@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    GXL (1.0)
+         Document Type Definition
+         (April 25, 2002)
+    
+    copyright by
+    
+           Andy Schuerr
+             Real-Time Systems Lab
+             Darmstadt University of Technology
+             Merckstr. 25, D-64283 Darmstadt, Germany
+             andy.schuerr@es.tu-darmstadt.de
+    
+           Susan Elliott Sim
+             School of Information and Computer Science
+             444 Computer Science Bldg.
+             University of California, Irvine
+             ses@ics.uci.edu
+    
+           Ric Holt
+             Department of Computer Science
+             University of Waterloo
+             Waterloo N2L 3G1, Canada
+             holt@plg.uwaterloo.ca
+    
+           Andreas Winter
+             Institute for Software Technology
+             University of Koblenz-Landau
+             Universitaetsstrasse 1, D-56070 Koblenz, Germany
+             winter@uni-koblenz.de
+-->
+<!-- Extensions -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="xlink.xsd"/>
+    <!-- Attribute values -->
+    <xs:element name="val" abstract="true"/>
+    <!-- gxl -->
+    <xs:element name="gxl">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="graph"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <!-- type -->
+    <xs:element name="type">
+        <xs:complexType>
+            <xs:attribute ref="xlink:type" default="simple"/>
+            <xs:attribute ref="xlink:href" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <!-- graph -->
+    <xs:element name="graph">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="type"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="attr"/>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element ref="node"/>
+                    <xs:element ref="edge"/>
+                    <xs:element ref="rel"/>
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="id" use="required" type="xs:ID"/>
+            <xs:attribute name="role" type="xs:NMTOKEN"/>
+            <xs:attribute name="edgeids" default="false">
+                <xs:simpleType>
+                    <xs:restriction base="xs:token">
+                        <xs:enumeration value="true"/>
+                        <xs:enumeration value="false"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="hypergraph" default="false">
+                <xs:simpleType>
+                    <xs:restriction base="xs:token">
+                        <xs:enumeration value="true"/>
+                        <xs:enumeration value="false"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="edgemode" default="directed">
+                <xs:simpleType>
+                    <xs:restriction base="xs:token">
+                        <xs:enumeration value="directed"/>
+                        <xs:enumeration value="undirected"/>
+                        <xs:enumeration value="defaultdirected"/>
+                        <xs:enumeration value="defaultundirected"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    <!-- node -->
+    <xs:element name="node">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="type"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="attr"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="graph"/>
+            </xs:sequence>
+            <xs:attribute name="id" use="required" type="xs:ID"/>
+        </xs:complexType>
+    </xs:element>
+    <!-- edge -->
+    <xs:element name="edge">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="type"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="attr"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="graph"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:ID"/>
+            <xs:attribute name="from" use="required" type="xs:IDREF"/>
+            <xs:attribute name="to" use="required" type="xs:IDREF"/>
+            <xs:attribute name="fromorder"/>
+            <xs:attribute name="toorder"/>
+            <xs:attribute name="isdirected">
+                <xs:simpleType>
+                    <xs:restriction base="xs:token">
+                        <xs:enumeration value="true"/>
+                        <xs:enumeration value="false"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    <!-- rel -->
+    <xs:element name="rel">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="type"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="attr"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="graph"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="relend"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:ID"/>
+            <xs:attribute name="isdirected">
+                <xs:simpleType>
+                    <xs:restriction base="xs:token">
+                        <xs:enumeration value="true"/>
+                        <xs:enumeration value="false"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    <!-- relend -->
+    <xs:element name="relend">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="attr"/>
+            </xs:sequence>
+            <xs:attribute name="target" use="required" type="xs:IDREF"/>
+            <xs:attribute name="role" type="xs:NMTOKEN"/>
+            <xs:attribute name="direction">
+                <xs:simpleType>
+                    <xs:restriction base="xs:token">
+                        <xs:enumeration value="in"/>
+                        <xs:enumeration value="out"/>
+                        <xs:enumeration value="none"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="startorder"/>
+            <xs:attribute name="endorder"/>
+        </xs:complexType>
+    </xs:element>
+    <!-- attr -->
+    <xs:element name="attr">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="attr"/>
+                <xs:element ref="val"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:ID"/>
+            <xs:attribute name="name" use="required" type="xs:NMTOKEN"/>
+            <xs:attribute name="kind" type="xs:NMTOKEN"/>
+        </xs:complexType>
+    </xs:element>
+    <!-- locator -->
+    <xs:element name="locator" substitutionGroup="val">
+        <xs:complexType>
+            <xs:attribute ref="xlink:type" default="simple"/>
+            <xs:attribute ref="xlink:href" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <!-- atomic values -->
+    <xs:element name="bool" substitutionGroup="val" type="xs:string"/>
+    <xs:element name="int" substitutionGroup="val" type="xs:string"/>
+    <xs:element name="float" substitutionGroup="val" type="xs:string"/>
+    <xs:element name="string" substitutionGroup="val" type="xs:string"/>
+    <!-- enumeration value -->
+    <xs:element name="enum" substitutionGroup="val" type="xs:string"/>
+    <!-- composite values -->
+    <xs:element name="seq" substitutionGroup="val">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="val"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="set" substitutionGroup="val">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="val"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="bag" substitutionGroup="val">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="val"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="tup" substitutionGroup="val">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="val"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
