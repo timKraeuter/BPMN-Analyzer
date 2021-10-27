@@ -5,7 +5,7 @@ import api.Node;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class GrooveNode implements Node {
-    private final static AtomicLong idCounter = new AtomicLong(-1);
+    protected final static AtomicLong idCounter = new AtomicLong(-1);
 
     private final String id = "n" + idCounter.incrementAndGet();
     private final String name;
@@ -14,7 +14,20 @@ public class GrooveNode implements Node {
         this.name = name;
     }
 
+    @Override
     public String getId() {
-        return id;
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public String toString() {
+        return "GrooveNode{" +
+                "id='" + this.id + '\'' +
+                ", name='" + this.name + '\'' +
+                '}';
     }
 }

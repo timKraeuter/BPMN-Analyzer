@@ -1,19 +1,28 @@
 package groove;
 
-import groove.gxl.Graph;
 import groove.gxl.Gxl;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 
+import java.io.File;
 import java.io.StringWriter;
 
-public class GraphToXMLConverter {
+public class GxlToXMLConverter {
 
     private static JAXBContext jaxbContext;
     private static Marshaller jaxbMarshaller;
 
-    private GraphToXMLConverter() {
+    private GxlToXMLConverter() {
+    }
+
+    public static void toXml(final Gxl gxl, File outputFile) {
+        createJAXBObjectsIfNeeded();
+        try {
+            jaxbMarshaller.marshal(gxl, outputFile);
+        } catch (final JAXBException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static String toXml(final Gxl graph) {
