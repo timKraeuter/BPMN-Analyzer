@@ -30,7 +30,21 @@ public class GrooveGraphRule implements GraphRule {
         if (this.contextNodes.get(node.getId()) != null) {
             throw new RuntimeException(String.format("Node %s already contained as a context node!", node));
         }
+        if (this.nodesToBeDeleted.get(node.getId()) != null) {
+            throw new RuntimeException(String.format("Node %s already contained as a to-be-deleted node!", node));
+        }
         this.nodesToBeAdded.put(node.getId(), node);
+    }
+
+    public void addDelNode(GrooveNode deleteNode) {
+        if (this.contextNodes.get(deleteNode.getId()) != null) {
+            throw new RuntimeException(String.format("Node %s already contained as a context node!", deleteNode));
+        }
+        if (this.nodesToBeAdded.get(deleteNode.getId()) != null) {
+            throw new RuntimeException(String.format("Node %s already contained as a to-be-added node!", deleteNode));
+        }
+        this.nodesToBeDeleted.put(deleteNode.getId(), deleteNode);
+
     }
 
     public void addNewEdge(GrooveEdge grooveEdge) {
@@ -54,5 +68,9 @@ public class GrooveGraphRule implements GraphRule {
         Map<String, GrooveNode> addedAndContextNodes = new HashMap<>(this.nodesToBeAdded);
         addedAndContextNodes.putAll(this.contextNodes); // the maps are distinct, see add methods.
         return addedAndContextNodes;
+    }
+
+    public List<GrooveNode> getNodesToBeDeleted() {
+        return new ArrayList<>(this.nodesToBeDeleted.values());
     }
 }

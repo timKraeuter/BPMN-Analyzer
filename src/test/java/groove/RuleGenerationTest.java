@@ -36,6 +36,23 @@ public class RuleGenerationTest {
     }
 
     @Test
+    void generateDeleteNodeRuleTest() throws IOException {
+        File tempDir = FileUtils.getTempDirectory();
+
+        GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator();
+        ruleGenerator.newRule("deleteSingleNode");
+        ruleGenerator.deleteNode("node");
+        ruleGenerator.generateRule();
+        ruleGenerator.writeRules(tempDir);
+
+        File expected_rule = new File(this.getClass().getResource("/deleteSingleNode.gpr").getFile());
+        File generated_rule = new File(tempDir + "/deleteSingleNode.gpr");
+        assertThat(
+                FileUtils.readFileToString(generated_rule, StandardCharsets.UTF_8),
+                is(FileUtils.readFileToString(expected_rule, StandardCharsets.UTF_8)));
+    }
+
+    @Test
     void generateAddEdgeRuleTest() throws IOException {
         File tempDir = FileUtils.getTempDirectory();
 

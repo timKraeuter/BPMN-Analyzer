@@ -19,8 +19,10 @@ public interface GraphRuleGenerator {
 
     /**
      * Define that the current rule deletes a node with the given name.
+     *
+     * @return
      */
-    void deleteNode(String nodeName);
+    Node deleteNode(String nodeName);
 
     /**
      * Define that the current rule adds the given edge.

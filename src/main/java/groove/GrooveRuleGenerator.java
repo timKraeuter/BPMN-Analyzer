@@ -23,8 +23,11 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
     }
 
     @Override
-    public void deleteNode(String nodeName) {
-
+    public GrooveNode deleteNode(String nodeName) {
+        assert this.currentRule != null;
+        GrooveNode deleteNode = new GrooveNode(nodeName);
+        this.currentRule.addDelNode(deleteNode);
+        return deleteNode;
     }
 
     @Override
@@ -47,6 +50,7 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
 
     @Override
     public void addEdge(String name, Node source, Node target) {
+        assert this.currentRule != null;
         Map<String, GrooveNode> contextAndAddedNodes = this.currentRule.getContextAndAddedNodes();
         GrooveNode sourceNode = contextAndAddedNodes.get(source.getId());
         if (sourceNode == null) {
@@ -88,60 +92,63 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
 
             Map<String, groove.gxl.Node> createdGxlNodes = new HashMap<>();
             // Add nodes which should be added to gxl
-            grooveGraphRule.getNodesToBeAdded().forEach(grooveNode -> this.addNodeToGxlGraph(graph, grooveNode, createdGxlNodes));
-            grooveGraphRule.getEdgesToBeAdded().forEach(grooveEdge -> {
-                groove.gxl.Node sourceNode = createdGxlNodes.get(grooveEdge.getSourceNode().getId());
-                groove.gxl.Node targetNode = createdGxlNodes.get(grooveEdge.getTargetNode().getId());
-                assert sourceNode != null;
-                assert targetNode != null;
-
-                groove.gxl.Edge gxledge = new groove.gxl.Edge();
-                gxledge.setFrom(sourceNode);
-                gxledge.setTo(targetNode);
-
-                Attr nameAttr = new Attr();
-                groove.gxl.String name = new groove.gxl.String();
-                name.setvalue(grooveEdge.getName());
-                nameAttr.getLocatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup().add(name);
-                nameAttr.setName("label");
-                gxledge.getAttr().add(nameAttr);
-
-                graph.getNodeOrEdgeOrRel().add(gxledge);
-            });
+            grooveGraphRule.getNodesToBeAdded().forEach(toBeAddedNode -> this.addNodeToGxlGraph(graph, toBeAddedNode, createdGxlNodes, "new:"));
+            // Add edges which should be added to gxl
+            grooveGraphRule.getEdgesToBeAdded().forEach(toBeAddedEdge -> this.addEdgeToGxlGraph(graph, toBeAddedEdge, createdGxlNodes));
+            // Add nodes which should be deleted to gxl
+            grooveGraphRule.getNodesToBeDeleted().forEach(toBeDeletedNode -> this.addNodeToGxlGraph(graph, toBeDeletedNode, new HashMap<>(), "del:"));
 
             // Write each rule to a file
             this.writeRuleToFile(dir, grooveGraphRule, gxl);
         });
     }
 
+    private void addEdgeToGxlGraph(Graph graph, GrooveEdge grooveEdge, Map<String, groove.gxl.Node> createdGxlNodes) {
+        groove.gxl.Node sourceNode = createdGxlNodes.get(grooveEdge.getSourceNode().getId());
+        groove.gxl.Node targetNode = createdGxlNodes.get(grooveEdge.getTargetNode().getId());
+        assert sourceNode != null;
+        assert targetNode != null;
+
+        groove.gxl.Edge gxledge = new groove.gxl.Edge();
+        gxledge.setFrom(sourceNode);
+        gxledge.setTo(targetNode);
+
+        Attr nameAttr = this.createLabelAttribute(grooveEdge.getName());
+        gxledge.getAttr().add(nameAttr);
+
+        graph.getNodeOrEdgeOrRel().add(gxledge);
+    }
+
+    private Attr createLabelAttribute(String value) {
+        Attr nameAttr = new Attr();
+        groove.gxl.String name = new groove.gxl.String();
+        name.setvalue(value);
+        nameAttr.getLocatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup().add(name);
+        nameAttr.setName("label");
+        return nameAttr;
+    }
+
     private void addNodeToGxlGraph(
             Graph graph,
             GrooveNode grooveNode,
-            Map<String, groove.gxl.Node> createdGxlNodes) {
+            Map<String, groove.gxl.Node> nodeRepository,
+            String labelValue) {
         groove.gxl.Node gxlNode = new groove.gxl.Node();
         gxlNode.setId(grooveNode.getId());
-        createdGxlNodes.put(gxlNode.getId(), gxlNode);
+        nodeRepository.put(gxlNode.getId(), gxlNode);
 
         // Node name becomes a label edge
         groove.gxl.Edge nameEdge = new groove.gxl.Edge();
         nameEdge.setFrom(gxlNode);
         nameEdge.setTo(gxlNode);
-        Attr nameAttr = new Attr();
-        groove.gxl.String name = new groove.gxl.String();
-        name.setvalue(grooveNode.getName());
-        nameAttr.getLocatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup().add(name);
-        nameAttr.setName("label");
+        Attr nameAttr = this.createLabelAttribute(grooveNode.getName());
         nameEdge.getAttr().add(nameAttr);
 
-        // New nodes need the new label
+        // Nodes need get a "new:" or "del:" label.
         groove.gxl.Edge newIdentifierEdge = new groove.gxl.Edge();
         newIdentifierEdge.setFrom(gxlNode);
         newIdentifierEdge.setTo(gxlNode);
-        Attr newAttr = new Attr();
-        groove.gxl.String newTag = new groove.gxl.String();
-        newTag.setvalue("new:");
-        newAttr.getLocatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup().add(newTag);
-        newAttr.setName("label");
+        Attr newAttr = this.createLabelAttribute(labelValue);
         newIdentifierEdge.getAttr().add(newAttr);
 
         graph.getNodeOrEdgeOrRel().add(gxlNode);
