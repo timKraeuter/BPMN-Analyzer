@@ -42,5 +42,5 @@ public interface GraphRuleGenerator {
 
     void generateRule();
 
-    void newRule(String ruleName);
+    void startRule(String ruleName);
 }

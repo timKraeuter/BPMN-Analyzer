@@ -4,23 +4,23 @@
         <node id="n0"/>
         <edge from="n0" to="n0">
             <attr name="label">
-                <string>new:</string>
+                <string>source</string>
             </attr>
         </edge>
         <edge from="n0" to="n0">
             <attr name="label">
-                <string>source</string>
+                <string>new:</string>
             </attr>
         </edge>
         <node id="n1"/>
         <edge from="n1" to="n1">
             <attr name="label">
-                <string>new:</string>
+                <string>target</string>
             </attr>
         </edge>
         <edge from="n1" to="n1">
             <attr name="label">
-                <string>target</string>
+                <string>new:</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">

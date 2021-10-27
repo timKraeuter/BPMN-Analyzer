@@ -23,7 +23,7 @@ public class RuleGenerationTest {
         File tempDir = FileUtils.getTempDirectory();
 
         GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator();
-        ruleGenerator.newRule("addSingleNode");
+        ruleGenerator.startRule("addSingleNode");
         ruleGenerator.addNode("node");
         ruleGenerator.generateRule();
         ruleGenerator.writeRules(tempDir);
@@ -40,7 +40,7 @@ public class RuleGenerationTest {
         File tempDir = FileUtils.getTempDirectory();
 
         GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator();
-        ruleGenerator.newRule("deleteSingleNode");
+        ruleGenerator.startRule("deleteSingleNode");
         ruleGenerator.deleteNode("node");
         ruleGenerator.generateRule();
         ruleGenerator.writeRules(tempDir);
@@ -57,7 +57,7 @@ public class RuleGenerationTest {
         File tempDir = FileUtils.getTempDirectory();
 
         GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator();
-        ruleGenerator.newRule("addNodesWithEdge");
+        ruleGenerator.startRule("addNodesWithEdge");
         GrooveNode source = ruleGenerator.addNode("source");
         GrooveNode target = ruleGenerator.addNode("target");
         ruleGenerator.addEdge("edge", source, target);

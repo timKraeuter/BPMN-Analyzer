@@ -4,12 +4,12 @@
         <node id="n0"/>
         <edge from="n0" to="n0">
             <attr name="label">
-                <string>del:</string>
+                <string>node</string>
             </attr>
         </edge>
         <edge from="n0" to="n0">
             <attr name="label">
-                <string>node</string>
+                <string>del:</string>
             </attr>
         </edge>
     </graph>
