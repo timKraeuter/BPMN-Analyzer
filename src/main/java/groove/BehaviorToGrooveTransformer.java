@@ -31,15 +31,15 @@ public class BehaviorToGrooveTransformer {
         });
 
         // Generate start graph.
-        this.generateStartGraphFile(targetFolder);
+        this.generateStartGraphFile(finiteStateMachine, targetFolder);
 
         // Generate system.properties file pointing to the start graph.
     }
 
-    private void generateStartGraphFile(File targetFolder) {
+    private void generateStartGraphFile(FiniteStateMachine finiteStateMachine, File targetFolder) {
         Gxl gxl = new Gxl();
         Graph graph = GxlHelper.createStandardGxlGraph("start", gxl);
-        GxlHelper.createNodeWithName("n0", "start", graph);
+        GxlHelper.createNodeWithName("n0", finiteStateMachine.getStartState().getName(), graph);
 
         File startGraphFile = new File(targetFolder.getPath() + "/start.gst");
         GxlToXMLConverter.toXml(gxl, startGraphFile);
