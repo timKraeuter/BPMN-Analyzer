@@ -3,6 +3,7 @@ package groove;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import util.FileTestHelper;
 
 import java.io.File;
 

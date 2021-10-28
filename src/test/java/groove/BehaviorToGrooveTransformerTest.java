@@ -6,6 +6,7 @@ import behavior.fsm.Transition;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import util.FileTestHelper;
 
 import java.io.File;
 import java.io.IOException;

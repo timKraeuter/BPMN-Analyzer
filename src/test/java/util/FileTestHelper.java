@@ -1,4 +1,4 @@
-package groove;
+package util;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
@@ -26,7 +26,7 @@ public class FileTestHelper {
     }
 
     /**
-     * Test if the files in the dirs are equal. Shallow,i.e., no recursion!
+     * Test if the files in the dirs are equal. Shallow, i.e., no recursion!
      */
     @SuppressWarnings("ConstantConditions")
     public static void testDirEquals(File expected, File actual, Function<String, Boolean> fileNameFilter) {
