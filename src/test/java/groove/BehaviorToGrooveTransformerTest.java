@@ -5,6 +5,7 @@ import behavior.fsm.State;
 import behavior.fsm.Transition;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.FileTestHelper;
 
@@ -15,6 +16,11 @@ import java.nio.charset.StandardCharsets;
 class BehaviorToGrooveTransformerTest {
     //    private static final String outputPath = "C:/Source/groove/bin";
     private static final String outputPath = FileUtils.getTempDirectoryPath();
+
+    @BeforeEach
+    void setUp() {
+        GrooveNode.idCounter.set(-1);
+    }
 
     @Test
     void testFSMGeneration() throws IOException {
