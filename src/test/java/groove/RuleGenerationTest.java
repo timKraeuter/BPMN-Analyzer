@@ -5,11 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RuleGenerationTest {
 
@@ -19,7 +14,7 @@ public class RuleGenerationTest {
     }
 
     @Test
-    void generateAddNodeRuleTest() throws IOException {
+    void generateAddNodeRuleTest() {
         File tempDir = FileUtils.getTempDirectory();
 
         GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator();
@@ -30,13 +25,11 @@ public class RuleGenerationTest {
 
         File expected_rule = new File(this.getClass().getResource("/addSingleNode.gpr").getFile());
         File generated_rule = new File(tempDir + "/addSingleNode.gpr");
-        assertThat(
-                FileUtils.readFileToString(generated_rule, StandardCharsets.UTF_8),
-                is(FileUtils.readFileToString(expected_rule, StandardCharsets.UTF_8)));
+        FileTestHelper.testFileEquals(expected_rule, generated_rule);
     }
 
     @Test
-    void generateDeleteNodeRuleTest() throws IOException {
+    void generateDeleteNodeRuleTest() {
         File tempDir = FileUtils.getTempDirectory();
 
         GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator();
@@ -47,13 +40,11 @@ public class RuleGenerationTest {
 
         File expected_rule = new File(this.getClass().getResource("/deleteSingleNode.gpr").getFile());
         File generated_rule = new File(tempDir + "/deleteSingleNode.gpr");
-        assertThat(
-                FileUtils.readFileToString(generated_rule, StandardCharsets.UTF_8),
-                is(FileUtils.readFileToString(expected_rule, StandardCharsets.UTF_8)));
+        FileTestHelper.testFileEquals(expected_rule, generated_rule);
     }
 
     @Test
-    void generateAddEdgeRuleTest() throws IOException {
+    void generateAddEdgeRuleTest() {
         File tempDir = FileUtils.getTempDirectory();
 
         GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator();
@@ -66,8 +57,6 @@ public class RuleGenerationTest {
 
         File expected_rule = new File(this.getClass().getResource("/addNodesWithEdge.gpr").getFile());
         File generated_rule = new File(tempDir + "/addNodesWithEdge.gpr");
-        assertThat(
-                FileUtils.readFileToString(generated_rule, StandardCharsets.UTF_8),
-                is(FileUtils.readFileToString(expected_rule, StandardCharsets.UTF_8)));
+        FileTestHelper.testFileEquals(expected_rule, generated_rule);
     }
 }
