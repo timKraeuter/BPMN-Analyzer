@@ -5,7 +5,7 @@ import groove.gxl.Graph;
 import groove.gxl.Gxl;
 import groove.gxl.Node;
 
-public class GxlHelper {
+public class GrooveGxlHelper {
     public static Graph createStandardGxlGraph(String id, Gxl gxl) {
         Graph graph = new Graph();
         gxl.getGraph().add(graph);
@@ -30,6 +30,21 @@ public class GxlHelper {
         graph.getNodeOrEdgeOrRel().add(nameEdge);
 
         return gxlNode;
+    }
+
+    public static void createEdgeWithName(
+            Graph graph,
+            groove.gxl.Node sourceNode,
+            groove.gxl.Node targetNode,
+            String name) {
+        groove.gxl.Edge gxledge = new groove.gxl.Edge();
+        gxledge.setFrom(sourceNode);
+        gxledge.setTo(targetNode);
+
+        Attr nameAttr = GrooveGxlHelper.createLabelAttribute(name);
+        gxledge.getAttr().add(nameAttr);
+
+        graph.getNodeOrEdgeOrRel().add(gxledge);
     }
 
     public static Attr createLabelAttribute(String value) {

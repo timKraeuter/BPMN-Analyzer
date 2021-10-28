@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="work_r2" role="rule" edgeids="false" edgemode="directed">
+        <node id="n15"/>
+        <edge from="n15" to="n15">
+            <attr name="label">
+                <string>Token</string>
+            </attr>
+        </edge>
+        <edge from="n15" to="n15">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n13"/>
+        <edge from="n13" to="n13">
+            <attr name="label">
+                <string>Token</string>
+            </attr>
+        </edge>
+        <edge from="n13" to="n13">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n12"/>
+        <edge from="n12" to="n12">
+            <attr name="label">
+                <string>r2_preWork</string>
+            </attr>
+        </edge>
+        <node id="n14"/>
+        <edge from="n14" to="n14">
+            <attr name="label">
+                <string>r2_postWork</string>
+            </attr>
+        </edge>
+        <edge from="n14" to="n15">
+            <attr name="label">
+                <string>new:token</string>
+            </attr>
+        </edge>
+        <edge from="n12" to="n13">
+            <attr name="label">
+                <string>del:token</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

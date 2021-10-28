@@ -27,41 +27,69 @@ public class GrooveGraphRule implements GraphRule {
     }
 
     public void addNewNode(GrooveNode node) {
-        if (this.contextNodes.get(node.getId()) != null) {
-            throw new RuntimeException(String.format("Node %s already contained as a context node!", node));
-        }
-        if (this.nodesToBeDeleted.get(node.getId()) != null) {
-            throw new RuntimeException(String.format("Node %s already contained as a to-be-deleted node!", node));
-        }
+        this.checkIfNotAlreadyInContext(node);
+        this.checkIfNotAlreadyDeleted(node);
         this.nodesToBeAdded.put(node.getId(), node);
     }
 
-    public void addDelNode(GrooveNode deleteNode) {
-        if (this.contextNodes.get(deleteNode.getId()) != null) {
-            throw new RuntimeException(String.format("Node %s already contained as a context node!", deleteNode));
+    private void checkIfNotAlreadyDeleted(GrooveNode node) {
+        if (this.nodesToBeDeleted.get(node.getId()) != null) {
+            throw new RuntimeException(String.format("Node %s already contained as a to-be-deleted node!", node));
         }
-        if (this.nodesToBeAdded.get(deleteNode.getId()) != null) {
-            throw new RuntimeException(String.format("Node %s already contained as a to-be-added node!", deleteNode));
-        }
-        this.nodesToBeDeleted.put(deleteNode.getId(), deleteNode);
-
     }
 
-    public void addNewEdge(GrooveEdge grooveEdge) {
+    private void checkIfNotAlreadyInContext(GrooveNode node) {
+        if (this.contextNodes.get(node.getId()) != null) {
+            throw new RuntimeException(String.format("Node %s already contained as a context node!", node));
+        }
+    }
+
+    private void checkIfNotAlreadyAdded(GrooveNode contextNode) {
+        if (this.nodesToBeAdded.get(contextNode.getId()) != null) {
+            throw new RuntimeException(String.format("Node %s already contained as a to-be-added node!", contextNode));
+        }
+    }
+
+    public void addContextNode(GrooveNode contextNode) {
+        this.checkIfNotAlreadyDeleted(contextNode);
+        this.checkIfNotAlreadyAdded(contextNode);
+        this.contextNodes.put(contextNode.getId(), contextNode);
+    }
+
+    public void addDelNode(GrooveNode deleteNode) {
+        this.checkIfNotAlreadyInContext(deleteNode);
+        this.checkIfNotAlreadyAdded(deleteNode);
+        this.nodesToBeDeleted.put(deleteNode.getId(), deleteNode);
+    }
+
+    public void addNewEdge(GrooveEdge edge) {
         // It should be checked elsewhere that the source and target node are in the context of the rule or added by the rule!
-        this.edgesToBeAdded.put(grooveEdge.getId(), grooveEdge);
+        this.edgesToBeAdded.put(edge.getId(), edge);
+    }
+
+    public void addDelEdge(GrooveEdge edge) {
+        // It should be checked elsewhere that the source and target nodes are contained in the rule!
+        this.edgesToBeDeleted.put(edge.getId(), edge);
     }
 
     public String getRuleName() {
         return this.ruleName;
     }
 
-    public List<GrooveNode> getNodesToBeAdded() {
-        return new ArrayList<>(this.nodesToBeAdded.values());
+    public Set<GrooveNode> getNodesToBeAdded() {
+        return new LinkedHashSet<>(this.nodesToBeAdded.values());
     }
 
-    public List<GrooveEdge> getEdgesToBeAdded() {
-        return new ArrayList<>(this.edgesToBeAdded.values());
+    public Set<GrooveNode> getContextNodes() {
+        return new LinkedHashSet<>(this.contextNodes.values());
+    }
+
+    public Set<GrooveEdge> getEdgesToBeAdded() {
+        return new LinkedHashSet<>(this.edgesToBeAdded.values());
+    }
+
+    public Set<GrooveEdge> getEdgesToBeDeleted() {
+        return new LinkedHashSet<>(this.edgesToBeDeleted.values());
     }
 
     public Map<String, GrooveNode> getContextAndAddedNodes() {
@@ -72,5 +100,12 @@ public class GrooveGraphRule implements GraphRule {
 
     public List<GrooveNode> getNodesToBeDeleted() {
         return new ArrayList<>(this.nodesToBeDeleted.values());
+    }
+
+    public Map<String, GrooveNode> getAllNodes() {
+        LinkedHashMap<String, GrooveNode> allNodes = new LinkedHashMap<>(this.nodesToBeDeleted);
+        allNodes.putAll(this.nodesToBeAdded);
+        allNodes.putAll(this.contextNodes);
+        return allNodes;
     }
 }
