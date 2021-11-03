@@ -47,11 +47,7 @@ class BehaviorToGrooveTransformerTest {
                 fileName -> fileName.equals("system.properties")); // Ignore the system.properties file because it contains a timestamp and a dir.
 
         File propertiesFile = new File(this.getClass().getResource("/abc.gps/system.properties").getFile());
-        Assertions.assertTrue(
-                FileUtils.readFileToString(propertiesFile, StandardCharsets.UTF_8).endsWith(
-                        "startGraph=start\n" +
-                                "grooveVersion=5.8.1\n" +
-                                "grammarVersion=3.7"));
+        checkPropertiesFile(propertiesFile);
     }
 
     @Test
@@ -105,10 +101,16 @@ class BehaviorToGrooveTransformerTest {
                 fileName -> fileName.equals("system.properties")); // Ignore the system.properties file because it contains a timestamp and a dir.
 
         File propertiesFile = new File(this.getClass().getResource("/pn.gps/system.properties").getFile());
+        checkPropertiesFile(propertiesFile);
+    }
+
+    private void checkPropertiesFile(File propertiesFile) throws IOException {
         Assertions.assertTrue(
-                FileUtils.readFileToString(propertiesFile, StandardCharsets.UTF_8).endsWith(
-                        "startGraph=start\n" +
-                                "grooveVersion=5.8.1\n" +
-                                "grammarVersion=3.7"));
+                FileUtils.readFileToString(propertiesFile, StandardCharsets.UTF_8)
+                         .replaceAll("\r?\n", "\r\n") // force identical line separators
+                         .endsWith(
+                                 "startGraph=start\r\n" +
+                                         "grooveVersion=5.8.1\r\n" +
+                                         "grammarVersion=3.7"));
     }
 }

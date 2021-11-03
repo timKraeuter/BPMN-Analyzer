@@ -17,9 +17,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class FileTestHelper {
     public static void testFileEquals(File expected, File actual) {
         try {
+            final String actualString = FileUtils.readFileToString(actual, StandardCharsets.UTF_8)
+                                                 .replaceAll("\r?\n", "\r\n"); // force consistent line separators
+            final String expectedString = FileUtils.readFileToString(expected, StandardCharsets.UTF_8)
+                                                   .replaceAll("\r?\n", "\r\n"); // force consistent line separators
             assertThat(
-                    FileUtils.readFileToString(actual, StandardCharsets.UTF_8),
-                    is(FileUtils.readFileToString(expected, StandardCharsets.UTF_8)));
+                    actualString,
+                    is(expectedString));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
