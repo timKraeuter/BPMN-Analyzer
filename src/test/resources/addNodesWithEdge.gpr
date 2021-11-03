@@ -25,7 +25,7 @@
         </edge>
         <edge from="n0" to="n1">
             <attr name="label">
-                <string>edge</string>
+                <string>new:edge</string>
             </attr>
         </edge>
     </graph>
