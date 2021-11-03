@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 
 class BehaviorToGrooveTransformerTest {
     //    private static final String outputPath = "C:/Source/groove/bin";
+//        private static final String outputPath = "B:/Research/groove/bin";
     private static final String outputPath = FileUtils.getTempDirectoryPath();
 
     @BeforeEach
@@ -25,7 +26,7 @@ class BehaviorToGrooveTransformerTest {
     }
 
     @Test
-    void testFSMGeneration() throws IOException {
+    void testFSMGenerationABC() throws IOException {
         State start = new State("start");
         FiniteStateMachine fsm = new FiniteStateMachine("abc", start);
         State s1 = new State("s1");
@@ -51,7 +52,35 @@ class BehaviorToGrooveTransformerTest {
     }
 
     @Test
-    void testPNGeneration() throws IOException {
+    void testFSMGenerationResources() throws IOException {
+        State start = new State("start");
+        FiniteStateMachine fsm = new FiniteStateMachine("2_Resource_Process", start);
+        State r1 = new State("r1");
+        State work = new State("work");
+        State r2_released = new State("r2_released");
+        State end = new State("end");
+        fsm.addTransition(new Transition("acquire_r1", start, r1));
+        fsm.addTransition(new Transition("acquire_r2", r1, work));
+        fsm.addTransition(new Transition("release_r2", work, r2_released));
+        fsm.addTransition(new Transition("release_r1", r2_released, end));
+
+        BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
+        File outputDir = new File(outputPath);
+        transformer.generateGrooveGrammar(fsm, outputDir);
+
+        // assert
+        File expectedDir = new File(this.getClass().getResource("/2_Resource_Process.gps").getFile());
+        FileTestHelper.testDirEquals(
+                expectedDir,
+                new File(outputDir + "/2_Resource_Process.gps"),
+                fileName -> fileName.equals("system.properties")); // Ignore the system.properties file because it contains a timestamp and a dir.
+
+        File propertiesFile = new File(this.getClass().getResource("/2_Resource_Process.gps/system.properties").getFile());
+        checkPropertiesFile(propertiesFile);
+    }
+
+    @Test
+    void testPNGenerationResources() throws IOException {
         PetriNet pn = new PetriNet("pn");
         // Places
         Place start = new Place("start", 3);

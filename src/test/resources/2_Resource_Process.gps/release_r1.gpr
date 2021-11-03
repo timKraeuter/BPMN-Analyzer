@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="release_r1" role="rule" edgeids="false" edgemode="directed">
+        <node id="n7"/>
+        <edge from="n7" to="n7">
+            <attr name="label">
+                <string>end</string>
+            </attr>
+        </edge>
+        <edge from="n7" to="n7">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n6"/>
+        <edge from="n6" to="n6">
+            <attr name="label">
+                <string>r2_released</string>
+            </attr>
+        </edge>
+        <edge from="n6" to="n6">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>
