@@ -1,6 +1,10 @@
 package groove;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.elk.core.RecursiveGraphLayoutEngine;
+import org.eclipse.elk.core.util.BasicProgressMonitor;
+import org.eclipse.elk.graph.ElkNode;
+import org.eclipse.elk.graph.util.ElkGraphUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.FileTestHelper;
@@ -12,6 +16,21 @@ public class RuleGenerationTest {
     @BeforeEach
     void setUp() {
         GrooveNode.idCounter.set(-1);
+    }
+
+    @Test
+    void elkTest() {
+        RecursiveGraphLayoutEngine recursiveGraphLayoutEngine = new RecursiveGraphLayoutEngine();
+        BasicProgressMonitor progressMonitor = new BasicProgressMonitor();
+        ElkNode graph = ElkGraphUtil.createGraph();
+        ElkNode node = ElkGraphUtil.createNode(graph);
+        System.out.println(node.getX());
+        System.out.println(node.getY());
+        ElkGraphUtil.createNode(graph);
+        ElkGraphUtil.createNode(graph);
+        recursiveGraphLayoutEngine.layout(graph, progressMonitor);
+        System.out.println(node.getX());
+        System.out.println(node.getY());
     }
 
     @Test
