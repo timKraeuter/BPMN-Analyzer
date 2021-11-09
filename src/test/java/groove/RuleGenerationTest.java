@@ -3,6 +3,7 @@ package groove;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.elk.core.RecursiveGraphLayoutEngine;
 import org.eclipse.elk.core.util.BasicProgressMonitor;
+import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,14 +24,20 @@ public class RuleGenerationTest {
         RecursiveGraphLayoutEngine recursiveGraphLayoutEngine = new RecursiveGraphLayoutEngine();
         BasicProgressMonitor progressMonitor = new BasicProgressMonitor();
         ElkNode graph = ElkGraphUtil.createGraph();
-        ElkNode node = ElkGraphUtil.createNode(graph);
-        System.out.println(node.getX());
-        System.out.println(node.getY());
-        ElkGraphUtil.createNode(graph);
-        ElkGraphUtil.createNode(graph);
+        ElkNode node1 = ElkGraphUtil.createNode(graph);
+        ElkNode node2 = ElkGraphUtil.createNode(graph);
+        ElkNode node3 = ElkGraphUtil.createNode(graph);
+        ElkEdge e1 = ElkGraphUtil.createSimpleEdge(node1, node2);
+        ElkEdge e2 = ElkGraphUtil.createSimpleEdge(node1, node3);
+        System.out.println(node1.getX());
+        System.out.println(node1.getY());
         recursiveGraphLayoutEngine.layout(graph, progressMonitor);
-        System.out.println(node.getX());
-        System.out.println(node.getY());
+        System.out.println(node1.getX());
+        System.out.println(node1.getY());
+        System.out.println(node2.getX());
+        System.out.println(node2.getY());
+        System.out.println(node3.getX());
+        System.out.println(node3.getY());
     }
 
     @Test

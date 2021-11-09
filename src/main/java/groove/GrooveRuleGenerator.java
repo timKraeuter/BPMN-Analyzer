@@ -5,12 +5,17 @@ import api.Node;
 import behavior.Aspect;
 import groove.gxl.Graph;
 import groove.gxl.Gxl;
+import org.eclipse.elk.core.RecursiveGraphLayoutEngine;
+import org.eclipse.elk.core.util.BasicProgressMonitor;
+import org.eclipse.elk.graph.ElkNode;
+import org.eclipse.elk.graph.util.ElkGraphUtil;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class GrooveRuleGenerator implements GraphRuleGenerator {
     public static final String ASPECT_LABEL_NEW = "new:";
@@ -92,6 +97,8 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
             // Create gxl with a graph for each rule
             Gxl gxl = new Gxl();
             Graph graph = GrooveGxlHelper.createStandardGxlGraph(grooveGraphRule.getRuleName(), gxl);
+            Map<String, ElkNode> layouting = this.createLayouting(grooveGraphRule);
+            System.out.println(layouting);
 
             Map<String, groove.gxl.Node> allGxlNodes = new HashMap<>();
             // Add nodes which should be added to gxl
@@ -114,6 +121,20 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
             // Write each rule to a file
             this.writeRuleToFile(dir, grooveGraphRule, gxl);
         });
+    }
+
+    private Map<String, ElkNode> createLayouting(GrooveGraphRule grooveGraphRule) {
+        ElkNode graph = ElkGraphUtil.createGraph();
+        Map<String, ElkNode> layoutNodes = grooveGraphRule.getAllNodes().entrySet().stream()
+                                                          .collect(Collectors.toMap(Map.Entry::getKey, o -> ElkGraphUtil.createNode(graph)));
+        grooveGraphRule.getAllEdges()
+                       .forEach((s, grooveEdge) -> ElkGraphUtil.createSimpleEdge(
+                               layoutNodes.get(grooveEdge.getSourceNode().getId()),
+                               layoutNodes.get(grooveEdge.getTargetNode().getId())));
+
+        RecursiveGraphLayoutEngine recursiveGraphLayoutEngine = new RecursiveGraphLayoutEngine();
+        recursiveGraphLayoutEngine.layout(graph, new BasicProgressMonitor());
+        return layoutNodes;
     }
 
     private void addEdgeToGxlGraph(
