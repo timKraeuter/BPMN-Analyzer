@@ -41,7 +41,7 @@ public class PetriNet implements Behavior {
     }
 
     @Override
-    public void handle(BehaviorVisitor visitor) {
-        visitor.accept(this);
+    public void accept(BehaviorVisitor visitor) {
+        visitor.handle(this);
     }
 }

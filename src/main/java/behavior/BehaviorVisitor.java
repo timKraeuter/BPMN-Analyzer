@@ -1,10 +1,13 @@
 package behavior;
 
+import behavior.bpmn.BPMNProcessModel;
 import behavior.fsm.FiniteStateMachine;
 import behavior.petriNet.PetriNet;
 
 public interface BehaviorVisitor {
-    void accept(FiniteStateMachine finiteStateMachine);
+    void handle(FiniteStateMachine finiteStateMachine);
 
-    void accept(PetriNet petriNet);
+    void handle(PetriNet petriNet);
+
+    void handle(BPMNProcessModel bpmnProcessModel);
 }

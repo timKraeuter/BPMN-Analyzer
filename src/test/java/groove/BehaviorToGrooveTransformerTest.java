@@ -1,5 +1,7 @@
 package groove;
 
+import behavior.bpmn.*;
+import behavior.bpmn.auxiliary.BPMNProcessBuilder;
 import behavior.fsm.FiniteStateMachine;
 import behavior.fsm.State;
 import behavior.fsm.Transition;
@@ -130,6 +132,49 @@ class BehaviorToGrooveTransformerTest {
                 fileName -> fileName.equals("system.properties")); // Ignore the system.properties file because it contains a timestamp and a dir.
 
         File propertiesFile = new File(this.getClass().getResource("/pn.gps/system.properties").getFile());
+        checkPropertiesFile(propertiesFile);
+    }
+
+    @Test
+    void testBPMNGenerationResources() throws IOException {
+        // Build the process model from the NWPT example.
+        final StartEvent start = new StartEvent("start");
+        final EndEvent end = new EndEvent("end");
+        Activity a0 = new Activity("a0");
+        Activity a1 = new Activity("a1");
+        final AlternativeGateway split = new AlternativeGateway("split");
+        Activity a2_1 = new Activity("a2_1");
+        Activity a2_2 = new Activity("a2_2");
+        final AlternativeGateway merge = new AlternativeGateway("merge");
+        Activity a3 = new Activity("a3");
+
+        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+                .name("subwork.gps")
+                .startEvent(start)
+                .sequenceFlow(start, a0)
+                .sequenceFlow(a0, a1)
+                .sequenceFlow(a1, split)
+                .sequenceFlow(split, a2_1)
+                .sequenceFlow(split, a2_2)
+                .sequenceFlow(a2_1, merge)
+                .sequenceFlow(a2_2, merge)
+                .sequenceFlow(merge, a3)
+                .sequenceFlow(merge, end)
+                .endEvent(end)
+                .build();
+
+        BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
+        File outputDir = new File(outputPath);
+        transformer.generateGrooveGrammar(processModel, outputDir);
+
+        // assert
+        File expectedDir = new File(this.getClass().getResource("/subwork.gps").getFile());
+        FileTestHelper.testDirEquals(
+                expectedDir,
+                new File(outputDir + "/subwork.gps"),
+                fileName -> fileName.equals("system.properties")); // Ignore the system.properties file because it contains a timestamp and a dir.
+
+        File propertiesFile = new File(this.getClass().getResource("/subwork.gps/system.properties").getFile());
         checkPropertiesFile(propertiesFile);
     }
 

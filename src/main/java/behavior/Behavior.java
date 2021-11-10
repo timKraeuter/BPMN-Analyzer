@@ -3,5 +3,5 @@ package behavior;
 public interface Behavior {
     String getName();
 
-    void handle(BehaviorVisitor visitor);
+    void accept(BehaviorVisitor visitor);
 }
