@@ -48,11 +48,22 @@ public class GrooveGxlHelper {
     }
 
     public static Attr createLabelAttribute(String value) {
+        String attrName = "label";
+        Attr nameAttr = createAttribute(attrName, value);
+        return nameAttr;
+    }
+
+    private static Attr createAttribute(String attrName, String attrValue) {
         Attr nameAttr = new Attr();
         groove.gxl.String name = new groove.gxl.String();
-        name.setvalue(value);
+        name.setvalue(attrValue);
         nameAttr.getLocatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup().add(name);
-        nameAttr.setName("label");
+        nameAttr.setName(attrName);
         return nameAttr;
+    }
+
+    public static void addLayoutToNode(Node gxlNode, double x, double y) {
+        Attr layoutAttr = createAttribute("layout", String.format("%.0f %.0f 0 0", x, y));
+        gxlNode.getAttr().add(layoutAttr);
     }
 }

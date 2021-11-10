@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="release_r2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n5"/>
+        <node id="n5">
+            <attr name="layout">
+                <string>62 132 0 0</string>
+            </attr>
+        </node>
         <edge from="n5" to="n5">
             <attr name="label">
                 <string>r2_released</string>
@@ -12,7 +16,11 @@
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n4"/>
+        <node id="n4">
+            <attr name="layout">
+                <string>62 62 0 0</string>
+            </attr>
+        </node>
         <edge from="n4" to="n4">
             <attr name="label">
                 <string>work</string>

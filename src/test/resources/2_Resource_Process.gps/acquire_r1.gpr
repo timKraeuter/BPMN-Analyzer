@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="acquire_r1" role="rule" edgeids="false" edgemode="directed">
-        <node id="n1"/>
+        <node id="n1">
+            <attr name="layout">
+                <string>62 132 0 0</string>
+            </attr>
+        </node>
         <edge from="n1" to="n1">
             <attr name="label">
                 <string>r1</string>
@@ -12,7 +16,11 @@
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n0"/>
+        <node id="n0">
+            <attr name="layout">
+                <string>62 62 0 0</string>
+            </attr>
+        </node>
         <edge from="n0" to="n0">
             <attr name="label">
                 <string>start</string>
