@@ -20,27 +20,6 @@ public class RuleGenerationTest {
     }
 
     @Test
-    void elkTest() {
-        RecursiveGraphLayoutEngine recursiveGraphLayoutEngine = new RecursiveGraphLayoutEngine();
-        BasicProgressMonitor progressMonitor = new BasicProgressMonitor();
-        ElkNode graph = ElkGraphUtil.createGraph();
-        ElkNode node1 = ElkGraphUtil.createNode(graph);
-        ElkNode node2 = ElkGraphUtil.createNode(graph);
-        ElkNode node3 = ElkGraphUtil.createNode(graph);
-        ElkEdge e1 = ElkGraphUtil.createSimpleEdge(node1, node2);
-        ElkEdge e2 = ElkGraphUtil.createSimpleEdge(node1, node3);
-        System.out.println(node1.getX());
-        System.out.println(node1.getY());
-        recursiveGraphLayoutEngine.layout(graph, progressMonitor);
-        System.out.println(node1.getX());
-        System.out.println(node1.getY());
-        System.out.println(node2.getX());
-        System.out.println(node2.getY());
-        System.out.println(node3.getX());
-        System.out.println(node3.getY());
-    }
-
-    @Test
     void generateAddNodeRuleTest() {
         File tempDir = FileUtils.getTempDirectory();
 
