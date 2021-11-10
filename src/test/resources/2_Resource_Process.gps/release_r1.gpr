@@ -3,7 +3,7 @@
     <graph id="release_r1" role="rule" edgeids="false" edgemode="directed">
         <node id="n7">
             <attr name="layout">
-                <string>62 132 0 0</string>
+                <string>62 82 0 0</string>
             </attr>
         </node>
         <edge from="n7" to="n7">
@@ -18,7 +18,7 @@
         </edge>
         <node id="n6">
             <attr name="layout">
-                <string>62 62 0 0</string>
+                <string>62 172 0 0</string>
             </attr>
         </node>
         <edge from="n6" to="n6">

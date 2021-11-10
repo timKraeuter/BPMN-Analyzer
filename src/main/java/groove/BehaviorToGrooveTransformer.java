@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class BehaviorToGrooveTransformer {
@@ -52,11 +54,14 @@ public class BehaviorToGrooveTransformer {
         Gxl gxl = new Gxl();
         Graph graph = GrooveGxlHelper.createStandardGxlGraph("start", gxl);
         AtomicLong idCounter = new AtomicLong(-1);
+        Map<String, String> nodeLabels = new HashMap<>();
+
         petriNet.getPlaces().forEach(place -> {
             Node placeNode = GrooveGxlHelper.createNodeWithName(
                     this.getNodeId(idCounter),
                     place.getName(),
                     graph);
+            nodeLabels.put(placeNode.getId(), place.getName());
             // Create and link start tokens for each place.
             if (place.getStartTokenAmount() > 0) {
                 for (int i = 0; i < place.getStartTokenAmount(); i++) {
@@ -64,10 +69,12 @@ public class BehaviorToGrooveTransformer {
                             this.getNodeId(idCounter),
                             TOKEN_NODE_NAME,
                             graph);
+                    nodeLabels.put(tokenNode.getId(), TOKEN_NODE_NAME);
                     GrooveGxlHelper.createEdgeWithName(graph, placeNode, tokenNode, TOKEN_EDGE_NAME);
                 }
             }
         });
+        GrooveGxlHelper.layoutGraph(graph, nodeLabels);
 
         File startGraphFile = new File(graphGrammarSubFolder.getPath() + "/start.gst");
         GxlToXMLConverter.toXml(gxl, startGraphFile);

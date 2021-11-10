@@ -3,6 +3,7 @@ package groove;
 import api.GraphRuleGenerator;
 import api.Node;
 import behavior.Aspect;
+import groove.gxl.Attr;
 import groove.gxl.Edge;
 import groove.gxl.Graph;
 import groove.gxl.Gxl;
@@ -12,16 +13,12 @@ import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GrooveRuleGenerator implements GraphRuleGenerator {
     public static final String ASPECT_LABEL_NEW = "new:";
     public static final String ASPECT_LABEL_DEL = "del:";
-    public static final int XY_SHIFT_GROOVE_LAYOUT = 50;
     private List<GrooveGraphRule> rules = new ArrayList<>();
     private GrooveGraphRule currentRule = null;
 
@@ -118,45 +115,12 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
 
             // TODO: context edges!
 
-            this.layoutGraph(graph);
+            GrooveGxlHelper.layoutGraph(graph, grooveGraphRule.getAllNodes().entrySet().stream()
+                                                   .collect(Collectors.toMap(Map.Entry::getKey,
+                                                           idNodePair -> idNodePair.getValue().getName())));
             // Write each rule to a file
             this.writeRuleToFile(dir, grooveGraphRule, gxl);
         });
-    }
-
-    private void layoutGraph(Graph graph) {
-        // Need from to of edges for the nodes created earlier.
-        // Build a map of nodes with id or something.
-        graph.getNodeOrEdgeOrRel().forEach(nodeOrEdge -> {
-            if (nodeOrEdge instanceof groove.gxl.Node) {
-                System.out.println("Node " + nodeOrEdge);
-            }
-            if (nodeOrEdge instanceof Edge) {
-                Edge edge = (Edge) nodeOrEdge;
-                System.out.println("Edge " + edge);
-            }
-        });
-//        GrooveGxlHelper.addLayoutToNode(gxlNode, layoutNode.getX() + XY_SHIFT_GROOVE_LAYOUT, layoutNode.getY() + XY_SHIFT_GROOVE_LAYOUT);
-    }
-
-    private Map<String, ElkNode> createLayouting(GrooveGraphRule grooveGraphRule) {
-        ElkNode graph = ElkGraphUtil.createGraph();
-        Map<String, ElkNode> layoutNodes = grooveGraphRule.getAllNodes().entrySet().stream()
-                                                          .collect(Collectors.toMap(Map.Entry::getKey, o -> {
-                                                              ElkNode node = ElkGraphUtil.createNode(graph);
-                                                              // Layouting of groove is complicated. But these magic numbers work ok for now.
-                                                              node.setHeight(50);
-                                                              node.setWidth(o.getKey().length() * 60);
-                                                              return node;
-                                                          }));
-        grooveGraphRule.getAllEdges()
-                       .forEach((s, grooveEdge) -> ElkGraphUtil.createSimpleEdge(
-                               layoutNodes.get(grooveEdge.getSourceNode().getId()),
-                               layoutNodes.get(grooveEdge.getTargetNode().getId())));
-
-        RecursiveGraphLayoutEngine recursiveGraphLayoutEngine = new RecursiveGraphLayoutEngine();
-        recursiveGraphLayoutEngine.layout(graph, new BasicProgressMonitor());
-        return layoutNodes;
     }
 
     private void addEdgeToGxlGraph(

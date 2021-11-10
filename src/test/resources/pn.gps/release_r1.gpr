@@ -3,7 +3,7 @@
     <graph id="release_r1" role="rule" edgeids="false" edgemode="directed">
         <node id="n19">
             <attr name="layout">
-                <string>262 132 0 0</string>
+                <string>127 82 0 0</string>
             </attr>
         </node>
         <edge from="n19" to="n19">
@@ -18,7 +18,7 @@
         </edge>
         <node id="n17">
             <attr name="layout">
-                <string>262 62 0 0</string>
+                <string>247 172 0 0</string>
             </attr>
         </node>
         <edge from="n17" to="n17">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n16">
             <attr name="layout">
-                <string>62 62 0 0</string>
+                <string>62 172 0 0</string>
             </attr>
         </node>
         <edge from="n16" to="n16">
@@ -43,7 +43,7 @@
         </edge>
         <node id="n18">
             <attr name="layout">
-                <string>62 132 0 0</string>
+                <string>62 82 0 0</string>
             </attr>
         </node>
         <edge from="n18" to="n18">
