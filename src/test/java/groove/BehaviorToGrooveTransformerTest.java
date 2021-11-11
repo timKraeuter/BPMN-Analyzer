@@ -19,8 +19,8 @@ import java.nio.charset.StandardCharsets;
 
 class BehaviorToGrooveTransformerTest {
     //    private static final String outputPath = "C:/Source/groove/bin";
-//        private static final String outputPath = "B:/Research/groove/bin";
-    private static final String outputPath = FileUtils.getTempDirectoryPath();
+    private static final String outputPath = "B:/Source/groove/bin";
+//    private static final String outputPath = FileUtils.getTempDirectoryPath();
 
     @BeforeEach
     void setUp() {
@@ -149,17 +149,17 @@ class BehaviorToGrooveTransformerTest {
         Activity a3 = new Activity("a3");
 
         final BPMNProcessModel processModel = new BPMNProcessBuilder()
-                .name("subwork.gps")
+                .name("subwork")
                 .startEvent(start)
-                .sequenceFlow(start, a0)
-                .sequenceFlow(a0, a1)
-                .sequenceFlow(a1, split)
-                .sequenceFlow(split, a2_1)
-                .sequenceFlow(split, a2_2)
-                .sequenceFlow(a2_1, merge)
-                .sequenceFlow(a2_2, merge)
-                .sequenceFlow(merge, a3)
-                .sequenceFlow(merge, end)
+                .sequenceFlow("start", start, a0)
+                .sequenceFlow("a0", a0, a1)
+                .sequenceFlow("a1", a1, split)
+                .sequenceFlow("split_a2_1", split, a2_1)
+                .sequenceFlow("split_a2_2", split, a2_2)
+                .sequenceFlow("a2_1", a2_1, merge)
+                .sequenceFlow("a2_2", a2_2, merge)
+                .sequenceFlow("merge", merge, a3)
+                .sequenceFlow("a3", a3, end)
                 .endEvent(end)
                 .build();
 

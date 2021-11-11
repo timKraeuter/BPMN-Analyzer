@@ -31,9 +31,9 @@ public class BPMNProcessBuilder {
         return this;
     }
 
-    public BPMNProcessBuilder sequenceFlow(ControleFlowNode from, ControleFlowNode to) {
+    public BPMNProcessBuilder sequenceFlow(String name, ControlFlowNode from, ControlFlowNode to) {
         // We could check that this sequence flow is connected to the already created part of the model.
-        final SequenceFlow sequenceFlow = new SequenceFlow(from, to);
+        final SequenceFlow sequenceFlow = new SequenceFlow(name, from, to);
         this.sequenceFlows.add(sequenceFlow);
         return this;
     }

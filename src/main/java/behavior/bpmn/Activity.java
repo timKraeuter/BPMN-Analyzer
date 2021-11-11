@@ -1,14 +1,14 @@
 package behavior.bpmn;
 
-import behavior.bpmn.auxiliary.ControleFlowNodeVisitor;
+import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
 
-public class Activity extends ControleFlowNode {
+public class Activity extends ControlFlowNode {
     public Activity(String name) {
         super(name);
     }
 
     @Override
-    void accept(ControleFlowNodeVisitor visitor) {
+    public void accept(ControlFlowNodeVisitor visitor) {
         visitor.handle(this);
     }
 }

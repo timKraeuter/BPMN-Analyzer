@@ -2,10 +2,13 @@ package groove;
 
 import behavior.Behavior;
 import behavior.BehaviorVisitor;
-import behavior.bpmn.BPMNProcessModel;
+import behavior.bpmn.*;
+import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
 import behavior.fsm.FiniteStateMachine;
 import behavior.petriNet.PetriNet;
 import behavior.petriNet.Place;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import groove.gxl.Graph;
 import groove.gxl.Gxl;
 import groove.gxl.Node;
@@ -27,6 +30,7 @@ public class BehaviorToGrooveTransformer {
     private static final String START_GST = "/start.gst";
     private static final String START = "start";
     private static final String START_NODE_ID = "n0";
+    private static final String FINISHED_SUFFIX = "_finished";
 
     void generateGrooveGrammar(Behavior behavior, File targetFolder) {
         behavior.accept(new BehaviorVisitor() {
@@ -54,9 +58,161 @@ public class BehaviorToGrooveTransformer {
         this.generateBPMNStartGraph(bpmnProcessModel, graphGrammarSubFolder);
 
         // Generate rules
-//        this.generatePNRules(petriNet, graphGrammarSubFolder);
+        this.generateBPMNRules(bpmnProcessModel, graphGrammarSubFolder);
 
         this.generatePropertiesFile(graphGrammarSubFolder);
+    }
+
+    private void generateBPMNRules(BPMNProcessModel bpmnProcessModel, File graphGrammarSubFolder) {
+        GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator();
+
+        final Multimap<ParallelGateway, SequenceFlow> parallelGatewayOutgoing = ArrayListMultimap.create();
+        final Multimap<ParallelGateway, SequenceFlow> parallelGatewayIncoming = ArrayListMultimap.create();
+
+        bpmnProcessModel.getSequenceFlows().forEach(sequenceFlow -> {
+            ruleGenerator.startRule(sequenceFlow.getName());
+
+            sequenceFlow.getSource().accept(new ControlFlowNodeVisitor() {
+                @Override
+                public void handle(StartEvent startEventSource) {
+                    sequenceFlow.getTarget().accept(new ControlFlowNodeVisitor() {
+                        @Override
+                        public void handle(StartEvent startEvent) {
+                            throw new RuntimeException(
+                                    String.format("There should be no sequence flow between start events! " +
+                                                    "BPMN-Model: \"%s\", Sequence flow: \"%s\"",
+                                            bpmnProcessModel,
+                                            sequenceFlow));
+                        }
+
+                        @Override
+                        public void handle(Activity activity) {
+                            ruleGenerator.deleteNode(startEventSource.getName());
+                            ruleGenerator.addNode(activity.getName());
+                        }
+
+                        @Override
+                        public void handle(AlternativeGateway alternativeGateway) {
+                            ruleGenerator.deleteNode(startEventSource.getName());
+                            ruleGenerator.addNode(alternativeGateway.getName());
+                        }
+
+                        @Override
+                        public void handle(ParallelGateway parallelGateway) {
+                            ruleGenerator.deleteNode(startEventSource.getName());
+                            ruleGenerator.addNode(startEventSource.getName() + FINISHED_SUFFIX);
+
+                            parallelGatewayIncoming.put(parallelGateway, sequenceFlow);
+                        }
+
+                        @Override
+                        public void handle(EndEvent endEvent) {
+                            ruleGenerator.deleteNode(startEventSource.getName());
+                            ruleGenerator.addNode(endEvent.getName());
+                        }
+                    });
+                }
+
+                @Override
+                public void handle(Activity activitySource) {
+                    sequenceFlow.getTarget().accept(new ControlFlowNodeVisitor() {
+                        @Override
+                        public void handle(StartEvent startEvent) {
+                            throw new RuntimeException(
+                                    String.format("There should be no sequence flow to a start event! " +
+                                                    "BPMN-Model: \"%s\", Sequence flow: \"%s\"",
+                                            bpmnProcessModel,
+                                            sequenceFlow));
+                        }
+
+                        @Override
+                        public void handle(Activity activityTarget) {
+                            ruleGenerator.deleteNode(activitySource.getName());
+                            ruleGenerator.addNode(activityTarget.getName());
+                        }
+
+                        @Override
+                        public void handle(AlternativeGateway alternativeGateway) {
+                            ruleGenerator.deleteNode(activitySource.getName());
+                            ruleGenerator.addNode(alternativeGateway.getName());
+                        }
+
+                        @Override
+                        public void handle(ParallelGateway parallelGateway) {
+                            ruleGenerator.deleteNode(activitySource.getName());
+                            ruleGenerator.addNode(activitySource.getName() + FINISHED_SUFFIX);
+
+                            parallelGatewayIncoming.put(parallelGateway, sequenceFlow);
+                        }
+
+                        @Override
+                        public void handle(EndEvent endEvent) {
+                            ruleGenerator.deleteNode(activitySource.getName());
+                            ruleGenerator.addNode(endEvent.getName());
+                        }
+                    });
+                }
+
+                @Override
+                public void handle(AlternativeGateway alternativeGatewaySource) {
+                    sequenceFlow.getTarget().accept(new ControlFlowNodeVisitor() {
+                        @Override
+                        public void handle(StartEvent startEvent) {
+                            throw new RuntimeException(
+                                    String.format("There should be no sequence flow to a start event! " +
+                                                    "BPMN-Model: \"%s\", Sequence flow: \"%s\"",
+                                            bpmnProcessModel,
+                                            sequenceFlow));
+                        }
+
+                        @Override
+                        public void handle(Activity activity) {
+                            ruleGenerator.deleteNode(alternativeGatewaySource.getName());
+                            ruleGenerator.addNode(activity.getName());
+                        }
+
+                        @Override
+                        public void handle(AlternativeGateway alternativeGatewayTarget) {
+                            ruleGenerator.deleteNode(alternativeGatewaySource.getName());
+                            ruleGenerator.addNode(alternativeGatewayTarget.getName());
+                        }
+
+                        @Override
+                        public void handle(ParallelGateway parallelGateway) {
+                            ruleGenerator.deleteNode(alternativeGatewaySource.getName());
+                            ruleGenerator.addNode(alternativeGatewaySource.getName() + FINISHED_SUFFIX);
+
+                            parallelGatewayIncoming.put(parallelGateway, sequenceFlow);
+                        }
+
+                        @Override
+                        public void handle(EndEvent endEvent) {
+                            ruleGenerator.deleteNode(alternativeGatewaySource.getName());
+                            ruleGenerator.addNode(endEvent.getName());
+                        }
+                    });
+                }
+
+                @Override
+                public void handle(ParallelGateway parallelGatewaySource) {
+                    throw new UnsupportedOperationException("TBD");
+                }
+
+                @Override
+                public void handle(EndEvent endEvent) {
+                    throw new RuntimeException(
+                            String.format("An end event should never be source of a sequence flow! " +
+                                            "BPMN-Model: \"%s\", Sequence flow: \"%s\"",
+                                    bpmnProcessModel,
+                                    sequenceFlow));
+                }
+            });
+        ruleGenerator.generateRule();
+        });
+
+        // TODO: extra rules for parallel gateways
+
+        ruleGenerator.writeRules(graphGrammarSubFolder);
     }
 
     private void generateBPMNStartGraph(BPMNProcessModel bpmnProcessModel, File graphGrammarSubFolder) {
