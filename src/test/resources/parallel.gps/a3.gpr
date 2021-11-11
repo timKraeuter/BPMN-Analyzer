@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="a2_1" role="rule" edgeids="false" edgemode="directed">
+    <graph id="a3" role="rule" edgeids="false" edgemode="directed">
         <node id="n11">
             <attr name="layout">
-                <string>142 82 0 0</string>
+                <string>112 82 0 0</string>
             </attr>
         </node>
         <edge from="n11" to="n11">
             <attr name="label">
-                <string>merge</string>
+                <string>end</string>
             </attr>
         </edge>
         <edge from="n11" to="n11">
@@ -23,7 +23,7 @@
         </node>
         <edge from="n10" to="n10">
             <attr name="label">
-                <string>a2_1</string>
+                <string>a3</string>
             </attr>
         </edge>
         <edge from="n10" to="n10">

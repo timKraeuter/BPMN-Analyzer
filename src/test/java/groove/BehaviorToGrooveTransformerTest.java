@@ -19,8 +19,8 @@ import java.nio.charset.StandardCharsets;
 
 class BehaviorToGrooveTransformerTest {
     //    private static final String outputPath = "C:/Source/groove/bin";
-    private static final String outputPath = "B:/Source/groove/bin";
-//    private static final String outputPath = FileUtils.getTempDirectoryPath();
+//    private static final String outputPath = "B:/Source/groove/bin";
+    private static final String outputPath = FileUtils.getTempDirectoryPath();
 
     @BeforeEach
     void setUp() {
@@ -135,30 +135,34 @@ class BehaviorToGrooveTransformerTest {
         checkPropertiesFile(propertiesFile);
     }
 
+    /**
+     * See the pdf in resources which describes the BPMN process.
+     */
     @Test
-    void testBPMNGenerationResources() throws IOException {
+    void testBPMNExclusiveGatewayGenerationResources() throws IOException {
         // Build the process model from the NWPT example.
         final StartEvent start = new StartEvent("start");
         final EndEvent end = new EndEvent("end");
         Activity a0 = new Activity("a0");
         Activity a1 = new Activity("a1");
-        final AlternativeGateway split = new AlternativeGateway("split");
+        final ExclusiveGateway e1 = new ExclusiveGateway("e1");
         Activity a2_1 = new Activity("a2_1");
         Activity a2_2 = new Activity("a2_2");
-        final AlternativeGateway merge = new AlternativeGateway("merge");
+        final ExclusiveGateway e2 = new ExclusiveGateway("e2");
         Activity a3 = new Activity("a3");
 
+        final String modelName = "exclusive";
         final BPMNProcessModel processModel = new BPMNProcessBuilder()
-                .name("subwork")
+                .name(modelName)
                 .startEvent(start)
                 .sequenceFlow("start", start, a0)
                 .sequenceFlow("a0", a0, a1)
-                .sequenceFlow("a1", a1, split)
-                .sequenceFlow("split_a2_1", split, a2_1)
-                .sequenceFlow("split_a2_2", split, a2_2)
-                .sequenceFlow("a2_1", a2_1, merge)
-                .sequenceFlow("a2_2", a2_2, merge)
-                .sequenceFlow("merge", merge, a3)
+                .sequenceFlow("a1", a1, e1)
+                .sequenceFlow("e1_a2_1", e1, a2_1)
+                .sequenceFlow("e1_a2_2", e1, a2_2)
+                .sequenceFlow("a2_1", a2_1, e2)
+                .sequenceFlow("a2_2", a2_2, e2)
+                .sequenceFlow("e2", e2, a3)
                 .sequenceFlow("a3", a3, end)
                 .endEvent(end)
                 .build();
@@ -168,13 +172,60 @@ class BehaviorToGrooveTransformerTest {
         transformer.generateGrooveGrammar(processModel, outputDir);
 
         // assert
-        File expectedDir = new File(this.getClass().getResource("/subwork.gps").getFile());
+        File expectedDir = new File(this.getClass().getResource("/" + modelName + ".gps").getFile());
         FileTestHelper.testDirEquals(
                 expectedDir,
-                new File(outputDir + "/subwork.gps"),
+                new File(outputDir + "/" + modelName + ".gps"),
                 fileName -> fileName.equals("system.properties")); // Ignore the system.properties file because it contains a timestamp and a dir.
 
-        File propertiesFile = new File(this.getClass().getResource("/subwork.gps/system.properties").getFile());
+        File propertiesFile = new File(this.getClass().getResource("/" + modelName + ".gps/system.properties").getFile());
+        checkPropertiesFile(propertiesFile);
+    }
+
+    /**
+     * See the pdf in resources which describes the BPMN process.
+     */
+    @Test
+    void testBPMNParallelGatewayGenerationResources() throws IOException {
+        // Build the process model from the NWPT example.
+        final StartEvent start = new StartEvent("start");
+        final EndEvent end = new EndEvent("end");
+        Activity a0 = new Activity("a0");
+        Activity a1 = new Activity("a1");
+        final ParallelGateway p1 = new ParallelGateway("p1");
+        Activity a2_1 = new Activity("a2_1");
+        Activity a2_2 = new Activity("a2_2");
+        final ParallelGateway p2 = new ParallelGateway("p2");
+        Activity a3 = new Activity("a3");
+
+        final String modelName = "parallel";
+        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+                .name(modelName)
+                .startEvent(start)
+                .sequenceFlow("start", start, a0)
+                .sequenceFlow("a0", a0, a1)
+                .sequenceFlow("a1", a1, p1)
+                .sequenceFlow("p1_a2_1", p1, a2_1)
+                .sequenceFlow("p1_a2_2", p1, a2_2)
+                .sequenceFlow("a2_1", a2_1, p2)
+                .sequenceFlow("a2_2", a2_2, p2)
+                .sequenceFlow("p2", p2, a3)
+                .sequenceFlow("a3", a3, end)
+                .endEvent(end)
+                .build();
+
+        BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
+        File outputDir = new File(outputPath);
+        transformer.generateGrooveGrammar(processModel, outputDir);
+
+        // assert
+        File expectedDir = new File(this.getClass().getResource("/" + modelName + ".gps").getFile());
+        FileTestHelper.testDirEquals(
+                expectedDir,
+                new File(outputDir + "/" + modelName + ".gps"),
+                fileName -> fileName.equals("system.properties")); // Ignore the system.properties file because it contains a timestamp and a dir.
+
+        File propertiesFile = new File(this.getClass().getResource("/" + modelName + ".gps/system.properties").getFile());
         checkPropertiesFile(propertiesFile);
     }
 

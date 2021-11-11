@@ -11,4 +11,9 @@ public class StartEvent extends ControlFlowNode {
     public void accept(ControlFlowNodeVisitor visitor) {
         visitor.handle(this);
     }
+
+    @Override
+    public boolean isParallelGateway() {
+        return false;
+    }
 }

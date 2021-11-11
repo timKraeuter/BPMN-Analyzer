@@ -14,4 +14,6 @@ public abstract class ControlFlowNode {
     }
 
     public abstract void accept(ControlFlowNodeVisitor visitor);
+
+    public abstract boolean isParallelGateway();
 }

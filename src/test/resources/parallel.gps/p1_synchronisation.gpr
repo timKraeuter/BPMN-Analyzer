@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="split_a2_1" role="rule" edgeids="false" edgemode="directed">
-        <node id="n7">
+    <graph id="p1_synchronisation" role="rule" edgeids="false" edgemode="directed">
+        <node id="n13">
             <attr name="layout">
                 <string>62 82 0 0</string>
             </attr>
         </node>
-        <edge from="n7" to="n7">
+        <edge from="n13" to="n13">
             <attr name="label">
-                <string>a2_1</string>
+                <string>p1</string>
             </attr>
         </edge>
-        <edge from="n7" to="n7">
+        <edge from="n13" to="n13">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n6">
+        <node id="n12">
             <attr name="layout">
-                <string>142 82 0 0</string>
+                <string>62 172 0 0</string>
             </attr>
         </node>
-        <edge from="n6" to="n6">
+        <edge from="n12" to="n12">
             <attr name="label">
-                <string>split</string>
+                <string>a1_finished</string>
             </attr>
         </edge>
-        <edge from="n6" to="n6">
+        <edge from="n12" to="n12">
             <attr name="label">
                 <string>del:</string>
             </attr>

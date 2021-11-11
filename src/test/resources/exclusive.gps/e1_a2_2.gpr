@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="split_a2_2" role="rule" edgeids="false" edgemode="directed">
+    <graph id="e1_a2_2" role="rule" edgeids="false" edgemode="directed">
         <node id="n9">
             <attr name="layout">
-                <string>62 82 0 0</string>
+                <string>112 82 0 0</string>
             </attr>
         </node>
         <edge from="n9" to="n9">
@@ -18,12 +18,12 @@
         </edge>
         <node id="n8">
             <attr name="layout">
-                <string>142 82 0 0</string>
+                <string>62 82 0 0</string>
             </attr>
         </node>
         <edge from="n8" to="n8">
             <attr name="label">
-                <string>split</string>
+                <string>e1</string>
             </attr>
         </edge>
         <edge from="n8" to="n8">

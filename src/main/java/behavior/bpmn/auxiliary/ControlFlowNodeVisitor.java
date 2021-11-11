@@ -7,7 +7,7 @@ public interface ControlFlowNodeVisitor {
 
     void handle(Activity activity);
 
-    void handle(AlternativeGateway alternativeGateway);
+    void handle(ExclusiveGateway exclusiveGateway);
 
     void handle(ParallelGateway parallelGateway);
 

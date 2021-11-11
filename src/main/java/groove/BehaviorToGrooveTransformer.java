@@ -8,6 +8,7 @@ import behavior.fsm.FiniteStateMachine;
 import behavior.petriNet.PetriNet;
 import behavior.petriNet.Place;
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import groove.gxl.Graph;
 import groove.gxl.Gxl;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
@@ -30,7 +32,11 @@ public class BehaviorToGrooveTransformer {
     private static final String START_GST = "/start.gst";
     private static final String START = "start";
     private static final String START_NODE_ID = "n0";
+
+    // BPMN constants.
     private static final String FINISHED_SUFFIX = "_finished";
+    private static final String SYNCHRONISATION_SUFFIX = "_synchronisation";
+    private static final String DISTRIBUTION_SUFFIX = "_distribution";
 
     void generateGrooveGrammar(Behavior behavior, File targetFolder) {
         behavior.accept(new BehaviorVisitor() {
@@ -66,12 +72,14 @@ public class BehaviorToGrooveTransformer {
     private void generateBPMNRules(BPMNProcessModel bpmnProcessModel, File graphGrammarSubFolder) {
         GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator();
 
-        final Multimap<ParallelGateway, SequenceFlow> parallelGatewayOutgoing = ArrayListMultimap.create();
-        final Multimap<ParallelGateway, SequenceFlow> parallelGatewayIncoming = ArrayListMultimap.create();
+        // Iteration order of LinkedHashMultimap needed for testcases
+        final Multimap<ParallelGateway, SequenceFlow> parallelGatewayOutgoing = LinkedHashMultimap.create();
+        final Multimap<ParallelGateway, SequenceFlow> parallelGatewayIncoming = LinkedHashMultimap.create();
 
         bpmnProcessModel.getSequenceFlows().forEach(sequenceFlow -> {
-            ruleGenerator.startRule(sequenceFlow.getName());
-
+            if (!sequenceFlow.getSource().isParallelGateway()) {
+                ruleGenerator.startRule(sequenceFlow.getName());
+            }
             sequenceFlow.getSource().accept(new ControlFlowNodeVisitor() {
                 @Override
                 public void handle(StartEvent startEventSource) {
@@ -92,9 +100,9 @@ public class BehaviorToGrooveTransformer {
                         }
 
                         @Override
-                        public void handle(AlternativeGateway alternativeGateway) {
+                        public void handle(ExclusiveGateway exclusiveGateway) {
                             ruleGenerator.deleteNode(startEventSource.getName());
-                            ruleGenerator.addNode(alternativeGateway.getName());
+                            ruleGenerator.addNode(exclusiveGateway.getName());
                         }
 
                         @Override
@@ -132,9 +140,9 @@ public class BehaviorToGrooveTransformer {
                         }
 
                         @Override
-                        public void handle(AlternativeGateway alternativeGateway) {
+                        public void handle(ExclusiveGateway exclusiveGateway) {
                             ruleGenerator.deleteNode(activitySource.getName());
-                            ruleGenerator.addNode(alternativeGateway.getName());
+                            ruleGenerator.addNode(exclusiveGateway.getName());
                         }
 
                         @Override
@@ -154,7 +162,7 @@ public class BehaviorToGrooveTransformer {
                 }
 
                 @Override
-                public void handle(AlternativeGateway alternativeGatewaySource) {
+                public void handle(ExclusiveGateway exclusiveGatewaySource) {
                     sequenceFlow.getTarget().accept(new ControlFlowNodeVisitor() {
                         @Override
                         public void handle(StartEvent startEvent) {
@@ -167,35 +175,35 @@ public class BehaviorToGrooveTransformer {
 
                         @Override
                         public void handle(Activity activity) {
-                            ruleGenerator.deleteNode(alternativeGatewaySource.getName());
+                            ruleGenerator.deleteNode(exclusiveGatewaySource.getName());
                             ruleGenerator.addNode(activity.getName());
                         }
 
                         @Override
-                        public void handle(AlternativeGateway alternativeGatewayTarget) {
-                            ruleGenerator.deleteNode(alternativeGatewaySource.getName());
-                            ruleGenerator.addNode(alternativeGatewayTarget.getName());
+                        public void handle(ExclusiveGateway exclusiveGatewayTarget) {
+                            ruleGenerator.deleteNode(exclusiveGatewaySource.getName());
+                            ruleGenerator.addNode(exclusiveGatewayTarget.getName());
                         }
 
                         @Override
                         public void handle(ParallelGateway parallelGateway) {
-                            ruleGenerator.deleteNode(alternativeGatewaySource.getName());
-                            ruleGenerator.addNode(alternativeGatewaySource.getName() + FINISHED_SUFFIX);
+                            ruleGenerator.deleteNode(exclusiveGatewaySource.getName());
+                            ruleGenerator.addNode(exclusiveGatewaySource.getName() + FINISHED_SUFFIX);
 
                             parallelGatewayIncoming.put(parallelGateway, sequenceFlow);
                         }
 
                         @Override
                         public void handle(EndEvent endEvent) {
-                            ruleGenerator.deleteNode(alternativeGatewaySource.getName());
+                            ruleGenerator.deleteNode(exclusiveGatewaySource.getName());
                             ruleGenerator.addNode(endEvent.getName());
                         }
                     });
                 }
 
                 @Override
-                public void handle(ParallelGateway parallelGatewaySource) {
-                    throw new UnsupportedOperationException("TBD");
+                public void handle(ParallelGateway parallelGateway) {
+                    parallelGatewayOutgoing.put(parallelGateway, sequenceFlow);
                 }
 
                 @Override
@@ -207,10 +215,38 @@ public class BehaviorToGrooveTransformer {
                                     sequenceFlow));
                 }
             });
-        ruleGenerator.generateRule();
+            if (!sequenceFlow.getSource().isParallelGateway()) {
+                ruleGenerator.generateRule();
+            }
         });
 
-        // TODO: extra rules for parallel gateways
+        // Merge for parallel gateways
+        parallelGatewayIncoming.keySet().forEach(parallelGateway -> {
+            ruleGenerator.startRule(parallelGateway.getName() + SYNCHRONISATION_SUFFIX);
+
+            final Collection<SequenceFlow> incomingFlows = parallelGatewayIncoming.get(parallelGateway);
+            incomingFlows.forEach(sequenceFlow -> ruleGenerator.deleteNode(sequenceFlow.getSource().getName() + FINISHED_SUFFIX));
+            ruleGenerator.addNode(parallelGateway.getName());
+
+            ruleGenerator.generateRule();
+        });
+
+        // Distribution for parallel gateways
+        parallelGatewayOutgoing.keySet().forEach(parallelGateway -> {
+            ruleGenerator.startRule(parallelGateway.getName() + DISTRIBUTION_SUFFIX);
+
+            final Collection<SequenceFlow> outgoingFlows = parallelGatewayOutgoing.get(parallelGateway);
+            outgoingFlows.forEach(sequenceFlow -> {
+                if (sequenceFlow.getTarget().isParallelGateway()) {
+                    ruleGenerator.addNode(sequenceFlow.getTarget().getName() + FINISHED_SUFFIX);
+                } else {
+                    ruleGenerator.addNode(sequenceFlow.getTarget().getName());
+                }
+            });
+            ruleGenerator.deleteNode(parallelGateway.getName());
+
+            ruleGenerator.generateRule();
+        });
 
         ruleGenerator.writeRules(graphGrammarSubFolder);
     }
