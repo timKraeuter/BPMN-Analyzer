@@ -8,6 +8,7 @@ import behavior.bpmn.auxiliary.StartParallelOrElseControlFlowNodeVisitor;
 import behavior.fsm.FiniteStateMachine;
 import behavior.petriNet.PetriNet;
 import behavior.petriNet.Place;
+import behavior.piCalculus.NamedPiProcess;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import groove.graph.GrooveNode;
@@ -55,6 +56,11 @@ public class BehaviorToGrooveTransformer {
             @Override
             public void handle(BPMNProcessModel bpmnProcessModel) {
                 BehaviorToGrooveTransformer.this.generateGrooveGrammarForBPMNProcessModel(bpmnProcessModel, targetFolder);
+            }
+
+            @Override
+            public void handle(NamedPiProcess piProcess) {
+                throw new UnsupportedOperationException("TBD");
             }
         });
     }

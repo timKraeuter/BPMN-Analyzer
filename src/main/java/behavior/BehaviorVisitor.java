@@ -3,6 +3,7 @@ package behavior;
 import behavior.bpmn.BPMNProcessModel;
 import behavior.fsm.FiniteStateMachine;
 import behavior.petriNet.PetriNet;
+import behavior.piCalculus.NamedPiProcess;
 
 public interface BehaviorVisitor {
     void handle(FiniteStateMachine finiteStateMachine);
@@ -10,4 +11,6 @@ public interface BehaviorVisitor {
     void handle(PetriNet petriNet);
 
     void handle(BPMNProcessModel bpmnProcessModel);
+
+    void handle(NamedPiProcess piProcess);
 }
