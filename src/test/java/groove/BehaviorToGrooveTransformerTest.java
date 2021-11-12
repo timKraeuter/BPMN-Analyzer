@@ -39,7 +39,7 @@ class BehaviorToGrooveTransformerTest {
         fsm.addTransition(new Transition("a", start, s1));
         fsm.addTransition(new Transition("b", s1, s2));
         fsm.addTransition(new Transition("c", s2, s3));
-        
+
         this.checkGrooveGeneration(fsmName, fsm);
     }
 
@@ -220,6 +220,31 @@ class BehaviorToGrooveTransformerTest {
                 .sequenceFlow("e4_e2", e4, e2)
                 .sequenceFlow("e4_end", e4, end)
                 .endEvent(end)
+                .build();
+
+        this.checkGrooveGeneration(modelName, processModel);
+    }
+
+    @Test
+    void testBPMNTwoEndEventsGenerationResources() throws IOException {
+        final StartEvent start = new StartEvent("start");
+        final ParallelGateway p1 = new ParallelGateway("p1");
+        Activity a1 = new Activity("a1");
+        Activity a2 = new Activity("a2");
+        final EndEvent end1 = new EndEvent("end1");
+        final EndEvent end2 = new EndEvent("end2");
+
+        final String modelName = "twoEndEvents";
+        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+                .name(modelName)
+                .startEvent(start)
+                .sequenceFlow("start", start, p1)
+                .sequenceFlow("p1", p1, a1)
+                .sequenceFlow("p1", p1, a2)
+                .sequenceFlow("a1", a1, end1)
+                .sequenceFlow("a2", a2, end2)
+                .endEvent(end1)
+                .endEvent(end2)
                 .build();
 
         this.checkGrooveGeneration(modelName, processModel);
