@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="a3" role="rule" edgeids="false" edgemode="directed">
+        <node id="n15">
+            <attr name="layout">
+                <string>62 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n15" to="n15">
+            <attr name="label">
+                <string>e3</string>
+            </attr>
+        </edge>
+        <edge from="n15" to="n15">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n14">
+            <attr name="layout">
+                <string>112 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n14" to="n14">
+            <attr name="label">
+                <string>a3</string>
+            </attr>
+        </edge>
+        <edge from="n14" to="n14">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

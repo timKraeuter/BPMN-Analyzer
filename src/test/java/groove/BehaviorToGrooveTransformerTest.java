@@ -1,5 +1,6 @@
 package groove;
 
+import behavior.Behavior;
 import behavior.bpmn.*;
 import behavior.bpmn.auxiliary.BPMNProcessBuilder;
 import behavior.fsm.FiniteStateMachine;
@@ -18,9 +19,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 class BehaviorToGrooveTransformerTest {
-    //    private static final String outputPath = "C:/Source/groove/bin";
+    private static final String outputPath = "C:/Source/groove/bin";
 //    private static final String outputPath = "B:/Source/groove/bin";
-    private static final String outputPath = FileUtils.getTempDirectoryPath();
+//    private static final String outputPath = FileUtils.getTempDirectoryPath();
 
     @BeforeEach
     void setUp() {
@@ -30,33 +31,23 @@ class BehaviorToGrooveTransformerTest {
     @Test
     void testFSMGenerationABC() throws IOException {
         State start = new State("start");
-        FiniteStateMachine fsm = new FiniteStateMachine("abc", start);
+        String fsmName = "abc";
+        FiniteStateMachine fsm = new FiniteStateMachine(fsmName, start);
         State s1 = new State("s1");
         State s2 = new State("s2");
         State s3 = new State("s3");
         fsm.addTransition(new Transition("a", start, s1));
         fsm.addTransition(new Transition("b", s1, s2));
         fsm.addTransition(new Transition("c", s2, s3));
-
-        BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
-        File outputDir = new File(outputPath);
-        transformer.generateGrooveGrammar(fsm, outputDir);
-
-        // assert
-        File expectedDir = new File(this.getClass().getResource("/abc.gps").getFile());
-        FileTestHelper.testDirEquals(
-                expectedDir,
-                new File(outputDir + "/abc.gps"),
-                fileName -> fileName.equals("system.properties")); // Ignore the system.properties file because it contains a timestamp and a dir.
-
-        File propertiesFile = new File(this.getClass().getResource("/abc.gps/system.properties").getFile());
-        checkPropertiesFile(propertiesFile);
+        
+        this.checkGrooveGeneration(fsmName, fsm);
     }
 
     @Test
     void testFSMGenerationResources() throws IOException {
         State start = new State("start");
-        FiniteStateMachine fsm = new FiniteStateMachine("2_Resource_Process", start);
+        String fsmName = "2_Resource_Process";
+        FiniteStateMachine fsm = new FiniteStateMachine(fsmName, start);
         State r1 = new State("r1");
         State work = new State("work");
         State r2_released = new State("r2_released");
@@ -66,24 +57,13 @@ class BehaviorToGrooveTransformerTest {
         fsm.addTransition(new Transition("release_r2", work, r2_released));
         fsm.addTransition(new Transition("release_r1", r2_released, end));
 
-        BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
-        File outputDir = new File(outputPath);
-        transformer.generateGrooveGrammar(fsm, outputDir);
-
-        // assert
-        File expectedDir = new File(this.getClass().getResource("/2_Resource_Process.gps").getFile());
-        FileTestHelper.testDirEquals(
-                expectedDir,
-                new File(outputDir + "/2_Resource_Process.gps"),
-                fileName -> fileName.equals("system.properties")); // Ignore the system.properties file because it contains a timestamp and a dir.
-
-        File propertiesFile = new File(this.getClass().getResource("/2_Resource_Process.gps/system.properties").getFile());
-        checkPropertiesFile(propertiesFile);
+        this.checkGrooveGeneration(fsmName, fsm);
     }
 
     @Test
     void testPNGenerationResources() throws IOException {
-        PetriNet pn = new PetriNet("pn");
+        String petriNetName = "pn";
+        PetriNet pn = new PetriNet(petriNetName);
         // Places
         Place start = new Place("start", 3);
         Place r1_preWork = new Place("r1_preWork");
@@ -120,23 +100,11 @@ class BehaviorToGrooveTransformerTest {
         pn.addTransition(release_r2);
 
         // TODO weird object things in the visual debugger when explorings pairs. (depth 2)
-        BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
-        File outputDir = new File(outputPath);
-        transformer.generateGrooveGrammar(pn, outputDir);
-
-        // assert
-        File expectedDir = new File(this.getClass().getResource("/pn.gps").getFile());
-        FileTestHelper.testDirEquals(
-                expectedDir,
-                new File(outputDir + "/pn.gps"),
-                fileName -> fileName.equals("system.properties")); // Ignore the system.properties file because it contains a timestamp and a dir.
-
-        File propertiesFile = new File(this.getClass().getResource("/pn.gps/system.properties").getFile());
-        checkPropertiesFile(propertiesFile);
+        this.checkGrooveGeneration(petriNetName, pn);
     }
 
     /**
-     * See the pdf in resources which describes the BPMN process.
+     * See the pdf in resources/documentation which describes the BPMN process.
      */
     @Test
     void testBPMNExclusiveGatewayGenerationResources() throws IOException {
@@ -167,27 +135,14 @@ class BehaviorToGrooveTransformerTest {
                 .endEvent(end)
                 .build();
 
-        BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
-        File outputDir = new File(outputPath);
-        transformer.generateGrooveGrammar(processModel, outputDir);
-
-        // assert
-        File expectedDir = new File(this.getClass().getResource("/" + modelName + ".gps").getFile());
-        FileTestHelper.testDirEquals(
-                expectedDir,
-                new File(outputDir + "/" + modelName + ".gps"),
-                fileName -> fileName.equals("system.properties")); // Ignore the system.properties file because it contains a timestamp and a dir.
-
-        File propertiesFile = new File(this.getClass().getResource("/" + modelName + ".gps/system.properties").getFile());
-        checkPropertiesFile(propertiesFile);
+        this.checkGrooveGeneration(modelName, processModel);
     }
 
     /**
-     * See the pdf in resources which describes the BPMN process.
+     * See the pdf in resources/documentation which describes the BPMN process.
      */
     @Test
     void testBPMNParallelGatewayGenerationResources() throws IOException {
-        // Build the process model from the NWPT example.
         final StartEvent start = new StartEvent("start");
         final EndEvent end = new EndEvent("end");
         Activity a0 = new Activity("a0");
@@ -214,9 +169,13 @@ class BehaviorToGrooveTransformerTest {
                 .endEvent(end)
                 .build();
 
+        this.checkGrooveGeneration(modelName, processModel);
+    }
+
+    private void checkGrooveGeneration(String modelName, Behavior behavior) throws IOException {
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
         File outputDir = new File(outputPath);
-        transformer.generateGrooveGrammar(processModel, outputDir);
+        transformer.generateGrooveGrammar(behavior, outputDir);
 
         // assert
         File expectedDir = new File(this.getClass().getResource("/" + modelName + ".gps").getFile());
@@ -226,7 +185,44 @@ class BehaviorToGrooveTransformerTest {
                 fileName -> fileName.equals("system.properties")); // Ignore the system.properties file because it contains a timestamp and a dir.
 
         File propertiesFile = new File(this.getClass().getResource("/" + modelName + ".gps/system.properties").getFile());
-        checkPropertiesFile(propertiesFile);
+        this.checkPropertiesFile(propertiesFile);
+    }
+
+    /**
+     * See the pdf in resources/documentation which describes the BPMN process.
+     */
+    @Test
+    void testBPMNCyclicGenerationResources() throws IOException {
+        final StartEvent start = new StartEvent("start");
+        final EndEvent end = new EndEvent("end");
+        Activity a0 = new Activity("a0");
+        final ExclusiveGateway e1 = new ExclusiveGateway("e1");
+        Activity a1 = new Activity("a1");
+        Activity a2 = new Activity("a2");
+        Activity a3 = new Activity("a3");
+        final ExclusiveGateway e2 = new ExclusiveGateway("e2");
+        final ExclusiveGateway e3 = new ExclusiveGateway("e3");
+        final ExclusiveGateway e4 = new ExclusiveGateway("e4");
+
+        final String modelName = "cyclic";
+        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+                .name(modelName)
+                .startEvent(start)
+                .sequenceFlow("start", start, a0)
+                .sequenceFlow("a0", a0, e1)
+                .sequenceFlow("e1_a1", e1, a1)
+                .sequenceFlow("e1_a2", e1, a2)
+                .sequenceFlow("a1", a1, e2)
+                .sequenceFlow("a2", a2, e3)
+                .sequenceFlow("e2", e2, a3)
+                .sequenceFlow("a3", a3, e3)
+                .sequenceFlow("e3", e3, e4)
+                .sequenceFlow("e4_e2", e4, e2)
+                .sequenceFlow("e4_end", e4, end)
+                .endEvent(end)
+                .build();
+
+        this.checkGrooveGeneration(modelName, processModel);
     }
 
     private void checkPropertiesFile(File propertiesFile) throws IOException {
