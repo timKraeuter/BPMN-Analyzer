@@ -1,17 +1,15 @@
 package groove;
 
+import groove.graph.GrooveNode;
+import groove.graph.GrooveRuleGenerator;
 import org.apache.commons.io.FileUtils;
-import org.eclipse.elk.core.RecursiveGraphLayoutEngine;
-import org.eclipse.elk.core.util.BasicProgressMonitor;
-import org.eclipse.elk.graph.ElkEdge;
-import org.eclipse.elk.graph.ElkNode;
-import org.eclipse.elk.graph.util.ElkGraphUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.FileTestHelper;
 
 import java.io.File;
 
+@SuppressWarnings("ConstantConditions")
 public class RuleGenerationTest {
 
     @BeforeEach

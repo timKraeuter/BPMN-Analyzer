@@ -1,4 +1,4 @@
-package groove;
+package groove.graph;
 
 import api.GraphRule;
 
@@ -7,7 +7,6 @@ import java.util.*;
 public class GrooveGraphRule implements GraphRule {
     private final String ruleName;
 
-    // We are using list since one Node with exactly the same properties could be added twice by a rule.
     private final Map<String, GrooveNode> nodesToBeAdded;
     private final Map<String, GrooveNode> contextNodes;
     private final Map<String, GrooveNode> nodesToBeDeleted;

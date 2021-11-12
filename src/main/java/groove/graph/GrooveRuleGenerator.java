@@ -1,25 +1,23 @@
-package groove;
+package groove.graph;
 
 import api.GraphRuleGenerator;
 import api.Node;
-import behavior.Aspect;
-import groove.gxl.Attr;
-import groove.gxl.Edge;
+import groove.GrooveGxlHelper;
+import groove.GxlToXMLConverter;
 import groove.gxl.Graph;
 import groove.gxl.Gxl;
-import org.eclipse.elk.core.RecursiveGraphLayoutEngine;
-import org.eclipse.elk.core.util.BasicProgressMonitor;
-import org.eclipse.elk.graph.ElkNode;
-import org.eclipse.elk.graph.util.ElkGraphUtil;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class GrooveRuleGenerator implements GraphRuleGenerator {
     public static final String ASPECT_LABEL_NEW = "new:";
     public static final String ASPECT_LABEL_DEL = "del:";
-    private List<GrooveGraphRule> rules = new ArrayList<>();
+    private final List<GrooveGraphRule> rules = new ArrayList<>();
     private GrooveGraphRule currentRule = null;
 
     @Override
@@ -99,19 +97,19 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
 
             Map<String, groove.gxl.Node> allGxlNodes = new HashMap<>();
             // Add nodes which should be added to gxl
-            grooveGraphRule.getNodesToBeAdded().forEach(toBeAddedNode -> this.addNodeToGxlGraph(graph, toBeAddedNode, allGxlNodes, Aspect.ADD));
+            grooveGraphRule.getNodesToBeAdded().forEach(toBeAddedNode -> this.addNodeToGxlGraph(graph, toBeAddedNode, allGxlNodes, NodeRuleAspect.ADD));
 
             // Add nodes which should be deleted to gxl
-            grooveGraphRule.getNodesToBeDeleted().forEach(toBeDeletedNode -> this.addNodeToGxlGraph(graph, toBeDeletedNode, allGxlNodes, Aspect.DEL));
+            grooveGraphRule.getNodesToBeDeleted().forEach(toBeDeletedNode -> this.addNodeToGxlGraph(graph, toBeDeletedNode, allGxlNodes, NodeRuleAspect.DEL));
 
             // Add nodes which should be in context
-            grooveGraphRule.getContextNodes().forEach(contextNode -> this.addNodeToGxlGraph(graph, contextNode, allGxlNodes, Aspect.CONTEXT));
+            grooveGraphRule.getContextNodes().forEach(contextNode -> this.addNodeToGxlGraph(graph, contextNode, allGxlNodes, NodeRuleAspect.CONTEXT));
 
             // Add edges which should be added to gxl
-            grooveGraphRule.getEdgesToBeAdded().forEach(toBeAddedEdge -> this.addEdgeToGxlGraph(graph, toBeAddedEdge, allGxlNodes, Aspect.ADD));
+            grooveGraphRule.getEdgesToBeAdded().forEach(toBeAddedEdge -> this.addEdgeToGxlGraph(graph, toBeAddedEdge, allGxlNodes, NodeRuleAspect.ADD));
 
             // Add edges which should be deleted to gxl
-            grooveGraphRule.getEdgesToBeDeleted().forEach(toBeDeletedEdge -> this.addEdgeToGxlGraph(graph, toBeDeletedEdge, allGxlNodes, Aspect.DEL));
+            grooveGraphRule.getEdgesToBeDeleted().forEach(toBeDeletedEdge -> this.addEdgeToGxlGraph(graph, toBeDeletedEdge, allGxlNodes, NodeRuleAspect.DEL));
 
             // TODO: context edges!
 
@@ -127,7 +125,7 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
             Graph graph,
             GrooveEdge grooveEdge,
             Map<String, groove.gxl.Node> createdGxlNodes,
-            Aspect addDelOrContext) {
+            NodeRuleAspect addDelOrContext) {
         groove.gxl.Node sourceNode = createdGxlNodes.get(grooveEdge.getSourceNode().getId());
         groove.gxl.Node targetNode = createdGxlNodes.get(grooveEdge.getTargetNode().getId());
         assert sourceNode != null;
@@ -140,7 +138,7 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
             Graph graph,
             GrooveNode grooveNode,
             Map<String, groove.gxl.Node> nodeRepository,
-            Aspect addDelOrContext) {
+            NodeRuleAspect addDelOrContext) {
         groove.gxl.Node gxlNode = GrooveGxlHelper.createNodeWithName(grooveNode.getId(), grooveNode.getName(), graph);
         nodeRepository.put(gxlNode.getId(), gxlNode);
 
@@ -158,7 +156,7 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
         }
     }
 
-    private String getAspectLabel(Aspect addDelOrContext) {
+    private String getAspectLabel(NodeRuleAspect addDelOrContext) {
         switch (addDelOrContext) {
             case ADD:
                 return ASPECT_LABEL_NEW;

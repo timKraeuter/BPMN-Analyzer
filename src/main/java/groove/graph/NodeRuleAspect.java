@@ -1,4 +1,4 @@
-package behavior;
+package groove.graph;
 
 /**
  * A node or edge in a graph rule can have one of three aspects:
@@ -6,7 +6,7 @@ package behavior;
  * context
  * and del.
  */
-public enum Aspect {
+public enum NodeRuleAspect {
     ADD,
     CONTEXT,
     DEL

@@ -8,9 +8,10 @@ import behavior.bpmn.auxiliary.StartParallelOrElseControlFlowNodeVisitor;
 import behavior.fsm.FiniteStateMachine;
 import behavior.petriNet.PetriNet;
 import behavior.petriNet.Place;
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
+import groove.graph.GrooveNode;
+import groove.graph.GrooveRuleGenerator;
 import groove.gxl.Graph;
 import groove.gxl.Gxl;
 import groove.gxl.Node;
@@ -80,7 +81,7 @@ public class BehaviorToGrooveTransformer {
         bpmnProcessModel.getSequenceFlows().forEach(sequenceFlow -> sequenceFlow.getSource().accept(new ControlFlowNodeVisitor() {
             @Override
             public void handle(StartEvent startEvent) {
-                handleNonParallelGateway(
+                this.handleNonParallelGateway(
                         startEvent,
                         sequenceFlow,
                         bpmnProcessModel,
@@ -90,7 +91,7 @@ public class BehaviorToGrooveTransformer {
 
             @Override
             public void handle(Activity activity) {
-                handleNonParallelGateway(
+                this.handleNonParallelGateway(
                         activity,
                         sequenceFlow,
                         bpmnProcessModel,
@@ -100,7 +101,7 @@ public class BehaviorToGrooveTransformer {
 
             @Override
             public void handle(ExclusiveGateway exclusiveGateway) {
-                handleNonParallelGateway(
+                this.handleNonParallelGateway(
                         exclusiveGateway,
                         sequenceFlow,
                         bpmnProcessModel,
@@ -191,7 +192,7 @@ public class BehaviorToGrooveTransformer {
     private void generateBPMNStartGraph(BPMNProcessModel bpmnProcessModel, File graphGrammarSubFolder) {
         final String startEventName = bpmnProcessModel.getStartEvent().getName();
 
-        createStartGraphWithOneNode(graphGrammarSubFolder, startEventName);
+        this.createStartGraphWithOneNode(graphGrammarSubFolder, startEventName);
 
     }
 
@@ -322,7 +323,7 @@ public class BehaviorToGrooveTransformer {
     private void generateFSMStartGraphFile(FiniteStateMachine finiteStateMachine, File targetFolder) {
         final String startStateName = finiteStateMachine.getStartState().getName();
 
-        createStartGraphWithOneNode(targetFolder, startStateName);
+        this.createStartGraphWithOneNode(targetFolder, startStateName);
     }
 
     private void createStartGraphWithOneNode(File targetFolder, String startNodeName) {

@@ -1,4 +1,4 @@
-package groove;
+package groove.graph;
 
 import api.Edge;
 

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-class GraphToXMLConverterTest {
+class GxlToXMLConverterTest {
     @Test
     void test() {
         Gxl gxl = new Gxl();

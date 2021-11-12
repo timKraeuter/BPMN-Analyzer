@@ -8,6 +8,7 @@ import behavior.fsm.State;
 import behavior.fsm.Transition;
 import behavior.petriNet.PetriNet;
 import behavior.petriNet.Place;
+import groove.graph.GrooveNode;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

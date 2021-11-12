@@ -1,11 +1,11 @@
-package groove;
+package groove.graph;
 
 import api.Node;
 
 import java.util.concurrent.atomic.AtomicLong;
 
 public class GrooveNode implements Node {
-    protected final static AtomicLong idCounter = new AtomicLong(-1);
+    public static final AtomicLong idCounter = new AtomicLong(-1);
 
     private final String id = "n" + idCounter.incrementAndGet();
     private final String name;
