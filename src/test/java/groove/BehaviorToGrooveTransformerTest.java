@@ -20,9 +20,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 class BehaviorToGrooveTransformerTest {
-    //    private static final String outputPath = "C:/Source/groove/bin";
+        private static final String outputPath = "C:/Source/groove/bin";
 //    private static final String outputPath = "B:/Source/groove/bin";
-    private static final String outputPath = FileUtils.getTempDirectoryPath();
+//    private static final String outputPath = FileUtils.getTempDirectoryPath();
 
     @BeforeEach
     void setUp() {

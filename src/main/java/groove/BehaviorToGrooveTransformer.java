@@ -60,9 +60,21 @@ public class BehaviorToGrooveTransformer {
 
             @Override
             public void handle(NamedPiProcess piProcess) {
-                throw new UnsupportedOperationException("TBD");
+                BehaviorToGrooveTransformer.this.generateGrooveGrammarForPiProcess(piProcess, targetFolder);
             }
         });
+    }
+
+    private void generateGrooveGrammarForPiProcess(NamedPiProcess piProcess, File grooveDir) {
+        File graphGrammarSubFolder = this.makeSubFolder(piProcess, grooveDir);
+
+        this.generatePiStartGraph(piProcess, graphGrammarSubFolder);
+
+        this.generatePropertiesFile(graphGrammarSubFolder);
+    }
+
+    private void generatePiStartGraph(NamedPiProcess piProcess, File graphGrammarSubFolder) {
+        // TODO: implement
     }
 
     private void generateGrooveGrammarForBPMNProcessModel(BPMNProcessModel bpmnProcessModel, File grooveDir) {
