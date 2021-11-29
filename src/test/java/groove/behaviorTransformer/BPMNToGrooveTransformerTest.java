@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelper {
-    
+
     @BeforeEach
     void setUp() {
         GrooveNode.idCounter.set(-1);
@@ -36,7 +36,7 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .endEvent(end)
                 .build();
 
-        this.checkGrooveGeneration(modelName, processModel);
+        this.checkGrooveGeneration(processModel);
     }
 
     /**
@@ -71,7 +71,7 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .endEvent(end)
                 .build();
 
-        this.checkGrooveGeneration(modelName, processModel);
+        this.checkGrooveGeneration(processModel);
     }
 
     /**
@@ -105,7 +105,7 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .endEvent(end)
                 .build();
 
-        this.checkGrooveGeneration(modelName, processModel);
+        this.checkGrooveGeneration(processModel);
     }
 
     /**
@@ -142,7 +142,7 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .endEvent(end)
                 .build();
 
-        this.checkGrooveGeneration(modelName, processModel);
+        this.checkGrooveGeneration(processModel);
     }
 
     /**
@@ -170,6 +170,6 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .endEvent(end2)
                 .build();
 
-        this.checkGrooveGeneration(modelName, processModel);
+        this.checkGrooveGeneration(processModel);
     }
 }

@@ -8,4 +8,9 @@ public class MultiarySum extends Sum {
     public MultiarySum(Set<Sum> sums) {
         this.sums = sums;
     }
+
+    @Override
+    public void accept(PiProcessVisitor visitor) {
+        visitor.handle(this);
+    }
 }

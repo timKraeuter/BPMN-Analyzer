@@ -28,7 +28,7 @@ class FSMToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelpe
         fsm.addTransition(new Transition("b", s1, s2));
         fsm.addTransition(new Transition("c", s2, s3));
 
-        this.checkGrooveGeneration(fsmName, fsm);
+        this.checkGrooveGeneration(fsm);
     }
 
     @Test
@@ -45,6 +45,6 @@ class FSMToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelpe
         fsm.addTransition(new Transition("release_r2", work, r2_released));
         fsm.addTransition(new Transition("release_r1", r2_released, end));
 
-        this.checkGrooveGeneration(fsmName, fsm);
+        this.checkGrooveGeneration(fsm);
     }
 }

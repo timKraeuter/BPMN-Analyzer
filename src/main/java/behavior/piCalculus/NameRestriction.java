@@ -8,4 +8,9 @@ public class NameRestriction implements PiProcess {
         this.restrictedName = restrictedName;
         this.restrictedProcess = restrictedProcess;
     }
+
+    @Override
+    public void accept(PiProcessVisitor visitor) {
+        visitor.handle(this);
+    }
 }

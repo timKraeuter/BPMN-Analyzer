@@ -15,7 +15,8 @@ interface BehaviorToGrooveTransformerTestHelper {
     String outputPath = FileUtils.getTempDirectoryPath();
 
     @SuppressWarnings("ConstantConditions")
-    default void checkGrooveGeneration(String modelName, Behavior behavior) throws IOException {
+    default void checkGrooveGeneration(Behavior behavior) throws IOException {
+        String modelName = behavior.getName();
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
         File outputDir = new File(outputPath);
         transformer.generateGrooveGrammar(behavior, outputDir);

@@ -14,7 +14,7 @@ class PNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelper
     void setUp() {
         GrooveNode.idCounter.set(-1);
     }
-    
+
     @Test
     void testPNGenerationResources() throws IOException {
         String petriNetName = "pn";
@@ -55,6 +55,6 @@ class PNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelper
         pn.addTransition(release_r2);
 
         // TODO weird object things in the visual debugger when explorings pairs. (depth 2)
-        this.checkGrooveGeneration(petriNetName, pn);
+        this.checkGrooveGeneration(pn);
     }
 }

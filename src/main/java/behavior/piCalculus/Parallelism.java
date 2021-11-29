@@ -9,4 +9,9 @@ public class Parallelism implements PiProcess {
     public Parallelism(Set<PiProcess> parallelProcesses) {
         this.parallelProcesses = new LinkedHashSet<>(parallelProcesses);
     }
+
+    @Override
+    public void accept(PiProcessVisitor visitor) {
+        visitor.handle(this);
+    }
 }
