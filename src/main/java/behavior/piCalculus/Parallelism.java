@@ -14,4 +14,10 @@ public class Parallelism implements PiProcess {
     public <T> T accept(PiProcessVisitor<T> visitor) {
         return visitor.handle(this);
     }
+
+    @Override
+    public boolean isEmptySum() {
+        return false;
+    }
+
 }

@@ -26,6 +26,8 @@ public class PiCalcToGrooveTransformer {
     private static final String TYPE_NAME = TYPE + "Name";
     public static final String CHANNEL = "channel";
     public static final String PAYLOAD = "payload";
+    public static final String PAR = "par";
+    public static final String RES = "res";
 
     void copyPiRules(File targetFolder) {
         // TODO: Copy the fixed set of rules from somewhere.
@@ -40,11 +42,23 @@ public class PiCalcToGrooveTransformer {
         Map<String, Node> nameToNode = new HashMap<>();
 
         // Create root process with flag go.
-        Node node = GrooveGxlHelper.createNodeWithName(this.getNodeId(idCounter), TYPE_PROCESS, graph);
-        GrooveGxlHelper.addFlagToNode(graph, node, "go");
-        nodeIdToLabel.put(node.getId(), TYPE_PROCESS);
-        // TODO: connect to the node either with c or par.
-        Node node1 = this.convertProcess(graph, piProcess.getProcess(), nodeIdToLabel, idCounter, nameToNode);
+        Node rootNode = GrooveGxlHelper.createNodeWithNameAndRememberLabel(
+                this.getNodeId(idCounter),
+                TYPE_PROCESS,
+                graph,
+                nodeIdToLabel);
+        GrooveGxlHelper.addFlagToNode(graph, rootNode, "go");
+
+        if (!piProcess.getProcess().isEmptySum()) {
+            Node parOrSum = this.convertProcess(
+                    graph,
+                    piProcess.getProcess(),
+                    nodeIdToLabel,
+                    idCounter,
+                    nameToNode,
+                    true);
+            this.addEdgeFromRoot(piProcess, graph, rootNode, parOrSum);
+        }
 
         GrooveGxlHelper.layoutGraph(graph, nodeIdToLabel);
 
@@ -52,12 +66,50 @@ public class PiCalcToGrooveTransformer {
         GxlToXMLConverter.toXml(gxl, startGraphFile);
     }
 
+    private void addEdgeFromRoot(NamedPiProcess piProcess, Graph graph, Node rootNode, Node parOrSum) {
+        piProcess.getProcess().accept(new PiProcessVisitor<Void>() {
+            @Override
+            public Void handle(Parallelism parallelism) {
+                // Add par edge
+                GrooveGxlHelper.createEdgeWithName(graph, rootNode, parOrSum, PAR);
+                return null;
+            }
+
+            @Override
+            public Void handle(NameRestriction restriction) {
+                // Add res edge
+                GrooveGxlHelper.createEdgeWithName(graph, rootNode, parOrSum, RES);
+                return null;
+            }
+
+            @Override
+            public Void handle(PrefixedProcess prefixedProcess) {
+                // Add coercion edge
+                GrooveGxlHelper.createEdgeWithName(graph, rootNode, parOrSum, C);
+                return null;
+            }
+
+            @Override
+            public Void handle(EmptySum emptySum) {
+                return null;
+            }
+
+            @Override
+            public Void handle(MultiarySum multiarySum) {
+                // Add coercion edge
+                GrooveGxlHelper.createEdgeWithName(graph, rootNode, parOrSum, C);
+                return null;
+            }
+        });
+    }
+
     private Node convertProcess(
             Graph graph,
             PiProcess piProcess,
             Map<String, String> nodeIdToLabel,
             AtomicLong idCounter,
-            Map<String, Node> nameToNode) {
+            Map<String, Node> nameToNode,
+            boolean addCoercion) {
         return piProcess.accept(new PiProcessVisitor<>() {
 
             @Override
@@ -72,6 +124,7 @@ public class PiCalcToGrooveTransformer {
 
             @Override
             public Node handle(PrefixedProcess prefixedProcess) {
+                // TODO: respect coercion boolean
                 // TODO: Add picking a free name and renaming!
                 Node coercionNode = GrooveGxlHelper.createNodeWithNameAndRememberLabel(
                         PiCalcToGrooveTransformer.this.getNodeId(idCounter),
@@ -106,7 +159,8 @@ public class PiCalcToGrooveTransformer {
                         prefixedProcess.getProcess(),
                         nodeIdToLabel,
                         idCounter,
-                        nameToNode);
+                        nameToNode,
+                        true);
                 GrooveGxlHelper.createEdgeWithName(graph, opNode, subProcessNode, PROCESS);
 
                 return coercionNode;
@@ -126,9 +180,9 @@ public class PiCalcToGrooveTransformer {
 
             private String getPrefixTypeString(PrefixType prefixType) {
                 switch (prefixType) {
-                    case SEND:
+                    case OUT:
                         return TYPE_OUT;
-                    case RECEIVE:
+                    case IN:
                         return TYPE_IN;
                 }
                 throw new RuntimeException("Unknown PrefixType: " + prefixType);

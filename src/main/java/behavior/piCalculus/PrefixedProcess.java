@@ -19,6 +19,11 @@ public class PrefixedProcess extends Sum {
         return visitor.handle(this);
     }
 
+    @Override
+    public boolean isEmptySum() {
+        return false;
+    }
+
     public PrefixType getPrefixType() {
         return this.prefix.getPrefixType();
     }

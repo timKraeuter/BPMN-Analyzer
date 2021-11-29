@@ -16,6 +16,16 @@ class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHe
 
     @Test
     void summation() throws Exception {
+        // x?(y).0
+        Prefix inPrefix = new Prefix(PrefixType.IN, "x", Sets.newHashSet("y"));
+        PrefixedProcess in = new PrefixedProcess(inPrefix, new EmptySum());
+        // x!(y).0
+        Prefix outPrefix = new Prefix(PrefixType.OUT, "x", Sets.newHashSet("y"));
+        PrefixedProcess out = new PrefixedProcess(outPrefix, new EmptySum());
+        MultiarySum sum = new MultiarySum(Sets.newHashSet(in, out));
+
+        NamedPiProcess namedProcess = new NamedPiProcess("sum", sum);
+        this.checkGrooveGeneration(namedProcess);
     }
 
     @Test
@@ -31,7 +41,7 @@ class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHe
     @Test
     void in() throws Exception {
         // x?(y).0
-        Prefix prefix = new Prefix(PrefixType.RECEIVE, "x", Sets.newHashSet("y"));
+        Prefix prefix = new Prefix(PrefixType.IN, "x", Sets.newHashSet("y"));
         PrefixedProcess in = new PrefixedProcess(prefix, new EmptySum());
 
         NamedPiProcess namedProcess = new NamedPiProcess("in", in);
@@ -41,7 +51,7 @@ class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHe
     @Test
     void out() throws Exception {
         // x!(y).0
-        Prefix prefix = new Prefix(PrefixType.SEND, "x", Sets.newHashSet("y"));
+        Prefix prefix = new Prefix(PrefixType.OUT, "x", Sets.newHashSet("y"));
         PrefixedProcess out = new PrefixedProcess(prefix, new EmptySum());
 
         NamedPiProcess namedProcess = new NamedPiProcess("out", out);
