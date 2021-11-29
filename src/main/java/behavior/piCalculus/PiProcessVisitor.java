@@ -1,13 +1,13 @@
 package behavior.piCalculus;
 
-public interface PiProcessVisitor {
-    void handle(Parallelism parallelism);
+public interface PiProcessVisitor<RETURN> {
+    RETURN handle(Parallelism parallelism);
 
-    void handle(NameRestriction restriction);
+    RETURN handle(NameRestriction restriction);
 
-    void handle(PrefixedProcess prefixedProcess);
+    RETURN handle(PrefixedProcess prefixedProcess);
 
-    void handle(EmptySum emptySum);
+    RETURN handle(EmptySum emptySum);
 
-    void handle(MultiarySum multiarySum);
+    RETURN handle(MultiarySum multiarySum);
 }

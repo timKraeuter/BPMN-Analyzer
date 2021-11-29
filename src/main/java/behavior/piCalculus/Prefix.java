@@ -12,4 +12,16 @@ public class Prefix {
         this.channel = channel;
         this.parameters = parameters;
     }
+
+    public PrefixType getPrefixType() {
+        return this.prefixType;
+    }
+
+    public String getChannel() {
+        return this.channel;
+    }
+
+    public Set<String> getPayloads() {
+        return this.parameters;
+    }
 }

@@ -1,5 +1,7 @@
 package behavior.piCalculus;
 
+import java.util.Set;
+
 /**
  * Singular sum is a prefixed process: a!(x).P/a?(y).P .
  */
@@ -13,7 +15,26 @@ public class PrefixedProcess extends Sum {
     }
 
     @Override
-    public void accept(PiProcessVisitor visitor) {
-        visitor.handle(this);
+    public <T> T accept(PiProcessVisitor<T> visitor) {
+        return visitor.handle(this);
+    }
+
+    public PrefixType getPrefixType() {
+        return this.prefix.getPrefixType();
+    }
+
+    public PiProcess getProcess() {
+        return this.process;
+    }
+
+    public String getChannel() {
+        return this.prefix.getChannel();
+    }
+
+    public String getPayload() {
+        Set<String> payloads = this.prefix.getPayloads();
+        // For now we only allow the pi-calculus to send and receive one name at a time.
+        assert payloads.size() == 1;
+        return payloads.iterator().next();
     }
 }

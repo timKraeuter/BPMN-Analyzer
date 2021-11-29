@@ -11,7 +11,7 @@ public class Parallelism implements PiProcess {
     }
 
     @Override
-    public void accept(PiProcessVisitor visitor) {
-        visitor.handle(this);
+    public <T> T accept(PiProcessVisitor<T> visitor) {
+        return visitor.handle(this);
     }
 }

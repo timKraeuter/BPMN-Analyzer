@@ -13,6 +13,7 @@ import java.util.Map;
 public class GrooveGxlHelper {
     private static final int XY_SHIFT_GROOVE_LAYOUT = 50;
     private static final String LABEL = "label";
+    private static final String FLAG = "flag:";
 
     public static Graph createStandardGxlGraph(String id, Gxl gxl) {
         Graph graph = new Graph();
@@ -22,6 +23,17 @@ public class GrooveGxlHelper {
         graph.setEdgemode("directed");
         graph.setId(id);
         return graph;
+    }
+
+    public static Node createNodeWithNameAndRememberLabel(
+            String nodeId,
+            String nodeName,
+            Graph graph,
+            Map<String, String> nodeIdToLabel) {
+        Node nodeWithName = createNodeWithName(nodeId, nodeName, graph);
+        nodeIdToLabel.put(nodeId, nodeName);
+
+        return nodeWithName;
     }
 
     public static Node createNodeWithName(String nodeId, String nodeName, Graph graph) {
@@ -51,6 +63,20 @@ public class GrooveGxlHelper {
 
         Attr nameAttr = GrooveGxlHelper.createLabelAttribute(name);
         gxledge.getAttr().add(nameAttr);
+
+        graph.getNodeOrEdgeOrRel().add(gxledge);
+    }
+
+    public static void addFlagToNode(
+            Graph graph,
+            groove.gxl.Node node,
+            String flagValue) {
+        groove.gxl.Edge gxledge = new groove.gxl.Edge();
+        gxledge.setFrom(node);
+        gxledge.setTo(node);
+
+        Attr flagAttr = createLabelAttribute(FLAG + flagValue);
+        gxledge.getAttr().add(flagAttr);
 
         graph.getNodeOrEdgeOrRel().add(gxledge);
     }
