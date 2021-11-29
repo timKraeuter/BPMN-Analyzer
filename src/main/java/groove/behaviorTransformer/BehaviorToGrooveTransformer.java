@@ -51,24 +51,13 @@ public class BehaviorToGrooveTransformer {
 
     private void generateGrooveGrammarForPiProcess(NamedPiProcess piProcess, File grooveDir) {
         File graphGrammarSubFolder = this.makeSubFolder(piProcess, grooveDir);
+        PiCalcToGrooveTransformer transformer = new PiCalcToGrooveTransformer();
 
-        this.generatePiStartGraph(piProcess, graphGrammarSubFolder);
+        transformer.generatePiStartGraph(piProcess, graphGrammarSubFolder);
+
+        transformer.copyPiRules(graphGrammarSubFolder);
 
         this.generatePropertiesFile(graphGrammarSubFolder);
-    }
-
-    private void generatePiStartGraph(NamedPiProcess piProcess, File targetFolder) {
-        Gxl gxl = new Gxl();
-        Graph graph = GrooveGxlHelper.createStandardGxlGraph(piProcess.getName(), gxl);
-        GrooveGxlHelper.createNodeWithName(START_NODE_ID, piProcess.getName(), graph);
-
-        // TODO: implement
-        Map<String, String> nodeLabels = new HashMap<>();
-        nodeLabels.put(START_NODE_ID, piProcess.getName());
-        GrooveGxlHelper.layoutGraph(graph, nodeLabels);
-
-        File startGraphFile = new File(targetFolder.getPath() + String.format("%s.gst", piProcess.getName()));
-        GxlToXMLConverter.toXml(gxl, startGraphFile);
     }
 
     private void generateGrooveGrammarForBPMNProcessModel(BPMNProcessModel bpmnProcessModel, File grooveDir) {
