@@ -126,11 +126,7 @@ public class PiCalcToGrooveTransformer {
             public Node handle(PrefixedProcess prefixedProcess) {
                 // TODO: respect coercion boolean
                 // TODO: Add picking a free name and renaming!
-                Node coercionNode = GrooveGxlHelper.createNodeWithNameAndRememberLabel(
-                        PiCalcToGrooveTransformer.this.getNodeId(idCounter),
-                        TYPE_COERCION,
-                        graph,
-                        nodeIdToLabel);
+                Node topLevelNode;
 
                 Node summationNode = GrooveGxlHelper.createNodeWithNameAndRememberLabel(
                         PiCalcToGrooveTransformer.this.getNodeId(idCounter),
@@ -138,7 +134,16 @@ public class PiCalcToGrooveTransformer {
                         graph,
                         nodeIdToLabel);
 
-                GrooveGxlHelper.createEdgeWithName(graph, coercionNode, summationNode, C);
+                topLevelNode = summationNode;
+                if (addCoercion) {
+                    Node coercionNode = GrooveGxlHelper.createNodeWithNameAndRememberLabel(
+                            PiCalcToGrooveTransformer.this.getNodeId(idCounter),
+                            TYPE_COERCION,
+                            graph,
+                            nodeIdToLabel);
+                    GrooveGxlHelper.createEdgeWithName(graph, coercionNode, summationNode, C);
+                    topLevelNode = coercionNode;
+                }
 
                 Node opNode = GrooveGxlHelper.createNodeWithNameAndRememberLabel(
                         PiCalcToGrooveTransformer.this.getNodeId(idCounter),
@@ -163,7 +168,7 @@ public class PiCalcToGrooveTransformer {
                         true);
                 GrooveGxlHelper.createEdgeWithName(graph, opNode, subProcessNode, PROCESS);
 
-                return coercionNode;
+                return topLevelNode;
             }
 
             private Node createNodeForNameIfNeeded(String name, Map<String, String> nodeIdToLabel) {

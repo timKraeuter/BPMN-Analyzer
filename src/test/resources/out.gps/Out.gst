@@ -18,25 +18,25 @@
         </edge>
         <node id="n1">
             <attr name="layout">
-                <string>262 85 0 0</string>
+                <string>477 85 0 0</string>
             </attr>
         </node>
         <edge from="n1" to="n1">
             <attr name="label">
-                <string>type:Coercion</string>
+                <string>type:Summation</string>
             </attr>
         </edge>
         <node id="n2">
             <attr name="layout">
-                <string>477 85 0 0</string>
+                <string>262 85 0 0</string>
             </attr>
         </node>
         <edge from="n2" to="n2">
             <attr name="label">
-                <string>type:Summation</string>
+                <string>type:Coercion</string>
             </attr>
         </edge>
-        <edge from="n1" to="n2">
+        <edge from="n2" to="n1">
             <attr name="label">
                 <string>c</string>
             </attr>
@@ -51,7 +51,7 @@
                 <string>type:Out</string>
             </attr>
         </edge>
-        <edge from="n2" to="n3">
+        <edge from="n1" to="n3">
             <attr name="label">
                 <string>op</string>
             </attr>
@@ -101,7 +101,7 @@
                 <string>process</string>
             </attr>
         </edge>
-        <edge from="n0" to="n1">
+        <edge from="n0" to="n2">
             <attr name="label">
                 <string>c</string>
             </attr>
