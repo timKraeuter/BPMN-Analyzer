@@ -15,19 +15,27 @@ import java.util.concurrent.atomic.AtomicLong;
 public class PiCalcToGrooveTransformer {
 
     private static final String TYPE = "type:";
+
+    // Possible node labels.
     private static final String TYPE_PROCESS = TYPE + "Process";
     private static final String TYPE_OUT = TYPE + "Out";
     private static final String TYPE_IN = TYPE + "In";
-    private static final String PROCESS = "process";
     private static final String TYPE_SUMMATION = TYPE + "Summation";
-    private static final String OP = "op";
     private static final String TYPE_COERCION = TYPE + "Coercion";
-    private static final String C = "c";
     private static final String TYPE_NAME = TYPE + "Name";
-    public static final String CHANNEL = "channel";
-    public static final String PAYLOAD = "payload";
-    public static final String PAR = "par";
-    public static final String RES = "res";
+    private static final String TYPE_SUM = TYPE + "Sum";
+
+    // Possible edge labels
+    private static final String PROCESS = "process";
+    private static final String OP = "op";
+    private static final String C = "c";
+    private static final String CHANNEL = "channel";
+    private static final String PAYLOAD = "payload";
+    private static final String PAR = "par";
+    private static final String RES = "res";
+    public static final String SUM = "sum";
+    public static final String ARG_1 = "arg1";
+    public static final String ARG_2 = "arg2";
 
     void copyPiRules(File targetFolder) {
         // TODO: Copy the fixed set of rules from somewhere.
@@ -124,7 +132,6 @@ public class PiCalcToGrooveTransformer {
 
             @Override
             public Node handle(PrefixedProcess prefixedProcess) {
-                // TODO: respect coercion boolean
                 // TODO: Add picking a free name and renaming!
                 Node topLevelNode;
 
@@ -179,6 +186,7 @@ public class PiCalcToGrooveTransformer {
                             TYPE_NAME,
                             graph,
                             nodeIdToLabel);
+                    nameToNode.put(name, nameNode);
                 }
                 return nameNode;
             }
@@ -204,7 +212,53 @@ public class PiCalcToGrooveTransformer {
 
             @Override
             public Node handle(MultiarySum multiarySum) {
-                return null;
+                Node topLevelNode;
+                Node summationNode = GrooveGxlHelper.createNodeWithNameAndRememberLabel(
+                        PiCalcToGrooveTransformer.this.getNodeId(idCounter),
+                        TYPE_SUMMATION,
+                        graph,
+                        nodeIdToLabel);
+
+                topLevelNode = summationNode;
+                if (addCoercion) {
+                    Node coercionNode = GrooveGxlHelper.createNodeWithNameAndRememberLabel(
+                            PiCalcToGrooveTransformer.this.getNodeId(idCounter),
+                            TYPE_COERCION,
+                            graph,
+                            nodeIdToLabel);
+                    GrooveGxlHelper.createEdgeWithName(graph, coercionNode, summationNode, C);
+                    topLevelNode = coercionNode;
+                }
+                Node sumNode = GrooveGxlHelper.createNodeWithNameAndRememberLabel(
+                        PiCalcToGrooveTransformer.this.getNodeId(idCounter),
+                        TYPE_SUM,
+                        graph,
+                        nodeIdToLabel);
+
+                GrooveGxlHelper.createEdgeWithName(graph, summationNode, sumNode, SUM);
+
+                Sum first = multiarySum.getFirst();
+                Sum second = multiarySum.getSecond();
+
+                Node firstNode = PiCalcToGrooveTransformer.this.convertProcess(
+                        graph,
+                        first,
+                        nodeIdToLabel,
+                        idCounter,
+                        nameToNode,
+                        false);
+                GrooveGxlHelper.createEdgeWithName(graph, sumNode, firstNode, ARG_1);
+
+                Node secondNode = PiCalcToGrooveTransformer.this.convertProcess(
+                        graph,
+                        second,
+                        nodeIdToLabel,
+                        idCounter,
+                        nameToNode,
+                        false);
+                GrooveGxlHelper.createEdgeWithName(graph, sumNode, secondNode, ARG_2);
+
+                return topLevelNode;
             }
         });
     }

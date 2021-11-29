@@ -19,8 +19,8 @@ class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHe
         // x?(y).0
         Prefix inPrefix = new Prefix(PrefixType.IN, "x", Sets.newHashSet("y"));
         PrefixedProcess in = new PrefixedProcess(inPrefix, new EmptySum());
-        // x!(y).0
-        Prefix outPrefix = new Prefix(PrefixType.OUT, "x", Sets.newHashSet("y"));
+        // x!(z).0
+        Prefix outPrefix = new Prefix(PrefixType.OUT, "x", Sets.newHashSet("z"));
         PrefixedProcess out = new PrefixedProcess(outPrefix, new EmptySum());
         MultiarySum sum = new MultiarySum(Sets.newHashSet(in, out));
 
