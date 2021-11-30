@@ -41,6 +41,7 @@ public class FileTestHelper {
                                                           .collect(Collectors.toMap(File::getName, Function.identity()));
 
         Map<String, File> actualFileNamesToFile = Arrays.stream(actual.listFiles())
+                                                        .filter(file -> !fileNameFilter.apply(file.getName()))
                                                         .collect(Collectors.toMap(File::getName, Function.identity()));
         // First check if the folders have files with the same name.
         assertThat(actualFileNamesToFile.keySet(), is(expectedFileNamesToFile.keySet()));

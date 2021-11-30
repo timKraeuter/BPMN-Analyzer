@@ -8,14 +8,19 @@ import util.FileTestHelper;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Function;
 
 interface BehaviorToGrooveTransformerTestHelper {
     //    private static final String outputPath = "C:/Source/groove/bin";
     //    private static final String outputPath = "B:/Source/groove/bin";
     String outputPath = FileUtils.getTempDirectoryPath();
 
-    @SuppressWarnings("ConstantConditions")
     default void checkGrooveGeneration(Behavior behavior) throws IOException {
+        this.checkGrooveGeneration(behavior, x -> false);
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    default void checkGrooveGeneration(Behavior behavior, Function<String, Boolean> fileNameFilter) throws IOException {
         String modelName = behavior.getName();
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
         File outputDir = new File(outputPath);
@@ -26,7 +31,7 @@ interface BehaviorToGrooveTransformerTestHelper {
         FileTestHelper.testDirEquals(
                 expectedDir,
                 new File(outputDir + "/" + modelName + ".gps"),
-                fileName -> fileName.equals("system.properties")); // Ignore the system.properties file because it contains a timestamp and a dir.
+                fileName -> fileName.equals("system.properties") || fileNameFilter.apply(fileName)); // Ignore the system.properties file because it contains a timestamp and a dir.
 
         File propertiesFile = new File(outputDir + "/" + modelName + ".gps/system.properties");
         this.checkPropertiesFile(propertiesFile);

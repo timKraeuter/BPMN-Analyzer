@@ -56,7 +56,7 @@ public class BehaviorToGrooveTransformer {
 
         transformer.generatePiStartGraph(piProcess, graphGrammarSubFolder);
 
-        transformer.copyPiRules(graphGrammarSubFolder);
+        transformer.copyPiRulesAndTypeGraph(graphGrammarSubFolder);
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
         additionalProperties.put("typeGraph", "Type");
