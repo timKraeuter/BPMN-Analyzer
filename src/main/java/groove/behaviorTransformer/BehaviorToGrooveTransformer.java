@@ -61,7 +61,7 @@ public class BehaviorToGrooveTransformer {
         final Map<String, String> additionalProperties = Maps.newHashMap();
         additionalProperties.put("typeGraph", "Type");
         additionalProperties.put("checkDangling", "true");
-        this.generatePropertiesFile(graphGrammarSubFolder, additionalProperties);
+        this.generatePropertiesFile(graphGrammarSubFolder, piProcess.getName(), additionalProperties);
     }
 
     private void generateGrooveGrammarForBPMNProcessModel(BPMNProcessModel bpmnProcessModel, File grooveDir) {
@@ -74,7 +74,7 @@ public class BehaviorToGrooveTransformer {
         // Generate rules
         transformer.generateBPMNRules(bpmnProcessModel, graphGrammarSubFolder);
 
-        this.generatePropertiesFile(graphGrammarSubFolder, Maps.newHashMap());
+        this.generatePropertiesFile(graphGrammarSubFolder, START, Maps.newHashMap());
     }
 
     private void generateGrooveGrammarForPN(PetriNet petriNet, File grooveDir) {
@@ -87,7 +87,7 @@ public class BehaviorToGrooveTransformer {
         // Generate rules
         transformer.generatePNRules(petriNet, graphGrammarSubFolder);
 
-        this.generatePropertiesFile(graphGrammarSubFolder, Maps.newHashMap());
+        this.generatePropertiesFile(graphGrammarSubFolder, START, Maps.newHashMap());
     }
 
     private void generateGrooveGrammarForFSM(FiniteStateMachine finiteStateMachine, File grooveDir) {
@@ -98,7 +98,7 @@ public class BehaviorToGrooveTransformer {
 
         transformer.generateFSMRules(finiteStateMachine, graphGrammarSubFolder);
 
-        this.generatePropertiesFile(graphGrammarSubFolder, Maps.newHashMap());
+        this.generatePropertiesFile(graphGrammarSubFolder, START, Maps.newHashMap());
     }
 
     private File makeSubFolder(Behavior behavior, File grooveDir) {
@@ -108,27 +108,32 @@ public class BehaviorToGrooveTransformer {
         return graphGrammarSubFolder;
     }
 
-    private void generatePropertiesFile(File subFolder, Map<String, String> additionalProperties) {
+    private void generatePropertiesFile(File subFolder, String startGraph, Map<String, String> additionalProperties) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
 
         String propertiesContent = String.format("# %s (Groove rule generator)\n" +
                         "location=%s\n" +
-                        "startGraph=start\n" +
-                        additionalProperties.entrySet().stream()
-                                            .reduce("",
-                                                    (prop1, prop2) -> prop1 + prop2 + "\n",
-                                                    (key, value) -> key + "=" + value) +
+                        "startGraph=%s\n" +
+                        this.getAdditionalProperties(additionalProperties) +
                         "grooveVersion=5.8.1\n" +
                         "grammarVersion=3.7",
                 dtf.format(now),
-                subFolder.getPath());
+                subFolder.getPath(),
+                startGraph);
         File properties_file = new File(subFolder + "/" + "system.properties");
         try {
             FileUtils.writeStringToFile(properties_file, propertiesContent, StandardCharsets.UTF_8, false);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String getAdditionalProperties(Map<String, String> additionalProperties) {
+        return additionalProperties.entrySet().stream()
+                                   .reduce("",
+                                           (prop1, prop2) -> prop1 + prop2 + "\n",
+                                           (key, value) -> key + "=" + value);
     }
 
     static void createStartGraphWithOneNode(File targetFolder, String startNodeName) {
