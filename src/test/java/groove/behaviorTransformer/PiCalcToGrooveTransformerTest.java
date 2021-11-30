@@ -3,7 +3,6 @@ package groove.behaviorTransformer;
 import behavior.piCalculus.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 
@@ -77,6 +76,21 @@ class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHe
 
     @Test
     void fig20() throws Exception {
+        // z!(w).0
+        Prefix wOutPrefix = new Prefix(PrefixType.OUT, "z", Sets.newHashSet("w"));
+        PrefixedProcess wOutOnZ = new PrefixedProcess(wOutPrefix, new EmptySum());
+        // x?(z).z!(w).0
+        Prefix xInPrefix = new Prefix(PrefixType.IN, "x", Sets.newHashSet("z"));
+        PrefixedProcess zInOnX = new PrefixedProcess(xInPrefix, wOutOnZ);
 
+        // x!(x).0
+        Prefix xOutPrefix = new Prefix(PrefixType.OUT, "x", Sets.newHashSet("x"));
+        PrefixedProcess xOutOnX = new PrefixedProcess(xOutPrefix, new EmptySum());
+
+        // x?(z).z!(w).0 | x!(x).0
+        Parallelism par = new Parallelism(Lists.newArrayList(zInOnX, xOutOnX));
+
+        NamedPiProcess namedProcess = new NamedPiProcess("fig20", par);
+        this.checkGrooveGeneration(namedProcess);
     }
 }
