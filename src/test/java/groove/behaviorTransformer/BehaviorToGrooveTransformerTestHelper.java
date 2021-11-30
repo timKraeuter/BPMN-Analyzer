@@ -28,7 +28,7 @@ interface BehaviorToGrooveTransformerTestHelper {
                 new File(outputDir + "/" + modelName + ".gps"),
                 fileName -> fileName.equals("system.properties")); // Ignore the system.properties file because it contains a timestamp and a dir.
 
-        File propertiesFile = new File(this.getClass().getResource("/" + modelName + ".gps/system.properties").getFile());
+        File propertiesFile = new File(outputDir + "/" + modelName + ".gps/system.properties");
         this.checkPropertiesFile(propertiesFile);
     }
 
@@ -37,8 +37,7 @@ interface BehaviorToGrooveTransformerTestHelper {
                 FileUtils.readFileToString(propertiesFile, StandardCharsets.UTF_8)
                          .replaceAll("\r?\n", "\r\n") // force identical line separators
                          .endsWith(
-                                 "startGraph=start\r\n" +
-                                         "grooveVersion=5.8.1\r\n" +
+                                 "grooveVersion=5.8.1\r\n" +
                                          "grammarVersion=3.7"));
     }
 }

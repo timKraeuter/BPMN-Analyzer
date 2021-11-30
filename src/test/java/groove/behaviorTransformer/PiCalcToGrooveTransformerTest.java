@@ -3,17 +3,33 @@ package groove.behaviorTransformer;
 import behavior.piCalculus.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 
 class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelper {
 
     @Test
-    void emptySum() throws Exception {
+    void checkTypeAndDanglingInPropertiesFile() throws Exception {
         EmptySum empty = new EmptySum();
 
         NamedPiProcess namedProcess = new NamedPiProcess("emptySum", empty);
         this.checkGrooveGeneration(namedProcess);
+
+        File outputDir = new File(outputPath);
+        File propertiesFile = new File(outputDir + "/" + namedProcess.getName() + ".gps/system.properties");
+        final String propertiesContent = FileUtils.readFileToString(propertiesFile, StandardCharsets.UTF_8)
+                                                  .replaceAll("\r?\n", "\r\n");
+
+        assertThat(propertiesContent.contains(
+                "typeGraph=Type\r\n" +
+                        "checkDangling=true\r\n"), is(true));
     }
 
     @Test

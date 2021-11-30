@@ -49,6 +49,8 @@ public class PiCalcToGrooveTransformer {
 
     void copyPiRules(File targetFolder) {
         // TODO: Copy the fixed set of rules from somewhere.
+
+        // copy the typegraph
     }
 
     void generatePiStartGraph(NamedPiProcess piProcess, File targetFolder) {

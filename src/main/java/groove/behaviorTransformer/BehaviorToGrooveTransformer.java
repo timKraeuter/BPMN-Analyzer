@@ -6,6 +6,7 @@ import behavior.bpmn.BPMNProcessModel;
 import behavior.fsm.FiniteStateMachine;
 import behavior.petriNet.PetriNet;
 import behavior.piCalculus.NamedPiProcess;
+import com.google.common.collect.Maps;
 import groove.GrooveGxlHelper;
 import groove.GxlToXMLConverter;
 import groove.gxl.Graph;
@@ -57,7 +58,10 @@ public class BehaviorToGrooveTransformer {
 
         transformer.copyPiRules(graphGrammarSubFolder);
 
-        this.generatePropertiesFile(graphGrammarSubFolder);
+        final Map<String, String> additionalProperties = Maps.newHashMap();
+        additionalProperties.put("typeGraph", "Type");
+        additionalProperties.put("checkDangling", "true");
+        this.generatePropertiesFile(graphGrammarSubFolder, additionalProperties);
     }
 
     private void generateGrooveGrammarForBPMNProcessModel(BPMNProcessModel bpmnProcessModel, File grooveDir) {
@@ -70,7 +74,7 @@ public class BehaviorToGrooveTransformer {
         // Generate rules
         transformer.generateBPMNRules(bpmnProcessModel, graphGrammarSubFolder);
 
-        this.generatePropertiesFile(graphGrammarSubFolder);
+        this.generatePropertiesFile(graphGrammarSubFolder, Maps.newHashMap());
     }
 
     private void generateGrooveGrammarForPN(PetriNet petriNet, File grooveDir) {
@@ -83,7 +87,7 @@ public class BehaviorToGrooveTransformer {
         // Generate rules
         transformer.generatePNRules(petriNet, graphGrammarSubFolder);
 
-        this.generatePropertiesFile(graphGrammarSubFolder);
+        this.generatePropertiesFile(graphGrammarSubFolder, Maps.newHashMap());
     }
 
     private void generateGrooveGrammarForFSM(FiniteStateMachine finiteStateMachine, File grooveDir) {
@@ -94,7 +98,7 @@ public class BehaviorToGrooveTransformer {
 
         transformer.generateFSMRules(finiteStateMachine, graphGrammarSubFolder);
 
-        this.generatePropertiesFile(graphGrammarSubFolder);
+        this.generatePropertiesFile(graphGrammarSubFolder, Maps.newHashMap());
     }
 
     private File makeSubFolder(Behavior behavior, File grooveDir) {
@@ -104,13 +108,17 @@ public class BehaviorToGrooveTransformer {
         return graphGrammarSubFolder;
     }
 
-    private void generatePropertiesFile(File subFolder) {
+    private void generatePropertiesFile(File subFolder, Map<String, String> additionalProperties) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
 
         String propertiesContent = String.format("# %s (Groove rule generator)\n" +
                         "location=%s\n" +
                         "startGraph=start\n" +
+                        additionalProperties.entrySet().stream()
+                                            .reduce("",
+                                                    (prop1, prop2) -> prop1 + prop2 + "\n",
+                                                    (key, value) -> key + "=" + value) +
                         "grooveVersion=5.8.1\n" +
                         "grammarVersion=3.7",
                 dtf.format(now),
