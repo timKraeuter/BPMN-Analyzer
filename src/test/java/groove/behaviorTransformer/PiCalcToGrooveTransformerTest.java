@@ -1,8 +1,11 @@
 package groove.behaviorTransformer;
 
 import behavior.piCalculus.*;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+
 
 class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelper {
 
@@ -22,7 +25,9 @@ class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHe
         // x!(z).0
         Prefix outPrefix = new Prefix(PrefixType.OUT, "x", Sets.newHashSet("z"));
         PrefixedProcess out = new PrefixedProcess(outPrefix, new EmptySum());
-        MultiarySum sum = new MultiarySum(Sets.newHashSet(in, out));
+
+        // x?(y).0 + x!(z).0
+        MultiarySum sum = new MultiarySum(Lists.newArrayList(in, out));
 
         NamedPiProcess namedProcess = new NamedPiProcess("sum", sum);
         this.checkGrooveGeneration(namedProcess);
@@ -35,7 +40,18 @@ class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHe
 
     @Test
     void parallel() throws Exception {
+        // x?(y).0
+        Prefix inPrefix = new Prefix(PrefixType.IN, "x", Sets.newHashSet("y"));
+        PrefixedProcess in = new PrefixedProcess(inPrefix, new EmptySum());
+        // x!(z).0
+        Prefix outPrefix = new Prefix(PrefixType.OUT, "x", Sets.newHashSet("z"));
+        PrefixedProcess out = new PrefixedProcess(outPrefix, new EmptySum());
 
+        // x?(y).0 | x!(z).0
+        Parallelism par = new Parallelism(Lists.newArrayList(in, out));
+
+        NamedPiProcess namedProcess = new NamedPiProcess("par", par);
+        this.checkGrooveGeneration(namedProcess);
     }
 
     @Test

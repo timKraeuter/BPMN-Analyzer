@@ -1,5 +1,6 @@
 package behavior.piCalculus;
 
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -41,5 +42,18 @@ public class PrefixedProcess extends Sum {
         // For now we only allow the pi-calculus to send and receive one name at a time.
         assert payloads.size() == 1;
         return payloads.iterator().next();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PrefixedProcess that = (PrefixedProcess) o;
+        return Objects.equals(prefix, that.prefix) && Objects.equals(process, that.process);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(prefix, process);
     }
 }

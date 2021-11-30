@@ -1,5 +1,7 @@
 package behavior.piCalculus;
 
+import java.util.Objects;
+
 public class NameRestriction implements PiProcess {
     private final String restrictedName;
     private final PiProcess restrictedProcess;
@@ -17,5 +19,18 @@ public class NameRestriction implements PiProcess {
     @Override
     public boolean isEmptySum() {
         return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NameRestriction that = (NameRestriction) o;
+        return Objects.equals(restrictedName, that.restrictedName) && Objects.equals(restrictedProcess, that.restrictedProcess);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(restrictedName, restrictedProcess);
     }
 }
