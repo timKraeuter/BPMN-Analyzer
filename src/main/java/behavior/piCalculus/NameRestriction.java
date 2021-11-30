@@ -21,6 +21,14 @@ public class NameRestriction implements PiProcess {
         return false;
     }
 
+    public String getRestrictedName() {
+        return restrictedName;
+    }
+
+    public PiProcess getRestrictedProcess() {
+        return restrictedProcess;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

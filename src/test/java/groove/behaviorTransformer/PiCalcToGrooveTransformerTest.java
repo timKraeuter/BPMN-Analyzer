@@ -34,7 +34,11 @@ class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHe
 
     @Test
     void restriction() throws Exception {
+        // new x(0)
+        final NameRestriction xRestriction = new NameRestriction("x", new EmptySum());
 
+        NamedPiProcess namedProcess = new NamedPiProcess("res", xRestriction);
+        this.checkGrooveGeneration(namedProcess);
     }
 
     @Test
