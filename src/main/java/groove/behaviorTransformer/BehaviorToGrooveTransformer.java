@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +26,58 @@ public class BehaviorToGrooveTransformer {
     static final String START_GST = "/start.gst";
     static final String START = "start";
     static final String START_NODE_ID = "n0";
+
+    void generateGrooveGrammar(File grooveFolder, String name, Behavior... behaviors) {
+        File graphGrammarSubFolder = this.makeSubFolder(name, grooveFolder);
+        final boolean[] piProcessIncluded = {false};
+        Arrays.stream(behaviors).forEach(behavior -> behavior.accept(new BehaviorVisitor() {
+            @Override
+            public void handle(FiniteStateMachine finiteStateMachine) {
+                FSMToGrooveTransformer transformer = new FSMToGrooveTransformer();
+
+                transformer.generateFSMStartGraphFile(finiteStateMachine, graphGrammarSubFolder);
+
+                transformer.generateFSMRules(finiteStateMachine, graphGrammarSubFolder, true);
+            }
+
+            @Override
+            public void handle(PetriNet petriNet) {
+                PNToGrooveTransformer transformer = new PNToGrooveTransformer();
+
+                transformer.generatePNStartGraphFile(petriNet, graphGrammarSubFolder);
+
+                transformer.generatePNRules(petriNet, graphGrammarSubFolder);
+            }
+
+            @Override
+            public void handle(BPMNProcessModel bpmnProcessModel) {
+                BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer();
+
+                transformer.generateBPMNStartGraph(bpmnProcessModel, graphGrammarSubFolder);
+
+                transformer.generateBPMNRules(bpmnProcessModel, graphGrammarSubFolder);
+            }
+
+            @Override
+            public void handle(NamedPiProcess piProcess) {
+                piProcessIncluded[0] = true;
+
+                PiCalcToGrooveTransformer transformer = new PiCalcToGrooveTransformer();
+
+                transformer.generatePiStartGraph(piProcess, graphGrammarSubFolder);
+
+                transformer.copyPiRulesAndTypeGraph(graphGrammarSubFolder);
+
+            }
+        }));
+
+        final Map<String, String> additionalProperties = Maps.newHashMap();
+        if (piProcessIncluded[0]) {
+            additionalProperties.put("typeGraph", "Type");
+            additionalProperties.put("checkDangling", "true");
+        }
+        this.generatePropertiesFile(graphGrammarSubFolder, "start", additionalProperties);
+    }
 
     void generateGrooveGrammar(Behavior behavior, File targetFolder) {
         behavior.accept(new BehaviorVisitor() {
@@ -102,7 +155,11 @@ public class BehaviorToGrooveTransformer {
     }
 
     private File makeSubFolder(Behavior behavior, File grooveDir) {
-        File graphGrammarSubFolder = new File(grooveDir + "/" + behavior.getName() + ".gps");
+        return this.makeSubFolder(behavior.getName(), grooveDir);
+    }
+
+    private File makeSubFolder(String folderName, File grooveDir) {
+        File graphGrammarSubFolder = new File(grooveDir + "/" + folderName + ".gps");
         //noinspection ResultOfMethodCallIgnored
         graphGrammarSubFolder.mkdir();
         return graphGrammarSubFolder;

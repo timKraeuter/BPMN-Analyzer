@@ -47,4 +47,20 @@ class FSMToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelpe
 
         this.checkGrooveGeneration(fsm);
     }
+
+    @Test
+    void testFSMGenerationTrafficLight() throws IOException {
+        State red = new State("red");
+        String fsmName = "trafficLight";
+        FiniteStateMachine fsm = new FiniteStateMachine(fsmName, red);
+        State red_amber = new State("red-amber");
+        State green = new State("green");
+        State amber = new State("amber");
+        fsm.addTransition(new Transition("turn_red_amber", red, red_amber));
+        fsm.addTransition(new Transition("turn_green", red_amber, green));
+        fsm.addTransition(new Transition("turn_amber", green, amber));
+        fsm.addTransition(new Transition("turn_red", amber, red));
+
+        this.checkGrooveGeneration(fsm);
+    }
 }

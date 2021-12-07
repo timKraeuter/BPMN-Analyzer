@@ -14,12 +14,17 @@ public class FSMToGrooveTransformer {
     }
 
     void generateFSMRules(FiniteStateMachine finiteStateMachine, File subFolder) {
+        this.generateFSMRules(finiteStateMachine, subFolder, false);
+    }
+
+    void generateFSMRules(FiniteStateMachine finiteStateMachine, File subFolder, Boolean addPrefix) {
         GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator();
         finiteStateMachine.getTransitions().forEach(transition -> {
-            ruleGenerator.startRule(transition.getName());
+            String potentialPrefix = addPrefix ? finiteStateMachine.getName() + "_" : "";
+            ruleGenerator.startRule(potentialPrefix + transition.getName());
 
-            ruleGenerator.deleteNode(transition.getSource().getName());
-            ruleGenerator.addNode(transition.getTarget().getName());
+            ruleGenerator.deleteNode(potentialPrefix + transition.getSource().getName());
+            ruleGenerator.addNode(potentialPrefix + transition.getTarget().getName());
 
             ruleGenerator.generateRule();
         });
