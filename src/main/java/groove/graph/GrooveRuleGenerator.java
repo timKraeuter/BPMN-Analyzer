@@ -9,10 +9,7 @@ import groove.gxl.Graph;
 import groove.gxl.Gxl;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GrooveRuleGenerator implements GraphRuleGenerator {
@@ -20,7 +17,7 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
     public static final String ASPECT_LABEL_DEL = "del:";
     private final List<GrooveGraphRule> rules = new ArrayList<>();
     private GrooveGraphRule currentRule = null;
-    private String prefix;
+    private final String prefix;
 
     public GrooveRuleGenerator() {
         this.prefix = "";
@@ -32,6 +29,43 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
         } else {
             this.prefix = "";
         }
+    }
+
+    public static GrooveRuleGenerator createSynchedRules(Map<String, Set<GrooveGraphRule>> nameToToBeSynchedRules) {
+        GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator();
+        nameToToBeSynchedRules.forEach((synchedRuleName, value) -> {
+            ruleGenerator.startRule(synchedRuleName);
+
+            value.forEach(grooveGraphRule -> {
+                Map<String, GrooveNode> oldIdToNewNode = new HashMap<>();
+                // Nodes
+                grooveGraphRule.getNodesToBeAdded().forEach(addNode -> {
+                    GrooveNode createdAddNode = ruleGenerator.addNode(addNode.getName());
+                    oldIdToNewNode.put(addNode.getId(), createdAddNode);
+                });
+                grooveGraphRule.getNodesToBeDeleted().forEach(delNode -> {
+                    GrooveNode createdDelNode = ruleGenerator.deleteNode(delNode.getName());
+                    oldIdToNewNode.put(delNode.getId(), createdDelNode);
+                });
+                grooveGraphRule.getContextNodes().forEach(contextNode -> {
+                    GrooveNode createdContextNode = ruleGenerator.contextNode(contextNode.getName());
+                    oldIdToNewNode.put(contextNode.getId(), createdContextNode);
+                });
+
+                // Edges
+                grooveGraphRule.getEdgesToBeAdded().forEach(addEdge -> ruleGenerator.addEdge(
+                        addEdge.getName(),
+                        oldIdToNewNode.get(addEdge.getSourceNode().getId()),
+                        oldIdToNewNode.get(addEdge.getTargetNode().getId())));
+                grooveGraphRule.getEdgesToBeDeleted().forEach(delEdge -> ruleGenerator.deleteEdge(
+                        delEdge.getName(),
+                        oldIdToNewNode.get(delEdge.getSourceNode().getId()),
+                        oldIdToNewNode.get(delEdge.getTargetNode().getId())));
+            });
+
+            ruleGenerator.generateRule();
+        });
+        return ruleGenerator;
     }
 
     @Override
@@ -112,9 +146,11 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
     }
 
     @Override
-    public void generateRule() {
-        this.rules.add(this.currentRule);
+    public GrooveGraphRule generateRule() {
+        GrooveGraphRule newRule = this.currentRule;
+        this.rules.add(newRule);
         this.currentRule = null;
+        return newRule;
     }
 
     public void writeRules(File dir) {

@@ -5,7 +5,7 @@ public interface GraphRuleGenerator {
     void startRule(String ruleName);
 
     /**
-     * Definte that the current rule needs a node in the context with the given name.
+     * Define that the current rule needs a node in the context with the given name.
      */
     Node contextNode(String name);
 
@@ -29,5 +29,5 @@ public interface GraphRuleGenerator {
      */
     void deleteEdge(String name, Node source, Node target);
 
-    void generateRule();
+    GraphRule generateRule();
 }
