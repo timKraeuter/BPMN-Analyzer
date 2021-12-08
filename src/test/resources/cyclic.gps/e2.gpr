@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="e2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n13">
+        <node id="n14">
             <attr name="layout">
                 <string>62 82 0 0</string>
             </attr>
         </node>
-        <edge from="n13" to="n13">
+        <edge from="n14" to="n14">
             <attr name="label">
                 <string>a3</string>
             </attr>
         </edge>
-        <edge from="n13" to="n13">
+        <edge from="n14" to="n14">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n12">
+        <node id="n13">
             <attr name="layout">
                 <string>112 82 0 0</string>
             </attr>
         </node>
-        <edge from="n12" to="n12">
+        <edge from="n13" to="n13">
             <attr name="label">
                 <string>e2</string>
             </attr>
         </edge>
-        <edge from="n12" to="n12">
+        <edge from="n13" to="n13">
             <attr name="label">
                 <string>del:</string>
             </attr>

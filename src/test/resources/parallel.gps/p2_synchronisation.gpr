@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="p2_synchronisation" role="rule" edgeids="false" edgemode="directed">
-        <node id="n16">
+        <node id="n17">
             <attr name="layout">
                 <string>62 82 0 0</string>
             </attr>
         </node>
-        <edge from="n16" to="n16">
+        <edge from="n17" to="n17">
             <attr name="label">
                 <string>p2</string>
             </attr>
         </edge>
-        <edge from="n16" to="n16">
+        <edge from="n17" to="n17">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n14">
+        <node id="n15">
             <attr name="layout">
                 <string>112 82 0 0</string>
             </attr>
         </node>
-        <edge from="n14" to="n14">
+        <edge from="n15" to="n15">
             <attr name="label">
                 <string>a2_1_finished</string>
             </attr>
         </edge>
-        <edge from="n14" to="n14">
+        <edge from="n15" to="n15">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n15">
+        <node id="n16">
             <attr name="layout">
                 <string>62 172 0 0</string>
             </attr>
         </node>
-        <edge from="n15" to="n15">
+        <edge from="n16" to="n16">
             <attr name="label">
                 <string>a2_2_finished</string>
             </attr>
         </edge>
-        <edge from="n15" to="n15">
+        <edge from="n16" to="n16">
             <attr name="label">
                 <string>del:</string>
             </attr>

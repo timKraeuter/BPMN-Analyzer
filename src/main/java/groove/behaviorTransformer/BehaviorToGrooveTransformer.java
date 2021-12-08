@@ -9,8 +9,10 @@ import behavior.piCalculus.NamedPiProcess;
 import com.google.common.collect.Maps;
 import groove.GrooveGxlHelper;
 import groove.GxlToXMLConverter;
+import groove.graph.GrooveGraph;
 import groove.gxl.Graph;
 import groove.gxl.Gxl;
+import groove.gxl.Node;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -18,9 +20,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class BehaviorToGrooveTransformer {
     static final String START_GST = "/start.gst";
@@ -30,12 +30,13 @@ public class BehaviorToGrooveTransformer {
     void generateGrooveGrammar(File grooveFolder, String name, Behavior... behaviors) {
         File graphGrammarSubFolder = this.makeSubFolder(name, grooveFolder);
         final boolean[] piProcessIncluded = {false};
+        Set<GrooveGraph> startGraphs = new LinkedHashSet<>();
         Arrays.stream(behaviors).forEach(behavior -> behavior.accept(new BehaviorVisitor() {
             @Override
             public void handle(FiniteStateMachine finiteStateMachine) {
                 FSMToGrooveTransformer transformer = new FSMToGrooveTransformer();
 
-                transformer.generateFSMStartGraphFile(finiteStateMachine, graphGrammarSubFolder);
+                startGraphs.add(transformer.generateStartGraph(finiteStateMachine, true));
 
                 transformer.generateFSMRules(finiteStateMachine, graphGrammarSubFolder, true);
             }
@@ -44,6 +45,7 @@ public class BehaviorToGrooveTransformer {
             public void handle(PetriNet petriNet) {
                 PNToGrooveTransformer transformer = new PNToGrooveTransformer();
 
+                // TODO: Save start graph
                 transformer.generatePNStartGraphFile(petriNet, graphGrammarSubFolder);
 
                 transformer.generatePNRules(petriNet, graphGrammarSubFolder);
@@ -53,8 +55,10 @@ public class BehaviorToGrooveTransformer {
             public void handle(BPMNProcessModel bpmnProcessModel) {
                 BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer();
 
-                transformer.generateBPMNStartGraph(bpmnProcessModel, graphGrammarSubFolder);
+                // TODO: prefix start graph similar to FSM.
+                startGraphs.add(transformer.generateStartGraph(bpmnProcessModel));
 
+                // TODO: prefix rules when start graph is prefixed.
                 transformer.generateBPMNRules(bpmnProcessModel, graphGrammarSubFolder);
             }
 
@@ -64,6 +68,7 @@ public class BehaviorToGrooveTransformer {
 
                 PiCalcToGrooveTransformer transformer = new PiCalcToGrooveTransformer();
 
+                // TODO: Save start graph
                 transformer.generatePiStartGraph(piProcess, graphGrammarSubFolder);
 
                 transformer.copyPiRulesAndTypeGraph(graphGrammarSubFolder);
@@ -77,6 +82,11 @@ public class BehaviorToGrooveTransformer {
             additionalProperties.put("checkDangling", "true");
         }
         this.generatePropertiesFile(graphGrammarSubFolder, "start", additionalProperties);
+
+        // Merge start graphs and write the final one.
+        Optional<GrooveGraph> startGraph = startGraphs.stream()
+                                                      .reduce((graph, graph2) -> graph.union(graph2, (name1, name2) -> name1));
+        startGraph.ifPresent(graph -> this.generateStartGraphFile(graph, graphGrammarSubFolder));
     }
 
     void generateGrooveGrammar(Behavior behavior, File targetFolder) {
@@ -122,7 +132,9 @@ public class BehaviorToGrooveTransformer {
         BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer();
 
         // Generate start graph
-        transformer.generateBPMNStartGraph(bpmnProcessModel, graphGrammarSubFolder);
+        // TODO: Make an abstraction of transformer, such that every transformer has to generate a start graph. Than refactor these two lines into one method and use many times.
+        GrooveGraph startGraph = transformer.generateStartGraph(bpmnProcessModel);
+        this.generateStartGraphFile(startGraph, graphGrammarSubFolder);
 
         // Generate rules
         transformer.generateBPMNRules(bpmnProcessModel, graphGrammarSubFolder);
@@ -147,11 +159,19 @@ public class BehaviorToGrooveTransformer {
         File graphGrammarSubFolder = this.makeSubFolder(finiteStateMachine, grooveDir);
         FSMToGrooveTransformer transformer = new FSMToGrooveTransformer();
 
-        transformer.generateFSMStartGraphFile(finiteStateMachine, graphGrammarSubFolder);
+        GrooveGraph startGraph = transformer.generateStartGraph(finiteStateMachine);
+        this.generateStartGraphFile(startGraph, graphGrammarSubFolder);
 
         transformer.generateFSMRules(finiteStateMachine, graphGrammarSubFolder);
 
         this.generatePropertiesFile(graphGrammarSubFolder, START, Maps.newHashMap());
+    }
+
+    void generateStartGraphFile(GrooveGraph grooveGraph, File targetFolder) {
+        Gxl gxl = createGxlFromGrooveGraph(grooveGraph);
+        File startGraphFile = new File(targetFolder.getPath() + START_GST);
+
+        GxlToXMLConverter.toXml(gxl, startGraphFile);
     }
 
     private File makeSubFolder(Behavior behavior, File grooveDir) {
@@ -193,16 +213,26 @@ public class BehaviorToGrooveTransformer {
                                            (key, value) -> key + "=" + value);
     }
 
-    static void createStartGraphWithOneNode(File targetFolder, String startNodeName) {
+    static Gxl createGxlFromGrooveGraph(GrooveGraph graph) {
+        String gxlGraphName = String.format("%s_%s", graph.getName(), START);
         Gxl gxl = new Gxl();
-        Graph graph = GrooveGxlHelper.createStandardGxlGraph(START, gxl);
-        GrooveGxlHelper.createNodeWithName(START_NODE_ID, startNodeName, graph);
+        Graph gxlGraph = GrooveGxlHelper.createStandardGxlGraph(gxlGraphName, gxl);
 
-        Map<String, String> nodeLabels = new HashMap<>();
-        nodeLabels.put(START_NODE_ID, startNodeName);
-        GrooveGxlHelper.layoutGraph(graph, nodeLabels);
+        Map<String, String> idToNodeLabel = new HashMap<>();
+        Map<String, Node> grooveNodeIdToGxlNode = new HashMap<>();
 
-        File startGraphFile = new File(targetFolder.getPath() + START_GST);
-        GxlToXMLConverter.toXml(gxl, startGraphFile);
+        graph.nodes().forEach(node -> {
+            idToNodeLabel.put(node.getId(), node.getName());
+            Node gxlNode = GrooveGxlHelper.createNodeWithName(node.getId(), node.getName(), gxlGraph);
+            grooveNodeIdToGxlNode.put(node.getId(), gxlNode);
+        });
+        graph.edges().forEach(edge -> GrooveGxlHelper.createEdgeWithName(
+                gxlGraph,
+                grooveNodeIdToGxlNode.get(edge.getSourceNode().getId()),
+                grooveNodeIdToGxlNode.get(edge.getTargetNode().getId()),
+                edge.getName()));
+
+        GrooveGxlHelper.layoutGraph(gxlGraph, idToNodeLabel);
+        return gxl;
     }
 }

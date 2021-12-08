@@ -11,9 +11,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
 interface BehaviorToGrooveTransformerTestHelper {
-    //    private static final String outputPath = "C:/Source/groove/bin";
-    //    private static final String outputPath = "B:/Source/groove/bin";
-    String outputPath = FileUtils.getTempDirectoryPath();
+    String outputPath = "C:/Source/groove/bin";
+    //    String outputPath = "B:/Source/groove/bin";
+//    String outputPath = FileUtils.getTempDirectoryPath();
 
     default void checkGrooveGeneration(Behavior behavior) throws IOException {
         this.checkGrooveGeneration(behavior, x -> false);

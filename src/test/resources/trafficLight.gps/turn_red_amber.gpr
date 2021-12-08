@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="turn_red_amber" role="rule" edgeids="false" edgemode="directed">
-        <node id="n1">
+        <node id="n2">
             <attr name="layout">
                 <string>62 172 0 0</string>
             </attr>
         </node>
-        <edge from="n1" to="n1">
+        <edge from="n2" to="n2">
             <attr name="label">
                 <string>red-amber</string>
             </attr>
         </edge>
-        <edge from="n1" to="n1">
+        <edge from="n2" to="n2">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n0">
+        <node id="n1">
             <attr name="layout">
                 <string>62 82 0 0</string>
             </attr>
         </node>
-        <edge from="n0" to="n0">
+        <edge from="n1" to="n1">
             <attr name="label">
                 <string>red</string>
             </attr>
         </edge>
-        <edge from="n0" to="n0">
+        <edge from="n1" to="n1">
             <attr name="label">
                 <string>del:</string>
             </attr>

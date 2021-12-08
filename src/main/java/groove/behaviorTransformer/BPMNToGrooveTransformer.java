@@ -5,6 +5,9 @@ import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
 import behavior.bpmn.auxiliary.StartParallelOrElseControlFlowNodeVisitor;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
+import groove.graph.GrooveGraph;
+import groove.graph.GrooveNode;
 import groove.graph.GrooveRuleGenerator;
 
 import java.io.File;
@@ -133,9 +136,8 @@ public class BPMNToGrooveTransformer {
         ruleGenerator.writeRules(graphGrammarSubFolder);
     }
 
-    void generateBPMNStartGraph(BPMNProcessModel bpmnProcessModel, File graphGrammarSubFolder) {
-        final String startEventName = bpmnProcessModel.getStartEvent().getName();
-
-        BehaviorToGrooveTransformer.createStartGraphWithOneNode(graphGrammarSubFolder, startEventName);
+    GrooveGraph generateStartGraph(BPMNProcessModel bpmnProcessModel) {
+        GrooveNode startEventNode = new GrooveNode(bpmnProcessModel.getStartEvent().getName());
+        return new GrooveGraph(bpmnProcessModel.getName(), Sets.newHashSet(startEventNode), Sets.newHashSet());
     }
 }
