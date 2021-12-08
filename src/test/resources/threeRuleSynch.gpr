@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="threeRuleSynch" role="rule" edgeids="false" edgemode="directed">
+        <node id="n7">
+            <attr name="layout">
+                <string>162 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n7" to="n7">
+            <attr name="label">
+                <string>s1</string>
+            </attr>
+        </edge>
+        <edge from="n7" to="n7">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n8">
+            <attr name="layout">
+                <string>212 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n8" to="n8">
+            <attr name="label">
+                <string>t1</string>
+            </attr>
+        </edge>
+        <edge from="n8" to="n8">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n9">
+            <attr name="layout">
+                <string>62 172 0 0</string>
+            </attr>
+        </node>
+        <edge from="n9" to="n9">
+            <attr name="label">
+                <string>s2</string>
+            </attr>
+        </edge>
+        <edge from="n9" to="n9">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n10">
+            <attr name="layout">
+                <string>112 172 0 0</string>
+            </attr>
+        </node>
+        <edge from="n10" to="n10">
+            <attr name="label">
+                <string>t2</string>
+            </attr>
+        </edge>
+        <edge from="n10" to="n10">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n11">
+            <attr name="layout">
+                <string>162 172 0 0</string>
+            </attr>
+        </node>
+        <edge from="n11" to="n11">
+            <attr name="label">
+                <string>delete</string>
+            </attr>
+        </edge>
+        <edge from="n11" to="n11">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n12">
+            <attr name="layout">
+                <string>62 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n12" to="n12">
+            <attr name="label">
+                <string>s3</string>
+            </attr>
+        </edge>
+        <node id="n13">
+            <attr name="layout">
+                <string>112 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n13" to="n13">
+            <attr name="label">
+                <string>t3</string>
+            </attr>
+        </edge>
+        <edge from="n7" to="n8">
+            <attr name="label">
+                <string>new:edge1</string>
+            </attr>
+        </edge>
+        <edge from="n9" to="n10">
+            <attr name="label">
+                <string>new:edge2</string>
+            </attr>
+        </edge>
+        <edge from="n12" to="n13">
+            <attr name="label">
+                <string>del:edge3</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

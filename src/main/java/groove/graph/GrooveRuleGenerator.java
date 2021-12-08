@@ -33,10 +33,10 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
 
     public static GrooveRuleGenerator createSynchedRules(Map<String, Set<GrooveGraphRule>> nameToToBeSynchedRules) {
         GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator();
-        nameToToBeSynchedRules.forEach((synchedRuleName, value) -> {
+        nameToToBeSynchedRules.forEach((synchedRuleName, synchedRules) -> {
             ruleGenerator.startRule(synchedRuleName);
 
-            value.forEach(grooveGraphRule -> {
+            new LinkedHashSet<>(synchedRules).forEach(grooveGraphRule -> {
                 Map<String, GrooveNode> oldIdToNewNode = new HashMap<>();
                 // Nodes
                 grooveGraphRule.getNodesToBeAdded().forEach(addNode -> {
