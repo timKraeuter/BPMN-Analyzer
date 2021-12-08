@@ -25,11 +25,13 @@ public class GenerateGrammarForMultipleBehaviorsTest {
         FiniteStateMachine phases = new FiniteStateMachine("phases", phase1);
         phases.addTransition(new Transition("switch_to_phase2", phase1, phase2));
         phases.addTransition(new Transition("switch_to_phase1", phase2, phase1));
-        // Expect a folder with prefixed rules and start states etc.
 
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
         File outputDir = new File(outputPath);
         transformer.generateGrooveGrammar(outputDir, "trafficLightsTest", tl_a, tl_b, tl_c, phases);
+        // TODO: we would like to synch our rules now!
+
+        // Expect a folder with prefixed rules and start states etc.
     }
 
     private FiniteStateMachine createTrafficLight(String fsmName, String startStateName) {
