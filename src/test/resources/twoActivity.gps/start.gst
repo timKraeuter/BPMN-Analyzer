@@ -8,7 +8,7 @@
         </node>
         <edge from="n0" to="n0">
             <attr name="label">
-                <string>start</string>
+                <string>twoActivity_start</string>
             </attr>
         </edge>
     </graph>

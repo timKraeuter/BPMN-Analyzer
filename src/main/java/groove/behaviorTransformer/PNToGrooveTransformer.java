@@ -57,8 +57,8 @@ public class PNToGrooveTransformer {
         return "n" + idCounter.incrementAndGet();
     }
 
-    void generatePNRules(PetriNet petriNet, File subFolder) {
-        GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator();
+    void generatePNRules(PetriNet petriNet, File subFolder, boolean addPrefix) {
+        GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator(petriNet, addPrefix);
         petriNet.getTransitions().forEach(transition -> {
             ruleGenerator.startRule(transition.getName());
 

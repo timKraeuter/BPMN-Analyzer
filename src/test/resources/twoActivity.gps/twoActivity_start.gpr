@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="a1" role="rule" edgeids="false" edgemode="directed">
-        <node id="n6">
-            <attr name="layout">
-                <string>112 82 0 0</string>
-            </attr>
-        </node>
-        <edge from="n6" to="n6">
-            <attr name="label">
-                <string>end</string>
-            </attr>
-        </edge>
-        <edge from="n6" to="n6">
-            <attr name="label">
-                <string>new:</string>
-            </attr>
-        </edge>
-        <node id="n5">
+    <graph id="twoActivity_start" role="rule" edgeids="false" edgemode="directed">
+        <node id="n2">
             <attr name="layout">
                 <string>62 82 0 0</string>
             </attr>
         </node>
-        <edge from="n5" to="n5">
+        <edge from="n2" to="n2">
             <attr name="label">
-                <string>a1</string>
+                <string>twoActivity_a0</string>
             </attr>
         </edge>
-        <edge from="n5" to="n5">
+        <edge from="n2" to="n2">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n1">
+            <attr name="layout">
+                <string>62 172 0 0</string>
+            </attr>
+        </node>
+        <edge from="n1" to="n1">
+            <attr name="label">
+                <string>twoActivity_start</string>
+            </attr>
+        </edge>
+        <edge from="n1" to="n1">
             <attr name="label">
                 <string>del:</string>
             </attr>

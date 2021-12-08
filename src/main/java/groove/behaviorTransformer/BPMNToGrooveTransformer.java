@@ -1,5 +1,6 @@
 package groove.behaviorTransformer;
 
+import behavior.Behavior;
 import behavior.bpmn.*;
 import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
 import behavior.bpmn.auxiliary.StartParallelOrElseControlFlowNodeVisitor;
@@ -18,8 +19,9 @@ public class BPMNToGrooveTransformer {
     private static final String SYNCHRONISATION_SUFFIX = "_synchronisation";
     private static final String DISTRIBUTION_SUFFIX = "_distribution";
 
-    void generateBPMNRules(BPMNProcessModel bpmnProcessModel, File graphGrammarSubFolder) {
-        GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator();
+
+    void generateBPMNRules(BPMNProcessModel bpmnProcessModel, File graphGrammarSubFolder, boolean addPrefix) {
+        GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator(bpmnProcessModel, addPrefix);
 
         // Iteration order of LinkedHashMultimap needed for testcases
         final Multimap<ParallelGateway, SequenceFlow> parallelGatewayOutgoing = LinkedHashMultimap.create();
@@ -136,8 +138,13 @@ public class BPMNToGrooveTransformer {
         ruleGenerator.writeRules(graphGrammarSubFolder);
     }
 
-    GrooveGraph generateStartGraph(BPMNProcessModel bpmnProcessModel) {
-        GrooveNode startEventNode = new GrooveNode(bpmnProcessModel.getStartEvent().getName());
+    GrooveGraph generateStartGraph(BPMNProcessModel bpmnProcessModel, boolean addPrefix) {
+        String potentialPrefix = this.getPrefixOrEmpty(bpmnProcessModel, addPrefix);
+        GrooveNode startEventNode = new GrooveNode(potentialPrefix + bpmnProcessModel.getStartEvent().getName());
         return new GrooveGraph(bpmnProcessModel.getName(), Sets.newHashSet(startEventNode), Sets.newHashSet());
+    }
+
+    private String getPrefixOrEmpty(Behavior finiteStateMachine, Boolean addPrefix) {
+        return addPrefix ? finiteStateMachine.getName() + "_" : "";
     }
 }

@@ -2,6 +2,7 @@ package groove.graph;
 
 import api.GraphRuleGenerator;
 import api.Node;
+import behavior.Behavior;
 import groove.GrooveGxlHelper;
 import groove.GxlToXMLConverter;
 import groove.gxl.Graph;
@@ -19,30 +20,53 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
     public static final String ASPECT_LABEL_DEL = "del:";
     private final List<GrooveGraphRule> rules = new ArrayList<>();
     private GrooveGraphRule currentRule = null;
+    private String prefix;
+
+    public GrooveRuleGenerator() {
+        this.prefix = "";
+    }
+
+    public GrooveRuleGenerator(Behavior behavior, boolean addPrefix) {
+        if (addPrefix) {
+            this.prefix = behavior.getName() + "_";
+        } else {
+            this.prefix = "";
+        }
+    }
 
     @Override
     public void startRule(String ruleName) {
-        this.currentRule = new GrooveGraphRule(ruleName);
+        this.currentRule = new GrooveGraphRule(this.addPrefix(ruleName));
     }
 
     @Override
     public GrooveNode contextNode(String nodeName) {
+        String prefixedNodeName = this.addPrefix(nodeName);
+
         assert this.currentRule != null;
-        GrooveNode contextNode = new GrooveNode(nodeName);
+        GrooveNode contextNode = new GrooveNode(prefixedNodeName);
         this.currentRule.addContextNode(contextNode);
         return contextNode;
+    }
+
+    private String addPrefix(String name) {
+        return this.prefix + name;
     }
 
     @Override
     public GrooveNode addNode(String nodeName) {
         assert this.currentRule != null;
-        GrooveNode newNode = new GrooveNode(nodeName);
+
+        String prefixedNodeName = this.addPrefix(nodeName);
+
+        GrooveNode newNode = new GrooveNode(prefixedNodeName);
         this.currentRule.addNewNode(newNode);
         return newNode;
     }
 
     @Override
-    public void addEdge(String name, Node source, Node target) {
+    public void addEdge(String edgeName, Node source, Node target) {
+
         assert this.currentRule != null;
         Map<String, GrooveNode> contextAndAddedNodes = this.currentRule.getContextAndAddedNodes();
         GrooveNode sourceNode = contextAndAddedNodes.get(source.getId());
@@ -50,19 +74,22 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
 
         this.checkNodeContainment(source, target, sourceNode, targetNode);
 
-        this.currentRule.addNewEdge(new GrooveEdge(name, sourceNode, targetNode));
+        String prefixedEdgeName = this.addPrefix(edgeName);
+        this.currentRule.addNewEdge(new GrooveEdge(prefixedEdgeName, sourceNode, targetNode));
     }
 
     @Override
     public GrooveNode deleteNode(String nodeName) {
         assert this.currentRule != null;
-        GrooveNode deleteNode = new GrooveNode(nodeName);
+
+        String prefixedNodeName = this.addPrefix(nodeName);
+        GrooveNode deleteNode = new GrooveNode(prefixedNodeName);
         this.currentRule.addDelNode(deleteNode);
         return deleteNode;
     }
 
     @Override
-    public void deleteEdge(String name, Node source, Node target) {
+    public void deleteEdge(String edgeName, Node source, Node target) {
         assert this.currentRule != null;
         Map<String, GrooveNode> nodes = this.currentRule.getAllNodes();
 
@@ -71,7 +98,8 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
 
         this.checkNodeContainment(source, target, sourceNode, targetNode);
 
-        this.currentRule.addDelEdge(new GrooveEdge(name, sourceNode, targetNode));
+        String prefixedEdgeName = this.addPrefix(edgeName);
+        this.currentRule.addDelEdge(new GrooveEdge(prefixedEdgeName, sourceNode, targetNode));
     }
 
     private void checkNodeContainment(Node source, Node target, GrooveNode sourceNode, GrooveNode targetNode) {
@@ -114,8 +142,8 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
             // TODO: context edges!
 
             GrooveGxlHelper.layoutGraph(graph, grooveGraphRule.getAllNodes().entrySet().stream()
-                                                   .collect(Collectors.toMap(Map.Entry::getKey,
-                                                           idNodePair -> idNodePair.getValue().getName())));
+                                                              .collect(Collectors.toMap(Map.Entry::getKey,
+                                                                      idNodePair -> idNodePair.getValue().getName())));
             // Write each rule to a file
             this.writeRuleToFile(dir, grooveGraphRule, gxl);
         });

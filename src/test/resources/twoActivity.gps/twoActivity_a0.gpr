@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="a0" role="rule" edgeids="false" edgemode="directed">
+    <graph id="twoActivity_a0" role="rule" edgeids="false" edgemode="directed">
         <node id="n4">
             <attr name="layout">
                 <string>62 82 0 0</string>
@@ -8,7 +8,7 @@
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>a1</string>
+                <string>twoActivity_a1</string>
             </attr>
         </edge>
         <edge from="n4" to="n4">
@@ -18,12 +18,12 @@
         </edge>
         <node id="n3">
             <attr name="layout">
-                <string>112 82 0 0</string>
+                <string>62 172 0 0</string>
             </attr>
         </node>
         <edge from="n3" to="n3">
             <attr name="label">
-                <string>a0</string>
+                <string>twoActivity_a0</string>
             </attr>
         </edge>
         <edge from="n3" to="n3">

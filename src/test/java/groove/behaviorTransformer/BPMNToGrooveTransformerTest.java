@@ -20,7 +20,6 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
      */
     @Test
     void testBPMNTwoActivityGenerationResources() throws IOException {
-        // Build the process model from the NWPT example.
         final StartEvent start = new StartEvent("start");
         Activity a0 = new Activity("a0");
         Activity a1 = new Activity("a1");
@@ -36,7 +35,7 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .endEvent(end)
                 .build();
 
-        this.checkGrooveGeneration(processModel);
+        this.checkGrooveGeneration(processModel, true);
     }
 
     /**

@@ -11,20 +11,27 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
 interface BehaviorToGrooveTransformerTestHelper {
-    String outputPath = "C:/Source/groove/bin";
+    //    String outputPath = "C:/Source/groove/bin";
     //    String outputPath = "B:/Source/groove/bin";
-//    String outputPath = FileUtils.getTempDirectoryPath();
+    String outputPath = FileUtils.getTempDirectoryPath();
 
     default void checkGrooveGeneration(Behavior behavior) throws IOException {
-        this.checkGrooveGeneration(behavior, x -> false);
+        this.checkGrooveGeneration(behavior, false);
+    }
+
+    default void checkGrooveGeneration(Behavior behavior, boolean addPrefix) throws IOException {
+        this.checkGrooveGeneration(behavior, addPrefix, x -> false);
     }
 
     @SuppressWarnings("ConstantConditions")
-    default void checkGrooveGeneration(Behavior behavior, Function<String, Boolean> fileNameFilter) throws IOException {
+    default void checkGrooveGeneration(
+            Behavior behavior,
+            boolean addPrefix,
+            Function<String, Boolean> fileNameFilter) throws IOException {
         String modelName = behavior.getName();
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
         File outputDir = new File(outputPath);
-        transformer.generateGrooveGrammar(behavior, outputDir);
+        transformer.generateGrooveGrammar(behavior, outputDir, addPrefix);
 
         // assert
         File expectedDir = new File(this.getClass().getResource("/" + modelName + ".gps").getFile());
