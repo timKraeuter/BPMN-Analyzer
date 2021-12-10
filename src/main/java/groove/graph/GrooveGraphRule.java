@@ -107,11 +107,4 @@ public class GrooveGraphRule implements GraphRule {
         allNodes.putAll(this.contextNodes);
         return allNodes;
     }
-
-    public Map<String, GrooveEdge> getAllEdges() {
-        Map<String, GrooveEdge> allEdges = new LinkedHashMap<>(this.edgesToBeDeleted);
-        allEdges.putAll(this.edgesToBeAdded);
-        allEdges.putAll(this.contextEdges);
-        return allEdges;
-    }
 }

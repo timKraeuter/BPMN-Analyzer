@@ -22,12 +22,4 @@ public class GrooveNode implements Node {
     public String getName() {
         return this.name;
     }
-
-    @Override
-    public String toString() {
-        return "GrooveNode{" +
-                "id='" + this.id + '\'' +
-                ", name='" + this.name + '\'' +
-                '}';
-    }
 }

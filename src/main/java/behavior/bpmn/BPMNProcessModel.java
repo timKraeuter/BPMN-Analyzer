@@ -20,20 +20,16 @@ public class BPMNProcessModel implements Behavior {
     }
 
     public StartEvent getStartEvent() {
-        return startEvent;
-    }
-
-    public Set<EndEvent> getEndEvents() {
-        return Collections.unmodifiableSet(endEvents);
+        return this.startEvent;
     }
 
     public Set<SequenceFlow> getSequenceFlows() {
-        return Collections.unmodifiableSet(sequenceFlows);
+        return Collections.unmodifiableSet(this.sequenceFlows);
     }
 
     @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 
     @Override
