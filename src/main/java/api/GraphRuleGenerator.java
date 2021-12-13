@@ -29,5 +29,5 @@ public interface GraphRuleGenerator {
      */
     void deleteEdge(String name, Node source, Node target);
 
-    GraphRule generateRule();
+    GraphRule buildRule();
 }

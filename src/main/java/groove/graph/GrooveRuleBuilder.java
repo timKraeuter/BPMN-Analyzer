@@ -3,27 +3,20 @@ package groove.graph;
 import api.GraphRuleGenerator;
 import api.Node;
 import behavior.Behavior;
-import groove.GrooveGxlHelper;
-import groove.GxlToXMLConverter;
-import groove.gxl.Graph;
-import groove.gxl.Gxl;
 
-import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class GrooveRuleGenerator implements GraphRuleGenerator {
-    public static final String ASPECT_LABEL_NEW = "new:";
-    public static final String ASPECT_LABEL_DEL = "del:";
+public class GrooveRuleBuilder implements GraphRuleGenerator {
     private final List<GrooveGraphRule> rules = new ArrayList<>();
     private GrooveGraphRule currentRule = null;
     private final String prefix;
 
-    public GrooveRuleGenerator() {
+    public GrooveRuleBuilder() {
         this.prefix = "";
     }
 
-    public GrooveRuleGenerator(Behavior behavior, boolean addPrefix) {
+    public GrooveRuleBuilder(Behavior behavior, boolean addPrefix) {
         this.prefix = getPotentialPrefix(behavior, addPrefix);
     }
 
@@ -37,12 +30,12 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
         return prefix;
     }
 
-    public static GrooveRuleGenerator createSynchedRules(Map<String, Set<GrooveGraphRule>> nameToToBeSynchedRules) {
-        GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator();
+    public static GrooveRuleBuilder createSynchedRules(Map<String, Set<GrooveGraphRule>> nameToToBeSynchedRules) {
+        GrooveRuleBuilder ruleGenerator = new GrooveRuleBuilder();
         nameToToBeSynchedRules.forEach((synchedRuleName, synchedRules) -> {
             ruleGenerator.startRule(synchedRuleName);
 
-            new LinkedHashSet<>(synchedRules).forEach(grooveGraphRule -> {
+            synchedRules.forEach(grooveGraphRule -> {
                 Map<String, GrooveNode> oldIdToNewNode = new HashMap<>();
                 // Nodes
                 grooveGraphRule.getNodesToBeAdded().forEach(addNode -> {
@@ -69,7 +62,7 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
                         oldIdToNewNode.get(delEdge.getTargetNode().getId())));
             });
 
-            ruleGenerator.generateRule();
+            ruleGenerator.buildRule();
         });
         return ruleGenerator;
     }
@@ -152,94 +145,14 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
     }
 
     @Override
-    public GrooveGraphRule generateRule() {
+    public GrooveGraphRule buildRule() {
         GrooveGraphRule newRule = this.currentRule;
         this.rules.add(newRule);
         this.currentRule = null;
         return newRule;
     }
 
-    public void writeRules(File dir) {
-        this.rules.forEach(grooveGraphRule -> {
-            // Create gxl with a graph for each rule
-            Gxl gxl = new Gxl();
-            Graph graph = GrooveGxlHelper.createStandardGxlGraph(grooveGraphRule.getRuleName(), gxl);
-
-            Map<String, groove.gxl.Node> allGxlNodes = new HashMap<>();
-            // Add nodes which should be added to gxl
-            grooveGraphRule.getNodesToBeAdded().forEach(toBeAddedNode -> this.addNodeToGxlGraph(graph, toBeAddedNode, allGxlNodes, NodeRuleAspect.ADD));
-
-            // Add nodes which should be deleted to gxl
-            grooveGraphRule.getNodesToBeDeleted().forEach(toBeDeletedNode -> this.addNodeToGxlGraph(graph, toBeDeletedNode, allGxlNodes, NodeRuleAspect.DEL));
-
-            // Add nodes which should be in context
-            grooveGraphRule.getContextNodes().forEach(contextNode -> this.addNodeToGxlGraph(graph, contextNode, allGxlNodes, NodeRuleAspect.CONTEXT));
-
-            // Add edges which should be added to gxl
-            grooveGraphRule.getEdgesToBeAdded().forEach(toBeAddedEdge -> this.addEdgeToGxlGraph(graph, toBeAddedEdge, allGxlNodes, NodeRuleAspect.ADD));
-
-            // Add edges which should be deleted to gxl
-            grooveGraphRule.getEdgesToBeDeleted().forEach(toBeDeletedEdge -> this.addEdgeToGxlGraph(graph, toBeDeletedEdge, allGxlNodes, NodeRuleAspect.DEL));
-
-            // TODO: context edges!
-
-            GrooveGxlHelper.layoutGraph(graph, grooveGraphRule.getAllNodes().entrySet().stream()
-                                                              .collect(Collectors.toMap(Map.Entry::getKey,
-                                                                      idNodePair -> idNodePair.getValue().getName())));
-            // Write each rule to a file
-            this.writeRuleToFile(dir, grooveGraphRule, gxl);
-        });
-    }
-
-    private void addEdgeToGxlGraph(
-            Graph graph,
-            GrooveEdge grooveEdge,
-            Map<String, groove.gxl.Node> createdGxlNodes,
-            NodeRuleAspect addDelOrContext) {
-        groove.gxl.Node sourceNode = createdGxlNodes.get(grooveEdge.getSourceNode().getId());
-        groove.gxl.Node targetNode = createdGxlNodes.get(grooveEdge.getTargetNode().getId());
-        assert sourceNode != null;
-        assert targetNode != null;
-
-        GrooveGxlHelper.createEdgeWithName(graph, sourceNode, targetNode, this.getAspectLabel(addDelOrContext) + grooveEdge.getName());
-    }
-
-    private void addNodeToGxlGraph(
-            Graph graph,
-            GrooveNode grooveNode,
-            Map<String, groove.gxl.Node> nodeRepository,
-            NodeRuleAspect addDelOrContext) {
-        groove.gxl.Node gxlNode = GrooveGxlHelper.createNodeWithName(grooveNode.getId(), grooveNode.getName(), graph);
-        nodeRepository.put(gxlNode.getId(), gxlNode);
-
-        // Nodes need get a "new:", "del:" or no label depending on their aspect.
-        switch (addDelOrContext) {
-            case CONTEXT:
-                // No label
-                break;
-            case ADD:
-                GrooveGxlHelper.createEdgeWithName(graph, gxlNode, gxlNode, ASPECT_LABEL_NEW);
-                break;
-            case DEL:
-                GrooveGxlHelper.createEdgeWithName(graph, gxlNode, gxlNode, ASPECT_LABEL_DEL);
-                break;
-        }
-    }
-
-    private String getAspectLabel(NodeRuleAspect addDelOrContext) {
-        switch (addDelOrContext) {
-            case ADD:
-                return ASPECT_LABEL_NEW;
-            case DEL:
-                return ASPECT_LABEL_DEL;
-            case CONTEXT:
-            default:
-                return "";
-        }
-    }
-
-    private void writeRuleToFile(File dir, GrooveGraphRule grooveGraphRule, Gxl gxl) {
-        File file = new File(dir.getPath() + "/" + grooveGraphRule.getRuleName() + ".gpr");
-        GxlToXMLConverter.toXml(gxl, file);
+    public Stream<GrooveGraphRule> getRules() {
+        return this.rules.stream();
     }
 }

@@ -9,7 +9,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
-import groove.graph.GrooveRuleGenerator;
+import groove.graph.GrooveRuleBuilder;
 
 import java.util.Collection;
 
@@ -26,8 +26,8 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     }
 
     @Override
-    public GrooveRuleGenerator generateRules(BPMNProcessModel bpmnProcessModel, boolean addPrefix) {
-        GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator(bpmnProcessModel, addPrefix);
+    public GrooveRuleBuilder generateRules(BPMNProcessModel bpmnProcessModel, boolean addPrefix) {
+        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(bpmnProcessModel, addPrefix);
 
         // Iteration order of LinkedHashMultimap needed for testcases
         final Multimap<ParallelGateway, SequenceFlow> parallelGatewayOutgoing = LinkedHashMultimap.create();
@@ -40,7 +40,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                         startEvent,
                         sequenceFlow,
                         bpmnProcessModel,
-                        ruleGenerator,
+                        ruleBuilder,
                         parallelGatewayIncoming);
             }
 
@@ -50,7 +50,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                         activity,
                         sequenceFlow,
                         bpmnProcessModel,
-                        ruleGenerator,
+                        ruleBuilder,
                         parallelGatewayIncoming);
             }
 
@@ -60,7 +60,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                         exclusiveGateway,
                         sequenceFlow,
                         bpmnProcessModel,
-                        ruleGenerator,
+                        ruleBuilder,
                         parallelGatewayIncoming);
             }
 
@@ -68,7 +68,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                     ControlFlowNode notParallelGatewayNode,
                     SequenceFlow sequenceFlow,
                     BPMNProcessModel bpmnProcessModel,
-                    GrooveRuleGenerator ruleGenerator,
+                    GrooveRuleBuilder ruleGenerator,
                     Multimap<ParallelGateway, SequenceFlow> parallelGatewayIncoming) {
                 ruleGenerator.startRule(sequenceFlow.getName());
                 sequenceFlow.getTarget().accept(new StartParallelOrElseControlFlowNodeVisitor() {
@@ -95,7 +95,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                         parallelGatewayIncoming.put(parallelGateway, sequenceFlow);
                     }
                 });
-                ruleGenerator.generateRule();
+                ruleGenerator.buildRule();
             }
 
             @Override
@@ -115,33 +115,33 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
 
         // Synchronisation for parallel gateways
         parallelGatewayIncoming.keySet().forEach(parallelGateway -> {
-            ruleGenerator.startRule(parallelGateway.getName() + SYNCHRONISATION_SUFFIX);
+            ruleBuilder.startRule(parallelGateway.getName() + SYNCHRONISATION_SUFFIX);
 
             final Collection<SequenceFlow> incomingFlows = parallelGatewayIncoming.get(parallelGateway);
-            incomingFlows.forEach(sequenceFlow -> ruleGenerator.deleteNode(sequenceFlow.getSource().getName() + FINISHED_SUFFIX));
-            ruleGenerator.addNode(parallelGateway.getName());
+            incomingFlows.forEach(sequenceFlow -> ruleBuilder.deleteNode(sequenceFlow.getSource().getName() + FINISHED_SUFFIX));
+            ruleBuilder.addNode(parallelGateway.getName());
 
-            ruleGenerator.generateRule();
+            ruleBuilder.buildRule();
         });
 
         // Distribution for parallel gateways
         parallelGatewayOutgoing.keySet().forEach(parallelGateway -> {
-            ruleGenerator.startRule(parallelGateway.getName() + DISTRIBUTION_SUFFIX);
+            ruleBuilder.startRule(parallelGateway.getName() + DISTRIBUTION_SUFFIX);
 
             final Collection<SequenceFlow> outgoingFlows = parallelGatewayOutgoing.get(parallelGateway);
             outgoingFlows.forEach(sequenceFlow -> {
                 if (sequenceFlow.getTarget().isParallelGateway()) {
-                    ruleGenerator.addNode(sequenceFlow.getTarget().getName() + FINISHED_SUFFIX);
+                    ruleBuilder.addNode(sequenceFlow.getTarget().getName() + FINISHED_SUFFIX);
                 } else {
-                    ruleGenerator.addNode(sequenceFlow.getTarget().getName());
+                    ruleBuilder.addNode(sequenceFlow.getTarget().getName());
                 }
             });
-            ruleGenerator.deleteNode(parallelGateway.getName());
+            ruleBuilder.deleteNode(parallelGateway.getName());
 
-            ruleGenerator.generateRule();
+            ruleBuilder.buildRule();
         });
 
-        return ruleGenerator;
+        return ruleBuilder;
     }
 
     private String getPrefixOrEmpty(Behavior finiteStateMachine, Boolean addPrefix) {

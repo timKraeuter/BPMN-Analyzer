@@ -4,7 +4,7 @@ import behavior.piCalculus.*;
 import groove.graph.GrooveEdge;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
-import groove.graph.GrooveRuleGenerator;
+import groove.graph.GrooveRuleBuilder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -45,9 +45,9 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
     private Map<String, GrooveNode> nameToNode;
 
     @Override
-    public GrooveRuleGenerator generateRules(NamedPiProcess namedPiProcess, boolean addPrefix) {
+    public GrooveRuleBuilder generateRules(NamedPiProcess namedPiProcess, boolean addPrefix) {
         // Fixed set of rules for Pi. We do not think about synchronisation yet.
-        return new GrooveRuleGenerator();
+        return new GrooveRuleBuilder();
     }
 
     @Override

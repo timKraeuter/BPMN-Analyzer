@@ -4,7 +4,7 @@ import behavior.fsm.FiniteStateMachine;
 import com.google.common.collect.Sets;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
-import groove.graph.GrooveRuleGenerator;
+import groove.graph.GrooveRuleBuilder;
 
 public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMachine> {
 
@@ -16,17 +16,17 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
     }
 
     @Override
-    public GrooveRuleGenerator generateRules(FiniteStateMachine finiteStateMachine, boolean addPrefix) {
-        GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator(finiteStateMachine, addPrefix);
+    public GrooveRuleBuilder generateRules(FiniteStateMachine finiteStateMachine, boolean addPrefix) {
+        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(finiteStateMachine, addPrefix);
         finiteStateMachine.getTransitions().forEach(transition -> {
-            ruleGenerator.startRule(transition.getName());
+            ruleBuilder.startRule(transition.getName());
 
-            ruleGenerator.deleteNode(transition.getSource().getName());
-            ruleGenerator.addNode(transition.getTarget().getName());
+            ruleBuilder.deleteNode(transition.getSource().getName());
+            ruleBuilder.addNode(transition.getTarget().getName());
 
-            ruleGenerator.generateRule();
+            ruleBuilder.buildRule();
         });
-        return ruleGenerator;
+        return ruleBuilder;
     }
 
     private String getPrefixOrEmpty(FiniteStateMachine finiteStateMachine, Boolean addPrefix) {

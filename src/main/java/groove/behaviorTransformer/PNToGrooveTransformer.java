@@ -5,7 +5,7 @@ import behavior.petriNet.Place;
 import groove.graph.GrooveEdge;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
-import groove.graph.GrooveRuleGenerator;
+import groove.graph.GrooveRuleBuilder;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -17,7 +17,7 @@ public class PNToGrooveTransformer implements GrooveTransformer<PetriNet> {
 
     @Override
     public GrooveGraph generateStartGraph(PetriNet petriNet, boolean addPrefix) {
-        String potentialPrefix = GrooveRuleGenerator.getPotentialPrefix(petriNet, addPrefix);
+        String potentialPrefix = GrooveRuleBuilder.getPotentialPrefix(petriNet, addPrefix);
 
         Set<GrooveNode> nodes = new LinkedHashSet<>();
         Set<GrooveEdge> edges = new LinkedHashSet<>();
@@ -39,33 +39,33 @@ public class PNToGrooveTransformer implements GrooveTransformer<PetriNet> {
     }
 
     @Override
-    public GrooveRuleGenerator generateRules(PetriNet petriNet, boolean addPrefix) {
-        GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator(petriNet, addPrefix);
+    public GrooveRuleBuilder generateRules(PetriNet petriNet, boolean addPrefix) {
+        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(petriNet, addPrefix);
         petriNet.getTransitions().forEach(transition -> {
-            ruleGenerator.startRule(transition.getName());
+            ruleBuilder.startRule(transition.getName());
 
             transition.getIncomingEdges().forEach(weigthPlacePair -> {
                 Place place = weigthPlacePair.getRight();
                 Integer weight = weigthPlacePair.getLeft();
-                GrooveNode placeNode = ruleGenerator.contextNode(place.getName());
+                GrooveNode placeNode = ruleBuilder.contextNode(place.getName());
                 for (int i = 0; i < weight; i++) {
-                    GrooveNode toBeDeletedTokenNode = ruleGenerator.deleteNode(TOKEN_NODE_NAME);
-                    ruleGenerator.deleteEdge(TOKEN_EDGE_NAME, placeNode, toBeDeletedTokenNode);
+                    GrooveNode toBeDeletedTokenNode = ruleBuilder.deleteNode(TOKEN_NODE_NAME);
+                    ruleBuilder.deleteEdge(TOKEN_EDGE_NAME, placeNode, toBeDeletedTokenNode);
                 }
             });
 
             transition.getOutgoingEdges().forEach(weigthPlacePair -> {
                 Place place = weigthPlacePair.getRight();
                 Integer weight = weigthPlacePair.getLeft();
-                GrooveNode placeNode = ruleGenerator.contextNode(place.getName());
+                GrooveNode placeNode = ruleBuilder.contextNode(place.getName());
                 for (int i = 0; i < weight; i++) {
-                    GrooveNode toBeAddedTokenNode = ruleGenerator.addNode(TOKEN_NODE_NAME);
-                    ruleGenerator.addEdge(TOKEN_EDGE_NAME, placeNode, toBeAddedTokenNode);
+                    GrooveNode toBeAddedTokenNode = ruleBuilder.addNode(TOKEN_NODE_NAME);
+                    ruleBuilder.addEdge(TOKEN_EDGE_NAME, placeNode, toBeAddedTokenNode);
                 }
             });
 
-            ruleGenerator.generateRule();
+            ruleBuilder.buildRule();
         });
-        return ruleGenerator;
+        return ruleBuilder;
     }
 }
