@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="release_r1" role="rule" edgeids="false" edgemode="directed">
-        <node id="n19">
+        <node id="n28">
             <attr name="layout">
                 <string>127 82 0 0</string>
             </attr>
         </node>
-        <edge from="n19" to="n19">
+        <edge from="n28" to="n28">
             <attr name="label">
                 <string>Token</string>
             </attr>
         </edge>
-        <edge from="n19" to="n19">
+        <edge from="n28" to="n28">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n17">
+        <node id="n26">
             <attr name="layout">
                 <string>247 172 0 0</string>
             </attr>
         </node>
-        <edge from="n17" to="n17">
+        <edge from="n26" to="n26">
             <attr name="label">
                 <string>Token</string>
             </attr>
         </edge>
-        <edge from="n17" to="n17">
+        <edge from="n26" to="n26">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n16">
+        <node id="n25">
             <attr name="layout">
                 <string>62 172 0 0</string>
             </attr>
         </node>
-        <edge from="n16" to="n16">
+        <edge from="n25" to="n25">
             <attr name="label">
                 <string>r1_postWork</string>
             </attr>
         </edge>
-        <node id="n18">
+        <node id="n27">
             <attr name="layout">
                 <string>62 82 0 0</string>
             </attr>
         </node>
-        <edge from="n18" to="n18">
+        <edge from="n27" to="n27">
             <attr name="label">
                 <string>end</string>
             </attr>
         </edge>
-        <edge from="n18" to="n19">
+        <edge from="n27" to="n28">
             <attr name="label">
                 <string>new:token</string>
             </attr>
         </edge>
-        <edge from="n16" to="n17">
+        <edge from="n25" to="n26">
             <attr name="label">
                 <string>del:token</string>
             </attr>

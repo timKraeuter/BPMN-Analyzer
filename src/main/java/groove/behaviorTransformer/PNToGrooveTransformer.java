@@ -2,62 +2,44 @@ package groove.behaviorTransformer;
 
 import behavior.petriNet.PetriNet;
 import behavior.petriNet.Place;
-import groove.GrooveGxlHelper;
-import groove.GxlToXMLConverter;
+import groove.graph.GrooveEdge;
+import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
 import groove.graph.GrooveRuleGenerator;
-import groove.gxl.Graph;
-import groove.gxl.Gxl;
-import groove.gxl.Node;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-import static groove.behaviorTransformer.BehaviorToGrooveTransformer.START;
-import static groove.behaviorTransformer.BehaviorToGrooveTransformer.START_GST;
-
-public class PNToGrooveTransformer {
+public class PNToGrooveTransformer implements GrooveTransformer<PetriNet> {
 
     private static final String TOKEN_NODE_NAME = "Token";
     private static final String TOKEN_EDGE_NAME = "token";
 
-    void generatePNStartGraphFile(PetriNet petriNet, File graphGrammarSubFolder) {
-        Gxl gxl = new Gxl();
-        Graph graph = GrooveGxlHelper.createStandardGxlGraph(START, gxl);
-        AtomicLong idCounter = new AtomicLong(-1);
-        Map<String, String> nodeLabels = new HashMap<>();
+    @Override
+    public GrooveGraph generateStartGraph(PetriNet petriNet, boolean addPrefix) {
+        String potentialPrefix = GrooveRuleGenerator.getPotentialPrefix(petriNet, addPrefix);
 
+        Set<GrooveNode> nodes = new LinkedHashSet<>();
+        Set<GrooveEdge> edges = new LinkedHashSet<>();
+
+        // Create a node for each place of the petri net.
         petriNet.getPlaces().forEach(place -> {
-            Node placeNode = GrooveGxlHelper.createNodeWithName(
-                    this.getNodeId(idCounter),
-                    place.getName(),
-                    graph);
-            nodeLabels.put(placeNode.getId(), place.getName());
+            GrooveNode placeNode = new GrooveNode(potentialPrefix + place.getName());
+            nodes.add(placeNode);
             // Create and link start tokens for each place.
-            if (place.getStartTokenAmount() > 0) {
-                for (int i = 0; i < place.getStartTokenAmount(); i++) {
-                    Node tokenNode = GrooveGxlHelper.createNodeWithName(
-                            this.getNodeId(idCounter),
-                            TOKEN_NODE_NAME,
-                            graph);
-                    nodeLabels.put(tokenNode.getId(), TOKEN_NODE_NAME);
-                    GrooveGxlHelper.createEdgeWithName(graph, placeNode, tokenNode, TOKEN_EDGE_NAME);
-                }
+            for (int i = 0; i < place.getStartTokenAmount(); i++) {
+                GrooveNode tokenNode = new GrooveNode(potentialPrefix + TOKEN_NODE_NAME);
+                nodes.add(tokenNode);
+
+                GrooveEdge tokenEdge = new GrooveEdge(potentialPrefix + TOKEN_EDGE_NAME, placeNode, tokenNode);
+                edges.add(tokenEdge);
             }
         });
-        GrooveGxlHelper.layoutGraph(graph, nodeLabels);
-
-        File startGraphFile = new File(graphGrammarSubFolder.getPath() + START_GST);
-        GxlToXMLConverter.toXml(gxl, startGraphFile);
+        return new GrooveGraph(petriNet.getName(), nodes, edges);
     }
 
-    private String getNodeId(AtomicLong idCounter) {
-        return "n" + idCounter.incrementAndGet();
-    }
-
-    void generatePNRules(PetriNet petriNet, File subFolder, boolean addPrefix) {
+    @Override
+    public GrooveRuleGenerator generateRules(PetriNet petriNet, boolean addPrefix) {
         GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator(petriNet, addPrefix);
         petriNet.getTransitions().forEach(transition -> {
             ruleGenerator.startRule(transition.getName());
@@ -84,6 +66,6 @@ public class PNToGrooveTransformer {
 
             ruleGenerator.generateRule();
         });
-        ruleGenerator.writeRules(subFolder);
+        return ruleGenerator;
     }
 }

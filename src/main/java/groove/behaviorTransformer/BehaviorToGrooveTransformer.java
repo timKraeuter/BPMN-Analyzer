@@ -47,10 +47,9 @@ public class BehaviorToGrooveTransformer {
             public void handle(PetriNet petriNet) {
                 PNToGrooveTransformer transformer = new PNToGrooveTransformer();
 
-                // TODO: Save start graph and add a prefix to it
-                transformer.generatePNStartGraphFile(petriNet, graphGrammarSubFolder);
+                startGraphs.add(transformer.generateStartGraph(petriNet, true));
 
-                transformer.generatePNRules(petriNet, graphGrammarSubFolder, true);
+                transformer.generateAndWriteRules(petriNet, true, graphGrammarSubFolder);
             }
 
             @Override
@@ -59,7 +58,6 @@ public class BehaviorToGrooveTransformer {
 
                 startGraphs.add(transformer.generateStartGraph(bpmnProcessModel, true));
 
-                // TODO: prefix rules when start graph is prefixed.
                 transformer.generateAndWriteRules(bpmnProcessModel, true, graphGrammarSubFolder);
             }
 
@@ -146,10 +144,10 @@ public class BehaviorToGrooveTransformer {
 
         // Generate start graph
         // TODO: Should accept a potential prefix!
-        transformer.generatePNStartGraphFile(petriNet, graphGrammarSubFolder);
+        transformer.generateAndWriteStartGraph(petriNet, addPrefix, graphGrammarSubFolder);
 
         // Generate rules
-        transformer.generatePNRules(petriNet, graphGrammarSubFolder, addPrefix);
+        transformer.generateAndWriteRules(petriNet, addPrefix, graphGrammarSubFolder);
 
         this.generatePropertiesFile(graphGrammarSubFolder, START, Maps.newHashMap());
     }

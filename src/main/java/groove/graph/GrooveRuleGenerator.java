@@ -24,11 +24,17 @@ public class GrooveRuleGenerator implements GraphRuleGenerator {
     }
 
     public GrooveRuleGenerator(Behavior behavior, boolean addPrefix) {
+        this.prefix = getPotentialPrefix(behavior, addPrefix);
+    }
+
+    public static String getPotentialPrefix(Behavior behavior, boolean addPrefix) {
+        final String prefix;
         if (addPrefix) {
-            this.prefix = behavior.getName() + "_";
+            prefix = behavior.getName() + "_";
         } else {
-            this.prefix = "";
+            prefix = "";
         }
+        return prefix;
     }
 
     public static GrooveRuleGenerator createSynchedRules(Map<String, Set<GrooveGraphRule>> nameToToBeSynchedRules) {
