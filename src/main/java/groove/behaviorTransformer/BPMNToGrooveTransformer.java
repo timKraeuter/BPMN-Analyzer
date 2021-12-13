@@ -9,9 +9,11 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
+import groove.graph.rule.GrooveGraphRule;
 import groove.graph.rule.GrooveRuleBuilder;
 
 import java.util.Collection;
+import java.util.stream.Stream;
 
 public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessModel> {
     private static final String FINISHED_SUFFIX = "_finished";
@@ -26,7 +28,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     }
 
     @Override
-    public GrooveRuleBuilder generateRules(BPMNProcessModel bpmnProcessModel, boolean addPrefix) {
+    public Stream<GrooveGraphRule> generateRules(BPMNProcessModel bpmnProcessModel, boolean addPrefix) {
         GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(bpmnProcessModel, addPrefix);
 
         // Iteration order of LinkedHashMultimap needed for testcases
@@ -141,7 +143,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
             ruleBuilder.buildRule();
         });
 
-        return ruleBuilder;
+        return ruleBuilder.getRules();
     }
 
     private String getPrefixOrEmpty(Behavior finiteStateMachine, Boolean addPrefix) {

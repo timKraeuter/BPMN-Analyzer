@@ -5,10 +5,12 @@ import behavior.petriNet.Place;
 import groove.graph.GrooveEdge;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
+import groove.graph.rule.GrooveGraphRule;
 import groove.graph.rule.GrooveRuleBuilder;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class PNToGrooveTransformer implements GrooveTransformer<PetriNet> {
 
@@ -39,7 +41,7 @@ public class PNToGrooveTransformer implements GrooveTransformer<PetriNet> {
     }
 
     @Override
-    public GrooveRuleBuilder generateRules(PetriNet petriNet, boolean addPrefix) {
+    public Stream<GrooveGraphRule> generateRules(PetriNet petriNet, boolean addPrefix) {
         GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(petriNet, addPrefix);
         petriNet.getTransitions().forEach(transition -> {
             ruleBuilder.startRule(transition.getName());
@@ -66,6 +68,6 @@ public class PNToGrooveTransformer implements GrooveTransformer<PetriNet> {
 
             ruleBuilder.buildRule();
         });
-        return ruleBuilder;
+        return ruleBuilder.getRules();
     }
 }

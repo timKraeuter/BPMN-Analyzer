@@ -4,7 +4,10 @@ import behavior.fsm.FiniteStateMachine;
 import com.google.common.collect.Sets;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
+import groove.graph.rule.GrooveGraphRule;
 import groove.graph.rule.GrooveRuleBuilder;
+
+import java.util.stream.Stream;
 
 public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMachine> {
 
@@ -16,7 +19,7 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
     }
 
     @Override
-    public GrooveRuleBuilder generateRules(FiniteStateMachine finiteStateMachine, boolean addPrefix) {
+    public Stream<GrooveGraphRule> generateRules(FiniteStateMachine finiteStateMachine, boolean addPrefix) {
         GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(finiteStateMachine, addPrefix);
         finiteStateMachine.getTransitions().forEach(transition -> {
             ruleBuilder.startRule(transition.getName());
@@ -26,7 +29,7 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
 
             ruleBuilder.buildRule();
         });
-        return ruleBuilder;
+        return ruleBuilder.getRules();
     }
 
     private String getPrefixOrEmpty(FiniteStateMachine finiteStateMachine, Boolean addPrefix) {

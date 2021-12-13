@@ -32,7 +32,7 @@ public class GrooveRuleBuilder implements GraphRuleGenerator {
         return prefix;
     }
 
-    public static GrooveRuleBuilder createSynchedRules(Map<String, Set<GrooveGraphRule>> nameToToBeSynchedRules) {
+    public static Stream<GrooveGraphRule> createSynchedRules(Map<String, Set<GrooveGraphRule>> nameToToBeSynchedRules) {
         GrooveRuleBuilder ruleGenerator = new GrooveRuleBuilder();
         nameToToBeSynchedRules.forEach((synchedRuleName, synchedRules) -> {
             ruleGenerator.startRule(synchedRuleName);
@@ -66,7 +66,7 @@ public class GrooveRuleBuilder implements GraphRuleGenerator {
 
             ruleGenerator.buildRule();
         });
-        return ruleGenerator;
+        return ruleGenerator.getRules();
     }
 
     @Override

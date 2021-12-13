@@ -20,7 +20,7 @@ public class GenerateGrammarForMultipleBehaviorsTest {
 
     @Test
     void tlTest() {
-        FiniteStateMachine tl_a = this.createTrafficLight("A", "red");
+        FiniteStateMachine tl_a = this.createTrafficLight("A", "green");
         FiniteStateMachine tl_b = this.createTrafficLight("B", "red");
         FiniteStateMachine tl_c = this.createTrafficLight("C", "green");
 
@@ -35,13 +35,21 @@ public class GenerateGrammarForMultipleBehaviorsTest {
 
         Map<String, Set<String>> nameToToBeSynchedRules = new LinkedHashMap<>();
 
-        Set<String> toBeSynched = new LinkedHashSet<>(); // Fixed iteration order needed for the testcase.
-        toBeSynched.add(String.format("%s_%s", phases.getName(), SW_TO_PHASE_1));
-        toBeSynched.add(String.format("%s_%s", tl_a.getName(), TURN_GREEN));
-        toBeSynched.add(String.format("%s_%s", tl_b.getName(), TURN_RED));
-        toBeSynched.add(String.format("%s_%s", tl_c.getName(), TURN_GREEN));
+        Set<String> toBeSynched1 = new LinkedHashSet<>(); // Fixed iteration order needed for the testcase.
+        toBeSynched1.add(String.format("%s_%s", phases.getName(), SW_TO_PHASE_1));
+        toBeSynched1.add(String.format("%s_%s", tl_a.getName(), TURN_GREEN));
+        toBeSynched1.add(String.format("%s_%s", tl_b.getName(), TURN_RED));
+        toBeSynched1.add(String.format("%s_%s", tl_c.getName(), TURN_GREEN));
 
-        nameToToBeSynchedRules.put(SW_TO_PHASE_1, toBeSynched);
+        nameToToBeSynchedRules.put(SW_TO_PHASE_1, toBeSynched1);
+
+        Set<String> toBeSynched2 = new LinkedHashSet<>(); // Fixed iteration order needed for the testcase.
+        toBeSynched2.add(String.format("%s_%s", phases.getName(), SW_TO_PHASE_2));
+        toBeSynched2.add(String.format("%s_%s", tl_a.getName(), TURN_RED));
+        toBeSynched2.add(String.format("%s_%s", tl_b.getName(), TURN_GREEN));
+        toBeSynched2.add(String.format("%s_%s", tl_c.getName(), TURN_RED));
+
+        nameToToBeSynchedRules.put(SW_TO_PHASE_2, toBeSynched2);
 
         transformer.generateGrooveGrammar(
                 outputDir,
@@ -51,8 +59,6 @@ public class GenerateGrammarForMultipleBehaviorsTest {
                 tl_b,
                 tl_c,
                 phases);
-        // TODO: we would like to synch our rules now!
-
         // Expect a folder with prefixed rules and start states etc.
     }
 

@@ -4,6 +4,7 @@ import behavior.piCalculus.*;
 import groove.graph.GrooveEdge;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
+import groove.graph.rule.GrooveGraphRule;
 import groove.graph.rule.GrooveRuleBuilder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProcess> {
 
@@ -45,9 +47,9 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
     private Map<String, GrooveNode> nameToNode;
 
     @Override
-    public GrooveRuleBuilder generateRules(NamedPiProcess namedPiProcess, boolean addPrefix) {
+    public Stream<GrooveGraphRule> generateRules(NamedPiProcess namedPiProcess, boolean addPrefix) {
         // Fixed set of rules for Pi. We do not think about synchronisation yet.
-        return new GrooveRuleBuilder();
+        return new GrooveRuleBuilder().getRules();
     }
 
     @Override
@@ -66,7 +68,7 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
 
     @Override
     public GrooveGraph generateStartGraph(NamedPiProcess piProcess, boolean addPrefix) {
-        // Prefixing is not needed for the pi-calculus since a shared set of rules is needed for everything.
+        // Prefixing is not needed for the pi-calculus since a shared set of rules is used for everything.
 
         this.nodes = new LinkedHashSet<>();
         this.edges = new LinkedHashSet<>();

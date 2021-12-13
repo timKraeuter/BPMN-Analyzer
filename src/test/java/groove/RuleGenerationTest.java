@@ -14,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 @SuppressWarnings("ConstantConditions")
 public class RuleGenerationTest {
@@ -94,9 +95,9 @@ public class RuleGenerationTest {
         toBeSynched.add(r2);
 
         nameToToBeSynchedRules.put("twoRuleSynch", toBeSynched);
-        GrooveRuleBuilder synchBuilder = GrooveRuleBuilder.createSynchedRules(nameToToBeSynchedRules);
+        Stream<GrooveGraphRule> synchedRules = GrooveRuleBuilder.createSynchedRules(nameToToBeSynchedRules);
 
-        GrooveRuleWriter.writeRules(synchBuilder.getRules(), tempDir);
+        GrooveRuleWriter.writeRules(synchedRules, tempDir);
 
         File expected_rule = new File(this.getClass().getResource("/twoRuleSynch.gpr").getFile());
         File generated_rule = new File(tempDir + "/twoRuleSynch.gpr");
@@ -135,9 +136,9 @@ public class RuleGenerationTest {
         toBeSynched.add(r3);
 
         nameToToBeSynchedRules.put("threeRuleSynch", toBeSynched);
-        GrooveRuleBuilder synchBuilder = GrooveRuleBuilder.createSynchedRules(nameToToBeSynchedRules);
+        Stream<GrooveGraphRule> synchedRules = GrooveRuleBuilder.createSynchedRules(nameToToBeSynchedRules);
 
-        GrooveRuleWriter.writeRules(synchBuilder.getRules(), tempDir);
+        GrooveRuleWriter.writeRules(synchedRules, tempDir);
 
         File expected_rule = new File(this.getClass().getResource("/threeRuleSynch.gpr").getFile());
         File generated_rule = new File(tempDir + "/threeRuleSynch.gpr");

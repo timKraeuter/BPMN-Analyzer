@@ -3,11 +3,12 @@ package groove.behaviorTransformer;
 import behavior.Behavior;
 import groove.GxlToXMLConverter;
 import groove.graph.GrooveGraph;
-import groove.graph.rule.GrooveRuleBuilder;
+import groove.graph.rule.GrooveGraphRule;
 import groove.graph.rule.GrooveRuleWriter;
 import groove.gxl.Gxl;
 
 import java.io.File;
+import java.util.stream.Stream;
 
 import static groove.behaviorTransformer.BehaviorToGrooveTransformer.START_GST;
 
@@ -27,11 +28,11 @@ public interface GrooveTransformer<SOURCE extends Behavior> {
         GxlToXMLConverter.toXml(gxl, startGraphFile);
     }
 
-    GrooveRuleBuilder generateRules(SOURCE source, boolean addPrefix);
+    Stream<GrooveGraphRule> generateRules(SOURCE source, boolean addPrefix);
 
     default void generateAndWriteRules(SOURCE source, boolean addPrefix, File targetFolder) {
-        GrooveRuleBuilder ruleBuilder = this.generateRules(source, addPrefix);
-        GrooveRuleWriter.writeRules(ruleBuilder.getRules(), targetFolder);
+        Stream<GrooveGraphRule> rules = this.generateRules(source, addPrefix);
+        GrooveRuleWriter.writeRules(rules, targetFolder);
     }
 
 }

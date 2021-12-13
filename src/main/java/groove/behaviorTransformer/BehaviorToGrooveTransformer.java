@@ -11,6 +11,7 @@ import groove.GrooveGxlHelper;
 import groove.graph.GrooveGraph;
 import groove.graph.rule.GrooveGraphRule;
 import groove.graph.rule.GrooveRuleBuilder;
+import groove.graph.rule.GrooveRuleWriter;
 import groove.gxl.Graph;
 import groove.gxl.Gxl;
 import groove.gxl.Node;
@@ -22,7 +23,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BehaviorToGrooveTransformer {
     static final String START_GST = "/start.gst";
@@ -37,7 +40,7 @@ public class BehaviorToGrooveTransformer {
 
         final boolean[] piProcessIncluded = {false};
         Set<GrooveGraph> startGraphs = new LinkedHashSet<>();
-        Set<GrooveRuleBuilder> rules = new LinkedHashSet<>();
+        Set<GrooveGraphRule> allRules = new LinkedHashSet<>();
 
         Arrays.stream(behaviors).forEach(behavior -> behavior.accept(new BehaviorVisitor() {
             @Override
@@ -45,7 +48,7 @@ public class BehaviorToGrooveTransformer {
                 FSMToGrooveTransformer transformer = new FSMToGrooveTransformer();
 
                 startGraphs.add(transformer.generateStartGraph(finiteStateMachine, true));
-                rules.add(transformer.generateRules(finiteStateMachine, true));
+                transformer.generateRules(finiteStateMachine, true).forEach(allRules::add);
             }
 
             @Override
@@ -53,7 +56,7 @@ public class BehaviorToGrooveTransformer {
                 PNToGrooveTransformer transformer = new PNToGrooveTransformer();
 
                 startGraphs.add(transformer.generateStartGraph(petriNet, true));
-                rules.add(transformer.generateRules(petriNet, true));
+                transformer.generateRules(petriNet, true).forEach(allRules::add);
             }
 
             @Override
@@ -61,7 +64,7 @@ public class BehaviorToGrooveTransformer {
                 BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer();
 
                 startGraphs.add(transformer.generateStartGraph(bpmnProcessModel, true));
-                rules.add(transformer.generateRules(bpmnProcessModel, true));
+                transformer.generateRules(bpmnProcessModel, true).forEach(allRules::add);
             }
 
             @Override
@@ -71,7 +74,7 @@ public class BehaviorToGrooveTransformer {
                 PiCalcToGrooveTransformer transformer = new PiCalcToGrooveTransformer();
 
                 startGraphs.add(transformer.generateStartGraph(piProcess, true));
-                rules.add(transformer.generateRules(piProcess, true));
+                transformer.generateRules(piProcess, true).forEach(allRules::add);
             }
         }));
 
@@ -85,13 +88,33 @@ public class BehaviorToGrooveTransformer {
         // Merge start graphs and write the final one.
         this.mergeAndWriteStartGraphs(graphGrammarSubFolder, startGraphs);
 
-        List<GrooveGraphRule> allRules = rules.stream()
-                                              .flatMap(GrooveRuleBuilder::getRules)
-                                              .collect(Collectors.toList());
+        this.writeAndSynchRules(nameToToBeSynchedRuleNames, allRules, graphGrammarSubFolder);
+    }
+
+    private void writeAndSynchRules(
+            Map<String, Set<String>> nameToToBeSynchedRuleNames,
+            Set<GrooveGraphRule> allRules,
+            File targetFolder) {
         Map<String, Set<GrooveGraphRule>> nameToToBeSynchedRules = new LinkedHashMap<>();
-        GrooveRuleBuilder synchedRules = GrooveRuleBuilder.createSynchedRules(
+        Map<String, GrooveGraphRule> indexedRules = allRules.stream()
+                                                            .collect(Collectors.toMap(
+                                                                    GrooveGraphRule::getRuleName,
+                                                                    Function.identity()));
+
+        nameToToBeSynchedRuleNames.forEach((newRuleName, ruleNames) -> {
+            Set<GrooveGraphRule> rules = ruleNames.stream().map(indexedRules::get)
+                                                  .collect(Collectors.toSet());
+            rules.forEach(allRules::remove);
+            nameToToBeSynchedRules.put(newRuleName, rules);
+        });
+
+
+        Stream<GrooveGraphRule> synchedRules = GrooveRuleBuilder.createSynchedRules(
                 nameToToBeSynchedRules
         );
+
+        GrooveRuleWriter.writeRules(synchedRules, targetFolder);
+        GrooveRuleWriter.writeRules(allRules.stream(), targetFolder);
     }
 
     private void mergeAndWriteStartGraphs(File graphGrammarSubFolder, Set<GrooveGraph> startGraphs) {
