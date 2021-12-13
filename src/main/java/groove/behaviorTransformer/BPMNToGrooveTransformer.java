@@ -11,16 +11,22 @@ import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
 import groove.graph.GrooveRuleGenerator;
 
-import java.io.File;
 import java.util.Collection;
 
-public class BPMNToGrooveTransformer {
+public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessModel> {
     private static final String FINISHED_SUFFIX = "_finished";
     private static final String SYNCHRONISATION_SUFFIX = "_synchronisation";
     private static final String DISTRIBUTION_SUFFIX = "_distribution";
 
+    @Override
+    public GrooveGraph generateStartGraph(BPMNProcessModel bpmnProcessModel, boolean addPrefix) {
+        String potentialPrefix = this.getPrefixOrEmpty(bpmnProcessModel, addPrefix);
+        GrooveNode startEventNode = new GrooveNode(potentialPrefix + bpmnProcessModel.getStartEvent().getName());
+        return new GrooveGraph(bpmnProcessModel.getName(), Sets.newHashSet(startEventNode), Sets.newHashSet());
+    }
 
-    void generateBPMNRules(BPMNProcessModel bpmnProcessModel, File graphGrammarSubFolder, boolean addPrefix) {
+    @Override
+    public GrooveRuleGenerator generateRules(BPMNProcessModel bpmnProcessModel, boolean addPrefix) {
         GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator(bpmnProcessModel, addPrefix);
 
         // Iteration order of LinkedHashMultimap needed for testcases
@@ -135,13 +141,7 @@ public class BPMNToGrooveTransformer {
             ruleGenerator.generateRule();
         });
 
-        ruleGenerator.writeRules(graphGrammarSubFolder);
-    }
-
-    GrooveGraph generateStartGraph(BPMNProcessModel bpmnProcessModel, boolean addPrefix) {
-        String potentialPrefix = this.getPrefixOrEmpty(bpmnProcessModel, addPrefix);
-        GrooveNode startEventNode = new GrooveNode(potentialPrefix + bpmnProcessModel.getStartEvent().getName());
-        return new GrooveGraph(bpmnProcessModel.getName(), Sets.newHashSet(startEventNode), Sets.newHashSet());
+        return ruleGenerator;
     }
 
     private String getPrefixOrEmpty(Behavior finiteStateMachine, Boolean addPrefix) {

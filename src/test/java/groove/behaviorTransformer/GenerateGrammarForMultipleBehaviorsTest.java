@@ -6,11 +6,15 @@ import behavior.fsm.Transition;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class GenerateGrammarForMultipleBehaviorsTest {
     private static final String outputPath = "C:/Source/groove/bin";
+    public static final String SW_TO_PHASE_2 = "switch_to_phase2";
+    public static final String SW_TO_PHASE_1 = "switch_to_phase1";
+    public static final String TURN_RED = "turn_red";
+    public static final String TURN_GREEN = "turn_green";
     //    private static final String outputPath = "B:/Source/groove/bin";
     //    String outputPath = FileUtils.getTempDirectoryPath();
 
@@ -23,12 +27,30 @@ public class GenerateGrammarForMultipleBehaviorsTest {
         State phase1 = new State("phase1");
         State phase2 = new State("phase2");
         FiniteStateMachine phases = new FiniteStateMachine("phases", phase1);
-        phases.addTransition(new Transition("switch_to_phase2", phase1, phase2));
-        phases.addTransition(new Transition("switch_to_phase1", phase2, phase1));
+        phases.addTransition(new Transition(SW_TO_PHASE_2, phase1, phase2));
+        phases.addTransition(new Transition(SW_TO_PHASE_1, phase2, phase1));
 
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
         File outputDir = new File(outputPath);
-        transformer.generateGrooveGrammar(outputDir, "trafficLightsTest", tl_a, tl_b, tl_c, phases);
+
+        Map<String, Set<String>> nameToToBeSynchedRules = new LinkedHashMap<>();
+
+        Set<String> toBeSynched = new LinkedHashSet<>(); // Fixed iteration order needed for the testcase.
+        toBeSynched.add(String.format("%s_%s", phases.getName(), SW_TO_PHASE_1));
+        toBeSynched.add(String.format("%s_%s", tl_a.getName(), TURN_GREEN));
+        toBeSynched.add(String.format("%s_%s", tl_b.getName(), TURN_RED));
+        toBeSynched.add(String.format("%s_%s", tl_c.getName(), TURN_GREEN));
+
+        nameToToBeSynchedRules.put(SW_TO_PHASE_1, toBeSynched);
+
+        transformer.generateGrooveGrammar(
+                outputDir,
+                "trafficLightsTest",
+                nameToToBeSynchedRules,
+                tl_a,
+                tl_b,
+                tl_c,
+                phases);
         // TODO: we would like to synch our rules now!
 
         // Expect a folder with prefixed rules and start states etc.
@@ -49,9 +71,9 @@ public class GenerateGrammarForMultipleBehaviorsTest {
         }
         FiniteStateMachine fsm = new FiniteStateMachine(fsmName, startState.get());
         fsm.addTransition(new Transition("turn_red_amber", red, red_amber));
-        fsm.addTransition(new Transition("turn_green", red_amber, green));
+        fsm.addTransition(new Transition(TURN_GREEN, red_amber, green));
         fsm.addTransition(new Transition("turn_amber", green, amber));
-        fsm.addTransition(new Transition("turn_red", amber, red));
+        fsm.addTransition(new Transition(TURN_RED, amber, red));
         return fsm;
     }
 }

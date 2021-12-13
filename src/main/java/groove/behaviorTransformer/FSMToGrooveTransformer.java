@@ -6,17 +6,17 @@ import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
 import groove.graph.GrooveRuleGenerator;
 
-import java.io.File;
+public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMachine> {
 
-public class FSMToGrooveTransformer {
-
+    @Override
     public GrooveGraph generateStartGraph(FiniteStateMachine finiteStateMachine, boolean addPrefix) {
         String potentialPrefix = this.getPrefixOrEmpty(finiteStateMachine, addPrefix);
         GrooveNode startStateNode = new GrooveNode(potentialPrefix + finiteStateMachine.getStartState().getName());
         return new GrooveGraph(finiteStateMachine.getName(), Sets.newHashSet(startStateNode), Sets.newHashSet());
     }
 
-    void generateFSMRules(FiniteStateMachine finiteStateMachine, File subFolder, Boolean addPrefix) {
+    @Override
+    public GrooveRuleGenerator generateRules(FiniteStateMachine finiteStateMachine, boolean addPrefix) {
         GrooveRuleGenerator ruleGenerator = new GrooveRuleGenerator(finiteStateMachine, addPrefix);
         finiteStateMachine.getTransitions().forEach(transition -> {
             ruleGenerator.startRule(transition.getName());
@@ -26,7 +26,7 @@ public class FSMToGrooveTransformer {
 
             ruleGenerator.generateRule();
         });
-        ruleGenerator.writeRules(subFolder);
+        return ruleGenerator;
     }
 
     private String getPrefixOrEmpty(FiniteStateMachine finiteStateMachine, Boolean addPrefix) {

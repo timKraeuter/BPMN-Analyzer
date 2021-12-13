@@ -8,7 +8,6 @@ import behavior.petriNet.PetriNet;
 import behavior.piCalculus.NamedPiProcess;
 import com.google.common.collect.Maps;
 import groove.GrooveGxlHelper;
-import groove.GxlToXMLConverter;
 import groove.graph.GrooveGraph;
 import groove.gxl.Graph;
 import groove.gxl.Gxl;
@@ -26,8 +25,12 @@ public class BehaviorToGrooveTransformer {
     static final String START_GST = "/start.gst";
     static final String START = "start";
 
-    void generateGrooveGrammar(File grooveFolder, String name, Behavior... behaviors) {
-        File graphGrammarSubFolder = this.makeSubFolder(name, grooveFolder);
+    void generateGrooveGrammar(
+            File grooveFolder,
+            String graphGrammarName,
+            Map<String, Set<String>> nameToToBeSynchedRules,
+            Behavior... behaviors) {
+        File graphGrammarSubFolder = this.makeSubFolder(graphGrammarName, grooveFolder);
         final boolean[] piProcessIncluded = {false};
         Set<GrooveGraph> startGraphs = new LinkedHashSet<>();
         Arrays.stream(behaviors).forEach(behavior -> behavior.accept(new BehaviorVisitor() {
@@ -37,7 +40,7 @@ public class BehaviorToGrooveTransformer {
 
                 startGraphs.add(transformer.generateStartGraph(finiteStateMachine, true));
 
-                transformer.generateFSMRules(finiteStateMachine, graphGrammarSubFolder, true);
+                transformer.generateAndWriteRules(finiteStateMachine, true, graphGrammarSubFolder);
             }
 
             @Override
@@ -57,7 +60,7 @@ public class BehaviorToGrooveTransformer {
                 startGraphs.add(transformer.generateStartGraph(bpmnProcessModel, true));
 
                 // TODO: prefix rules when start graph is prefixed.
-                transformer.generateBPMNRules(bpmnProcessModel, graphGrammarSubFolder, true);
+                transformer.generateAndWriteRules(bpmnProcessModel, true, graphGrammarSubFolder);
             }
 
             @Override
@@ -84,7 +87,7 @@ public class BehaviorToGrooveTransformer {
         // Merge start graphs and write the final one.
         Optional<GrooveGraph> startGraph = startGraphs.stream()
                                                       .reduce((graph, graph2) -> graph.union(graph2, (name1, name2) -> name1));
-        startGraph.ifPresent(graph -> this.generateStartGraphFile(graph, graphGrammarSubFolder));
+        startGraph.ifPresent(graph -> GrooveTransformer.writeStartGraph(graphGrammarSubFolder, graph));
     }
 
     void generateGrooveGrammar(Behavior behavior, File targetFolder, boolean addPrefix) {
@@ -130,12 +133,9 @@ public class BehaviorToGrooveTransformer {
         BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer();
 
         // Generate start graph
-        // TODO: Make an abstraction of transformer, such that every transformer has to generate a start graph. Than refactor these two lines into one method and use many times.
-        GrooveGraph startGraph = transformer.generateStartGraph(bpmnProcessModel, addPrefix);
-        this.generateStartGraphFile(startGraph, graphGrammarSubFolder);
-
+        transformer.generateAndWriteStartGraph(bpmnProcessModel, addPrefix, graphGrammarSubFolder);
         // Generate rules
-        transformer.generateBPMNRules(bpmnProcessModel, graphGrammarSubFolder, addPrefix);
+        transformer.generateAndWriteRules(bpmnProcessModel, addPrefix, graphGrammarSubFolder);
 
         this.generatePropertiesFile(graphGrammarSubFolder, START, Maps.newHashMap());
     }
@@ -158,19 +158,12 @@ public class BehaviorToGrooveTransformer {
         File graphGrammarSubFolder = this.makeSubFolder(finiteStateMachine, grooveDir);
         FSMToGrooveTransformer transformer = new FSMToGrooveTransformer();
 
-        GrooveGraph startGraph = transformer.generateStartGraph(finiteStateMachine, addPrefix);
-        this.generateStartGraphFile(startGraph, graphGrammarSubFolder);
-
-        transformer.generateFSMRules(finiteStateMachine, graphGrammarSubFolder, addPrefix);
+        // Generate start graph
+        transformer.generateAndWriteStartGraph(finiteStateMachine, addPrefix, graphGrammarSubFolder);
+        // Generate rules
+        transformer.generateAndWriteRules(finiteStateMachine, addPrefix, graphGrammarSubFolder);
 
         this.generatePropertiesFile(graphGrammarSubFolder, START, Maps.newHashMap());
-    }
-
-    void generateStartGraphFile(GrooveGraph grooveGraph, File targetFolder) {
-        Gxl gxl = createGxlFromGrooveGraph(grooveGraph);
-        File startGraphFile = new File(targetFolder.getPath() + START_GST);
-
-        GxlToXMLConverter.toXml(gxl, startGraphFile);
     }
 
     private File makeSubFolder(Behavior behavior, File grooveDir) {
