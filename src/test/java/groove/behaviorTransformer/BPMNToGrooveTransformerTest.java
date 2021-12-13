@@ -2,18 +2,11 @@ package groove.behaviorTransformer;
 
 import behavior.bpmn.*;
 import behavior.bpmn.auxiliary.BPMNProcessBuilder;
-import groove.graph.GrooveNode;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelper {
-
-    @BeforeEach
-    void setUp() {
-        GrooveNode.idCounter.set(-1);
-    }
 
     /**
      * See model [SEQ] in bpmn_models/models.png

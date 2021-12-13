@@ -1,7 +1,6 @@
 package groove.graph;
 
 import api.Graph;
-import com.google.common.collect.Sets;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -46,8 +45,8 @@ public class GrooveGraph implements Graph {
     public GrooveGraph union(GrooveGraph graph, BiFunction<String, String, String> nameResolver) {
         assert !this.name.equals(graph.name);
 
-        Set<GrooveNode> nodes = Sets.newHashSet();
-        Set<GrooveEdge> edges = Sets.newHashSet();
+        Set<GrooveNode> nodes = new LinkedHashSet<>();
+        Set<GrooveEdge> edges = new LinkedHashSet<>();
 
         nodes.addAll(this.nodes);
         nodes.addAll(graph.nodes);

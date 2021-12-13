@@ -2,6 +2,8 @@ package groove.graph;
 
 import api.Node;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class GrooveNode implements Node {
@@ -9,9 +11,11 @@ public class GrooveNode implements Node {
 
     private final String id = "n" + idCounter.incrementAndGet();
     private final String name;
+    private final Set<String> flags;
 
     public GrooveNode(String name) {
         this.name = name;
+        this.flags = new LinkedHashSet<>();
     }
 
     @Override
@@ -21,5 +25,13 @@ public class GrooveNode implements Node {
 
     public String getName() {
         return this.name;
+    }
+
+    public Set<String> getFlags() {
+        return this.flags;
+    }
+
+    public void addFlag(String flag) {
+        this.flags.add(flag);
     }
 }

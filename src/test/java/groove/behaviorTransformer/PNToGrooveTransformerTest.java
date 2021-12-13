@@ -2,18 +2,11 @@ package groove.behaviorTransformer;
 
 import behavior.petriNet.PetriNet;
 import behavior.petriNet.Place;
-import groove.graph.GrooveNode;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 class PNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelper {
-
-    @BeforeEach
-    void setUp() {
-        GrooveNode.idCounter.set(-1);
-    }
 
     @Test
     void testPNGenerationResources() throws IOException {

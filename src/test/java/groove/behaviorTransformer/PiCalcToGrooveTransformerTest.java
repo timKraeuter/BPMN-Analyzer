@@ -26,7 +26,7 @@ class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHe
         File outputDir = new File(new File(outputPath) + "/" + namedProcess.getName() + ".gps/");
         File ruleAndTypeGraphDir = new File(this.getClass().getResource("/GaducciPi").getFile());
 
-        FileTestHelper.testDirEquals(ruleAndTypeGraphDir, outputDir, s -> s.equals("emptySum.gst") || s.equals("system.properties"));
+        FileTestHelper.testDirEquals(ruleAndTypeGraphDir, outputDir, s -> s.equals("start.gst") || s.equals("system.properties"));
     }
 
     @Test

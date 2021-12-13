@@ -25,17 +25,6 @@ public class GrooveGxlHelper {
         return graph;
     }
 
-    public static Node createNodeWithNameAndRememberLabel(
-            String nodeId,
-            String nodeName,
-            Graph graph,
-            Map<String, String> nodeIdToLabel) {
-        Node nodeWithName = createNodeWithName(nodeId, nodeName, graph);
-        nodeIdToLabel.put(nodeId, nodeName);
-
-        return nodeWithName;
-    }
-
     public static Node createNodeWithName(String nodeId, String nodeName, Graph graph) {
         Node gxlNode = new groove.gxl.Node();
         gxlNode.setId(nodeId);

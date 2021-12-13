@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="res" role="rule" edgeids="false" edgemode="directed">
+    <graph id="res_start" role="rule" edgeids="false" edgemode="directed">
         <node id="n0">
             <attr name="layout">
                 <string>62 144 0 0</string>
@@ -36,11 +36,6 @@
                 <string>type:Name</string>
             </attr>
         </edge>
-        <edge from="n1" to="n2">
-            <attr name="label">
-                <string>name</string>
-            </attr>
-        </edge>
         <node id="n3">
             <attr name="layout">
                 <string>522 152 0 0</string>
@@ -49,6 +44,11 @@
         <edge from="n3" to="n3">
             <attr name="label">
                 <string>type:Process</string>
+            </attr>
+        </edge>
+        <edge from="n1" to="n2">
+            <attr name="label">
+                <string>name</string>
             </attr>
         </edge>
         <edge from="n1" to="n3">

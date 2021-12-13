@@ -3,18 +3,11 @@ package groove.behaviorTransformer;
 import behavior.fsm.FiniteStateMachine;
 import behavior.fsm.State;
 import behavior.fsm.Transition;
-import groove.graph.GrooveNode;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 class FSMToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelper {
-
-    @BeforeEach
-    void setUp() {
-        GrooveNode.idCounter.set(-1);
-    }
 
     @Test
     void testFSMGenerationABC() throws IOException {

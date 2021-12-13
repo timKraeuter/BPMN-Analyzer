@@ -67,11 +67,9 @@ public class BehaviorToGrooveTransformer {
 
                 PiCalcToGrooveTransformer transformer = new PiCalcToGrooveTransformer();
 
-                // TODO: Save start graph
-                transformer.generatePiStartGraph(piProcess, graphGrammarSubFolder);
+                startGraphs.add(transformer.generateStartGraph(piProcess, true));
 
-                transformer.copyPiRulesAndTypeGraph(graphGrammarSubFolder);
-
+                transformer.generateAndWriteRules(piProcess, true, graphGrammarSubFolder);
             }
         }));
 
@@ -116,14 +114,14 @@ public class BehaviorToGrooveTransformer {
         File graphGrammarSubFolder = this.makeSubFolder(piProcess, grooveDir);
         PiCalcToGrooveTransformer transformer = new PiCalcToGrooveTransformer();
 
-        transformer.generatePiStartGraph(piProcess, graphGrammarSubFolder);
+        transformer.generateAndWriteStartGraph(piProcess, false, graphGrammarSubFolder);
 
-        transformer.copyPiRulesAndTypeGraph(graphGrammarSubFolder);
+        transformer.generateAndWriteRules(piProcess, false, graphGrammarSubFolder);
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
         additionalProperties.put("typeGraph", "Type");
         additionalProperties.put("checkDangling", "true");
-        this.generatePropertiesFile(graphGrammarSubFolder, piProcess.getName(), additionalProperties);
+        this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
     }
 
     private void generateGrooveGrammarForBPMNProcessModel(BPMNProcessModel bpmnProcessModel, File grooveDir, boolean addPrefix) {
@@ -214,6 +212,7 @@ public class BehaviorToGrooveTransformer {
         graph.nodes().forEach(node -> {
             idToNodeLabel.put(node.getId(), node.getName());
             Node gxlNode = GrooveGxlHelper.createNodeWithName(node.getId(), node.getName(), gxlGraph);
+            node.getFlags().forEach(flag -> GrooveGxlHelper.addFlagToNode(gxlGraph, gxlNode, flag));
             grooveNodeIdToGxlNode.put(node.getId(), gxlNode);
         });
         graph.edges().forEach(edge -> GrooveGxlHelper.createEdgeWithName(

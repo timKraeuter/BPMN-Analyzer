@@ -1,22 +1,18 @@
 package groove.behaviorTransformer;
 
 import behavior.piCalculus.*;
-import groove.GrooveGxlHelper;
-import groove.GxlToXMLConverter;
-import groove.gxl.Graph;
-import groove.gxl.Gxl;
-import groove.gxl.Node;
+import groove.graph.GrooveEdge;
+import groove.graph.GrooveGraph;
+import groove.graph.GrooveNode;
+import groove.graph.GrooveRuleGenerator;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.*;
 
-public class PiCalcToGrooveTransformer {
+public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProcess> {
 
     private static final String TYPE = "type:";
 
@@ -44,10 +40,20 @@ public class PiCalcToGrooveTransformer {
     private static final String ARG_2 = "arg2";
     private static final String NAME = "name";
 
-    private Graph graph;
-    private AtomicLong idCounter;
-    private Map<String, String> nodeIdToLabel;
-    private Map<String, Node> nameToNode;
+    private Set<GrooveNode> nodes;
+    private Set<GrooveEdge> edges;
+    private Map<String, GrooveNode> nameToNode;
+
+    @Override
+    public GrooveRuleGenerator generateRules(NamedPiProcess namedPiProcess, boolean addPrefix) {
+        // Fixed set of rules for Pi. We do not think about synchronisation yet.
+        return new GrooveRuleGenerator();
+    }
+
+    @Override
+    public void generateAndWriteRules(NamedPiProcess namedPiProcess, boolean addPrefix, File targetFolder) {
+        this.copyPiRulesAndTypeGraph(targetFolder);
+    }
 
     void copyPiRulesAndTypeGraph(File targetFolder) {
         File sourceDirectory = new File(this.getClass().getResource("/GaducciPi").getFile());
@@ -58,159 +64,139 @@ public class PiCalcToGrooveTransformer {
         }
     }
 
-    void generatePiStartGraph(NamedPiProcess piProcess, File targetFolder) {
-        Gxl gxl = new Gxl();
-        this.graph = GrooveGxlHelper.createStandardGxlGraph(piProcess.getName(), gxl);
+    @Override
+    public GrooveGraph generateStartGraph(NamedPiProcess piProcess, boolean addPrefix) {
+        // Prefixing is not needed for the pi-calculus since a shared set of rules is needed for everything.
 
-        this.idCounter = new AtomicLong(-1);
-        this.nodeIdToLabel = new HashMap<>();
-        this.nameToNode = new HashMap<>();
+        this.nodes = new LinkedHashSet<>();
+        this.edges = new LinkedHashSet<>();
+
+        this.nameToNode = new LinkedHashMap<>();
 
         // Create root process with flag go.
-        Node rootNode = GrooveGxlHelper.createNodeWithNameAndRememberLabel(
-                this.getNodeId(this.idCounter),
-                TYPE_PROCESS,
-                this.graph,
-                this.nodeIdToLabel);
-        GrooveGxlHelper.addFlagToNode(this.graph, rootNode, "go");
+        GrooveNode rootNode = this.createAndSaveNodeWithName(TYPE_PROCESS);
+        rootNode.addFlag("go");
 
-        Optional<Pair<Node, String>> parOrSum = this.convertProcess(
+        Optional<Pair<GrooveNode, String>> parOrSum = this.convertProcess(
                 piProcess.getProcess(),
                 true);
-        parOrSum.ifPresent(nodeEdgeLabelPair ->
-                GrooveGxlHelper.createEdgeWithName(
-                        this.graph,
+        parOrSum.ifPresent(nodeEdgelabelPair ->
+                this.createAndSaveEdgeWithName(
+                        nodeEdgelabelPair.getRight(),
                         rootNode,
-                        nodeEdgeLabelPair.getLeft(),
-                        nodeEdgeLabelPair.getRight()));
+                        nodeEdgelabelPair.getLeft()));
 
-        GrooveGxlHelper.layoutGraph(this.graph, this.nodeIdToLabel);
-
-        File startGraphFile = new File(targetFolder.getPath() + String.format("/%s.gst", piProcess.getName()));
-        GxlToXMLConverter.toXml(gxl, startGraphFile);
+        return new GrooveGraph(piProcess.getName(), this.nodes, this.edges);
     }
 
-    private Optional<Pair<Node, String>> convertProcess(
+    private Optional<Pair<GrooveNode, String>> convertProcess(
             PiProcess piProcess,
             boolean addCoercion) {
         return piProcess.accept(new PiProcessVisitor<>() {
 
             @Override
-            public Optional<Pair<Node, String>> handle(Parallelism parallelism) {
-                Node parNode = this.createNodeWithName(TYPE_PAR);
+            public Optional<Pair<GrooveNode, String>> handle(Parallelism parallelism) {
+                GrooveNode parNode = PiCalcToGrooveTransformer.this.createAndSaveNodeWithName(TYPE_PAR);
 
                 // arg 1
-                Node processNodeArg1 = this.createNodeWithName(TYPE_PROCESS);
-                GrooveGxlHelper.createEdgeWithName(PiCalcToGrooveTransformer.this.graph, parNode, processNodeArg1, ARG_1);
+                GrooveNode processNodeArg1 = PiCalcToGrooveTransformer.this.createAndSaveNodeWithName(TYPE_PROCESS);
+                PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(ARG_1, parNode, processNodeArg1);
 
                 final PiProcess arg1 = parallelism.getFirst();
-                Optional<Pair<Node, String>> arg1Continuation = PiCalcToGrooveTransformer.this.convertProcess(arg1, true);
+                Optional<Pair<GrooveNode, String>> arg1Continuation =
+                        PiCalcToGrooveTransformer.this.convertProcess(arg1, true);
                 arg1Continuation.ifPresent(nodeEdgeLabelPair ->
-                        GrooveGxlHelper.createEdgeWithName(
-                                PiCalcToGrooveTransformer.this.graph,
+                        PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(
+                                nodeEdgeLabelPair.getRight(),
                                 processNodeArg1,
-                                nodeEdgeLabelPair.getLeft(),
-                                nodeEdgeLabelPair.getRight()));
+                                nodeEdgeLabelPair.getLeft()));
 
                 // arg2
-                Node processNodeArg2 = this.createNodeWithName(TYPE_PROCESS);
-                GrooveGxlHelper.createEdgeWithName(PiCalcToGrooveTransformer.this.graph, parNode, processNodeArg2, ARG_2);
+                GrooveNode processNodeArg2 = PiCalcToGrooveTransformer.this.createAndSaveNodeWithName(TYPE_PROCESS);
+                PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(ARG_2, parNode, processNodeArg2);
 
                 final PiProcess arg2 = parallelism.getSecond();
-                Optional<Pair<Node, String>> arg2Continuation = PiCalcToGrooveTransformer.this.convertProcess(arg2, true);
+                Optional<Pair<GrooveNode, String>> arg2Continuation = PiCalcToGrooveTransformer.this.convertProcess(arg2, true);
                 arg2Continuation.ifPresent(nodeEdgeLabelPair ->
-                        GrooveGxlHelper.createEdgeWithName(
-                                PiCalcToGrooveTransformer.this.graph,
+                        PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(
+                                nodeEdgeLabelPair.getRight(),
                                 processNodeArg2,
-                                nodeEdgeLabelPair.getLeft(),
-                                nodeEdgeLabelPair.getRight()));
+                                nodeEdgeLabelPair.getLeft()));
 
                 return Optional.of(Pair.of(parNode, PAR));
             }
 
-            private Node createNodeWithName(String name) {
-                return GrooveGxlHelper.createNodeWithNameAndRememberLabel(
-                        PiCalcToGrooveTransformer.this.getNodeId(PiCalcToGrooveTransformer.this.idCounter),
-                        name,
-                        PiCalcToGrooveTransformer.this.graph,
-                        PiCalcToGrooveTransformer.this.nodeIdToLabel);
-            }
-
             @Override
-            public Optional<Pair<Node, String>> handle(NameRestriction restriction) {
+            public Optional<Pair<GrooveNode, String>> handle(NameRestriction restriction) {
                 // TODO: Add picking a free name and renaming!
-                final Node resNode = this.createNodeWithName(TYPE_RESTRICTION);
+                final GrooveNode resNode = PiCalcToGrooveTransformer.this.createAndSaveNodeWithName(TYPE_RESTRICTION);
 
                 // Create restricted name
-                Node nameNode = this.createNodeForNameIfNeeded(restriction.getRestrictedName());
-                GrooveGxlHelper.createEdgeWithName(PiCalcToGrooveTransformer.this.graph, resNode, nameNode, NAME);
+                GrooveNode nameNode = this.createNodeForNameIfNeeded(restriction.getRestrictedName());
+                PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(NAME, resNode, nameNode);
 
                 // Create process for subprocess
-                Node processNode = this.createNodeWithName(TYPE_PROCESS);
-                GrooveGxlHelper.createEdgeWithName(PiCalcToGrooveTransformer.this.graph, resNode, processNode, PROCESS);
+                GrooveNode processNode = PiCalcToGrooveTransformer.this.createAndSaveNodeWithName(TYPE_PROCESS);
+                PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(PROCESS, resNode, processNode);
 
                 // Connect subprocess
-                Optional<Pair<Node, String>> subProcessNode = PiCalcToGrooveTransformer.this.convertProcess(
+                Optional<Pair<GrooveNode, String>> subProcessNode = PiCalcToGrooveTransformer.this.convertProcess(
                         restriction.getRestrictedProcess(),
                         true);
                 subProcessNode.ifPresent(nodeEdgeLabelPair ->
-                        GrooveGxlHelper.createEdgeWithName(
-                                PiCalcToGrooveTransformer.this.graph,
+                        PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(
+                                nodeEdgeLabelPair.getRight(),
                                 processNode,
-                                nodeEdgeLabelPair.getLeft(),
-                                nodeEdgeLabelPair.getRight()));
+                                nodeEdgeLabelPair.getLeft()));
 
                 return Optional.of(Pair.of(resNode, RES));
             }
 
             @Override
-            public Optional<Pair<Node, String>> handle(PrefixedProcess prefixedProcess) {
+            public Optional<Pair<GrooveNode, String>> handle(PrefixedProcess prefixedProcess) {
                 // TODO: Add picking a free name and renaming!
-                Node topLevelNode;
+                GrooveNode topLevelNode;
 
-                Node summationNode = this.createNodeWithName(TYPE_SUMMATION);
+                GrooveNode summationNode = PiCalcToGrooveTransformer.this.createAndSaveNodeWithName(TYPE_SUMMATION);
 
                 topLevelNode = summationNode;
                 if (addCoercion) {
-                    Node coercionNode = this.createNodeWithName(TYPE_COERCION);
-                    GrooveGxlHelper.createEdgeWithName(PiCalcToGrooveTransformer.this.graph, coercionNode, summationNode, C);
+                    GrooveNode coercionNode = PiCalcToGrooveTransformer.this.createAndSaveNodeWithName(TYPE_COERCION);
+                    PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(C, coercionNode, summationNode);
                     topLevelNode = coercionNode;
                 }
 
-                Node opNode = this.createNodeWithName(this.getPrefixTypeString(prefixedProcess.getPrefixType()));
+                GrooveNode opNode = PiCalcToGrooveTransformer.this.createAndSaveNodeWithName(
+                        this.getPrefixTypeString(prefixedProcess.getPrefixType()));
 
-                GrooveGxlHelper.createEdgeWithName(PiCalcToGrooveTransformer.this.graph, summationNode, opNode, OP);
+                PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(OP, summationNode, opNode);
 
-                Node channelNode = this.createNodeForNameIfNeeded(prefixedProcess.getChannel());
-                GrooveGxlHelper.createEdgeWithName(PiCalcToGrooveTransformer.this.graph, opNode, channelNode, CHANNEL);
+                GrooveNode channelNode = this.createNodeForNameIfNeeded(prefixedProcess.getChannel());
+                PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(CHANNEL, opNode, channelNode);
 
-                Node payloadNode = this.createNodeForNameIfNeeded(prefixedProcess.getPayload());
-                GrooveGxlHelper.createEdgeWithName(PiCalcToGrooveTransformer.this.graph, opNode, payloadNode, PAYLOAD);
+                GrooveNode payloadNode = this.createNodeForNameIfNeeded(prefixedProcess.getPayload());
+                PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(PAYLOAD, opNode, payloadNode);
 
-                Node processNode = this.createNodeWithName(TYPE_PROCESS);
-                GrooveGxlHelper.createEdgeWithName(PiCalcToGrooveTransformer.this.graph, opNode, processNode, PROCESS);
+                GrooveNode processNode = PiCalcToGrooveTransformer.this.createAndSaveNodeWithName(TYPE_PROCESS);
+                PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(PROCESS, opNode, processNode);
 
-                Optional<Pair<Node, String>> subProcessNode = PiCalcToGrooveTransformer.this.convertProcess(
+                Optional<Pair<GrooveNode, String>> subProcessNode = PiCalcToGrooveTransformer.this.convertProcess(
                         prefixedProcess.getProcess(),
                         true);
                 subProcessNode.ifPresent(nodeEdgeLabelPair ->
-                        GrooveGxlHelper.createEdgeWithName(
-                                PiCalcToGrooveTransformer.this.graph,
+                        PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(
+                                nodeEdgeLabelPair.getRight(),
                                 processNode,
-                                nodeEdgeLabelPair.getLeft(),
-                                nodeEdgeLabelPair.getRight()));
+                                nodeEdgeLabelPair.getLeft()));
 
                 return Optional.of(Pair.of(topLevelNode, addCoercion ? C : ""));
             }
 
-            private Node createNodeForNameIfNeeded(String name) {
-                Node nameNode = PiCalcToGrooveTransformer.this.nameToNode.get(name);
+            private GrooveNode createNodeForNameIfNeeded(String name) {
+                GrooveNode nameNode = PiCalcToGrooveTransformer.this.nameToNode.get(name);
                 if (nameNode == null) {
-                    nameNode = GrooveGxlHelper.createNodeWithNameAndRememberLabel(
-                            PiCalcToGrooveTransformer.this.getNodeId(PiCalcToGrooveTransformer.this.idCounter),
-                            TYPE_NAME,
-                            PiCalcToGrooveTransformer.this.graph,
-                            PiCalcToGrooveTransformer.this.nodeIdToLabel);
+                    nameNode = PiCalcToGrooveTransformer.this.createAndSaveNodeWithName(TYPE_NAME);
+                    // TODO: add pi-name to the node somehow!
                     PiCalcToGrooveTransformer.this.nameToNode.put(name, nameNode);
                 }
                 return nameNode;
@@ -227,41 +213,56 @@ public class PiCalcToGrooveTransformer {
             }
 
             @Override
-            public Optional<Pair<Node, String>> handle(EmptySum emptySum) {
+            public Optional<Pair<GrooveNode, String>> handle(EmptySum emptySum) {
                 return Optional.empty();
             }
 
             @Override
-            public Optional<Pair<Node, String>> handle(MultiarySum multiarySum) {
-                Node topLevelNode;
-                Node summationNode = this.createNodeWithName(TYPE_SUMMATION);
+            public Optional<Pair<GrooveNode, String>> handle(MultiarySum multiarySum) {
+                GrooveNode topLevelNode;
+                GrooveNode summationNode = PiCalcToGrooveTransformer.this.createAndSaveNodeWithName(TYPE_SUMMATION);
 
                 topLevelNode = summationNode;
                 if (addCoercion) {
-                    Node coercionNode = this.createNodeWithName(TYPE_COERCION);
-                    GrooveGxlHelper.createEdgeWithName(PiCalcToGrooveTransformer.this.graph, coercionNode, summationNode, C);
+                    GrooveNode coercionNode = PiCalcToGrooveTransformer.this.createAndSaveNodeWithName(TYPE_COERCION);
+                    PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(C, coercionNode, summationNode);
                     topLevelNode = coercionNode;
                 }
-                Node sumNode = this.createNodeWithName(TYPE_SUM);
+                GrooveNode sumNode = PiCalcToGrooveTransformer.this.createAndSaveNodeWithName(TYPE_SUM);
 
-                GrooveGxlHelper.createEdgeWithName(PiCalcToGrooveTransformer.this.graph, summationNode, sumNode, SUM);
+                PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(SUM, summationNode, sumNode);
 
                 // Arg 1
                 Sum first = multiarySum.getFirst();
-                Optional<Pair<Node, String>> arg1 = PiCalcToGrooveTransformer.this.convertProcess(first, false);
-                arg1.ifPresent(nodeStringPair -> GrooveGxlHelper.createEdgeWithName(PiCalcToGrooveTransformer.this.graph, sumNode, nodeStringPair.getLeft(), ARG_1));
+                Optional<Pair<GrooveNode, String>> arg1 = PiCalcToGrooveTransformer.this.convertProcess(first, false);
+                arg1.ifPresent(nodeStringPair ->
+                        PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(
+                                ARG_1,
+                                sumNode,
+                                nodeStringPair.getLeft()));
 
                 // Arg 2
                 Sum second = multiarySum.getSecond();
-                Optional<Pair<Node, String>> arg2 = PiCalcToGrooveTransformer.this.convertProcess(second, false);
-                arg2.ifPresent(nodeStringPair -> GrooveGxlHelper.createEdgeWithName(PiCalcToGrooveTransformer.this.graph, sumNode, nodeStringPair.getLeft(), ARG_2));
+                Optional<Pair<GrooveNode, String>> arg2 = PiCalcToGrooveTransformer.this.convertProcess(second, false);
+                arg2.ifPresent(nodeStringPair ->
+                        PiCalcToGrooveTransformer.this.createAndSaveEdgeWithName(
+                                ARG_2,
+                                sumNode,
+                                nodeStringPair.getLeft()));
 
                 return Optional.of(Pair.of(topLevelNode, addCoercion ? C : ""));
             }
         });
     }
 
-    private String getNodeId(AtomicLong idCounter) {
-        return "n" + idCounter.incrementAndGet();
+    private void createAndSaveEdgeWithName(String name, GrooveNode sourceNode, GrooveNode targetNode) {
+        GrooveEdge arg1Edge = new GrooveEdge(name, sourceNode, targetNode);
+        this.edges.add(arg1Edge);
+    }
+
+    private GrooveNode createAndSaveNodeWithName(String name) {
+        GrooveNode grooveNode = new GrooveNode(name);
+        this.nodes.add(grooveNode);
+        return grooveNode;
     }
 }

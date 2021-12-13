@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="out" role="rule" edgeids="false" edgemode="directed">
+    <graph id="out_start" role="rule" edgeids="false" edgemode="directed">
         <node id="n0">
             <attr name="layout">
                 <string>62 85 0 0</string>
@@ -36,11 +36,6 @@
                 <string>type:Coercion</string>
             </attr>
         </edge>
-        <edge from="n2" to="n1">
-            <attr name="label">
-                <string>c</string>
-            </attr>
-        </edge>
         <node id="n3">
             <attr name="layout">
                 <string>707 85 0 0</string>
@@ -49,11 +44,6 @@
         <edge from="n3" to="n3">
             <attr name="label">
                 <string>type:Out</string>
-            </attr>
-        </edge>
-        <edge from="n1" to="n3">
-            <attr name="label">
-                <string>op</string>
             </attr>
         </edge>
         <node id="n4">
@@ -66,11 +56,6 @@
                 <string>type:Name</string>
             </attr>
         </edge>
-        <edge from="n3" to="n4">
-            <attr name="label">
-                <string>channel</string>
-            </attr>
-        </edge>
         <node id="n5">
             <attr name="layout">
                 <string>857 232 0 0</string>
@@ -81,11 +66,6 @@
                 <string>type:Name</string>
             </attr>
         </edge>
-        <edge from="n3" to="n5">
-            <attr name="label">
-                <string>payload</string>
-            </attr>
-        </edge>
         <node id="n6">
             <attr name="layout">
                 <string>857 72 0 0</string>
@@ -94,6 +74,26 @@
         <edge from="n6" to="n6">
             <attr name="label">
                 <string>type:Process</string>
+            </attr>
+        </edge>
+        <edge from="n2" to="n1">
+            <attr name="label">
+                <string>c</string>
+            </attr>
+        </edge>
+        <edge from="n1" to="n3">
+            <attr name="label">
+                <string>op</string>
+            </attr>
+        </edge>
+        <edge from="n3" to="n4">
+            <attr name="label">
+                <string>channel</string>
+            </attr>
+        </edge>
+        <edge from="n3" to="n5">
+            <attr name="label">
+                <string>payload</string>
             </attr>
         </edge>
         <edge from="n3" to="n6">

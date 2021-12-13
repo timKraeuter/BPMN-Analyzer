@@ -1,8 +1,10 @@
 package groove.behaviorTransformer;
 
 import behavior.Behavior;
+import groove.graph.GrooveNode;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import util.FileTestHelper;
 
 import java.io.File;
@@ -14,6 +16,11 @@ interface BehaviorToGrooveTransformerTestHelper {
     String outputPath = "C:/Source/groove/bin";
     //    String outputPath = "B:/Source/groove/bin";
 //    String outputPath = FileUtils.getTempDirectoryPath();
+
+    @BeforeEach
+    default void setUp() {
+        GrooveNode.idCounter.set(-1);
+    }
 
     default void checkGrooveGeneration(Behavior behavior) throws IOException {
         this.checkGrooveGeneration(behavior, false);
