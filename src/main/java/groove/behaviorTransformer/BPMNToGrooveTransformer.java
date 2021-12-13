@@ -9,7 +9,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
-import groove.graph.GrooveRuleBuilder;
+import groove.graph.rule.GrooveRuleBuilder;
 
 import java.util.Collection;
 

@@ -1,9 +1,9 @@
 package groove;
 
-import groove.graph.GrooveGraphRule;
 import groove.graph.GrooveNode;
-import groove.graph.GrooveRuleBuilder;
-import groove.graph.GrooveRuleWriter;
+import groove.graph.rule.GrooveGraphRule;
+import groove.graph.rule.GrooveRuleBuilder;
+import groove.graph.rule.GrooveRuleWriter;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

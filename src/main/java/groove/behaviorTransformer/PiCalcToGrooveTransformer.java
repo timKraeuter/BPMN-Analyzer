@@ -4,7 +4,7 @@ import behavior.piCalculus.*;
 import groove.graph.GrooveEdge;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
-import groove.graph.GrooveRuleBuilder;
+import groove.graph.rule.GrooveRuleBuilder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 

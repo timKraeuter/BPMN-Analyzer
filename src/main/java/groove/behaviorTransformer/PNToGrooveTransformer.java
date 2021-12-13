@@ -5,7 +5,7 @@ import behavior.petriNet.Place;
 import groove.graph.GrooveEdge;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
-import groove.graph.GrooveRuleBuilder;
+import groove.graph.rule.GrooveRuleBuilder;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

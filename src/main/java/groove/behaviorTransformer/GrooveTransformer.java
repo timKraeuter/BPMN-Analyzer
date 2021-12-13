@@ -3,8 +3,8 @@ package groove.behaviorTransformer;
 import behavior.Behavior;
 import groove.GxlToXMLConverter;
 import groove.graph.GrooveGraph;
-import groove.graph.GrooveRuleBuilder;
-import groove.graph.GrooveRuleWriter;
+import groove.graph.rule.GrooveRuleBuilder;
+import groove.graph.rule.GrooveRuleWriter;
 import groove.gxl.Gxl;
 
 import java.io.File;

@@ -4,7 +4,7 @@ import behavior.fsm.FiniteStateMachine;
 import com.google.common.collect.Sets;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
-import groove.graph.GrooveRuleBuilder;
+import groove.graph.rule.GrooveRuleBuilder;
 
 public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMachine> {
 

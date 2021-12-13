@@ -1,8 +1,10 @@
-package groove.graph;
+package groove.graph.rule;
 
 import api.GraphRuleGenerator;
 import api.Node;
 import behavior.Behavior;
+import groove.graph.GrooveEdge;
+import groove.graph.GrooveNode;
 
 import java.util.*;
 import java.util.stream.Stream;

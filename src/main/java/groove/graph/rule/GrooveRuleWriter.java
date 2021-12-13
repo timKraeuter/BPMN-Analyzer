@@ -1,7 +1,9 @@
-package groove.graph;
+package groove.graph.rule;
 
 import groove.GrooveGxlHelper;
 import groove.GxlToXMLConverter;
+import groove.graph.GrooveEdge;
+import groove.graph.GrooveNode;
 import groove.gxl.Graph;
 import groove.gxl.Gxl;
 import groove.gxl.Node;

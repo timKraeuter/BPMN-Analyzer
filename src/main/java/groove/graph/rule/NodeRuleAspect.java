@@ -1,4 +1,4 @@
-package groove.graph;
+package groove.graph.rule;
 
 /**
  * A node or edge in a graph rule can have one of three aspects:
