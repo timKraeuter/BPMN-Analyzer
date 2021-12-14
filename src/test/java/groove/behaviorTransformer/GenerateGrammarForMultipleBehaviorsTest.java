@@ -17,7 +17,7 @@ public class GenerateGrammarForMultipleBehaviorsTest implements BehaviorToGroove
     public static final String TURN_GREEN = "turn_green";
 
     @Test
-    void tlTest() {
+    void tlSynchTest() {
         FiniteStateMachine tl_a = this.createTrafficLight("A", "green");
         FiniteStateMachine tl_b = this.createTrafficLight("B", "red");
         FiniteStateMachine tl_c = this.createTrafficLight("C", "green");

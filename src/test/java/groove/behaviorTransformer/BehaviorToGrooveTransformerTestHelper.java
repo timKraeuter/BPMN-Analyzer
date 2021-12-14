@@ -13,9 +13,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
 interface BehaviorToGrooveTransformerTestHelper {
-    String outputPath = "C:/Source/groove/bin";
+    //    String outputPath = "C:/Source/groove/bin";
     //    String outputPath = "B:/Source/groove/bin";
-//    String outputPath = FileUtils.getTempDirectoryPath();
+    String outputPath = FileUtils.getTempDirectoryPath();
 
     @BeforeEach
     default void setUp() {
