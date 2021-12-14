@@ -37,32 +37,34 @@ public class GrooveRuleBuilder implements GraphRuleGenerator {
         nameToToBeSynchedRules.forEach((synchedRuleName, synchedRules) -> {
             ruleGenerator.startRule(synchedRuleName);
 
-            synchedRules.forEach(grooveGraphRule -> {
-                Map<String, GrooveNode> oldIdToNewNode = new HashMap<>();
-                // Nodes
-                grooveGraphRule.getNodesToBeAdded().forEach(addNode -> {
-                    GrooveNode createdAddNode = ruleGenerator.addNode(addNode.getName());
-                    oldIdToNewNode.put(addNode.getId(), createdAddNode);
-                });
-                grooveGraphRule.getNodesToBeDeleted().forEach(delNode -> {
-                    GrooveNode createdDelNode = ruleGenerator.deleteNode(delNode.getName());
-                    oldIdToNewNode.put(delNode.getId(), createdDelNode);
-                });
-                grooveGraphRule.getContextNodes().forEach(contextNode -> {
-                    GrooveNode createdContextNode = ruleGenerator.contextNode(contextNode.getName());
-                    oldIdToNewNode.put(contextNode.getId(), createdContextNode);
-                });
+            synchedRules.stream()
+                        .sorted(Comparator.comparing(GrooveGraphRule::getRuleName))
+                        .forEach(grooveGraphRule -> {
+                            Map<String, GrooveNode> oldIdToNewNode = new HashMap<>();
+                            // Nodes
+                            grooveGraphRule.getNodesToBeAdded().forEach(addNode -> {
+                                GrooveNode createdAddNode = ruleGenerator.addNode(addNode.getName());
+                                oldIdToNewNode.put(addNode.getId(), createdAddNode);
+                            });
+                            grooveGraphRule.getNodesToBeDeleted().forEach(delNode -> {
+                                GrooveNode createdDelNode = ruleGenerator.deleteNode(delNode.getName());
+                                oldIdToNewNode.put(delNode.getId(), createdDelNode);
+                            });
+                            grooveGraphRule.getContextNodes().forEach(contextNode -> {
+                                GrooveNode createdContextNode = ruleGenerator.contextNode(contextNode.getName());
+                                oldIdToNewNode.put(contextNode.getId(), createdContextNode);
+                            });
 
-                // Edges
-                grooveGraphRule.getEdgesToBeAdded().forEach(addEdge -> ruleGenerator.addEdge(
-                        addEdge.getName(),
-                        oldIdToNewNode.get(addEdge.getSourceNode().getId()),
-                        oldIdToNewNode.get(addEdge.getTargetNode().getId())));
-                grooveGraphRule.getEdgesToBeDeleted().forEach(delEdge -> ruleGenerator.deleteEdge(
-                        delEdge.getName(),
-                        oldIdToNewNode.get(delEdge.getSourceNode().getId()),
-                        oldIdToNewNode.get(delEdge.getTargetNode().getId())));
-            });
+                            // Edges
+                            grooveGraphRule.getEdgesToBeAdded().forEach(addEdge -> ruleGenerator.addEdge(
+                                    addEdge.getName(),
+                                    oldIdToNewNode.get(addEdge.getSourceNode().getId()),
+                                    oldIdToNewNode.get(addEdge.getTargetNode().getId())));
+                            grooveGraphRule.getEdgesToBeDeleted().forEach(delEdge -> ruleGenerator.deleteEdge(
+                                    delEdge.getName(),
+                                    oldIdToNewNode.get(delEdge.getSourceNode().getId()),
+                                    oldIdToNewNode.get(delEdge.getTargetNode().getId())));
+                        });
 
             ruleGenerator.buildRule();
         });

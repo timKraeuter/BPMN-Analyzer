@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="switch_to_phase2" role="rule" edgeids="false" edgemode="directed">
+        <node id="n40">
+            <attr name="layout">
+                <string>62 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n40" to="n40">
+            <attr name="label">
+                <string>A_red</string>
+            </attr>
+        </edge>
+        <edge from="n40" to="n40">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n42">
+            <attr name="layout">
+                <string>252 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n42" to="n42">
+            <attr name="label">
+                <string>B_green</string>
+            </attr>
+        </edge>
+        <edge from="n42" to="n42">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n44">
+            <attr name="layout">
+                <string>157 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n44" to="n44">
+            <attr name="label">
+                <string>C_red</string>
+            </attr>
+        </edge>
+        <edge from="n44" to="n44">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n46">
+            <attr name="layout">
+                <string>62 262 0 0</string>
+            </attr>
+        </node>
+        <edge from="n46" to="n46">
+            <attr name="label">
+                <string>phases_phase2</string>
+            </attr>
+        </edge>
+        <edge from="n46" to="n46">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n41">
+            <attr name="layout">
+                <string>377 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n41" to="n41">
+            <attr name="label">
+                <string>A_amber</string>
+            </attr>
+        </edge>
+        <edge from="n41" to="n41">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n43">
+            <attr name="layout">
+                <string>187 172 0 0</string>
+            </attr>
+        </node>
+        <edge from="n43" to="n43">
+            <attr name="label">
+                <string>B_red-amber</string>
+            </attr>
+        </edge>
+        <edge from="n43" to="n43">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n45">
+            <attr name="layout">
+                <string>62 172 0 0</string>
+            </attr>
+        </node>
+        <edge from="n45" to="n45">
+            <attr name="label">
+                <string>C_amber</string>
+            </attr>
+        </edge>
+        <edge from="n45" to="n45">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n47">
+            <attr name="layout">
+                <string>277 262 0 0</string>
+            </attr>
+        </node>
+        <edge from="n47" to="n47">
+            <attr name="label">
+                <string>phases_phase1</string>
+            </attr>
+        </edge>
+        <edge from="n47" to="n47">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

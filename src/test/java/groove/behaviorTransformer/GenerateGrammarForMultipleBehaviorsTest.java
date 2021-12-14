@@ -4,19 +4,17 @@ import behavior.fsm.FiniteStateMachine;
 import behavior.fsm.State;
 import behavior.fsm.Transition;
 import org.junit.jupiter.api.Test;
+import util.FileTestHelper;
 
 import java.io.File;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class GenerateGrammarForMultipleBehaviorsTest {
-    private static final String outputPath = "C:/Source/groove/bin";
+public class GenerateGrammarForMultipleBehaviorsTest implements BehaviorToGrooveTransformerTestHelper {
     public static final String SW_TO_PHASE_2 = "switch_to_phase2";
     public static final String SW_TO_PHASE_1 = "switch_to_phase1";
     public static final String TURN_RED = "turn_red";
     public static final String TURN_GREEN = "turn_green";
-    //    private static final String outputPath = "B:/Source/groove/bin";
-    //    String outputPath = FileUtils.getTempDirectoryPath();
 
     @Test
     void tlTest() {
@@ -35,31 +33,35 @@ public class GenerateGrammarForMultipleBehaviorsTest {
 
         Map<String, Set<String>> nameToToBeSynchedRules = new LinkedHashMap<>();
 
-        Set<String> toBeSynched1 = new LinkedHashSet<>(); // Fixed iteration order needed for the testcase.
-        toBeSynched1.add(String.format("%s_%s", phases.getName(), SW_TO_PHASE_1));
-        toBeSynched1.add(String.format("%s_%s", tl_a.getName(), TURN_GREEN));
-        toBeSynched1.add(String.format("%s_%s", tl_b.getName(), TURN_RED));
-        toBeSynched1.add(String.format("%s_%s", tl_c.getName(), TURN_GREEN));
+        Set<String> phase1Synch = new HashSet<>();
+        phase1Synch.add(String.format("%s_%s", phases.getName(), SW_TO_PHASE_1));
+        phase1Synch.add(String.format("%s_%s", tl_a.getName(), TURN_GREEN));
+        phase1Synch.add(String.format("%s_%s", tl_b.getName(), TURN_RED));
+        phase1Synch.add(String.format("%s_%s", tl_c.getName(), TURN_GREEN));
 
-        nameToToBeSynchedRules.put(SW_TO_PHASE_1, toBeSynched1);
+        nameToToBeSynchedRules.put(SW_TO_PHASE_1, phase1Synch);
 
-        Set<String> toBeSynched2 = new LinkedHashSet<>(); // Fixed iteration order needed for the testcase.
-        toBeSynched2.add(String.format("%s_%s", phases.getName(), SW_TO_PHASE_2));
-        toBeSynched2.add(String.format("%s_%s", tl_a.getName(), TURN_RED));
-        toBeSynched2.add(String.format("%s_%s", tl_b.getName(), TURN_GREEN));
-        toBeSynched2.add(String.format("%s_%s", tl_c.getName(), TURN_RED));
+        Set<String> phasye2Synch = new HashSet<>();
+        phasye2Synch.add(String.format("%s_%s", phases.getName(), SW_TO_PHASE_2));
+        phasye2Synch.add(String.format("%s_%s", tl_a.getName(), TURN_RED));
+        phasye2Synch.add(String.format("%s_%s", tl_b.getName(), TURN_GREEN));
+        phasye2Synch.add(String.format("%s_%s", tl_c.getName(), TURN_RED));
 
-        nameToToBeSynchedRules.put(SW_TO_PHASE_2, toBeSynched2);
+        nameToToBeSynchedRules.put(SW_TO_PHASE_2, phasye2Synch);
 
         transformer.generateGrooveGrammar(
                 outputDir,
-                "trafficLightsTest",
+                "trafficLightsSynch",
                 nameToToBeSynchedRules,
                 tl_a,
                 tl_b,
                 tl_c,
                 phases);
-        // Expect a folder with prefixed rules and start states etc.
+
+        File expected_dir = new File(this.getClass().getResource("/trafficLightsSynch.gps").getFile());
+        File actual_dir = new File(outputPath + "/trafficLightsSynch.gps");
+
+        FileTestHelper.testDirEquals(expected_dir, actual_dir, fileName -> fileName.equals("system.properties"));
     }
 
     private FiniteStateMachine createTrafficLight(String fsmName, String startStateName) {
