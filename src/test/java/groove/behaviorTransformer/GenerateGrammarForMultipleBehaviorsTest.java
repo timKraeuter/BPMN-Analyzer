@@ -62,6 +62,11 @@ public class GenerateGrammarForMultipleBehaviorsTest implements BehaviorToGroove
         File actual_dir = new File(outputPath + "/trafficLightsSynch.gps");
 
         FileTestHelper.testDirEquals(expected_dir, actual_dir, fileName -> fileName.equals("system.properties"));
+
+        // Some safety LTL-Properties for the system:
+        // G!(A_is_Green & B_is_Green)
+        // G!(C_is_Green & B_is_Green)
+        // G!(A_is_Green & B_is_Green & C_is_Green)
     }
 
     private FiniteStateMachine createTrafficLight(String fsmName, String startStateName) {
