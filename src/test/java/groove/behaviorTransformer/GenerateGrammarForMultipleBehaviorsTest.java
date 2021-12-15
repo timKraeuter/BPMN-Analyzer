@@ -66,7 +66,7 @@ public class GenerateGrammarForMultipleBehaviorsTest implements BehaviorToGroove
         // Some safety LTL-Properties for the system:
         // G!(A_is_Green & B_is_Green)
         // G!(C_is_Green & B_is_Green)
-        // G!(A_is_Green & B_is_Green & C_is_Green)
+        // G!(A_is_Green & B_is_Green & C_is_Green) --> Already checked by the two previous ones!
     }
 
     private FiniteStateMachine createTrafficLight(String fsmName, String startStateName) {

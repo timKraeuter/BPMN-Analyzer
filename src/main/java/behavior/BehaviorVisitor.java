@@ -1,5 +1,6 @@
 package behavior;
 
+import behavior.activity.ActivityDiagram;
 import behavior.bpmn.BPMNProcessModel;
 import behavior.fsm.FiniteStateMachine;
 import behavior.petriNet.PetriNet;
@@ -13,4 +14,6 @@ public interface BehaviorVisitor {
     void handle(BPMNProcessModel bpmnProcessModel);
 
     void handle(NamedPiProcess piProcess);
+
+    void handle(ActivityDiagram activityDiagram);
 }

@@ -1,0 +1,12 @@
+package behavior.activity.nodes;
+
+/**
+ * Node to define concurrent branches in an activity diagram.
+ * The corresponding node to synchronise concurrent branches is the {@link JoinNode}.
+ */
+public class ForkNode extends ControlNode {
+
+    protected ForkNode(String name) {
+        super(name);
+    }
+}

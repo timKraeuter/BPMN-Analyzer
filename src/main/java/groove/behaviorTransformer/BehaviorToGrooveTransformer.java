@@ -2,6 +2,7 @@ package groove.behaviorTransformer;
 
 import behavior.Behavior;
 import behavior.BehaviorVisitor;
+import behavior.activity.ActivityDiagram;
 import behavior.bpmn.BPMNProcessModel;
 import behavior.fsm.FiniteStateMachine;
 import behavior.petriNet.PetriNet;
@@ -75,6 +76,12 @@ public class BehaviorToGrooveTransformer {
                 startGraphs.add(transformer.generateStartGraph(piProcess, true));
                 transformer.generateRules(piProcess, true).forEach(rule -> allRules.put(rule.getRuleName(), rule));
             }
+
+            @Override
+            public void handle(ActivityDiagram activityDiagram) {
+                // TODO: implement ActivityDiagram
+                throw new UnsupportedOperationException();
+            }
         }));
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
@@ -139,6 +146,12 @@ public class BehaviorToGrooveTransformer {
             @Override
             public void handle(NamedPiProcess piProcess) {
                 BehaviorToGrooveTransformer.this.generateGrooveGrammarForPiProcess(piProcess, targetFolder, addPrefix);
+            }
+
+            @Override
+            public void handle(ActivityDiagram activityDiagram) {
+                // TODO: implement ActivityDiagram
+                throw new UnsupportedOperationException();
             }
         });
     }
