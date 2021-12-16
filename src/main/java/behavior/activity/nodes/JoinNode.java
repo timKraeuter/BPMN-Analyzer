@@ -6,7 +6,7 @@ package behavior.activity.nodes;
  */
 public class JoinNode extends ControlNode {
 
-    protected JoinNode(String name) {
+    public JoinNode(String name) {
         super(name);
     }
 }

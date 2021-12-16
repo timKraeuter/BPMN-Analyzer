@@ -6,7 +6,7 @@ package behavior.activity.nodes;
  */
 public class ForkNode extends ControlNode {
 
-    protected ForkNode(String name) {
+    public ForkNode(String name) {
         super(name);
     }
 }

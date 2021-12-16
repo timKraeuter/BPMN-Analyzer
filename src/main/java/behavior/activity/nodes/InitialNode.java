@@ -5,7 +5,7 @@ package behavior.activity.nodes;
  * Only one initial node is allowed in the diagram.
  */
 public class InitialNode extends ControlNode {
-    protected InitialNode(String name) {
+    public InitialNode(String name) {
         super(name);
     }
 }

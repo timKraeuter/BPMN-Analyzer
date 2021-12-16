@@ -4,7 +4,7 @@ import behavior.activity.values.IntegerValue;
 
 public class IntegerVariable extends Variable<IntegerValue> {
 
-    public IntegerVariable(String name, IntegerValue initialValue) {
-        super(name, initialValue);
+    public IntegerVariable(String name, int initialValue) {
+        super(name, new IntegerValue(initialValue));
     }
 }

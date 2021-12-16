@@ -6,7 +6,7 @@ package behavior.activity.nodes;
  */
 public class DecisionNode extends ControlNode {
 
-    protected DecisionNode(String name) {
+    public DecisionNode(String name) {
         super(name);
     }
 }

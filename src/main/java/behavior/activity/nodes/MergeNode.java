@@ -5,7 +5,7 @@ package behavior.activity.nodes;
  */
 public class MergeNode extends ControlNode {
 
-    protected MergeNode(String name) {
+    public MergeNode(String name) {
         super(name);
     }
 }

@@ -4,6 +4,7 @@ import behavior.Behavior;
 import behavior.BehaviorVisitor;
 import behavior.activity.edges.ActivityEdge;
 import behavior.activity.nodes.ActivityNode;
+import behavior.activity.nodes.InitialNode;
 import behavior.activity.values.Value;
 import behavior.activity.variables.Variable;
 
@@ -14,19 +15,24 @@ import java.util.Set;
  */
 public class ActivityDiagram implements Behavior {
     private final String name;
-    private final Set<Variable<? extends Value>> inputs;
-    private final Set<Variable<? extends Value>> locals;
+
+    private final InitialNode initialNode;
     private final Set<ActivityNode> nodes;
     private final Set<ActivityEdge> edges;
 
+    private final Set<Variable<? extends Value>> inputVariables;
+    private final Set<Variable<? extends Value>> localVariables;
+
     public ActivityDiagram(String name,
-                           Set<Variable<? extends Value>> inputs,
-                           Set<Variable<? extends Value>> locals,
+                           InitialNode initialNode,
+                           Set<Variable<? extends Value>> inputVariables,
+                           Set<Variable<? extends Value>> localVariables,
                            Set<ActivityNode> nodes,
                            Set<ActivityEdge> edges) {
         this.name = name;
-        this.inputs = inputs;
-        this.locals = locals;
+        this.initialNode = initialNode;
+        this.inputVariables = inputVariables;
+        this.localVariables = localVariables;
         this.nodes = nodes;
         this.edges = edges;
     }

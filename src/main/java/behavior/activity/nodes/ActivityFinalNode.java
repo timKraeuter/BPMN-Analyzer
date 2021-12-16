@@ -5,7 +5,7 @@ package behavior.activity.nodes;
  */
 public class ActivityFinalNode extends ControlNode {
 
-    protected ActivityFinalNode(String name) {
+    public ActivityFinalNode(String name) {
         super(name);
     }
 }
