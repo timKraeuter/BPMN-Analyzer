@@ -14,6 +14,8 @@ import static groove.behaviorTransformer.BehaviorToGrooveTransformer.START_GST;
 
 public interface GrooveTransformer<SOURCE extends Behavior> {
 
+    String TYPE = "type:";
+
     GrooveGraph generateStartGraph(SOURCE source, boolean addPrefix);
 
     default void generateAndWriteStartGraph(SOURCE source, boolean addPrefix, File targetFolder) {

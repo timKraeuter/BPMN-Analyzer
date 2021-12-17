@@ -16,8 +16,6 @@ import java.util.stream.Stream;
 
 public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProcess> {
 
-    private static final String TYPE = "type:";
-
     // Possible node labels.
     private static final String TYPE_PROCESS = TYPE + "Process";
     private static final String TYPE_OUT = TYPE + "Out";

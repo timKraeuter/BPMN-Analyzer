@@ -50,7 +50,10 @@ public class ActivityDiagramBuilder {
     public ActivityDiagramBuilder createControlFlow(String name, ActivityNode source, ActivityNode target) {
         this.addNode(source);
         this.addNode(target);
-        this.edges.add(new ControlFlow(name, source, target, null));
+        ControlFlow controlFlow = new ControlFlow(name, source, target, null);
+        this.edges.add(controlFlow);
+        source.addOutgoingControlFlow(controlFlow);
+        target.addIncomingControlFlow(controlFlow);
         return this;
     }
 }

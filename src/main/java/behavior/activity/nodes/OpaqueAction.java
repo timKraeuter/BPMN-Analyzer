@@ -14,4 +14,9 @@ public class OpaqueAction extends ActivityNode {
         super(name);
         this.expressions = expressions;
     }
+
+    @Override
+    public void accept(ActivityNodeVisitor visitor) {
+        visitor.handle(this);
+    }
 }

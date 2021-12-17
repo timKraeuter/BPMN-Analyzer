@@ -8,4 +8,9 @@ public class ActivityFinalNode extends ControlNode {
     public ActivityFinalNode(String name) {
         super(name);
     }
+
+    @Override
+    public void accept(ActivityNodeVisitor visitor) {
+        visitor.handle(this);
+    }
 }

@@ -8,4 +8,9 @@ public class InitialNode extends ControlNode {
     public InitialNode(String name) {
         super(name);
     }
+
+    @Override
+    public void accept(ActivityNodeVisitor visitor) {
+        visitor.handle(this);
+    }
 }

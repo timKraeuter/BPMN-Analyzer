@@ -69,6 +69,7 @@ public class GrooveRuleWriter {
             Map<String, groove.gxl.Node> nodeRepository,
             NodeRuleAspect addDelOrContext) {
         groove.gxl.Node gxlNode = GrooveGxlHelper.createNodeWithName(grooveNode.getId(), grooveNode.getName(), graph);
+        // Each flag itself could be deleted, added or just context!
         grooveNode.getFlags().forEach(flag -> GrooveGxlHelper.addFlagToNode(graph, gxlNode, flag));
         nodeRepository.put(gxlNode.getId(), gxlNode);
 

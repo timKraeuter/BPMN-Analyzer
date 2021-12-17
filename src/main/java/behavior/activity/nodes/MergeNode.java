@@ -8,4 +8,9 @@ public class MergeNode extends ControlNode {
     public MergeNode(String name) {
         super(name);
     }
+
+    @Override
+    public void accept(ActivityNodeVisitor visitor) {
+        visitor.handle(this);
+    }
 }

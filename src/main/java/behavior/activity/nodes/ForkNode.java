@@ -9,4 +9,9 @@ public class ForkNode extends ControlNode {
     public ForkNode(String name) {
         super(name);
     }
+
+    @Override
+    public void accept(ActivityNodeVisitor visitor) {
+        visitor.handle(this);
+    }
 }

@@ -72,6 +72,22 @@ public class RuleGenerationTest {
     }
 
     @Test
+    void generateNodeWithFlagTest() {
+        File tempDir = FileUtils.getTempDirectory();
+
+        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder();
+        ruleBuilder.startRule("nodeWithFlag");
+        GrooveNode node = ruleBuilder.addNode("node");
+        node.addFlag("root");
+        ruleBuilder.buildRule();
+        GrooveRuleWriter.writeRules(ruleBuilder.getRules(), tempDir);
+
+        File expected_rule = new File(this.getClass().getResource("/nodeWithFlag.gpr").getFile());
+        File generated_rule = new File(tempDir + "/nodeWithFlag.gpr");
+        FileTestHelper.testFileEquals(expected_rule, generated_rule);
+    }
+
+    @Test
     void generateTwoRuleSynchTest() {
         File tempDir = FileUtils.getTempDirectory();
 

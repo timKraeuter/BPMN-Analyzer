@@ -9,6 +9,7 @@ import behavior.activity.values.Value;
 import behavior.activity.variables.Variable;
 
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Represents an activity diagram as described in the TTC 2015 Model Execution Case.
@@ -35,6 +36,18 @@ public class ActivityDiagram implements Behavior {
         this.localVariables = localVariables;
         this.nodes = nodes;
         this.edges = edges;
+    }
+
+    public InitialNode getInitialNode() {
+        return this.initialNode;
+    }
+
+    public Stream<ActivityNode> getNodes() {
+        return this.nodes.stream();
+    }
+
+    public Stream<ActivityEdge> getEdges() {
+        return this.edges.stream();
     }
 
     @Override

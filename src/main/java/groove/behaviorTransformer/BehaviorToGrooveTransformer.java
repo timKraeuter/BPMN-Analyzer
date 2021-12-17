@@ -10,6 +10,8 @@ import behavior.piCalculus.NamedPiProcess;
 import com.google.common.collect.Maps;
 import groove.GrooveGxlHelper;
 import groove.graph.GrooveGraph;
+import groove.graph.GrooveNode;
+import groove.graph.Value;
 import groove.graph.rule.GrooveGraphRule;
 import groove.graph.rule.GrooveRuleBuilder;
 import groove.graph.rule.GrooveRuleWriter;
@@ -150,10 +152,20 @@ public class BehaviorToGrooveTransformer {
 
             @Override
             public void handle(ActivityDiagram activityDiagram) {
-                // TODO: implement ActivityDiagram
-                throw new UnsupportedOperationException();
+                BehaviorToGrooveTransformer.this.generateGrooveGrammarForActivityDiagram(activityDiagram, targetFolder, addPrefix);
             }
         });
+    }
+
+    private void generateGrooveGrammarForActivityDiagram(ActivityDiagram activityDiagram, File targetFolder, boolean addPrefix) {
+        File graphGrammarSubFolder = this.makeSubFolder(activityDiagram, targetFolder);
+        ActivityDiagramToGrooveTransformer transformer = new ActivityDiagramToGrooveTransformer();
+
+        transformer.generateAndWriteStartGraph(activityDiagram, false, graphGrammarSubFolder);
+
+        transformer.generateAndWriteRules(activityDiagram, false, graphGrammarSubFolder);
+
+        this.generatePropertiesFile(graphGrammarSubFolder, START, Maps.newHashMap());
     }
 
     private void generateGrooveGrammarForPiProcess(NamedPiProcess piProcess, File grooveDir, boolean addPrefix) {
@@ -256,9 +268,14 @@ public class BehaviorToGrooveTransformer {
         Map<String, Node> grooveNodeIdToGxlNode = new HashMap<>();
 
         graph.nodes().forEach(node -> {
-            idToNodeLabel.put(node.getId(), node.getName());
             Node gxlNode = GrooveGxlHelper.createNodeWithName(node.getId(), node.getName(), gxlGraph);
+            // Add flags
             node.getFlags().forEach(flag -> GrooveGxlHelper.addFlagToNode(gxlGraph, gxlNode, flag));
+            // Add data nodes/attributes
+            node.getAttributes().forEach(
+                    (name, value) -> addNodeAttribute(gxlGraph, idToNodeLabel, gxlNode, name, value));
+
+            idToNodeLabel.put(node.getId(), node.getName());
             grooveNodeIdToGxlNode.put(node.getId(), gxlNode);
         });
         graph.edges().forEach(edge -> GrooveGxlHelper.createEdgeWithName(
@@ -269,5 +286,21 @@ public class BehaviorToGrooveTransformer {
 
         GrooveGxlHelper.layoutGraph(gxlGraph, idToNodeLabel);
         return gxl;
+    }
+
+    private static void addNodeAttribute(
+            Graph graph,
+            Map<String, String> idToNodeLabel,
+            Node attributeHolder,
+            String attributeName,
+            Value<?> attributeValue) {
+        String attributeNodeName = String.format("%s:%s", attributeValue.getTypeName(), attributeValue.getValue());
+        Node dataNode = GrooveGxlHelper.createNodeWithName(
+                GrooveNode.getNextNodeId(),
+                attributeNodeName,
+                graph);
+        GrooveGxlHelper.createEdgeWithName(graph, attributeHolder, dataNode, attributeName);
+
+        idToNodeLabel.put(dataNode.getId(), attributeNodeName);
     }
 }

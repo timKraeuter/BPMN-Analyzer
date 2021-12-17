@@ -13,4 +13,12 @@ public abstract class ActivityEdge {
         this.source = source;
         this.target = target;
     }
+
+    public ActivityNode getSource() {
+        return this.source;
+    }
+
+    public ActivityNode getTarget() {
+        return this.target;
+    }
 }

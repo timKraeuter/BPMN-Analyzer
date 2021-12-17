@@ -9,4 +9,9 @@ public class DecisionNode extends ControlNode {
     public DecisionNode(String name) {
         super(name);
     }
+
+    @Override
+    public void accept(ActivityNodeVisitor visitor) {
+        visitor.handle(this);
+    }
 }
