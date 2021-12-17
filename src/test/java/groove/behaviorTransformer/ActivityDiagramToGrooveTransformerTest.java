@@ -43,7 +43,7 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
      * See activity_diagrams/decision.
      */
     @Test
-    void testAlternative() throws IOException {
+    void testDecision() throws IOException {
         ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
         InitialNode initNode = new InitialNode("initial");
         OpaqueAction action1 = new OpaqueAction("Action1", Collections.emptyList());
@@ -58,7 +58,8 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
 
         ActivityDiagram activityDiagram = builder.setName("Decision")
                                                  .setInitialNode(initNode)
-                                                 .createControlFlow("", initNode, decisionNode)
+                                                 .createControlFlow("", initNode, action1)
+                                                 .createControlFlow("", action1, decisionNode)
                                                  .createControlFlow("", decisionNode, action1_1)
                                                  .createControlFlow("", decisionNode, action1_2)
                                                  .createControlFlow("", action1_1, mergeNode)
@@ -90,7 +91,8 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
 
         ActivityDiagram activityDiagram = builder.setName("Fork")
                                                  .setInitialNode(initNode)
-                                                 .createControlFlow("", initNode, forkNode)
+                                                 .createControlFlow("", initNode, action1)
+                                                 .createControlFlow("", action1, forkNode)
                                                  .createControlFlow("", forkNode, action1_1)
                                                  .createControlFlow("", forkNode, action1_2)
                                                  .createControlFlow("", action1_1, joinNode)

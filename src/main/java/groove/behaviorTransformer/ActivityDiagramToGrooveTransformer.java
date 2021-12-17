@@ -82,6 +82,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
             @Override
             public void handle(OpaqueAction opaqueAction) {
                 GrooveNode opaqueActionGroove = new GrooveNode(TYPE_OPAQUE_ACTION);
+                opaqueActionGroove.addAttribute("name", opaqueAction.getName());
                 builder.addNode(opaqueActionGroove);
                 createdNodesIndex.put(opaqueAction, opaqueActionGroove);
                 // TODO: Add expressions!
