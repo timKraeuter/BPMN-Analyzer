@@ -20,13 +20,14 @@ public class GrooveGraphBuilder {
     }
 
     public GrooveGraphBuilder addNode(GrooveNode node) {
+        assert node != null;
         this.nodes.add(node);
         return this;
     }
 
     public GrooveGraphBuilder addEdge(String name, GrooveNode source, GrooveNode target) {
-        this.nodes.add(source);
-        this.nodes.add(target);
+        this.addNode(source)
+            .addNode(target);
         this.edges.add(new GrooveEdge(name, source, target));
         return this;
     }

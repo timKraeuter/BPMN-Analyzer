@@ -1,9 +1,10 @@
 package behavior.activity.expression.bool;
 
+import behavior.activity.expression.BinaryExpression;
 import behavior.activity.expression.visitor.ExpressionVisitor;
 import behavior.activity.variables.BooleanVariable;
 
-public class BooleanBinaryExpression extends BooleanExpression {
+public class BooleanBinaryExpression extends BooleanExpression implements BinaryExpression {
     private final BooleanVariable operand1;
     private final BooleanVariable operand2;
 
@@ -30,8 +31,27 @@ public class BooleanBinaryExpression extends BooleanExpression {
         return this.operand2;
     }
 
+    public BooleanBinaryOperator getOperator() {
+        return this.operator;
+    }
+
     @Override
     public void accept(ExpressionVisitor visitor) {
         visitor.handle(this);
+    }
+
+    @Override
+    public String getNameOfOperand1() {
+        return this.operand1.getName();
+    }
+
+    @Override
+    public String getNameOfOperand2() {
+        return this.operand2.getName();
+    }
+
+    @Override
+    public String getNameOfAssignee() {
+        return this.getAssignee().getName();
     }
 }

@@ -3,10 +3,17 @@ package groove.behaviorTransformer;
 import behavior.activity.ActivityDiagram;
 import behavior.activity.ActivityDiagramBuilder;
 import behavior.activity.expression.SetVariableExpression;
+import behavior.activity.expression.bool.BooleanBinaryExpression;
+import behavior.activity.expression.bool.BooleanBinaryOperator;
+import behavior.activity.expression.bool.BooleanUnaryExpression;
+import behavior.activity.expression.bool.BooleanUnaryOperator;
 import behavior.activity.expression.integer.IntegerCalculationExpression;
 import behavior.activity.expression.integer.IntegerCalculationOperator;
+import behavior.activity.expression.integer.IntegerComparisonExpression;
+import behavior.activity.expression.integer.IntegerComparisonOperator;
 import behavior.activity.nodes.*;
 import behavior.activity.values.IntegerValue;
+import behavior.activity.variables.BooleanVariable;
 import behavior.activity.variables.IntegerVariable;
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
@@ -139,7 +146,56 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         this.checkGrooveGeneration(activityDiagram);
     }
 
-    // TODO: testcase for all the other expression: booleans, diff and so on.
+    /**
+     * Tests an activity diagram with one activity which has a lot of different expressions.
+     */
+    @Test
+    void testExpression() throws IOException {
+        ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
+        InitialNode initNode = new InitialNode("initial");
+
+        IntegerVariable x = new IntegerVariable("x", 1);
+        IntegerVariable y = new IntegerVariable("y", 2);
+        IntegerVariable diffVar = new IntegerVariable("diff", 0);
+        BooleanVariable xEqualsX = new BooleanVariable("x equals x", false);
+        // TODO: add leq geq etc.
+
+        BooleanVariable a = new BooleanVariable("A", true);
+        BooleanVariable notA = new BooleanVariable("Not A", true);
+        BooleanVariable b = new BooleanVariable("B", false);
+        BooleanVariable aAndB = new BooleanVariable("A and B", true);
+        BooleanVariable aOrB = new BooleanVariable("A or B", true);
+
+        IntegerCalculationExpression diff = new IntegerCalculationExpression(
+                x,
+                y,
+                diffVar,
+                IntegerCalculationOperator.SUBTRACT);
+        IntegerComparisonExpression x_equals_x = new IntegerComparisonExpression(x, x, xEqualsX, IntegerComparisonOperator.EQUALS);
+        BooleanUnaryExpression notAExp = new BooleanUnaryExpression(a, notA, BooleanUnaryOperator.NOT);
+        BooleanBinaryExpression aAndBExp = new BooleanBinaryExpression(a, b, BooleanBinaryOperator.AND, aAndB);
+        BooleanBinaryExpression aOrBxp = new BooleanBinaryExpression(a, b, BooleanBinaryOperator.OR, aOrB);
+
+        OpaqueAction action1 = new OpaqueAction("Action1", Lists.newArrayList(x_equals_x, diff, notAExp, aAndBExp, aOrBxp));
+        ActivityFinalNode finalNode = new ActivityFinalNode("final");
+
+        ActivityDiagram activityDiagram = builder.setName("Exps")
+                                                 .setInitialNode(initNode)
+                                                 .createControlFlow("", initNode, action1)
+                                                 .createControlFlow("", action1, finalNode)
+                                                 .addLocalVariable(x)
+                                                 .addLocalVariable(y)
+                                                 .addLocalVariable(a)
+                                                 .addLocalVariable(notA)
+                                                 .addLocalVariable(b)
+                                                 .addLocalVariable(aAndB)
+                                                 .addLocalVariable(xEqualsX)
+                                                 .addLocalVariable(aOrB)
+                                                 .addLocalVariable(diffVar)
+                                                 .build();
+
+        this.checkGrooveGeneration(activityDiagram);
+    }
 
     /**
      * TODO: add picture and describe.

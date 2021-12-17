@@ -1,9 +1,11 @@
 package groove.behaviorTransformer;
 
 import behavior.activity.ActivityDiagram;
+import behavior.activity.expression.BinaryExpression;
 import behavior.activity.expression.SetVariableExpression;
 import behavior.activity.expression.bool.BooleanBinaryExpression;
 import behavior.activity.expression.bool.BooleanUnaryExpression;
+import behavior.activity.expression.bool.BooleanUnaryOperator;
 import behavior.activity.expression.integer.IntegerCalculationExpression;
 import behavior.activity.expression.integer.IntegerComparisonExpression;
 import behavior.activity.expression.visitor.ExpressionVisitor;
@@ -41,10 +43,15 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     private static final String TYPE_SUM = TYPE + "Sum";
     private static final String TYPE_DIFFERENCE = TYPE + "Difference";
     private static final String TYPE_SMALLER = TYPE + "Smaller";
+    private static final String TYPE_GREATER = TYPE + "Greater";
+    private static final String TYPE_GREATER_EQUALS = TYPE + "GreaterEquals";
+    private static final String TYPE_EQUALS = TYPE + "Equals";
+    private static final String TYPE_SMALLER_EQUALS = TYPE + "SmallerEquals";
 
     private static final String TYPE_BOOLEAN_VALUE = TYPE + "BooleanValue";
     private static final String TYPE_NOT = TYPE + "Not";
     private static final String TYPE_AND = TYPE + "And";
+    private static final String TYPE_OR = TYPE + "Or";
 
     private static final String TYPE_VARIABLE = TYPE + "Variable";
     private static final String TYPE_SET_VARIABLE_EXPRESSION = TYPE + "SetVariableExpression";
@@ -128,61 +135,8 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                 opaqueActionGroove.addAttribute(NAME, opaqueAction.getName());
                 builder.addNode(opaqueActionGroove);
                 createdNodesIndex.put(opaqueAction, opaqueActionGroove);
-                // TODO: Finish expressions!
 
-                opaqueAction.expressions().forEach(expression -> expression.accept(new ExpressionVisitor() {
-                    @Override
-                    public <VALUE extends Value> void handle(SetVariableExpression<VALUE> setVariableExpression) {
-                        GrooveNode expressionNode = new GrooveNode(TYPE_SET_VARIABLE_EXPRESSION);
-                        builder.addEdge(EXP, opaqueActionGroove, expressionNode);
-
-                        GrooveNode newValueNode = ActivityDiagramToGrooveTransformer.this.createValueNode(
-                                setVariableExpression.getValue());
-                        builder.addEdge(NEW_VALUE, expressionNode, newValueNode);
-
-                        GrooveNode variableNode = variableNameToNode.get(
-                                setVariableExpression.getVariableToBeSet().getName());
-                        builder.addEdge(VAR, expressionNode, variableNode);
-                    }
-
-                    @Override
-                    public void handle(IntegerCalculationExpression integerCalculationExpression) {
-                        GrooveNode expNode = null;
-                        switch (integerCalculationExpression.getOperator()) {
-                            case ADD:
-                                expNode = new GrooveNode(TYPE_SUM);
-                                break;
-                            case SUBTRACT:
-                                expNode = new GrooveNode(TYPE_DIFFERENCE);
-                                break;
-                        }
-                        builder.addEdge(EXP, opaqueActionGroove, expNode);
-
-                        GrooveNode assigneeVar = variableNameToNode.get(
-                                integerCalculationExpression.getAssignee().getName());
-                        builder.addEdge(ASSIGNEE, expNode, assigneeVar);
-
-                        GrooveNode operand1Var = variableNameToNode.get(integerCalculationExpression.getOperand1().getName());
-                        builder.addEdge(OPERAND_1, expNode, operand1Var);
-                        GrooveNode operand2Var = variableNameToNode.get(integerCalculationExpression.getOperand2().getName());
-                        builder.addEdge(OPERAND_2, expNode, operand2Var);
-                    }
-
-                    @Override
-                    public void handle(IntegerComparisonExpression integerComparisonExpression) {
-                        throw new UnsupportedOperationException();
-                    }
-
-                    @Override
-                    public void handle(BooleanBinaryExpression booleanBinaryExpression) {
-                        throw new UnsupportedOperationException();
-                    }
-
-                    @Override
-                    public void handle(BooleanUnaryExpression booleanUnaryExpression) {
-                        throw new UnsupportedOperationException();
-                    }
-                }));
+                ActivityDiagramToGrooveTransformer.this.convertActionExpressions(opaqueAction, opaqueActionGroove, builder, variableNameToNode);
             }
 
             @Override
@@ -202,6 +156,139 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                 });
 
         return builder.build();
+    }
+
+    private void convertActionExpressions(
+            OpaqueAction opaqueAction,
+            GrooveNode opaqueActionGroove,
+            GrooveGraphBuilder builder,
+            Map<String, GrooveNode> variableNameToNode) {
+        opaqueAction.expressions().forEach(expression -> expression.accept(new ExpressionVisitor() {
+            @Override
+            public <VALUE extends Value> void handle(SetVariableExpression<VALUE> setVariableExpression) {
+                GrooveNode expressionNode = new GrooveNode(TYPE_SET_VARIABLE_EXPRESSION);
+                builder.addEdge(EXP, opaqueActionGroove, expressionNode);
+
+                GrooveNode newValueNode = ActivityDiagramToGrooveTransformer.this.createValueNode(
+                        setVariableExpression.getValue());
+                builder.addEdge(NEW_VALUE, expressionNode, newValueNode);
+
+                String varName = setVariableExpression.getVariableToBeSet().getName();
+                GrooveNode variableNode = ActivityDiagramToGrooveTransformer.this.getVarForName(varName, variableNameToNode);
+                builder.addEdge(VAR, expressionNode, variableNode);
+            }
+
+            @Override
+            public void handle(IntegerCalculationExpression integerCalculationExpression) {
+                GrooveNode expNode = null;
+                switch (integerCalculationExpression.getOperator()) {
+                    case ADD:
+                        expNode = new GrooveNode(TYPE_SUM);
+                        break;
+                    case SUBTRACT:
+                        expNode = new GrooveNode(TYPE_DIFFERENCE);
+                        break;
+                }
+                ActivityDiagramToGrooveTransformer.this.addExpressionToAction(
+                        integerCalculationExpression,
+                        expNode,
+                        builder,
+                        opaqueActionGroove,
+                        variableNameToNode);
+            }
+
+            @Override
+            public void handle(IntegerComparisonExpression integerComparisonExpression) {
+                GrooveNode expNode = null;
+                switch (integerComparisonExpression.getOperator()) {
+
+                    case SMALLER:
+                        expNode = new GrooveNode(TYPE_SMALLER);
+                        break;
+                    case SMALLER_EQUALS:
+                        expNode = new GrooveNode(TYPE_SMALLER_EQUALS);
+                        break;
+                    case EQUALS:
+                        expNode = new GrooveNode(TYPE_EQUALS);
+                        break;
+                    case GREATER_EQUALS:
+                        expNode = new GrooveNode(TYPE_GREATER_EQUALS);
+                        break;
+                    case GREATER:
+                        expNode = new GrooveNode(TYPE_GREATER);
+                        break;
+                }
+                ActivityDiagramToGrooveTransformer.this.addExpressionToAction(
+                        integerComparisonExpression,
+                        expNode,
+                        builder,
+                        opaqueActionGroove,
+                        variableNameToNode);
+
+            }
+
+            @Override
+            public void handle(BooleanBinaryExpression booleanBinaryExpression) {
+                GrooveNode expNode = null;
+                switch (booleanBinaryExpression.getOperator()) {
+                    case AND:
+                        expNode = new GrooveNode(TYPE_AND);
+                        break;
+                    case OR:
+                        expNode = new GrooveNode(TYPE_OR);
+                        break;
+                }
+                ActivityDiagramToGrooveTransformer.this.addExpressionToAction(
+                        booleanBinaryExpression,
+                        expNode,
+                        builder,
+                        opaqueActionGroove,
+                        variableNameToNode);
+            }
+
+            @Override
+            public void handle(BooleanUnaryExpression booleanUnaryExpression) {
+                assert BooleanUnaryOperator.values().length == 1;
+                GrooveNode notExpNode = new GrooveNode(TYPE_NOT);
+                builder.addEdge(EXP, opaqueActionGroove, notExpNode);
+
+                String assigneeVarName = booleanUnaryExpression.getAssignee().getName();
+                GrooveNode assigneeVar = ActivityDiagramToGrooveTransformer.this.getVarForName(
+                        assigneeVarName,
+                        variableNameToNode);
+                builder.addEdge(ASSIGNEE, notExpNode, assigneeVar);
+
+                String operand1VarName = booleanUnaryExpression.getOperand().getName();
+                GrooveNode operand1Var = ActivityDiagramToGrooveTransformer.this.getVarForName(
+                        operand1VarName,
+                        variableNameToNode);
+                builder.addEdge(OPERAND_1, notExpNode, operand1Var);
+            }
+        }));
+    }
+
+    private GrooveNode getVarForName(String varName, Map<String, GrooveNode> variableNameToNode) {
+        GrooveNode variableNode = variableNameToNode.get(varName);
+        if (variableNode == null) {
+            throw new RuntimeException(String.format("Variable with name %s not initialized correctly!", varName));
+        }
+        return variableNode;
+    }
+
+    private void addExpressionToAction(BinaryExpression binaryExpression,
+                                       GrooveNode expNode,
+                                       GrooveGraphBuilder builder,
+                                       GrooveNode opaqueActionGroove,
+                                       Map<String, GrooveNode> variableNameToNode) {
+        builder.addEdge(EXP, opaqueActionGroove, expNode);
+
+        GrooveNode assigneeVar = this.getVarForName(binaryExpression.getNameOfAssignee(), variableNameToNode);
+        builder.addEdge(ASSIGNEE, expNode, assigneeVar);
+
+        GrooveNode operand1Var = this.getVarForName(binaryExpression.getNameOfOperand1(), variableNameToNode);
+        builder.addEdge(OPERAND_1, expNode, operand1Var);
+        GrooveNode operand2Var = this.getVarForName(binaryExpression.getNameOfOperand2(), variableNameToNode);
+        builder.addEdge(OPERAND_2, expNode, operand2Var);
     }
 
     private void createAndInitVariable(
