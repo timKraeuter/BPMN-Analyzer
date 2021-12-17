@@ -10,4 +10,9 @@ public class BooleanValue implements Value {
     public boolean getValue() {
         return this.value;
     }
+
+    @Override
+    public <RETURN> RETURN accept(ValueVisitor<RETURN> visitor) {
+        return visitor.handle(this);
+    }
 }

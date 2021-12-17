@@ -59,4 +59,12 @@ public class ActivityDiagram implements Behavior {
     public void accept(BehaviorVisitor visitor) {
         visitor.handle(this);
     }
+
+    public Stream<Variable<? extends Value>> inputVariables() {
+        return this.inputVariables.stream();
+    }
+
+    public Stream<Variable<? extends Value>> localVariables() {
+        return this.localVariables.stream();
+    }
 }

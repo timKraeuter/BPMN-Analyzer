@@ -1,5 +1,6 @@
 package behavior.activity.expression.bool;
 
+import behavior.activity.expression.visitor.ExpressionVisitor;
 import behavior.activity.variables.BooleanVariable;
 
 public class BooleanBinaryExpression extends BooleanExpression {
@@ -27,5 +28,10 @@ public class BooleanBinaryExpression extends BooleanExpression {
 
     public BooleanVariable getOperand2() {
         return this.operand2;
+    }
+
+    @Override
+    public void accept(ExpressionVisitor visitor) {
+        visitor.handle(this);
     }
 }

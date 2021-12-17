@@ -1,5 +1,6 @@
 package behavior.activity.expression.integer;
 
+import behavior.activity.expression.visitor.ExpressionVisitor;
 import behavior.activity.variables.BooleanVariable;
 import behavior.activity.variables.IntegerVariable;
 
@@ -23,5 +24,10 @@ public class IntegerComparisonExpression extends IntegerExpression {
 
     public IntegerComparisonOperator getOperator() {
         return this.operator;
+    }
+
+    @Override
+    public void accept(ExpressionVisitor visitor) {
+        visitor.handle(this);
     }
 }

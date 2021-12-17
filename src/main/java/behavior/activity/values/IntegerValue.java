@@ -10,4 +10,9 @@ public class IntegerValue implements Value {
     public int getValue() {
         return this.value;
     }
+
+    @Override
+    public <RETURN> RETURN accept(ValueVisitor<RETURN> visitor) {
+        return visitor.handle(this);
+    }
 }

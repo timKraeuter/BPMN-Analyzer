@@ -113,13 +113,14 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
         InitialNode initNode = new InitialNode("initial");
         IntegerVariable x = new IntegerVariable("x", 0);
-        IntegerVariable y = new IntegerVariable("x", 0);
+        IntegerVariable y = new IntegerVariable("y", 0);
         SetVariableExpression<IntegerValue> setX = new SetVariableExpression<>(new IntegerValue(5), x);
-        SetVariableExpression<IntegerValue> setY = new SetVariableExpression<>(new IntegerValue(5), y);
+        SetVariableExpression<IntegerValue> setY = new SetVariableExpression<>(new IntegerValue(37), y);
+        IntegerVariable sumVar = new IntegerVariable("sum", 0);
         IntegerCalculationExpression sum = new IntegerCalculationExpression(
                 x,
                 y,
-                new IntegerVariable("sum", 0),
+                sumVar,
                 IntegerCalculationOperator.ADD);
         OpaqueAction action1 = new OpaqueAction("Action1", Lists.newArrayList(setX, setY));
         OpaqueAction action2 = new OpaqueAction("Action2", Lists.newArrayList(sum));
@@ -130,10 +131,15 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
                                                  .createControlFlow("", initNode, action1)
                                                  .createControlFlow("", action1, action2)
                                                  .createControlFlow("", action2, finalNode)
+                                                 .addLocalVariable(x)
+                                                 .addLocalVariable(y)
+                                                 .addLocalVariable(sumVar)
                                                  .build();
 
         this.checkGrooveGeneration(activityDiagram);
     }
+
+    // TODO: testcase for all the other expression: booleans, diff and so on.
 
     /**
      * TODO: add picture and describe.

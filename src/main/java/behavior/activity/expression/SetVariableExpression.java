@@ -1,5 +1,6 @@
 package behavior.activity.expression;
 
+import behavior.activity.expression.visitor.ExpressionVisitor;
 import behavior.activity.values.Value;
 import behavior.activity.variables.Variable;
 
@@ -23,5 +24,10 @@ public class SetVariableExpression<VALUE extends Value> implements Expression {
 
     public Variable<VALUE> getVariableToBeSet() {
         return this.variableToBeSet;
+    }
+
+    @Override
+    public void accept(ExpressionVisitor visitor) {
+        visitor.handle(this);
     }
 }

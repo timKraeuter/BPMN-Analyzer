@@ -1,5 +1,6 @@
 package behavior.activity.expression.integer;
 
+import behavior.activity.expression.visitor.ExpressionVisitor;
 import behavior.activity.variables.IntegerVariable;
 
 public class IntegerCalculationExpression extends IntegerExpression {
@@ -24,5 +25,10 @@ public class IntegerCalculationExpression extends IntegerExpression {
 
     public IntegerCalculationOperator getOperator() {
         return this.operator;
+    }
+
+    @Override
+    public void accept(ExpressionVisitor visitor) {
+        visitor.handle(this);
     }
 }
