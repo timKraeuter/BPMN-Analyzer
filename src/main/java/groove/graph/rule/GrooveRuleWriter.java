@@ -40,11 +40,12 @@ public class GrooveRuleWriter {
             // Add edges which should be deleted to gxl
             grooveGraphRule.getEdgesToBeDeleted().forEach(toBeDeletedEdge -> addEdgeToGxlGraph(graph, toBeDeletedEdge, allGxlNodes, NodeRuleAspect.DEL));
 
-            // TODO: context edges!
+            // Add edges which should be deleted to gxl
+            grooveGraphRule.getContextEdges().forEach(toBeDeletedEdge -> addEdgeToGxlGraph(graph, toBeDeletedEdge, allGxlNodes, NodeRuleAspect.CONTEXT));
 
             GrooveGxlHelper.layoutGraph(graph, grooveGraphRule.getAllNodes().entrySet().stream()
-                                                              .collect(Collectors.toMap(Map.Entry::getKey,
-                                                                      idNodePair -> idNodePair.getValue().getName())));
+                    .collect(Collectors.toMap(Map.Entry::getKey,
+                            idNodePair -> idNodePair.getValue().getName())));
             // Write each rule to a file
             writeRuleToFile(dir, grooveGraphRule, gxl);
         });

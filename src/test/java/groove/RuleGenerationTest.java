@@ -19,6 +19,8 @@ import java.util.stream.Stream;
 @SuppressWarnings("ConstantConditions")
 public class RuleGenerationTest {
 
+    public static final String CONTEXT_EDGE_GPR = "/contextEdge.gpr";
+
     @BeforeEach
     void setUp() {
         GrooveNode.idCounter.set(-1);
@@ -68,6 +70,23 @@ public class RuleGenerationTest {
 
         File expected_rule = new File(this.getClass().getResource("/addNodesWithEdge.gpr").getFile());
         File generated_rule = new File(tempDir + "/addNodesWithEdge.gpr");
+        FileTestHelper.testFileEquals(expected_rule, generated_rule);
+    }
+
+    @Test
+    void generateContextEdgeRuleTest() {
+        File tempDir = FileUtils.getTempDirectory();
+
+        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder();
+        ruleBuilder.startRule("contextEdge");
+        GrooveNode source = ruleBuilder.contextNode("source");
+        GrooveNode target = ruleBuilder.contextNode("target");
+        ruleBuilder.contextEdge("edge", source, target);
+        ruleBuilder.buildRule();
+        GrooveRuleWriter.writeRules(ruleBuilder.getRules(), tempDir);
+
+        File expected_rule = new File(this.getClass().getResource(CONTEXT_EDGE_GPR).getFile());
+        File generated_rule = new File(tempDir + CONTEXT_EDGE_GPR);
         FileTestHelper.testFileEquals(expected_rule, generated_rule);
     }
 

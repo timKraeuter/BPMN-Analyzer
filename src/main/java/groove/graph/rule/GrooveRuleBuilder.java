@@ -128,6 +128,20 @@ public class GrooveRuleBuilder implements GraphRuleGenerator {
     @Override
     public void deleteEdge(String edgeName, Node source, Node target) {
         assert this.currentRule != null;
+        Map<String, GrooveNode> contextAndAddedNodes = this.currentRule.getContextAndAddedNodes();
+
+        GrooveNode sourceNode = contextAndAddedNodes.get(source.getId());
+        GrooveNode targetNode = contextAndAddedNodes.get(target.getId());
+
+        this.checkNodeContainment(source, target, sourceNode, targetNode);
+
+        String prefixedEdgeName = this.addPrefix(edgeName);
+        this.currentRule.addDelEdge(new GrooveEdge(prefixedEdgeName, sourceNode, targetNode));
+    }
+
+    @Override
+    public void contextEdge(String name, GrooveNode source, GrooveNode target) {
+        assert this.currentRule != null;
         Map<String, GrooveNode> nodes = this.currentRule.getAllNodes();
 
         GrooveNode sourceNode = nodes.get(source.getId());
@@ -135,8 +149,8 @@ public class GrooveRuleBuilder implements GraphRuleGenerator {
 
         this.checkNodeContainment(source, target, sourceNode, targetNode);
 
-        String prefixedEdgeName = this.addPrefix(edgeName);
-        this.currentRule.addDelEdge(new GrooveEdge(prefixedEdgeName, sourceNode, targetNode));
+        String prefixedEdgeName = this.addPrefix(name);
+        this.currentRule.addContextEdge(new GrooveEdge(prefixedEdgeName, sourceNode, targetNode));
     }
 
     private void checkNodeContainment(Node source, Node target, GrooveNode sourceNode, GrooveNode targetNode) {

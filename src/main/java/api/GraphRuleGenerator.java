@@ -1,5 +1,7 @@
 package api;
 
+import groove.graph.GrooveNode;
+
 public interface GraphRuleGenerator {
 
     void startRule(String ruleName);
@@ -29,5 +31,12 @@ public interface GraphRuleGenerator {
      */
     void deleteEdge(String name, Node source, Node target);
 
+    /**
+     * Define that the current rule needs an edge between two nodes (The nodes must be in context, added or deleted).
+     */
+    void contextEdge(String name, GrooveNode source, GrooveNode target);
+
+
     GraphRule buildRule();
+
 }

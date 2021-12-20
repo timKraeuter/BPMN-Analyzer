@@ -73,6 +73,11 @@ public class GrooveGraphRule implements GraphRule {
         this.edgesToBeDeleted.put(edge.getId(), edge);
     }
 
+    public void addContextEdge(GrooveEdge edge) {
+        // It should be checked elsewhere that the source and target nodes are contained in the rule!
+        this.contextEdges.put(edge.getId(), edge);
+    }
+
     public String getRuleName() {
         return this.ruleName;
     }
@@ -91,6 +96,10 @@ public class GrooveGraphRule implements GraphRule {
 
     public Set<GrooveEdge> getEdgesToBeDeleted() {
         return new LinkedHashSet<>(this.edgesToBeDeleted.values());
+    }
+
+    public Set<GrooveEdge> getContextEdges() {
+        return new LinkedHashSet<>(this.contextEdges.values());
     }
 
     public Map<String, GrooveNode> getContextAndAddedNodes() {
