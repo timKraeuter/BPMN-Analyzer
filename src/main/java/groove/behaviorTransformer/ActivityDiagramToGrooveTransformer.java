@@ -371,7 +371,8 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
             activityNode.accept(new ActivityNodeVisitor() {
                 @Override
                 public void handle(DecisionNode decisionNode) {
-
+                    GrooveNode decision = ruleBuilder.contextNode(TYPE_DECISION_NODE);
+                    ActivityDiagramToGrooveTransformer.this.addTokenFlow(decision, ruleBuilder);
                 }
 
                 @Override
@@ -400,6 +401,8 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
                 @Override
                 public void handle(MergeNode mergeNode) {
+                    GrooveNode merge = ruleBuilder.contextNode(TYPE_MERGE_NODE);
+                    ActivityDiagramToGrooveTransformer.this.addTokenFlow(merge, ruleBuilder);
 
                 }
 
@@ -410,15 +413,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                             ActivityDiagramToGrooveTransformer.this.createStringNodeLabel(opaqueAction.getName()));
                     ruleBuilder.contextEdge("name", action, actionName);
 
-                    GrooveNode inFlow = ruleBuilder.contextNode(TYPE_CONTROL_FLOW);
-                    ruleBuilder.contextEdge(TARGET, inFlow, action);
-
-                    GrooveNode outFlow = ruleBuilder.contextNode(TYPE_CONTROL_FLOW);
-                    ruleBuilder.contextEdge(SOURCE, outFlow, action);
-
-                    GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
-                    ruleBuilder.deleteEdge(TOKENS, inFlow, token);
-                    ruleBuilder.addEdge(TOKENS, outFlow, token);
+                    ActivityDiagramToGrooveTransformer.this.addTokenFlow(action, ruleBuilder);
                 }
 
                 @Override
@@ -441,6 +436,18 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
         });
 
         return ruleBuilder.getRules();
+    }
+
+    private void addTokenFlow(GrooveNode activityNode, GrooveRuleBuilder ruleBuilder) {
+        GrooveNode inFlow = ruleBuilder.contextNode(TYPE_CONTROL_FLOW);
+        ruleBuilder.contextEdge(TARGET, inFlow, activityNode);
+
+        GrooveNode outFlow = ruleBuilder.contextNode(TYPE_CONTROL_FLOW);
+        ruleBuilder.contextEdge(SOURCE, outFlow, activityNode);
+
+        GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
+        ruleBuilder.deleteEdge(TOKENS, inFlow, token);
+        ruleBuilder.addEdge(TOKENS, outFlow, token);
     }
 
     private GrooveNode createDiagramNodeWithName(GrooveRuleBuilder ruleBuilder, ActivityDiagram activityDiagram) {

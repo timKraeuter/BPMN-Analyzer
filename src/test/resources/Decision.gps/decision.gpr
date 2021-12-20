@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="decision" role="rule" edgeids="false" edgemode="directed">
+        <node id="n38">
+            <attr name="layout">
+                <string>342 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n38" to="n38">
+            <attr name="label">
+                <string>type:DecisionNode</string>
+            </attr>
+        </edge>
+        <node id="n39">
+            <attr name="layout">
+                <string>62 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n39" to="n39">
+            <attr name="label">
+                <string>type:ControlFlow</string>
+            </attr>
+        </edge>
+        <node id="n40">
+            <attr name="layout">
+                <string>62 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n40" to="n40">
+            <attr name="label">
+                <string>type:ControlFlow</string>
+            </attr>
+        </edge>
+        <node id="n41">
+            <attr name="layout">
+                <string>342 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n41" to="n41">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n40" to="n41">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n39" to="n41">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n39" to="n38">
+            <attr name="label">
+                <string>target</string>
+            </attr>
+        </edge>
+        <edge from="n40" to="n38">
+            <attr name="label">
+                <string>source</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

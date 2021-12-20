@@ -56,8 +56,8 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         OpaqueAction action1 = new OpaqueAction("Action1", Collections.emptyList());
 
         DecisionNode decisionNode = new DecisionNode("decision");
-        OpaqueAction action1_1 = new OpaqueAction("Action1.1", Collections.emptyList());
-        OpaqueAction action1_2 = new OpaqueAction("Action1.2", Collections.emptyList());
+        OpaqueAction action1_1 = new OpaqueAction("Action1_1", Collections.emptyList());
+        OpaqueAction action1_2 = new OpaqueAction("Action1_2", Collections.emptyList());
         MergeNode mergeNode = new MergeNode("merge");
 
         OpaqueAction action2 = new OpaqueAction("Action2", Collections.emptyList());
@@ -75,7 +75,7 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
                 .createControlFlow("", action2, finalNode)
                 .build();
 
-        this.checkGrooveGeneration(activityDiagram);
+        this.checkGrooveGeneration(activityDiagram, false, x -> x.equals("type.gty"));
     }
 
     /**
