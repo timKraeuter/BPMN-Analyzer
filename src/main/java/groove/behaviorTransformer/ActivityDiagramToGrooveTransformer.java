@@ -74,28 +74,23 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
         Map<ActivityNode, GrooveNode> createdNodesIndex = new LinkedHashMap<>();
 
-        // Create initial node in groove
-        InitialNode initialNode = activityDiagram.getInitialNode();
-        GrooveNode initialNodeGroove = new GrooveNode(TYPE_INITIAL_NODE);
-        builder.addNode(initialNodeGroove);
-        createdNodesIndex.put(initialNode, initialNodeGroove);
+        this.createNodeForActivityDiagramAndInitial(activityDiagram, builder, createdNodesIndex);
 
-        // Create activity diagram node in groove
-        GrooveNode activityDiagramNode = new GrooveNode(TYPE_ACTIVITY_DIAGRAM);
-        activityDiagramNode.addAttribute("running", false);
-        activityDiagramNode.addAttribute("name", activityDiagram.getName());
-        builder.addNode(activityDiagramNode);
-        builder.addEdge("start", activityDiagramNode, initialNodeGroove);
-
-        // Create variables in groove
         Map<String, GrooveNode> variableNameToNode = new HashMap<>();
-        activityDiagram.localVariables().forEach(localVar -> this.createAndInitVariable(builder, localVar, variableNameToNode));
-        activityDiagram.inputVariables().forEach(inputVariable -> {
-            // TODO: This should be done according to given parameters of the input variables NOT the initial values.
-            this.createAndInitVariable(builder, inputVariable, variableNameToNode);
-        });
+        this.createNodesForLocalAndInputVariables(activityDiagram, builder, variableNameToNode);
 
-        // Create activity nodes in groove
+        this.createNodesForActivityNodes(activityDiagram, builder, createdNodesIndex, variableNameToNode);
+
+        this.addControlFlowsToGraph(activityDiagram, builder, createdNodesIndex);
+
+        return builder.build();
+    }
+
+    private void createNodesForActivityNodes(
+            ActivityDiagram activityDiagram,
+            GrooveGraphBuilder builder,
+            Map<ActivityNode, GrooveNode> createdNodesIndex,
+            Map<String, GrooveNode> variableNameToNode) {
         activityDiagram.getNodes().forEach(activityNode -> activityNode.accept(new ActivityNodeVisitor() {
             @Override
             public void handle(DecisionNode decisionNode) {
@@ -147,7 +142,12 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                 createdNodesIndex.put(activityFinalNode, activityFinalNodeGroove);
             }
         }));
-        // Create control flows in groove
+    }
+
+    private void addControlFlowsToGraph(
+            ActivityDiagram activityDiagram,
+            GrooveGraphBuilder builder,
+            Map<ActivityNode, GrooveNode> createdNodesIndex) {
         activityDiagram.getEdges().forEach(
                 edge -> {
                     GrooveNode controlFlowNode = new GrooveNode(TYPE_CONTROL_FLOW);
@@ -155,8 +155,33 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                     builder.addEdge(SOURCE, controlFlowNode, createdNodesIndex.get(edge.getSource()));
                     builder.addEdge(TARGET, controlFlowNode, createdNodesIndex.get(edge.getTarget()));
                 });
+    }
 
-        return builder.build();
+    private void createNodesForLocalAndInputVariables(
+            ActivityDiagram activityDiagram,
+            GrooveGraphBuilder builder,
+            Map<String, GrooveNode> variableNameToNode) {
+        activityDiagram.localVariables().forEach(localVar -> this.createAndInitVariable(builder, localVar, variableNameToNode));
+        activityDiagram.inputVariables().forEach(inputVariable -> {
+            // TODO: This should be done according to given parameters of the input variables NOT the initial values.
+            this.createAndInitVariable(builder, inputVariable, variableNameToNode);
+        });
+    }
+
+    private void createNodeForActivityDiagramAndInitial(
+            ActivityDiagram activityDiagram,
+            GrooveGraphBuilder builder,
+            Map<ActivityNode, GrooveNode> createdNodesIndex) {
+        InitialNode initialNode = activityDiagram.getInitialNode();
+        GrooveNode initialNodeGroove = new GrooveNode(TYPE_INITIAL_NODE);
+        builder.addNode(initialNodeGroove);
+        createdNodesIndex.put(initialNode, initialNodeGroove);
+
+        GrooveNode activityDiagramNode = new GrooveNode(TYPE_ACTIVITY_DIAGRAM);
+        activityDiagramNode.addAttribute("running", false);
+        activityDiagramNode.addAttribute("name", activityDiagram.getName());
+        builder.addNode(activityDiagramNode);
+        builder.addEdge("start", activityDiagramNode, initialNodeGroove);
     }
 
     private void convertActionExpressions(
