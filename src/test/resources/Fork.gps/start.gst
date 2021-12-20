@@ -103,7 +103,7 @@
         </node>
         <edge from="n20" to="n20">
             <attr name="label">
-                <string>string:"Action1.1"</string>
+                <string>string:"Action1_1"</string>
             </attr>
         </edge>
         <edge from="n4" to="n20">
@@ -128,7 +128,7 @@
         </node>
         <edge from="n21" to="n21">
             <attr name="label">
-                <string>string:"Action1.2"</string>
+                <string>string:"Action1_2"</string>
             </attr>
         </edge>
         <edge from="n5" to="n21">

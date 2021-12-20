@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<ActivityDiagram> {
@@ -45,6 +46,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     private static final String TYPE_FINAL_NODE = TYPE + "FinalNode";
     private static final String TYPE_TOKEN = TYPE + "Token";
     private static final String TYPE_CONTROL_TOKEN = TYPE + "ControlToken";
+    private static final String TYPE_FORKED_TOKEN = TYPE + "ForkedToken";
     private static final String STRING = "string:";
     private static final String BOOL = "bool:";
     private static final String FALSE = BOOL + "false";
@@ -79,6 +81,8 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     private static final String OPERAND_1 = "1";
     private static final String OPERAND_2 = "2";
     private static final String TOKENS = "tokens";
+    private static final String BASE_TOKEN = "baseToken";
+    private static final String UNEQUALS = "!=";
 
     @Override
     public GrooveGraph generateStartGraph(ActivityDiagram activityDiagram, boolean addPrefix) {
@@ -377,7 +381,26 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
                 @Override
                 public void handle(ForkNode forkNode) {
+                    GrooveNode fork = ruleBuilder.contextNode(TYPE_FORK_NODE);
+                    GrooveNode inFlow = ruleBuilder.contextNode(TYPE_CONTROL_FLOW);
+                    ruleBuilder.contextEdge(TARGET, inFlow, fork);
 
+                    GrooveNode controlToken = ruleBuilder.contextNode(TYPE_CONTROL_TOKEN);
+                    ruleBuilder.deleteEdge(TOKENS, inFlow, controlToken);
+
+                    AtomicReference<GrooveNode> previousFlow = new AtomicReference<>();
+                    forkNode.getOutgoingFlows().forEach(controlFlow -> {
+                        GrooveNode outFlow = ruleBuilder.contextNode(TYPE_CONTROL_FLOW);
+                        ruleBuilder.contextEdge(SOURCE, outFlow, fork);
+                        if (previousFlow.get() != null) {
+                            ruleBuilder.contextEdge(UNEQUALS, previousFlow.get(), outFlow);
+                        }
+                        previousFlow.set(outFlow);
+
+                        GrooveNode forkedToken = ruleBuilder.addNode(TYPE_FORKED_TOKEN);
+                        ruleBuilder.addEdge(BASE_TOKEN, forkedToken, controlToken);
+                        ruleBuilder.addEdge(TOKENS, outFlow, forkedToken);
+                    });
                 }
 
                 @Override
@@ -396,6 +419,26 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
                 @Override
                 public void handle(JoinNode joinNode) {
+                    GrooveNode join = ruleBuilder.contextNode(TYPE_JOIN_NODE);
+                    GrooveNode outFlow = ruleBuilder.contextNode(TYPE_CONTROL_FLOW);
+                    ruleBuilder.contextEdge(SOURCE, outFlow, join);
+
+                    GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
+                    ruleBuilder.addEdge(TOKENS, outFlow, token);
+
+                    AtomicReference<GrooveNode> previousFlow = new AtomicReference<>();
+                    joinNode.getIncomingFlows().forEach(controlFlow -> {
+                        GrooveNode inFlow = ruleBuilder.contextNode(TYPE_CONTROL_FLOW);
+                        ruleBuilder.contextEdge(TARGET, inFlow, join);
+                        if (previousFlow.get() != null) {
+                            ruleBuilder.contextEdge(UNEQUALS, previousFlow.get(), inFlow);
+                        }
+                        previousFlow.set(inFlow);
+
+                        GrooveNode forkedToken = ruleBuilder.deleteNode(TYPE_FORKED_TOKEN);
+                        ruleBuilder.deleteEdge(TOKENS, inFlow, forkedToken);
+                        ruleBuilder.deleteEdge(BASE_TOKEN, forkedToken, token);
+                    });
 
                 }
 
