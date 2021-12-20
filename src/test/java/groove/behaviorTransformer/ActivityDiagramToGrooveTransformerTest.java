@@ -158,7 +158,6 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         IntegerVariable y = new IntegerVariable("y", 2);
         IntegerVariable diffVar = new IntegerVariable("diff", 0);
         BooleanVariable xEqualsX = new BooleanVariable("x equals x", false);
-        // TODO: add leq geq etc.
 
         BooleanVariable a = new BooleanVariable("A", true);
         BooleanVariable notA = new BooleanVariable("Not A", true);
@@ -172,21 +171,26 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
                 diffVar,
                 IntegerCalculationOperator.SUBTRACT);
         IntegerComparisonExpression x_equals_x = new IntegerComparisonExpression(x, x, xEqualsX, IntegerComparisonOperator.EQUALS);
+        IntegerComparisonExpression x_seq_x = new IntegerComparisonExpression(x, x, xEqualsX, IntegerComparisonOperator.SMALLER_EQUALS);
+        IntegerComparisonExpression x_smaller_x = new IntegerComparisonExpression(x, x, xEqualsX, IntegerComparisonOperator.SMALLER);
+        IntegerComparisonExpression x_geq_x = new IntegerComparisonExpression(x, x, xEqualsX, IntegerComparisonOperator.GREATER_EQUALS);
         BooleanUnaryExpression notAExp = new BooleanUnaryExpression(a, notA, BooleanUnaryOperator.NOT);
         BooleanBinaryExpression aAndBExp = new BooleanBinaryExpression(a, b, BooleanBinaryOperator.AND, aAndB);
         BooleanBinaryExpression aOrBxp = new BooleanBinaryExpression(a, b, BooleanBinaryOperator.OR, aOrB);
 
-        OpaqueAction action1 = new OpaqueAction("Action1", Lists.newArrayList(x_equals_x, diff, notAExp, aAndBExp, aOrBxp));
+        OpaqueAction action1 = new OpaqueAction(
+                "Action1",
+                Lists.newArrayList(x_equals_x, diff, notAExp, aAndBExp, aOrBxp, x_seq_x, x_smaller_x, x_geq_x));
         ActivityFinalNode finalNode = new ActivityFinalNode("final");
 
         ActivityDiagram activityDiagram = builder.setName("Exps")
-                                                 .setInitialNode(initNode)
-                                                 .createControlFlow("", initNode, action1)
-                                                 .createControlFlow("", action1, finalNode)
-                                                 .addLocalVariable(x)
-                                                 .addLocalVariable(y)
-                                                 .addLocalVariable(a)
-                                                 .addLocalVariable(notA)
+                .setInitialNode(initNode)
+                .createControlFlow("", initNode, action1)
+                .createControlFlow("", action1, finalNode)
+                .addLocalVariable(x)
+                .addLocalVariable(y)
+                .addLocalVariable(a)
+                .addLocalVariable(notA)
                                                  .addLocalVariable(b)
                                                  .addLocalVariable(aAndB)
                                                  .addLocalVariable(xEqualsX)
