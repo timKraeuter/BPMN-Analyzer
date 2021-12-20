@@ -42,7 +42,7 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
                 .createControlFlow("", action2, finalNode)
                 .build();
 
-        this.checkGrooveGeneration(activityDiagram);
+        this.checkGrooveGeneration(activityDiagram, false, x -> x.equals("type.gty"));
     }
 
     /**

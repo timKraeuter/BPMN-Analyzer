@@ -19,7 +19,11 @@ import groove.graph.GrooveGraph;
 import groove.graph.GrooveGraphBuilder;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveGraphRule;
+import groove.graph.rule.GrooveRuleBuilder;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -30,6 +34,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
     // Possible node labels.
     private static final String TYPE_INITIAL_NODE = TYPE + "InitialNode";
+    private static final String TYPE_ACTIVITY_NODE = TYPE + "ActivityNode";
     private static final String TYPE_ACTIVITY_DIAGRAM = TYPE + "ActivityDiagram";
     private static final String TYPE_CONTROL_FLOW = TYPE + "ControlFlow";
     private static final String TYPE_OPAQUE_ACTION = TYPE + "OpaqueAction";
@@ -38,6 +43,12 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     private static final String TYPE_DECISION_NODE = TYPE + "DecisionNode";
     private static final String TYPE_MERGE_NODE = TYPE + "MergeNode";
     private static final String TYPE_FINAL_NODE = TYPE + "FinalNode";
+    private static final String TYPE_TOKEN = TYPE + "Token";
+    private static final String TYPE_CONTROL_TOKEN = TYPE + "ControlToken";
+    private static final String STRING = "string:";
+    private static final String BOOL = "bool:";
+    private static final String FALSE = BOOL + "false";
+    private static final String TRUE = BOOL + "true";
 
     private static final String TYPE_INTEGER_VALUE = TYPE + "IntegerValue";
     private static final String TYPE_SUM = TYPE + "Sum";
@@ -67,6 +78,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     private static final String ASSIGNEE = "assignee";
     private static final String OPERAND_1 = "1";
     private static final String OPERAND_2 = "2";
+    private static final String TOKENS = "tokens";
 
     @Override
     public GrooveGraph generateStartGraph(ActivityDiagram activityDiagram, boolean addPrefix) {
@@ -350,7 +362,127 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
     @Override
     public Stream<GrooveGraphRule> generateRules(ActivityDiagram activityDiagram, boolean addPrefix) {
-        // TODO: implement!
-        return Stream.of();
+        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(activityDiagram, addPrefix);
+
+        this.addStartRule(activityDiagram, ruleBuilder);
+
+        activityDiagram.getNodes().forEach(activityNode -> {
+            ruleBuilder.startRule(activityNode.getName());
+            activityNode.accept(new ActivityNodeVisitor() {
+                @Override
+                public void handle(DecisionNode decisionNode) {
+
+                }
+
+                @Override
+                public void handle(ForkNode forkNode) {
+
+                }
+
+                @Override
+                public void handle(InitialNode initialNode) {
+                    GrooveNode initNode = ruleBuilder.contextNode(TYPE_INITIAL_NODE);
+                    GrooveNode controlFlowNode = ruleBuilder.contextNode(TYPE_CONTROL_FLOW);
+                    ruleBuilder.contextEdge(SOURCE, controlFlowNode, initNode);
+
+                    GrooveNode activityNode = ruleBuilder.contextNode(TYPE_ACTIVITY_NODE);
+                    ruleBuilder.contextEdge(TARGET, controlFlowNode, activityNode);
+
+                    GrooveNode tokenNode = ruleBuilder.contextNode(TYPE_TOKEN);
+                    ruleBuilder.deleteEdge(TOKENS, initNode, tokenNode);
+                    ruleBuilder.addEdge(TOKENS, controlFlowNode, tokenNode);
+                }
+
+                @Override
+                public void handle(JoinNode joinNode) {
+
+                }
+
+                @Override
+                public void handle(MergeNode mergeNode) {
+
+                }
+
+                @Override
+                public void handle(OpaqueAction opaqueAction) {
+                    GrooveNode action = ruleBuilder.contextNode(TYPE_OPAQUE_ACTION);
+                    GrooveNode actionName = ruleBuilder.contextNode(
+                            ActivityDiagramToGrooveTransformer.this.createStringNodeLabel(opaqueAction.getName()));
+                    ruleBuilder.contextEdge("name", action, actionName);
+
+                    GrooveNode inFlow = ruleBuilder.contextNode(TYPE_CONTROL_FLOW);
+                    ruleBuilder.contextEdge(TARGET, inFlow, action);
+
+                    GrooveNode outFlow = ruleBuilder.contextNode(TYPE_CONTROL_FLOW);
+                    ruleBuilder.contextEdge(SOURCE, outFlow, action);
+
+                    GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
+                    ruleBuilder.deleteEdge(TOKENS, inFlow, token);
+                    ruleBuilder.addEdge(TOKENS, outFlow, token);
+                }
+
+                @Override
+                public void handle(ActivityFinalNode activityFinalNode) {
+                    GrooveNode activityDiagramNode = ActivityDiagramToGrooveTransformer.this.createDiagramNodeWithName(ruleBuilder, activityDiagram);
+
+                    ruleBuilder.addEdge("running", activityDiagramNode, ruleBuilder.contextNode(FALSE));
+                    ruleBuilder.deleteEdge("running", activityDiagramNode, ruleBuilder.contextNode(TRUE));
+
+                    GrooveNode flowNode = ruleBuilder.contextNode(TYPE_CONTROL_FLOW);
+                    GrooveNode finalNode = ruleBuilder.contextNode(TYPE_FINAL_NODE);
+                    GrooveNode tokenNode = ruleBuilder.deleteNode(TYPE_TOKEN);
+
+                    ruleBuilder.contextEdge(TARGET, flowNode, finalNode);
+                    ruleBuilder.deleteEdge(TOKENS, flowNode, tokenNode);
+
+                }
+            });
+            ruleBuilder.buildRule();
+        });
+
+        return ruleBuilder.getRules();
+    }
+
+    private GrooveNode createDiagramNodeWithName(GrooveRuleBuilder ruleBuilder, ActivityDiagram activityDiagram) {
+        GrooveNode activityDiagramNode = ruleBuilder.contextNode(TYPE_ACTIVITY_DIAGRAM);
+        GrooveNode diagramName = ruleBuilder.contextNode(this.createStringNodeLabel(activityDiagram.getName()));
+        ruleBuilder.contextEdge("name", activityDiagramNode, diagramName);
+        return activityDiagramNode;
+    }
+
+    private String createStringNodeLabel(String stringValue) {
+        return String.format("%s\"%s\"", STRING, stringValue);
+    }
+
+    private void addStartRule(ActivityDiagram activityDiagram, GrooveRuleBuilder ruleBuilder) {
+        ruleBuilder.startRule(String.format("%s_start", activityDiagram.getName()));
+
+        GrooveNode activityDiagramNode = this.createDiagramNodeWithName(ruleBuilder, activityDiagram);
+
+        GrooveNode falseNode = ruleBuilder.contextNode(FALSE);
+        GrooveNode trueNode = ruleBuilder.contextNode(TRUE);
+        ruleBuilder.deleteEdge("running", activityDiagramNode, falseNode);
+        ruleBuilder.addEdge("running", activityDiagramNode, trueNode);
+
+        GrooveNode initNode = ruleBuilder.contextNode(TYPE_INITIAL_NODE);
+        ruleBuilder.contextEdge("start", activityDiagramNode, initNode);
+        GrooveNode token = ruleBuilder.addNode(TYPE_CONTROL_TOKEN);
+        ruleBuilder.addEdge(TOKENS, initNode, token);
+
+        ruleBuilder.buildRule();
+    }
+
+    @Override
+    public void generateAndWriteRulesFurther(ActivityDiagram activityDiagram, boolean addPrefix, File targetFolder) {
+        this.copyTypeGraph(targetFolder);
+    }
+
+    private void copyTypeGraph(File targetFolder) {
+        File sourceDirectory = new File(this.getClass().getResource("/ActivityDiagram").getFile());
+        try {
+            FileUtils.copyDirectory(sourceDirectory, targetFolder);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

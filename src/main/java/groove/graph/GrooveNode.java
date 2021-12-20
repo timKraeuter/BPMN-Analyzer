@@ -59,4 +59,9 @@ public class GrooveNode implements Node {
     public void addAttribute(String name, boolean value) {
         this.attributes.put(name, new BooleanValue(value));
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

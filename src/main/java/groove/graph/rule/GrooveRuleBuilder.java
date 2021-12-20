@@ -128,7 +128,7 @@ public class GrooveRuleBuilder implements GraphRuleGenerator {
     @Override
     public void deleteEdge(String edgeName, Node source, Node target) {
         assert this.currentRule != null;
-        Map<String, GrooveNode> contextAndAddedNodes = this.currentRule.getContextAndAddedNodes();
+        Map<String, GrooveNode> contextAndAddedNodes = this.currentRule.getAllNodes();
 
         GrooveNode sourceNode = contextAndAddedNodes.get(source.getId());
         GrooveNode targetNode = contextAndAddedNodes.get(target.getId());

@@ -35,6 +35,11 @@ public interface GrooveTransformer<SOURCE extends Behavior> {
     default void generateAndWriteRules(SOURCE source, boolean addPrefix, File targetFolder) {
         Stream<GrooveGraphRule> rules = this.generateRules(source, addPrefix);
         GrooveRuleWriter.writeRules(rules, targetFolder);
+        this.generateAndWriteRulesFurther(source, addPrefix, targetFolder);
+    }
+
+    default void generateAndWriteRulesFurther(SOURCE source, boolean addPrefix, File targetFolder) {
+        // to be overridden if needed
     }
 
 }

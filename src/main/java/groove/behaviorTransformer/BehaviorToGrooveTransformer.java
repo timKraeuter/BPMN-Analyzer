@@ -165,7 +165,9 @@ public class BehaviorToGrooveTransformer {
 
         transformer.generateAndWriteRules(activityDiagram, false, graphGrammarSubFolder);
 
-        this.generatePropertiesFile(graphGrammarSubFolder, START, Maps.newHashMap());
+        final Map<String, String> additionalProperties = Maps.newHashMap();
+        additionalProperties.put("typeGraph", "type");
+        this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
     }
 
     private void generateGrooveGrammarForPiProcess(NamedPiProcess piProcess, File grooveDir, boolean addPrefix) {
@@ -199,7 +201,6 @@ public class BehaviorToGrooveTransformer {
         PNToGrooveTransformer transformer = new PNToGrooveTransformer();
 
         // Generate start graph
-        // TODO: Should accept a potential prefix!
         transformer.generateAndWriteStartGraph(petriNet, addPrefix, graphGrammarSubFolder);
 
         // Generate rules

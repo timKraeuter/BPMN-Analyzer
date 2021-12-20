@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="Action2" role="rule" edgeids="false" edgemode="directed">
+        <node id="n27">
+            <attr name="layout">
+                <string>342 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n27" to="n27">
+            <attr name="label">
+                <string>type:OpaqueAction</string>
+            </attr>
+        </edge>
+        <node id="n28">
+            <attr name="layout">
+                <string>617 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n28" to="n28">
+            <attr name="label">
+                <string>string:"Action2"</string>
+            </attr>
+        </edge>
+        <node id="n29">
+            <attr name="layout">
+                <string>62 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n29" to="n29">
+            <attr name="label">
+                <string>type:ControlFlow</string>
+            </attr>
+        </edge>
+        <node id="n30">
+            <attr name="layout">
+                <string>62 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n30" to="n30">
+            <attr name="label">
+                <string>type:ControlFlow</string>
+            </attr>
+        </edge>
+        <node id="n31">
+            <attr name="layout">
+                <string>342 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n31" to="n31">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n30" to="n31">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n29" to="n31">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n27" to="n28">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n29" to="n27">
+            <attr name="label">
+                <string>target</string>
+            </attr>
+        </edge>
+        <edge from="n30" to="n27">
+            <attr name="label">
+                <string>source</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>
