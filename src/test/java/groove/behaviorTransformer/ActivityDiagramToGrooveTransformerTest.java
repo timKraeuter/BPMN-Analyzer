@@ -36,11 +36,11 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         ActivityFinalNode finalNode = new ActivityFinalNode("final");
 
         ActivityDiagram activityDiagram = builder.setName("Activity")
-                                                 .setInitialNode(initNode)
-                                                 .createControlFlow("", initNode, action1)
-                                                 .createControlFlow("", action1, action2)
-                                                 .createControlFlow("", action2, finalNode)
-                                                 .build();
+                .setInitialNode(initNode)
+                .createControlFlow("", initNode, action1)
+                .createControlFlow("", action1, action2)
+                .createControlFlow("", action2, finalNode)
+                .build();
 
         this.checkGrooveGeneration(activityDiagram);
     }
@@ -64,16 +64,16 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         ActivityFinalNode finalNode = new ActivityFinalNode("final");
 
         ActivityDiagram activityDiagram = builder.setName("Decision")
-                                                 .setInitialNode(initNode)
-                                                 .createControlFlow("", initNode, action1)
-                                                 .createControlFlow("", action1, decisionNode)
-                                                 .createControlFlow("", decisionNode, action1_1)
-                                                 .createControlFlow("", decisionNode, action1_2)
-                                                 .createControlFlow("", action1_1, mergeNode)
-                                                 .createControlFlow("", action1_2, mergeNode)
-                                                 .createControlFlow("", mergeNode, action2)
-                                                 .createControlFlow("", action2, finalNode)
-                                                 .build();
+                .setInitialNode(initNode)
+                .createControlFlow("", initNode, action1)
+                .createControlFlow("", action1, decisionNode)
+                .createControlFlow("", decisionNode, action1_1)
+                .createControlFlow("", decisionNode, action1_2)
+                .createControlFlow("", action1_1, mergeNode)
+                .createControlFlow("", action1_2, mergeNode)
+                .createControlFlow("", mergeNode, action2)
+                .createControlFlow("", action2, finalNode)
+                .build();
 
         this.checkGrooveGeneration(activityDiagram);
     }
@@ -97,16 +97,16 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         ActivityFinalNode finalNode = new ActivityFinalNode("final");
 
         ActivityDiagram activityDiagram = builder.setName("Fork")
-                                                 .setInitialNode(initNode)
-                                                 .createControlFlow("", initNode, action1)
-                                                 .createControlFlow("", action1, forkNode)
-                                                 .createControlFlow("", forkNode, action1_1)
-                                                 .createControlFlow("", forkNode, action1_2)
-                                                 .createControlFlow("", action1_1, joinNode)
-                                                 .createControlFlow("", action1_2, joinNode)
-                                                 .createControlFlow("", joinNode, action2)
-                                                 .createControlFlow("", action2, finalNode)
-                                                 .build();
+                .setInitialNode(initNode)
+                .createControlFlow("", initNode, action1)
+                .createControlFlow("", action1, forkNode)
+                .createControlFlow("", forkNode, action1_1)
+                .createControlFlow("", forkNode, action1_2)
+                .createControlFlow("", action1_1, joinNode)
+                .createControlFlow("", action1_2, joinNode)
+                .createControlFlow("", joinNode, action2)
+                .createControlFlow("", action2, finalNode)
+                .build();
 
         this.checkGrooveGeneration(activityDiagram);
     }
@@ -134,14 +134,14 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         ActivityFinalNode finalNode = new ActivityFinalNode("final");
 
         ActivityDiagram activityDiagram = builder.setName("Vars")
-                                                 .setInitialNode(initNode)
-                                                 .createControlFlow("", initNode, action1)
-                                                 .createControlFlow("", action1, action2)
-                                                 .createControlFlow("", action2, finalNode)
-                                                 .addLocalVariable(x)
-                                                 .addLocalVariable(y)
-                                                 .addLocalVariable(sumVar)
-                                                 .build();
+                .setInitialNode(initNode)
+                .createControlFlow("", initNode, action1)
+                .createControlFlow("", action1, action2)
+                .createControlFlow("", action2, finalNode)
+                .addLocalVariable(x)
+                .addLocalVariable(y)
+                .addLocalVariable(sumVar)
+                .build();
 
         this.checkGrooveGeneration(activityDiagram);
     }
@@ -191,21 +191,69 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
                 .addLocalVariable(y)
                 .addLocalVariable(a)
                 .addLocalVariable(notA)
-                                                 .addLocalVariable(b)
-                                                 .addLocalVariable(aAndB)
-                                                 .addLocalVariable(xEqualsX)
-                                                 .addLocalVariable(aOrB)
-                                                 .addLocalVariable(diffVar)
-                                                 .build();
+                .addLocalVariable(b)
+                .addLocalVariable(aAndB)
+                .addLocalVariable(xEqualsX)
+                .addLocalVariable(aOrB)
+                .addLocalVariable(diffVar)
+                .build();
 
         this.checkGrooveGeneration(activityDiagram);
     }
 
     /**
-     * TODO: add picture and describe.
+     * TODO: add picture.
      */
     @Test
     void testTTCExample() throws IOException {
+        BooleanVariable not_internal = new BooleanVariable("not internal", false);
+        BooleanVariable internal = new BooleanVariable("internal", false);
+        BooleanUnaryExpression notInternalExp = new BooleanUnaryExpression(
+                not_internal,
+                internal,
+                BooleanUnaryOperator.NOT);
 
+        ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
+        InitialNode initNode = new InitialNode("initial");
+        OpaqueAction register = new OpaqueAction("register", Lists.newArrayList(notInternalExp));
+        DecisionNode decisionNode = new DecisionNode("");
+
+        OpaqueAction get_welcome_package = new OpaqueAction("get welcome package", Lists.newArrayList());
+        OpaqueAction assign_to_project_external = new OpaqueAction("assign to project external", Lists.newArrayList());
+        ForkNode forkNode = new ForkNode("");
+
+        OpaqueAction add_to_website = new OpaqueAction("add to website", Lists.newArrayList());
+        OpaqueAction assign_to_project = new OpaqueAction("assign to project", Lists.newArrayList());
+
+        JoinNode joinNode = new JoinNode("");
+        OpaqueAction manager_interview = new OpaqueAction("manager interview", Lists.newArrayList());
+        OpaqueAction manager_report = new OpaqueAction("manager report", Lists.newArrayList());
+
+        MergeNode mergeNode = new MergeNode("");
+        OpaqueAction authorize_payment = new OpaqueAction("authorize payment", Lists.newArrayList());
+        ActivityFinalNode finalNode = new ActivityFinalNode("final");
+
+        ActivityDiagram ttc_workflow = builder.setInitialNode(initNode)
+                .setName("TTC_Workflow")
+                .createControlFlow("", initNode, register)
+                .createControlFlow("", register, decisionNode)
+                .createControlFlow("", decisionNode, assign_to_project_external)
+                .createControlFlow("", assign_to_project_external, mergeNode)
+                .createControlFlow("", decisionNode, get_welcome_package)
+                .createControlFlow("", get_welcome_package, forkNode)
+                .createControlFlow("", forkNode, add_to_website)
+                .createControlFlow("", forkNode, assign_to_project)
+                .createControlFlow("", add_to_website, joinNode)
+                .createControlFlow("", assign_to_project, joinNode)
+                .createControlFlow("", joinNode, manager_interview)
+                .createControlFlow("", manager_interview, manager_report)
+                .createControlFlow("", manager_report, mergeNode)
+                .createControlFlow("", mergeNode, authorize_payment)
+                .createControlFlow("", authorize_payment, finalNode)
+                .addLocalVariable(not_internal)
+                .addInputVariable(internal)
+                .build();
+
+        this.checkGrooveGeneration(ttc_workflow);
     }
 }

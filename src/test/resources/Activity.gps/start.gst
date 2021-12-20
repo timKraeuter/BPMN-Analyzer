@@ -3,7 +3,7 @@
     <graph id="Activity_start" role="rule" edgeids="false" edgemode="directed">
         <node id="n0">
             <attr name="layout">
-                <string>382 152 0 0</string>
+                <string>392 312 0 0</string>
             </attr>
         </node>
         <edge from="n0" to="n0">
@@ -13,7 +13,7 @@
         </edge>
         <node id="n1">
             <attr name="layout">
-                <string>62 80 0 0</string>
+                <string>62 333 0 0</string>
             </attr>
         </node>
         <edge from="n1" to="n1">
@@ -23,7 +23,7 @@
         </edge>
         <node id="n8">
             <attr name="layout">
-                <string>382 72 0 0</string>
+                <string>392 392 0 0</string>
             </attr>
         </node>
         <edge from="n8" to="n8">
@@ -36,9 +36,24 @@
                 <string>running</string>
             </attr>
         </edge>
+        <node id="n9">
+            <attr name="layout">
+                <string>392 472 0 0</string>
+            </attr>
+        </node>
+        <edge from="n9" to="n9">
+            <attr name="label">
+                <string>string:"Activity"</string>
+            </attr>
+        </edge>
+        <edge from="n1" to="n9">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
         <node id="n2">
             <attr name="layout">
-                <string>382 232 0 0</string>
+                <string>392 232 0 0</string>
             </attr>
         </node>
         <edge from="n2" to="n2">
@@ -46,24 +61,24 @@
                 <string>type:OpaqueAction</string>
             </attr>
         </edge>
-        <node id="n9">
+        <node id="n10">
             <attr name="layout">
-                <string>657 232 0 0</string>
+                <string>667 232 0 0</string>
             </attr>
         </node>
-        <edge from="n9" to="n9">
+        <edge from="n10" to="n10">
             <attr name="label">
                 <string>string:"Action1"</string>
             </attr>
         </edge>
-        <edge from="n2" to="n9">
+        <edge from="n2" to="n10">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
         <node id="n3">
             <attr name="layout">
-                <string>382 312 0 0</string>
+                <string>392 152 0 0</string>
             </attr>
         </node>
         <edge from="n3" to="n3">
@@ -71,24 +86,24 @@
                 <string>type:OpaqueAction</string>
             </attr>
         </edge>
-        <node id="n10">
+        <node id="n11">
             <attr name="layout">
-                <string>657 312 0 0</string>
+                <string>667 152 0 0</string>
             </attr>
         </node>
-        <edge from="n10" to="n10">
+        <edge from="n11" to="n11">
             <attr name="label">
                 <string>string:"Action2"</string>
             </attr>
         </edge>
-        <edge from="n3" to="n10">
+        <edge from="n3" to="n11">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
         <node id="n4">
             <attr name="layout">
-                <string>382 392 0 0</string>
+                <string>392 72 0 0</string>
             </attr>
         </node>
         <edge from="n4" to="n4">
@@ -98,7 +113,7 @@
         </edge>
         <node id="n5">
             <attr name="layout">
-                <string>122 169 0 0</string>
+                <string>122 249 0 0</string>
             </attr>
         </node>
         <edge from="n5" to="n5">
@@ -108,7 +123,7 @@
         </edge>
         <node id="n6">
             <attr name="layout">
-                <string>122 249 0 0</string>
+                <string>122 169 0 0</string>
             </attr>
         </node>
         <edge from="n6" to="n6">
@@ -118,7 +133,7 @@
         </edge>
         <node id="n7">
             <attr name="layout">
-                <string>122 329 0 0</string>
+                <string>122 80 0 0</string>
             </attr>
         </node>
         <edge from="n7" to="n7">

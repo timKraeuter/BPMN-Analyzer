@@ -83,6 +83,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
         // Create activity diagram node in groove
         GrooveNode activityDiagramNode = new GrooveNode(TYPE_ACTIVITY_DIAGRAM);
         activityDiagramNode.addAttribute("running", false);
+        activityDiagramNode.addAttribute("name", activityDiagram.getName());
         builder.addNode(activityDiagramNode);
         builder.addEdge("start", activityDiagramNode, initialNodeGroove);
 
