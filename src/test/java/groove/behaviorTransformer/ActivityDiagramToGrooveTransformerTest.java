@@ -206,5 +206,6 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
      */
     @Test
     void testTTCExample() throws IOException {
+
     }
 }
