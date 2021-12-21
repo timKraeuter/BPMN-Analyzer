@@ -143,7 +143,7 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
                 .addLocalVariable(sumVar)
                 .build();
 
-        this.checkGrooveGeneration(activityDiagram);
+        this.checkGrooveGeneration(activityDiagram, false, fileName -> fileName.equals("type.gty"));
     }
 
     /**
@@ -158,6 +158,10 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         IntegerVariable y = new IntegerVariable("y", 2);
         IntegerVariable diffVar = new IntegerVariable("diff", 0);
         BooleanVariable xEqualsX = new BooleanVariable("x equals x", false);
+        BooleanVariable xSeqX = new BooleanVariable("x smaller equals x", false);
+        BooleanVariable xSmallerX = new BooleanVariable("x smaller x", false);
+        BooleanVariable xGeqX = new BooleanVariable("x greater equals x", false);
+        BooleanVariable xGreaterX = new BooleanVariable("x greater x", false);
 
         BooleanVariable a = new BooleanVariable("A", true);
         BooleanVariable notA = new BooleanVariable("Not A", true);
@@ -171,16 +175,17 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
                 diffVar,
                 IntegerCalculationOperator.SUBTRACT);
         IntegerComparisonExpression x_equals_x = new IntegerComparisonExpression(x, x, xEqualsX, IntegerComparisonOperator.EQUALS);
-        IntegerComparisonExpression x_seq_x = new IntegerComparisonExpression(x, x, xEqualsX, IntegerComparisonOperator.SMALLER_EQUALS);
-        IntegerComparisonExpression x_smaller_x = new IntegerComparisonExpression(x, x, xEqualsX, IntegerComparisonOperator.SMALLER);
-        IntegerComparisonExpression x_geq_x = new IntegerComparisonExpression(x, x, xEqualsX, IntegerComparisonOperator.GREATER_EQUALS);
+        IntegerComparisonExpression x_seq_x = new IntegerComparisonExpression(x, x, xSeqX, IntegerComparisonOperator.SMALLER_EQUALS);
+        IntegerComparisonExpression x_smaller_x = new IntegerComparisonExpression(x, x, xSmallerX, IntegerComparisonOperator.SMALLER);
+        IntegerComparisonExpression x_geq_x = new IntegerComparisonExpression(x, x, xGeqX, IntegerComparisonOperator.GREATER_EQUALS);
+        IntegerComparisonExpression x_greater_x = new IntegerComparisonExpression(x, x, xGreaterX, IntegerComparisonOperator.GREATER);
         BooleanUnaryExpression notAExp = new BooleanUnaryExpression(a, notA, BooleanUnaryOperator.NOT);
         BooleanBinaryExpression aAndBExp = new BooleanBinaryExpression(a, b, BooleanBinaryOperator.AND, aAndB);
         BooleanBinaryExpression aOrBxp = new BooleanBinaryExpression(a, b, BooleanBinaryOperator.OR, aOrB);
 
         OpaqueAction action1 = new OpaqueAction(
                 "Action1",
-                Lists.newArrayList(x_equals_x, diff, notAExp, aAndBExp, aOrBxp, x_seq_x, x_smaller_x, x_geq_x));
+                Lists.newArrayList(x_equals_x, diff, notAExp, aAndBExp, aOrBxp, x_seq_x, x_smaller_x, x_geq_x, x_greater_x));
         ActivityFinalNode finalNode = new ActivityFinalNode("final");
 
         ActivityDiagram activityDiagram = builder.setName("Exps")
@@ -194,11 +199,15 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
                 .addLocalVariable(b)
                 .addLocalVariable(aAndB)
                 .addLocalVariable(xEqualsX)
+                .addLocalVariable(xGeqX)
+                .addLocalVariable(xGreaterX)
+                .addLocalVariable(xSmallerX)
+                .addLocalVariable(xSeqX)
                 .addLocalVariable(aOrB)
                 .addLocalVariable(diffVar)
                 .build();
 
-        this.checkGrooveGeneration(activityDiagram);
+        this.checkGrooveGeneration(activityDiagram, false, fileName -> fileName.equals("type.gty"));
     }
 
     /**

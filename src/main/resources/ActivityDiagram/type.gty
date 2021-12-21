@@ -126,7 +126,7 @@
         </node>
         <node id="n24">
             <attr name="layout">
-                <string>423 516 100 36</string>
+                <string>423 507 100 54</string>
             </attr>
         </node>
         <node id="n25">
@@ -151,7 +151,7 @@
         </node>
         <node id="n29">
             <attr name="layout">
-                <string>1245 166 40 18</string>
+                <string>1266 164 40 18</string>
             </attr>
         </node>
         <node id="n30">
@@ -162,6 +162,11 @@
         <node id="n31">
             <attr name="layout">
                 <string>1338 160 85 18</string>
+            </attr>
+        </node>
+        <node id="n32">
+            <attr name="layout">
+                <string>1312 226 45 18</string>
             </attr>
         </node>
         <edge from="n6" to="n6">
@@ -199,14 +204,14 @@
                 <string>type:BooleanExpression</string>
             </attr>
         </edge>
-        <edge from="n11" to="n1">
-            <attr name="label">
-                <string>sub:</string>
-            </attr>
-        </edge>
         <edge from="n11" to="n7">
             <attr name="label">
                 <string>assignee</string>
+            </attr>
+        </edge>
+        <edge from="n11" to="n1">
+            <attr name="label">
+                <string>sub:</string>
             </attr>
         </edge>
         <edge from="n5" to="n5">
@@ -214,14 +219,14 @@
                 <string>type:Not</string>
             </attr>
         </edge>
-        <edge from="n5" to="n11">
-            <attr name="label">
-                <string>sub:</string>
-            </attr>
-        </edge>
         <edge from="n5" to="n7">
             <attr name="label">
                 <string>1</string>
+            </attr>
+        </edge>
+        <edge from="n5" to="n11">
+            <attr name="label">
+                <string>sub:</string>
             </attr>
         </edge>
         <edge from="n4" to="n4">
@@ -304,14 +309,14 @@
                 <string>type:SetVariableExpression</string>
             </attr>
         </edge>
-        <edge from="n2" to="n7">
-            <attr name="label">
-                <string>var</string>
-            </attr>
-        </edge>
         <edge from="n2" to="n1">
             <attr name="label">
                 <string>sub:</string>
+            </attr>
+        </edge>
+        <edge from="n2" to="n7">
+            <attr name="label">
+                <string>var</string>
             </attr>
         </edge>
         <edge from="n2" to="n8">
@@ -564,11 +569,6 @@
                 <string>type:BinaryBooleanExpression</string>
             </attr>
         </edge>
-        <edge from="n28" to="n11">
-            <attr name="label">
-                <string>sub:</string>
-            </attr>
-        </edge>
         <edge from="n28" to="n7">
             <attr name="label">
                 <string>1</string>
@@ -577,6 +577,11 @@
         <edge from="n28" to="n7">
             <attr name="label">
                 <string>2</string>
+            </attr>
+        </edge>
+        <edge from="n28" to="n11">
+            <attr name="label">
+                <string>sub:</string>
             </attr>
         </edge>
         <edge from="n29" to="n29">
@@ -605,6 +610,16 @@
             </attr>
         </edge>
         <edge from="n31" to="n9">
+            <attr name="label">
+                <string>sub:</string>
+            </attr>
+        </edge>
+        <edge from="n32" to="n32">
+            <attr name="label">
+                <string>type:Greater</string>
+            </attr>
+        </edge>
+        <edge from="n32" to="n9">
             <attr name="label">
                 <string>sub:</string>
             </attr>

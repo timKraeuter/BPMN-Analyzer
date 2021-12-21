@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="final" role="rule" edgeids="false" edgemode="directed">
+        <node id="n222">
+            <attr name="layout">
+                <string>322 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n222" to="n222">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n222" to="n222">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n216">
+            <attr name="layout">
+                <string>62 255 0 0</string>
+            </attr>
+        </node>
+        <edge from="n216" to="n216">
+            <attr name="label">
+                <string>type:ActivityDiagram</string>
+            </attr>
+        </edge>
+        <node id="n217">
+            <attr name="layout">
+                <string>392 402 0 0</string>
+            </attr>
+        </node>
+        <edge from="n217" to="n217">
+            <attr name="label">
+                <string>string:"Exps"</string>
+            </attr>
+        </edge>
+        <node id="n218">
+            <attr name="layout">
+                <string>392 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n218" to="n218">
+            <attr name="label">
+                <string>bool:false</string>
+            </attr>
+        </edge>
+        <node id="n219">
+            <attr name="layout">
+                <string>392 322 0 0</string>
+            </attr>
+        </node>
+        <edge from="n219" to="n219">
+            <attr name="label">
+                <string>bool:true</string>
+            </attr>
+        </edge>
+        <node id="n220">
+            <attr name="layout">
+                <string>62 90 0 0</string>
+            </attr>
+        </node>
+        <edge from="n220" to="n220">
+            <attr name="label">
+                <string>type:ControlFlow</string>
+            </attr>
+        </edge>
+        <node id="n221">
+            <attr name="layout">
+                <string>322 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n221" to="n221">
+            <attr name="label">
+                <string>type:FinalNode</string>
+            </attr>
+        </edge>
+        <edge from="n216" to="n218">
+            <attr name="label">
+                <string>new:running</string>
+            </attr>
+        </edge>
+        <edge from="n216" to="n219">
+            <attr name="label">
+                <string>del:running</string>
+            </attr>
+        </edge>
+        <edge from="n220" to="n222">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n216" to="n217">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n220" to="n221">
+            <attr name="label">
+                <string>target</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

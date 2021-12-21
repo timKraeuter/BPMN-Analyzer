@@ -92,6 +92,10 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     private static final String ARG_1 = "arg:1";
     private static final String INT_ADD = "int:add";
     private static final String INT_SUB = "int:sub";
+    private static final String PROD = "prod:";
+    private static final String BOOL_NOT = "bool:not";
+    private static final String BOOL_AND = "bool:and";
+    private static final String BOOL_OR = "bool:or";
 
     @Override
     public GrooveGraph generateStartGraph(ActivityDiagram activityDiagram, boolean addPrefix) {
@@ -547,7 +551,6 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                 GrooveNode operand2ValueInt = ruleBuilder.contextNode(INT);
                 ruleBuilder.contextEdge(VALUE, operand2Value, operand2ValueInt);
 
-
                 // Assignee
                 GrooveNode assigneeVar = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
                         integerCalculationExpression.getNameOfAssignee(),
@@ -560,7 +563,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                 ruleBuilder.addEdge(VALUE, assigneeValue, newAssigneeValue);
 
                 // Groove operator for calculation
-                GrooveNode operatorNode = ruleBuilder.contextNode("prod:");
+                GrooveNode operatorNode = ruleBuilder.contextNode(PROD);
                 ruleBuilder.contextEdge(ARG_0, operatorNode, operand1ValueInt);
                 ruleBuilder.contextEdge(ARG_1, operatorNode, operand2ValueInt);
                 ruleBuilder.contextEdge(grooveOperator, operatorNode, newAssigneeValue);
@@ -573,17 +576,165 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
             @Override
             public void handle(IntegerComparisonExpression integerComparisonExpression) {
+                GrooveNode exp = null;
+                String grooveOperator = "";
+                switch (integerComparisonExpression.getOperator()) {
+                    case SMALLER:
+                        exp = ruleBuilder.deleteNode(TYPE_SMALLER);
+                        grooveOperator = "int:lt";
+                        break;
+                    case SMALLER_EQUALS:
+                        exp = ruleBuilder.deleteNode(TYPE_SMALLER_EQUALS);
+                        grooveOperator = "int:le";
+                        break;
+                    case EQUALS:
+                        exp = ruleBuilder.deleteNode(TYPE_EQUALS);
+                        grooveOperator = "int:eq";
+                        break;
+                    case GREATER_EQUALS:
+                        exp = ruleBuilder.deleteNode(TYPE_GREATER_EQUALS);
+                        grooveOperator = "int:ge";
+                        break;
+                    case GREATER:
+                        exp = ruleBuilder.deleteNode(TYPE_GREATER);
+                        grooveOperator = "int:gt";
+                        break;
+                }
+                ruleBuilder.deleteEdge(EXP, action, exp);
+
+                // Operand 1
+                GrooveNode operand1Var = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
+                        integerComparisonExpression.getNameOfOperand1(),
+                        ruleBuilder);
+                GrooveNode operand1Value = ruleBuilder.contextNode(TYPE_INTEGER_VALUE);
+                ruleBuilder.contextEdge(VALUE, operand1Var, operand1Value);
+                GrooveNode operand1ValueInt = ruleBuilder.contextNode(INT);
+                ruleBuilder.contextEdge(VALUE, operand1Value, operand1ValueInt);
+
+                // Operand 2
+                GrooveNode operand2Var = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
+                        integerComparisonExpression.getNameOfOperand2(),
+                        ruleBuilder);
+                GrooveNode operand2Value = ruleBuilder.contextNode(TYPE_INTEGER_VALUE);
+                ruleBuilder.contextEdge(VALUE, operand2Var, operand2Value);
+                GrooveNode operand2ValueInt = ruleBuilder.contextNode(INT);
+                ruleBuilder.contextEdge(VALUE, operand2Value, operand2ValueInt);
+
+                // Assignee
+                GrooveNode assigneeVar = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
+                        integerComparisonExpression.getNameOfAssignee(),
+                        ruleBuilder);
+                GrooveNode assigneeValue = ruleBuilder.contextNode(TYPE_BOOLEAN_VALUE);
+                ruleBuilder.contextEdge(VALUE, assigneeVar, assigneeValue);
+                GrooveNode oldAssigneeValue = ruleBuilder.contextNode(BOOL);
+                ruleBuilder.deleteEdge(VALUE, assigneeValue, oldAssigneeValue);
+                GrooveNode newAssigneeValue = ruleBuilder.contextNode(BOOL);
+                ruleBuilder.addEdge(VALUE, assigneeValue, newAssigneeValue);
+
+                // Groove operator for calculation
+                GrooveNode operatorNode = ruleBuilder.contextNode(PROD);
+                ruleBuilder.contextEdge(ARG_0, operatorNode, operand1ValueInt);
+                ruleBuilder.contextEdge(ARG_1, operatorNode, operand2ValueInt);
+                ruleBuilder.contextEdge(grooveOperator, operatorNode, newAssigneeValue);
+
+                // Deletion of the exp and its connections
+                ruleBuilder.deleteEdge(OPERAND_1, exp, operand1Var);
+                ruleBuilder.deleteEdge(OPERAND_2, exp, operand2Var);
+                ruleBuilder.deleteEdge(ASSIGNEE, exp, assigneeVar);
 
             }
 
             @Override
             public void handle(BooleanBinaryExpression booleanBinaryExpression) {
+                GrooveNode exp = null;
+                String grooveOperator = "";
+                switch (booleanBinaryExpression.getOperator()) {
+                    case AND:
+                        exp = ruleBuilder.deleteNode(TYPE_AND);
+                        grooveOperator = BOOL_AND;
+                        break;
+                    case OR:
+                        exp = ruleBuilder.deleteNode(TYPE_OR);
+                        grooveOperator = BOOL_OR;
+                        break;
+                }
+                ruleBuilder.deleteEdge(EXP, action, exp);
+
+                // Operand 1
+                GrooveNode operand1Var = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
+                        booleanBinaryExpression.getNameOfOperand1(),
+                        ruleBuilder);
+                GrooveNode operand1Value = ruleBuilder.contextNode(TYPE_BOOLEAN_VALUE);
+                ruleBuilder.contextEdge(VALUE, operand1Var, operand1Value);
+                GrooveNode operand1ValueBool = ruleBuilder.contextNode(BOOL);
+                ruleBuilder.contextEdge(VALUE, operand1Value, operand1ValueBool);
+
+                // Operand 2
+                GrooveNode operand2Var = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
+                        booleanBinaryExpression.getNameOfOperand2(),
+                        ruleBuilder);
+                GrooveNode operand2Value = ruleBuilder.contextNode(TYPE_BOOLEAN_VALUE);
+                ruleBuilder.contextEdge(VALUE, operand2Var, operand2Value);
+                GrooveNode operand2ValueBool = ruleBuilder.contextNode(BOOL);
+                ruleBuilder.contextEdge(VALUE, operand2Value, operand2ValueBool);
+
+                // Assignee
+                GrooveNode assigneeVar = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
+                        booleanBinaryExpression.getNameOfAssignee(),
+                        ruleBuilder);
+                GrooveNode assigneeValue = ruleBuilder.contextNode(TYPE_BOOLEAN_VALUE);
+                ruleBuilder.contextEdge(VALUE, assigneeVar, assigneeValue);
+                GrooveNode oldAssigneeValue = ruleBuilder.contextNode(BOOL);
+                ruleBuilder.deleteEdge(VALUE, assigneeValue, oldAssigneeValue);
+                GrooveNode newAssigneeValue = ruleBuilder.contextNode(BOOL);
+                ruleBuilder.addEdge(VALUE, assigneeValue, newAssigneeValue);
+
+                // Groove operator for calculation
+                GrooveNode operatorNode = ruleBuilder.contextNode(PROD);
+                ruleBuilder.contextEdge(ARG_0, operatorNode, operand1ValueBool);
+                ruleBuilder.contextEdge(ARG_1, operatorNode, operand1ValueBool);
+                ruleBuilder.contextEdge(grooveOperator, operatorNode, newAssigneeValue);
+
+                // Deletion of the exp and its connections
+                ruleBuilder.deleteEdge(OPERAND_1, exp, operand1Var);
+                ruleBuilder.deleteEdge(OPERAND_2, exp, operand2Var);
+                ruleBuilder.deleteEdge(ASSIGNEE, exp, assigneeVar);
 
             }
 
             @Override
             public void handle(BooleanUnaryExpression booleanUnaryExpression) {
+                GrooveNode exp = ruleBuilder.deleteNode(TYPE_NOT);
+                ruleBuilder.deleteEdge(EXP, action, exp);
 
+                // Operand
+                GrooveNode operandVar = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
+                        booleanUnaryExpression.getOperand().getName(),
+                        ruleBuilder);
+                GrooveNode operandValue = ruleBuilder.contextNode(TYPE_BOOLEAN_VALUE);
+                ruleBuilder.contextEdge(VALUE, operandVar, operandValue);
+                GrooveNode operandValueBool = ruleBuilder.contextNode(BOOL);
+                ruleBuilder.contextEdge(VALUE, operandValue, operandValueBool);
+
+                // Assignee
+                GrooveNode assigneeVar = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
+                        booleanUnaryExpression.getAssignee().getName(),
+                        ruleBuilder);
+                GrooveNode assigneeValue = ruleBuilder.contextNode(TYPE_BOOLEAN_VALUE);
+                ruleBuilder.contextEdge(VALUE, assigneeVar, assigneeValue);
+                GrooveNode oldAssigneeValue = ruleBuilder.contextNode(BOOL);
+                ruleBuilder.deleteEdge(VALUE, assigneeValue, oldAssigneeValue);
+                GrooveNode newAssigneeValue = ruleBuilder.contextNode(BOOL);
+                ruleBuilder.addEdge(VALUE, assigneeValue, newAssigneeValue);
+
+                // Groove operator for calculation
+                GrooveNode operatorNode = ruleBuilder.contextNode(PROD);
+                ruleBuilder.contextEdge(ARG_0, operatorNode, operandValueBool);
+                ruleBuilder.contextEdge(BOOL_NOT, operatorNode, newAssigneeValue);
+
+                // Deletion of the exp and its connections
+                ruleBuilder.deleteEdge(OPERAND_1, exp, operandVar);
+                ruleBuilder.deleteEdge(ASSIGNEE, exp, assigneeVar);
             }
         });
     }
