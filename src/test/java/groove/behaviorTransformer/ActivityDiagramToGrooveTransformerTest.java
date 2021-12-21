@@ -225,21 +225,21 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
         InitialNode initNode = new InitialNode("initial");
         OpaqueAction register = new OpaqueAction("register", Lists.newArrayList(notInternalExp));
-        DecisionNode decisionNode = new DecisionNode("");
+        DecisionNode decisionNode = new DecisionNode("decision");
 
-        OpaqueAction get_welcome_package = new OpaqueAction("get welcome package", Lists.newArrayList());
-        OpaqueAction assign_to_project_external = new OpaqueAction("assign to project external", Lists.newArrayList());
-        ForkNode forkNode = new ForkNode("");
+        OpaqueAction get_welcome_package = new OpaqueAction("get_welcome_package", Lists.newArrayList());
+        OpaqueAction assign_to_project_external = new OpaqueAction("assign_to_project_external", Lists.newArrayList());
+        ForkNode forkNode = new ForkNode("fork");
 
-        OpaqueAction add_to_website = new OpaqueAction("add to website", Lists.newArrayList());
-        OpaqueAction assign_to_project = new OpaqueAction("assign to project", Lists.newArrayList());
+        OpaqueAction add_to_website = new OpaqueAction("add_to_website", Lists.newArrayList());
+        OpaqueAction assign_to_project = new OpaqueAction("assign_to_project", Lists.newArrayList());
 
-        JoinNode joinNode = new JoinNode("");
-        OpaqueAction manager_interview = new OpaqueAction("manager interview", Lists.newArrayList());
-        OpaqueAction manager_report = new OpaqueAction("manager report", Lists.newArrayList());
+        JoinNode joinNode = new JoinNode("join");
+        OpaqueAction manager_interview = new OpaqueAction("manager_interview", Lists.newArrayList());
+        OpaqueAction manager_report = new OpaqueAction("manager_report", Lists.newArrayList());
 
-        MergeNode mergeNode = new MergeNode("");
-        OpaqueAction authorize_payment = new OpaqueAction("authorize payment", Lists.newArrayList());
+        MergeNode mergeNode = new MergeNode("merge");
+        OpaqueAction authorize_payment = new OpaqueAction("authorize_payment", Lists.newArrayList());
         ActivityFinalNode finalNode = new ActivityFinalNode("final");
 
         ActivityDiagram ttc_workflow = builder.setInitialNode(initNode)

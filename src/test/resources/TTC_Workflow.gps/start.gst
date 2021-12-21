@@ -213,7 +213,7 @@
         </node>
         <edge from="n42" to="n42">
             <attr name="label">
-                <string>string:"assign to project external"</string>
+                <string>string:"assign_to_project_external"</string>
             </attr>
         </edge>
         <edge from="n9" to="n42">
@@ -248,7 +248,7 @@
         </node>
         <edge from="n43" to="n43">
             <attr name="label">
-                <string>string:"get welcome package"</string>
+                <string>string:"get_welcome_package"</string>
             </attr>
         </edge>
         <edge from="n11" to="n43">
@@ -283,7 +283,7 @@
         </node>
         <edge from="n44" to="n44">
             <attr name="label">
-                <string>string:"add to website"</string>
+                <string>string:"add_to_website"</string>
             </attr>
         </edge>
         <edge from="n13" to="n44">
@@ -308,7 +308,7 @@
         </node>
         <edge from="n45" to="n45">
             <attr name="label">
-                <string>string:"assign to project"</string>
+                <string>string:"assign_to_project"</string>
             </attr>
         </edge>
         <edge from="n14" to="n45">
@@ -343,7 +343,7 @@
         </node>
         <edge from="n46" to="n46">
             <attr name="label">
-                <string>string:"manager interview"</string>
+                <string>string:"manager_interview"</string>
             </attr>
         </edge>
         <edge from="n16" to="n46">
@@ -368,7 +368,7 @@
         </node>
         <edge from="n47" to="n47">
             <attr name="label">
-                <string>string:"manager report"</string>
+                <string>string:"manager_report"</string>
             </attr>
         </edge>
         <edge from="n17" to="n47">
@@ -393,7 +393,7 @@
         </node>
         <edge from="n48" to="n48">
             <attr name="label">
-                <string>string:"authorize payment"</string>
+                <string>string:"authorize_payment"</string>
             </attr>
         </edge>
         <edge from="n18" to="n48">
