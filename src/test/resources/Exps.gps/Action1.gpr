@@ -1466,11 +1466,6 @@
                 <string>del:exp</string>
             </attr>
         </edge>
-        <edge from="n96" to="n97">
-            <attr name="label">
-                <string>del:value</string>
-            </attr>
-        </edge>
         <edge from="n85" to="n86">
             <attr name="label">
                 <string>del:1</string>
@@ -1486,14 +1481,14 @@
                 <string>del:assignee</string>
             </attr>
         </edge>
+        <edge from="n96" to="n97">
+            <attr name="label">
+                <string>del:value</string>
+            </attr>
+        </edge>
         <edge from="n80" to="n100">
             <attr name="label">
                 <string>del:exp</string>
-            </attr>
-        </edge>
-        <edge from="n111" to="n112">
-            <attr name="label">
-                <string>del:value</string>
             </attr>
         </edge>
         <edge from="n100" to="n101">
@@ -1511,14 +1506,14 @@
                 <string>del:assignee</string>
             </attr>
         </edge>
+        <edge from="n111" to="n112">
+            <attr name="label">
+                <string>del:value</string>
+            </attr>
+        </edge>
         <edge from="n80" to="n115">
             <attr name="label">
                 <string>del:exp</string>
-            </attr>
-        </edge>
-        <edge from="n122" to="n123">
-            <attr name="label">
-                <string>del:value</string>
             </attr>
         </edge>
         <edge from="n115" to="n116">
@@ -1531,14 +1526,14 @@
                 <string>del:assignee</string>
             </attr>
         </edge>
+        <edge from="n122" to="n123">
+            <attr name="label">
+                <string>del:value</string>
+            </attr>
+        </edge>
         <edge from="n80" to="n126">
             <attr name="label">
                 <string>del:exp</string>
-            </attr>
-        </edge>
-        <edge from="n137" to="n138">
-            <attr name="label">
-                <string>del:value</string>
             </attr>
         </edge>
         <edge from="n126" to="n127">
@@ -1556,14 +1551,14 @@
                 <string>del:assignee</string>
             </attr>
         </edge>
+        <edge from="n137" to="n138">
+            <attr name="label">
+                <string>del:value</string>
+            </attr>
+        </edge>
         <edge from="n80" to="n141">
             <attr name="label">
                 <string>del:exp</string>
-            </attr>
-        </edge>
-        <edge from="n152" to="n153">
-            <attr name="label">
-                <string>del:value</string>
             </attr>
         </edge>
         <edge from="n141" to="n142">
@@ -1581,14 +1576,14 @@
                 <string>del:assignee</string>
             </attr>
         </edge>
+        <edge from="n152" to="n153">
+            <attr name="label">
+                <string>del:value</string>
+            </attr>
+        </edge>
         <edge from="n80" to="n156">
             <attr name="label">
                 <string>del:exp</string>
-            </attr>
-        </edge>
-        <edge from="n167" to="n168">
-            <attr name="label">
-                <string>del:value</string>
             </attr>
         </edge>
         <edge from="n156" to="n157">
@@ -1606,14 +1601,14 @@
                 <string>del:assignee</string>
             </attr>
         </edge>
+        <edge from="n167" to="n168">
+            <attr name="label">
+                <string>del:value</string>
+            </attr>
+        </edge>
         <edge from="n80" to="n171">
             <attr name="label">
                 <string>del:exp</string>
-            </attr>
-        </edge>
-        <edge from="n182" to="n183">
-            <attr name="label">
-                <string>del:value</string>
             </attr>
         </edge>
         <edge from="n171" to="n172">
@@ -1631,14 +1626,14 @@
                 <string>del:assignee</string>
             </attr>
         </edge>
+        <edge from="n182" to="n183">
+            <attr name="label">
+                <string>del:value</string>
+            </attr>
+        </edge>
         <edge from="n80" to="n186">
             <attr name="label">
                 <string>del:exp</string>
-            </attr>
-        </edge>
-        <edge from="n197" to="n198">
-            <attr name="label">
-                <string>del:value</string>
             </attr>
         </edge>
         <edge from="n186" to="n187">
@@ -1656,14 +1651,14 @@
                 <string>del:assignee</string>
             </attr>
         </edge>
+        <edge from="n197" to="n198">
+            <attr name="label">
+                <string>del:value</string>
+            </attr>
+        </edge>
         <edge from="n80" to="n201">
             <attr name="label">
                 <string>del:exp</string>
-            </attr>
-        </edge>
-        <edge from="n212" to="n213">
-            <attr name="label">
-                <string>del:value</string>
             </attr>
         </edge>
         <edge from="n201" to="n202">
@@ -1679,6 +1674,11 @@
         <edge from="n201" to="n210">
             <attr name="label">
                 <string>del:assignee</string>
+            </attr>
+        </edge>
+        <edge from="n212" to="n213">
+            <attr name="label">
+                <string>del:value</string>
             </attr>
         </edge>
         <edge from="n80" to="n81">

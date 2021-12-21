@@ -226,11 +226,6 @@
                 <string>del:exp</string>
             </attr>
         </edge>
-        <edge from="n72" to="n73">
-            <attr name="label">
-                <string>del:value</string>
-            </attr>
-        </edge>
         <edge from="n61" to="n62">
             <attr name="label">
                 <string>del:1</string>
@@ -244,6 +239,11 @@
         <edge from="n61" to="n70">
             <attr name="label">
                 <string>del:assignee</string>
+            </attr>
+        </edge>
+        <edge from="n72" to="n73">
+            <attr name="label">
+                <string>del:value</string>
             </attr>
         </edge>
         <edge from="n56" to="n57">
