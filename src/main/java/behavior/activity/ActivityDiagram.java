@@ -2,7 +2,7 @@ package behavior.activity;
 
 import behavior.Behavior;
 import behavior.BehaviorVisitor;
-import behavior.activity.edges.ActivityEdge;
+import behavior.activity.edges.ControlFlow;
 import behavior.activity.nodes.ActivityNode;
 import behavior.activity.nodes.InitialNode;
 import behavior.activity.values.Value;
@@ -19,7 +19,7 @@ public class ActivityDiagram implements Behavior {
 
     private final InitialNode initialNode;
     private final Set<ActivityNode> nodes;
-    private final Set<ActivityEdge> edges;
+    private final Set<ControlFlow> edges;
 
     private final Set<Variable<? extends Value>> inputVariables;
     private final Set<Variable<? extends Value>> localVariables;
@@ -29,7 +29,7 @@ public class ActivityDiagram implements Behavior {
                            Set<Variable<? extends Value>> inputVariables,
                            Set<Variable<? extends Value>> localVariables,
                            Set<ActivityNode> nodes,
-                           Set<ActivityEdge> edges) {
+                           Set<ControlFlow> edges) {
         this.name = name;
         this.initialNode = initialNode;
         this.inputVariables = inputVariables;
@@ -46,7 +46,7 @@ public class ActivityDiagram implements Behavior {
         return this.nodes.stream();
     }
 
-    public Stream<ActivityEdge> getEdges() {
+    public Stream<ControlFlow> getEdges() {
         return this.edges.stream();
     }
 

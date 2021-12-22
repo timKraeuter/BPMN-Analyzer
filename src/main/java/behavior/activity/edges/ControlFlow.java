@@ -11,7 +11,7 @@ public class ControlFlow extends ActivityEdge {
         this.guard = guard;
     }
 
-    public BooleanVariable getGuard() {
+    public BooleanVariable getGuardIfExists() {
         return this.guard;
     }
 }

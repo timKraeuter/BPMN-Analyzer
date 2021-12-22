@@ -3,7 +3,7 @@
     <graph id="decision" role="rule" edgeids="false" edgemode="directed">
         <node id="n75">
             <attr name="layout">
-                <string>342 72 0 0</string>
+                <string>332 72 0 0</string>
             </attr>
         </node>
         <edge from="n75" to="n75">
@@ -23,7 +23,7 @@
         </edge>
         <node id="n77">
             <attr name="layout">
-                <string>62 152 0 0</string>
+                <string>62 160 0 0</string>
             </attr>
         </node>
         <edge from="n77" to="n77">
@@ -33,12 +33,42 @@
         </edge>
         <node id="n78">
             <attr name="layout">
-                <string>342 152 0 0</string>
+                <string>332 152 0 0</string>
             </attr>
         </node>
         <edge from="n78" to="n78">
             <attr name="label">
                 <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n79">
+            <attr name="layout">
+                <string>362 232 0 0</string>
+            </attr>
+        </node>
+        <edge from="n79" to="n79">
+            <attr name="label">
+                <string>type:Variable</string>
+            </attr>
+        </edge>
+        <node id="n80">
+            <attr name="layout">
+                <string>607 232 0 0</string>
+            </attr>
+        </node>
+        <edge from="n80" to="n80">
+            <attr name="label">
+                <string>type:BooleanValue</string>
+            </attr>
+        </edge>
+        <node id="n81">
+            <attr name="layout">
+                <string>882 232 0 0</string>
+            </attr>
+        </node>
+        <edge from="n81" to="n81">
+            <attr name="label">
+                <string>bool:true</string>
             </attr>
         </edge>
         <edge from="n77" to="n78">
@@ -59,6 +89,21 @@
         <edge from="n77" to="n75">
             <attr name="label">
                 <string>source</string>
+            </attr>
+        </edge>
+        <edge from="n77" to="n79">
+            <attr name="label">
+                <string>guard</string>
+            </attr>
+        </edge>
+        <edge from="n79" to="n80">
+            <attr name="label">
+                <string>value</string>
+            </attr>
+        </edge>
+        <edge from="n80" to="n81">
+            <attr name="label">
+                <string>value</string>
             </attr>
         </edge>
     </graph>

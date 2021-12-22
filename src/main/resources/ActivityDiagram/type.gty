@@ -219,14 +219,14 @@
                 <string>type:Not</string>
             </attr>
         </edge>
-        <edge from="n5" to="n7">
-            <attr name="label">
-                <string>1</string>
-            </attr>
-        </edge>
         <edge from="n5" to="n11">
             <attr name="label">
                 <string>sub:</string>
+            </attr>
+        </edge>
+        <edge from="n5" to="n7">
+            <attr name="label">
+                <string>1</string>
             </attr>
         </edge>
         <edge from="n4" to="n4">
@@ -309,9 +309,9 @@
                 <string>type:SetVariableExpression</string>
             </attr>
         </edge>
-        <edge from="n2" to="n1">
+        <edge from="n2" to="n8">
             <attr name="label">
-                <string>sub:</string>
+                <string>newValue</string>
             </attr>
         </edge>
         <edge from="n2" to="n7">
@@ -319,9 +319,9 @@
                 <string>var</string>
             </attr>
         </edge>
-        <edge from="n2" to="n8">
+        <edge from="n2" to="n1">
             <attr name="label">
-                <string>newValue</string>
+                <string>sub:</string>
             </attr>
         </edge>
         <edge from="n8" to="n8">
@@ -404,6 +404,11 @@
                 <string>string:name</string>
             </attr>
         </edge>
+        <edge from="n15" to="n13">
+            <attr name="label">
+                <string>tokens</string>
+            </attr>
+        </edge>
         <edge from="n15" to="n12">
             <attr name="label">
                 <string>source</string>
@@ -412,11 +417,6 @@
         <edge from="n15" to="n12">
             <attr name="label">
                 <string>target</string>
-            </attr>
-        </edge>
-        <edge from="n15" to="n13">
-            <attr name="label">
-                <string>tokens</string>
             </attr>
         </edge>
         <edge from="n16" to="n16">
@@ -487,6 +487,11 @@
         <edge from="n22" to="n15">
             <attr name="label">
                 <string>sub:</string>
+            </attr>
+        </edge>
+        <edge from="n22" to="n7">
+            <attr name="label">
+                <string>guard</string>
             </attr>
         </edge>
         <edge from="n23" to="n23">

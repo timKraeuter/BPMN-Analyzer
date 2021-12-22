@@ -14,4 +14,9 @@ public class ForkNode extends ControlNode {
     public void accept(ActivityNodeVisitor visitor) {
         visitor.handle(this);
     }
+
+    @Override
+    public boolean isDecisionNode() {
+        return false;
+    }
 }

@@ -21,6 +21,11 @@ public class OpaqueAction extends ActivityNode {
         visitor.handle(this);
     }
 
+    @Override
+    public boolean isDecisionNode() {
+        return false;
+    }
+
     public Stream<Expression> expressions() {
         return this.expressions.stream();
     }

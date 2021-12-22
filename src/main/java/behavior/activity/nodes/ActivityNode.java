@@ -36,4 +36,6 @@ public abstract class ActivityNode {
     }
 
     public abstract void accept(ActivityNodeVisitor visitor);
+
+    public abstract boolean isDecisionNode();
 }

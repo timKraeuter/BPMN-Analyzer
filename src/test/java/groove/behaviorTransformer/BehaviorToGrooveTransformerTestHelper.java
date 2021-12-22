@@ -13,9 +13,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
 interface BehaviorToGrooveTransformerTestHelper {
-    // String outputPath = "C:/Source/groove/bin";
+    String outputPath = "C:/Source/groove/bin";
     //    String outputPath = "B:/Source/groove/bin";
-    String outputPath = FileUtils.getTempDirectoryPath();
+//    String outputPath = FileUtils.getTempDirectoryPath();
 
     @BeforeEach
     default void setUp() {
@@ -54,9 +54,9 @@ interface BehaviorToGrooveTransformerTestHelper {
     default void checkPropertiesFile(File propertiesFile) throws IOException {
         Assertions.assertTrue(
                 FileUtils.readFileToString(propertiesFile, StandardCharsets.UTF_8)
-                         .replaceAll("\r?\n", "\r\n") // force identical line separators
-                         .endsWith(
-                                 "grooveVersion=5.8.1\r\n" +
-                                         "grammarVersion=3.7"));
+                        .replaceAll("\r?\n", "\r\n") // force identical line separators
+                        .endsWith(
+                                "grooveVersion=5.8.1\r\n" +
+                                        "grammarVersion=3.7"));
     }
 }

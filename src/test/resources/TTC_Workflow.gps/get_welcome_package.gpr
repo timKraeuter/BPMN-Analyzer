@@ -1,77 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="get_welcome_package" role="rule" edgeids="false" edgemode="directed">
-        <node id="n88">
+        <node id="n91">
             <attr name="layout">
                 <string>342 152 0 0</string>
             </attr>
         </node>
-        <edge from="n88" to="n88">
+        <edge from="n91" to="n91">
             <attr name="label">
                 <string>type:OpaqueAction</string>
             </attr>
         </edge>
-        <node id="n89">
+        <node id="n92">
             <attr name="layout">
                 <string>617 152 0 0</string>
             </attr>
         </node>
-        <edge from="n89" to="n89">
+        <edge from="n92" to="n92">
             <attr name="label">
                 <string>string:"get_welcome_package"</string>
             </attr>
         </edge>
-        <node id="n90">
+        <node id="n93">
             <attr name="layout">
                 <string>62 72 0 0</string>
             </attr>
         </node>
-        <edge from="n90" to="n90">
+        <edge from="n93" to="n93">
             <attr name="label">
                 <string>type:ControlFlow</string>
             </attr>
         </edge>
-        <node id="n91">
+        <node id="n94">
             <attr name="layout">
                 <string>62 152 0 0</string>
             </attr>
         </node>
-        <edge from="n91" to="n91">
+        <edge from="n94" to="n94">
             <attr name="label">
                 <string>type:ControlFlow</string>
             </attr>
         </edge>
-        <node id="n92">
+        <node id="n95">
             <attr name="layout">
                 <string>342 72 0 0</string>
             </attr>
         </node>
-        <edge from="n92" to="n92">
+        <edge from="n95" to="n95">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n91" to="n92">
+        <edge from="n94" to="n95">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n90" to="n92">
+        <edge from="n93" to="n95">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n88" to="n89">
+        <edge from="n91" to="n92">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n90" to="n88">
+        <edge from="n93" to="n91">
             <attr name="label">
                 <string>target</string>
             </attr>
         </edge>
-        <edge from="n91" to="n88">
+        <edge from="n94" to="n91">
             <attr name="label">
                 <string>source</string>
             </attr>

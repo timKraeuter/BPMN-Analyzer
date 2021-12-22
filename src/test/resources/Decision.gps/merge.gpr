@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="merge" role="rule" edgeids="false" edgemode="directed">
-        <node id="n52">
+        <node id="n61">
             <attr name="layout">
                 <string>342 72 0 0</string>
             </attr>
         </node>
-        <edge from="n52" to="n52">
+        <edge from="n61" to="n61">
             <attr name="label">
                 <string>type:MergeNode</string>
             </attr>
         </edge>
-        <node id="n53">
+        <node id="n62">
             <attr name="layout">
                 <string>62 72 0 0</string>
             </attr>
         </node>
-        <edge from="n53" to="n53">
+        <edge from="n62" to="n62">
             <attr name="label">
                 <string>type:ControlFlow</string>
             </attr>
         </edge>
-        <node id="n54">
+        <node id="n63">
             <attr name="layout">
                 <string>62 152 0 0</string>
             </attr>
         </node>
-        <edge from="n54" to="n54">
+        <edge from="n63" to="n63">
             <attr name="label">
                 <string>type:ControlFlow</string>
             </attr>
         </edge>
-        <node id="n55">
+        <node id="n64">
             <attr name="layout">
                 <string>342 152 0 0</string>
             </attr>
         </node>
-        <edge from="n55" to="n55">
+        <edge from="n64" to="n64">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n54" to="n55">
+        <edge from="n63" to="n64">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n53" to="n55">
+        <edge from="n62" to="n64">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n53" to="n52">
+        <edge from="n62" to="n61">
             <attr name="label">
                 <string>target</string>
             </attr>
         </edge>
-        <edge from="n54" to="n52">
+        <edge from="n63" to="n61">
             <attr name="label">
                 <string>source</string>
             </attr>

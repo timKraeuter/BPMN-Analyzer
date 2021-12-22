@@ -1,10 +1,10 @@
 package behavior.activity;
 
-import behavior.activity.edges.ActivityEdge;
 import behavior.activity.edges.ControlFlow;
 import behavior.activity.nodes.ActivityNode;
 import behavior.activity.nodes.InitialNode;
 import behavior.activity.values.Value;
+import behavior.activity.variables.BooleanVariable;
 import behavior.activity.variables.Variable;
 
 import java.util.LinkedHashSet;
@@ -15,7 +15,7 @@ public class ActivityDiagramBuilder {
     private final Set<Variable<? extends Value>> inputVariables = new LinkedHashSet<>();
     private final Set<Variable<? extends Value>> localVariables = new LinkedHashSet<>();
     private final Set<ActivityNode> nodes = new LinkedHashSet<>();
-    private final Set<ActivityEdge> edges = new LinkedHashSet<>();
+    private final Set<ControlFlow> edges = new LinkedHashSet<>();
     private InitialNode initialNode;
 
     public ActivityDiagram build() {
@@ -48,9 +48,18 @@ public class ActivityDiagramBuilder {
     }
 
     public ActivityDiagramBuilder createControlFlow(String name, ActivityNode source, ActivityNode target) {
+        this.createControlFlowWithGuard(name, source, target, null);
+        return this;
+    }
+
+    public ActivityDiagramBuilder createControlFlowWithGuard(
+            String name,
+            ActivityNode source,
+            ActivityNode target,
+            BooleanVariable guard) {
         this.addNode(source);
         this.addNode(target);
-        ControlFlow controlFlow = new ControlFlow(name, source, target, null);
+        ControlFlow controlFlow = new ControlFlow(name, source, target, guard);
         this.edges.add(controlFlow);
         source.addOutgoingControlFlow(controlFlow);
         target.addIncomingControlFlow(controlFlow);

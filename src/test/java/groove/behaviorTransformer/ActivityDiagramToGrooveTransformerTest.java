@@ -211,7 +211,8 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
     }
 
     /**
-     * TODO: add picture.
+     * Tests the semantics using the example from the TTC 2015.
+     * See activity_diagrams/ttc_workflow.
      */
     @Test
     void testTTCExample() throws IOException {
@@ -246,9 +247,9 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
                 .setName("TTC_Workflow")
                 .createControlFlow("", initNode, register)
                 .createControlFlow("", register, decisionNode)
-                .createControlFlow("", decisionNode, assign_to_project_external)
+                .createControlFlowWithGuard("", decisionNode, assign_to_project_external, not_internal)
                 .createControlFlow("", assign_to_project_external, mergeNode)
-                .createControlFlow("", decisionNode, get_welcome_package)
+                .createControlFlowWithGuard("", decisionNode, get_welcome_package, internal)
                 .createControlFlow("", get_welcome_package, forkNode)
                 .createControlFlow("", forkNode, add_to_website)
                 .createControlFlow("", forkNode, assign_to_project)

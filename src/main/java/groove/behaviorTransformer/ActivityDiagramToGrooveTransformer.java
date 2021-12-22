@@ -1,6 +1,7 @@
 package groove.behaviorTransformer;
 
 import behavior.activity.ActivityDiagram;
+import behavior.activity.edges.ControlFlow;
 import behavior.activity.expression.BinaryExpression;
 import behavior.activity.expression.Expression;
 import behavior.activity.expression.SetVariableExpression;
@@ -32,7 +33,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<ActivityDiagram> {
-
 
     // Possible node labels.
     private static final String TYPE_INITIAL_NODE = TYPE + "InitialNode";
@@ -80,12 +80,16 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     private static final String OPERAND_2 = "2";
     private static final String TOKENS = "tokens";
     private static final String BASE_TOKEN = "baseToken";
+    private static final String GUARD = "guard";
 
     // Special groove labels
     private static final String STRING = "string:";
     private static final String BOOL = "bool:";
     private static final String FALSE = BOOL + "false";
     private static final String TRUE = BOOL + "true";
+    private static final String BOOL_NOT = "bool:not";
+    private static final String BOOL_AND = "bool:and";
+    private static final String BOOL_OR = "bool:or";
     private static final String UNEQUALS = "!=";
     private static final String INT = "int:";
     private static final String ARG_0 = "arg:0";
@@ -93,9 +97,6 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     private static final String INT_ADD = "int:add";
     private static final String INT_SUB = "int:sub";
     private static final String PROD = "prod:";
-    private static final String BOOL_NOT = "bool:not";
-    private static final String BOOL_AND = "bool:and";
-    private static final String BOOL_OR = "bool:or";
     private static final String INT_LT = "int:lt";
     private static final String INT_LE = "int:le";
     private static final String INT_EQ = "int:eq";
@@ -115,7 +116,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
         this.createNodesForActivityNodes(activityDiagram, builder, createdNodesIndex, variableNameToNode);
 
-        this.addControlFlowsToGraph(activityDiagram, builder, createdNodesIndex);
+        this.addControlFlowsToGraph(activityDiagram, builder, createdNodesIndex, variableNameToNode);
 
         return builder.build();
     }
@@ -181,14 +182,35 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     private void addControlFlowsToGraph(
             ActivityDiagram activityDiagram,
             GrooveGraphBuilder builder,
-            Map<ActivityNode, GrooveNode> createdNodesIndex) {
+            Map<ActivityNode, GrooveNode> createdNodesIndex,
+            Map<String, GrooveNode> variableNameToNode) {
         activityDiagram.getEdges().forEach(
                 edge -> {
                     GrooveNode controlFlowNode = new GrooveNode(TYPE_CONTROL_FLOW);
                     builder.addNode(controlFlowNode);
                     builder.addEdge(SOURCE, controlFlowNode, createdNodesIndex.get(edge.getSource()));
                     builder.addEdge(TARGET, controlFlowNode, createdNodesIndex.get(edge.getTarget()));
+                    if (edge.getSource().isDecisionNode()) {
+                        this.connectGuardOrAddDefaultGuard(builder, variableNameToNode, edge, controlFlowNode);
+                    }
                 });
+    }
+
+    private void connectGuardOrAddDefaultGuard(
+            GrooveGraphBuilder builder,
+            Map<String, GrooveNode> variableNameToNode,
+            ControlFlow decisionEdge,
+            GrooveNode decisionEdgeGrooveNode) {
+        GrooveNode varNode;
+        if (decisionEdge.getGuardIfExists() != null) {
+            varNode = variableNameToNode.get(decisionEdge.getGuardIfExists().getName());
+        } else {
+            varNode = new GrooveNode(TYPE_VARIABLE);
+            GrooveNode boolValue = new GrooveNode(TYPE_BOOLEAN_VALUE);
+            builder.addEdge(VALUE, varNode, boolValue);
+            builder.addEdge(VALUE, boolValue, new GrooveNode(TRUE));
+        }
+        builder.addEdge(GUARD, decisionEdgeGrooveNode, varNode);
     }
 
     private void createNodesForLocalAndInputVariables(
@@ -394,7 +416,16 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                 @Override
                 public void handle(DecisionNode decisionNode) {
                     GrooveNode decision = ruleBuilder.contextNode(TYPE_DECISION_NODE);
-                    ActivityDiagramToGrooveTransformer.this.addTokenFlow(decision, ruleBuilder);
+
+                    GrooveNode outFlow = ActivityDiagramToGrooveTransformer.this.addTokenFlow(decision, ruleBuilder);
+
+                    // Connected guard must be true
+                    GrooveNode guardVar = ruleBuilder.contextNode(TYPE_VARIABLE);
+                    ruleBuilder.contextEdge(GUARD, outFlow, guardVar);
+                    GrooveNode boolValue = ruleBuilder.contextNode(TYPE_BOOLEAN_VALUE);
+                    ruleBuilder.contextEdge(VALUE, guardVar, boolValue);
+                    GrooveNode trueValue = ruleBuilder.contextNode(TRUE);
+                    ruleBuilder.contextEdge(VALUE, boolValue, trueValue);
                 }
 
                 @Override
@@ -790,7 +821,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
         return var;
     }
 
-    private void addTokenFlow(GrooveNode activityNode, GrooveRuleBuilder ruleBuilder) {
+    private GrooveNode addTokenFlow(GrooveNode activityNode, GrooveRuleBuilder ruleBuilder) {
         GrooveNode inFlow = ruleBuilder.contextNode(TYPE_CONTROL_FLOW);
         ruleBuilder.contextEdge(TARGET, inFlow, activityNode);
 
@@ -800,6 +831,8 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
         GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
         ruleBuilder.deleteEdge(TOKENS, inFlow, token);
         ruleBuilder.addEdge(TOKENS, outFlow, token);
+
+        return outFlow;
     }
 
     private GrooveNode createDiagramNodeWithName(GrooveRuleBuilder ruleBuilder, ActivityDiagram activityDiagram) {
