@@ -266,4 +266,25 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
 
         this.checkGrooveGeneration(ttc_workflow);
     }
+
+    //    @Test
+    void perf1() throws IOException {
+        ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
+        InitialNode initNode = new InitialNode("initial");
+
+        builder.setName("perf1")
+                .setInitialNode(initNode);
+
+        ActivityNode previous = initNode;
+        for (int i = 0; i < 1000; i++) {
+            OpaqueAction action = new OpaqueAction("activity" + i, Lists.newArrayList());
+            builder.createControlFlow("", previous, action);
+            previous = action;
+        }
+
+        ActivityFinalNode finalNode = new ActivityFinalNode("final");
+        builder.createControlFlow("", previous, finalNode);
+
+        this.checkGrooveGeneration(builder.build());
+    }
 }
