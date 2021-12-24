@@ -102,6 +102,11 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     private static final String INT_EQ = "int:eq";
     private static final String INT_GE = "int:ge";
     private static final String INT_GT = "int:gt";
+    private boolean doLayout;
+
+    public ActivityDiagramToGrooveTransformer(boolean doLayout) {
+        this.doLayout = doLayout;
+    }
 
     @Override
     public GrooveGraph generateStartGraph(ActivityDiagram activityDiagram, boolean addPrefix) {
@@ -868,6 +873,11 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     @Override
     public void generateAndWriteRulesFurther(ActivityDiagram activityDiagram, boolean addPrefix, File targetFolder) {
         this.copyTypeGraph(targetFolder);
+    }
+
+    @Override
+    public boolean isLayoutActivated() {
+        return this.doLayout;
     }
 
     private void copyTypeGraph(File targetFolder) {

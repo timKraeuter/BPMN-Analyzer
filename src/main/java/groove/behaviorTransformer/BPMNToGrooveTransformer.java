@@ -146,6 +146,11 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
         return ruleBuilder.getRules();
     }
 
+    @Override
+    public boolean isLayoutActivated() {
+        return true; // TODO: implement layout as parameter!
+    }
+
     private String getPrefixOrEmpty(Behavior finiteStateMachine, Boolean addPrefix) {
         return addPrefix ? finiteStateMachine.getName() + "_" : "";
     }

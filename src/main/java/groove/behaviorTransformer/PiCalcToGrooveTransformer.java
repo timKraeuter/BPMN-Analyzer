@@ -55,6 +55,11 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
         this.copyPiRulesAndTypeGraph(targetFolder);
     }
 
+    @Override
+    public boolean isLayoutActivated() {
+        return true; // TODO: implement layout as parameter!
+    }
+
     void copyPiRulesAndTypeGraph(File targetFolder) {
         File sourceDirectory = new File(this.getClass().getResource("/GaducciPi").getFile());
         try {

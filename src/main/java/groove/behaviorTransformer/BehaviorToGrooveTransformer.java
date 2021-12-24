@@ -108,7 +108,7 @@ public class BehaviorToGrooveTransformer {
 
         nameToToBeSynchedRuleNames.forEach((newRuleName, ruleNames) -> {
             Set<GrooveGraphRule> rules = ruleNames.stream().map(indexedRules::get)
-                                                  .collect(Collectors.toSet());
+                    .collect(Collectors.toSet());
             rules.forEach(unsynchedRules::remove);
             nameToToBeSynchedRules.put(newRuleName, rules);
         });
@@ -124,8 +124,8 @@ public class BehaviorToGrooveTransformer {
 
     private void mergeAndWriteStartGraphs(File graphGrammarSubFolder, Set<GrooveGraph> startGraphs) {
         Optional<GrooveGraph> startGraph = startGraphs.stream()
-                                                      .reduce((graph, graph2) -> graph.union(graph2, (name1, name2) -> name1));
-        startGraph.ifPresent(graph -> GrooveTransformer.writeStartGraph(graphGrammarSubFolder, graph));
+                .reduce((graph, graph2) -> graph.union(graph2, (name1, name2) -> name1));
+        startGraph.ifPresent(graph -> GrooveTransformer.writeStartGraph(graphGrammarSubFolder, graph, true));
     }
 
     void generateGrooveGrammar(Behavior behavior, File targetFolder, boolean addPrefix) {
@@ -159,7 +159,7 @@ public class BehaviorToGrooveTransformer {
 
     private void generateGrooveGrammarForActivityDiagram(ActivityDiagram activityDiagram, File targetFolder, boolean addPrefix) {
         File graphGrammarSubFolder = this.makeSubFolder(activityDiagram, targetFolder);
-        ActivityDiagramToGrooveTransformer transformer = new ActivityDiagramToGrooveTransformer();
+        ActivityDiagramToGrooveTransformer transformer = new ActivityDiagramToGrooveTransformer(true);
 
         transformer.generateAndWriteStartGraph(activityDiagram, false, graphGrammarSubFolder);
 
@@ -255,12 +255,12 @@ public class BehaviorToGrooveTransformer {
 
     private String getAdditionalProperties(Map<String, String> additionalProperties) {
         return additionalProperties.entrySet().stream()
-                                   .reduce("",
-                                           (prop1, prop2) -> prop1 + prop2 + "\n",
-                                           (key, value) -> key + "=" + value);
+                .reduce("",
+                        (prop1, prop2) -> prop1 + prop2 + "\n",
+                        (key, value) -> key + "=" + value);
     }
 
-    static Gxl createGxlFromGrooveGraph(GrooveGraph graph) {
+    static Gxl createGxlFromGrooveGraph(GrooveGraph graph, boolean doLayout) {
         String gxlGraphName = String.format("%s_%s", graph.getName(), START);
         Gxl gxl = new Gxl();
         Graph gxlGraph = GrooveGxlHelper.createStandardGxlGraph(gxlGraphName, gxl);
@@ -285,7 +285,9 @@ public class BehaviorToGrooveTransformer {
                 grooveNodeIdToGxlNode.get(edge.getTargetNode().getId()),
                 edge.getName()));
 
-        GrooveGxlHelper.layoutGraph(gxlGraph, idToNodeLabel);
+        if (doLayout) {
+            GrooveGxlHelper.layoutGraph(gxlGraph, idToNodeLabel);
+        }
         return gxl;
     }
 

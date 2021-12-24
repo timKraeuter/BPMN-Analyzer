@@ -267,7 +267,7 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         this.checkGrooveGeneration(ttc_workflow);
     }
 
-    //    @Test
+//    @Test
     void perf1() throws IOException {
         ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
         InitialNode initNode = new InitialNode("initial");

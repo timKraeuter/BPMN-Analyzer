@@ -20,11 +20,11 @@ public interface GrooveTransformer<SOURCE extends Behavior> {
 
     default void generateAndWriteStartGraph(SOURCE source, boolean addPrefix, File targetFolder) {
         GrooveGraph startGraph = this.generateStartGraph(source, addPrefix);
-        writeStartGraph(targetFolder, startGraph);
+        writeStartGraph(targetFolder, startGraph, this.isLayoutActivated());
     }
 
-    static void writeStartGraph(File targetFolder, GrooveGraph startGraph) {
-        Gxl gxl = BehaviorToGrooveTransformer.createGxlFromGrooveGraph(startGraph);
+    static void writeStartGraph(File targetFolder, GrooveGraph startGraph, boolean layoutActivated) {
+        Gxl gxl = BehaviorToGrooveTransformer.createGxlFromGrooveGraph(startGraph, layoutActivated);
         File startGraphFile = new File(targetFolder.getPath() + START_GST);
 
         GxlToXMLConverter.toXml(gxl, startGraphFile);
@@ -42,4 +42,5 @@ public interface GrooveTransformer<SOURCE extends Behavior> {
         // to be overridden if needed
     }
 
+    boolean isLayoutActivated();
 }
