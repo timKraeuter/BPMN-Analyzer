@@ -267,7 +267,7 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         this.checkGrooveGeneration(ttc_workflow);
     }
 
-//    @Test
+    //    @Test
     void perf1() throws IOException {
         ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
         InitialNode initNode = new InitialNode("initial");
@@ -284,6 +284,54 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
 
         ActivityFinalNode finalNode = new ActivityFinalNode("final");
         builder.createControlFlow("", previous, finalNode);
+
+        this.checkGrooveGeneration(builder.build());
+    }
+
+    @Test
+    void perf3_2() throws IOException {
+        ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
+        InitialNode initNode = new InitialNode("initial");
+        OpaqueAction a = new OpaqueAction("a", Lists.newArrayList());
+        OpaqueAction b = new OpaqueAction("b", Lists.newArrayList());
+        OpaqueAction c = new OpaqueAction("c", Lists.newArrayList());
+        OpaqueAction d = new OpaqueAction("d", Lists.newArrayList());
+        MergeNode mergeE = new MergeNode("mergeE");
+        OpaqueAction e = new OpaqueAction("e", Lists.newArrayList());
+        DecisionNode decisionI = new DecisionNode("decisionI");
+        OpaqueAction f = new OpaqueAction("f", Lists.newArrayList());
+        OpaqueAction g = new OpaqueAction("g", Lists.newArrayList());
+        OpaqueAction h = new OpaqueAction("h", Lists.newArrayList());
+        OpaqueAction i = new OpaqueAction("i", Lists.newArrayList());
+        OpaqueAction j = new OpaqueAction("j", Lists.newArrayList());
+        DecisionNode decisionLoop = new DecisionNode("decisionLoop");
+        MergeNode mergeFinal = new MergeNode("mergeFinal");
+        OpaqueAction k = new OpaqueAction("k", Lists.newArrayList());
+        OpaqueAction l = new OpaqueAction("l", Lists.newArrayList());
+        ActivityFinalNode finalNode = new ActivityFinalNode("final");
+
+        builder.setName("perf3-2")
+                .setInitialNode(initNode)
+                .createControlFlow("", initNode, a)
+                .createControlFlow("", a, b)
+                .createControlFlow("", b, c)
+                .createControlFlow("", c, d)
+                .createControlFlow("", d, mergeE)
+                .createControlFlow("", mergeE, e)
+                .createControlFlow("", e, decisionI)
+                .createControlFlow("", decisionI, f)
+                .createControlFlow("", decisionI, g)
+                .createControlFlow("", decisionI, i)
+                .createControlFlow("", f, mergeFinal)
+                .createControlFlow("", mergeFinal, finalNode)
+                .createControlFlow("", g, h)
+                .createControlFlow("", h, mergeFinal)
+                .createControlFlow("", i, j)
+                .createControlFlow("", j, decisionLoop)
+                .createControlFlow("", decisionLoop, k)
+                .createControlFlow("", decisionLoop, l)
+                .createControlFlow("", k, mergeFinal)
+                .createControlFlow("", l, mergeE);
 
         this.checkGrooveGeneration(builder.build());
     }
