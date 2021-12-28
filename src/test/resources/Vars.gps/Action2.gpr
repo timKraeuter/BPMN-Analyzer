@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="Action2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n61">
-            <attr name="layout">
-                <string>707 531 0 0</string>
-            </attr>
-        </node>
-        <edge from="n61" to="n61">
-            <attr name="label">
-                <string>type:Sum</string>
-            </attr>
-        </edge>
-        <edge from="n61" to="n61">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
         <node id="n56">
             <attr name="layout">
                 <string>342 523 0 0</string>
@@ -28,7 +13,7 @@
         </edge>
         <node id="n57">
             <attr name="layout">
-                <string>617 441 0 0</string>
+                <string>617 451 0 0</string>
             </attr>
         </node>
         <edge from="n57" to="n57">
@@ -64,6 +49,16 @@
         <edge from="n60" to="n60">
             <attr name="label">
                 <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n61">
+            <attr name="layout">
+                <string>707 531 0 0</string>
+            </attr>
+        </node>
+        <edge from="n61" to="n61">
+            <attr name="label">
+                <string>type:Sum</string>
             </attr>
         </edge>
         <node id="n62">
@@ -221,26 +216,6 @@
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n56" to="n61">
-            <attr name="label">
-                <string>del:exp</string>
-            </attr>
-        </edge>
-        <edge from="n61" to="n62">
-            <attr name="label">
-                <string>del:1</string>
-            </attr>
-        </edge>
-        <edge from="n61" to="n66">
-            <attr name="label">
-                <string>del:2</string>
-            </attr>
-        </edge>
-        <edge from="n61" to="n70">
-            <attr name="label">
-                <string>del:assignee</string>
-            </attr>
-        </edge>
         <edge from="n72" to="n73">
             <attr name="label">
                 <string>del:value</string>
@@ -261,9 +236,19 @@
                 <string>source</string>
             </attr>
         </edge>
+        <edge from="n56" to="n61">
+            <attr name="label">
+                <string>exp</string>
+            </attr>
+        </edge>
         <edge from="n62" to="n63">
             <attr name="label">
                 <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n61" to="n62">
+            <attr name="label">
+                <string>1</string>
             </attr>
         </edge>
         <edge from="n62" to="n64">
@@ -281,6 +266,11 @@
                 <string>name</string>
             </attr>
         </edge>
+        <edge from="n61" to="n66">
+            <attr name="label">
+                <string>2</string>
+            </attr>
+        </edge>
         <edge from="n66" to="n68">
             <attr name="label">
                 <string>value</string>
@@ -294,6 +284,11 @@
         <edge from="n70" to="n71">
             <attr name="label">
                 <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n61" to="n70">
+            <attr name="label">
+                <string>assignee</string>
             </attr>
         </edge>
         <edge from="n70" to="n72">

@@ -1,69 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="Action1" role="rule" edgeids="false" edgemode="directed">
-        <node id="n46">
-            <attr name="layout">
-                <string>627 492 0 0</string>
-            </attr>
-        </node>
-        <edge from="n46" to="n46">
-            <attr name="label">
-                <string>type:SetVariableExpression</string>
-            </attr>
-        </edge>
-        <edge from="n46" to="n46">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
-        <node id="n49">
-            <attr name="layout">
-                <string>1252 412 0 0</string>
-            </attr>
-        </node>
-        <edge from="n49" to="n49">
-            <attr name="label">
-                <string>type:Value</string>
-            </attr>
-        </edge>
-        <edge from="n49" to="n49">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
-        <node id="n51">
-            <attr name="layout">
-                <string>627 242 0 0</string>
-            </attr>
-        </node>
-        <edge from="n51" to="n51">
-            <attr name="label">
-                <string>type:SetVariableExpression</string>
-            </attr>
-        </edge>
-        <edge from="n51" to="n51">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
-        <node id="n54">
-            <attr name="layout">
-                <string>1252 82 0 0</string>
-            </attr>
-        </node>
-        <edge from="n54" to="n54">
-            <attr name="label">
-                <string>type:Value</string>
-            </attr>
-        </edge>
-        <edge from="n54" to="n54">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
         <node id="n41">
             <attr name="layout">
-                <string>342 480 0 0</string>
+                <string>342 460 0 0</string>
             </attr>
         </node>
         <edge from="n41" to="n41">
@@ -83,7 +23,7 @@
         </edge>
         <node id="n43">
             <attr name="layout">
-                <string>62 400 0 0</string>
+                <string>62 380 0 0</string>
             </attr>
         </node>
         <edge from="n43" to="n43">
@@ -93,7 +33,7 @@
         </edge>
         <node id="n44">
             <attr name="layout">
-                <string>62 480 0 0</string>
+                <string>62 460 0 0</string>
             </attr>
         </node>
         <edge from="n44" to="n44">
@@ -103,7 +43,7 @@
         </edge>
         <node id="n45">
             <attr name="layout">
-                <string>342 400 0 0</string>
+                <string>342 380 0 0</string>
             </attr>
         </node>
         <edge from="n45" to="n45">
@@ -111,9 +51,19 @@
                 <string>type:Token</string>
             </attr>
         </edge>
+        <node id="n46">
+            <attr name="layout">
+                <string>627 232 0 0</string>
+            </attr>
+        </node>
+        <edge from="n46" to="n46">
+            <attr name="label">
+                <string>type:SetVariableExpression</string>
+            </attr>
+        </edge>
         <node id="n47">
             <attr name="layout">
-                <string>1037 412 0 0</string>
+                <string>1037 152 0 0</string>
             </attr>
         </node>
         <edge from="n47" to="n47">
@@ -123,7 +73,7 @@
         </edge>
         <node id="n48">
             <attr name="layout">
-                <string>1252 322 0 0</string>
+                <string>1252 152 0 0</string>
             </attr>
         </node>
         <edge from="n48" to="n48">
@@ -131,9 +81,19 @@
                 <string>string:"x"</string>
             </attr>
         </edge>
+        <node id="n49">
+            <attr name="layout">
+                <string>1252 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n49" to="n49">
+            <attr name="label">
+                <string>type:Value</string>
+            </attr>
+        </edge>
         <node id="n50">
             <attr name="layout">
-                <string>1252 492 0 0</string>
+                <string>1252 232 0 0</string>
             </attr>
         </node>
         <edge from="n50" to="n50">
@@ -141,9 +101,19 @@
                 <string>type:Value</string>
             </attr>
         </edge>
+        <node id="n51">
+            <attr name="layout">
+                <string>627 472 0 0</string>
+            </attr>
+        </node>
+        <edge from="n51" to="n51">
+            <attr name="label">
+                <string>type:SetVariableExpression</string>
+            </attr>
+        </edge>
         <node id="n52">
             <attr name="layout">
-                <string>1037 162 0 0</string>
+                <string>1037 392 0 0</string>
             </attr>
         </node>
         <edge from="n52" to="n52">
@@ -153,7 +123,7 @@
         </edge>
         <node id="n53">
             <attr name="layout">
-                <string>1252 162 0 0</string>
+                <string>1252 312 0 0</string>
             </attr>
         </node>
         <edge from="n53" to="n53">
@@ -161,9 +131,19 @@
                 <string>string:"y"</string>
             </attr>
         </edge>
+        <node id="n54">
+            <attr name="layout">
+                <string>1252 392 0 0</string>
+            </attr>
+        </node>
+        <edge from="n54" to="n54">
+            <attr name="label">
+                <string>type:Value</string>
+            </attr>
+        </edge>
         <node id="n55">
             <attr name="layout">
-                <string>1252 242 0 0</string>
+                <string>1252 472 0 0</string>
             </attr>
         </node>
         <edge from="n55" to="n55">
@@ -191,44 +171,14 @@
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n41" to="n46">
-            <attr name="label">
-                <string>del:exp</string>
-            </attr>
-        </edge>
-        <edge from="n46" to="n47">
-            <attr name="label">
-                <string>del:var</string>
-            </attr>
-        </edge>
         <edge from="n47" to="n49">
             <attr name="label">
                 <string>del:value</string>
             </attr>
         </edge>
-        <edge from="n46" to="n50">
-            <attr name="label">
-                <string>del:newValue</string>
-            </attr>
-        </edge>
-        <edge from="n41" to="n51">
-            <attr name="label">
-                <string>del:exp</string>
-            </attr>
-        </edge>
-        <edge from="n51" to="n52">
-            <attr name="label">
-                <string>del:var</string>
-            </attr>
-        </edge>
         <edge from="n52" to="n54">
             <attr name="label">
                 <string>del:value</string>
-            </attr>
-        </edge>
-        <edge from="n51" to="n55">
-            <attr name="label">
-                <string>del:newValue</string>
             </attr>
         </edge>
         <edge from="n41" to="n42">
@@ -246,14 +196,44 @@
                 <string>source</string>
             </attr>
         </edge>
+        <edge from="n41" to="n46">
+            <attr name="label">
+                <string>exp</string>
+            </attr>
+        </edge>
         <edge from="n47" to="n48">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
+        <edge from="n46" to="n47">
+            <attr name="label">
+                <string>var</string>
+            </attr>
+        </edge>
+        <edge from="n46" to="n50">
+            <attr name="label">
+                <string>newValue</string>
+            </attr>
+        </edge>
+        <edge from="n41" to="n51">
+            <attr name="label">
+                <string>exp</string>
+            </attr>
+        </edge>
         <edge from="n52" to="n53">
             <attr name="label">
                 <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n51" to="n52">
+            <attr name="label">
+                <string>var</string>
+            </attr>
+        </edge>
+        <edge from="n51" to="n55">
+            <attr name="label">
+                <string>newValue</string>
             </attr>
         </edge>
     </graph>

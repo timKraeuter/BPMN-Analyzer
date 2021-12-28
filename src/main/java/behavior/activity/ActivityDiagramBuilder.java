@@ -48,11 +48,11 @@ public class ActivityDiagramBuilder {
     }
 
     public ActivityDiagramBuilder createControlFlow(String name, ActivityNode source, ActivityNode target) {
-        this.createControlFlowWithGuard(name, source, target, null);
+        this.createControlFlow(name, source, target, null);
         return this;
     }
 
-    public ActivityDiagramBuilder createControlFlowWithGuard(
+    public ActivityDiagramBuilder createControlFlow(
             String name,
             ActivityNode source,
             ActivityNode target,

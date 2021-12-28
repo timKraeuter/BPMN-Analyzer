@@ -247,9 +247,9 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
                 .setName("TTC_Workflow")
                 .createControlFlow("", initNode, register)
                 .createControlFlow("", register, decisionNode)
-                .createControlFlowWithGuard("", decisionNode, assign_to_project_external, not_internal)
+                .createControlFlow("", decisionNode, assign_to_project_external, not_internal)
                 .createControlFlow("", assign_to_project_external, mergeNode)
-                .createControlFlowWithGuard("", decisionNode, get_welcome_package, internal)
+                .createControlFlow("", decisionNode, get_welcome_package, internal)
                 .createControlFlow("", get_welcome_package, forkNode)
                 .createControlFlow("", forkNode, add_to_website)
                 .createControlFlow("", forkNode, assign_to_project)
@@ -288,11 +288,27 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         this.checkGrooveGeneration(builder.build());
     }
 
-    @Test
+    //    @Test
     void perf3_2() throws IOException {
+        IntegerVariable i_var = new IntegerVariable("i", 10);
+
+        IntegerVariable value2 = new IntegerVariable("value2", 2);
+        BooleanVariable iG2 = new BooleanVariable("iG2", false);
+        BooleanVariable iE2 = new BooleanVariable("iE2", false);
+        BooleanVariable iL2 = new BooleanVariable("iL2", false);
+        IntegerVariable loop = new IntegerVariable("loop", 0);
+        IntegerVariable iterations = new IntegerVariable("iterations", 14);
+        BooleanVariable loopEiterations = new BooleanVariable("loopEiterations", false);
+        BooleanVariable loopLiterations = new BooleanVariable("loopLiterations", false);
+        IntegerVariable value1 = new IntegerVariable("value1", 1);
+
         ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
         InitialNode initNode = new InitialNode("initial");
-        OpaqueAction a = new OpaqueAction("a", Lists.newArrayList());
+        OpaqueAction a = new OpaqueAction("a", Lists.newArrayList(
+                new IntegerComparisonExpression(i_var, value2, iG2, IntegerComparisonOperator.GREATER),
+                new IntegerComparisonExpression(i_var, value2, iE2, IntegerComparisonOperator.EQUALS),
+                new IntegerComparisonExpression(i_var, value2, iL2, IntegerComparisonOperator.SMALLER)
+        ));
         OpaqueAction b = new OpaqueAction("b", Lists.newArrayList());
         OpaqueAction c = new OpaqueAction("c", Lists.newArrayList());
         OpaqueAction d = new OpaqueAction("d", Lists.newArrayList());
@@ -312,6 +328,16 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
 
         builder.setName("perf3-2")
                 .setInitialNode(initNode)
+                .addInputVariable(i_var)
+                .addLocalVariable(value2)
+                .addLocalVariable(iG2)
+                .addLocalVariable(iE2)
+                .addLocalVariable(iL2)
+                .addLocalVariable(loop)
+                .addLocalVariable(iterations)
+                .addLocalVariable(loopEiterations)
+                .addLocalVariable(loopLiterations)
+                .addLocalVariable(value1)
                 .createControlFlow("", initNode, a)
                 .createControlFlow("", a, b)
                 .createControlFlow("", b, c)
@@ -319,9 +345,9 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
                 .createControlFlow("", d, mergeE)
                 .createControlFlow("", mergeE, e)
                 .createControlFlow("", e, decisionI)
-                .createControlFlow("", decisionI, f)
-                .createControlFlow("", decisionI, g)
-                .createControlFlow("", decisionI, i)
+                .createControlFlow("", decisionI, f, iG2)
+                .createControlFlow("", decisionI, g, iE2)
+                .createControlFlow("", decisionI, i, iL2)
                 .createControlFlow("", f, mergeFinal)
                 .createControlFlow("", mergeFinal, finalNode)
                 .createControlFlow("", g, h)

@@ -542,8 +542,8 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
         expression.accept(new ExpressionVisitor() {
             @Override
             public <VALUE extends Value> void handle(SetVariableExpression<VALUE> setVariableExpression) {
-                GrooveNode exp = ruleBuilder.deleteNode(TYPE_SET_VARIABLE_EXPRESSION);
-                ruleBuilder.deleteEdge(EXP, action, exp);
+                GrooveNode exp = ruleBuilder.contextNode(TYPE_SET_VARIABLE_EXPRESSION);
+                ruleBuilder.contextEdge(EXP, action, exp);
 
                 // Create variable in context
                 GrooveNode var = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
@@ -551,10 +551,10 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                         ruleBuilder);
 
                 // Swap the value of the variable
-                ruleBuilder.deleteEdge(VAR, exp, var);
-                ruleBuilder.deleteEdge(VALUE, var, ruleBuilder.deleteNode(TYPE_VALUE));
+                ruleBuilder.contextEdge(VAR, exp, var);
+                ruleBuilder.deleteEdge(VALUE, var, ruleBuilder.contextNode(TYPE_VALUE)); // We might want to implement a cleanup of the old values here.
                 GrooveNode newValue = ruleBuilder.contextNode(TYPE_VALUE);
-                ruleBuilder.deleteEdge(NEW_VALUE, exp, newValue);
+                ruleBuilder.contextEdge(NEW_VALUE, exp, newValue);
                 ruleBuilder.addEdge(VALUE, var, newValue);
             }
 
@@ -564,15 +564,15 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                 String grooveOperator = "";
                 switch (integerCalculationExpression.getOperator()) {
                     case ADD:
-                        exp = ruleBuilder.deleteNode(TYPE_SUM);
+                        exp = ruleBuilder.contextNode(TYPE_SUM);
                         grooveOperator = INT_ADD;
                         break;
                     case SUBTRACT:
-                        exp = ruleBuilder.deleteNode(TYPE_DIFFERENCE);
+                        exp = ruleBuilder.contextNode(TYPE_DIFFERENCE);
                         grooveOperator = INT_SUB;
                         break;
                 }
-                ruleBuilder.deleteEdge(EXP, action, exp);
+                ruleBuilder.contextEdge(EXP, action, exp);
 
                 // Operand 1
                 GrooveNode operand1ValueInt = ActivityDiagramToGrooveTransformer.this.createOperand(
@@ -615,27 +615,27 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                 String grooveOperator = "";
                 switch (integerComparisonExpression.getOperator()) {
                     case SMALLER:
-                        exp = ruleBuilder.deleteNode(TYPE_SMALLER);
+                        exp = ruleBuilder.contextNode(TYPE_SMALLER);
                         grooveOperator = INT_LT;
                         break;
                     case SMALLER_EQUALS:
-                        exp = ruleBuilder.deleteNode(TYPE_SMALLER_EQUALS);
+                        exp = ruleBuilder.contextNode(TYPE_SMALLER_EQUALS);
                         grooveOperator = INT_LE;
                         break;
                     case EQUALS:
-                        exp = ruleBuilder.deleteNode(TYPE_EQUALS);
+                        exp = ruleBuilder.contextNode(TYPE_EQUALS);
                         grooveOperator = INT_EQ;
                         break;
                     case GREATER_EQUALS:
-                        exp = ruleBuilder.deleteNode(TYPE_GREATER_EQUALS);
+                        exp = ruleBuilder.contextNode(TYPE_GREATER_EQUALS);
                         grooveOperator = INT_GE;
                         break;
                     case GREATER:
-                        exp = ruleBuilder.deleteNode(TYPE_GREATER);
+                        exp = ruleBuilder.contextNode(TYPE_GREATER);
                         grooveOperator = INT_GT;
                         break;
                 }
-                ruleBuilder.deleteEdge(EXP, action, exp);
+                ruleBuilder.contextEdge(EXP, action, exp);
 
                 // Operand 1
                 GrooveNode operand1ValueInt = ActivityDiagramToGrooveTransformer.this.createOperand(
@@ -678,15 +678,15 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                 String grooveOperator = "";
                 switch (booleanBinaryExpression.getOperator()) {
                     case AND:
-                        exp = ruleBuilder.deleteNode(TYPE_AND);
+                        exp = ruleBuilder.contextNode(TYPE_AND);
                         grooveOperator = BOOL_AND;
                         break;
                     case OR:
-                        exp = ruleBuilder.deleteNode(TYPE_OR);
+                        exp = ruleBuilder.contextNode(TYPE_OR);
                         grooveOperator = BOOL_OR;
                         break;
                 }
-                ruleBuilder.deleteEdge(EXP, action, exp);
+                ruleBuilder.contextEdge(EXP, action, exp);
 
                 // Operand 1
                 GrooveNode operand1ValueBool = ActivityDiagramToGrooveTransformer.this.createOperand(
@@ -725,8 +725,8 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
             @Override
             public void handle(BooleanUnaryExpression booleanUnaryExpression) {
-                GrooveNode exp = ruleBuilder.deleteNode(TYPE_NOT);
-                ruleBuilder.deleteEdge(EXP, action, exp);
+                GrooveNode exp = ruleBuilder.contextNode(TYPE_NOT);
+                ruleBuilder.contextEdge(EXP, action, exp);
 
                 // Operand
                 GrooveNode operandValueBool = ActivityDiagramToGrooveTransformer.this.createOperand(
@@ -763,7 +763,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
         GrooveNode operand2Var = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
                 operandVariableName,
                 ruleBuilder);
-        ruleBuilder.deleteEdge(operandEdgeName, exp, operand2Var);
+        ruleBuilder.contextEdge(operandEdgeName, exp, operand2Var);
 
         GrooveNode operand2Value = ruleBuilder.contextNode(activityDiagramValueType);
         ruleBuilder.contextEdge(VALUE, operand2Var, operand2Value);
@@ -782,7 +782,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
         GrooveNode assigneeVar = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
                 assigneeVarName,
                 ruleBuilder);
-        ruleBuilder.deleteEdge(ASSIGNEE, exp, assigneeVar);
+        ruleBuilder.contextEdge(ASSIGNEE, exp, assigneeVar);
 
         GrooveNode assigneeValue = ruleBuilder.contextNode(activityDiagramValueType);
         ruleBuilder.contextEdge(VALUE, assigneeVar, assigneeValue);
