@@ -288,16 +288,16 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         this.checkGrooveGeneration(builder.build());
     }
 
-    //    @Test
+    @Test
     void perf3_2() throws IOException {
-        IntegerVariable i_var = new IntegerVariable("i", 10);
+        IntegerVariable i_var = new IntegerVariable("i", 1);
 
         IntegerVariable value2 = new IntegerVariable("value2", 2);
         BooleanVariable iG2 = new BooleanVariable("iG2", false);
         BooleanVariable iE2 = new BooleanVariable("iE2", false);
         BooleanVariable iL2 = new BooleanVariable("iL2", false);
         IntegerVariable loop = new IntegerVariable("loop", 0);
-        IntegerVariable iterations = new IntegerVariable("iterations", 14);
+        IntegerVariable iterations = new IntegerVariable("iterations", 141);
         BooleanVariable loopEiterations = new BooleanVariable("loopEiterations", false);
         BooleanVariable loopLiterations = new BooleanVariable("loopLiterations", false);
         IntegerVariable value1 = new IntegerVariable("value1", 1);
@@ -319,11 +319,19 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         OpaqueAction g = new OpaqueAction("g", Lists.newArrayList());
         OpaqueAction h = new OpaqueAction("h", Lists.newArrayList());
         OpaqueAction i = new OpaqueAction("i", Lists.newArrayList());
-        OpaqueAction j = new OpaqueAction("j", Lists.newArrayList());
+        OpaqueAction j = new OpaqueAction("j", Lists.newArrayList(
+                new IntegerComparisonExpression(loop, iterations, loopEiterations, IntegerComparisonOperator.EQUALS),
+                new IntegerComparisonExpression(loop, iterations, loopLiterations, IntegerComparisonOperator.SMALLER),
+                new IntegerComparisonExpression(loop, iterations, loopEiterations, IntegerComparisonOperator.EQUALS)
+        ));
+
         DecisionNode decisionLoop = new DecisionNode("decisionLoop");
         MergeNode mergeFinal = new MergeNode("mergeFinal");
         OpaqueAction k = new OpaqueAction("k", Lists.newArrayList());
-        OpaqueAction l = new OpaqueAction("l", Lists.newArrayList());
+        OpaqueAction l = new OpaqueAction("l", Lists.newArrayList(
+                new IntegerCalculationExpression(loop, value1, loop, IntegerCalculationOperator.ADD)
+        ));
+
         ActivityFinalNode finalNode = new ActivityFinalNode("final");
 
         builder.setName("perf3-2")
@@ -354,8 +362,8 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
                 .createControlFlow("", h, mergeFinal)
                 .createControlFlow("", i, j)
                 .createControlFlow("", j, decisionLoop)
-                .createControlFlow("", decisionLoop, k)
-                .createControlFlow("", decisionLoop, l)
+                .createControlFlow("", decisionLoop, k, loopEiterations)
+                .createControlFlow("", decisionLoop, l, loopLiterations)
                 .createControlFlow("", k, mergeFinal)
                 .createControlFlow("", l, mergeE);
 

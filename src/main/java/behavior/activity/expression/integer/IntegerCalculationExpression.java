@@ -13,12 +13,11 @@ public class IntegerCalculationExpression extends IntegerExpression {
             IntegerVariable assignee,
             IntegerCalculationOperator operator) {
         super(operand1, operand2);
-        assert !assignee.getName().equals(operand1.getName());
-        assert !assignee.getName().equals(operand2.getName());
         this.operator = operator;
         this.assignee = assignee;
     }
 
+    @Override
     public IntegerVariable getAssignee() {
         return this.assignee;
     }
