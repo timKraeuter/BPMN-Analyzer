@@ -288,7 +288,7 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         this.checkGrooveGeneration(builder.build());
     }
 
-    @Test
+//    @Test
     void perf3_2() throws IOException {
         IntegerVariable i_var = new IntegerVariable("i", 1);
 
