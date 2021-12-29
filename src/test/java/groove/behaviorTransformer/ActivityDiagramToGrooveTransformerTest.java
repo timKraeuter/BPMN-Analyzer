@@ -369,4 +369,39 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
 
         this.checkGrooveGeneration(builder.build());
     }
+
+    @Test
+    void myPerf() throws IOException {
+        IntegerVariable counter = new IntegerVariable("i", 1);
+        IntegerVariable value1 = new IntegerVariable("value1", 1);
+        IntegerVariable iterations = new IntegerVariable("iterations", 100000);
+        BooleanVariable stop = new BooleanVariable("stop", false);
+        BooleanVariable notStop = new BooleanVariable("dontStop", true);
+
+        ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
+        InitialNode initNode = new InitialNode("initial");
+        MergeNode merge = new MergeNode("merge");
+        OpaqueAction a = new OpaqueAction("a", Lists.newArrayList(
+                new IntegerCalculationExpression(counter, value1, counter, IntegerCalculationOperator.ADD),
+                new IntegerComparisonExpression(counter, iterations, stop, IntegerComparisonOperator.EQUALS),
+                new BooleanUnaryExpression(stop, notStop, BooleanUnaryOperator.NOT)
+        ));
+        DecisionNode decision = new DecisionNode("decision");
+        ActivityFinalNode finalNode = new ActivityFinalNode("final");
+
+        builder.setName("myPerf")
+                .setInitialNode(initNode)
+                .addInputVariable(counter)
+                .addLocalVariable(value1)
+                .addLocalVariable(iterations)
+                .addLocalVariable(stop)
+                .addLocalVariable(notStop)
+                .createControlFlow("", initNode, merge)
+                .createControlFlow("", merge, a)
+                .createControlFlow("", a, decision)
+                .createControlFlow("", decision, merge, notStop)
+                .createControlFlow("", decision, finalNode, stop);
+
+        this.checkGrooveGeneration(builder.build());
+    }
 }
