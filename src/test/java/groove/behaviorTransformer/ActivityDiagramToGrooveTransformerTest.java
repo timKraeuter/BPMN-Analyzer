@@ -370,11 +370,11 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         this.checkGrooveGeneration(builder.build());
     }
 
-    @Test
+//    @Test
     void myPerf() throws IOException {
         IntegerVariable counter = new IntegerVariable("i", 1);
         IntegerVariable value1 = new IntegerVariable("value1", 1);
-        IntegerVariable iterations = new IntegerVariable("iterations", 100000);
+        IntegerVariable iterations = new IntegerVariable("iterations", 100000); // 36/37s on hvl laptop
         BooleanVariable stop = new BooleanVariable("stop", false);
         BooleanVariable notStop = new BooleanVariable("dontStop", true);
 
