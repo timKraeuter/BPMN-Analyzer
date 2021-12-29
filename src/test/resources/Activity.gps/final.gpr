@@ -1,104 +1,89 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="final" role="rule" edgeids="false" edgemode="directed">
-        <node id="n38">
+        <node id="n22">
             <attr name="layout">
-                <string>322 82 0 0</string>
+                <string>62 82 0 0</string>
             </attr>
         </node>
-        <edge from="n38" to="n38">
+        <edge from="n22" to="n22">
             <attr name="label">
-                <string>type:Token</string>
+                <string>type:ControlToken</string>
             </attr>
         </edge>
-        <edge from="n38" to="n38">
+        <edge from="n22" to="n22">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n32">
+        <node id="n18">
             <attr name="layout">
-                <string>62 255 0 0</string>
+                <string>62 175 0 0</string>
             </attr>
         </node>
-        <edge from="n32" to="n32">
+        <edge from="n18" to="n18">
             <attr name="label">
                 <string>type:ActivityDiagram</string>
             </attr>
         </edge>
-        <node id="n33">
-            <attr name="layout">
-                <string>392 402 0 0</string>
-            </attr>
-        </node>
-        <edge from="n33" to="n33">
-            <attr name="label">
-                <string>string:"Activity"</string>
-            </attr>
-        </edge>
-        <node id="n34">
-            <attr name="layout">
-                <string>392 242 0 0</string>
-            </attr>
-        </node>
-        <edge from="n34" to="n34">
-            <attr name="label">
-                <string>bool:false</string>
-            </attr>
-        </edge>
-        <node id="n35">
+        <node id="n19">
             <attr name="layout">
                 <string>392 322 0 0</string>
             </attr>
         </node>
-        <edge from="n35" to="n35">
+        <edge from="n19" to="n19">
+            <attr name="label">
+                <string>string:"Activity"</string>
+            </attr>
+        </edge>
+        <node id="n20">
+            <attr name="layout">
+                <string>392 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n20" to="n20">
+            <attr name="label">
+                <string>bool:false</string>
+            </attr>
+        </edge>
+        <node id="n21">
+            <attr name="layout">
+                <string>392 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n21" to="n21">
             <attr name="label">
                 <string>bool:true</string>
             </attr>
         </edge>
-        <node id="n36">
+        <node id="n23">
             <attr name="layout">
-                <string>62 90 0 0</string>
+                <string>337 82 0 0</string>
             </attr>
         </node>
-        <edge from="n36" to="n36">
+        <edge from="n23" to="n23">
             <attr name="label">
-                <string>type:ControlFlow</string>
+                <string>string:"final"</string>
             </attr>
         </edge>
-        <node id="n37">
-            <attr name="layout">
-                <string>322 162 0 0</string>
-            </attr>
-        </node>
-        <edge from="n37" to="n37">
-            <attr name="label">
-                <string>type:FinalNode</string>
-            </attr>
-        </edge>
-        <edge from="n32" to="n34">
+        <edge from="n18" to="n20">
             <attr name="label">
                 <string>new:running</string>
             </attr>
         </edge>
-        <edge from="n32" to="n35">
+        <edge from="n18" to="n21">
             <attr name="label">
                 <string>del:running</string>
             </attr>
         </edge>
-        <edge from="n36" to="n38">
+        <edge from="n22" to="n23">
             <attr name="label">
-                <string>del:tokens</string>
+                <string>del:name</string>
             </attr>
         </edge>
-        <edge from="n32" to="n33">
+        <edge from="n18" to="n19">
             <attr name="label">
                 <string>name</string>
-            </attr>
-        </edge>
-        <edge from="n36" to="n37">
-            <attr name="label">
-                <string>target</string>
             </attr>
         </edge>
     </graph>

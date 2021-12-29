@@ -204,14 +204,14 @@
                 <string>type:BooleanExpression</string>
             </attr>
         </edge>
-        <edge from="n11" to="n7">
-            <attr name="label">
-                <string>assignee</string>
-            </attr>
-        </edge>
         <edge from="n11" to="n1">
             <attr name="label">
                 <string>sub:</string>
+            </attr>
+        </edge>
+        <edge from="n11" to="n7">
+            <attr name="label">
+                <string>assignee</string>
             </attr>
         </edge>
         <edge from="n5" to="n5">
@@ -219,14 +219,14 @@
                 <string>type:Not</string>
             </attr>
         </edge>
-        <edge from="n5" to="n11">
-            <attr name="label">
-                <string>sub:</string>
-            </attr>
-        </edge>
         <edge from="n5" to="n7">
             <attr name="label">
                 <string>1</string>
+            </attr>
+        </edge>
+        <edge from="n5" to="n11">
+            <attr name="label">
+                <string>sub:</string>
             </attr>
         </edge>
         <edge from="n4" to="n4">
@@ -309,11 +309,6 @@
                 <string>type:SetVariableExpression</string>
             </attr>
         </edge>
-        <edge from="n2" to="n8">
-            <attr name="label">
-                <string>newValue</string>
-            </attr>
-        </edge>
         <edge from="n2" to="n7">
             <attr name="label">
                 <string>var</string>
@@ -322,6 +317,11 @@
         <edge from="n2" to="n1">
             <attr name="label">
                 <string>sub:</string>
+            </attr>
+        </edge>
+        <edge from="n2" to="n8">
+            <attr name="label">
+                <string>newValue</string>
             </attr>
         </edge>
         <edge from="n8" to="n8">
@@ -379,6 +379,11 @@
                 <string>type:Token</string>
             </attr>
         </edge>
+        <edge from="n13" to="n13">
+            <attr name="label">
+                <string>string:name</string>
+            </attr>
+        </edge>
         <edge from="n14" to="n14">
             <attr name="label">
                 <string>type:ControlToken</string>
@@ -404,11 +409,6 @@
                 <string>string:name</string>
             </attr>
         </edge>
-        <edge from="n15" to="n13">
-            <attr name="label">
-                <string>tokens</string>
-            </attr>
-        </edge>
         <edge from="n15" to="n12">
             <attr name="label">
                 <string>source</string>
@@ -417,6 +417,11 @@
         <edge from="n15" to="n12">
             <attr name="label">
                 <string>target</string>
+            </attr>
+        </edge>
+        <edge from="n15" to="n13">
+            <attr name="label">
+                <string>tokens</string>
             </attr>
         </edge>
         <edge from="n16" to="n16">
@@ -499,14 +504,14 @@
                 <string>type:OpaqueAction</string>
             </attr>
         </edge>
-        <edge from="n23" to="n12">
-            <attr name="label">
-                <string>sub:</string>
-            </attr>
-        </edge>
         <edge from="n23" to="n1">
             <attr name="label">
                 <string>exp</string>
+            </attr>
+        </edge>
+        <edge from="n23" to="n12">
+            <attr name="label">
+                <string>sub:</string>
             </attr>
         </edge>
         <edge from="n24" to="n24">

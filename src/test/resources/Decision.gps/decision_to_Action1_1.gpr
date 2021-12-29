@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="initial" role="rule" edgeids="false" edgemode="directed">
-        <node id="n21">
+    <graph id="decision_to_Action1_1" role="rule" edgeids="false" edgemode="directed">
+        <node id="n15">
             <attr name="layout">
                 <string>62 80 0 0</string>
             </attr>
         </node>
-        <edge from="n21" to="n21">
+        <edge from="n15" to="n15">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n22">
+        <node id="n16">
             <attr name="layout">
                 <string>232 152 0 0</string>
             </attr>
         </node>
-        <edge from="n22" to="n22">
+        <edge from="n16" to="n16">
             <attr name="label">
-                <string>string:"initial"</string>
+                <string>string:"decision"</string>
             </attr>
         </edge>
-        <node id="n23">
+        <node id="n17">
             <attr name="layout">
                 <string>232 72 0 0</string>
             </attr>
         </node>
-        <edge from="n23" to="n23">
+        <edge from="n17" to="n17">
             <attr name="label">
-                <string>string:"Action1"</string>
+                <string>string:"Action1_1"</string>
             </attr>
         </edge>
-        <edge from="n21" to="n23">
+        <edge from="n15" to="n17">
             <attr name="label">
                 <string>new:name</string>
             </attr>
         </edge>
-        <edge from="n21" to="n22">
+        <edge from="n15" to="n16">
             <attr name="label">
                 <string>del:name</string>
             </attr>

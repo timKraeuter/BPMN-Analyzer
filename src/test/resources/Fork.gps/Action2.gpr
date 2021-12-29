@@ -1,79 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="Action2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n62">
+        <node id="n33">
             <attr name="layout">
-                <string>342 152 0 0</string>
+                <string>62 80 0 0</string>
             </attr>
         </node>
-        <edge from="n62" to="n62">
-            <attr name="label">
-                <string>type:OpaqueAction</string>
-            </attr>
-        </edge>
-        <node id="n63">
-            <attr name="layout">
-                <string>617 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n63" to="n63">
-            <attr name="label">
-                <string>string:"Action2"</string>
-            </attr>
-        </edge>
-        <node id="n64">
-            <attr name="layout">
-                <string>62 72 0 0</string>
-            </attr>
-        </node>
-        <edge from="n64" to="n64">
-            <attr name="label">
-                <string>type:ControlFlow</string>
-            </attr>
-        </edge>
-        <node id="n65">
-            <attr name="layout">
-                <string>62 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n65" to="n65">
-            <attr name="label">
-                <string>type:ControlFlow</string>
-            </attr>
-        </edge>
-        <node id="n66">
-            <attr name="layout">
-                <string>342 72 0 0</string>
-            </attr>
-        </node>
-        <edge from="n66" to="n66">
+        <edge from="n33" to="n33">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n65" to="n66">
+        <node id="n34">
+            <attr name="layout">
+                <string>232 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n34" to="n34">
             <attr name="label">
-                <string>new:tokens</string>
+                <string>string:"Action2"</string>
             </attr>
         </edge>
-        <edge from="n64" to="n66">
+        <node id="n35">
+            <attr name="layout">
+                <string>232 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n35" to="n35">
             <attr name="label">
-                <string>del:tokens</string>
+                <string>string:"final"</string>
             </attr>
         </edge>
-        <edge from="n62" to="n63">
+        <edge from="n33" to="n35">
             <attr name="label">
-                <string>name</string>
+                <string>new:name</string>
             </attr>
         </edge>
-        <edge from="n64" to="n62">
+        <edge from="n33" to="n34">
             <attr name="label">
-                <string>target</string>
-            </attr>
-        </edge>
-        <edge from="n65" to="n62">
-            <attr name="label">
-                <string>source</string>
+                <string>del:name</string>
             </attr>
         </edge>
     </graph>
