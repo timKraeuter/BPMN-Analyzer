@@ -1,129 +1,99 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="fork" role="rule" edgeids="false" edgemode="directed">
-        <node id="n100">
+        <node id="n58">
             <attr name="layout">
-                <string>592 272 0 0</string>
+                <string>62 225 0 0</string>
             </attr>
         </node>
-        <edge from="n100" to="n100">
+        <edge from="n58" to="n58">
             <attr name="label">
                 <string>type:ForkedToken</string>
             </attr>
         </edge>
-        <edge from="n100" to="n100">
+        <edge from="n58" to="n58">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n102">
+        <node id="n60">
             <attr name="layout">
-                <string>592 82 0 0</string>
+                <string>62 135 0 0</string>
             </attr>
         </node>
-        <edge from="n102" to="n102">
+        <edge from="n60" to="n60">
             <attr name="label">
                 <string>type:ForkedToken</string>
             </attr>
         </edge>
-        <edge from="n102" to="n102">
+        <edge from="n60" to="n60">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n96">
+        <node id="n56">
             <attr name="layout">
-                <string>592 162 0 0</string>
+                <string>402 152 0 0</string>
             </attr>
         </node>
-        <edge from="n96" to="n96">
+        <edge from="n56" to="n56">
             <attr name="label">
-                <string>type:ForkNode</string>
+                <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n97">
+        <node id="n57">
             <attr name="layout">
-                <string>332 208 0 0</string>
+                <string>732 152 0 0</string>
             </attr>
         </node>
-        <edge from="n97" to="n97">
+        <edge from="n57" to="n57">
             <attr name="label">
-                <string>type:ControlFlow</string>
+                <string>string:"fork"</string>
             </attr>
         </edge>
-        <node id="n98">
+        <node id="n59">
             <attr name="layout">
-                <string>852 216 0 0</string>
+                <string>322 234 0 0</string>
             </attr>
         </node>
-        <edge from="n98" to="n98">
+        <edge from="n59" to="n59">
             <attr name="label">
-                <string>type:ControlToken</string>
+                <string>string:"add_to_website"</string>
             </attr>
         </edge>
-        <node id="n99">
+        <node id="n61">
             <attr name="layout">
-                <string>62 103 0 0</string>
+                <string>322 72 0 0</string>
             </attr>
         </node>
-        <edge from="n99" to="n99">
+        <edge from="n61" to="n61">
             <attr name="label">
-                <string>type:ControlFlow</string>
+                <string>string:"assign_to_project"</string>
             </attr>
         </edge>
-        <node id="n101">
-            <attr name="layout">
-                <string>332 90 0 0</string>
-            </attr>
-        </node>
-        <edge from="n101" to="n101">
-            <attr name="label">
-                <string>type:ControlFlow</string>
-            </attr>
-        </edge>
-        <edge from="n100" to="n98">
+        <edge from="n58" to="n56">
             <attr name="label">
                 <string>new:baseToken</string>
             </attr>
         </edge>
-        <edge from="n99" to="n100">
+        <edge from="n58" to="n59">
             <attr name="label">
-                <string>new:tokens</string>
+                <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n102" to="n98">
+        <edge from="n60" to="n56">
             <attr name="label">
                 <string>new:baseToken</string>
             </attr>
         </edge>
-        <edge from="n101" to="n102">
+        <edge from="n60" to="n61">
             <attr name="label">
-                <string>new:tokens</string>
+                <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n97" to="n98">
+        <edge from="n56" to="n57">
             <attr name="label">
-                <string>del:tokens</string>
-            </attr>
-        </edge>
-        <edge from="n97" to="n96">
-            <attr name="label">
-                <string>target</string>
-            </attr>
-        </edge>
-        <edge from="n99" to="n96">
-            <attr name="label">
-                <string>source</string>
-            </attr>
-        </edge>
-        <edge from="n101" to="n96">
-            <attr name="label">
-                <string>source</string>
-            </attr>
-        </edge>
-        <edge from="n99" to="n101">
-            <attr name="label">
-                <string>!=</string>
+                <string>del:position</string>
             </attr>
         </edge>
     </graph>

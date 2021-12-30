@@ -1,79 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="manager_interview" role="rule" edgeids="false" edgemode="directed">
-        <node id="n120">
+        <node id="n74">
             <attr name="layout">
-                <string>342 152 0 0</string>
+                <string>62 80 0 0</string>
             </attr>
         </node>
-        <edge from="n120" to="n120">
-            <attr name="label">
-                <string>type:OpaqueAction</string>
-            </attr>
-        </edge>
-        <node id="n121">
-            <attr name="layout">
-                <string>617 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n121" to="n121">
-            <attr name="label">
-                <string>string:"manager_interview"</string>
-            </attr>
-        </edge>
-        <node id="n122">
-            <attr name="layout">
-                <string>62 72 0 0</string>
-            </attr>
-        </node>
-        <edge from="n122" to="n122">
-            <attr name="label">
-                <string>type:ControlFlow</string>
-            </attr>
-        </edge>
-        <node id="n123">
-            <attr name="layout">
-                <string>62 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n123" to="n123">
-            <attr name="label">
-                <string>type:ControlFlow</string>
-            </attr>
-        </edge>
-        <node id="n124">
-            <attr name="layout">
-                <string>342 72 0 0</string>
-            </attr>
-        </node>
-        <edge from="n124" to="n124">
+        <edge from="n74" to="n74">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n123" to="n124">
+        <node id="n75">
+            <attr name="layout">
+                <string>232 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n75" to="n75">
             <attr name="label">
-                <string>new:tokens</string>
+                <string>string:"manager_interview"</string>
             </attr>
         </edge>
-        <edge from="n122" to="n124">
+        <node id="n76">
+            <attr name="layout">
+                <string>232 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n76" to="n76">
             <attr name="label">
-                <string>del:tokens</string>
+                <string>string:"manager_report"</string>
             </attr>
         </edge>
-        <edge from="n120" to="n121">
+        <edge from="n74" to="n76">
             <attr name="label">
-                <string>name</string>
+                <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n122" to="n120">
+        <edge from="n74" to="n75">
             <attr name="label">
-                <string>target</string>
-            </attr>
-        </edge>
-        <edge from="n123" to="n120">
-            <attr name="label">
-                <string>source</string>
+                <string>del:position</string>
             </attr>
         </edge>
     </graph>

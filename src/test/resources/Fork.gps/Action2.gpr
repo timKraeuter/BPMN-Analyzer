@@ -33,12 +33,12 @@
         </edge>
         <edge from="n33" to="n35">
             <attr name="label">
-                <string>new:name</string>
+                <string>new:position</string>
             </attr>
         </edge>
         <edge from="n33" to="n34">
             <attr name="label">
-                <string>del:name</string>
+                <string>del:position</string>
             </attr>
         </edge>
     </graph>

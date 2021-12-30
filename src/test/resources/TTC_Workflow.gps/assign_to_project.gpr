@@ -1,79 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="assign_to_project" role="rule" edgeids="false" edgemode="directed">
-        <node id="n108">
+        <node id="n65">
             <attr name="layout">
-                <string>342 152 0 0</string>
+                <string>62 80 0 0</string>
             </attr>
         </node>
-        <edge from="n108" to="n108">
-            <attr name="label">
-                <string>type:OpaqueAction</string>
-            </attr>
-        </edge>
-        <node id="n109">
-            <attr name="layout">
-                <string>617 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n109" to="n109">
-            <attr name="label">
-                <string>string:"assign_to_project"</string>
-            </attr>
-        </edge>
-        <node id="n110">
-            <attr name="layout">
-                <string>62 72 0 0</string>
-            </attr>
-        </node>
-        <edge from="n110" to="n110">
-            <attr name="label">
-                <string>type:ControlFlow</string>
-            </attr>
-        </edge>
-        <node id="n111">
-            <attr name="layout">
-                <string>62 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n111" to="n111">
-            <attr name="label">
-                <string>type:ControlFlow</string>
-            </attr>
-        </edge>
-        <node id="n112">
-            <attr name="layout">
-                <string>342 72 0 0</string>
-            </attr>
-        </node>
-        <edge from="n112" to="n112">
+        <edge from="n65" to="n65">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n111" to="n112">
+        <node id="n66">
+            <attr name="layout">
+                <string>232 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n66" to="n66">
             <attr name="label">
-                <string>new:tokens</string>
+                <string>string:"assign_to_project"</string>
             </attr>
         </edge>
-        <edge from="n110" to="n112">
+        <node id="n67">
+            <attr name="layout">
+                <string>232 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n67" to="n67">
             <attr name="label">
-                <string>del:tokens</string>
+                <string>string:"join"</string>
             </attr>
         </edge>
-        <edge from="n108" to="n109">
+        <edge from="n65" to="n67">
             <attr name="label">
-                <string>name</string>
+                <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n110" to="n108">
+        <edge from="n65" to="n66">
             <attr name="label">
-                <string>target</string>
-            </attr>
-        </edge>
-        <edge from="n111" to="n108">
-            <attr name="label">
-                <string>source</string>
+                <string>del:position</string>
             </attr>
         </edge>
     </graph>

@@ -1,64 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="merge" role="rule" edgeids="false" edgemode="directed">
-        <node id="n87">
+        <node id="n50">
             <attr name="layout">
-                <string>342 72 0 0</string>
+                <string>62 80 0 0</string>
             </attr>
         </node>
-        <edge from="n87" to="n87">
-            <attr name="label">
-                <string>type:MergeNode</string>
-            </attr>
-        </edge>
-        <node id="n88">
-            <attr name="layout">
-                <string>62 72 0 0</string>
-            </attr>
-        </node>
-        <edge from="n88" to="n88">
-            <attr name="label">
-                <string>type:ControlFlow</string>
-            </attr>
-        </edge>
-        <node id="n89">
-            <attr name="layout">
-                <string>62 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n89" to="n89">
-            <attr name="label">
-                <string>type:ControlFlow</string>
-            </attr>
-        </edge>
-        <node id="n90">
-            <attr name="layout">
-                <string>342 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n90" to="n90">
+        <edge from="n50" to="n50">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n89" to="n90">
+        <node id="n51">
+            <attr name="layout">
+                <string>232 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n51" to="n51">
             <attr name="label">
-                <string>new:tokens</string>
+                <string>string:"merge"</string>
             </attr>
         </edge>
-        <edge from="n88" to="n90">
+        <node id="n52">
+            <attr name="layout">
+                <string>232 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n52" to="n52">
             <attr name="label">
-                <string>del:tokens</string>
+                <string>string:"authorize_payment"</string>
             </attr>
         </edge>
-        <edge from="n88" to="n87">
+        <edge from="n50" to="n52">
             <attr name="label">
-                <string>target</string>
+                <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n89" to="n87">
+        <edge from="n50" to="n51">
             <attr name="label">
-                <string>source</string>
+                <string>del:position</string>
             </attr>
         </edge>
     </graph>

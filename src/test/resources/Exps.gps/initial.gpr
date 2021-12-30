@@ -1,64 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="initial" role="rule" edgeids="false" edgemode="directed">
-        <node id="n76">
+        <node id="n61">
             <attr name="layout">
-                <string>340 152 0 0</string>
+                <string>62 80 0 0</string>
             </attr>
         </node>
-        <edge from="n76" to="n76">
-            <attr name="label">
-                <string>type:InitialNode</string>
-            </attr>
-        </edge>
-        <node id="n77">
-            <attr name="layout">
-                <string>62 85 0 0</string>
-            </attr>
-        </node>
-        <edge from="n77" to="n77">
-            <attr name="label">
-                <string>type:ControlFlow</string>
-            </attr>
-        </edge>
-        <node id="n78">
-            <attr name="layout">
-                <string>332 72 0 0</string>
-            </attr>
-        </node>
-        <edge from="n78" to="n78">
-            <attr name="label">
-                <string>type:ActivityNode</string>
-            </attr>
-        </edge>
-        <node id="n79">
-            <attr name="layout">
-                <string>607 160 0 0</string>
-            </attr>
-        </node>
-        <edge from="n79" to="n79">
+        <edge from="n61" to="n61">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n77" to="n79">
+        <node id="n62">
+            <attr name="layout">
+                <string>232 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n62" to="n62">
             <attr name="label">
-                <string>new:tokens</string>
+                <string>string:"initial"</string>
             </attr>
         </edge>
-        <edge from="n76" to="n79">
+        <node id="n63">
+            <attr name="layout">
+                <string>232 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n63" to="n63">
             <attr name="label">
-                <string>del:tokens</string>
+                <string>string:"Action1"</string>
             </attr>
         </edge>
-        <edge from="n77" to="n76">
+        <edge from="n61" to="n63">
             <attr name="label">
-                <string>source</string>
+                <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n77" to="n78">
+        <edge from="n61" to="n62">
             <attr name="label">
-                <string>target</string>
+                <string>del:position</string>
             </attr>
         </edge>
     </graph>

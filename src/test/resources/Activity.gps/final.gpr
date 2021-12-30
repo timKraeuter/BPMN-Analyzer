@@ -78,7 +78,7 @@
         </edge>
         <edge from="n22" to="n23">
             <attr name="label">
-                <string>del:name</string>
+                <string>del:position</string>
             </attr>
         </edge>
         <edge from="n18" to="n19">

@@ -1,104 +1,89 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="final" role="rule" edgeids="false" edgemode="directed">
-        <node id="n141">
+        <node id="n87">
             <attr name="layout">
-                <string>322 82 0 0</string>
+                <string>62 82 0 0</string>
             </attr>
         </node>
-        <edge from="n141" to="n141">
+        <edge from="n87" to="n87">
             <attr name="label">
-                <string>type:Token</string>
+                <string>type:ControlToken</string>
             </attr>
         </edge>
-        <edge from="n141" to="n141">
+        <edge from="n87" to="n87">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n135">
+        <node id="n83">
             <attr name="layout">
-                <string>62 255 0 0</string>
+                <string>62 175 0 0</string>
             </attr>
         </node>
-        <edge from="n135" to="n135">
+        <edge from="n83" to="n83">
             <attr name="label">
                 <string>type:ActivityDiagram</string>
             </attr>
         </edge>
-        <node id="n136">
-            <attr name="layout">
-                <string>392 402 0 0</string>
-            </attr>
-        </node>
-        <edge from="n136" to="n136">
-            <attr name="label">
-                <string>string:"TTC_Workflow"</string>
-            </attr>
-        </edge>
-        <node id="n137">
-            <attr name="layout">
-                <string>392 242 0 0</string>
-            </attr>
-        </node>
-        <edge from="n137" to="n137">
-            <attr name="label">
-                <string>bool:false</string>
-            </attr>
-        </edge>
-        <node id="n138">
+        <node id="n84">
             <attr name="layout">
                 <string>392 322 0 0</string>
             </attr>
         </node>
-        <edge from="n138" to="n138">
+        <edge from="n84" to="n84">
+            <attr name="label">
+                <string>string:"TTC_Workflow"</string>
+            </attr>
+        </edge>
+        <node id="n85">
+            <attr name="layout">
+                <string>392 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n85" to="n85">
+            <attr name="label">
+                <string>bool:false</string>
+            </attr>
+        </edge>
+        <node id="n86">
+            <attr name="layout">
+                <string>392 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n86" to="n86">
             <attr name="label">
                 <string>bool:true</string>
             </attr>
         </edge>
-        <node id="n139">
+        <node id="n88">
             <attr name="layout">
-                <string>62 90 0 0</string>
+                <string>337 82 0 0</string>
             </attr>
         </node>
-        <edge from="n139" to="n139">
+        <edge from="n88" to="n88">
             <attr name="label">
-                <string>type:ControlFlow</string>
+                <string>string:"final"</string>
             </attr>
         </edge>
-        <node id="n140">
-            <attr name="layout">
-                <string>322 162 0 0</string>
-            </attr>
-        </node>
-        <edge from="n140" to="n140">
-            <attr name="label">
-                <string>type:FinalNode</string>
-            </attr>
-        </edge>
-        <edge from="n135" to="n137">
+        <edge from="n83" to="n85">
             <attr name="label">
                 <string>new:running</string>
             </attr>
         </edge>
-        <edge from="n135" to="n138">
+        <edge from="n83" to="n86">
             <attr name="label">
                 <string>del:running</string>
             </attr>
         </edge>
-        <edge from="n139" to="n141">
+        <edge from="n87" to="n88">
             <attr name="label">
-                <string>del:tokens</string>
+                <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n135" to="n136">
+        <edge from="n83" to="n84">
             <attr name="label">
                 <string>name</string>
-            </attr>
-        </edge>
-        <edge from="n139" to="n140">
-            <attr name="label">
-                <string>target</string>
             </attr>
         </edge>
     </graph>

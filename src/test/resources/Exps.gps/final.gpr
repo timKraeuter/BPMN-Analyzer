@@ -1,104 +1,89 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="final" role="rule" edgeids="false" edgemode="directed">
-        <node id="n222">
+        <node id="n193">
             <attr name="layout">
-                <string>322 82 0 0</string>
+                <string>62 82 0 0</string>
             </attr>
         </node>
-        <edge from="n222" to="n222">
+        <edge from="n193" to="n193">
             <attr name="label">
-                <string>type:Token</string>
+                <string>type:ControlToken</string>
             </attr>
         </edge>
-        <edge from="n222" to="n222">
+        <edge from="n193" to="n193">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n216">
+        <node id="n189">
             <attr name="layout">
-                <string>62 255 0 0</string>
+                <string>62 175 0 0</string>
             </attr>
         </node>
-        <edge from="n216" to="n216">
+        <edge from="n189" to="n189">
             <attr name="label">
                 <string>type:ActivityDiagram</string>
             </attr>
         </edge>
-        <node id="n217">
-            <attr name="layout">
-                <string>392 402 0 0</string>
-            </attr>
-        </node>
-        <edge from="n217" to="n217">
-            <attr name="label">
-                <string>string:"Exps"</string>
-            </attr>
-        </edge>
-        <node id="n218">
-            <attr name="layout">
-                <string>392 242 0 0</string>
-            </attr>
-        </node>
-        <edge from="n218" to="n218">
-            <attr name="label">
-                <string>bool:false</string>
-            </attr>
-        </edge>
-        <node id="n219">
+        <node id="n190">
             <attr name="layout">
                 <string>392 322 0 0</string>
             </attr>
         </node>
-        <edge from="n219" to="n219">
+        <edge from="n190" to="n190">
+            <attr name="label">
+                <string>string:"Exps"</string>
+            </attr>
+        </edge>
+        <node id="n191">
+            <attr name="layout">
+                <string>392 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n191" to="n191">
+            <attr name="label">
+                <string>bool:false</string>
+            </attr>
+        </edge>
+        <node id="n192">
+            <attr name="layout">
+                <string>392 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n192" to="n192">
             <attr name="label">
                 <string>bool:true</string>
             </attr>
         </edge>
-        <node id="n220">
+        <node id="n194">
             <attr name="layout">
-                <string>62 90 0 0</string>
+                <string>337 82 0 0</string>
             </attr>
         </node>
-        <edge from="n220" to="n220">
+        <edge from="n194" to="n194">
             <attr name="label">
-                <string>type:ControlFlow</string>
+                <string>string:"final"</string>
             </attr>
         </edge>
-        <node id="n221">
-            <attr name="layout">
-                <string>322 162 0 0</string>
-            </attr>
-        </node>
-        <edge from="n221" to="n221">
-            <attr name="label">
-                <string>type:FinalNode</string>
-            </attr>
-        </edge>
-        <edge from="n216" to="n218">
+        <edge from="n189" to="n191">
             <attr name="label">
                 <string>new:running</string>
             </attr>
         </edge>
-        <edge from="n216" to="n219">
+        <edge from="n189" to="n192">
             <attr name="label">
                 <string>del:running</string>
             </attr>
         </edge>
-        <edge from="n220" to="n222">
+        <edge from="n193" to="n194">
             <attr name="label">
-                <string>del:tokens</string>
+                <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n216" to="n217">
+        <edge from="n189" to="n190">
             <attr name="label">
                 <string>name</string>
-            </attr>
-        </edge>
-        <edge from="n220" to="n221">
-            <attr name="label">
-                <string>target</string>
             </attr>
         </edge>
     </graph>

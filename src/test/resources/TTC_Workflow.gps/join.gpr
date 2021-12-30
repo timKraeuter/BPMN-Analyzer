@@ -1,129 +1,104 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="join" role="rule" edgeids="false" edgemode="directed">
-        <node id="n117">
+        <node id="n70">
             <attr name="layout">
-                <string>592 82 0 0</string>
+                <string>62 230 0 0</string>
             </attr>
         </node>
-        <edge from="n117" to="n117">
+        <edge from="n70" to="n70">
             <attr name="label">
                 <string>type:ForkedToken</string>
             </attr>
         </edge>
-        <edge from="n117" to="n117">
+        <edge from="n70" to="n70">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n119">
+        <node id="n72">
             <attr name="layout">
-                <string>592 172 0 0</string>
+                <string>332 162 0 0</string>
             </attr>
         </node>
-        <edge from="n119" to="n119">
+        <edge from="n72" to="n72">
             <attr name="label">
                 <string>type:ForkedToken</string>
             </attr>
         </edge>
-        <edge from="n119" to="n119">
+        <edge from="n72" to="n72">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n113">
+        <node id="n68">
             <attr name="layout">
-                <string>592 252 0 0</string>
+                <string>607 234 0 0</string>
             </attr>
         </node>
-        <edge from="n113" to="n113">
-            <attr name="label">
-                <string>type:JoinNode</string>
-            </attr>
-        </edge>
-        <node id="n114">
-            <attr name="layout">
-                <string>332 298 0 0</string>
-            </attr>
-        </node>
-        <edge from="n114" to="n114">
-            <attr name="label">
-                <string>type:ControlFlow</string>
-            </attr>
-        </edge>
-        <node id="n115">
-            <attr name="layout">
-                <string>852 172 0 0</string>
-            </attr>
-        </node>
-        <edge from="n115" to="n115">
+        <edge from="n68" to="n68">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n116">
+        <node id="n69">
             <attr name="layout">
-                <string>62 95 0 0</string>
+                <string>807 234 0 0</string>
             </attr>
         </node>
-        <edge from="n116" to="n116">
+        <edge from="n69" to="n69">
             <attr name="label">
-                <string>type:ControlFlow</string>
+                <string>string:"manager_interview"</string>
             </attr>
         </edge>
-        <node id="n118">
+        <node id="n71">
             <attr name="layout">
-                <string>332 180 0 0</string>
+                <string>332 72 0 0</string>
             </attr>
         </node>
-        <edge from="n118" to="n118">
+        <edge from="n71" to="n71">
             <attr name="label">
-                <string>type:ControlFlow</string>
+                <string>string:"join"</string>
             </attr>
         </edge>
-        <edge from="n114" to="n115">
+        <node id="n73">
+            <attr name="layout">
+                <string>592 154 0 0</string>
+            </attr>
+        </node>
+        <edge from="n73" to="n73">
             <attr name="label">
-                <string>new:tokens</string>
+                <string>string:"join"</string>
             </attr>
         </edge>
-        <edge from="n116" to="n117">
+        <edge from="n68" to="n69">
             <attr name="label">
-                <string>del:tokens</string>
+                <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n117" to="n115">
+        <edge from="n70" to="n68">
             <attr name="label">
                 <string>del:baseToken</string>
             </attr>
         </edge>
-        <edge from="n118" to="n119">
-            <attr name="label">
-                <string>del:tokens</string>
-            </attr>
-        </edge>
-        <edge from="n119" to="n115">
+        <edge from="n72" to="n68">
             <attr name="label">
                 <string>del:baseToken</string>
             </attr>
         </edge>
-        <edge from="n114" to="n113">
+        <edge from="n70" to="n71">
             <attr name="label">
-                <string>source</string>
+                <string>position</string>
             </attr>
         </edge>
-        <edge from="n116" to="n113">
-            <attr name="label">
-                <string>target</string>
-            </attr>
-        </edge>
-        <edge from="n118" to="n113">
-            <attr name="label">
-                <string>target</string>
-            </attr>
-        </edge>
-        <edge from="n116" to="n118">
+        <edge from="n70" to="n72">
             <attr name="label">
                 <string>!=</string>
+            </attr>
+        </edge>
+        <edge from="n72" to="n73">
+            <attr name="label">
+                <string>position</string>
             </attr>
         </edge>
     </graph>

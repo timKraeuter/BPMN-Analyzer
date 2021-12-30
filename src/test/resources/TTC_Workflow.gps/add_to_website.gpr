@@ -1,79 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="add_to_website" role="rule" edgeids="false" edgemode="directed">
-        <node id="n103">
+        <node id="n62">
             <attr name="layout">
-                <string>342 152 0 0</string>
+                <string>62 80 0 0</string>
             </attr>
         </node>
-        <edge from="n103" to="n103">
-            <attr name="label">
-                <string>type:OpaqueAction</string>
-            </attr>
-        </edge>
-        <node id="n104">
-            <attr name="layout">
-                <string>617 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n104" to="n104">
-            <attr name="label">
-                <string>string:"add_to_website"</string>
-            </attr>
-        </edge>
-        <node id="n105">
-            <attr name="layout">
-                <string>62 72 0 0</string>
-            </attr>
-        </node>
-        <edge from="n105" to="n105">
-            <attr name="label">
-                <string>type:ControlFlow</string>
-            </attr>
-        </edge>
-        <node id="n106">
-            <attr name="layout">
-                <string>62 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n106" to="n106">
-            <attr name="label">
-                <string>type:ControlFlow</string>
-            </attr>
-        </edge>
-        <node id="n107">
-            <attr name="layout">
-                <string>342 72 0 0</string>
-            </attr>
-        </node>
-        <edge from="n107" to="n107">
+        <edge from="n62" to="n62">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n106" to="n107">
+        <node id="n63">
+            <attr name="layout">
+                <string>232 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n63" to="n63">
             <attr name="label">
-                <string>new:tokens</string>
+                <string>string:"add_to_website"</string>
             </attr>
         </edge>
-        <edge from="n105" to="n107">
+        <node id="n64">
+            <attr name="layout">
+                <string>232 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n64" to="n64">
             <attr name="label">
-                <string>del:tokens</string>
+                <string>string:"join"</string>
             </attr>
         </edge>
-        <edge from="n103" to="n104">
+        <edge from="n62" to="n64">
             <attr name="label">
-                <string>name</string>
+                <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n105" to="n103">
+        <edge from="n62" to="n63">
             <attr name="label">
-                <string>target</string>
-            </attr>
-        </edge>
-        <edge from="n106" to="n103">
-            <attr name="label">
-                <string>source</string>
+                <string>del:position</string>
             </attr>
         </edge>
     </graph>

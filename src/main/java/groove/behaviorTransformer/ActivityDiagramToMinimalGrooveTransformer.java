@@ -13,6 +13,7 @@ import behavior.activity.values.BooleanValue;
 import behavior.activity.values.IntegerValue;
 import behavior.activity.values.Value;
 import behavior.activity.values.ValueVisitor;
+import behavior.activity.variables.BooleanVariable;
 import behavior.activity.variables.Variable;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveGraphBuilder;
@@ -30,24 +31,21 @@ public class ActivityDiagramToMinimalGrooveTransformer implements GrooveTransfor
 
     // Possible node labels.
     private static final String TYPE_ACTIVITY_DIAGRAM = TYPE + "ActivityDiagram";
-    private static final String TYPE_CONTROL_FLOW = TYPE + "ControlFlow";
     private static final String TYPE_TOKEN = TYPE + "Token";
     private static final String TYPE_CONTROL_TOKEN = TYPE + "ControlToken";
     private static final String TYPE_FORKED_TOKEN = TYPE + "ForkedToken";
 
     private static final String TYPE_INTEGER_VALUE = TYPE + "IntegerValue";
-
     private static final String TYPE_BOOLEAN_VALUE = TYPE + "BooleanValue";
 
     private static final String TYPE_VARIABLE = TYPE + "Variable";
 
     // Edge labels
-    private static final String SOURCE = "source";
-    private static final String TARGET = "target";
     private static final String VALUE = "value";
     private static final String NAME = "name";
-    private static final String TOKENS = "tokens";
     private static final String BASE_TOKEN = "baseToken";
+    private static final String POSITION = "position";
+    private static final String RUNNING = "running";
 
     // Special groove labels
     private static final String STRING = "string:";
@@ -80,7 +78,7 @@ public class ActivityDiagramToMinimalGrooveTransformer implements GrooveTransfor
         GrooveGraphBuilder builder = new GrooveGraphBuilder().setName(activityDiagram.getName());
 
         GrooveNode activityDiagramNode = new GrooveNode(TYPE_ACTIVITY_DIAGRAM);
-        activityDiagramNode.addAttribute("running", false);
+        activityDiagramNode.addAttribute(RUNNING, false);
         activityDiagramNode.addAttribute("name", activityDiagram.getName());
         builder.addNode(activityDiagramNode);
 
@@ -143,6 +141,17 @@ public class ActivityDiagramToMinimalGrooveTransformer implements GrooveTransfor
 
                     ActivityDiagramToMinimalGrooveTransformer.this.updateTokenPosition(decisionNode.getName(), targetName, ruleBuilder);
 
+                    // Guard
+                    BooleanVariable guardIfExists = controlFlow.getGuardIfExists();
+                    if (guardIfExists != null) {
+                        GrooveNode guardVar = ActivityDiagramToMinimalGrooveTransformer.this.createContextVariableWithName(guardIfExists.getName(), ruleBuilder);
+
+                        GrooveNode boolValue = ruleBuilder.contextNode(TYPE_BOOLEAN_VALUE);
+                        ruleBuilder.contextEdge(VALUE, guardVar, boolValue);
+                        GrooveNode trueValue = ruleBuilder.contextNode(TRUE);
+                        ruleBuilder.contextEdge(VALUE, boolValue, trueValue);
+                    }
+
                     ruleBuilder.buildRule();
                 });
             }
@@ -156,14 +165,14 @@ public class ActivityDiagramToMinimalGrooveTransformer implements GrooveTransfor
                 GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
                 GrooveNode oldTokenPosition = ruleBuilder.contextNode(
                         ActivityDiagramToMinimalGrooveTransformer.this.createStringNodeLabel(forkNodeName));
-                ruleBuilder.deleteEdge(NAME, token, oldTokenPosition);
+                ruleBuilder.deleteEdge(POSITION, token, oldTokenPosition);
 
                 forkNode.getOutgoingFlows().forEach(controlFlow -> {
                     GrooveNode forkedToken = ruleBuilder.addNode(TYPE_FORKED_TOKEN);
                     ruleBuilder.addEdge(BASE_TOKEN, forkedToken, token);
                     GrooveNode forkedTokenPosition = ruleBuilder.contextNode(
                             ActivityDiagramToMinimalGrooveTransformer.this.createStringNodeLabel(controlFlow.getTarget().getName()));
-                    ruleBuilder.addEdge(NAME, forkedToken, forkedTokenPosition);
+                    ruleBuilder.addEdge(POSITION, forkedToken, forkedTokenPosition);
                 });
 
                 ruleBuilder.buildRule();
@@ -197,7 +206,7 @@ public class ActivityDiagramToMinimalGrooveTransformer implements GrooveTransfor
                     GrooveNode baseToken = ruleBuilder.contextNode(TYPE_TOKEN);
                     GrooveNode newTokenPosition = ruleBuilder.contextNode(
                             ActivityDiagramToMinimalGrooveTransformer.this.createStringNodeLabel(outFlow.getTarget().getName()));
-                    ruleBuilder.addEdge(NAME, baseToken, newTokenPosition);
+                    ruleBuilder.addEdge(POSITION, baseToken, newTokenPosition);
 
                     AtomicReference<GrooveNode> previousToken = new AtomicReference<>();
                     joinNode.getIncomingFlows().forEach(controlFlow -> {
@@ -209,7 +218,7 @@ public class ActivityDiagramToMinimalGrooveTransformer implements GrooveTransfor
 
                         GrooveNode forkedTokenPosition = ruleBuilder.contextNode(
                                 ActivityDiagramToMinimalGrooveTransformer.this.createStringNodeLabel(joinNodeName));
-                        ruleBuilder.contextEdge(NAME, forkedToken, forkedTokenPosition);
+                        ruleBuilder.contextEdge(POSITION, forkedToken, forkedTokenPosition);
                         ruleBuilder.deleteEdge(BASE_TOKEN, forkedToken, baseToken);
                     });
 
@@ -257,13 +266,13 @@ public class ActivityDiagramToMinimalGrooveTransformer implements GrooveTransfor
                 String finalNodeName = activityFinalNode.getName();
                 ruleBuilder.startRule(finalNodeName);
                 GrooveNode activityDiagramNode = ActivityDiagramToMinimalGrooveTransformer.this.createDiagramNodeWithName(ruleBuilder, activityDiagram);
-                ruleBuilder.addEdge("running", activityDiagramNode, ruleBuilder.contextNode(FALSE));
-                ruleBuilder.deleteEdge("running", activityDiagramNode, ruleBuilder.contextNode(TRUE));
+                ruleBuilder.addEdge(RUNNING, activityDiagramNode, ruleBuilder.contextNode(FALSE));
+                ruleBuilder.deleteEdge(RUNNING, activityDiagramNode, ruleBuilder.contextNode(TRUE));
 
                 GrooveNode token = ruleBuilder.deleteNode(TYPE_CONTROL_TOKEN);
                 GrooveNode initStringAttribute = ruleBuilder.contextNode(
                         ActivityDiagramToMinimalGrooveTransformer.this.createStringNodeLabel(finalNodeName));
-                ruleBuilder.deleteEdge(NAME, token, initStringAttribute);
+                ruleBuilder.deleteEdge(POSITION, token, initStringAttribute);
 
                 ruleBuilder.buildRule();
             }
@@ -276,11 +285,11 @@ public class ActivityDiagramToMinimalGrooveTransformer implements GrooveTransfor
         GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
         GrooveNode oldTokenPosition = ruleBuilder.contextNode(
                 ActivityDiagramToMinimalGrooveTransformer.this.createStringNodeLabel(oldPosition));
-        ruleBuilder.deleteEdge(NAME, token, oldTokenPosition);
+        ruleBuilder.deleteEdge(POSITION, token, oldTokenPosition);
 
         GrooveNode newTokenPosition = ruleBuilder.contextNode(
                 ActivityDiagramToMinimalGrooveTransformer.this.createStringNodeLabel(newPosition));
-        ruleBuilder.addEdge(NAME, token, newTokenPosition);
+        ruleBuilder.addEdge(POSITION, token, newTokenPosition);
     }
 
     private void convertExpressionsToGroove(Expression expression, GrooveRuleBuilder ruleBuilder) {
@@ -548,20 +557,6 @@ public class ActivityDiagramToMinimalGrooveTransformer implements GrooveTransfor
         return var;
     }
 
-    private GrooveNode addTokenFlow(GrooveNode activityNode, GrooveRuleBuilder ruleBuilder) {
-        GrooveNode inFlow = ruleBuilder.contextNode(TYPE_CONTROL_FLOW);
-        ruleBuilder.contextEdge(TARGET, inFlow, activityNode);
-
-        GrooveNode outFlow = ruleBuilder.contextNode(TYPE_CONTROL_FLOW);
-        ruleBuilder.contextEdge(SOURCE, outFlow, activityNode);
-
-        GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
-        ruleBuilder.deleteEdge(TOKENS, inFlow, token);
-        ruleBuilder.addEdge(TOKENS, outFlow, token);
-
-        return outFlow;
-    }
-
     private GrooveNode createDiagramNodeWithName(GrooveRuleBuilder ruleBuilder, ActivityDiagram activityDiagram) {
         return this.createNodeWithStringAttributeAndType(
                 ruleBuilder,
@@ -581,13 +576,13 @@ public class ActivityDiagramToMinimalGrooveTransformer implements GrooveTransfor
 
         GrooveNode falseNode = ruleBuilder.contextNode(FALSE);
         GrooveNode trueNode = ruleBuilder.contextNode(TRUE);
-        ruleBuilder.deleteEdge("running", activityDiagramNode, falseNode);
-        ruleBuilder.addEdge("running", activityDiagramNode, trueNode);
+        ruleBuilder.deleteEdge(RUNNING, activityDiagramNode, falseNode);
+        ruleBuilder.addEdge(RUNNING, activityDiagramNode, trueNode);
 
         GrooveNode token = ruleBuilder.addNode(TYPE_CONTROL_TOKEN);
         GrooveNode initStringAttribute = ruleBuilder.contextNode(
                 ActivityDiagramToMinimalGrooveTransformer.this.createStringNodeLabel(activityDiagram.getInitialNode().getName()));
-        ruleBuilder.addEdge(NAME, token, initStringAttribute);
+        ruleBuilder.addEdge(POSITION, token, initStringAttribute);
 
 
         ruleBuilder.buildRule();

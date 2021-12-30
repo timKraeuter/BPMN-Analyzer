@@ -78,7 +78,7 @@
         </edge>
         <edge from="n17" to="n18">
             <attr name="label">
-                <string>new:name</string>
+                <string>new:position</string>
             </attr>
         </edge>
         <edge from="n19" to="n15">
@@ -88,12 +88,12 @@
         </edge>
         <edge from="n19" to="n20">
             <attr name="label">
-                <string>new:name</string>
+                <string>new:position</string>
             </attr>
         </edge>
         <edge from="n15" to="n16">
             <attr name="label">
-                <string>del:name</string>
+                <string>del:position</string>
             </attr>
         </edge>
     </graph>

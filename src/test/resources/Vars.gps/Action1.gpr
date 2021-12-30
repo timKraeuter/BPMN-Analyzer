@@ -133,7 +133,7 @@
         </edge>
         <edge from="n24" to="n26">
             <attr name="label">
-                <string>new:name</string>
+                <string>new:position</string>
             </attr>
         </edge>
         <edge from="n29" to="n31">
@@ -148,7 +148,7 @@
         </edge>
         <edge from="n24" to="n25">
             <attr name="label">
-                <string>del:name</string>
+                <string>del:position</string>
             </attr>
         </edge>
         <edge from="n29" to="n30">
