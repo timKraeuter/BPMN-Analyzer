@@ -269,6 +269,7 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
 
     //    @Test
     void perf1() throws IOException {
+        // Around 5000ms
         ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
         InitialNode initNode = new InitialNode("initial");
 
@@ -288,8 +289,9 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         this.checkGrooveGeneration(builder.build());
     }
 
-//    @Test
+    //    @Test
     void perf3_2() throws IOException {
+        // Around 630 ms
         IntegerVariable i_var = new IntegerVariable("i", 1);
 
         IntegerVariable value2 = new IntegerVariable("value2", 2);
@@ -370,11 +372,13 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         this.checkGrooveGeneration(builder.build());
     }
 
-//    @Test
+    //    @Test
     void myPerf() throws IOException {
+        // 36/37s on hvl laptop before mini
+        // 32/33s after mini
         IntegerVariable counter = new IntegerVariable("i", 1);
         IntegerVariable value1 = new IntegerVariable("value1", 1);
-        IntegerVariable iterations = new IntegerVariable("iterations", 100000); // 36/37s on hvl laptop
+        IntegerVariable iterations = new IntegerVariable("iterations", 100000);
         BooleanVariable stop = new BooleanVariable("stop", false);
         BooleanVariable notStop = new BooleanVariable("dontStop", true);
 
