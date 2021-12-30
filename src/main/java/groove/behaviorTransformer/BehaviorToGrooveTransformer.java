@@ -159,7 +159,7 @@ public class BehaviorToGrooveTransformer {
 
     private void generateGrooveGrammarForActivityDiagram(ActivityDiagram activityDiagram, File targetFolder, boolean addPrefix) {
         File graphGrammarSubFolder = this.makeSubFolder(activityDiagram, targetFolder);
-        ActivityDiagramToMinimalGrooveTransformer transformer = new ActivityDiagramToMinimalGrooveTransformer(true);
+        ActivityDiagramToGrooveTransformer transformer = new ActivityDiagramToGrooveTransformer(true);
 
         transformer.generateAndWriteStartGraph(activityDiagram, false, graphGrammarSubFolder);
 
