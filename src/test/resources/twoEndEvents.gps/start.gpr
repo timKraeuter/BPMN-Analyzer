@@ -3,32 +3,42 @@
     <graph id="start" role="rule" edgeids="false" edgemode="directed">
         <node id="n2">
             <attr name="layout">
-                <string>62 172 0 0</string>
+                <string>62 80 0 0</string>
             </attr>
         </node>
         <edge from="n2" to="n2">
             <attr name="label">
-                <string>start_finished</string>
+                <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n2" to="n2">
-            <attr name="label">
-                <string>new:</string>
-            </attr>
-        </edge>
-        <node id="n1">
+        <node id="n3">
             <attr name="layout">
-                <string>62 82 0 0</string>
+                <string>232 152 0 0</string>
             </attr>
         </node>
-        <edge from="n1" to="n1">
+        <edge from="n3" to="n3">
             <attr name="label">
-                <string>start</string>
+                <string>string:"start"</string>
             </attr>
         </edge>
-        <edge from="n1" to="n1">
+        <node id="n4">
+            <attr name="layout">
+                <string>232 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n4" to="n4">
             <attr name="label">
-                <string>del:</string>
+                <string>string:"p1"</string>
+            </attr>
+        </edge>
+        <edge from="n2" to="n4">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n2" to="n3">
+            <attr name="label">
+                <string>del:position</string>
             </attr>
         </edge>
     </graph>

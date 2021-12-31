@@ -8,7 +8,22 @@
         </node>
         <edge from="n0" to="n0">
             <attr name="label">
-                <string>twoActivity_start</string>
+                <string>type:ControlToken</string>
+            </attr>
+        </edge>
+        <node id="n1">
+            <attr name="layout">
+                <string>337 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n1" to="n1">
+            <attr name="label">
+                <string>string:"start"</string>
+            </attr>
+        </edge>
+        <edge from="n0" to="n1">
+            <attr name="label">
+                <string>position</string>
             </attr>
         </edge>
     </graph>

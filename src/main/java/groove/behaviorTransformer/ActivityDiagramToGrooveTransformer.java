@@ -47,26 +47,6 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     private static final String POSITION = "position";
     private static final String RUNNING = "running";
 
-    // Special groove labels
-    private static final String STRING = "string:";
-    private static final String BOOL = "bool:";
-    private static final String FALSE = BOOL + "false";
-    private static final String TRUE = BOOL + "true";
-    private static final String BOOL_NOT = "bool:not";
-    private static final String BOOL_AND = "bool:and";
-    private static final String BOOL_OR = "bool:or";
-    private static final String UNEQUALS = "!=";
-    private static final String INT = "int:";
-    private static final String ARG_0 = "arg:0";
-    private static final String ARG_1 = "arg:1";
-    private static final String INT_ADD = "int:add";
-    private static final String INT_SUB = "int:sub";
-    private static final String PROD = "prod:";
-    private static final String INT_LT = "int:lt";
-    private static final String INT_LE = "int:le";
-    private static final String INT_EQ = "int:eq";
-    private static final String INT_GE = "int:ge";
-    private static final String INT_GT = "int:gt";
     private boolean doLayout;
 
     public ActivityDiagramToGrooveTransformer(boolean doLayout) {
@@ -75,6 +55,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
     @Override
     public GrooveGraph generateStartGraph(ActivityDiagram activityDiagram, boolean addPrefix) {
+        // TODO: Add prefix if needed!
         GrooveGraphBuilder builder = new GrooveGraphBuilder().setName(activityDiagram.getName());
 
         GrooveNode activityDiagramNode = new GrooveNode(TYPE_ACTIVITY_DIAGRAM);
@@ -565,10 +546,6 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                 "name");
     }
 
-    private String createStringNodeLabel(String stringValue) {
-        return String.format("%s\"%s\"", STRING, stringValue);
-    }
-
     private void addStartRule(ActivityDiagram activityDiagram, GrooveRuleBuilder ruleBuilder) {
         ruleBuilder.startRule(String.format("%s_start", activityDiagram.getName()));
 
@@ -583,7 +560,6 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
         GrooveNode initStringAttribute = ruleBuilder.contextNode(
                 ActivityDiagramToGrooveTransformer.this.createStringNodeLabel(activityDiagram.getInitialNode().getName()));
         ruleBuilder.addEdge(POSITION, token, initStringAttribute);
-
 
         ruleBuilder.buildRule();
     }

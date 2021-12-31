@@ -13,8 +13,32 @@ import java.util.stream.Stream;
 import static groove.behaviorTransformer.BehaviorToGrooveTransformer.START_GST;
 
 public interface GrooveTransformer<SOURCE extends Behavior> {
+    // Special groove labels
+    String BOOL = "bool:";
+    String FALSE = BOOL + "false";
+    String TRUE = BOOL + "true";
+    String BOOL_NOT = "bool:not";
+    String BOOL_AND = "bool:and";
+    String BOOL_OR = "bool:or";
+    String UNEQUALS = "!=";
+    String INT = "int:";
+    String ARG_0 = "arg:0";
+    String ARG_1 = "arg:1";
+    String INT_ADD = "int:add";
+    String INT_SUB = "int:sub";
+    String PROD = "prod:";
+    String INT_LT = "int:lt";
+    String INT_LE = "int:le";
+    String INT_EQ = "int:eq";
+    String INT_GE = "int:ge";
+    String INT_GT = "int:gt";
 
     String TYPE = "type:";
+    String STRING = "string:";
+
+    default String createStringNodeLabel(String stringValue) {
+        return String.format("%s\"%s\"", STRING, stringValue);
+    }
 
     GrooveGraph generateStartGraph(SOURCE source, boolean addPrefix);
 

@@ -27,15 +27,15 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .sequenceFlow("a1", a1, end)
                 .endEvent(end)
                 .build();
-
-        this.checkGrooveGeneration(processModel, true);
+        // TODO: test prefix
+        this.checkGrooveGeneration(processModel, false);
     }
 
     /**
      * See model in bpmn_models/exclusive_parallel_BPMN.pdf
      */
     @Test
-    void testBPMNExclusiveGatewayGenerationResources() throws IOException {
+    void testBPMNExclusiveGateway() throws IOException {
         // Build the process model from the NWPT example.
         final StartEvent start = new StartEvent("start");
         final EndEvent end = new EndEvent("end");
@@ -70,7 +70,7 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
      * See model in bpmn_models/exclusive_parallel_BPMN.pdf
      */
     @Test
-    void testBPMNParallelGatewayGenerationResources() throws IOException {
+    void testBPMNParallelGateway() throws IOException {
         final StartEvent start = new StartEvent("start");
         final EndEvent end = new EndEvent("end");
         Activity a0 = new Activity("a0");
@@ -97,14 +97,53 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .endEvent(end)
                 .build();
 
-        this.checkGrooveGeneration(processModel);
+        this.checkGrooveGeneration(processModel, false, fileName -> fileName.equals("type.gty"));
+    }
+
+    /**
+     * TODO: add model picture
+     */
+    @Test
+    void testBPMNParallelGatewayComplex() throws IOException {
+        final StartEvent start = new StartEvent("start");
+        final EndEvent end = new EndEvent("end");
+        Activity a0 = new Activity("a0");
+        Activity a1 = new Activity("a1");
+        final ParallelGateway p1 = new ParallelGateway("p1");
+        Activity a2_1 = new Activity("a2_1");
+        Activity a2_2 = new Activity("a2_2");
+        final ParallelGateway p2 = new ParallelGateway("p2");
+        Activity a3_1 = new Activity("a3_1");
+        Activity a3_2 = new Activity("a3_2");
+        final ParallelGateway p3 = new ParallelGateway("p3");
+
+        final String modelName = "parallel_complex";
+        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+                .name(modelName)
+                .startEvent(start)
+                .sequenceFlow("start", start, a0)
+                .sequenceFlow("a0", a0, a1)
+                .sequenceFlow("a1", a1, p1)
+                .sequenceFlow("p1_a2_1", p1, a2_1)
+                .sequenceFlow("p1_a2_2", p1, a2_2)
+                .sequenceFlow("a2_1", a2_1, p2)
+                .sequenceFlow("a2_2", a2_2, p2)
+                .sequenceFlow("p2", p2, a3_1)
+                .sequenceFlow("p2", p2, a3_2)
+                .sequenceFlow("a3_1", a3_1, p3)
+                .sequenceFlow("p3", p3, end)
+                .sequenceFlow("a3_2", a3_2, end)
+                .endEvent(end)
+                .build();
+
+        this.checkGrooveGeneration(processModel, false, fileName -> fileName.equals("type.gty"));
     }
 
     /**
      * See model [CYC] in bpmn_models/models.png (without data).
      */
     @Test
-    void testBPMNCyclicGenerationResources() throws IOException {
+    void testBPMNCyclic() throws IOException {
         final StartEvent start = new StartEvent("start");
         final EndEvent end = new EndEvent("end");
         Activity a0 = new Activity("a0");
@@ -134,14 +173,14 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .endEvent(end)
                 .build();
 
-        this.checkGrooveGeneration(processModel);
+        this.checkGrooveGeneration(processModel, false, fileName -> fileName.equals("type.gty"));
     }
 
     /**
      * See model [EXT] in bpmn_models/models.png.
      */
     @Test
-    void testBPMNTwoEndEventsGenerationResources() throws IOException {
+    void testBPMNTwoEndEvents() throws IOException {
         final StartEvent start = new StartEvent("start");
         final ParallelGateway p1 = new ParallelGateway("p1");
         Activity a1 = new Activity("a1");
@@ -162,6 +201,6 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .endEvent(end2)
                 .build();
 
-        this.checkGrooveGeneration(processModel);
+        this.checkGrooveGeneration(processModel, false, fileName -> fileName.equals("type.gty"));
     }
 }

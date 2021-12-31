@@ -375,7 +375,7 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
     //    @Test
     void myPerf() throws IOException {
         // 36/37s on hvl laptop before mini
-        // 32/33s after mini
+        // 32/33s after min
         IntegerVariable counter = new IntegerVariable("i", 1);
         IntegerVariable value1 = new IntegerVariable("value1", 1);
         IntegerVariable iterations = new IntegerVariable("iterations", 100000);

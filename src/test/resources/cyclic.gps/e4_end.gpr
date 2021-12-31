@@ -1,34 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="e4_end" role="rule" edgeids="false" edgemode="directed">
-        <node id="n22">
+        <node id="n32">
             <attr name="layout">
-                <string>112 82 0 0</string>
+                <string>62 80 0 0</string>
             </attr>
         </node>
-        <edge from="n22" to="n22">
+        <edge from="n32" to="n32">
             <attr name="label">
-                <string>end</string>
+                <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n22" to="n22">
-            <attr name="label">
-                <string>new:</string>
-            </attr>
-        </edge>
-        <node id="n21">
+        <node id="n33">
             <attr name="layout">
-                <string>62 82 0 0</string>
+                <string>232 152 0 0</string>
             </attr>
         </node>
-        <edge from="n21" to="n21">
+        <edge from="n33" to="n33">
             <attr name="label">
-                <string>e4</string>
+                <string>string:"e4"</string>
             </attr>
         </edge>
-        <edge from="n21" to="n21">
+        <node id="n34">
+            <attr name="layout">
+                <string>232 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n34" to="n34">
             <attr name="label">
-                <string>del:</string>
+                <string>string:"end"</string>
+            </attr>
+        </edge>
+        <edge from="n32" to="n34">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n32" to="n33">
+            <attr name="label">
+                <string>del:position</string>
             </attr>
         </edge>
     </graph>

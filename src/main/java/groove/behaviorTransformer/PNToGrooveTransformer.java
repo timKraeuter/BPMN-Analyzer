@@ -73,6 +73,6 @@ public class PNToGrooveTransformer implements GrooveTransformer<PetriNet> {
 
     @Override
     public boolean isLayoutActivated() {
-        return false; // TODO: implement layout as parameter!
+        return true; // TODO: implement layout as parameter!
     }
 }

@@ -193,7 +193,9 @@ public class BehaviorToGrooveTransformer {
         // Generate rules
         transformer.generateAndWriteRules(bpmnProcessModel, addPrefix, graphGrammarSubFolder);
 
-        this.generatePropertiesFile(graphGrammarSubFolder, START, Maps.newHashMap());
+        final Map<String, String> additionalProperties = Maps.newHashMap();
+        additionalProperties.put("typeGraph", "type");
+        this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
     }
 
     private void generateGrooveGrammarForPN(PetriNet petriNet, File grooveDir, boolean addPrefix) {
