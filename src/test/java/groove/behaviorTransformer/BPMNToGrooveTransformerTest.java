@@ -101,7 +101,7 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
     }
 
     /**
-     * TODO: add model picture
+     * See model in bpmn_models/exclusive_parallel_BPMN.pdf
      */
     @Test
     void testBPMNParallelGatewayComplex() throws IOException {
