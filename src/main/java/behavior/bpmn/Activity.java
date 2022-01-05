@@ -12,8 +12,4 @@ public class Activity extends ControlFlowNode {
         visitor.handle(this);
     }
 
-    @Override
-    public boolean isParallelGateway() {
-        return false;
-    }
 }

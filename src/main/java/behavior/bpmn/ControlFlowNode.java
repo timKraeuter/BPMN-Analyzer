@@ -10,10 +10,8 @@ public abstract class ControlFlowNode {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public abstract void accept(ControlFlowNodeVisitor visitor);
-
-    public abstract boolean isParallelGateway();
 }

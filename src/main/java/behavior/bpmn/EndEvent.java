@@ -13,8 +13,4 @@ public class EndEvent extends ControlFlowNode {
         visitor.handle(this);
     }
 
-    @Override
-    public boolean isParallelGateway() {
-        return false;
-    }
 }

@@ -12,8 +12,4 @@ public class ExclusiveGateway extends ControlFlowNode {
         visitor.handle(this);
     }
 
-    @Override
-    public boolean isParallelGateway() {
-        return false;
-    }
 }

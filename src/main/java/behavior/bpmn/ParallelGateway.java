@@ -12,8 +12,4 @@ public class ParallelGateway extends ControlFlowNode {
         visitor.handle(this);
     }
 
-    @Override
-    public boolean isParallelGateway() {
-        return true;
-    }
 }
