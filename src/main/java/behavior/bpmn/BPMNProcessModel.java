@@ -3,8 +3,8 @@ package behavior.bpmn;
 import behavior.Behavior;
 import behavior.BehaviorVisitor;
 
-import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class BPMNProcessModel implements Behavior {
     private final String name;
@@ -23,8 +23,8 @@ public class BPMNProcessModel implements Behavior {
         return this.startEvent;
     }
 
-    public Set<SequenceFlow> getSequenceFlows() {
-        return Collections.unmodifiableSet(this.sequenceFlows);
+    public Stream<SequenceFlow> getSequenceFlows() {
+        return this.sequenceFlows.stream();
     }
 
     @Override
@@ -35,6 +35,10 @@ public class BPMNProcessModel implements Behavior {
     @Override
     public void accept(BehaviorVisitor visitor) {
         visitor.handle(this);
+    }
+
+    public Stream<EndEvent> getEndEvents() {
+        return this.endEvents.stream();
     }
 
     /*

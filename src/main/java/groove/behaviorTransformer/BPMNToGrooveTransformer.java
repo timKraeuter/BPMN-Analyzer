@@ -60,9 +60,8 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     public Stream<GrooveGraphRule> generateRules(BPMNProcessModel bpmnProcessModel, boolean addPrefix) {
         GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(bpmnProcessModel, addPrefix);
 
-        // Iteration order of LinkedHashMultimap needed for determinism.
         final Set<ParallelGateway> parallelGateways = new LinkedHashSet<>();
-
+        // One rule for each sequence flow
         bpmnProcessModel.getSequenceFlows().forEach(sequenceFlow -> sequenceFlow.getSource().accept(new ControlFlowNodeVisitor() {
             @Override
             public void handle(StartEvent startEvent) {
@@ -148,6 +147,17 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
 
         // Fork/Synchronisation for parallel gateways
         parallelGateways.forEach(parallelGateway -> this.createRuleForParallelGateway(ruleBuilder, parallelGateway));
+
+        bpmnProcessModel.getEndEvents().forEach(endEvent -> {
+            ruleBuilder.startRule(endEvent.getName());
+
+            GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
+            GrooveNode oldTokenPosition = ruleBuilder.contextNode(this.createStringNodeLabel(endEvent.getName()));
+            ruleBuilder.deleteEdge(POSITION, token, oldTokenPosition);
+
+            ruleBuilder.buildRule();
+
+        });
 
         return ruleBuilder.getRules();
     }
