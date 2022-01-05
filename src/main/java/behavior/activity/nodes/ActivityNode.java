@@ -8,11 +8,15 @@ import java.util.stream.Stream;
 
 public abstract class ActivityNode {
     private final String name;
-    private Set<ControlFlow> outgoingFlows = new LinkedHashSet<>();
-    private Set<ControlFlow> incomingFlows = new LinkedHashSet<>();
+    private final Set<ControlFlow> outgoingFlows = new LinkedHashSet<>();
+    private final Set<ControlFlow> incomingFlows = new LinkedHashSet<>();
 
     protected ActivityNode(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public void addOutgoingControlFlow(ControlFlow outgoingFlow) {
@@ -21,10 +25,6 @@ public abstract class ActivityNode {
 
     public void addIncomingControlFlow(ControlFlow incomingFlow) {
         this.incomingFlows.add(incomingFlow);
-    }
-
-    public String getName() {
-        return this.name;
     }
 
     public Stream<ControlFlow> getOutgoingFlows() {
@@ -36,6 +36,4 @@ public abstract class ActivityNode {
     }
 
     public abstract void accept(ActivityNodeVisitor visitor);
-
-    public abstract boolean isDecisionNode();
 }

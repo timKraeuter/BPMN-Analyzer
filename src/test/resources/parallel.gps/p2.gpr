@@ -1,39 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="p2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n28">
-            <attr name="layout">
-                <string>62 230 0 0</string>
-            </attr>
-        </node>
-        <edge from="n28" to="n28">
-            <attr name="label">
-                <string>type:ForkedToken</string>
-            </attr>
-        </edge>
-        <edge from="n28" to="n28">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
         <node id="n30">
             <attr name="layout">
-                <string>332 162 0 0</string>
+                <string>62 82 0 0</string>
             </attr>
         </node>
         <edge from="n30" to="n30">
             <attr name="label">
-                <string>type:ForkedToken</string>
+                <string>type:Token</string>
             </attr>
         </edge>
         <edge from="n30" to="n30">
             <attr name="label">
-                <string>del:</string>
+                <string>new:</string>
             </attr>
         </edge>
         <node id="n26">
             <attr name="layout">
-                <string>597 234 0 0</string>
+                <string>62 244 0 0</string>
             </attr>
         </node>
         <edge from="n26" to="n26">
@@ -41,19 +26,39 @@
                 <string>type:Token</string>
             </attr>
         </edge>
+        <edge from="n26" to="n26">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n28">
+            <attr name="layout">
+                <string>240 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n28" to="n28">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n28" to="n28">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
         <node id="n27">
             <attr name="layout">
-                <string>777 234 0 0</string>
+                <string>232 162 0 0</string>
             </attr>
         </node>
         <edge from="n27" to="n27">
             <attr name="label">
-                <string>string:"a3"</string>
+                <string>string:"p2"</string>
             </attr>
         </edge>
         <node id="n29">
             <attr name="layout">
-                <string>332 72 0 0</string>
+                <string>417 252 0 0</string>
             </attr>
         </node>
         <edge from="n29" to="n29">
@@ -63,22 +68,22 @@
         </edge>
         <node id="n31">
             <attr name="layout">
-                <string>592 154 0 0</string>
+                <string>232 82 0 0</string>
             </attr>
         </node>
         <edge from="n31" to="n31">
             <attr name="label">
-                <string>string:"p2"</string>
+                <string>string:"a3"</string>
             </attr>
         </edge>
-        <edge from="n26" to="n27">
+        <edge from="n30" to="n31">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n28" to="n26">
+        <edge from="n26" to="n27">
             <attr name="label">
-                <string>del:baseToken</string>
+                <string>del:position</string>
             </attr>
         </edge>
         <edge from="n28" to="n29">
@@ -86,17 +91,7 @@
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n30" to="n26">
-            <attr name="label">
-                <string>del:baseToken</string>
-            </attr>
-        </edge>
-        <edge from="n30" to="n31">
-            <attr name="label">
-                <string>del:position</string>
-            </attr>
-        </edge>
-        <edge from="n28" to="n30">
+        <edge from="n26" to="n28">
             <attr name="label">
                 <string>!=</string>
             </attr>

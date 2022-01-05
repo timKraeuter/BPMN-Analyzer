@@ -15,8 +15,4 @@ public class DecisionNode extends ControlNode {
         visitor.handle(this);
     }
 
-    @Override
-    public boolean isDecisionNode() {
-        return true;
-    }
 }

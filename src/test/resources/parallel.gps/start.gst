@@ -8,12 +8,12 @@
         </node>
         <edge from="n0" to="n0">
             <attr name="label">
-                <string>type:ControlToken</string>
+                <string>type:Token</string>
             </attr>
         </edge>
         <node id="n1">
             <attr name="layout">
-                <string>337 72 0 0</string>
+                <string>232 72 0 0</string>
             </attr>
         </node>
         <edge from="n1" to="n1">

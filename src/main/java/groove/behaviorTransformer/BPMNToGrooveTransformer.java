@@ -3,8 +3,6 @@ package groove.behaviorTransformer;
 import behavior.bpmn.*;
 import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
 import behavior.bpmn.auxiliary.StartParallelOrElseControlFlowNodeVisitor;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveGraphBuilder;
 import groove.graph.GrooveNode;
@@ -14,18 +12,15 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessModel> {
     // Node names
     private static final String TYPE_TOKEN = TYPE + "Token";
-    private static final String TYPE_CONTROL_TOKEN = TYPE + "ControlToken";
-    private static final String TYPE_FORKED_TOKEN = TYPE + "ForkedToken";
 
     // Edge names
-    private static final String BASE_TOKEN = "baseToken";
     private static final String POSITION = "position";
 
     @Override
@@ -46,7 +41,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     public GrooveGraph generateStartGraph(BPMNProcessModel bpmnProcessModel, boolean addPrefix) {
         // TODO: Add prefix if needed!
         GrooveGraphBuilder startGraphBuilder = new GrooveGraphBuilder().setName(bpmnProcessModel.getName());
-        GrooveNode startToken = new GrooveNode(TYPE_CONTROL_TOKEN);
+        GrooveNode startToken = new GrooveNode(TYPE_TOKEN);
         GrooveNode tokenName = new GrooveNode(this.createStringNodeLabel(bpmnProcessModel.getStartEvent().getName()));
         startGraphBuilder.addEdge(POSITION, startToken, tokenName);
         return startGraphBuilder.build();
@@ -66,8 +61,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
         GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(bpmnProcessModel, addPrefix);
 
         // Iteration order of LinkedHashMultimap needed for determinism.
-        final Multimap<ParallelGateway, SequenceFlow> parallelGatewayOutgoing = LinkedHashMultimap.create();
-        final Multimap<ParallelGateway, SequenceFlow> parallelGatewayIncoming = LinkedHashMultimap.create();
+        final Set<ParallelGateway> parallelGateways = new LinkedHashSet<>();
 
         bpmnProcessModel.getSequenceFlows().forEach(sequenceFlow -> sequenceFlow.getSource().accept(new ControlFlowNodeVisitor() {
             @Override
@@ -77,7 +71,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                         sequenceFlow,
                         bpmnProcessModel,
                         ruleBuilder,
-                        parallelGatewayIncoming);
+                        parallelGateways);
             }
 
             @Override
@@ -87,7 +81,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                         sequenceFlow,
                         bpmnProcessModel,
                         ruleBuilder,
-                        parallelGatewayIncoming);
+                        parallelGateways);
             }
 
             @Override
@@ -97,7 +91,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                         sequenceFlow,
                         bpmnProcessModel,
                         ruleBuilder,
-                        parallelGatewayIncoming);
+                        parallelGateways);
             }
 
             private void handleNonParallelGateway(
@@ -105,7 +99,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                     SequenceFlow sequenceFlow,
                     BPMNProcessModel bpmnProcessModel,
                     GrooveRuleBuilder ruleGenerator,
-                    Multimap<ParallelGateway, SequenceFlow> parallelGatewayIncoming) {
+                    Set<ParallelGateway> parallelGateways) {
                 ruleGenerator.startRule(sequenceFlow.getName());
                 sequenceFlow.getTarget().accept(new StartParallelOrElseControlFlowNodeVisitor() {
                     @Override
@@ -131,7 +125,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                                 notParallelGatewayNode.getName(),
                                 parallelGateway.getName(),
                                 ruleBuilder);
-                        parallelGatewayIncoming.put(parallelGateway, sequenceFlow);
+                        parallelGateways.add(parallelGateway);
                     }
                 });
                 ruleGenerator.buildRule();
@@ -139,7 +133,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
 
             @Override
             public void handle(ParallelGateway parallelGateway) {
-                parallelGatewayOutgoing.put(parallelGateway, sequenceFlow);
+                parallelGateways.add(parallelGateway);
             }
 
             @Override
@@ -152,52 +146,30 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
             }
         }));
 
-        // Synchronisation for parallel gateways
-        parallelGatewayIncoming.keySet().forEach(parallelGateway ->
-                this.createRuleForParallelGateway(
-                        ruleBuilder,
-                        parallelGatewayOutgoing,
-                        parallelGatewayIncoming,
-                        parallelGateway));
+        // Fork/Synchronisation for parallel gateways
+        parallelGateways.forEach(parallelGateway -> this.createRuleForParallelGateway(ruleBuilder, parallelGateway));
+
         return ruleBuilder.getRules();
     }
 
-    private void createRuleForParallelGateway(
-            GrooveRuleBuilder ruleBuilder,
-            Multimap<ParallelGateway, SequenceFlow> parallelGatewayOutgoing,
-            Multimap<ParallelGateway, SequenceFlow> parallelGatewayIncoming,
-            ParallelGateway parallelGateway) {
+    private void createRuleForParallelGateway(GrooveRuleBuilder ruleBuilder, ParallelGateway parallelGateway) {
         ruleBuilder.startRule(parallelGateway.getName());
 
-        final Collection<SequenceFlow> incomingFlows = parallelGatewayIncoming.get(parallelGateway);
-        final Collection<SequenceFlow> outgoingFlows = parallelGatewayOutgoing.get(parallelGateway);
-        GrooveNode baseToken = ruleBuilder.contextNode(TYPE_TOKEN);
-        if (outgoingFlows.size() > 1) {
-            outgoingFlows.forEach(sequenceFlow -> {
-                GrooveNode forkedToken = ruleBuilder.addNode(TYPE_FORKED_TOKEN);
-                ruleBuilder.addEdge(BASE_TOKEN, forkedToken, baseToken);
-                String flowTargetName = sequenceFlow.getTarget().getName();
-                ruleBuilder.addEdge(POSITION, forkedToken, ruleBuilder.contextNode(this.createStringNodeLabel(flowTargetName)));
-            });
-        } else if (outgoingFlows.size() == 1) {
-            SequenceFlow singleOutFlow = outgoingFlows.iterator().next();
-            String outFlowTargetName = singleOutFlow.getTarget().getName();
-            ruleBuilder.addEdge(POSITION, baseToken, ruleBuilder.contextNode(this.createStringNodeLabel(outFlowTargetName)));
-        }
-        if (incomingFlows.size() > 1) {
-            AtomicReference<GrooveNode> previousToken = new AtomicReference<>();
-            incomingFlows.forEach(sequenceFlow -> {
-                GrooveNode forkedToken = ruleBuilder.deleteNode(TYPE_FORKED_TOKEN);
-                if (previousToken.get() != null) {
-                    ruleBuilder.contextEdge(UNEQUALS, previousToken.get(), forkedToken);
-                }
-                previousToken.set(forkedToken);
-                ruleBuilder.deleteEdge(BASE_TOKEN, forkedToken, baseToken);
-                ruleBuilder.deleteEdge(POSITION, forkedToken, ruleBuilder.contextNode(this.createStringNodeLabel(parallelGateway.getName())));
-            });
-        } else if (incomingFlows.size() == 1) {
-            ruleBuilder.deleteEdge(POSITION, baseToken, ruleBuilder.contextNode(this.createStringNodeLabel(parallelGateway.getName())));
-        }
+        // Delete one token for each incoming flow.
+        Set<GrooveNode> previousTokens = new LinkedHashSet<>();
+        parallelGateway.getIncomingFlows().forEach(sequenceFlow -> {
+            GrooveNode forkedToken = ruleBuilder.deleteNode(TYPE_TOKEN);
+            previousTokens.forEach(previousToken -> ruleBuilder.contextEdge(UNEQUALS, previousToken, forkedToken));
+            previousTokens.add(forkedToken);
+            ruleBuilder.deleteEdge(POSITION, forkedToken, ruleBuilder.contextNode(this.createStringNodeLabel(parallelGateway.getName())));
+        });
+
+        // Add one token for each outgoing flow.
+        parallelGateway.getOutgoingFlows().forEach(sequenceFlow -> {
+            GrooveNode forkedToken = ruleBuilder.addNode(TYPE_TOKEN);
+            String flowTargetName = sequenceFlow.getTarget().getName();
+            ruleBuilder.addEdge(POSITION, forkedToken, ruleBuilder.contextNode(this.createStringNodeLabel(flowTargetName)));
+        });
 
         ruleBuilder.buildRule();
     }

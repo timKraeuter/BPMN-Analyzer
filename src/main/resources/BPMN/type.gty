@@ -9,21 +9,6 @@
                 <string>321 192 90 36</string>
             </attr>
         </node>
-        <node id="n14">
-            <attr name="layout">
-                <string>216 329 84 18</string>
-            </attr>
-        </node>
-        <node id="n25">
-            <attr name="layout">
-                <string>414 335 80 18</string>
-            </attr>
-        </node>
-        <edge from="n13" to="n13">
-            <attr name="label">
-                <string>abs:</string>
-            </attr>
-        </edge>
         <edge from="n13" to="n13">
             <attr name="label">
                 <string>type:Token</string>
@@ -32,31 +17,6 @@
         <edge from="n13" to="n13">
             <attr name="label">
                 <string>string:position</string>
-            </attr>
-        </edge>
-        <edge from="n14" to="n14">
-            <attr name="label">
-                <string>type:ControlToken</string>
-            </attr>
-        </edge>
-        <edge from="n14" to="n13">
-            <attr name="label">
-                <string>sub:</string>
-            </attr>
-        </edge>
-        <edge from="n25" to="n25">
-            <attr name="label">
-                <string>type:ForkedToken</string>
-            </attr>
-        </edge>
-        <edge from="n25" to="n13">
-            <attr name="label">
-                <string>baseToken</string>
-            </attr>
-        </edge>
-        <edge from="n25" to="n13">
-            <attr name="label">
-                <string>sub:</string>
             </attr>
         </edge>
     </graph>

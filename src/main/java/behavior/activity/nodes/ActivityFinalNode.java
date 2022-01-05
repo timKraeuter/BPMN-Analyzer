@@ -14,8 +14,4 @@ public class ActivityFinalNode extends ControlNode {
         visitor.handle(this);
     }
 
-    @Override
-    public boolean isDecisionNode() {
-        return false;
-    }
 }

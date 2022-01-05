@@ -113,8 +113,7 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
         Activity a2_1 = new Activity("a2_1");
         Activity a2_2 = new Activity("a2_2");
         final ParallelGateway p2 = new ParallelGateway("p2");
-        Activity a3_1 = new Activity("a3_1");
-        Activity a3_2 = new Activity("a3_2");
+        Activity a3 = new Activity("a3");
         final ParallelGateway p3 = new ParallelGateway("p3");
 
         final String modelName = "parallel_complex";
@@ -126,13 +125,12 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .sequenceFlow("a1", a1, p1)
                 .sequenceFlow("p1_a2_1", p1, a2_1)
                 .sequenceFlow("p1_a2_2", p1, a2_2)
-                .sequenceFlow("a2_1", a2_1, p2)
                 .sequenceFlow("a2_2", a2_2, p2)
-                .sequenceFlow("p2", p2, a3_1)
-                .sequenceFlow("p2", p2, a3_2)
-                .sequenceFlow("a3_1", a3_1, p3)
+                .sequenceFlow("a2_1", a2_1, p3)
+                .sequenceFlow("p2", p2, a3)
+                .sequenceFlow("p2", p2, p3)
+                .sequenceFlow("a3", a3, p3)
                 .sequenceFlow("p3", p3, end)
-                .sequenceFlow("a3_2", a3_2, end)
                 .endEvent(end)
                 .build();
 

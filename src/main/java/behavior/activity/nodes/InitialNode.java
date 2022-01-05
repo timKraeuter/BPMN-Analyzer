@@ -14,8 +14,4 @@ public class InitialNode extends ControlNode {
         visitor.handle(this);
     }
 
-    @Override
-    public boolean isDecisionNode() {
-        return false;
-    }
 }

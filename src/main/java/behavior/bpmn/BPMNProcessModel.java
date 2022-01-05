@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Set;
 
 public class BPMNProcessModel implements Behavior {
-    private String name;
+    private final String name;
     private final StartEvent startEvent;
     private final Set<EndEvent> endEvents;
     private final Set<SequenceFlow> sequenceFlows;
@@ -36,4 +36,9 @@ public class BPMNProcessModel implements Behavior {
     public void accept(BehaviorVisitor visitor) {
         visitor.handle(this);
     }
+
+    /*
+    According to the BPMN spec the following consistency rules exist:
+    - Gateways or Activities without incoming sequence flows are forbidden (p426)
+     */
 }
