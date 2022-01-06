@@ -12,36 +12,51 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
-interface BehaviorToGrooveTransformerTestHelper {
-    //    String outputPath = "C:/Source/groove/bin";
+abstract class BehaviorToGrooveTransformerTestHelper {
+    //    private String outputPath = "C:/Source/groove/bin";
     //    String outputPath = "B:/Source/groove/bin";
     String outputPath = FileUtils.getTempDirectoryPath();
 
+    private boolean addPrefix = false;
+    private Function<String, Boolean> fileNameFilter = x -> false;
+
     @BeforeEach
-    default void setUp() {
+    void setUp() {
         GrooveNode.idCounter.set(-1);
+        this.addPrefix = false;
+        this.fileNameFilter = x -> false;
+        this.setUpFurther();
     }
 
-    default void checkGrooveGeneration(Behavior behavior) throws IOException {
-        this.checkGrooveGeneration(behavior, false);
+    protected abstract void setUpFurther();
+
+    public abstract String getOutputPathSubFolderName();
+
+    public String getOutputPathIncludingSubFolder() {
+        return this.outputPath + "/" + this.getOutputPathSubFolderName();
     }
 
-    default void checkGrooveGeneration(Behavior behavior, boolean addPrefix) throws IOException {
-        this.checkGrooveGeneration(behavior, addPrefix, x -> false);
+    public void setAddPrefix(boolean addPrefix) {
+        this.addPrefix = addPrefix;
+    }
+
+    public void setFileNameFilter(Function<String, Boolean> fileNameFilter) {
+        this.fileNameFilter = fileNameFilter;
+    }
+
+    void checkGrooveGeneration(Behavior behavior) throws IOException {
+        this.checkGrooveGeneration(behavior, this.addPrefix, this.fileNameFilter);
     }
 
     @SuppressWarnings("ConstantConditions")
-    default void checkGrooveGeneration(
-            Behavior behavior,
-            boolean addPrefix,
-            Function<String, Boolean> fileNameFilter) throws IOException {
+    private void checkGrooveGeneration(Behavior behavior, boolean addPrefix, Function<String, Boolean> fileNameFilter) throws IOException {
         String modelName = behavior.getName();
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
-        File outputDir = new File(outputPath);
+        File outputDir = new File(this.getOutputPathIncludingSubFolder());
         transformer.generateGrooveGrammar(behavior, outputDir, addPrefix);
 
         // assert
-        File expectedDir = new File(this.getClass().getResource("/" + modelName + ".gps").getFile());
+        File expectedDir = new File(this.getClass().getResource("/" + this.getOutputPathSubFolderName() + "/" + modelName + ".gps").getFile());
         FileTestHelper.testDirEquals(
                 expectedDir,
                 new File(outputDir + "/" + modelName + ".gps"),
@@ -51,12 +66,8 @@ interface BehaviorToGrooveTransformerTestHelper {
         this.checkPropertiesFile(propertiesFile);
     }
 
-    default void checkPropertiesFile(File propertiesFile) throws IOException {
-        Assertions.assertTrue(
-                FileUtils.readFileToString(propertiesFile, StandardCharsets.UTF_8)
-                        .replaceAll("\r?\n", "\r\n") // force identical line separators
-                        .endsWith(
-                                "grooveVersion=5.8.1\r\n" +
-                                        "grammarVersion=3.7"));
+    void checkPropertiesFile(File propertiesFile) throws IOException {
+        Assertions.assertTrue(FileUtils.readFileToString(propertiesFile, StandardCharsets.UTF_8).replaceAll("\r?\n", "\r\n") // force identical line separators
+                                       .endsWith("grooveVersion=5.8.1\r\n" + "grammarVersion=3.7"));
     }
 }
