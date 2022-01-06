@@ -7,6 +7,7 @@ import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
 import behavior.bpmn.auxiliary.StartParallelOrElseControlFlowNodeVisitor;
 import behavior.bpmn.events.EndEvent;
+import behavior.bpmn.events.LinkEvent;
 import behavior.bpmn.events.StartEvent;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
@@ -133,6 +134,20 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                                 ruleBuilder);
                         parallelGateways.add(parallelGateway);
                     }
+
+                    @Override
+                    public void handle(LinkEvent linkEvent) {
+                        switch (linkEvent.getType()) {
+                            case THROW:
+                                BPMNToGrooveTransformer.this.updateTokenPosition(
+                                        notParallelGatewayNode.getName(),
+                                        linkEvent.getName(),
+                                        ruleBuilder);
+                                break;
+                            case CATCH:
+                                throw new RuntimeException("A link catch event cannot have incoming sequence flows!");
+                        }
+                    }
                 });
                 ruleGenerator.buildRule();
             }
@@ -150,26 +165,43 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                                 bpmnProcessModel,
                                 sequenceFlow));
             }
+
+            @Override
+            public void handle(LinkEvent linkEvent) {
+                switch (linkEvent.getType()) {
+                    case THROW:
+                        // do nothing. It is not possible for a throw event to have outgoing flows!
+                        throw new RuntimeException("A link throw event cannot have outgoing sequence flows!");
+                    case CATCH:
+                        this.handleNonParallelGateway(
+                                linkEvent,
+                                sequenceFlow,
+                                bpmnProcessModel,
+                                ruleBuilder,
+                                parallelGateways);
+                        break;
+                }
+            }
         }));
 
-        // Fork/Synchronisation for parallel gateways
-        parallelGateways.forEach(parallelGateway -> this.createRuleForParallelGateway(ruleBuilder, parallelGateway));
+        parallelGateways.forEach(parallelGateway -> this.createParallelGatewayRule(ruleBuilder, parallelGateway));
 
-        bpmnProcessModel.getEndEvents().forEach(endEvent -> {
-            ruleBuilder.startRule(endEvent.getName());
-
-            GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
-            GrooveNode oldTokenPosition = ruleBuilder.contextNode(this.createStringNodeLabel(endEvent.getName()));
-            ruleBuilder.deleteEdge(POSITION, token, oldTokenPosition);
-
-            ruleBuilder.buildRule();
-
-        });
+        bpmnProcessModel.getEndEvents().forEach(endEvent -> this.createEndEventRule(ruleBuilder, endEvent));
 
         return ruleBuilder.getRules();
     }
 
-    private void createRuleForParallelGateway(GrooveRuleBuilder ruleBuilder, ParallelGateway parallelGateway) {
+    private void createEndEventRule(GrooveRuleBuilder ruleBuilder, EndEvent endEvent) {
+        ruleBuilder.startRule(endEvent.getName());
+
+        GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
+        GrooveNode oldTokenPosition = ruleBuilder.contextNode(this.createStringNodeLabel(endEvent.getName()));
+        ruleBuilder.deleteEdge(POSITION, token, oldTokenPosition);
+
+        ruleBuilder.buildRule();
+    }
+
+    private void createParallelGatewayRule(GrooveRuleBuilder ruleBuilder, ParallelGateway parallelGateway) {
         ruleBuilder.startRule(parallelGateway.getName());
 
         // Delete one token for each incoming flow.

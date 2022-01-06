@@ -1,9 +1,8 @@
 package behavior.bpmn.events;
 
-import behavior.bpmn.ControlFlowNode;
 import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
 
-public class StartEvent extends ControlFlowNode {
+public class StartEvent extends Event {
     public StartEvent(String name) {
         super(name);
     }

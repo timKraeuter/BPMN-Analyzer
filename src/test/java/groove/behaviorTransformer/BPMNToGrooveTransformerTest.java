@@ -4,6 +4,8 @@ import behavior.bpmn.Activity;
 import behavior.bpmn.BPMNProcessModel;
 import behavior.bpmn.auxiliary.BPMNProcessBuilder;
 import behavior.bpmn.events.EndEvent;
+import behavior.bpmn.events.LinkEvent;
+import behavior.bpmn.events.LinkEventType;
 import behavior.bpmn.events.StartEvent;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
@@ -202,6 +204,36 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .sequenceFlow("a2", a2, end2)
                 .endEvent(end1)
                 .endEvent(end2)
+                .build();
+
+        this.checkGrooveGeneration(processModel, false, fileName -> fileName.equals("type.gty"));
+    }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/519f49aa-e3ec-4d6d-8425-3933f93f974d">"Link Event"</a> in cawemo.
+     */
+    @Test
+    void testLinkEvent() throws IOException {
+        final StartEvent start = new StartEvent("start");
+        final ParallelGateway p1 = new ParallelGateway("p1");
+        LinkEvent throw_link1 = new LinkEvent("Link1", LinkEventType.THROW);
+        LinkEvent throw_link2 = new LinkEvent("Link2", LinkEventType.THROW);
+        LinkEvent catch_link1 = new LinkEvent("Link1", LinkEventType.CATCH);
+        LinkEvent catch_link2 = new LinkEvent("Link2", LinkEventType.CATCH);
+        final ParallelGateway p2 = new ParallelGateway("p2");
+        final EndEvent end = new EndEvent("end");
+
+        final String modelName = "LinkEvent";
+        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+                .name(modelName)
+                .startEvent(start)
+                .sequenceFlow("start", start, p1)
+                .sequenceFlow("p1_link1", p1, throw_link1)
+                .sequenceFlow("p1_link2", p1, throw_link2)
+                .sequenceFlow("catch_link1", catch_link1, p2)
+                .sequenceFlow("catch_link2", catch_link2, p2)
+                .sequenceFlow("p2", p2, end)
+                .endEvent(end)
                 .build();
 
         this.checkGrooveGeneration(processModel, false, fileName -> fileName.equals("type.gty"));

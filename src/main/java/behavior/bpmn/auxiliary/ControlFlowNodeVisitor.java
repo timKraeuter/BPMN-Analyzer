@@ -2,6 +2,7 @@ package behavior.bpmn.auxiliary;
 
 import behavior.bpmn.Activity;
 import behavior.bpmn.events.EndEvent;
+import behavior.bpmn.events.LinkEvent;
 import behavior.bpmn.events.StartEvent;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
@@ -16,4 +17,6 @@ public interface ControlFlowNodeVisitor {
     void handle(ParallelGateway parallelGateway);
 
     void handle(EndEvent endEvent);
+
+    void handle(LinkEvent linkEvent);
 }
