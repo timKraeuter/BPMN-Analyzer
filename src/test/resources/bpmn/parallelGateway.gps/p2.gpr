@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="p2" role="rule" edgeids="false" edgemode="directed">
+        <node id="n48">
+            <attr name="layout">
+                <string>417 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n48" to="n48">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n48" to="n48">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n44">
+            <attr name="layout">
+                <string>422 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n44" to="n44">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n44" to="n44">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n46">
+            <attr name="layout">
+                <string>607 334 0 0</string>
+            </attr>
+        </node>
+        <edge from="n46" to="n46">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n46" to="n46">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n42">
+            <attr name="layout">
+                <string>62 97 0 0</string>
+            </attr>
+        </node>
+        <edge from="n42" to="n42">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n43">
+            <attr name="layout">
+                <string>402 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n43" to="n43">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n45">
+            <attr name="layout">
+                <string>602 244 0 0</string>
+            </attr>
+        </node>
+        <edge from="n45" to="n45">
+            <attr name="label">
+                <string>string:"p2"</string>
+            </attr>
+        </edge>
+        <node id="n47">
+            <attr name="layout">
+                <string>787 334 0 0</string>
+            </attr>
+        </node>
+        <edge from="n47" to="n47">
+            <attr name="label">
+                <string>string:"p2"</string>
+            </attr>
+        </edge>
+        <node id="n49">
+            <attr name="layout">
+                <string>602 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n49" to="n49">
+            <attr name="label">
+                <string>string:"a3"</string>
+            </attr>
+        </edge>
+        <edge from="n42" to="n48">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n48" to="n49">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n42" to="n44">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n44" to="n45">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n42" to="n46">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n46" to="n47">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n42" to="n43">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n44" to="n46">
+            <attr name="label">
+                <string>!=</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

@@ -28,9 +28,14 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     private static final String TYPE_GRAPH_DIR = "/BPMNTypeGraph";
     // Node names
     private static final String TYPE_TOKEN = TYPE + "Token";
+    private static final String TYPE_PROCESS_INSTANCE = TYPE + "ProcessInstance";
+    private static final String TYPE_RUNNING = TYPE + "Running";
+    private static final String TYPE_TERMINATED = TYPE + "Terminated";
 
     // Edge names
     private static final String POSITION = "position";
+    private static final String STATE = "state";
+    private static final String TOKENS = "tokens";
 
     @Override
     public void generateAndWriteRulesFurther(BPMNProcessModel model, boolean addPrefix, File targetFolder) {
@@ -50,19 +55,37 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     public GrooveGraph generateStartGraph(BPMNProcessModel bpmnProcessModel, boolean addPrefix) {
         // TODO: Add prefix if needed!
         GrooveGraphBuilder startGraphBuilder = new GrooveGraphBuilder().setName(bpmnProcessModel.getName());
+        GrooveNode processInstance = new GrooveNode(TYPE_PROCESS_INSTANCE);
+        GrooveNode running = new GrooveNode(TYPE_RUNNING);
+        startGraphBuilder.addEdge(STATE, processInstance, running);
+
         GrooveNode startToken = new GrooveNode(TYPE_TOKEN);
         GrooveNode tokenName = new GrooveNode(this.createStringNodeLabel(bpmnProcessModel.getStartEvent().getName()));
         startGraphBuilder.addEdge(POSITION, startToken, tokenName);
+        startGraphBuilder.addEdge(TOKENS, processInstance, startToken);
+
         return startGraphBuilder.build();
     }
 
-    private void updateTokenPosition(String oldPosition, String newPosition, GrooveRuleBuilder ruleBuilder) {
+    private void updateTokenPositionWhenRunning(String oldPosition, String newPosition, GrooveRuleBuilder ruleBuilder) {
+        // Process instance has to be running
+        GrooveNode processInstance = this.createContextRunningProcessInstance(ruleBuilder);
+
+        // Update tokens
         GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
+        ruleBuilder.contextEdge(TOKENS, processInstance, token);
         GrooveNode oldTokenPosition = ruleBuilder.contextNode(this.createStringNodeLabel(oldPosition));
         ruleBuilder.deleteEdge(POSITION, token, oldTokenPosition);
 
         GrooveNode newTokenPosition = ruleBuilder.contextNode(this.createStringNodeLabel(newPosition));
         ruleBuilder.addEdge(POSITION, token, newTokenPosition);
+    }
+
+    private GrooveNode createContextRunningProcessInstance(GrooveRuleBuilder ruleBuilder) {
+        GrooveNode processInstance = ruleBuilder.contextNode(TYPE_PROCESS_INSTANCE);
+        GrooveNode running = ruleBuilder.contextNode(TYPE_RUNNING);
+        ruleBuilder.contextEdge(STATE, processInstance, running);
+        return processInstance;
     }
 
     @Override
@@ -121,7 +144,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
 
                     @Override
                     public void handleRest(ControlFlowNode node) {
-                        BPMNToGrooveTransformer.this.updateTokenPosition(
+                        BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
                                 notParallelGatewayNode.getName(),
                                 node.getName(),
                                 ruleBuilder);
@@ -129,7 +152,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
 
                     @Override
                     public void handle(ParallelGateway parallelGateway) {
-                        BPMNToGrooveTransformer.this.updateTokenPosition(
+                        BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
                                 notParallelGatewayNode.getName(),
                                 parallelGateway.getName(),
                                 ruleBuilder);
@@ -140,7 +163,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                     public void handle(LinkEvent linkEvent) {
                         switch (linkEvent.getType()) {
                             case THROW:
-                                BPMNToGrooveTransformer.this.updateTokenPosition(
+                                BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
                                         notParallelGatewayNode.getName(),
                                         linkEvent.getName(),
                                         ruleBuilder);
@@ -195,20 +218,39 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     private void createEndEventRule(GrooveRuleBuilder ruleBuilder, EndEvent endEvent) {
         ruleBuilder.startRule(endEvent.getName());
 
+        GrooveNode processInstance = ruleBuilder.contextNode(TYPE_PROCESS_INSTANCE);
+
         GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
-        GrooveNode oldTokenPosition = ruleBuilder.contextNode(this.createStringNodeLabel(endEvent.getName()));
-        ruleBuilder.deleteEdge(POSITION, token, oldTokenPosition);
+        GrooveNode position = ruleBuilder.contextNode(this.createStringNodeLabel(endEvent.getName()));
+        ruleBuilder.deleteEdge(POSITION, token, position);
+        ruleBuilder.deleteEdge(TOKENS, processInstance, token);
+
+        switch (endEvent.getType()) {
+            case NONE:
+                GrooveNode running = ruleBuilder.contextNode(TYPE_RUNNING);
+                ruleBuilder.contextEdge(STATE, processInstance, running);
+                break;
+            case TERMINATION:
+                GrooveNode delete_running = ruleBuilder.deleteNode(TYPE_RUNNING);
+                ruleBuilder.deleteEdge(STATE, processInstance, delete_running);
+
+                GrooveNode terminated = ruleBuilder.addNode(TYPE_TERMINATED);
+                ruleBuilder.addEdge(STATE, processInstance, terminated);
+                break;
+        }
 
         ruleBuilder.buildRule();
     }
 
     private void createParallelGatewayRule(GrooveRuleBuilder ruleBuilder, ParallelGateway parallelGateway) {
         ruleBuilder.startRule(parallelGateway.getName());
+        GrooveNode processInstance = this.createContextRunningProcessInstance(ruleBuilder);
 
         // Delete one token for each incoming flow.
         Set<GrooveNode> previousTokens = new LinkedHashSet<>();
         parallelGateway.getIncomingFlows().forEach(sequenceFlow -> {
             GrooveNode forkedToken = ruleBuilder.deleteNode(TYPE_TOKEN);
+            ruleBuilder.deleteEdge(TOKENS, processInstance, forkedToken);
             previousTokens.forEach(previousToken -> ruleBuilder.contextEdge(UNEQUALS, previousToken, forkedToken));
             previousTokens.add(forkedToken);
             ruleBuilder.deleteEdge(POSITION, forkedToken, ruleBuilder.contextNode(this.createStringNodeLabel(parallelGateway.getName())));
@@ -217,6 +259,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
         // Add one token for each outgoing flow.
         parallelGateway.getOutgoingFlows().forEach(sequenceFlow -> {
             GrooveNode forkedToken = ruleBuilder.addNode(TYPE_TOKEN);
+            ruleBuilder.addEdge(TOKENS, processInstance, forkedToken);
             String flowTargetName = sequenceFlow.getTarget().getName();
             ruleBuilder.addEdge(POSITION, forkedToken, ruleBuilder.contextNode(this.createStringNodeLabel(flowTargetName)));
         });

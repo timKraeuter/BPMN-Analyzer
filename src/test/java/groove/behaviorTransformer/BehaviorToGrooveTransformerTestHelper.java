@@ -13,9 +13,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
 abstract class BehaviorToGrooveTransformerTestHelper {
-    //    private String outputPath = "C:/Source/groove/bin";
+    private final String outputPath = "C:/Source/groove/bin";
     //    String outputPath = "B:/Source/groove/bin";
-    String outputPath = FileUtils.getTempDirectoryPath();
+    //    String outputPath = FileUtils.getTempDirectoryPath();
 
     private boolean addPrefix = false;
     private Function<String, Boolean> fileNameFilter = x -> false;

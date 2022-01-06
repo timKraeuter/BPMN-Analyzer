@@ -3,10 +3,7 @@ package groove.behaviorTransformer;
 import behavior.bpmn.Activity;
 import behavior.bpmn.BPMNProcessModel;
 import behavior.bpmn.auxiliary.BPMNProcessBuilder;
-import behavior.bpmn.events.EndEvent;
-import behavior.bpmn.events.LinkEvent;
-import behavior.bpmn.events.LinkEventType;
-import behavior.bpmn.events.StartEvent;
+import behavior.bpmn.events.*;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
 import org.junit.jupiter.api.Test;
@@ -24,22 +21,22 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     }
 
     /**
-     * See model [SEQ] in bpmn_models/models.png
+     * See test case <a href="https://cawemo.com/share/e9bca9c5-c750-487f-becf-737bbd6ea19b">"Sequential Activities"</a> in cawemo.
      */
     @Test
-    void testBPMNTwoActivityGenerationResources() throws IOException {
+    void testSequentialActivities() throws IOException {
         final StartEvent start = new StartEvent("start");
-        Activity a0 = new Activity("a0");
-        Activity a1 = new Activity("a1");
+        Activity a = new Activity("A");
+        Activity b = new Activity("B");
         final EndEvent end = new EndEvent("end");
 
-        final String modelName = "twoActivity";
+        final String modelName = "sequentialActivities";
         final BPMNProcessModel processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
-                .sequenceFlow("start", start, a0)
-                .sequenceFlow("a0", a0, a1)
-                .sequenceFlow("a1", a1, end)
+                .sequenceFlow("start", start, a)
+                .sequenceFlow("A", a, b)
+                .sequenceFlow("B", b, end)
                 .endEvent(end)
                 .build();
         // TODO: test prefix
@@ -48,10 +45,10 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     }
 
     /**
-     * See model in bpmn_models/exclusive_parallel_BPMN.pdf
+     * See test case <a href="https://cawemo.com/share/9f739e59-c250-4f84-96cd-191914b07296">"Exclusive Gateway"</a> in cawemo.
      */
     @Test
-    void testBPMNExclusiveGateway() throws IOException {
+    void testExclusiveGateway() throws IOException {
         // Build the process model from the NWPT example.
         final StartEvent start = new StartEvent("start");
         final EndEvent end = new EndEvent("end");
@@ -63,7 +60,7 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
         final ExclusiveGateway e2 = new ExclusiveGateway("e2");
         Activity a3 = new Activity("a3");
 
-        final String modelName = "exclusive";
+        final String modelName = "exclusiveGateway";
         final BPMNProcessModel processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
@@ -83,12 +80,11 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     }
 
     /**
-     * See model in bpmn_models/exclusive_parallel_BPMN.pdf
+     * See test case <a href="https://cawemo.com/share/7ac506cd-86f7-4c89-a946-1ab2b3707d92">"Parallel Gateway"</a> in cawemo.
      */
     @Test
-    void testBPMNParallelGateway() throws IOException {
+    void testParallelGateway() throws IOException {
         final StartEvent start = new StartEvent("start");
-        final EndEvent end = new EndEvent("end");
         Activity a0 = new Activity("a0");
         Activity a1 = new Activity("a1");
         final ParallelGateway p1 = new ParallelGateway("p1");
@@ -96,8 +92,9 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
         Activity a2_2 = new Activity("a2_2");
         final ParallelGateway p2 = new ParallelGateway("p2");
         Activity a3 = new Activity("a3");
+        final EndEvent end = new EndEvent("end");
 
-        final String modelName = "parallel";
+        final String modelName = "parallelGateway";
         final BPMNProcessModel processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
@@ -117,12 +114,11 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     }
 
     /**
-     * See model in bpmn_models/exclusive_parallel_BPMN.pdf
+     * See test case <a href="https://cawemo.com/share/d0d0439d-31da-4b34-b508-aa75bc2551c8">"Parallel Gateway - Complex"</a> in cawemo.
      */
     @Test
-    void testBPMNParallelGatewayComplex() throws IOException {
+    void testParallelGatewayComplex() throws IOException {
         final StartEvent start = new StartEvent("start");
-        final EndEvent end = new EndEvent("end");
         Activity a0 = new Activity("a0");
         Activity a1 = new Activity("a1");
         final ParallelGateway p1 = new ParallelGateway("p1");
@@ -131,8 +127,9 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
         final ParallelGateway p2 = new ParallelGateway("p2");
         Activity a3 = new Activity("a3");
         final ParallelGateway p3 = new ParallelGateway("p3");
+        final EndEvent end = new EndEvent("end");
 
-        final String modelName = "parallel_complex";
+        final String modelName = "parallelGateway_complex";
         final BPMNProcessModel processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
@@ -154,10 +151,10 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     }
 
     /**
-     * See model [CYC] in bpmn_models/models.png (without data).
+     * See test case <a href="https://cawemo.com/share/9b143426-50ed-4621-83af-b30e29273077">"[CYC]"</a> in cawemo.
      */
     @Test
-    void testBPMNCyclic() throws IOException {
+    void testCyclic() throws IOException {
         final StartEvent start = new StartEvent("start");
         final EndEvent end = new EndEvent("end");
         Activity a0 = new Activity("a0");
@@ -191,10 +188,10 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     }
 
     /**
-     * See model [EXT] in bpmn_models/models.png.
+     * See test case <a href="https://cawemo.com/share/e1777355-d0cc-45d0-8f01-87d08ba2b5ef">"[EXT]"</a> in cawemo.
      */
     @Test
-    void testBPMNTwoEndEvents() throws IOException {
+    void testTwoEndEvents() throws IOException {
         final StartEvent start = new StartEvent("start");
         final ParallelGateway p1 = new ParallelGateway("p1");
         Activity a1 = new Activity("a1");
@@ -232,7 +229,7 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
         final ParallelGateway p2 = new ParallelGateway("p2");
         final EndEvent end = new EndEvent("end");
 
-        final String modelName = "LinkEvent";
+        final String modelName = "linkEvent";
         final BPMNProcessModel processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
@@ -243,6 +240,34 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
                 .sequenceFlow("catch_link2", catch_link2, p2)
                 .sequenceFlow("p2", p2, end)
                 .endEvent(end)
+                .build();
+
+        this.checkGrooveGeneration(processModel);
+    }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/e579995b-65f3-4146-a974-f136f5fd949b">"Terminate End Event"</a> in cawemo.
+     */
+    @Test
+    void testTerminateEndEvent() throws IOException {
+        final StartEvent start = new StartEvent("start");
+        final ParallelGateway p1 = new ParallelGateway("p1");
+        Activity a = new Activity("A");
+        Activity b = new Activity("B");
+        final EndEvent end = new EndEvent("end");
+        final EndEvent terminate_end = new EndEvent("terminate_end", EndEventType.TERMINATION);
+
+        final String modelName = "terminateEndEvent";
+        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+                .name(modelName)
+                .startEvent(start)
+                .sequenceFlow("start", start, p1)
+                .sequenceFlow("p1_A", p1, a)
+                .sequenceFlow("p1_B", p1, b)
+                .sequenceFlow("A", a, end)
+                .sequenceFlow("B", b, terminate_end)
+                .endEvent(end)
+                .endEvent(terminate_end)
                 .build();
 
         this.checkGrooveGeneration(processModel);
