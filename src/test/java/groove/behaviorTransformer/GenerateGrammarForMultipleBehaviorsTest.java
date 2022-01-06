@@ -10,11 +10,20 @@ import java.io.File;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class GenerateGrammarForMultipleBehaviorsTest implements BehaviorToGrooveTransformerTestHelper {
-    public static final String SW_TO_PHASE_2 = "switch_to_phase2";
-    public static final String SW_TO_PHASE_1 = "switch_to_phase1";
-    public static final String TURN_RED = "turn_red";
-    public static final String TURN_GREEN = "turn_green";
+public class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTransformerTestHelper {
+    private static final String SW_TO_PHASE_2 = "switch_to_phase2";
+    private static final String SW_TO_PHASE_1 = "switch_to_phase1";
+    private static final String TURN_RED = "turn_red";
+    private static final String TURN_GREEN = "turn_green";
+
+    @Override
+    protected void setUpFurther() {
+    }
+
+    @Override
+    public String getOutputPathSubFolderName() {
+        return "synch";
+    }
 
     @Test
     void tlSynchTest() {
@@ -29,7 +38,7 @@ public class GenerateGrammarForMultipleBehaviorsTest implements BehaviorToGroove
         phases.addTransition(new Transition(SW_TO_PHASE_1, phase2, phase1));
 
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
-        File outputDir = new File(outputPath);
+        File outputDir = new File(this.getOutputPathIncludingSubFolder());
 
         Map<String, Set<String>> nameToToBeSynchedRules = new LinkedHashMap<>();
 
@@ -58,8 +67,8 @@ public class GenerateGrammarForMultipleBehaviorsTest implements BehaviorToGroove
                 tl_c,
                 phases);
 
-        File expected_dir = new File(this.getClass().getResource("/trafficLightsSynch.gps").getFile());
-        File actual_dir = new File(outputPath + "/trafficLightsSynch.gps");
+        File expected_dir = new File(this.getClass().getResource("/synch/trafficLightsSynch.gps").getFile());
+        File actual_dir = new File(this.getOutputPathIncludingSubFolder() + "/trafficLightsSynch.gps");
 
         FileTestHelper.testDirEquals(expected_dir, actual_dir, fileName -> fileName.equals("system.properties"));
 

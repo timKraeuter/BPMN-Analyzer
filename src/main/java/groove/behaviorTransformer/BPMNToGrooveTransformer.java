@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessModel> {
+    private static final String TYPE_GRAPH_DIR = "/BPMNTypeGraph";
     // Node names
     private static final String TYPE_TOKEN = TYPE + "Token";
 
@@ -37,7 +38,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     }
 
     private void copyTypeGraph(File targetFolder) {
-        File sourceDirectory = new File(this.getClass().getResource("/BPMN").getFile());
+        File sourceDirectory = new File(this.getClass().getResource(TYPE_GRAPH_DIR).getFile());
         try {
             FileUtils.copyDirectory(sourceDirectory, targetFolder);
         } catch (IOException e) {

@@ -6,7 +6,16 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-class PNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelper {
+class PNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
+
+    @Override
+    protected void setUpFurther() {
+    }
+
+    @Override
+    public String getOutputPathSubFolderName() {
+        return "pn";
+    }
 
     @Test
     void testPNGenerationResources() throws IOException {

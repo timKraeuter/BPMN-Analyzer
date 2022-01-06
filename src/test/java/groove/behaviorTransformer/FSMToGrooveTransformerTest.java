@@ -7,7 +7,16 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-class FSMToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelper {
+class FSMToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
+
+    @Override
+    protected void setUpFurther() {
+    }
+
+    @Override
+    public String getOutputPathSubFolderName() {
+        return "fsm";
+    }
 
     @Test
     void testFSMGenerationABC() throws IOException {

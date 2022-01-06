@@ -13,7 +13,15 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelper {
+class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
+
+    private static final String TYPE_GRAPH_FILE_NAME = "type.gty";
+
+    @Override
+    protected void setUpFurther() {
+        // Default is to ignore the type graph.
+        this.setFileNameFilter(x -> x.equals(TYPE_GRAPH_FILE_NAME));
+    }
 
     /**
      * See model [SEQ] in bpmn_models/models.png
@@ -35,7 +43,8 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .endEvent(end)
                 .build();
         // TODO: test prefix
-        this.checkGrooveGeneration(processModel, false);
+        this.setFileNameFilter(x -> false); // Expect type graph here.
+        this.checkGrooveGeneration(processModel);
     }
 
     /**
@@ -104,7 +113,7 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .endEvent(end)
                 .build();
 
-        this.checkGrooveGeneration(processModel, false, fileName -> fileName.equals("type.gty"));
+        this.checkGrooveGeneration(processModel);
     }
 
     /**
@@ -141,7 +150,7 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .endEvent(end)
                 .build();
 
-        this.checkGrooveGeneration(processModel, false, fileName -> fileName.equals("type.gty"));
+        this.checkGrooveGeneration(processModel);
     }
 
     /**
@@ -178,7 +187,7 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .endEvent(end)
                 .build();
 
-        this.checkGrooveGeneration(processModel, false, fileName -> fileName.equals("type.gty"));
+        this.checkGrooveGeneration(processModel);
     }
 
     /**
@@ -206,7 +215,7 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .endEvent(end2)
                 .build();
 
-        this.checkGrooveGeneration(processModel, false, fileName -> fileName.equals("type.gty"));
+        this.checkGrooveGeneration(processModel);
     }
 
     /**
@@ -236,6 +245,11 @@ class BPMNToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelp
                 .endEvent(end)
                 .build();
 
-        this.checkGrooveGeneration(processModel, false, fileName -> fileName.equals("type.gty"));
+        this.checkGrooveGeneration(processModel);
+    }
+
+    @Override
+    public String getOutputPathSubFolderName() {
+        return "bpmn";
     }
 }

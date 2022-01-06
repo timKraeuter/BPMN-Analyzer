@@ -21,7 +21,15 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.Collections;
 
-class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelper {
+class ActivityDiagramToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
+
+    private static final String TYPE_GRAPH_FILE_NAME = "type.gty";
+
+    @Override
+    protected void setUpFurther() {
+        // Default is to ignore the type graph.
+        this.setFileNameFilter(x -> x.equals(TYPE_GRAPH_FILE_NAME));
+    }
 
     /**
      * Tests an activity diagram consisting of two subsequent activities.
@@ -36,13 +44,14 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         ActivityFinalNode finalNode = new ActivityFinalNode("final");
 
         ActivityDiagram activityDiagram = builder.setName("Activity")
-                .setInitialNode(initNode)
-                .createControlFlow("", initNode, action1)
-                .createControlFlow("", action1, action2)
-                .createControlFlow("", action2, finalNode)
-                .build();
+                                                 .setInitialNode(initNode)
+                                                 .createControlFlow("", initNode, action1)
+                                                 .createControlFlow("", action1, action2)
+                                                 .createControlFlow("", action2, finalNode)
+                                                 .build();
 
-        this.checkGrooveGeneration(activityDiagram, false, x -> x.equals("type.gty"));
+        this.setFileNameFilter(x -> false); // Expect copied type graph
+        this.checkGrooveGeneration(activityDiagram);
     }
 
     /**
@@ -75,7 +84,7 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
                 .createControlFlow("", action2, finalNode)
                 .build();
 
-        this.checkGrooveGeneration(activityDiagram, false, x -> x.equals("type.gty"));
+        this.checkGrooveGeneration(activityDiagram);
     }
 
     /**
@@ -108,7 +117,7 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
                 .createControlFlow("", action2, finalNode)
                 .build();
 
-        this.checkGrooveGeneration(activityDiagram, false, x -> x.equals("type.gty"));
+        this.checkGrooveGeneration(activityDiagram);
     }
 
     /**
@@ -143,7 +152,7 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
                 .addLocalVariable(sumVar)
                 .build();
 
-        this.checkGrooveGeneration(activityDiagram, false, fileName -> fileName.equals("type.gty"));
+        this.checkGrooveGeneration(activityDiagram);
     }
 
     /**
@@ -207,7 +216,7 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
                 .addLocalVariable(diffVar)
                 .build();
 
-        this.checkGrooveGeneration(activityDiagram, false, fileName -> fileName.equals("type.gty"));
+        this.checkGrooveGeneration(activityDiagram);
     }
 
     /**
@@ -394,18 +403,23 @@ class ActivityDiagramToGrooveTransformerTest implements BehaviorToGrooveTransfor
         ActivityFinalNode finalNode = new ActivityFinalNode("final");
 
         builder.setName("myPerf")
-                .setInitialNode(initNode)
-                .addInputVariable(counter)
-                .addLocalVariable(value1)
-                .addLocalVariable(iterations)
-                .addLocalVariable(stop)
-                .addLocalVariable(notStop)
-                .createControlFlow("", initNode, merge)
-                .createControlFlow("", merge, a)
-                .createControlFlow("", a, decision)
-                .createControlFlow("", decision, merge, notStop)
-                .createControlFlow("", decision, finalNode, stop);
+               .setInitialNode(initNode)
+               .addInputVariable(counter)
+               .addLocalVariable(value1)
+               .addLocalVariable(iterations)
+               .addLocalVariable(stop)
+               .addLocalVariable(notStop)
+               .createControlFlow("", initNode, merge)
+               .createControlFlow("", merge, a)
+               .createControlFlow("", a, decision)
+               .createControlFlow("", decision, merge, notStop)
+               .createControlFlow("", decision, finalNode, stop);
 
         this.checkGrooveGeneration(builder.build());
+    }
+
+    @Override
+    public String getOutputPathSubFolderName() {
+        return "activityDiagram";
     }
 }

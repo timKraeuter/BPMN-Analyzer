@@ -14,16 +14,28 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 
-class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHelper {
+class PiCalcToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
+
+    public static final String SUB_DIR = "piCalc";
+
+    @Override
+    protected void setUpFurther() {
+        this.setFileNameFilter(s -> s.endsWith(".gty") || s.endsWith(".gpr"));
+    }
+
+    @Override
+    public String getOutputPathSubFolderName() {
+        return SUB_DIR;
+    }
 
     @Test
     void checkCopyOfRulesAndTypeGraph() throws Exception {
         EmptySum empty = new EmptySum();
 
         NamedPiProcess namedProcess = new NamedPiProcess("emptySum", empty);
-        this.checkGrooveGeneration(namedProcess, false, s -> s.endsWith(".gty") || s.endsWith(".gpr"));
+        this.checkGrooveGeneration(namedProcess);
 
-        File outputDir = new File(new File(outputPath) + "/" + namedProcess.getName() + ".gps/");
+        File outputDir = new File(new File(this.getOutputPathIncludingSubFolder()) + "/" + namedProcess.getName() + ".gps/");
         File ruleAndTypeGraphDir = new File(this.getClass().getResource("/GaducciPi").getFile());
 
         FileTestHelper.testDirEquals(ruleAndTypeGraphDir, outputDir, s -> s.equals("start.gst") || s.equals("system.properties"));
@@ -34,9 +46,9 @@ class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHe
         EmptySum empty = new EmptySum();
 
         NamedPiProcess namedProcess = new NamedPiProcess("emptySum", empty);
-        this.checkGrooveGeneration(namedProcess, false, s -> s.endsWith(".gty") || s.endsWith(".gpr"));
+        this.checkGrooveGeneration(namedProcess);
 
-        File outputDir = new File(outputPath);
+        File outputDir = new File(this.getOutputPathIncludingSubFolder());
         File propertiesFile = new File(outputDir + "/" + namedProcess.getName() + ".gps/system.properties");
         final String propertiesContent = FileUtils.readFileToString(propertiesFile, StandardCharsets.UTF_8)
                                                   .replaceAll("\r?\n", "\r\n");
@@ -59,7 +71,7 @@ class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHe
         MultiarySum sum = new MultiarySum(Lists.newArrayList(in, out));
 
         NamedPiProcess namedProcess = new NamedPiProcess("sum", sum);
-        this.checkGrooveGeneration(namedProcess, false, s -> s.endsWith(".gty") || s.endsWith(".gpr"));
+        this.checkGrooveGeneration(namedProcess);
     }
 
     @Test
@@ -68,7 +80,7 @@ class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHe
         final NameRestriction xRestriction = new NameRestriction("x", new EmptySum());
 
         NamedPiProcess namedProcess = new NamedPiProcess("res", xRestriction);
-        this.checkGrooveGeneration(namedProcess, false, s -> s.endsWith(".gty") || s.endsWith(".gpr"));
+        this.checkGrooveGeneration(namedProcess);
     }
 
     @Test
@@ -84,7 +96,7 @@ class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHe
         Parallelism par = new Parallelism(Lists.newArrayList(in, out));
 
         NamedPiProcess namedProcess = new NamedPiProcess("par", par);
-        this.checkGrooveGeneration(namedProcess, false, s -> s.endsWith(".gty") || s.endsWith(".gpr"));
+        this.checkGrooveGeneration(namedProcess);
     }
 
     @Test
@@ -94,7 +106,7 @@ class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHe
         PrefixedProcess in = new PrefixedProcess(prefix, new EmptySum());
 
         NamedPiProcess namedProcess = new NamedPiProcess("in", in);
-        this.checkGrooveGeneration(namedProcess, false, s -> s.endsWith(".gty") || s.endsWith(".gpr"));
+        this.checkGrooveGeneration(namedProcess);
     }
 
     @Test
@@ -104,7 +116,7 @@ class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHe
         PrefixedProcess out = new PrefixedProcess(prefix, new EmptySum());
 
         NamedPiProcess namedProcess = new NamedPiProcess("out", out);
-        this.checkGrooveGeneration(namedProcess, false, s -> s.endsWith(".gty") || s.endsWith(".gpr"));
+        this.checkGrooveGeneration(namedProcess);
 
     }
 
@@ -125,6 +137,6 @@ class PiCalcToGrooveTransformerTest implements BehaviorToGrooveTransformerTestHe
         Parallelism par = new Parallelism(Lists.newArrayList(zInOnX, xOutOnX));
 
         NamedPiProcess namedProcess = new NamedPiProcess("fig20", par);
-        this.checkGrooveGeneration(namedProcess, false, s -> s.endsWith(".gty") || s.endsWith(".gpr"));
+        this.checkGrooveGeneration(namedProcess);
     }
 }

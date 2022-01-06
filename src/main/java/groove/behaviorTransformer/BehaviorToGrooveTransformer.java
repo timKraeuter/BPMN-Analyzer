@@ -230,7 +230,7 @@ public class BehaviorToGrooveTransformer {
     private File makeSubFolder(String folderName, File grooveDir) {
         File graphGrammarSubFolder = new File(grooveDir + "/" + folderName + ".gps");
         //noinspection ResultOfMethodCallIgnored
-        graphGrammarSubFolder.mkdir();
+        graphGrammarSubFolder.mkdirs();
         return graphGrammarSubFolder;
     }
 

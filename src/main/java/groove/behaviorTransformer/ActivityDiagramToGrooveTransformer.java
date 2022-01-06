@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<ActivityDiagram> {
+    private static final String TYPE_GRAPH_DIR = "/ActivityDiagramTypeGraph";
 
     // Possible node labels.
     private static final String TYPE_ACTIVITY_DIAGRAM = TYPE + "ActivityDiagram";
@@ -47,7 +48,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     private static final String POSITION = "position";
     private static final String RUNNING = "running";
 
-    private boolean doLayout;
+    private final boolean doLayout;
 
     public ActivityDiagramToGrooveTransformer(boolean doLayout) {
         this.doLayout = doLayout;
@@ -575,7 +576,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     }
 
     private void copyTypeGraph(File targetFolder) {
-        File sourceDirectory = new File(this.getClass().getResource("/ActivityDiagram").getFile());
+        File sourceDirectory = new File(this.getClass().getResource(TYPE_GRAPH_DIR).getFile());
         try {
             FileUtils.copyDirectory(sourceDirectory, targetFolder);
         } catch (IOException e) {

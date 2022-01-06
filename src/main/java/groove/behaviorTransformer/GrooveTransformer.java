@@ -50,7 +50,7 @@ public interface GrooveTransformer<SOURCE extends Behavior> {
     static void writeStartGraph(File targetFolder, GrooveGraph startGraph, boolean layoutActivated) {
         Gxl gxl = BehaviorToGrooveTransformer.createGxlFromGrooveGraph(startGraph, layoutActivated);
         File startGraphFile = new File(targetFolder.getPath() + START_GST);
-
+        
         GxlToXMLConverter.toXml(gxl, startGraphFile);
     }
 
