@@ -1,18 +1,24 @@
 package behavior.bpmn.auxiliary;
 
-import behavior.bpmn.*;
+import behavior.bpmn.Activity;
+import behavior.bpmn.ControlFlowNode;
+import behavior.bpmn.events.EndEvent;
+import behavior.bpmn.gateways.ExclusiveGateway;
 
 public interface StartParallelOrElseControlFlowNodeVisitor extends ControlFlowNodeVisitor{
+    @Override
     default void handle(Activity activity) {
-        handleRest(activity);
+        this.handleRest(activity);
     }
 
+    @Override
     default void handle(ExclusiveGateway exclusiveGateway) {
-        handleRest(exclusiveGateway);
+        this.handleRest(exclusiveGateway);
     }
 
+    @Override
     default void handle(EndEvent endEvent) {
-        handleRest(endEvent);
+        this.handleRest(endEvent);
     }
 
     /**

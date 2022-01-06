@@ -1,7 +1,12 @@
 package groove.behaviorTransformer;
 
-import behavior.bpmn.*;
+import behavior.bpmn.Activity;
+import behavior.bpmn.BPMNProcessModel;
 import behavior.bpmn.auxiliary.BPMNProcessBuilder;
+import behavior.bpmn.events.EndEvent;
+import behavior.bpmn.events.StartEvent;
+import behavior.bpmn.gateways.ExclusiveGateway;
+import behavior.bpmn.gateways.ParallelGateway;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

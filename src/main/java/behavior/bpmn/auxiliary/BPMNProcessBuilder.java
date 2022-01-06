@@ -1,6 +1,10 @@
 package behavior.bpmn.auxiliary;
 
-import behavior.bpmn.*;
+import behavior.bpmn.BPMNProcessModel;
+import behavior.bpmn.ControlFlowNode;
+import behavior.bpmn.SequenceFlow;
+import behavior.bpmn.events.EndEvent;
+import behavior.bpmn.events.StartEvent;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

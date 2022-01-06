@@ -2,6 +2,8 @@ package behavior.bpmn;
 
 import behavior.Behavior;
 import behavior.BehaviorVisitor;
+import behavior.bpmn.events.EndEvent;
+import behavior.bpmn.events.StartEvent;
 
 import java.util.Set;
 import java.util.stream.Stream;

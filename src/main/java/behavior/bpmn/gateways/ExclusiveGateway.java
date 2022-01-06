@@ -1,10 +1,10 @@
-package behavior.bpmn;
+package behavior.bpmn.gateways;
 
+import behavior.bpmn.ControlFlowNode;
 import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
 
-public class EndEvent extends ControlFlowNode {
-
-    public EndEvent(String name) {
+public class ExclusiveGateway extends ControlFlowNode {
+    public ExclusiveGateway(String name) {
         super(name);
     }
 

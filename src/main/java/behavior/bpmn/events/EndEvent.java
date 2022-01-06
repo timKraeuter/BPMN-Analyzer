@@ -1,9 +1,11 @@
-package behavior.bpmn;
+package behavior.bpmn.events;
 
+import behavior.bpmn.ControlFlowNode;
 import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
 
-public class ParallelGateway extends ControlFlowNode {
-    public ParallelGateway(String name) {
+public class EndEvent extends ControlFlowNode {
+
+    public EndEvent(String name) {
         super(name);
     }
 

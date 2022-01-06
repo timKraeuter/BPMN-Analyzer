@@ -1,8 +1,15 @@
 package groove.behaviorTransformer;
 
-import behavior.bpmn.*;
+import behavior.bpmn.Activity;
+import behavior.bpmn.BPMNProcessModel;
+import behavior.bpmn.ControlFlowNode;
+import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
 import behavior.bpmn.auxiliary.StartParallelOrElseControlFlowNodeVisitor;
+import behavior.bpmn.events.EndEvent;
+import behavior.bpmn.events.StartEvent;
+import behavior.bpmn.gateways.ExclusiveGateway;
+import behavior.bpmn.gateways.ParallelGateway;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveGraphBuilder;
 import groove.graph.GrooveNode;

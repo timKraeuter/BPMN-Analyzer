@@ -1,5 +1,6 @@
-package behavior.bpmn;
+package behavior.bpmn.events;
 
+import behavior.bpmn.ControlFlowNode;
 import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
 
 public class StartEvent extends ControlFlowNode {
