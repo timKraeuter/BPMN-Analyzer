@@ -273,6 +273,32 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
         this.checkGrooveGeneration(processModel);
     }
 
+    /**
+     * See test case <a href="https://cawemo.com/share/9fdaa163-2b27-4787-99df-1ecf55971f14">"Implicit exclusive gateway"</a> in cawemo.
+     */
+    @Test
+    void testImplicitExclusiveGateway() throws IOException {
+        final StartEvent start = new StartEvent("start");
+        final ExclusiveGateway e1 = new ExclusiveGateway("e1");
+        Activity a = new Activity("A");
+        Activity b = new Activity("B");
+        final EndEvent end = new EndEvent("end");
+
+        final String modelName = "implicitExclusiveGateway";
+        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+                .name(modelName)
+                .startEvent(start)
+                .sequenceFlow("start", start, e1)
+                .sequenceFlow("e1_A", e1, a)
+                .sequenceFlow("e1_B", e1, b)
+                .sequenceFlow("A", a, b)
+                .sequenceFlow("B", b, end)
+                .endEvent(end)
+                .build();
+
+        this.checkGrooveGeneration(processModel);
+    }
+
     @Override
     public String getOutputPathSubFolderName() {
         return "bpmn";
