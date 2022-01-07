@@ -2,8 +2,8 @@ package behavior.bpmn.gateways;
 
 import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
 
-public class ExclusiveGateway extends Gateway {
-    public ExclusiveGateway(String name) {
+public class InclusiveGateway extends Gateway {
+    public InclusiveGateway(String name) {
         super(name);
     }
 

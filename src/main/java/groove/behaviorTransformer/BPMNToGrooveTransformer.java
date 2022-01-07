@@ -10,7 +10,9 @@ import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.LinkEvent;
 import behavior.bpmn.events.StartEvent;
 import behavior.bpmn.gateways.ExclusiveGateway;
+import behavior.bpmn.gateways.InclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
+import com.google.common.collect.Sets;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveGraphBuilder;
 import groove.graph.GrooveNode;
@@ -22,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessModel> {
@@ -31,11 +34,14 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     private static final String TYPE_PROCESS_INSTANCE = TYPE + "ProcessInstance";
     private static final String TYPE_RUNNING = TYPE + "Running";
     private static final String TYPE_TERMINATED = TYPE + "Terminated";
+    private static final String TYPE_DECISION = TYPE + "Decision";
 
     // Edge names
     private static final String POSITION = "position";
     private static final String STATE = "state";
     private static final String TOKENS = "tokens";
+    private static final String DECISIONS = "decisions";
+    private static final String DECISION = "decision";
 
     @Override
     public void generateAndWriteRulesFurther(BPMNProcessModel model, boolean addPrefix, File targetFolder) {
@@ -93,6 +99,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
         GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(bpmnProcessModel, addPrefix);
 
         final Set<ParallelGateway> parallelGateways = new LinkedHashSet<>();
+        final Set<InclusiveGateway> inclusiveGateways = new LinkedHashSet<>();
         // One rule for each sequence flow
         bpmnProcessModel.getSequenceFlows().forEach(sequenceFlow -> sequenceFlow.getSource().accept(new ControlFlowNodeVisitor() {
             @Override
@@ -160,6 +167,11 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                     }
 
                     @Override
+                    public void handle(InclusiveGateway inclusiveGateway) {
+                        inclusiveGateways.add(inclusiveGateway);
+                    }
+
+                    @Override
                     public void handle(LinkEvent linkEvent) {
                         switch (linkEvent.getType()) {
                             case THROW:
@@ -179,6 +191,11 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
             @Override
             public void handle(ParallelGateway parallelGateway) {
                 parallelGateways.add(parallelGateway);
+            }
+
+            @Override
+            public void handle(InclusiveGateway inclusiveGateway) {
+                inclusiveGateways.add(inclusiveGateway);
             }
 
             @Override
@@ -210,9 +227,52 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
 
         parallelGateways.forEach(parallelGateway -> this.createParallelGatewayRule(ruleBuilder, parallelGateway));
 
+        inclusiveGateways.forEach(inclusiveGateway -> this.createInclusiveGatewayRules(ruleBuilder, inclusiveGateway));
+
         bpmnProcessModel.getEndEvents().forEach(endEvent -> this.createEndEventRule(ruleBuilder, endEvent));
 
         return ruleBuilder.getRules();
+    }
+
+    private void createInclusiveGatewayRules(GrooveRuleBuilder ruleBuilder, InclusiveGateway inclusiveGateway) {
+        long incomingFlowCount = inclusiveGateway.getIncomingFlows().count();
+        long outgoingFlowCount = inclusiveGateway.getOutgoingFlows().count();
+        if (incomingFlowCount == 1 && outgoingFlowCount > 1) {
+            this.createBranchingInclusiveGatewayRules(ruleBuilder, inclusiveGateway);
+        }
+    }
+
+    private void createBranchingInclusiveGatewayRules(GrooveRuleBuilder ruleBuilder, InclusiveGateway inclusiveGateway) {
+        SequenceFlow incFlow = inclusiveGateway.getIncomingFlows().findFirst().get(); // size 1 means this operation is save.
+        int i = 1;
+        for (Set<SequenceFlow> sequenceFlows : Sets.powerSet(inclusiveGateway.getOutgoingFlows().collect(Collectors.toSet()))) {
+            if (sequenceFlows.size() >= 1) { // Empty set is also part of the power set.
+                ruleBuilder.startRule(inclusiveGateway.getName() + i);
+                GrooveNode processInstance = this.createContextRunningProcessInstance(ruleBuilder);
+                GrooveNode previousToken = ruleBuilder.deleteNode(TYPE_TOKEN);
+                String incFlowSourceName = incFlow.getSource().getName();
+                ruleBuilder.deleteEdge(
+                        POSITION,
+                        previousToken,
+                        ruleBuilder.contextNode(this.createStringNodeLabel(incFlowSourceName)));
+
+                StringBuilder stringBuilder = new StringBuilder();
+                sequenceFlows.forEach(sequenceFlow -> {
+                    String sequenceFlowTargetName = sequenceFlow.getTarget().getName();
+                    GrooveNode newToken = ruleBuilder.addNode(TYPE_TOKEN);
+                    ruleBuilder.addEdge(
+                            POSITION,
+                            newToken,
+                            ruleBuilder.contextNode(this.createStringNodeLabel(sequenceFlowTargetName)));
+                    stringBuilder.append(sequenceFlowTargetName);
+                });
+                GrooveNode decision = ruleBuilder.addNode(TYPE_DECISION);
+                ruleBuilder.addEdge(DECISIONS, processInstance, decision);
+                ruleBuilder.addEdge(DECISION, decision, ruleBuilder.contextNode(this.createStringNodeLabel(stringBuilder.toString())));
+                ruleBuilder.buildRule();
+                i++;
+            }
+        }
     }
 
     private void createEndEventRule(GrooveRuleBuilder ruleBuilder, EndEvent endEvent) {

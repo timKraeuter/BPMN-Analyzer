@@ -1,9 +1,8 @@
 package behavior.bpmn.gateways;
 
-import behavior.bpmn.ControlFlowNode;
 import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
 
-public class ParallelGateway extends ControlFlowNode {
+public class ParallelGateway extends Gateway {
     public ParallelGateway(String name) {
         super(name);
     }

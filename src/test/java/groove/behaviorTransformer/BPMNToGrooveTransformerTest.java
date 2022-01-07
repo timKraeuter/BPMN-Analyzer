@@ -5,6 +5,7 @@ import behavior.bpmn.BPMNProcessModel;
 import behavior.bpmn.auxiliary.BPMNProcessBuilder;
 import behavior.bpmn.events.*;
 import behavior.bpmn.gateways.ExclusiveGateway;
+import behavior.bpmn.gateways.InclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
 import org.junit.jupiter.api.Test;
 
@@ -293,6 +294,34 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
                 .sequenceFlow("e1_B", e1, b)
                 .sequenceFlow("A", a, b)
                 .sequenceFlow("B", b, end)
+                .endEvent(end)
+                .build();
+
+        this.checkGrooveGeneration(processModel);
+    }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/e5ab5920-be7c-435f-8d58-964760455caf">"Inclusive gateway"</a> in cawemo.
+     */
+    @Test
+    void testInclusiveGateway() throws IOException {
+        final StartEvent start = new StartEvent("start");
+        final InclusiveGateway i1 = new InclusiveGateway("i1");
+        Activity a = new Activity("A");
+        Activity b = new Activity("B");
+        final InclusiveGateway i2 = new InclusiveGateway("i2");
+        final EndEvent end = new EndEvent("end");
+
+        final String modelName = "inclusiveGateway";
+        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+                .name(modelName)
+                .startEvent(start)
+                .sequenceFlow("start", start, i1)
+                .sequenceFlow("i1_A", i1, a)
+                .sequenceFlow("i1_B", i1, b)
+                .sequenceFlow("A", a, i2)
+                .sequenceFlow("B", b, i2)
+                .sequenceFlow("i2", i2, end)
                 .endEvent(end)
                 .build();
 
