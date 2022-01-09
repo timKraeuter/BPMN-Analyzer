@@ -21,7 +21,6 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -116,16 +115,22 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
             public void handle(Activity activity) {
                 activity.getIncomingFlows().forEach(incomingFlow -> {
                     final String incomingFlowId = incomingFlow.getID();
-                    ruleBuilder.startRule(activity.getIncomingFlows().count() > 1 ? incomingFlowId : activity.getName());
+                    ruleBuilder.startRule(this.getActivityRuleName(activity, incomingFlowId));
+                    GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(ruleBuilder);
+                    deleteTokenWithPosition(ruleBuilder, processInstance, incomingFlowId);
                     activity.getOutgoingFlows().forEach(outgoingFlow -> {
                         final String outgoingFlowID = outgoingFlow.getID();
-                        BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
-                                incomingFlowId,
-                                outgoingFlowID,
-                                ruleBuilder);
+                        addTokenWithPosition(ruleBuilder, processInstance, outgoingFlowID);
                     });
                     ruleBuilder.buildRule();
                 });
+            }
+
+            private String getActivityRuleName(Activity activity, String incomingFlowId) {
+                if (activity.getIncomingFlows().count() > 1) {
+                    return activity.getName() + "_" + incomingFlowId;
+                }
+                return activity.getName();
             }
 
             @Override
@@ -158,12 +163,12 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                     return exclusiveGateway.getName();
                 }
                 if (inCount == 1) {
-                    return outFlowID;
+                    return exclusiveGateway.getName() + "_" + outFlowID;
                 }
                 if (outCount == 1) {
-                    return incomingFlowId;
+                    return exclusiveGateway.getName() + "_" +incomingFlowId;
                 }
-                return incomingFlowId + "_" + outFlowID;
+                return exclusiveGateway.getName() + "_" + incomingFlowId + "_" + outFlowID;
             }
 
             @Override
@@ -366,21 +371,25 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
         ruleBuilder.startRule(parallelGateway.getName());
         GrooveNode processInstance = this.createContextRunningProcessInstance(ruleBuilder);
 
-        // Delete one token for each incoming flow.
-        parallelGateway.getIncomingFlows().forEach(sequenceFlow -> {
-            GrooveNode forkedToken = ruleBuilder.deleteNode(TYPE_TOKEN);
-            ruleBuilder.deleteEdge(TOKENS, processInstance, forkedToken);
-            ruleBuilder.deleteEdge(POSITION, forkedToken, ruleBuilder.contextNode(this.createStringNodeLabel(sequenceFlow.getID())));
-        });
+        parallelGateway.getIncomingFlows().forEach(
+                sequenceFlow -> deleteTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
 
-        // Add one token for each outgoing flow.
-        parallelGateway.getOutgoingFlows().forEach(sequenceFlow -> {
-            GrooveNode forkedToken = ruleBuilder.addNode(TYPE_TOKEN);
-            ruleBuilder.addEdge(TOKENS, processInstance, forkedToken);
-            ruleBuilder.addEdge(POSITION, forkedToken, ruleBuilder.contextNode(this.createStringNodeLabel(sequenceFlow.getID())));
-        });
+        parallelGateway.getOutgoingFlows().forEach(
+                sequenceFlow -> addTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
 
         ruleBuilder.buildRule();
+    }
+
+    private void deleteTokenWithPosition(GrooveRuleBuilder ruleBuilder, GrooveNode processInstance, String position) {
+        GrooveNode forkedToken = ruleBuilder.deleteNode(TYPE_TOKEN);
+        ruleBuilder.deleteEdge(TOKENS, processInstance, forkedToken);
+        ruleBuilder.deleteEdge(POSITION, forkedToken, ruleBuilder.contextNode(this.createStringNodeLabel(position)));
+    }
+
+    private void addTokenWithPosition(GrooveRuleBuilder ruleBuilder, GrooveNode processInstance, String position) {
+        GrooveNode forkedToken = ruleBuilder.addNode(TYPE_TOKEN);
+        ruleBuilder.addEdge(TOKENS, processInstance, forkedToken);
+        ruleBuilder.addEdge(POSITION, forkedToken, ruleBuilder.contextNode(this.createStringNodeLabel(position)));
     }
 
     @Override

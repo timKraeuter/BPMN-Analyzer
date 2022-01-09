@@ -1,72 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="e1_A" role="rule" edgeids="false" edgemode="directed">
-        <node id="n9">
+    <graph id="implicitParallelGateway_start" role="rule" edgeids="false" edgemode="directed">
+        <node id="n0">
             <attr name="layout">
-                <string>62 89 0 0</string>
+                <string>62 80 0 0</string>
             </attr>
         </node>
-        <edge from="n9" to="n9">
+        <edge from="n0" to="n0">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n10">
+        <node id="n1">
             <attr name="layout">
-                <string>382 160 0 0</string>
+                <string>382 72 0 0</string>
             </attr>
         </node>
-        <edge from="n10" to="n10">
+        <edge from="n1" to="n1">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n11">
+        <node id="n2">
             <attr name="layout">
-                <string>402 80 0 0</string>
+                <string>397 152 0 0</string>
             </attr>
         </node>
-        <edge from="n11" to="n11">
+        <edge from="n2" to="n2">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n12">
+        <node id="n3">
             <attr name="layout">
                 <string>582 152 0 0</string>
             </attr>
         </node>
-        <edge from="n12" to="n12">
+        <edge from="n3" to="n3">
             <attr name="label">
-                <string>string:"e1"</string>
+                <string>string:"start"</string>
             </attr>
         </edge>
-        <node id="n13">
-            <attr name="layout">
-                <string>582 72 0 0</string>
-            </attr>
-        </node>
-        <edge from="n13" to="n13">
-            <attr name="label">
-                <string>string:"A"</string>
-            </attr>
-        </edge>
-        <edge from="n11" to="n13">
-            <attr name="label">
-                <string>new:position</string>
-            </attr>
-        </edge>
-        <edge from="n11" to="n12">
-            <attr name="label">
-                <string>del:position</string>
-            </attr>
-        </edge>
-        <edge from="n9" to="n10">
+        <edge from="n0" to="n1">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n9" to="n11">
+        <edge from="n2" to="n3">
+            <attr name="label">
+                <string>position</string>
+            </attr>
+        </edge>
+        <edge from="n0" to="n2">
             <attr name="label">
                 <string>tokens</string>
             </attr>

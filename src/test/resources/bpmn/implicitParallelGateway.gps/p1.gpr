@@ -1,132 +1,132 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="p2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n47">
+    <graph id="p1" role="rule" edgeids="false" edgemode="directed">
+        <node id="n35">
             <attr name="layout">
                 <string>417 162 0 0</string>
             </attr>
         </node>
-        <edge from="n47" to="n47">
+        <edge from="n35" to="n35">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n47" to="n47">
+        <edge from="n35" to="n35">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n43">
+        <node id="n31">
             <attr name="layout">
                 <string>417 252 0 0</string>
             </attr>
         </node>
-        <edge from="n43" to="n43">
+        <edge from="n31" to="n31">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n43" to="n43">
+        <edge from="n31" to="n31">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n45">
+        <node id="n33">
             <attr name="layout">
                 <string>417 342 0 0</string>
             </attr>
         </node>
-        <edge from="n45" to="n45">
+        <edge from="n33" to="n33">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n45" to="n45">
+        <edge from="n33" to="n33">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n41">
+        <node id="n29">
             <attr name="layout">
                 <string>62 87 0 0</string>
             </attr>
         </node>
-        <edge from="n41" to="n41">
+        <edge from="n29" to="n29">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n42">
+        <node id="n30">
             <attr name="layout">
                 <string>402 72 0 0</string>
             </attr>
         </node>
-        <edge from="n42" to="n42">
+        <edge from="n30" to="n30">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n44">
+        <node id="n32">
             <attr name="layout">
                 <string>602 252 0 0</string>
             </attr>
         </node>
-        <edge from="n44" to="n44">
+        <edge from="n32" to="n32">
             <attr name="label">
-                <string>string:"a2_1_p2"</string>
+                <string>string:"B_p1"</string>
             </attr>
         </edge>
-        <node id="n46">
+        <node id="n34">
             <attr name="layout">
                 <string>602 342 0 0</string>
             </attr>
         </node>
-        <edge from="n46" to="n46">
+        <edge from="n34" to="n34">
             <attr name="label">
-                <string>string:"a2_2_p2"</string>
+                <string>string:"C_p1"</string>
             </attr>
         </edge>
-        <node id="n48">
+        <node id="n36">
             <attr name="layout">
                 <string>602 162 0 0</string>
             </attr>
         </node>
-        <edge from="n48" to="n48">
+        <edge from="n36" to="n36">
             <attr name="label">
-                <string>string:"p2_a3"</string>
+                <string>string:"p1_end"</string>
             </attr>
         </edge>
-        <edge from="n41" to="n47">
+        <edge from="n29" to="n35">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n47" to="n48">
+        <edge from="n35" to="n36">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n41" to="n43">
+        <edge from="n29" to="n31">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n43" to="n44">
+        <edge from="n31" to="n32">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n41" to="n45">
+        <edge from="n29" to="n33">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n45" to="n46">
+        <edge from="n33" to="n34">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n41" to="n42">
+        <edge from="n29" to="n30">
             <attr name="label">
                 <string>state</string>
             </attr>

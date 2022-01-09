@@ -302,6 +302,34 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     }
 
     /**
+     * See test case <a href="https://cawemo.com/share/5e855137-d237-4bf7-bbf4-639c8e6093e0">"Implicit parallel gateway"</a> in cawemo.
+     */
+    @Test
+    void testImplicitParallelGateway() throws IOException {
+        final StartEvent start = new StartEvent("start");
+        final ParallelGateway p1 = new ParallelGateway("p1");
+        Activity a = new Activity("A");
+        Activity b = new Activity("B");
+        Activity c = new Activity("C");
+        final EndEvent end = new EndEvent("end");
+
+        final String modelName = "implicitParallelGateway";
+        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+                .name(modelName)
+                .startEvent(start)
+                .sequenceFlow(start, a)
+                .sequenceFlow(a, b)
+                .sequenceFlow(a, c)
+                .sequenceFlow(b, p1)
+                .sequenceFlow(c, p1)
+                .sequenceFlow(p1, end)
+                .endEvent(end)
+                .build();
+
+        this.checkGrooveGeneration(processModel);
+    }
+
+    /**
      * See test case <a href="https://cawemo.com/share/e5ab5920-be7c-435f-8d58-964760455caf">"Inclusive gateway"</a> in cawemo.
      */
     @Test

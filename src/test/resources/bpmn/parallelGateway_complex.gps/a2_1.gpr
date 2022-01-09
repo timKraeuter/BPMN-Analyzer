@@ -1,74 +1,99 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="a2_1" role="rule" edgeids="false" edgemode="directed">
-        <node id="n27">
+        <node id="n33">
             <attr name="layout">
-                <string>62 89 0 0</string>
+                <string>407 252 0 0</string>
             </attr>
         </node>
-        <edge from="n27" to="n27">
-            <attr name="label">
-                <string>type:ProcessInstance</string>
-            </attr>
-        </edge>
-        <node id="n28">
-            <attr name="layout">
-                <string>382 160 0 0</string>
-            </attr>
-        </node>
-        <edge from="n28" to="n28">
-            <attr name="label">
-                <string>type:Running</string>
-            </attr>
-        </edge>
-        <node id="n29">
-            <attr name="layout">
-                <string>402 80 0 0</string>
-            </attr>
-        </node>
-        <edge from="n29" to="n29">
+        <edge from="n33" to="n33">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n30">
-            <attr name="layout">
-                <string>582 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n30" to="n30">
+        <edge from="n33" to="n33">
             <attr name="label">
-                <string>string:"p1_a2_1"</string>
+                <string>new:</string>
             </attr>
         </edge>
         <node id="n31">
             <attr name="layout">
-                <string>582 72 0 0</string>
+                <string>407 162 0 0</string>
             </attr>
         </node>
         <edge from="n31" to="n31">
             <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n31" to="n31">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n29">
+            <attr name="layout">
+                <string>62 85 0 0</string>
+            </attr>
+        </node>
+        <edge from="n29" to="n29">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n30">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n30" to="n30">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n32">
+            <attr name="layout">
+                <string>592 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n32" to="n32">
+            <attr name="label">
+                <string>string:"p1_a2_1"</string>
+            </attr>
+        </edge>
+        <node id="n34">
+            <attr name="layout">
+                <string>592 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n34" to="n34">
+            <attr name="label">
                 <string>string:"a2_1_p3"</string>
             </attr>
         </edge>
-        <edge from="n29" to="n31">
+        <edge from="n29" to="n33">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n33" to="n34">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n29" to="n30">
+        <edge from="n29" to="n31">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n31" to="n32">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n27" to="n28">
+        <edge from="n29" to="n30">
             <attr name="label">
                 <string>state</string>
-            </attr>
-        </edge>
-        <edge from="n27" to="n29">
-            <attr name="label">
-                <string>tokens</string>
             </attr>
         </edge>
     </graph>

@@ -1,72 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="B" role="rule" edgeids="false" edgemode="directed">
-        <node id="n24">
+    <graph id="Catch_Link2" role="rule" edgeids="false" edgemode="directed">
+        <node id="n40">
             <attr name="layout">
                 <string>62 89 0 0</string>
             </attr>
         </node>
-        <edge from="n24" to="n24">
+        <edge from="n40" to="n40">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n25">
+        <node id="n41">
             <attr name="layout">
                 <string>382 160 0 0</string>
             </attr>
         </node>
-        <edge from="n25" to="n25">
+        <edge from="n41" to="n41">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n26">
+        <node id="n42">
             <attr name="layout">
                 <string>402 80 0 0</string>
             </attr>
         </node>
-        <edge from="n26" to="n26">
+        <edge from="n42" to="n42">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n27">
+        <node id="n43">
             <attr name="layout">
                 <string>582 152 0 0</string>
             </attr>
         </node>
-        <edge from="n27" to="n27">
+        <edge from="n43" to="n43">
             <attr name="label">
-                <string>string:"B"</string>
+                <string>string:"Link2"</string>
             </attr>
         </edge>
-        <node id="n28">
+        <node id="n44">
             <attr name="layout">
                 <string>582 72 0 0</string>
             </attr>
         </node>
-        <edge from="n28" to="n28">
+        <edge from="n44" to="n44">
             <attr name="label">
-                <string>string:"end"</string>
+                <string>string:"Link2_p2"</string>
             </attr>
         </edge>
-        <edge from="n26" to="n28">
+        <edge from="n42" to="n44">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n26" to="n27">
+        <edge from="n42" to="n43">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n24" to="n25">
+        <edge from="n40" to="n41">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n24" to="n26">
+        <edge from="n40" to="n42">
             <attr name="label">
                 <string>tokens</string>
             </attr>
