@@ -358,6 +358,41 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
         this.checkGrooveGeneration(processModel);
     }
 
+    /**
+     * See test case <a href="https://cawemo.com/share/4edc1064-1a2f-46ba-b4bd-9bd3fceea7ae">"Inclusive gateway complex"</a> in cawemo.
+     */
+    @Test
+    void testInclusiveGatewayComplex() throws IOException {
+        final StartEvent start = new StartEvent("start");
+        final InclusiveGateway i1 = new InclusiveGateway("i1");
+        Activity a = new Activity("A");
+        final ParallelGateway p1 = new ParallelGateway("p1");
+        Activity b = new Activity("B");
+        Activity c = new Activity("C");
+        final ParallelGateway p2 = new ParallelGateway("p2");
+        final InclusiveGateway i2 = new InclusiveGateway("i2");
+        final EndEvent end = new EndEvent("end");
+
+        final String modelName = "inclusiveGatewayComplex";
+        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+                .name(modelName)
+                .startEvent(start)
+                .sequenceFlow(start, i1)
+                .sequenceFlow(i1, a)
+                .sequenceFlow(i1, p1)
+                .sequenceFlow(a, i2)
+                .sequenceFlow(p1, b)
+                .sequenceFlow(p1, c)
+                .sequenceFlow(b, p2)
+                .sequenceFlow(c, p2)
+                .sequenceFlow(p2, i2)
+                .sequenceFlow(i2, end)
+                .endEvent(end)
+                .build();
+
+        this.checkGrooveGeneration(processModel);
+    }
+
     @Override
     public String getOutputPathSubFolderName() {
         return "bpmn";
