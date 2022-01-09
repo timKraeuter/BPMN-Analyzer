@@ -1,72 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="e1_a2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n19">
+    <graph id="e3_a3_e3" role="rule" edgeids="false" edgemode="directed">
+        <node id="n52">
             <attr name="layout">
                 <string>62 89 0 0</string>
             </attr>
         </node>
-        <edge from="n19" to="n19">
+        <edge from="n52" to="n52">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n20">
+        <node id="n53">
             <attr name="layout">
                 <string>382 160 0 0</string>
             </attr>
         </node>
-        <edge from="n20" to="n20">
+        <edge from="n53" to="n53">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n21">
+        <node id="n54">
             <attr name="layout">
                 <string>402 80 0 0</string>
             </attr>
         </node>
-        <edge from="n21" to="n21">
+        <edge from="n54" to="n54">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n22">
+        <node id="n55">
             <attr name="layout">
                 <string>582 152 0 0</string>
             </attr>
         </node>
-        <edge from="n22" to="n22">
+        <edge from="n55" to="n55">
             <attr name="label">
-                <string>string:"e1"</string>
+                <string>string:"a3_e3"</string>
             </attr>
         </edge>
-        <node id="n23">
+        <node id="n56">
             <attr name="layout">
                 <string>582 72 0 0</string>
             </attr>
         </node>
-        <edge from="n23" to="n23">
+        <edge from="n56" to="n56">
             <attr name="label">
-                <string>string:"a2"</string>
+                <string>string:"e3_e4"</string>
             </attr>
         </edge>
-        <edge from="n21" to="n23">
+        <edge from="n54" to="n56">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n21" to="n22">
+        <edge from="n54" to="n55">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n19" to="n20">
+        <edge from="n52" to="n53">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n19" to="n21">
+        <edge from="n52" to="n54">
             <attr name="label">
                 <string>tokens</string>
             </attr>

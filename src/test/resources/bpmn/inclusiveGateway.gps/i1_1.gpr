@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="p1" role="rule" edgeids="false" edgemode="directed">
+    <graph id="i1_1" role="rule" edgeids="false" edgemode="directed">
         <node id="n13">
             <attr name="layout">
-                <string>417 162 0 0</string>
+                <string>425 162 0 0</string>
             </attr>
         </node>
         <edge from="n13" to="n13">
@@ -18,12 +18,12 @@
         </edge>
         <node id="n15">
             <attr name="layout">
-                <string>417 252 0 0</string>
+                <string>402 252 0 0</string>
             </attr>
         </node>
         <edge from="n15" to="n15">
             <attr name="label">
-                <string>type:Token</string>
+                <string>type:Decision</string>
             </attr>
         </edge>
         <edge from="n15" to="n15">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n11">
             <attr name="layout">
-                <string>417 342 0 0</string>
+                <string>425 342 0 0</string>
             </attr>
         </node>
         <edge from="n11" to="n11">
@@ -68,32 +68,32 @@
         </edge>
         <node id="n12">
             <attr name="layout">
-                <string>602 342 0 0</string>
+                <string>617 342 0 0</string>
             </attr>
         </node>
         <edge from="n12" to="n12">
             <attr name="label">
-                <string>string:"start_p1"</string>
+                <string>string:"start_i1"</string>
             </attr>
         </edge>
         <node id="n14">
             <attr name="layout">
-                <string>602 162 0 0</string>
+                <string>617 162 0 0</string>
             </attr>
         </node>
         <edge from="n14" to="n14">
             <attr name="label">
-                <string>string:"p1_A"</string>
+                <string>string:"i1_A"</string>
             </attr>
         </edge>
         <node id="n16">
             <attr name="layout">
-                <string>602 252 0 0</string>
+                <string>617 252 0 0</string>
             </attr>
         </node>
         <edge from="n16" to="n16">
             <attr name="label">
-                <string>string:"p1_B"</string>
+                <string>string:"i1_A"</string>
             </attr>
         </edge>
         <edge from="n9" to="n13">
@@ -108,12 +108,12 @@
         </edge>
         <edge from="n9" to="n15">
             <attr name="label">
-                <string>new:tokens</string>
+                <string>new:decisions</string>
             </attr>
         </edge>
         <edge from="n15" to="n16">
             <attr name="label">
-                <string>new:position</string>
+                <string>new:decision</string>
             </attr>
         </edge>
         <edge from="n9" to="n11">
