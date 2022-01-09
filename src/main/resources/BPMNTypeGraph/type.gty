@@ -29,6 +29,11 @@
                 <string>622 189 71 18</string>
             </attr>
         </node>
+        <node id="n4">
+            <attr name="layout">
+                <string>116 184 91 36</string>
+            </attr>
+        </node>
         <edge from="n13" to="n13">
             <attr name="label">
                 <string>type:Token</string>
@@ -52,6 +57,11 @@
         <edge from="n0" to="n1">
             <attr name="label">
                 <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n0" to="n4">
+            <attr name="label">
+                <string>decisions</string>
             </attr>
         </edge>
         <edge from="n1" to="n1">
@@ -82,6 +92,16 @@
         <edge from="n3" to="n1">
             <attr name="label">
                 <string>sub:</string>
+            </attr>
+        </edge>
+        <edge from="n4" to="n4">
+            <attr name="label">
+                <string>type:Decision</string>
+            </attr>
+        </edge>
+        <edge from="n4" to="n4">
+            <attr name="label">
+                <string>string:decision</string>
             </attr>
         </edge>
     </graph>

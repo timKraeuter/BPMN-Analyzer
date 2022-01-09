@@ -7,4 +7,9 @@ public abstract class Event extends ControlFlowNode {
     public Event(String name) {
         super(name);
     }
+
+    @Override
+    public boolean isInclusiveGateway() {
+        return false;
+    }
 }

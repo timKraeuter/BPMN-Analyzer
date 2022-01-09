@@ -12,4 +12,9 @@ public class ParallelGateway extends Gateway {
         visitor.handle(this);
     }
 
+    @Override
+    public boolean isInclusiveGateway() {
+        return false;
+    }
+
 }

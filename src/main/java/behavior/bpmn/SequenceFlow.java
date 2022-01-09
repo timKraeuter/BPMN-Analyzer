@@ -11,6 +11,15 @@ public class SequenceFlow {
         this.target = target;
     }
 
+    public String getID() {
+        // We assume names are unique if not empty
+        // We assume there only exists one sequence flow between two nodes for now.
+        if (name.isEmpty()) {
+            return String.format("%s_%s", source.getName(), target.getName());
+        }
+        return name;
+    }
+
     public ControlFlowNode getSource() {
         return source;
     }

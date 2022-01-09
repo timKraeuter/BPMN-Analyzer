@@ -23,6 +23,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -168,6 +169,10 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
 
                     @Override
                     public void handle(InclusiveGateway inclusiveGateway) {
+                        BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
+                                notParallelGatewayNode.getName(),
+                                inclusiveGateway.getName(),
+                                ruleBuilder);
                         inclusiveGateways.add(inclusiveGateway);
                     }
 
@@ -239,6 +244,81 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
         long outgoingFlowCount = inclusiveGateway.getOutgoingFlows().count();
         if (incomingFlowCount == 1 && outgoingFlowCount > 1) {
             this.createBranchingInclusiveGatewayRules(ruleBuilder, inclusiveGateway);
+            return;
+        }
+        if (incomingFlowCount > 1 && outgoingFlowCount == 1) {
+            this.createMergingInclusiveGatewayRules(ruleBuilder, inclusiveGateway);
+            return;
+        }
+        if (incomingFlowCount == 0 || outgoingFlowCount == 0) {
+            throw new RuntimeException(
+                    String.format(
+                            "The inclusive gateway \"%s\" has 0 incoming or outgoing flows!",
+                            inclusiveGateway.getName()));
+        }
+        throw new RuntimeException("Inclusive gateway should not have multiple incoming and outgoing flows.");
+    }
+
+    private void createMergingInclusiveGatewayRules(GrooveRuleBuilder ruleBuilder, InclusiveGateway inclusiveGateway) {
+        // Find the corresponding branching inclusive gateway
+        ControlFlowNode gateway = this.findCorrespondingBranchGateway(inclusiveGateway);
+        SequenceFlow outFlow = inclusiveGateway.getOutgoingFlows().findFirst().get(); // size 1 means this operation is save.
+        int i = 1;
+        for (Set<SequenceFlow> sequenceFlows : Sets.powerSet(gateway.getOutgoingFlows().collect(Collectors.toSet()))) {
+            if (sequenceFlows.size() >= 1) { // Empty set is also part of the power set.
+                ruleBuilder.startRule(inclusiveGateway.getName() + "_" + i);
+                GrooveNode processInstance = this.createContextRunningProcessInstance(ruleBuilder);
+                GrooveNode newToken = ruleBuilder.addNode(TYPE_TOKEN);
+                ruleBuilder.addEdge(TOKENS, processInstance, newToken);
+                String outFlowSourceName = outFlow.getSource().getName();
+                ruleBuilder.addEdge(
+                        POSITION,
+                        newToken,
+                        ruleBuilder.contextNode(this.createStringNodeLabel(outFlowSourceName)));
+
+                StringBuilder stringBuilder = new StringBuilder();
+                sequenceFlows.forEach(sequenceFlow -> {
+                    String sequenceFlowTargetName = sequenceFlow.getTarget().getName();
+                    GrooveNode previousToken = ruleBuilder.deleteNode(TYPE_TOKEN);
+                    ruleBuilder.deleteEdge(TOKENS, processInstance, previousToken);
+                    ruleBuilder.deleteEdge(
+                            POSITION,
+                            previousToken,
+                            ruleBuilder.contextNode(this.createStringNodeLabel(sequenceFlowTargetName)));
+                    stringBuilder.append(sequenceFlowTargetName);
+                });
+                GrooveNode decision = ruleBuilder.deleteNode(TYPE_DECISION);
+                ruleBuilder.deleteEdge(DECISIONS, processInstance, decision);
+                ruleBuilder.deleteEdge(DECISION, decision, ruleBuilder.contextNode(this.createStringNodeLabel(stringBuilder.toString())));
+                ruleBuilder.buildRule();
+                i++;
+            }
+        }
+    }
+
+    private ControlFlowNode findCorrespondingBranchGateway(InclusiveGateway inclusiveGateway) {
+        final Set<ControlFlowNode> iGateways = inclusiveGateway.getIncomingFlows()
+                                                               .map(this::searchBranchingGateway)
+                                                               .collect(Collectors.toSet());
+        return getSingleGatwayOrThrowException(iGateways);
+    }
+
+    private ControlFlowNode searchBranchingGateway(SequenceFlow inFlow) {
+        final ControlFlowNode source = inFlow.getSource();
+        if (source.isInclusiveGateway()) {
+            return source;
+        }
+        final Set<ControlFlowNode> iGateways = source.getIncomingFlows()
+                                                     .map(this::searchBranchingGateway)
+                                                     .collect(Collectors.toSet());
+        return getSingleGatwayOrThrowException(iGateways);
+    }
+
+    private ControlFlowNode getSingleGatwayOrThrowException(Set<ControlFlowNode> iGateways) {
+        if (iGateways.size() == 1) {
+            return iGateways.iterator().next();
+        } else {
+            throw new RuntimeException("No matching branching inclusive Gateway found!");
         }
     }
 
@@ -247,9 +327,10 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
         int i = 1;
         for (Set<SequenceFlow> sequenceFlows : Sets.powerSet(inclusiveGateway.getOutgoingFlows().collect(Collectors.toSet()))) {
             if (sequenceFlows.size() >= 1) { // Empty set is also part of the power set.
-                ruleBuilder.startRule(inclusiveGateway.getName() + i);
+                ruleBuilder.startRule(inclusiveGateway.getName() + "_" + i);
                 GrooveNode processInstance = this.createContextRunningProcessInstance(ruleBuilder);
                 GrooveNode previousToken = ruleBuilder.deleteNode(TYPE_TOKEN);
+                ruleBuilder.deleteEdge(TOKENS, processInstance, previousToken);
                 String incFlowSourceName = incFlow.getSource().getName();
                 ruleBuilder.deleteEdge(
                         POSITION,
@@ -260,6 +341,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                 sequenceFlows.forEach(sequenceFlow -> {
                     String sequenceFlowTargetName = sequenceFlow.getTarget().getName();
                     GrooveNode newToken = ruleBuilder.addNode(TYPE_TOKEN);
+                    ruleBuilder.addEdge(TOKENS, processInstance, newToken);
                     ruleBuilder.addEdge(
                             POSITION,
                             newToken,

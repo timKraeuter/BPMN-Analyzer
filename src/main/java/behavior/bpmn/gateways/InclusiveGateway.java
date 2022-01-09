@@ -12,4 +12,9 @@ public class InclusiveGateway extends Gateway {
         visitor.handle(this);
     }
 
+    @Override
+    public boolean isInclusiveGateway() {
+        return true;
+    }
+
 }

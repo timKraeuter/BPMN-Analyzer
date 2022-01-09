@@ -13,8 +13,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
 abstract class BehaviorToGrooveTransformerTestHelper {
-    private final String outputPath = "C:/Source/groove/bin";
-    //    String outputPath = "B:/Source/groove/bin";
+    //    private final String outputPath = "C:/Source/groove/bin";
+    String outputPath = "B:/Source/groove/bin";
     //    String outputPath = FileUtils.getTempDirectoryPath();
 
     private boolean addPrefix = false;
