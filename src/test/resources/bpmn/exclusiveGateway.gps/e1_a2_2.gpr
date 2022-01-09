@@ -38,7 +38,7 @@
         </node>
         <edge from="n27" to="n27">
             <attr name="label">
-                <string>string:"e1"</string>
+                <string>string:"a1_e1"</string>
             </attr>
         </edge>
         <node id="n28">
@@ -48,7 +48,7 @@
         </node>
         <edge from="n28" to="n28">
             <attr name="label">
-                <string>string:"a2_2"</string>
+                <string>string:"e1_a2_2"</string>
             </attr>
         </edge>
         <edge from="n26" to="n28">

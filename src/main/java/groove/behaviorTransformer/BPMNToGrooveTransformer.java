@@ -5,7 +5,6 @@ import behavior.bpmn.BPMNProcessModel;
 import behavior.bpmn.ControlFlowNode;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
-import behavior.bpmn.auxiliary.StartParallelOrElseControlFlowNodeVisitor;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.LinkEvent;
 import behavior.bpmn.events.StartEvent;
@@ -23,7 +22,6 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -99,143 +97,119 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     public Stream<GrooveGraphRule> generateRules(BPMNProcessModel bpmnProcessModel, boolean addPrefix) {
         GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(bpmnProcessModel, addPrefix);
 
-        final Set<ParallelGateway> parallelGateways = new LinkedHashSet<>();
-        final Set<InclusiveGateway> inclusiveGateways = new LinkedHashSet<>();
-        // One rule for each sequence flow
-        bpmnProcessModel.getSequenceFlows().forEach(sequenceFlow -> sequenceFlow.getSource().accept(new ControlFlowNodeVisitor() {
+        bpmnProcessModel.getControlFlowNodes().forEach(node -> node.accept(new ControlFlowNodeVisitor() {
             @Override
             public void handle(StartEvent startEvent) {
-                this.handleNonParallelGateway(
-                        startEvent,
-                        sequenceFlow,
-                        bpmnProcessModel,
-                        ruleBuilder,
-                        parallelGateways);
+                if (startEvent.getOutgoingFlows().count() != 1) {
+                    throw new RuntimeException("Start events should have exactly one outgoing flow!");
+                }
+                final String outgoingFlowID = startEvent.getOutgoingFlows().findFirst().get().getID();
+                ruleBuilder.startRule(startEvent.getName());
+                BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
+                        startEvent.getName(),
+                        outgoingFlowID,
+                        ruleBuilder);
+                ruleBuilder.buildRule();
             }
 
             @Override
             public void handle(Activity activity) {
-                this.handleNonParallelGateway(
-                        activity,
-                        sequenceFlow,
-                        bpmnProcessModel,
-                        ruleBuilder,
-                        parallelGateways);
+                activity.getIncomingFlows().forEach(incomingFlow -> {
+                    final String incomingFlowId = incomingFlow.getID();
+                    ruleBuilder.startRule(activity.getIncomingFlows().count() > 1 ? incomingFlowId : activity.getName());
+                    activity.getOutgoingFlows().forEach(outgoingFlow -> {
+                        final String outgoingFlowID = outgoingFlow.getID();
+                        BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
+                                incomingFlowId,
+                                outgoingFlowID,
+                                ruleBuilder);
+                    });
+                    ruleBuilder.buildRule();
+                });
             }
 
             @Override
             public void handle(ExclusiveGateway exclusiveGateway) {
-                this.handleNonParallelGateway(
-                        exclusiveGateway,
-                        sequenceFlow,
-                        bpmnProcessModel,
-                        ruleBuilder,
-                        parallelGateways);
+                createExclusiveGatewayRules(exclusiveGateway);
             }
 
-            private void handleNonParallelGateway(
-                    ControlFlowNode notParallelGatewayNode,
-                    SequenceFlow sequenceFlow,
-                    BPMNProcessModel bpmnProcessModel,
-                    GrooveRuleBuilder ruleGenerator,
-                    Set<ParallelGateway> parallelGateways) {
-                ruleGenerator.startRule(sequenceFlow.getName());
-                sequenceFlow.getTarget().accept(new StartParallelOrElseControlFlowNodeVisitor() {
-                    @Override
-                    public void handle(StartEvent startEvent) {
-                        throw new RuntimeException(
-                                String.format("There should be no sequence flow to a start event! " +
-                                                "BPMN-Model: \"%s\", Sequence flow: \"%s\"",
-                                        bpmnProcessModel,
-                                        sequenceFlow));
-                    }
-
-                    @Override
-                    public void handleRest(ControlFlowNode node) {
+            private void createExclusiveGatewayRules(ExclusiveGateway exclusiveGateway) {
+                exclusiveGateway.getIncomingFlows().forEach(incomingFlow -> {
+                    final String incomingFlowId = incomingFlow.getID();
+                    exclusiveGateway.getOutgoingFlows().forEach(outFlow -> {
+                        final String outgoingFlowID = outFlow.getID();
+                        ruleBuilder.startRule(this.getExclusiveGatewayName(exclusiveGateway, incomingFlowId, outgoingFlowID));
                         BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
-                                notParallelGatewayNode.getName(),
-                                node.getName(),
+                                incomingFlowId,
+                                outgoingFlowID,
                                 ruleBuilder);
-                    }
-
-                    @Override
-                    public void handle(ParallelGateway parallelGateway) {
-                        BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
-                                notParallelGatewayNode.getName(),
-                                parallelGateway.getName(),
-                                ruleBuilder);
-                        parallelGateways.add(parallelGateway);
-                    }
-
-                    @Override
-                    public void handle(InclusiveGateway inclusiveGateway) {
-                        BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
-                                notParallelGatewayNode.getName(),
-                                inclusiveGateway.getName(),
-                                ruleBuilder);
-                        inclusiveGateways.add(inclusiveGateway);
-                    }
-
-                    @Override
-                    public void handle(LinkEvent linkEvent) {
-                        switch (linkEvent.getType()) {
-                            case THROW:
-                                BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
-                                        notParallelGatewayNode.getName(),
-                                        linkEvent.getName(),
-                                        ruleBuilder);
-                                break;
-                            case CATCH:
-                                throw new RuntimeException("A link catch event cannot have incoming sequence flows!");
-                        }
-                    }
+                        ruleBuilder.buildRule();
+                    });
                 });
-                ruleGenerator.buildRule();
+            }
+
+            private String getExclusiveGatewayName(
+                    ExclusiveGateway exclusiveGateway,
+                    String incomingFlowId,
+                    String outFlowID) {
+                final long inCount = exclusiveGateway.getIncomingFlows().count();
+                final long outCount = exclusiveGateway.getOutgoingFlows().count();
+                if (inCount == 1 && outCount == 1) {
+                    return exclusiveGateway.getName();
+                }
+                if (inCount == 1) {
+                    return outFlowID;
+                }
+                if (outCount == 1) {
+                    return incomingFlowId;
+                }
+                return incomingFlowId + "_" + outFlowID;
             }
 
             @Override
             public void handle(ParallelGateway parallelGateway) {
-                parallelGateways.add(parallelGateway);
+                BPMNToGrooveTransformer.this.createParallelGatewayRule(ruleBuilder, parallelGateway);
             }
 
             @Override
             public void handle(InclusiveGateway inclusiveGateway) {
-                inclusiveGateways.add(inclusiveGateway);
+                BPMNToGrooveTransformer.this.createInclusiveGatewayRules(ruleBuilder, inclusiveGateway);
             }
 
             @Override
             public void handle(EndEvent endEvent) {
-                throw new RuntimeException(
-                        String.format("An end event should never be source of a sequence flow! " +
-                                        "BPMN-Model: \"%s\", Sequence flow: \"%s\"",
-                                bpmnProcessModel,
-                                sequenceFlow));
+                BPMNToGrooveTransformer.this.createEndEventRule(ruleBuilder, endEvent);
             }
 
             @Override
             public void handle(LinkEvent linkEvent) {
                 switch (linkEvent.getType()) {
                     case THROW:
-                        // do nothing. It is not possible for a throw event to have outgoing flows!
-                        throw new RuntimeException("A link throw event cannot have outgoing sequence flows!");
+                        ruleBuilder.startRule("Throw_" + linkEvent.getName());
+                        if (linkEvent.getIncomingFlows().count() != 1) {
+                            throw new RuntimeException("A throw link event should have exactly one incoming sequence flow!");
+                        }
+                        final String incomingFlowId = linkEvent.getIncomingFlows().findFirst().get().getID();
+                        BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
+                                incomingFlowId,
+                                linkEvent.getName(),
+                                ruleBuilder);
+                        break;
                     case CATCH:
-                        this.handleNonParallelGateway(
-                                linkEvent,
-                                sequenceFlow,
-                                bpmnProcessModel,
-                                ruleBuilder,
-                                parallelGateways);
+                        ruleBuilder.startRule("Catch_" + linkEvent.getName());
+                        if (linkEvent.getOutgoingFlows().count() != 1) {
+                            throw new RuntimeException("A catch link event should have exactly one outgoing sequence flow!");
+                        }
+                        final String outgoingFlowId = linkEvent.getOutgoingFlows().findFirst().get().getID();
+                        BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
+                                linkEvent.getName(),
+                                outgoingFlowId,
+                                ruleBuilder);
                         break;
                 }
+                ruleBuilder.buildRule();
             }
         }));
-
-        parallelGateways.forEach(parallelGateway -> this.createParallelGatewayRule(ruleBuilder, parallelGateway));
-
-        inclusiveGateways.forEach(inclusiveGateway -> this.createInclusiveGatewayRules(ruleBuilder, inclusiveGateway));
-
-        bpmnProcessModel.getEndEvents().forEach(endEvent -> this.createEndEventRule(ruleBuilder, endEvent));
-
         return ruleBuilder.getRules();
     }
 
@@ -300,7 +274,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
         final Set<ControlFlowNode> iGateways = inclusiveGateway.getIncomingFlows()
                                                                .map(this::searchBranchingGateway)
                                                                .collect(Collectors.toSet());
-        return getSingleGatwayOrThrowException(iGateways);
+        return getSingleGatewayOrThrowException(iGateways);
     }
 
     private ControlFlowNode searchBranchingGateway(SequenceFlow inFlow) {
@@ -311,10 +285,10 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
         final Set<ControlFlowNode> iGateways = source.getIncomingFlows()
                                                      .map(this::searchBranchingGateway)
                                                      .collect(Collectors.toSet());
-        return getSingleGatwayOrThrowException(iGateways);
+        return getSingleGatewayOrThrowException(iGateways);
     }
 
-    private ControlFlowNode getSingleGatwayOrThrowException(Set<ControlFlowNode> iGateways) {
+    private ControlFlowNode getSingleGatewayOrThrowException(Set<ControlFlowNode> iGateways) {
         if (iGateways.size() == 1) {
             return iGateways.iterator().next();
         } else {
@@ -358,12 +332,16 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     }
 
     private void createEndEventRule(GrooveRuleBuilder ruleBuilder, EndEvent endEvent) {
+        if (endEvent.getIncomingFlows().count() != 1) {
+            throw new RuntimeException("End events should have exactly one incoming flow!");
+        }
+        final String incomingFlowId = endEvent.getIncomingFlows().findFirst().get().getID();
         ruleBuilder.startRule(endEvent.getName());
 
         GrooveNode processInstance = ruleBuilder.contextNode(TYPE_PROCESS_INSTANCE);
 
         GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
-        GrooveNode position = ruleBuilder.contextNode(this.createStringNodeLabel(endEvent.getName()));
+        GrooveNode position = ruleBuilder.contextNode(this.createStringNodeLabel(incomingFlowId));
         ruleBuilder.deleteEdge(POSITION, token, position);
         ruleBuilder.deleteEdge(TOKENS, processInstance, token);
 
@@ -389,21 +367,17 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
         GrooveNode processInstance = this.createContextRunningProcessInstance(ruleBuilder);
 
         // Delete one token for each incoming flow.
-        Set<GrooveNode> previousTokens = new LinkedHashSet<>();
         parallelGateway.getIncomingFlows().forEach(sequenceFlow -> {
             GrooveNode forkedToken = ruleBuilder.deleteNode(TYPE_TOKEN);
             ruleBuilder.deleteEdge(TOKENS, processInstance, forkedToken);
-            previousTokens.forEach(previousToken -> ruleBuilder.contextEdge(UNEQUALS, previousToken, forkedToken));
-            previousTokens.add(forkedToken);
-            ruleBuilder.deleteEdge(POSITION, forkedToken, ruleBuilder.contextNode(this.createStringNodeLabel(parallelGateway.getName())));
+            ruleBuilder.deleteEdge(POSITION, forkedToken, ruleBuilder.contextNode(this.createStringNodeLabel(sequenceFlow.getID())));
         });
 
         // Add one token for each outgoing flow.
         parallelGateway.getOutgoingFlows().forEach(sequenceFlow -> {
             GrooveNode forkedToken = ruleBuilder.addNode(TYPE_TOKEN);
             ruleBuilder.addEdge(TOKENS, processInstance, forkedToken);
-            String flowTargetName = sequenceFlow.getTarget().getName();
-            ruleBuilder.addEdge(POSITION, forkedToken, ruleBuilder.contextNode(this.createStringNodeLabel(flowTargetName)));
+            ruleBuilder.addEdge(POSITION, forkedToken, ruleBuilder.contextNode(this.createStringNodeLabel(sequenceFlow.getID())));
         });
 
         ruleBuilder.buildRule();

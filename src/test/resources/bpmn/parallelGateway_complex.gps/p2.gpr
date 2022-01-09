@@ -1,132 +1,132 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="p2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n46">
+        <node id="n41">
             <attr name="layout">
                 <string>417 162 0 0</string>
             </attr>
         </node>
-        <edge from="n46" to="n46">
+        <edge from="n41" to="n41">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n46" to="n46">
+        <edge from="n41" to="n41">
             <attr name="label">
                 <string>new:</string>
-            </attr>
-        </edge>
-        <node id="n48">
-            <attr name="layout">
-                <string>417 252 0 0</string>
-            </attr>
-        </node>
-        <edge from="n48" to="n48">
-            <attr name="label">
-                <string>type:Token</string>
-            </attr>
-        </edge>
-        <edge from="n48" to="n48">
-            <attr name="label">
-                <string>new:</string>
-            </attr>
-        </edge>
-        <node id="n44">
-            <attr name="layout">
-                <string>417 342 0 0</string>
-            </attr>
-        </node>
-        <edge from="n44" to="n44">
-            <attr name="label">
-                <string>type:Token</string>
-            </attr>
-        </edge>
-        <edge from="n44" to="n44">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
-        <node id="n42">
-            <attr name="layout">
-                <string>62 87 0 0</string>
-            </attr>
-        </node>
-        <edge from="n42" to="n42">
-            <attr name="label">
-                <string>type:ProcessInstance</string>
             </attr>
         </edge>
         <node id="n43">
             <attr name="layout">
-                <string>402 72 0 0</string>
+                <string>417 252 0 0</string>
             </attr>
         </node>
         <edge from="n43" to="n43">
             <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n43" to="n43">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n39">
+            <attr name="layout">
+                <string>417 342 0 0</string>
+            </attr>
+        </node>
+        <edge from="n39" to="n39">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n39" to="n39">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n37">
+            <attr name="layout">
+                <string>62 87 0 0</string>
+            </attr>
+        </node>
+        <edge from="n37" to="n37">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n38">
+            <attr name="layout">
+                <string>402 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n38" to="n38">
+            <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n45">
+        <node id="n40">
             <attr name="layout">
                 <string>602 342 0 0</string>
             </attr>
         </node>
-        <edge from="n45" to="n45">
+        <edge from="n40" to="n40">
             <attr name="label">
-                <string>string:"p2"</string>
+                <string>string:"a2_2_p2"</string>
             </attr>
         </edge>
-        <node id="n47">
+        <node id="n42">
             <attr name="layout">
                 <string>602 162 0 0</string>
             </attr>
         </node>
-        <edge from="n47" to="n47">
+        <edge from="n42" to="n42">
             <attr name="label">
-                <string>string:"a3"</string>
+                <string>string:"p2_a3"</string>
             </attr>
         </edge>
-        <node id="n49">
+        <node id="n44">
             <attr name="layout">
                 <string>602 252 0 0</string>
             </attr>
         </node>
-        <edge from="n49" to="n49">
+        <edge from="n44" to="n44">
             <attr name="label">
-                <string>string:"p3"</string>
+                <string>string:"p2_p3"</string>
             </attr>
         </edge>
-        <edge from="n42" to="n46">
-            <attr name="label">
-                <string>new:tokens</string>
-            </attr>
-        </edge>
-        <edge from="n46" to="n47">
-            <attr name="label">
-                <string>new:position</string>
-            </attr>
-        </edge>
-        <edge from="n42" to="n48">
+        <edge from="n37" to="n41">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n48" to="n49">
+        <edge from="n41" to="n42">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n42" to="n44">
+        <edge from="n37" to="n43">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n43" to="n44">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n37" to="n39">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n44" to="n45">
+        <edge from="n39" to="n40">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n42" to="n43">
+        <edge from="n37" to="n38">
             <attr name="label">
                 <string>state</string>
             </attr>

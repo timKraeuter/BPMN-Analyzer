@@ -5,6 +5,7 @@ import behavior.BehaviorVisitor;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.StartEvent;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -25,8 +26,13 @@ public class BPMNProcessModel implements Behavior {
         return this.startEvent;
     }
 
-    public Stream<SequenceFlow> getSequenceFlows() {
-        return this.sequenceFlows.stream();
+    public Stream<ControlFlowNode> getControlFlowNodes() {
+        final LinkedHashSet<ControlFlowNode> nodes = new LinkedHashSet<>();
+        sequenceFlows.forEach(sequenceFlow -> {
+            nodes.add(sequenceFlow.getSource());
+            nodes.add(sequenceFlow.getTarget());
+        });
+        return nodes.stream();
     }
 
     @Override
