@@ -38,7 +38,7 @@
         </node>
         <edge from="n7" to="n7">
             <attr name="label">
-                <string>string:"start"</string>
+                <string>string:"twoEndEvents_start"</string>
             </attr>
         </edge>
         <node id="n8">

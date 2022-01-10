@@ -36,6 +36,13 @@ public interface GrooveTransformer<SOURCE extends Behavior> {
     String TYPE = "type:";
     String STRING = "string:";
 
+    static void writeStartGraph(File targetFolder, GrooveGraph startGraph, boolean layoutActivated) {
+        Gxl gxl = BehaviorToGrooveTransformer.createGxlFromGrooveGraph(startGraph, layoutActivated);
+        File startGraphFile = new File(targetFolder.getPath() + START_GST);
+
+        GxlToXMLConverter.toXml(gxl, startGraphFile);
+    }
+
     default String createStringNodeLabel(String stringValue) {
         return String.format("%s\"%s\"", STRING, stringValue);
     }
@@ -45,13 +52,6 @@ public interface GrooveTransformer<SOURCE extends Behavior> {
     default void generateAndWriteStartGraph(SOURCE source, boolean addPrefix, File targetFolder) {
         GrooveGraph startGraph = this.generateStartGraph(source, addPrefix);
         writeStartGraph(targetFolder, startGraph, this.isLayoutActivated());
-    }
-
-    static void writeStartGraph(File targetFolder, GrooveGraph startGraph, boolean layoutActivated) {
-        Gxl gxl = BehaviorToGrooveTransformer.createGxlFromGrooveGraph(startGraph, layoutActivated);
-        File startGraphFile = new File(targetFolder.getPath() + START_GST);
-        
-        GxlToXMLConverter.toXml(gxl, startGraphFile);
     }
 
     Stream<GrooveGraphRule> generateRules(SOURCE source, boolean addPrefix);

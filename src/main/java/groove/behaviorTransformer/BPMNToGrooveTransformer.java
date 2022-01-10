@@ -21,7 +21,10 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -64,11 +67,15 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
         startGraphBuilder.addEdge(STATE, processInstance, running);
 
         GrooveNode startToken = new GrooveNode(TYPE_TOKEN);
-        GrooveNode tokenName = new GrooveNode(this.createStringNodeLabel(bpmnProcessModel.getStartEvent().getName()));
+        GrooveNode tokenName = new GrooveNode(this.createStringNodeLabel(getStartEventTokenName(bpmnProcessModel)));
         startGraphBuilder.addEdge(POSITION, startToken, tokenName);
         startGraphBuilder.addEdge(TOKENS, processInstance, startToken);
 
         return startGraphBuilder.build();
+    }
+
+    private String getStartEventTokenName(BPMNProcessModel bpmnProcessModel) {
+        return bpmnProcessModel.getName() + "_" + bpmnProcessModel.getStartEvent().getName();
     }
 
     private void updateTokenPositionWhenRunning(String oldPosition, String newPosition, GrooveRuleBuilder ruleBuilder) {
@@ -105,7 +112,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                 final String outgoingFlowID = startEvent.getOutgoingFlows().findFirst().get().getID();
                 ruleBuilder.startRule(startEvent.getName());
                 BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
-                        startEvent.getName(),
+                        getStartEventTokenName(bpmnProcessModel),
                         outgoingFlowID,
                         ruleBuilder);
                 ruleBuilder.buildRule();

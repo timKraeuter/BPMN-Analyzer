@@ -45,8 +45,8 @@ public class BPMNProcessModel implements Behavior {
         visitor.handle(this);
     }
 
-    public Stream<EndEvent> getEndEvents() {
-        return this.endEvents.stream();
+    public Set<EndEvent> getEndEvents() {
+        return this.endEvents;
     }
 
     /*
