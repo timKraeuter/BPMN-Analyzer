@@ -446,6 +446,32 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
         this.checkGrooveGeneration(processModel);
     }
 
+    /**
+     * See test case <a href="https://cawemo.com/share/598c5678-1f50-49a3-8d30-abe22ecedc43">"Call activity"</a> in cawemo.
+     */
+    @Test
+    void testCallActivityTerminateEvent() throws IOException {
+        final StartEvent start = new StartEvent("start");
+        ParallelGateway p1 = new ParallelGateway("p1");
+        final CallActivity subprocess = new CallActivity(this.buildSimpleSubProcess());
+        final EndEvent end = new EndEvent("end");
+        final EndEvent terminate_end = new EndEvent("terminate_end", EndEventType.TERMINATION);
+
+        final String modelName = "callActivityTerminateEvent";
+        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+                .name(modelName)
+                .startEvent(start)
+                .sequenceFlow(start, p1)
+                .sequenceFlow(p1, subprocess)
+                .sequenceFlow(p1, terminate_end)
+                .sequenceFlow(subprocess, end)
+                .endEvent(end)
+                .endEvent(terminate_end)
+                .build();
+
+        this.checkGrooveGeneration(processModel);
+    }
+
     private BPMNProcessModel buildSimpleSubProcess() {
         // TODO: Possible name crashes in rules!
         final StartEvent start = new StartEvent("start_sub");

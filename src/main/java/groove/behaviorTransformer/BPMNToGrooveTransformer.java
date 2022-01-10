@@ -26,6 +26,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessModel> {
+    public static final String AT = "at";
+    public static final String FORALL = "forall:";
     private static final String FIXED_RULES_AND_TYPE_GRAPH_DIR = "/BPMNFixedRulesAndTypeGraph";
     // Node names
     private static final String TYPE_TOKEN = TYPE + "Token";
@@ -33,7 +35,6 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     private static final String TYPE_RUNNING = TYPE + "Running";
     private static final String TYPE_TERMINATED = TYPE + "Terminated";
     private static final String TYPE_DECISION = TYPE + "Decision";
-
     // Edge names
     private static final String POSITION = "position";
     private static final String STATE = "state";
@@ -390,12 +391,25 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                 ruleBuilder.contextEdge(STATE, processInstance, running);
                 break;
             case TERMINATION:
-                // TODO: Terminate possible subprocesses!
                 GrooveNode delete_running = ruleBuilder.deleteNode(TYPE_RUNNING);
                 ruleBuilder.deleteEdge(STATE, processInstance, delete_running);
 
                 GrooveNode terminated = ruleBuilder.addNode(TYPE_TERMINATED);
                 ruleBuilder.addEdge(STATE, processInstance, terminated);
+
+                // Terminate possible subprocess instances.
+                GrooveNode subInstance = ruleBuilder.contextNode(TYPE_PROCESS_INSTANCE);
+                ruleBuilder.contextEdge(SUBPROCESS, processInstance, subInstance);
+                GrooveNode subRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
+                ruleBuilder.deleteEdge(STATE, subInstance, subRunning);
+                GrooveNode subTerminated = ruleBuilder.addNode(TYPE_TERMINATED);
+                ruleBuilder.addEdge(STATE, subInstance, subTerminated);
+
+                GrooveNode forAll = ruleBuilder.contextNode(FORALL);
+                ruleBuilder.contextEdge(AT, subInstance, forAll);
+                ruleBuilder.contextEdge(AT, subRunning, forAll);
+                ruleBuilder.contextEdge(AT, subTerminated, forAll);
+
                 break;
         }
 
