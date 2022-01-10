@@ -157,7 +157,7 @@ public class RuleGenerationTest {
         generator1.addEdge("edge2", s2, t2);
         GrooveGraphRule r2 = generator1.buildRule();
 
-        generator1.startRule("addEdge2");
+        generator1.startRule("addEdge3");
         GrooveNode s3 = generator1.contextNode("s3");
         GrooveNode t3 = generator1.contextNode("t3");
         generator1.deleteEdge("edge3", s3, t3);

@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class GrooveRuleBuilder implements GraphRuleGenerator {
-    private final List<GrooveGraphRule> rules = new ArrayList<>();
+    private final Map<String, GrooveGraphRule> rulenameToRule = new LinkedHashMap<>();
     private final String prefix;
     private GrooveGraphRule currentRule = null;
 
@@ -73,6 +73,9 @@ public class GrooveRuleBuilder implements GraphRuleGenerator {
 
     @Override
     public void startRule(String ruleName) {
+        if (rulenameToRule.get(ruleName) != null) {
+            throw new RuntimeException(String.format("A rule with the name \"%s\" already exists!", ruleName));
+        }
         this.currentRule = new GrooveGraphRule(this.addPrefix(ruleName));
     }
 
@@ -165,12 +168,12 @@ public class GrooveRuleBuilder implements GraphRuleGenerator {
     @Override
     public GrooveGraphRule buildRule() {
         GrooveGraphRule newRule = this.currentRule;
-        this.rules.add(newRule);
+        this.rulenameToRule.put(newRule.getRuleName(), newRule);
         this.currentRule = null;
         return newRule;
     }
 
     public Stream<GrooveGraphRule> getRules() {
-        return this.rules.stream();
+        return this.rulenameToRule.values().stream();
     }
 }

@@ -10,10 +10,10 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class BPMNProcessBuilder {
-    private String name;
-    private StartEvent startEvent;
     private final Set<EndEvent> endEvents;
     private final Set<SequenceFlow> sequenceFlows;
+    private String name;
+    private StartEvent startEvent;
 
     public BPMNProcessBuilder() {
         this.endEvents = new LinkedHashSet<>();
@@ -35,13 +35,17 @@ public class BPMNProcessBuilder {
         return this;
     }
 
-    public BPMNProcessBuilder sequenceFlow(ControlFlowNode from, ControlFlowNode to) {
+    public BPMNProcessBuilder sequenceFlow(String name, ControlFlowNode from, ControlFlowNode to) {
         // We could check that this sequence flow is connected to the already created part of the model.
-        final SequenceFlow sequenceFlow = new SequenceFlow("", from, to);
+        final SequenceFlow sequenceFlow = new SequenceFlow(name, from, to);
         this.sequenceFlows.add(sequenceFlow);
         from.addOutgoingSequenceFlow(sequenceFlow);
         to.addIncomingSequenceFlow(sequenceFlow);
         return this;
+    }
+
+    public BPMNProcessBuilder sequenceFlow(ControlFlowNode from, ControlFlowNode to) {
+        return sequenceFlow("", from, to);
     }
 
     public BPMNProcessModel build() {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="Subprocess_A_Subprocess" role="rule" edgeids="false" edgemode="directed">
+    <graph id="Subprocess_a2" role="rule" edgeids="false" edgemode="directed">
         <node id="n29">
             <attr name="layout">
                 <string>392 260 0 0</string>
@@ -33,7 +33,7 @@
         </edge>
         <node id="n31">
             <attr name="layout">
-                <string>795 342 0 0</string>
+                <string>727 342 0 0</string>
             </attr>
         </node>
         <edge from="n31" to="n31">
@@ -88,12 +88,12 @@
         </node>
         <edge from="n28" to="n28">
             <attr name="label">
-                <string>string:"A_Subprocess"</string>
+                <string>string:"a2"</string>
             </attr>
         </edge>
         <node id="n32">
             <attr name="layout">
-                <string>1047 342 0 0</string>
+                <string>912 342 0 0</string>
             </attr>
         </node>
         <edge from="n32" to="n32">
