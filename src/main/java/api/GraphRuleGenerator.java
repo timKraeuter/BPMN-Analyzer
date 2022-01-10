@@ -38,5 +38,4 @@ public interface GraphRuleGenerator {
 
 
     GraphRule buildRule();
-
 }

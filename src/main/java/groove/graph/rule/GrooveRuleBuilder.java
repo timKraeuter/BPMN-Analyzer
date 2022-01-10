@@ -11,8 +11,8 @@ import java.util.stream.Stream;
 
 public class GrooveRuleBuilder implements GraphRuleGenerator {
     private final List<GrooveGraphRule> rules = new ArrayList<>();
-    private GrooveGraphRule currentRule = null;
     private final String prefix;
+    private GrooveGraphRule currentRule = null;
 
     public GrooveRuleBuilder() {
         this.prefix = "";
