@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessModel> {
-    private static final String TYPE_GRAPH_DIR = "/BPMNTypeGraph";
+    private static final String FIXED_RULES_AND_TYPE_GRAPH_DIR = "/BPMNFixedRulesAndTypeGraph";
     // Node names
     private static final String TYPE_TOKEN = TYPE + "Token";
     private static final String TYPE_PROCESS_INSTANCE = TYPE + "ProcessInstance";
@@ -50,7 +50,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     }
 
     private void copyTypeGraph(File targetFolder) {
-        File sourceDirectory = new File(this.getClass().getResource(TYPE_GRAPH_DIR).getFile());
+        File sourceDirectory = new File(this.getClass().getResource(FIXED_RULES_AND_TYPE_GRAPH_DIR).getFile());
         try {
             FileUtils.copyDirectory(sourceDirectory, targetFolder);
         } catch (IOException e) {
@@ -366,6 +366,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                 ruleBuilder.contextEdge(STATE, processInstance, running);
                 break;
             case TERMINATION:
+                // TODO: Terminate possible subprocesses!
                 GrooveNode delete_running = ruleBuilder.deleteNode(TYPE_RUNNING);
                 ruleBuilder.deleteEdge(STATE, processInstance, delete_running);
 

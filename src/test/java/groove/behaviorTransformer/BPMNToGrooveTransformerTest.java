@@ -14,11 +14,12 @@ import java.io.IOException;
 class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
 
     private static final String TYPE_GRAPH_FILE_NAME = "type.gty";
+    private static final String TERMINATE_RULE_FILE_NAME = "Terminate.gpr";
 
     @Override
     protected void setUpFurther() {
-        // Default is to ignore the type graph.
-        this.setFileNameFilter(x -> x.equals(TYPE_GRAPH_FILE_NAME));
+        // Default is to ignore the type graph and the terminate rule.
+        this.setFileNameFilter(x -> x.equals(TYPE_GRAPH_FILE_NAME) || x.equals(TERMINATE_RULE_FILE_NAME));
     }
 
     /**

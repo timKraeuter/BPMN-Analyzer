@@ -1,57 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph role="type" edgeids="false" edgemode="directed" id="type">
+    <graph role="rule" edgeids="false" edgemode="directed" id="Terminate">
         <attr name="$version">
             <string>curly</string>
         </attr>
-        <node id="n13">
-            <attr name="layout">
-                <string>321 192 90 36</string>
-            </attr>
-        </node>
         <node id="n0">
             <attr name="layout">
-                <string>317 102 97 18</string>
+                <string>195 248 97 18</string>
             </attr>
         </node>
         <node id="n1">
             <attr name="layout">
-                <string>492 96 129 18</string>
+                <string>415 249 71 18</string>
             </attr>
         </node>
         <node id="n2">
             <attr name="layout">
-                <string>522 187 52 18</string>
+                <string>435 305 52 18</string>
             </attr>
         </node>
         <node id="n3">
             <attr name="layout">
-                <string>622 189 71 18</string>
+                <string>228 122 38 18</string>
             </attr>
         </node>
         <node id="n4">
             <attr name="layout">
-                <string>116 184 91 36</string>
+                <string>35 126 97 18</string>
             </attr>
         </node>
-        <edge from="n13" to="n13">
-            <attr name="label">
-                <string>type:Token</string>
-            </attr>
-        </edge>
-        <edge from="n13" to="n13">
-            <attr name="label">
-                <string>string:position</string>
-            </attr>
-        </edge>
         <edge from="n0" to="n0">
             <attr name="label">
                 <string>type:ProcessInstance</string>
-            </attr>
-        </edge>
-        <edge from="n0" to="n13">
-            <attr name="label">
-                <string>tokens</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">
@@ -59,19 +39,34 @@
                 <string>state</string>
             </attr>
         </edge>
+        <edge from="n0" to="n2">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n0" to="n3">
+            <attr name="label">
+                <string>tokens</string>
+            </attr>
+        </edge>
         <edge from="n0" to="n4">
             <attr name="label">
-                <string>decisions</string>
+                <string>subprocess</string>
             </attr>
         </edge>
         <edge from="n1" to="n1">
             <attr name="label">
-                <string>abs:</string>
+                <string>new:</string>
             </attr>
         </edge>
         <edge from="n1" to="n1">
             <attr name="label">
-                <string>type:ProcessInstanceState</string>
+                <string>type:Terminated</string>
+            </attr>
+        </edge>
+        <edge from="n2" to="n2">
+            <attr name="label">
+                <string>del:</string>
             </attr>
         </edge>
         <edge from="n2" to="n2">
@@ -79,29 +74,24 @@
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n2" to="n1">
+        <edge from="n3" to="n3">
             <attr name="label">
-                <string>sub:</string>
+                <string>not:</string>
             </attr>
         </edge>
         <edge from="n3" to="n3">
             <attr name="label">
-                <string>type:Terminated</string>
-            </attr>
-        </edge>
-        <edge from="n3" to="n1">
-            <attr name="label">
-                <string>sub:</string>
+                <string>type:Token</string>
             </attr>
         </edge>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>type:Decision</string>
+                <string>not:</string>
             </attr>
         </edge>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:decision</string>
+                <string>type:ProcessInstance</string>
             </attr>
         </edge>
     </graph>
