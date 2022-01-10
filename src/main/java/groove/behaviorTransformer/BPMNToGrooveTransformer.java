@@ -1,9 +1,9 @@
 package groove.behaviorTransformer;
 
-import behavior.bpmn.Activity;
 import behavior.bpmn.BPMNProcessModel;
 import behavior.bpmn.ControlFlowNode;
 import behavior.bpmn.SequenceFlow;
+import behavior.bpmn.Task;
 import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.LinkEvent;
@@ -119,13 +119,13 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
             }
 
             @Override
-            public void handle(Activity activity) {
-                activity.getIncomingFlows().forEach(incomingFlow -> {
+            public void handle(Task task) {
+                task.getIncomingFlows().forEach(incomingFlow -> {
                     final String incomingFlowId = incomingFlow.getID();
-                    ruleBuilder.startRule(this.getActivityRuleName(activity, incomingFlowId));
+                    ruleBuilder.startRule(this.getActivityRuleName(task, incomingFlowId));
                     GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(ruleBuilder);
                     deleteTokenWithPosition(ruleBuilder, processInstance, incomingFlowId);
-                    activity.getOutgoingFlows().forEach(outgoingFlow -> {
+                    task.getOutgoingFlows().forEach(outgoingFlow -> {
                         final String outgoingFlowID = outgoingFlow.getID();
                         addTokenWithPosition(ruleBuilder, processInstance, outgoingFlowID);
                     });
@@ -133,11 +133,11 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                 });
             }
 
-            private String getActivityRuleName(Activity activity, String incomingFlowId) {
-                if (activity.getIncomingFlows().count() > 1) {
-                    return activity.getName() + "_" + incomingFlowId;
+            private String getActivityRuleName(Task task, String incomingFlowId) {
+                if (task.getIncomingFlows().count() > 1) {
+                    return task.getName() + "_" + incomingFlowId;
                 }
-                return activity.getName();
+                return task.getName();
             }
 
             @Override

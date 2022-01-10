@@ -1,7 +1,7 @@
 package groove.behaviorTransformer;
 
-import behavior.bpmn.Activity;
 import behavior.bpmn.BPMNProcessModel;
+import behavior.bpmn.Task;
 import behavior.bpmn.auxiliary.BPMNProcessBuilder;
 import behavior.bpmn.events.*;
 import behavior.bpmn.gateways.ExclusiveGateway;
@@ -28,8 +28,8 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     @Test
     void testSequentialActivities() throws IOException {
         final StartEvent start = new StartEvent("start");
-        Activity a = new Activity("A");
-        Activity b = new Activity("B");
+        Task a = new Task("A");
+        Task b = new Task("B");
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "sequentialActivities";
@@ -54,13 +54,13 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
         // Build the process model from the NWPT example.
         final StartEvent start = new StartEvent("start");
         final EndEvent end = new EndEvent("end");
-        Activity a0 = new Activity("a0");
-        Activity a1 = new Activity("a1");
+        Task a0 = new Task("a0");
+        Task a1 = new Task("a1");
         final ExclusiveGateway e1 = new ExclusiveGateway("e1");
-        Activity a2_1 = new Activity("a2_1");
-        Activity a2_2 = new Activity("a2_2");
+        Task a2_1 = new Task("a2_1");
+        Task a2_2 = new Task("a2_2");
         final ExclusiveGateway e2 = new ExclusiveGateway("e2");
-        Activity a3 = new Activity("a3");
+        Task a3 = new Task("a3");
 
         final String modelName = "exclusiveGateway";
         final BPMNProcessModel processModel = new BPMNProcessBuilder()
@@ -89,13 +89,13 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     @Test
     void testParallelGateway() throws IOException {
         final StartEvent start = new StartEvent("start");
-        Activity a0 = new Activity("a0");
-        Activity a1 = new Activity("a1");
+        Task a0 = new Task("a0");
+        Task a1 = new Task("a1");
         final ParallelGateway p1 = new ParallelGateway("p1");
-        Activity a2_1 = new Activity("a2_1");
-        Activity a2_2 = new Activity("a2_2");
+        Task a2_1 = new Task("a2_1");
+        Task a2_2 = new Task("a2_2");
         final ParallelGateway p2 = new ParallelGateway("p2");
-        Activity a3 = new Activity("a3");
+        Task a3 = new Task("a3");
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "parallelGateway";
@@ -123,13 +123,13 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     @Test
     void testParallelGatewayComplex() throws IOException {
         final StartEvent start = new StartEvent("start");
-        Activity a0 = new Activity("a0");
-        Activity a1 = new Activity("a1");
+        Task a0 = new Task("a0");
+        Task a1 = new Task("a1");
         final ParallelGateway p1 = new ParallelGateway("p1");
-        Activity a2_1 = new Activity("a2_1");
-        Activity a2_2 = new Activity("a2_2");
+        Task a2_1 = new Task("a2_1");
+        Task a2_2 = new Task("a2_2");
         final ParallelGateway p2 = new ParallelGateway("p2");
-        Activity a3 = new Activity("a3");
+        Task a3 = new Task("a3");
         final ParallelGateway p3 = new ParallelGateway("p3");
         final EndEvent end = new EndEvent("end");
 
@@ -161,11 +161,11 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     void testCyclic() throws IOException {
         final StartEvent start = new StartEvent("start");
         final EndEvent end = new EndEvent("end");
-        Activity a0 = new Activity("a0");
+        Task a0 = new Task("a0");
         final ExclusiveGateway e1 = new ExclusiveGateway("e1");
-        Activity a1 = new Activity("a1");
-        Activity a2 = new Activity("a2");
-        Activity a3 = new Activity("a3");
+        Task a1 = new Task("a1");
+        Task a2 = new Task("a2");
+        Task a3 = new Task("a3");
         final ExclusiveGateway e2 = new ExclusiveGateway("e2");
         final ExclusiveGateway e3 = new ExclusiveGateway("e3");
         final ExclusiveGateway e4 = new ExclusiveGateway("e4");
@@ -198,8 +198,8 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     void testTwoEndEvents() throws IOException {
         final StartEvent start = new StartEvent("start");
         final ParallelGateway p1 = new ParallelGateway("p1");
-        Activity a1 = new Activity("a1");
-        Activity a2 = new Activity("a2");
+        Task a1 = new Task("a1");
+        Task a2 = new Task("a2");
         final EndEvent end1 = new EndEvent("end1");
         final EndEvent end2 = new EndEvent("end2");
 
@@ -256,8 +256,8 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     void testTerminateEndEvent() throws IOException {
         final StartEvent start = new StartEvent("start");
         final ParallelGateway p1 = new ParallelGateway("p1");
-        Activity a = new Activity("A");
-        Activity b = new Activity("B");
+        Task a = new Task("A");
+        Task b = new Task("B");
         final EndEvent end = new EndEvent("end");
         final EndEvent terminate_end = new EndEvent("terminate_end", EndEventType.TERMINATION);
 
@@ -284,8 +284,8 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     void testImplicitExclusiveGateway() throws IOException {
         final StartEvent start = new StartEvent("start");
         final ExclusiveGateway e1 = new ExclusiveGateway("e1");
-        Activity a = new Activity("A");
-        Activity b = new Activity("B");
+        Task a = new Task("A");
+        Task b = new Task("B");
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "implicitExclusiveGateway";
@@ -309,9 +309,9 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     void testImplicitParallelGateway() throws IOException {
         final StartEvent start = new StartEvent("start");
         final ParallelGateway p1 = new ParallelGateway("p1");
-        Activity a = new Activity("A");
-        Activity b = new Activity("B");
-        Activity c = new Activity("C");
+        Task a = new Task("A");
+        Task b = new Task("B");
+        Task c = new Task("C");
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "implicitParallelGateway";
@@ -337,8 +337,8 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     void testInclusiveGateway() throws IOException {
         final StartEvent start = new StartEvent("start");
         final InclusiveGateway i1 = new InclusiveGateway("i1");
-        Activity a = new Activity("A");
-        Activity b = new Activity("B");
+        Task a = new Task("A");
+        Task b = new Task("B");
         final InclusiveGateway i2 = new InclusiveGateway("i2");
         final EndEvent end = new EndEvent("end");
 
@@ -365,10 +365,10 @@ class BPMNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper 
     void testInclusiveGatewayComplex() throws IOException {
         final StartEvent start = new StartEvent("start");
         final InclusiveGateway i1 = new InclusiveGateway("i1");
-        Activity a = new Activity("A");
+        Task a = new Task("A");
         final ParallelGateway p1 = new ParallelGateway("p1");
-        Activity b = new Activity("B");
-        Activity c = new Activity("C");
+        Task b = new Task("B");
+        Task c = new Task("C");
         final ParallelGateway p2 = new ParallelGateway("p2");
         final InclusiveGateway i2 = new InclusiveGateway("i2");
         final EndEvent end = new EndEvent("end");

@@ -2,8 +2,8 @@ package behavior.bpmn;
 
 import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
 
-public class Activity extends ControlFlowNode {
-    public Activity(String name) {
+public class Task extends ControlFlowNode {
+    public Task(String name) {
         super(name);
     }
 
