@@ -396,20 +396,6 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
 
                 GrooveNode terminated = ruleBuilder.addNode(TYPE_TERMINATED);
                 ruleBuilder.addEdge(STATE, processInstance, terminated);
-
-                // Terminate possible subprocess instances.
-                GrooveNode subInstance = ruleBuilder.contextNode(TYPE_PROCESS_INSTANCE);
-                ruleBuilder.contextEdge(SUBPROCESS, processInstance, subInstance);
-                GrooveNode subRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
-                ruleBuilder.deleteEdge(STATE, subInstance, subRunning);
-                GrooveNode subTerminated = ruleBuilder.addNode(TYPE_TERMINATED);
-                ruleBuilder.addEdge(STATE, subInstance, subTerminated);
-
-                GrooveNode forAll = ruleBuilder.contextNode(FORALL);
-                ruleBuilder.contextEdge(AT, subInstance, forAll);
-                ruleBuilder.contextEdge(AT, subRunning, forAll);
-                ruleBuilder.contextEdge(AT, subTerminated, forAll);
-
                 break;
         }
 

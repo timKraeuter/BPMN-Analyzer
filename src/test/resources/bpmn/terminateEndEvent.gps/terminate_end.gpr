@@ -3,7 +3,7 @@
     <graph id="terminate_end" role="rule" edgeids="false" edgemode="directed">
         <node id="n37">
             <attr name="layout">
-                <string>402 172 0 0</string>
+                <string>392 172 0 0</string>
             </attr>
         </node>
         <edge from="n37" to="n37">
@@ -12,28 +12,13 @@
             </attr>
         </edge>
         <edge from="n37" to="n37">
-            <attr name="label">
-                <string>new:</string>
-            </attr>
-        </edge>
-        <node id="n40">
-            <attr name="layout">
-                <string>800 140 0 0</string>
-            </attr>
-        </node>
-        <edge from="n40" to="n40">
-            <attr name="label">
-                <string>type:Terminated</string>
-            </attr>
-        </edge>
-        <edge from="n40" to="n40">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
         <node id="n34">
             <attr name="layout">
-                <string>477 342 0 0</string>
+                <string>430 262 0 0</string>
             </attr>
         </node>
         <edge from="n34" to="n34">
@@ -48,7 +33,7 @@
         </edge>
         <node id="n36">
             <attr name="layout">
-                <string>402 82 0 0</string>
+                <string>392 82 0 0</string>
             </attr>
         </node>
         <edge from="n36" to="n36">
@@ -57,28 +42,13 @@
             </attr>
         </edge>
         <edge from="n36" to="n36">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
-        <node id="n39">
-            <attr name="layout">
-                <string>822 230 0 0</string>
-            </attr>
-        </node>
-        <edge from="n39" to="n39">
-            <attr name="label">
-                <string>type:Running</string>
-            </attr>
-        </edge>
-        <edge from="n39" to="n39">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
         <node id="n33">
             <attr name="layout">
-                <string>62 327 0 0</string>
+                <string>62 95 0 0</string>
             </attr>
         </node>
         <edge from="n33" to="n33">
@@ -88,7 +58,7 @@
         </edge>
         <node id="n35">
             <attr name="layout">
-                <string>732 342 0 0</string>
+                <string>637 262 0 0</string>
             </attr>
         </node>
         <edge from="n35" to="n35">
@@ -96,32 +66,7 @@
                 <string>string:"B_terminate_end"</string>
             </attr>
         </edge>
-        <node id="n38">
-            <attr name="layout">
-                <string>402 252 0 0</string>
-            </attr>
-        </node>
-        <edge from="n38" to="n38">
-            <attr name="label">
-                <string>type:ProcessInstance</string>
-            </attr>
-        </edge>
-        <node id="n41">
-            <attr name="layout">
-                <string>1112 230 0 0</string>
-            </attr>
-        </node>
-        <edge from="n41" to="n41">
-            <attr name="label">
-                <string>forall:</string>
-            </attr>
-        </edge>
         <edge from="n33" to="n37">
-            <attr name="label">
-                <string>new:state</string>
-            </attr>
-        </edge>
-        <edge from="n38" to="n40">
             <attr name="label">
                 <string>new:state</string>
             </attr>
@@ -139,31 +84,6 @@
         <edge from="n33" to="n36">
             <attr name="label">
                 <string>del:state</string>
-            </attr>
-        </edge>
-        <edge from="n38" to="n39">
-            <attr name="label">
-                <string>del:state</string>
-            </attr>
-        </edge>
-        <edge from="n33" to="n38">
-            <attr name="label">
-                <string>subprocess</string>
-            </attr>
-        </edge>
-        <edge from="n38" to="n41">
-            <attr name="label">
-                <string>at</string>
-            </attr>
-        </edge>
-        <edge from="n39" to="n41">
-            <attr name="label">
-                <string>at</string>
-            </attr>
-        </edge>
-        <edge from="n40" to="n41">
-            <attr name="label">
-                <string>at</string>
             </attr>
         </edge>
     </graph>
