@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessModel> {
-    public static final String AT = "at";
-    public static final String FORALL = "forall:";
     private static final String FIXED_RULES_AND_TYPE_GRAPH_DIR = "/BPMNFixedRulesAndTypeGraph";
     // Node names
     private static final String TYPE_TOKEN = TYPE + "Token";
@@ -45,10 +43,10 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
 
     @Override
     public void generateAndWriteRulesFurther(BPMNProcessModel model, boolean addPrefix, File targetFolder) {
-        this.copyTypeGraph(targetFolder);
+        this.copyTypeGraphAndFixedRules(targetFolder);
     }
 
-    private void copyTypeGraph(File targetFolder) {
+    private void copyTypeGraphAndFixedRules(File targetFolder) {
         File sourceDirectory = new File(this.getClass().getResource(FIXED_RULES_AND_TYPE_GRAPH_DIR).getFile());
         try {
             FileUtils.copyDirectory(sourceDirectory, targetFolder);
@@ -117,23 +115,34 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                 }
                 final String outgoingFlowID = startEvent.getOutgoingFlows().findFirst().get().getID();
                 ruleBuilder.startRule(startEvent.getName());
-                BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(getStartEventTokenName(bpmnProcessModel), outgoingFlowID, ruleBuilder);
+                BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
+                        getStartEventTokenName(bpmnProcessModel),
+                        outgoingFlowID,
+                        ruleBuilder);
                 ruleBuilder.buildRule();
             }
 
             @Override
             public void handle(Task task) {
+                // Rules for starting the activity
                 task.getIncomingFlows().forEach(incomingFlow -> {
                     final String incomingFlowId = incomingFlow.getID();
-                    ruleBuilder.startRule(this.getTaskOrCallActivityRuleName(task, incomingFlowId));
+                    ruleBuilder.startRule(this.getTaskOrCallActivityRuleName(task, incomingFlowId) + "_start");
                     GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(ruleBuilder);
                     deleteTokenWithPosition(ruleBuilder, processInstance, incomingFlowId);
-                    task.getOutgoingFlows().forEach(outgoingFlow -> {
-                        final String outgoingFlowID = outgoingFlow.getID();
-                        addTokenWithPosition(ruleBuilder, processInstance, outgoingFlowID);
-                    });
+                    addTokenWithPosition(ruleBuilder, processInstance, task.getName());
                     ruleBuilder.buildRule();
                 });
+                // Rule for ending the activity
+                ruleBuilder.startRule(task.getName() + "_end");
+                GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(ruleBuilder);
+                deleteTokenWithPosition(ruleBuilder, processInstance, task.getName());
+
+                task.getOutgoingFlows().forEach(outgoingFlow -> {
+                    final String outgoingFlowID = outgoingFlow.getID();
+                    addTokenWithPosition(ruleBuilder, processInstance, outgoingFlowID);
+                });
+                ruleBuilder.buildRule();
             }
 
             @Override

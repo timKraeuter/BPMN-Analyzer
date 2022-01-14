@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="end" role="rule" edgeids="false" edgemode="directed">
-        <node id="n66">
+        <node id="n96">
             <attr name="layout">
                 <string>397 162 0 0</string>
             </attr>
         </node>
-        <edge from="n66" to="n66">
+        <edge from="n96" to="n96">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n66" to="n66">
+        <edge from="n96" to="n96">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n65">
+        <node id="n95">
             <attr name="layout">
                 <string>62 80 0 0</string>
             </attr>
         </node>
-        <edge from="n65" to="n65">
+        <edge from="n95" to="n95">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n67">
+        <node id="n97">
             <attr name="layout">
                 <string>582 162 0 0</string>
             </attr>
         </node>
-        <edge from="n67" to="n67">
+        <edge from="n97" to="n97">
             <attr name="label">
                 <string>string:"p3_end"</string>
             </attr>
         </edge>
-        <node id="n68">
+        <node id="n98">
             <attr name="layout">
                 <string>382 72 0 0</string>
             </attr>
         </node>
-        <edge from="n68" to="n68">
+        <edge from="n98" to="n98">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n66" to="n67">
+        <edge from="n96" to="n97">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n65" to="n66">
+        <edge from="n95" to="n96">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n65" to="n68">
+        <edge from="n95" to="n98">
             <attr name="label">
                 <string>state</string>
             </attr>

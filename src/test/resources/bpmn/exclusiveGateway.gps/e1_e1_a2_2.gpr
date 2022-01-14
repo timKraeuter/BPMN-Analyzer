@@ -1,72 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="e1_e1_a2_2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n26">
+        <node id="n38">
             <attr name="layout">
                 <string>62 89 0 0</string>
             </attr>
         </node>
-        <edge from="n26" to="n26">
+        <edge from="n38" to="n38">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n27">
+        <node id="n39">
             <attr name="layout">
                 <string>382 160 0 0</string>
             </attr>
         </node>
-        <edge from="n27" to="n27">
+        <edge from="n39" to="n39">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n28">
+        <node id="n40">
             <attr name="layout">
                 <string>402 80 0 0</string>
             </attr>
         </node>
-        <edge from="n28" to="n28">
+        <edge from="n40" to="n40">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n29">
+        <node id="n41">
             <attr name="layout">
                 <string>582 152 0 0</string>
             </attr>
         </node>
-        <edge from="n29" to="n29">
+        <edge from="n41" to="n41">
             <attr name="label">
                 <string>string:"a1_e1"</string>
             </attr>
         </edge>
-        <node id="n30">
+        <node id="n42">
             <attr name="layout">
                 <string>582 72 0 0</string>
             </attr>
         </node>
-        <edge from="n30" to="n30">
+        <edge from="n42" to="n42">
             <attr name="label">
                 <string>string:"e1_a2_2"</string>
             </attr>
         </edge>
-        <edge from="n28" to="n30">
+        <edge from="n40" to="n42">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n28" to="n29">
+        <edge from="n40" to="n41">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n26" to="n27">
+        <edge from="n38" to="n39">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n26" to="n28">
+        <edge from="n38" to="n40">
             <attr name="label">
                 <string>tokens</string>
             </attr>
