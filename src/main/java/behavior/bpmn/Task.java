@@ -17,4 +17,14 @@ public class Task extends ControlFlowNode {
         return false;
     }
 
+    @Override
+    public boolean isTask() {
+        return true;
+    }
+
+    @Override
+    public boolean isGateway() {
+        return false;
+    }
+
 }

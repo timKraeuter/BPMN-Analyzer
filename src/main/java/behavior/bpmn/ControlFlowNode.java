@@ -38,4 +38,8 @@ public abstract class ControlFlowNode {
     public abstract void accept(ControlFlowNodeVisitor visitor);
 
     public abstract boolean isInclusiveGateway();
+
+    public abstract boolean isTask();
+
+    public abstract boolean isGateway();
 }

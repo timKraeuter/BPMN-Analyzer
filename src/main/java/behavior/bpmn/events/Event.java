@@ -12,4 +12,14 @@ public abstract class Event extends ControlFlowNode {
     public boolean isInclusiveGateway() {
         return false;
     }
+
+    @Override
+    public boolean isTask() {
+        return false;
+    }
+
+    @Override
+    public boolean isGateway() {
+        return false;
+    }
 }

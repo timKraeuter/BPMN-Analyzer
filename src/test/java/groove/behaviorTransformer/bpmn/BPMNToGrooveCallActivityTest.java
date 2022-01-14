@@ -109,6 +109,48 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTest {
     }
 
     /**
+     * See test case <a href="https://cawemo.com/share/37764ed1-03e7-43c7-8218-34467a12d104">"Call activity no start event"</a> in cawemo.
+     */
+    @Test
+    void testCallActivityNoStartEvent() throws IOException {
+        final StartEvent start = new StartEvent("start");
+        final CallActivity subprocess = new CallActivity(this.buildNoStartEventSubProcess());
+        final EndEvent end = new EndEvent("end");
+        final EndEvent terminate_end = new EndEvent("terminate_end", EndEventType.TERMINATION);
+
+        final String modelName = "callActivityNoStartEvent";
+        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+                .name(modelName)
+                .startEvent(start)
+                .sequenceFlow(start, subprocess)
+                .sequenceFlow(subprocess, end)
+                .endEvent(end)
+                .endEvent(terminate_end)
+                .build();
+
+        this.checkGrooveGeneration(processModel);
+    }
+
+    private BPMNProcessModel buildNoStartEventSubProcess() {
+        final Task a = new Task("A");
+        final EndEvent endA = new EndEvent("endA");
+
+        final ExclusiveGateway e1 = new ExclusiveGateway("e1");
+        final EndEvent e1_end = new EndEvent("e1_end");
+
+        final ParallelGateway p1 = new ParallelGateway("p1");
+        final EndEvent p1_end = new EndEvent("p1_end");
+
+
+        return new BPMNProcessBuilder()
+                .name("Subprocess")
+                .sequenceFlow(a, endA)
+                .sequenceFlow(e1, e1_end)
+                .sequenceFlow(p1, p1_end)
+                .build();
+    }
+
+    /**
      * See test case <a href="https://cawemo.com/share/598c5678-1f50-49a3-8d30-abe22ecedc43">"Call activity"</a> in cawemo.
      */
     @Test

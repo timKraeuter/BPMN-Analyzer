@@ -18,10 +18,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -196,7 +193,15 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                 ruleBuilder.addEdge(SUBPROCESS, processInstance, subProcessInstance);
                 GrooveNode running = ruleBuilder.addNode(TYPE_RUNNING);
                 ruleBuilder.addEdge(STATE, subProcessInstance, running);
-                addTokenWithPosition(ruleBuilder, subProcessInstance, getStartEventTokenName(callActivity.getSubProcessModel()));
+                if (callActivity.getSubProcessModel().getStartEvent() != null) {
+                    // Subprocess has a unique start event which gets a token!
+                    addTokenWithPosition(ruleBuilder, subProcessInstance, getStartEventTokenName(callActivity.getSubProcessModel()));
+                } else {
+                    // All activites and gateways without incoming sequence flows get a token.
+                    callActivity.getSubProcessModel().getControlFlowNodes()
+                                .filter(controlFlowNode -> controlFlowNode.isTask() || controlFlowNode.isGateway())
+                                .forEach(controlFlowNode -> addTokenWithPosition(ruleBuilder, subProcessInstance, controlFlowNode.getName()));
+                }
 
                 ruleBuilder.buildRule();
             }
@@ -216,22 +221,39 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
             private void createExclusiveGatewayRules(ExclusiveGateway exclusiveGateway) {
                 exclusiveGateway.getIncomingFlows().forEach(incomingFlow -> {
                     final String incomingFlowId = incomingFlow.getID();
-                    exclusiveGateway.getOutgoingFlows().forEach(outFlow -> {
-                        final String outgoingFlowID = outFlow.getID();
-                        ruleBuilder.startRule(this.getExclusiveGatewayName(exclusiveGateway, incomingFlowId, outgoingFlowID));
-                        BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(incomingFlowId, outgoingFlowID, ruleBuilder);
-                        ruleBuilder.buildRule();
-                    });
+                    exclusiveGateway.getOutgoingFlows().forEach(
+                            outFlow -> createRuleExclusiveGatewayRule(
+                                    exclusiveGateway,
+                                    incomingFlowId,
+                                    outFlow.getID()));
                 });
+                // No incoming flows means we expect a token sitting at the gateway.
+                if (exclusiveGateway.getIncomingFlows().findAny().isEmpty()) {
+                    exclusiveGateway.getOutgoingFlows().forEach(
+                            outFlow -> createRuleExclusiveGatewayRule(
+                                    exclusiveGateway,
+                                    exclusiveGateway.getName(),
+                                    outFlow.getID()
+                            ));
+                }
+            }
+
+            private void createRuleExclusiveGatewayRule(
+                    ExclusiveGateway exclusiveGateway,
+                    String oldTokenPosition,
+                    String newTokenPosition) {
+                ruleBuilder.startRule(this.getExclusiveGatewayName(exclusiveGateway, oldTokenPosition, newTokenPosition));
+                BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(oldTokenPosition, newTokenPosition, ruleBuilder);
+                ruleBuilder.buildRule();
             }
 
             private String getExclusiveGatewayName(ExclusiveGateway exclusiveGateway, String incomingFlowId, String outFlowID) {
                 final long inCount = exclusiveGateway.getIncomingFlows().count();
                 final long outCount = exclusiveGateway.getOutgoingFlows().count();
-                if (inCount == 1 && outCount == 1) {
+                if (inCount <= 1 && outCount == 1) {
                     return exclusiveGateway.getName();
                 }
-                if (inCount == 1) {
+                if (inCount <= 1) {
                     return exclusiveGateway.getName() + "_" + outFlowID;
                 }
                 if (outCount == 1) {
@@ -283,7 +305,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     private void createInclusiveGatewayRules(GrooveRuleBuilder ruleBuilder, InclusiveGateway inclusiveGateway) {
         long incomingFlowCount = inclusiveGateway.getIncomingFlows().count();
         long outgoingFlowCount = inclusiveGateway.getOutgoingFlows().count();
-        if (incomingFlowCount == 1 && outgoingFlowCount > 1) {
+        if (incomingFlowCount <= 1 && outgoingFlowCount > 1) {
             this.createBranchingInclusiveGatewayRules(ruleBuilder, inclusiveGateway);
             return;
         }
@@ -291,8 +313,8 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
             this.createMergingInclusiveGatewayRules(ruleBuilder, inclusiveGateway);
             return;
         }
-        if (incomingFlowCount == 0 || outgoingFlowCount == 0) {
-            throw new RuntimeException(String.format("The inclusive gateway \"%s\" has 0 incoming or outgoing flows!", inclusiveGateway.getName()));
+        if (outgoingFlowCount == 0) {
+            throw new RuntimeException(String.format("The inclusive gateway \"%s\" has no outgoing flows!", inclusiveGateway.getName()));
         }
         throw new RuntimeException("Inclusive gateway should not have multiple incoming and outgoing flows.");
     }
@@ -352,16 +374,19 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     }
 
     private void createBranchingInclusiveGatewayRules(GrooveRuleBuilder ruleBuilder, InclusiveGateway inclusiveGateway) {
-        SequenceFlow incFlow = inclusiveGateway.getIncomingFlows().findFirst().get(); // size 1 means this operation is save.
+        Optional<SequenceFlow> incFlow = inclusiveGateway.getIncomingFlows().findFirst();
         int i = 1;
         for (Set<SequenceFlow> outFlows : Sets.powerSet(inclusiveGateway.getOutgoingFlows().collect(Collectors.toCollection(LinkedHashSet::new)))) {
             if (outFlows.size() >= 1) { // Empty set is also part of the power set.
                 ruleBuilder.startRule(inclusiveGateway.getName() + "_" + i);
                 GrooveNode processInstance = this.createContextRunningProcessInstance(ruleBuilder);
-                GrooveNode previousToken = ruleBuilder.deleteNode(TYPE_TOKEN);
-                ruleBuilder.deleteEdge(TOKENS, processInstance, previousToken);
-                String incFlowID = incFlow.getID();
-                ruleBuilder.deleteEdge(POSITION, previousToken, ruleBuilder.contextNode(this.createStringNodeLabel(incFlowID)));
+                String deleteTokenPosition;
+                if (incFlow.isPresent()) {
+                    deleteTokenPosition = incFlow.get().getID();
+                } else {
+                    deleteTokenPosition = inclusiveGateway.getName();
+                }
+                deleteTokenWithPosition(ruleBuilder, processInstance, deleteTokenPosition);
 
                 StringBuilder stringBuilder = new StringBuilder();
                 outFlows.forEach(outFlow -> {
@@ -416,6 +441,10 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
         GrooveNode processInstance = this.createContextRunningProcessInstance(ruleBuilder);
 
         parallelGateway.getIncomingFlows().forEach(sequenceFlow -> deleteTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
+        // If no incoming flows we consume a token at the position of the gateway.
+        if (parallelGateway.getIncomingFlows().findAny().isEmpty()) {
+            deleteTokenWithPosition(ruleBuilder, processInstance, parallelGateway.getName());
+        }
 
         parallelGateway.getOutgoingFlows().forEach(sequenceFlow -> addTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
 
