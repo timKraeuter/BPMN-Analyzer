@@ -2,5 +2,6 @@ package behavior.bpmn.events;
 
 public enum EndEventType {
     NONE, // Default
-    TERMINATION
+    TERMINATION,
+    MESSAGE_THROW
 }

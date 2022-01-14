@@ -3,7 +3,8 @@ package groove.behaviorTransformer;
 import behavior.bpmn.*;
 import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
 import behavior.bpmn.events.EndEvent;
-import behavior.bpmn.events.LinkEvent;
+import behavior.bpmn.events.IntermediateCatchEvent;
+import behavior.bpmn.events.IntermediateThrowEvent;
 import behavior.bpmn.events.StartEvent;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.InclusiveGateway;
@@ -23,6 +24,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessModel> {
+    public static final String THROW = "Throw_";
+    public static final String CATCH = "Catch_";
     private static final String FIXED_RULES_AND_TYPE_GRAPH_DIR = "/BPMNFixedRulesAndTypeGraph";
     // Node names
     private static final String TYPE_TOKEN = TYPE + "Token";
@@ -278,23 +281,34 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
             }
 
             @Override
-            public void handle(LinkEvent linkEvent) {
-                switch (linkEvent.getType()) {
-                    case THROW:
-                        ruleBuilder.startRule("Throw_" + linkEvent.getName());
-                        if (linkEvent.getIncomingFlows().count() != 1) {
+            public void handle(IntermediateThrowEvent intermediateThrowEvent) {
+                switch (intermediateThrowEvent.getType()) {
+                    case LINK:
+                        ruleBuilder.startRule(THROW + intermediateThrowEvent.getName());
+                        if (intermediateThrowEvent.getIncomingFlows().count() != 1) {
                             throw new RuntimeException("A throw link event should have exactly one incoming sequence flow!");
                         }
-                        final String incomingFlowId = linkEvent.getIncomingFlows().findFirst().get().getID();
-                        BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(incomingFlowId, linkEvent.getName(), ruleBuilder);
+                        final String incomingFlowId = intermediateThrowEvent.getIncomingFlows().findFirst().get().getID();
+                        BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(incomingFlowId, intermediateThrowEvent.getName(), ruleBuilder);
                         break;
-                    case CATCH:
-                        ruleBuilder.startRule("Catch_" + linkEvent.getName());
-                        if (linkEvent.getOutgoingFlows().count() != 1) {
+                    case MESSAGE:
+                        break;
+                }
+                ruleBuilder.buildRule();
+            }
+
+            @Override
+            public void handle(IntermediateCatchEvent intermediateCatchEvent) {
+                switch (intermediateCatchEvent.getType()) {
+                    case LINK:
+                        ruleBuilder.startRule(CATCH + intermediateCatchEvent.getName());
+                        if (intermediateCatchEvent.getOutgoingFlows().count() != 1) {
                             throw new RuntimeException("A catch link event should have exactly one outgoing sequence flow!");
                         }
-                        final String outgoingFlowId = linkEvent.getOutgoingFlows().findFirst().get().getID();
-                        BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(linkEvent.getName(), outgoingFlowId, ruleBuilder);
+                        final String outgoingFlowId = intermediateCatchEvent.getOutgoingFlows().findFirst().get().getID();
+                        BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(intermediateCatchEvent.getName(), outgoingFlowId, ruleBuilder);
+                        break;
+                    case MESSAGE:
                         break;
                 }
                 ruleBuilder.buildRule();

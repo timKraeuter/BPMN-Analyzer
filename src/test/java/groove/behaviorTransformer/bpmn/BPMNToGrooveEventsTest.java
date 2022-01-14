@@ -46,10 +46,10 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
     void testLinkEvent() throws IOException {
         final StartEvent start = new StartEvent("start");
         final ParallelGateway p1 = new ParallelGateway("p1");
-        LinkEvent throw_link1 = new LinkEvent("Link1", LinkEventType.THROW);
-        LinkEvent throw_link2 = new LinkEvent("Link2", LinkEventType.THROW);
-        LinkEvent catch_link1 = new LinkEvent("Link1", LinkEventType.CATCH);
-        LinkEvent catch_link2 = new LinkEvent("Link2", LinkEventType.CATCH);
+        IntermediateThrowEvent throw_link1 = new IntermediateThrowEvent("Link1", IntermediateEventType.LINK);
+        IntermediateThrowEvent throw_link2 = new IntermediateThrowEvent("Link2", IntermediateEventType.LINK);
+        IntermediateCatchEvent catch_link1 = new IntermediateCatchEvent("Link1", IntermediateEventType.LINK);
+        IntermediateCatchEvent catch_link2 = new IntermediateCatchEvent("Link2", IntermediateEventType.LINK);
         final ParallelGateway p2 = new ParallelGateway("p2");
         final EndEvent end = new EndEvent("end");
 
@@ -74,6 +74,34 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testTerminateEndEvent() throws IOException {
+        final StartEvent start = new StartEvent("start");
+        final ParallelGateway p1 = new ParallelGateway("p1");
+        Task a = new Task("A");
+        Task b = new Task("B");
+        final EndEvent end = new EndEvent("end");
+        final EndEvent terminate_end = new EndEvent("terminate_end", EndEventType.TERMINATION);
+
+        final String modelName = "terminateEndEvent";
+        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+                .name(modelName)
+                .startEvent(start)
+                .sequenceFlow(start, p1)
+                .sequenceFlow(p1, a)
+                .sequenceFlow(p1, b)
+                .sequenceFlow(a, end)
+                .sequenceFlow(b, terminate_end)
+                .endEvent(end)
+                .endEvent(terminate_end)
+                .build();
+
+        this.checkGrooveGeneration(processModel);
+    }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/e6a2eb93-b0e7-4c09-baa0-93ff18084d0e">"Message Events"</a> in cawemo.
+     */
+//    @Test
+    void testMessageEvents() throws IOException {
         final StartEvent start = new StartEvent("start");
         final ParallelGateway p1 = new ParallelGateway("p1");
         Task a = new Task("A");
