@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
-abstract class BehaviorToGrooveTransformerTestHelper {
+public abstract class BehaviorToGrooveTransformerTestHelper {
     private final String outputPath = "C:/Source/groove/bin";
 //    String outputPath = "B:/Source/groove/bin";
 //    String outputPath = FileUtils.getTempDirectoryPath();
@@ -44,7 +44,7 @@ abstract class BehaviorToGrooveTransformerTestHelper {
         this.fileNameFilter = fileNameFilter;
     }
 
-    void checkGrooveGeneration(Behavior behavior) throws IOException {
+    public void checkGrooveGeneration(Behavior behavior) throws IOException {
         this.checkGrooveGeneration(behavior, this.addPrefix, this.fileNameFilter);
     }
 
