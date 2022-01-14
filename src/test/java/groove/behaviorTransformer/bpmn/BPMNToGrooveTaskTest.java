@@ -30,7 +30,6 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(start, a)
                 .sequenceFlow(a, b)
                 .sequenceFlow(b, end)
-                .endEvent(end)
                 .build();
         // TODO: test prefix
         this.setFileNameFilter(x -> false); // Expect type graph here.
@@ -56,7 +55,6 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(e1, a)
                 .sequenceFlow(e1, b)
                 .sequenceFlow(a, b).sequenceFlow(b, end)
-                .endEvent(end)
                 .build();
 
         this.checkGrooveGeneration(processModel);
@@ -84,7 +82,6 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(b, p1)
                 .sequenceFlow(c, p1)
                 .sequenceFlow(p1, end)
-                .endEvent(end)
                 .build();
 
         this.checkGrooveGeneration(processModel);

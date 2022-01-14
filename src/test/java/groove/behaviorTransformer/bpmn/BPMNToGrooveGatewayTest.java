@@ -43,7 +43,6 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(a2_2, e2)
                 .sequenceFlow(e2, a3)
                 .sequenceFlow(a3, end)
-                .endEvent(end)
                 .build();
 
         // Exclusive Gateways rules could be optimized, by setting the token position to the exlusive gateway not the individual flow incoming.
@@ -79,7 +78,6 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(a2_2, p2)
                 .sequenceFlow(p2, a3)
                 .sequenceFlow(a3, end)
-                .endEvent(end)
                 .build();
 
         this.checkGrooveGeneration(processModel);
@@ -116,7 +114,6 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(p2, p3)
                 .sequenceFlow(a3, p3)
                 .sequenceFlow(p3, end)
-                .endEvent(end)
                 .build();
 
         this.checkGrooveGeneration(processModel);
@@ -144,7 +141,6 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(a, i2)
                 .sequenceFlow(b, i2)
                 .sequenceFlow(i2, end)
-                .endEvent(end)
                 .build();
 
         this.checkGrooveGeneration(processModel);
@@ -179,7 +175,6 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(c, p2)
                 .sequenceFlow(p2, i2)
                 .sequenceFlow(i2, end)
-                .endEvent(end)
                 .build();
 
         this.checkGrooveGeneration(processModel);

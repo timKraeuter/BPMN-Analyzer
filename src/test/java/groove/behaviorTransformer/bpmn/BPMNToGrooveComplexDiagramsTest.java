@@ -43,7 +43,6 @@ public class BPMNToGrooveComplexDiagramsTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(e3, e4)
                 .sequenceFlow(e4, e2)
                 .sequenceFlow(e4, end)
-                .endEvent(end)
                 .build();
 
         this.checkGrooveGeneration(processModel);

@@ -32,8 +32,6 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(p1, a2)
                 .sequenceFlow(a1, end1)
                 .sequenceFlow(a2, end2)
-                .endEvent(end1)
-                .endEvent(end2)
                 .build();
 
         this.checkGrooveGeneration(processModel);
@@ -63,7 +61,6 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(catch_link1, p2)
                 .sequenceFlow(catch_link2, p2)
                 .sequenceFlow(p2, end)
-                .endEvent(end)
                 .build();
 
         this.checkGrooveGeneration(processModel);
@@ -90,8 +87,6 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(p1, b)
                 .sequenceFlow(a, end)
                 .sequenceFlow(b, terminate_end)
-                .endEvent(end)
-                .endEvent(terminate_end)
                 .build();
 
         this.checkGrooveGeneration(processModel);
@@ -102,26 +97,31 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
      */
 //    @Test
     void testMessageEvents() throws IOException {
-        final StartEvent start = new StartEvent("start");
-        final ParallelGateway p1 = new ParallelGateway("p1");
-        Task a = new Task("A");
-        Task b = new Task("B");
-        final EndEvent end = new EndEvent("end");
-        final EndEvent terminate_end = new EndEvent("terminate_end", EndEventType.TERMINATION);
+        final StartEvent start_p1 = new StartEvent("start_p1");
+        IntermediateCatchEvent catch_p1 = new IntermediateCatchEvent("catch_p1", IntermediateEventType.MESSAGE);
+        final EndEvent end_p1 = new EndEvent("end_p1", EndEventType.MESSAGE_THROW);
 
-        final String modelName = "terminateEndEvent";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
-                .name(modelName)
-                .startEvent(start)
-                .sequenceFlow(start, p1)
-                .sequenceFlow(p1, a)
-                .sequenceFlow(p1, b)
-                .sequenceFlow(a, end)
-                .sequenceFlow(b, terminate_end)
-                .endEvent(end)
-                .endEvent(terminate_end)
+        final StartEvent start_p2 = new StartEvent("start_p2");
+        IntermediateCatchEvent throw_p2 = new IntermediateCatchEvent("throw_p2", IntermediateEventType.MESSAGE);
+        IntermediateCatchEvent catch_p2 = new IntermediateCatchEvent("catch_p2", IntermediateEventType.MESSAGE);
+        final EndEvent end_p2 = new EndEvent("end_p2");
+
+        final String modelName = "messageEvents";
+
+        final BPMNProcessModel p1Model = new BPMNProcessBuilder()
+                .name("p1")
+                .startEvent(start_p1)
+                .sequenceFlow(start_p1, catch_p2)
+                .sequenceFlow(catch_p2, end_p1)
+                .build();
+        final BPMNProcessModel p2Model = new BPMNProcessBuilder()
+                .name("p2")
+                .startEvent(start_p2)
+                .sequenceFlow(start_p2, throw_p2)
+                .sequenceFlow(throw_p2, catch_p2)
+                .sequenceFlow(catch_p2, end_p2)
                 .build();
 
-        this.checkGrooveGeneration(processModel);
+        this.checkGrooveGeneration(p1Model);
     }
 }

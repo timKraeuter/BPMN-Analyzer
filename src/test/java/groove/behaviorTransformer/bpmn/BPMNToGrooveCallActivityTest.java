@@ -35,7 +35,6 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(a, subprocess)
                 .sequenceFlow(subprocess, b)
                 .sequenceFlow(b, end)
-                .endEvent(end)
                 .build();
 
         this.checkGrooveGeneration(processModel);
@@ -62,7 +61,6 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
                 .sequenceFlow("a3", subprocess, b)
                 .sequenceFlow("a4", subprocess, b)
                 .sequenceFlow(b, end)
-                .endEvent(end)
                 .build();
 
         this.checkGrooveGeneration(processModel);
@@ -87,8 +85,6 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(p1, subprocess)
                 .sequenceFlow(p1, terminate_end)
                 .sequenceFlow(subprocess, end)
-                .endEvent(end)
-                .endEvent(terminate_end)
                 .build();
 
         this.checkGrooveGeneration(processModel);
@@ -104,7 +100,6 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
                 .startEvent(start)
                 .sequenceFlow(start, a)
                 .sequenceFlow(a, end)
-                .endEvent(end)
                 .build();
     }
 
@@ -124,8 +119,6 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
                 .startEvent(start)
                 .sequenceFlow(start, subprocess)
                 .sequenceFlow(subprocess, end)
-                .endEvent(end)
-                .endEvent(terminate_end)
                 .build();
 
         this.checkGrooveGeneration(processModel);
@@ -169,7 +162,6 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(a, subprocess)
                 .sequenceFlow(subprocess, b)
                 .sequenceFlow(b, end)
-                .endEvent(end)
                 .build();
 
         this.checkGrooveGeneration(processModel);
@@ -201,7 +193,6 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(f, p2)
                 .sequenceFlow(p2, e2)
                 .sequenceFlow(e2, end)
-                .endEvent(end)
                 .build();
     }
 }
