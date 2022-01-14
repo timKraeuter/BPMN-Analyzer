@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTest {
+public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
 
 
     /**

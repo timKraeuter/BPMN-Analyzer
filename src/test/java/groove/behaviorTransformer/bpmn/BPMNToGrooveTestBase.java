@@ -2,7 +2,7 @@ package groove.behaviorTransformer.bpmn;
 
 import groove.behaviorTransformer.BehaviorToGrooveTransformerTestHelper;
 
-public abstract class BPMNToGrooveTest extends BehaviorToGrooveTransformerTestHelper {
+public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTestHelper {
 
     static final String TYPE_GRAPH_FILE_NAME = "type.gty";
     static final String TERMINATE_RULE_FILE_NAME = "Terminate.gpr";

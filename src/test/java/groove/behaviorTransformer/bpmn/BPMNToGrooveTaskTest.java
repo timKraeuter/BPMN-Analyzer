@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class BPMNToGrooveTaskTest extends BPMNToGrooveTest {
+public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
 
     /**
      * See test case <a href="https://cawemo.com/share/e9bca9c5-c750-487f-becf-737bbd6ea19b">"Sequential Activities"</a> in cawemo.
