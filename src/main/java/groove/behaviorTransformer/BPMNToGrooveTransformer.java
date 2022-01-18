@@ -26,8 +26,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaboration> {
-    public static final String THROW = "Throw_";
-    public static final String CATCH = "Catch_";
+    private static final String THROW = "Throw_";
+    private static final String CATCH = "Catch_";
     private static final String FIXED_RULES_AND_TYPE_GRAPH_DIR = "/BPMNFixedRulesAndTypeGraph";
     // Node names
     private static final String TYPE_TOKEN = TYPE + "Token";
