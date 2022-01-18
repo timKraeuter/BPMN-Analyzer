@@ -1,8 +1,8 @@
 package groove.behaviorTransformer.bpmn;
 
-import behavior.bpmn.BPMNProcess;
+import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.activities.Task;
-import behavior.bpmn.auxiliary.BPMNProcessBuilder;
+import behavior.bpmn.auxiliary.BPMNCollaborationBuilder;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.StartEvent;
 import behavior.bpmn.gateways.ExclusiveGateway;
@@ -24,8 +24,9 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "sequentialActivities";
-        final BPMNProcess processModel = new BPMNProcessBuilder()
+        final BPMNCollaboration collaboration = new BPMNCollaborationBuilder()
                 .name(modelName)
+                .processName(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, a)
                 .sequenceFlow(a, b)
@@ -33,7 +34,7 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
                 .build();
         // TODO: test prefix
         this.setFileNameFilter(x -> false); // Expect type graph here.
-        this.checkGrooveGeneration(processModel);
+        this.checkGrooveGeneration(collaboration);
     }
 
     /**
@@ -48,8 +49,9 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "implicitExclusiveGateway";
-        final BPMNProcess processModel = new BPMNProcessBuilder()
+        final BPMNCollaboration collaboration = new BPMNCollaborationBuilder()
                 .name(modelName)
+                .processName(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, e1)
                 .sequenceFlow(e1, a)
@@ -57,7 +59,7 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(a, b).sequenceFlow(b, end)
                 .build();
 
-        this.checkGrooveGeneration(processModel);
+        this.checkGrooveGeneration(collaboration);
     }
 
     /**
@@ -73,8 +75,9 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "implicitParallelGateway";
-        final BPMNProcess processModel = new BPMNProcessBuilder()
+        final BPMNCollaboration collaboration = new BPMNCollaborationBuilder()
                 .name(modelName)
+                .processName(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, a)
                 .sequenceFlow(a, b)
@@ -84,6 +87,6 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(p1, end)
                 .build();
 
-        this.checkGrooveGeneration(processModel);
+        this.checkGrooveGeneration(collaboration);
     }
 }

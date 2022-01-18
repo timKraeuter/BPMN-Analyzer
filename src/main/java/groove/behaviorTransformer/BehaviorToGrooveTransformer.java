@@ -3,7 +3,7 @@ package groove.behaviorTransformer;
 import behavior.Behavior;
 import behavior.BehaviorVisitor;
 import behavior.activity.ActivityDiagram;
-import behavior.bpmn.BPMNProcess;
+import behavior.bpmn.BPMNCollaboration;
 import behavior.fsm.FiniteStateMachine;
 import behavior.petriNet.PetriNet;
 import behavior.piCalculus.NamedPiProcess;
@@ -109,11 +109,11 @@ public class BehaviorToGrooveTransformer {
             }
 
             @Override
-            public void handle(BPMNProcess bpmnProcess) {
+            public void handle(BPMNCollaboration collaboration) {
                 BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer();
 
-                startGraphs.add(transformer.generateStartGraph(bpmnProcess, true));
-                transformer.generateRules(bpmnProcess, true).forEach(rule -> allRules.put(rule.getRuleName(), rule));
+                startGraphs.add(transformer.generateStartGraph(collaboration, true));
+                transformer.generateRules(collaboration, true).forEach(rule -> allRules.put(rule.getRuleName(), rule));
             }
 
             @Override
@@ -188,8 +188,8 @@ public class BehaviorToGrooveTransformer {
             }
 
             @Override
-            public void handle(BPMNProcess bpmnProcess) {
-                BehaviorToGrooveTransformer.this.generateGrooveGrammarForBPMNProcessModel(bpmnProcess, targetFolder, addPrefix);
+            public void handle(BPMNCollaboration collaboration) {
+                BehaviorToGrooveTransformer.this.generateGrooveGrammarForBPMNProcessModel(collaboration, targetFolder, addPrefix);
             }
 
             @Override
@@ -231,14 +231,17 @@ public class BehaviorToGrooveTransformer {
         this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
     }
 
-    private void generateGrooveGrammarForBPMNProcessModel(BPMNProcess bpmnProcess, File grooveDir, boolean addPrefix) {
-        File graphGrammarSubFolder = this.makeSubFolder(bpmnProcess, grooveDir);
+    private void generateGrooveGrammarForBPMNProcessModel(
+            BPMNCollaboration collaboration,
+            File grooveDir,
+            boolean addPrefix) {
+        File graphGrammarSubFolder = this.makeSubFolder(collaboration, grooveDir);
         BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer();
 
         // Generate start graph
-        transformer.generateAndWriteStartGraph(bpmnProcess, addPrefix, graphGrammarSubFolder);
+        transformer.generateAndWriteStartGraph(collaboration, addPrefix, graphGrammarSubFolder);
         // Generate rules
-        transformer.generateAndWriteRules(bpmnProcess, addPrefix, graphGrammarSubFolder);
+        transformer.generateAndWriteRules(collaboration, addPrefix, graphGrammarSubFolder);
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
         additionalProperties.put("typeGraph", "type");

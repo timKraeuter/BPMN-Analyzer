@@ -1,7 +1,8 @@
 package groove.behaviorTransformer;
 
-import behavior.bpmn.BPMNProcess;
+import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.FlowNode;
+import behavior.bpmn.Process;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.Task;
@@ -27,7 +28,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcess> {
+public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaboration> {
     public static final String THROW = "Throw_";
     public static final String CATCH = "Catch_";
     private static final String FIXED_RULES_AND_TYPE_GRAPH_DIR = "/BPMNFixedRulesAndTypeGraph";
@@ -46,7 +47,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcess> {
     private static final String SUBPROCESS = "subprocess";
 
     @Override
-    public void generateAndWriteRulesFurther(BPMNProcess model, boolean addPrefix, File targetFolder) {
+    public void generateAndWriteRulesFurther(BPMNCollaboration collaboration, boolean addPrefix, File targetFolder) {
         this.copyTypeGraphAndFixedRules(targetFolder);
     }
 
@@ -60,23 +61,25 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcess> {
     }
 
     @Override
-    public GrooveGraph generateStartGraph(BPMNProcess bpmnProcess, boolean addPrefix) {
+    public GrooveGraph generateStartGraph(BPMNCollaboration collaboration, boolean addPrefix) {
         // TODO: Add prefix if needed!
-        GrooveGraphBuilder startGraphBuilder = new GrooveGraphBuilder().setName(bpmnProcess.getName());
+        GrooveGraphBuilder startGraphBuilder = new GrooveGraphBuilder().setName(collaboration.getName());
         GrooveNode processInstance = new GrooveNode(TYPE_PROCESS_INSTANCE);
         GrooveNode running = new GrooveNode(TYPE_RUNNING);
         startGraphBuilder.addEdge(STATE, processInstance, running);
 
-        GrooveNode startToken = new GrooveNode(TYPE_TOKEN);
-        GrooveNode tokenName = new GrooveNode(this.createStringNodeLabel(getStartEventTokenName(bpmnProcess)));
-        startGraphBuilder.addEdge(POSITION, startToken, tokenName);
-        startGraphBuilder.addEdge(TOKENS, processInstance, startToken);
+        collaboration.getParticipants().forEach(process -> {
+            GrooveNode startToken = new GrooveNode(TYPE_TOKEN);
+            GrooveNode tokenName = new GrooveNode(this.createStringNodeLabel(getStartEventTokenName(process)));
+            startGraphBuilder.addEdge(POSITION, startToken, tokenName);
+            startGraphBuilder.addEdge(TOKENS, processInstance, startToken);
+        });
 
         return startGraphBuilder.build();
     }
 
-    private String getStartEventTokenName(BPMNProcess bpmnProcess) {
-        return bpmnProcess.getName() + "_" + bpmnProcess.getStartEvent().getName();
+    private String getStartEventTokenName(Process process) {
+        return process.getName() + "_" + process.getStartEvent().getName();
     }
 
     private void updateTokenPositionWhenRunning(String oldPosition, String newPosition, GrooveRuleBuilder ruleBuilder) {
@@ -101,17 +104,27 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcess> {
     }
 
     @Override
-    public Stream<GrooveGraphRule> generateRules(BPMNProcess bpmnProcess, boolean addPrefix) {
-        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(bpmnProcess, addPrefix);
-        Set<BPMNProcess> visitedProcessModels = Sets.newHashSet(bpmnProcess);
+    public Stream<GrooveGraphRule> generateRules(BPMNCollaboration collaboration, boolean addPrefix) {
+        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(collaboration, addPrefix);
 
-        generateRules(bpmnProcess, ruleBuilder, visitedProcessModels);
+        Set<Process> visitedProcessModels = Sets.newHashSet();
+        collaboration.getParticipants().forEach(process -> {
+            if (!visitedProcessModels.contains(process)) {
+                visitedProcessModels.add(process);
+                generateRules(collaboration, process, ruleBuilder, visitedProcessModels);
+            }
+        });
+
 
         return ruleBuilder.getRules();
     }
 
-    private void generateRules(BPMNProcess bpmnProcess, GrooveRuleBuilder ruleBuilder, Set<BPMNProcess> visitedProcessModels) {
-        bpmnProcess.getControlFlowNodes().forEach(node -> node.accept(new FlowNodeVisitor() {
+    private void generateRules(
+            BPMNCollaboration collaboration,
+            Process process,
+            GrooveRuleBuilder ruleBuilder,
+            Set<Process> visitedProcessModels) {
+        process.getControlFlowNodes().forEach(node -> node.accept(new FlowNodeVisitor() {
             @Override
             public void handle(StartEvent startEvent) {
                 if (startEvent.getOutgoingFlows().count() != 1) {
@@ -120,7 +133,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcess> {
                 final String outgoingFlowID = startEvent.getOutgoingFlows().findFirst().get().getID();
                 ruleBuilder.startRule(startEvent.getName());
                 BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
-                        getStartEventTokenName(bpmnProcess),
+                        getStartEventTokenName(process),
                         outgoingFlowID,
                         ruleBuilder);
                 ruleBuilder.buildRule();
@@ -167,7 +180,11 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcess> {
                     return;
                 }
                 visitedProcessModels.add(callActivity.getSubProcessModel());
-                BPMNToGrooveTransformer.this.generateRules(callActivity.getSubProcessModel(), ruleBuilder, visitedProcessModels);
+                BPMNToGrooveTransformer.this.generateRules(
+                        collaboration,
+                        callActivity.getSubProcessModel(),
+                        ruleBuilder,
+                        visitedProcessModels);
             }
 
             private void createTerminateSubProcessRule(CallActivity callActivity) {

@@ -1,18 +1,18 @@
 package behavior.bpmn.activities;
 
-import behavior.bpmn.BPMNProcess;
+import behavior.bpmn.Process;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
 public class CallActivity extends Activity {
 
-    private final BPMNProcess subProcessModel;
+    private final Process subProcessModel;
 
-    public CallActivity(BPMNProcess subProcessModel) {
+    public CallActivity(Process subProcessModel) {
         super(subProcessModel.getName());
         this.subProcessModel = subProcessModel;
     }
 
-    public BPMNProcess getSubProcessModel() {
+    public Process getSubProcessModel() {
         return subProcessModel;
     }
 

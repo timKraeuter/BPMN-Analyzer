@@ -1,6 +1,5 @@
 package behavior.bpmn;
 
-// TODO: Add message flow!
 public class SequenceFlow {
     private final String name;
     private final FlowNode source;

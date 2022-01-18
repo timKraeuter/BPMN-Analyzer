@@ -1,21 +1,20 @@
 package behavior.bpmn;
 
-import behavior.Behavior;
-import behavior.BehaviorVisitor;
 import behavior.bpmn.events.StartEvent;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class BPMNProcess implements Behavior {
-    // TODO: Add pools somehow.
-    // has a set of lanes according to bpmn
+/**
+ * Represents a process modeled in BPMN.
+ */
+public class Process {
     private final String name;
     private final StartEvent startEvent;
     private final Set<SequenceFlow> sequenceFlows;
 
-    public BPMNProcess(String name, StartEvent startEvent, Set<SequenceFlow> sequenceFlows) {
+    public Process(String name, StartEvent startEvent, Set<SequenceFlow> sequenceFlows) {
         this.name = name;
         this.startEvent = startEvent;
         this.sequenceFlows = sequenceFlows;
@@ -34,14 +33,8 @@ public class BPMNProcess implements Behavior {
         return nodes.stream();
     }
 
-    @Override
     public String getName() {
-        return this.name;
-    }
-
-    @Override
-    public void accept(BehaviorVisitor visitor) {
-        visitor.handle(this);
+        return name;
     }
 
     /*
