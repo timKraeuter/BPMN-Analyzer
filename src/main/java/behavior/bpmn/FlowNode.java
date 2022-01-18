@@ -1,17 +1,17 @@
 package behavior.bpmn;
 
-import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
+import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public abstract class ControlFlowNode {
+public abstract class FlowNode {
     private final String name;
     private final Set<SequenceFlow> outgoingFlows = new LinkedHashSet<>();
     private final Set<SequenceFlow> incomingFlows = new LinkedHashSet<>();
 
-    public ControlFlowNode(String name) {
+    public FlowNode(String name) {
         this.name = name;
     }
 
@@ -35,7 +35,7 @@ public abstract class ControlFlowNode {
         return this.incomingFlows.stream();
     }
 
-    public abstract void accept(ControlFlowNodeVisitor visitor);
+    public abstract void accept(FlowNodeVisitor visitor);
 
     public abstract boolean isInclusiveGateway();
 

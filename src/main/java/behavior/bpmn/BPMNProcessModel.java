@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 public class BPMNProcessModel implements Behavior {
+    // TODO: Add pools somehow.
     private final String name;
     private final StartEvent startEvent;
     private final Set<SequenceFlow> sequenceFlows;
@@ -23,8 +24,8 @@ public class BPMNProcessModel implements Behavior {
         return this.startEvent;
     }
 
-    public Stream<ControlFlowNode> getControlFlowNodes() {
-        final LinkedHashSet<ControlFlowNode> nodes = new LinkedHashSet<>();
+    public Stream<FlowNode> getControlFlowNodes() {
+        final LinkedHashSet<FlowNode> nodes = new LinkedHashSet<>();
         sequenceFlows.forEach(sequenceFlow -> {
             nodes.add(sequenceFlow.getSource());
             nodes.add(sequenceFlow.getTarget());

@@ -1,6 +1,6 @@
 package behavior.bpmn.gateways;
 
-import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
+import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
 public class ParallelGateway extends Gateway {
     public ParallelGateway(String name) {
@@ -8,7 +8,7 @@ public class ParallelGateway extends Gateway {
     }
 
     @Override
-    public void accept(ControlFlowNodeVisitor visitor) {
+    public void accept(FlowNodeVisitor visitor) {
         visitor.handle(this);
     }
 

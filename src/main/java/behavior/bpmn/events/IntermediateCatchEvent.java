@@ -1,6 +1,6 @@
 package behavior.bpmn.events;
 
-import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
+import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
 public class IntermediateCatchEvent extends IntermediateEvent {
 
@@ -9,7 +9,7 @@ public class IntermediateCatchEvent extends IntermediateEvent {
     }
 
     @Override
-    public void accept(ControlFlowNodeVisitor visitor) {
+    public void accept(FlowNodeVisitor visitor) {
         visitor.handle(this);
     }
 }

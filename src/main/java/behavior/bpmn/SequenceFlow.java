@@ -1,11 +1,12 @@
 package behavior.bpmn;
 
+// TODO: Add message flow!
 public class SequenceFlow {
     private final String name;
-    private final ControlFlowNode source;
-    private final ControlFlowNode target;
+    private final FlowNode source;
+    private final FlowNode target;
 
-    public SequenceFlow(String name, ControlFlowNode source, ControlFlowNode target) {
+    public SequenceFlow(String name, FlowNode source, FlowNode target) {
         this.name = name;
         this.source = source;
         this.target = target;
@@ -20,11 +21,11 @@ public class SequenceFlow {
         return name;
     }
 
-    public ControlFlowNode getSource() {
+    public FlowNode getSource() {
         return source;
     }
 
-    public ControlFlowNode getTarget() {
+    public FlowNode getTarget() {
         return target;
     }
 

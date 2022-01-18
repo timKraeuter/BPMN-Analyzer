@@ -1,7 +1,7 @@
 package behavior.bpmn.auxiliary;
 
 import behavior.bpmn.BPMNProcessModel;
-import behavior.bpmn.ControlFlowNode;
+import behavior.bpmn.FlowNode;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.events.StartEvent;
 
@@ -27,7 +27,7 @@ public class BPMNProcessBuilder {
         return this;
     }
 
-    public BPMNProcessBuilder sequenceFlow(String name, ControlFlowNode from, ControlFlowNode to) {
+    public BPMNProcessBuilder sequenceFlow(String name, FlowNode from, FlowNode to) {
         // We could check that this sequence flow is connected to the already created part of the model.
         final SequenceFlow sequenceFlow = new SequenceFlow(name, from, to);
         this.sequenceFlows.add(sequenceFlow);
@@ -36,7 +36,7 @@ public class BPMNProcessBuilder {
         return this;
     }
 
-    public BPMNProcessBuilder sequenceFlow(ControlFlowNode from, ControlFlowNode to) {
+    public BPMNProcessBuilder sequenceFlow(FlowNode from, FlowNode to) {
         return sequenceFlow("", from, to);
     }
 

@@ -1,8 +1,8 @@
 package behavior.bpmn;
 
-import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
+import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
-public class CallActivity extends ControlFlowNode {
+public class CallActivity extends FlowNode {
 
     private final BPMNProcessModel subProcessModel;
 
@@ -16,7 +16,7 @@ public class CallActivity extends ControlFlowNode {
     }
 
     @Override
-    public void accept(ControlFlowNodeVisitor visitor) {
+    public void accept(FlowNodeVisitor visitor) {
         visitor.handle(this);
     }
 

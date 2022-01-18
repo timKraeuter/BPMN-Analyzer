@@ -10,7 +10,7 @@ import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.InclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
 
-public interface ControlFlowNodeVisitor {
+public interface FlowNodeVisitor {
     void handle(Task task);
 
     void handle(CallActivity callActivity);

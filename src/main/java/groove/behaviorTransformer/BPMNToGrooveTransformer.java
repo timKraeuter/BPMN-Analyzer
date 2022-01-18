@@ -1,7 +1,7 @@
 package groove.behaviorTransformer;
 
 import behavior.bpmn.*;
-import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
+import behavior.bpmn.auxiliary.FlowNodeVisitor;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.IntermediateCatchEvent;
 import behavior.bpmn.events.IntermediateThrowEvent;
@@ -107,7 +107,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     }
 
     private void generateRules(BPMNProcessModel bpmnProcessModel, GrooveRuleBuilder ruleBuilder, Set<BPMNProcessModel> visitedProcessModels) {
-        bpmnProcessModel.getControlFlowNodes().forEach(node -> node.accept(new ControlFlowNodeVisitor() {
+        bpmnProcessModel.getControlFlowNodes().forEach(node -> node.accept(new FlowNodeVisitor() {
             @Override
             public void handle(StartEvent startEvent) {
                 if (startEvent.getOutgoingFlows().count() != 1) {
@@ -209,7 +209,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                 ruleBuilder.buildRule();
             }
 
-            private String getTaskOrCallActivityRuleName(ControlFlowNode taskOrCallActivity, String incomingFlowId) {
+            private String getTaskOrCallActivityRuleName(FlowNode taskOrCallActivity, String incomingFlowId) {
                 if (taskOrCallActivity.getIncomingFlows().count() > 1) {
                     return taskOrCallActivity.getName() + "_" + incomingFlowId;
                 }
@@ -336,7 +336,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     private void createMergingInclusiveGatewayRules(GrooveRuleBuilder ruleBuilder, InclusiveGateway inclusiveGateway) {
         // Find the corresponding branching inclusive gateway
         Map<SequenceFlow, SequenceFlow> branchFlowsToInFlows = new HashMap<>();
-        ControlFlowNode branchGateway = this.findCorrespondingBranchGateway(inclusiveGateway, branchFlowsToInFlows);
+        FlowNode branchGateway = this.findCorrespondingBranchGateway(inclusiveGateway, branchFlowsToInFlows);
         SequenceFlow outFlow = inclusiveGateway.getOutgoingFlows().findFirst().get(); // size 1 means this operation is save.
         int i = 1;
         for (Set<SequenceFlow> branchGatewayOutFlows : Sets.powerSet(branchGateway.getOutgoingFlows().collect(Collectors.toCollection(LinkedHashSet::new)))) {
@@ -364,22 +364,22 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
         }
     }
 
-    private ControlFlowNode findCorrespondingBranchGateway(InclusiveGateway inclusiveGateway, Map<SequenceFlow, SequenceFlow> branchFlowsToInFlows) {
-        final Set<ControlFlowNode> iGateways = inclusiveGateway.getIncomingFlows().map(inFlow -> searchBranchingGateway(inFlow, inFlow, branchFlowsToInFlows)).collect(Collectors.toSet());
+    private FlowNode findCorrespondingBranchGateway(InclusiveGateway inclusiveGateway, Map<SequenceFlow, SequenceFlow> branchFlowsToInFlows) {
+        final Set<FlowNode> iGateways = inclusiveGateway.getIncomingFlows().map(inFlow -> searchBranchingGateway(inFlow, inFlow, branchFlowsToInFlows)).collect(Collectors.toSet());
         return getSingleGatewayOrThrowException(iGateways);
     }
 
-    private ControlFlowNode searchBranchingGateway(SequenceFlow originalFlow, SequenceFlow currentFlow, Map<SequenceFlow, SequenceFlow> branchFlowsToInFlows) {
-        final ControlFlowNode source = currentFlow.getSource();
+    private FlowNode searchBranchingGateway(SequenceFlow originalFlow, SequenceFlow currentFlow, Map<SequenceFlow, SequenceFlow> branchFlowsToInFlows) {
+        final FlowNode source = currentFlow.getSource();
         if (source.isInclusiveGateway()) {
             branchFlowsToInFlows.put(currentFlow, originalFlow);
             return source;
         }
-        final Set<ControlFlowNode> iGateways = source.getIncomingFlows().map(inFlow -> searchBranchingGateway(originalFlow, inFlow, branchFlowsToInFlows)).collect(Collectors.toSet());
+        final Set<FlowNode> iGateways = source.getIncomingFlows().map(inFlow -> searchBranchingGateway(originalFlow, inFlow, branchFlowsToInFlows)).collect(Collectors.toSet());
         return getSingleGatewayOrThrowException(iGateways);
     }
 
-    private ControlFlowNode getSingleGatewayOrThrowException(Set<ControlFlowNode> iGateways) {
+    private FlowNode getSingleGatewayOrThrowException(Set<FlowNode> iGateways) {
         if (iGateways.size() == 1) {
             return iGateways.iterator().next();
         } else {

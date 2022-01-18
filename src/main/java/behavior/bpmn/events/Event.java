@@ -1,8 +1,8 @@
 package behavior.bpmn.events;
 
-import behavior.bpmn.ControlFlowNode;
+import behavior.bpmn.FlowNode;
 
-public abstract class Event extends ControlFlowNode {
+public abstract class Event extends FlowNode {
 
     public Event(String name) {
         super(name);

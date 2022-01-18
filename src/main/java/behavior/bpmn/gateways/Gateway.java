@@ -1,8 +1,8 @@
 package behavior.bpmn.gateways;
 
-import behavior.bpmn.ControlFlowNode;
+import behavior.bpmn.FlowNode;
 
-public abstract class Gateway extends ControlFlowNode {
+public abstract class Gateway extends FlowNode {
     public Gateway(String name) {
         super(name);
     }

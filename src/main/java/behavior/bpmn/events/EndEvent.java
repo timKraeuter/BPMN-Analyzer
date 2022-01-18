@@ -1,6 +1,6 @@
 package behavior.bpmn.events;
 
-import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
+import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
 public class EndEvent extends Event {
 
@@ -26,7 +26,7 @@ public class EndEvent extends Event {
     }
 
     @Override
-    public void accept(ControlFlowNodeVisitor visitor) {
+    public void accept(FlowNodeVisitor visitor) {
         visitor.handle(this);
     }
 

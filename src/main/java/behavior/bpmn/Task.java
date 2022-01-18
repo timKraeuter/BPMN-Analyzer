@@ -1,14 +1,15 @@
 package behavior.bpmn;
 
-import behavior.bpmn.auxiliary.ControlFlowNodeVisitor;
+import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
-public class Task extends ControlFlowNode {
+// TODO: Split up into: ReceiveTask, SendTask and ServiceTask.
+public class Task extends FlowNode {
     public Task(String name) {
         super(name);
     }
 
     @Override
-    public void accept(ControlFlowNodeVisitor visitor) {
+    public void accept(FlowNodeVisitor visitor) {
         visitor.handle(this);
     }
 
