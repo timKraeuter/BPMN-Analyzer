@@ -12,6 +12,9 @@ public class MessageFlow {
     }
 
     public String getName() {
+        if (name.isEmpty()) {
+            return source.getName() + "_" + target.getName();
+        }
         return name;
     }
 

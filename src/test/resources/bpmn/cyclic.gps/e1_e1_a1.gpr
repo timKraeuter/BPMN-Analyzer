@@ -1,72 +1,87 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="e1_e1_a1" role="rule" edgeids="false" edgemode="directed">
-        <node id="n21">
-            <attr name="layout">
-                <string>62 89 0 0</string>
-            </attr>
-        </node>
-        <edge from="n21" to="n21">
-            <attr name="label">
-                <string>type:ProcessInstance</string>
-            </attr>
-        </edge>
-        <node id="n22">
-            <attr name="layout">
-                <string>382 160 0 0</string>
-            </attr>
-        </node>
-        <edge from="n22" to="n22">
-            <attr name="label">
-                <string>type:Running</string>
-            </attr>
-        </edge>
-        <node id="n23">
-            <attr name="layout">
-                <string>402 80 0 0</string>
-            </attr>
-        </node>
-        <edge from="n23" to="n23">
-            <attr name="label">
-                <string>type:Token</string>
-            </attr>
-        </edge>
-        <node id="n24">
-            <attr name="layout">
-                <string>582 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n24" to="n24">
-            <attr name="label">
-                <string>string:"a0_e1"</string>
-            </attr>
-        </edge>
         <node id="n25">
             <attr name="layout">
-                <string>582 72 0 0</string>
+                <string>62 85 0 0</string>
             </attr>
         </node>
         <edge from="n25" to="n25">
             <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n26">
+            <attr name="layout">
+                <string>392 232 0 0</string>
+            </attr>
+        </node>
+        <edge from="n26" to="n26">
+            <attr name="label">
+                <string>string:"cyclic"</string>
+            </attr>
+        </edge>
+        <node id="n27">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n27" to="n27">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n28">
+            <attr name="layout">
+                <string>442 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n28" to="n28">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n29">
+            <attr name="layout">
+                <string>637 224 0 0</string>
+            </attr>
+        </node>
+        <edge from="n29" to="n29">
+            <attr name="label">
+                <string>string:"a0_e1"</string>
+            </attr>
+        </edge>
+        <node id="n30">
+            <attr name="layout">
+                <string>637 144 0 0</string>
+            </attr>
+        </node>
+        <edge from="n30" to="n30">
+            <attr name="label">
                 <string>string:"e1_a1"</string>
             </attr>
         </edge>
-        <edge from="n23" to="n25">
+        <edge from="n28" to="n30">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n23" to="n24">
+        <edge from="n28" to="n29">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n21" to="n22">
+        <edge from="n25" to="n26">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n25" to="n27">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n21" to="n23">
+        <edge from="n25" to="n28">
             <attr name="label">
                 <string>tokens</string>
             </attr>

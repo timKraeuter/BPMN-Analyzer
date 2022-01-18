@@ -1,132 +1,147 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="i2_1" role="rule" edgeids="false" edgemode="directed">
-        <node id="n57">
+        <node id="n66">
             <attr name="layout">
-                <string>425 162 0 0</string>
+                <string>577 162 0 0</string>
             </attr>
         </node>
-        <edge from="n57" to="n57">
+        <edge from="n66" to="n66">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n57" to="n57">
+        <edge from="n66" to="n66">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n59">
+        <node id="n68">
             <attr name="layout">
-                <string>425 252 0 0</string>
+                <string>577 252 0 0</string>
             </attr>
         </node>
-        <edge from="n59" to="n59">
+        <edge from="n68" to="n68">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n59" to="n59">
+        <edge from="n68" to="n68">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n61">
+        <node id="n70">
             <attr name="layout">
-                <string>402 342 0 0</string>
+                <string>555 422 0 0</string>
             </attr>
         </node>
-        <edge from="n61" to="n61">
+        <edge from="n70" to="n70">
             <attr name="label">
                 <string>type:Decision</string>
             </attr>
         </edge>
-        <edge from="n61" to="n61">
+        <edge from="n70" to="n70">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n55">
+        <node id="n63">
             <attr name="layout">
-                <string>62 87 0 0</string>
+                <string>62 89 0 0</string>
             </attr>
         </node>
-        <edge from="n55" to="n55">
+        <edge from="n63" to="n63">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n56">
+        <node id="n64">
             <attr name="layout">
-                <string>402 72 0 0</string>
+                <string>412 72 0 0</string>
             </attr>
         </node>
-        <edge from="n56" to="n56">
+        <edge from="n64" to="n64">
+            <attr name="label">
+                <string>string:"inclusiveGatewayComplex"</string>
+            </attr>
+        </edge>
+        <node id="n65">
+            <attr name="layout">
+                <string>412 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n65" to="n65">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n58">
+        <node id="n67">
             <attr name="layout">
-                <string>617 162 0 0</string>
+                <string>912 162 0 0</string>
             </attr>
         </node>
-        <edge from="n58" to="n58">
+        <edge from="n67" to="n67">
             <attr name="label">
                 <string>string:"i2_end"</string>
             </attr>
         </edge>
-        <node id="n60">
+        <node id="n69">
             <attr name="layout">
-                <string>617 252 0 0</string>
+                <string>912 252 0 0</string>
             </attr>
         </node>
-        <edge from="n60" to="n60">
+        <edge from="n69" to="n69">
             <attr name="label">
                 <string>string:"A_i2"</string>
             </attr>
         </edge>
-        <node id="n62">
+        <node id="n71">
             <attr name="layout">
-                <string>617 342 0 0</string>
+                <string>912 422 0 0</string>
             </attr>
         </node>
-        <edge from="n62" to="n62">
+        <edge from="n71" to="n71">
             <attr name="label">
                 <string>string:"i1_A"</string>
             </attr>
         </edge>
-        <edge from="n55" to="n57">
+        <edge from="n63" to="n66">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n57" to="n58">
+        <edge from="n66" to="n67">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n55" to="n59">
+        <edge from="n63" to="n68">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n59" to="n60">
+        <edge from="n68" to="n69">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n55" to="n61">
+        <edge from="n63" to="n70">
             <attr name="label">
                 <string>del:decisions</string>
             </attr>
         </edge>
-        <edge from="n61" to="n62">
+        <edge from="n70" to="n71">
             <attr name="label">
                 <string>del:decision</string>
             </attr>
         </edge>
-        <edge from="n55" to="n56">
+        <edge from="n63" to="n64">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n63" to="n65">
             <attr name="label">
                 <string>state</string>
             </attr>

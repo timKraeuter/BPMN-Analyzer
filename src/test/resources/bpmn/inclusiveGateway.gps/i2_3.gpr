@@ -1,167 +1,182 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="i2_3" role="rule" edgeids="false" edgemode="directed">
-        <node id="n77">
+        <node id="n89">
             <attr name="layout">
-                <string>435 172 0 0</string>
+                <string>535 252 0 0</string>
             </attr>
         </node>
-        <edge from="n77" to="n77">
+        <edge from="n89" to="n89">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n77" to="n77">
+        <edge from="n89" to="n89">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n79">
+        <node id="n91">
             <attr name="layout">
-                <string>435 342 0 0</string>
+                <string>535 422 0 0</string>
             </attr>
         </node>
-        <edge from="n79" to="n79">
+        <edge from="n91" to="n91">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n79" to="n79">
+        <edge from="n91" to="n91">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n81">
+        <node id="n93">
             <attr name="layout">
-                <string>435 432 0 0</string>
+                <string>535 512 0 0</string>
             </attr>
         </node>
-        <edge from="n81" to="n81">
+        <edge from="n93" to="n93">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n81" to="n81">
+        <edge from="n93" to="n93">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n83">
+        <node id="n95">
             <attr name="layout">
-                <string>412 82 0 0</string>
+                <string>512 162 0 0</string>
             </attr>
         </node>
-        <edge from="n83" to="n83">
+        <edge from="n95" to="n95">
             <attr name="label">
                 <string>type:Decision</string>
             </attr>
         </edge>
-        <edge from="n83" to="n83">
+        <edge from="n95" to="n95">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n75">
+        <node id="n86">
             <attr name="layout">
-                <string>62 99 0 0</string>
+                <string>62 90 0 0</string>
             </attr>
         </node>
-        <edge from="n75" to="n75">
+        <edge from="n86" to="n86">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n76">
+        <node id="n87">
             <attr name="layout">
-                <string>412 252 0 0</string>
+                <string>422 332 0 0</string>
             </attr>
         </node>
-        <edge from="n76" to="n76">
+        <edge from="n87" to="n87">
+            <attr name="label">
+                <string>string:"inclusiveGateway"</string>
+            </attr>
+        </edge>
+        <node id="n88">
+            <attr name="layout">
+                <string>422 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n88" to="n88">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n78">
+        <node id="n90">
             <attr name="layout">
-                <string>627 172 0 0</string>
+                <string>817 252 0 0</string>
             </attr>
         </node>
-        <edge from="n78" to="n78">
+        <edge from="n90" to="n90">
             <attr name="label">
                 <string>string:"i2_end"</string>
             </attr>
         </edge>
-        <node id="n80">
+        <node id="n92">
             <attr name="layout">
-                <string>627 342 0 0</string>
+                <string>817 422 0 0</string>
             </attr>
         </node>
-        <edge from="n80" to="n80">
+        <edge from="n92" to="n92">
             <attr name="label">
                 <string>string:"A_i2"</string>
             </attr>
         </edge>
-        <node id="n82">
+        <node id="n94">
             <attr name="layout">
-                <string>627 432 0 0</string>
+                <string>817 512 0 0</string>
             </attr>
         </node>
-        <edge from="n82" to="n82">
+        <edge from="n94" to="n94">
             <attr name="label">
                 <string>string:"B_i2"</string>
             </attr>
         </edge>
-        <node id="n84">
+        <node id="n96">
             <attr name="layout">
-                <string>627 82 0 0</string>
+                <string>817 162 0 0</string>
             </attr>
         </node>
-        <edge from="n84" to="n84">
+        <edge from="n96" to="n96">
             <attr name="label">
                 <string>string:"i1_Ai1_B"</string>
             </attr>
         </edge>
-        <edge from="n75" to="n77">
+        <edge from="n86" to="n89">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n77" to="n78">
+        <edge from="n89" to="n90">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n75" to="n79">
+        <edge from="n86" to="n91">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n79" to="n80">
+        <edge from="n91" to="n92">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n75" to="n81">
+        <edge from="n86" to="n93">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n81" to="n82">
+        <edge from="n93" to="n94">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n75" to="n83">
+        <edge from="n86" to="n95">
             <attr name="label">
                 <string>del:decisions</string>
             </attr>
         </edge>
-        <edge from="n83" to="n84">
+        <edge from="n95" to="n96">
             <attr name="label">
                 <string>del:decision</string>
             </attr>
         </edge>
-        <edge from="n75" to="n76">
+        <edge from="n86" to="n87">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n86" to="n88">
             <attr name="label">
                 <string>state</string>
             </attr>

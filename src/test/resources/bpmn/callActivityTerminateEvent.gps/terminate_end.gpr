@@ -1,89 +1,104 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="terminate_end" role="rule" edgeids="false" edgemode="directed">
-        <node id="n56">
+        <node id="n66">
             <attr name="layout">
-                <string>392 172 0 0</string>
+                <string>402 172 0 0</string>
             </attr>
         </node>
-        <edge from="n56" to="n56">
+        <edge from="n66" to="n66">
             <attr name="label">
                 <string>type:Terminated</string>
             </attr>
         </edge>
-        <edge from="n56" to="n56">
+        <edge from="n66" to="n66">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n53">
+        <node id="n63">
             <attr name="layout">
-                <string>430 262 0 0</string>
+                <string>590 262 0 0</string>
             </attr>
         </node>
-        <edge from="n53" to="n53">
+        <edge from="n63" to="n63">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n53" to="n53">
+        <edge from="n63" to="n63">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n55">
+        <node id="n65">
             <attr name="layout">
-                <string>392 82 0 0</string>
+                <string>402 82 0 0</string>
             </attr>
         </node>
-        <edge from="n55" to="n55">
+        <edge from="n65" to="n65">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n55" to="n55">
+        <edge from="n65" to="n65">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n52">
+        <node id="n61">
             <attr name="layout">
-                <string>62 95 0 0</string>
+                <string>62 97 0 0</string>
             </attr>
         </node>
-        <edge from="n52" to="n52">
+        <edge from="n61" to="n61">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n54">
+        <node id="n62">
             <attr name="layout">
-                <string>637 262 0 0</string>
+                <string>402 342 0 0</string>
             </attr>
         </node>
-        <edge from="n54" to="n54">
+        <edge from="n62" to="n62">
+            <attr name="label">
+                <string>string:"callActivityTerminateEvent"</string>
+            </attr>
+        </edge>
+        <node id="n64">
+            <attr name="layout">
+                <string>947 262 0 0</string>
+            </attr>
+        </node>
+        <edge from="n64" to="n64">
             <attr name="label">
                 <string>string:"p1_terminate_end"</string>
             </attr>
         </edge>
-        <edge from="n52" to="n56">
+        <edge from="n61" to="n66">
             <attr name="label">
                 <string>new:state</string>
             </attr>
         </edge>
-        <edge from="n53" to="n54">
+        <edge from="n63" to="n64">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n52" to="n53">
+        <edge from="n61" to="n63">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n52" to="n55">
+        <edge from="n61" to="n65">
             <attr name="label">
                 <string>del:state</string>
+            </attr>
+        </edge>
+        <edge from="n61" to="n62">
+            <attr name="label">
+                <string>name</string>
             </attr>
         </edge>
     </graph>

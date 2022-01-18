@@ -24,6 +24,13 @@ public class BPMNCollaboration implements Behavior {
         return messageFlows;
     }
 
+    public Process getMessageFlowReceiver(MessageFlow flow) {
+        return this.getParticipants().stream()
+                   .filter(process -> process.getControlFlowNodes().anyMatch(flowNode -> flowNode == flow.getTarget()))
+                   .findFirst()
+                   .get(); // Must exist.
+    }
+
     @Override
     public String getName() {
         return name;

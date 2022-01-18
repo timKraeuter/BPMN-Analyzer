@@ -54,19 +54,14 @@
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <edge from="n0" to="n4">
+        <edge from="n0" to="n0">
             <attr name="label">
-                <string>decisions</string>
+                <string>string:name</string>
             </attr>
         </edge>
-        <edge from="n0" to="n13">
+        <edge from="n0" to="n5">
             <attr name="label">
-                <string>tokens</string>
-            </attr>
-        </edge>
-        <edge from="n0" to="n1">
-            <attr name="label">
-                <string>state</string>
+                <string>subprocess</string>
             </attr>
         </edge>
         <edge from="n0" to="n5">
@@ -74,9 +69,19 @@
                 <string>sub:</string>
             </attr>
         </edge>
-        <edge from="n0" to="n5">
+        <edge from="n0" to="n4">
             <attr name="label">
-                <string>subprocess</string>
+                <string>decisions</string>
+            </attr>
+        </edge>
+        <edge from="n0" to="n1">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n0" to="n13">
+            <attr name="label">
+                <string>tokens</string>
             </attr>
         </edge>
         <edge from="n1" to="n1">

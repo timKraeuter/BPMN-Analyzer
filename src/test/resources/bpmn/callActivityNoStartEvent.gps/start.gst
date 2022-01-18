@@ -3,7 +3,7 @@
     <graph id="callActivityNoStartEvent_start" role="rule" edgeids="false" edgemode="directed">
         <node id="n0">
             <attr name="layout">
-                <string>62 80 0 0</string>
+                <string>62 85 0 0</string>
             </attr>
         </node>
         <edge from="n0" to="n0">
@@ -13,45 +13,60 @@
         </edge>
         <node id="n1">
             <attr name="layout">
-                <string>382 72 0 0</string>
+                <string>392 152 0 0</string>
             </attr>
         </node>
         <edge from="n1" to="n1">
             <attr name="label">
-                <string>type:Running</string>
+                <string>string:"callActivityNoStartEvent"</string>
             </attr>
         </edge>
         <node id="n2">
             <attr name="layout">
-                <string>397 152 0 0</string>
+                <string>392 72 0 0</string>
             </attr>
         </node>
         <edge from="n2" to="n2">
             <attr name="label">
-                <string>type:Token</string>
+                <string>type:Running</string>
             </attr>
         </edge>
         <node id="n3">
             <attr name="layout">
-                <string>582 152 0 0</string>
+                <string>565 232 0 0</string>
             </attr>
         </node>
         <edge from="n3" to="n3">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n4">
+            <attr name="layout">
+                <string>907 232 0 0</string>
+            </attr>
+        </node>
+        <edge from="n4" to="n4">
             <attr name="label">
                 <string>string:"callActivityNoStartEvent_start"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">
             <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n0" to="n2">
+            <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n2" to="n3">
+        <edge from="n3" to="n4">
             <attr name="label">
                 <string>position</string>
             </attr>
         </edge>
-        <edge from="n0" to="n2">
+        <edge from="n0" to="n3">
             <attr name="label">
                 <string>tokens</string>
             </attr>

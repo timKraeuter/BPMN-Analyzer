@@ -1,62 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="end" role="rule" edgeids="false" edgemode="directed">
-        <node id="n141">
+        <node id="n166">
             <attr name="layout">
-                <string>397 162 0 0</string>
+                <string>527 242 0 0</string>
             </attr>
         </node>
-        <edge from="n141" to="n141">
+        <edge from="n166" to="n166">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n141" to="n141">
+        <edge from="n166" to="n166">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n140">
+        <node id="n164">
             <attr name="layout">
-                <string>62 80 0 0</string>
+                <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n140" to="n140">
+        <edge from="n164" to="n164">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n142">
+        <node id="n165">
             <attr name="layout">
-                <string>582 162 0 0</string>
+                <string>392 152 0 0</string>
             </attr>
         </node>
-        <edge from="n142" to="n142">
+        <edge from="n165" to="n165">
+            <attr name="label">
+                <string>string:"callActivityComplex"</string>
+            </attr>
+        </edge>
+        <node id="n167">
+            <attr name="layout">
+                <string>832 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n167" to="n167">
             <attr name="label">
                 <string>string:"B_end"</string>
             </attr>
         </edge>
-        <node id="n143">
+        <node id="n168">
             <attr name="layout">
-                <string>382 72 0 0</string>
+                <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n143" to="n143">
+        <edge from="n168" to="n168">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n141" to="n142">
+        <edge from="n166" to="n167">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n140" to="n141">
+        <edge from="n164" to="n166">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n140" to="n143">
+        <edge from="n164" to="n165">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n164" to="n168">
             <attr name="label">
                 <string>state</string>
             </attr>

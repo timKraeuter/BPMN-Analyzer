@@ -98,26 +98,27 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
     /**
      * See test case <a href="https://cawemo.com/share/e6a2eb93-b0e7-4c09-baa0-93ff18084d0e">"Message Events"</a> in cawemo.
      */
-//    @Test
+    @Test
     void testMessageEvents() throws IOException {
         final StartEvent start_p1 = new StartEvent("start_p1");
         IntermediateCatchEvent catch_p1 = new IntermediateCatchEvent("catch_p1", IntermediateEventType.MESSAGE);
         final EndEvent end_p1 = new EndEvent("end_p1", EndEventType.MESSAGE);
 
         final StartEvent start_p2 = new StartEvent("start_p2");
-        IntermediateCatchEvent throw_p2 = new IntermediateCatchEvent("throw_p2", IntermediateEventType.MESSAGE);
+        IntermediateThrowEvent throw_p2 = new IntermediateThrowEvent("throw_p2", IntermediateEventType.MESSAGE);
         IntermediateCatchEvent catch_p2 = new IntermediateCatchEvent("catch_p2", IntermediateEventType.MESSAGE);
         final EndEvent end_p2 = new EndEvent("end_p2");
 
         final String modelName = "messageEvents";
 
-        // TODO: Add message flows!
         final BPMNCollaboration p1Model = new BPMNCollaborationBuilder()
                 .name(modelName)
+                .messageFlow(throw_p2, catch_p1)
+                .messageFlow(end_p1, catch_p2)
                 .processName("p1")
                 .startEvent(start_p1)
-                .sequenceFlow(start_p1, catch_p2)
-                .sequenceFlow(catch_p2, end_p1)
+                .sequenceFlow(start_p1, catch_p1)
+                .sequenceFlow(catch_p1, end_p1)
                 .buildProcess()
                 .processName("p2")
                 .startEvent(start_p2)

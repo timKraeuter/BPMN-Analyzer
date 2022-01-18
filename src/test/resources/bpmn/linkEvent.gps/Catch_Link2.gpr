@@ -1,74 +1,114 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="Catch_Link2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n40">
+        <node id="n53">
             <attr name="layout">
-                <string>62 89 0 0</string>
+                <string>462 332 0 0</string>
             </attr>
         </node>
-        <edge from="n40" to="n40">
-            <attr name="label">
-                <string>type:ProcessInstance</string>
-            </attr>
-        </edge>
-        <node id="n41">
-            <attr name="layout">
-                <string>382 160 0 0</string>
-            </attr>
-        </node>
-        <edge from="n41" to="n41">
-            <attr name="label">
-                <string>type:Running</string>
-            </attr>
-        </edge>
-        <node id="n42">
-            <attr name="layout">
-                <string>402 80 0 0</string>
-            </attr>
-        </node>
-        <edge from="n42" to="n42">
+        <edge from="n53" to="n53">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n43">
-            <attr name="layout">
-                <string>582 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n43" to="n43">
+        <edge from="n53" to="n53">
             <attr name="label">
-                <string>string:"Link2"</string>
+                <string>new:</string>
             </attr>
         </edge>
-        <node id="n44">
+        <node id="n55">
             <attr name="layout">
-                <string>582 72 0 0</string>
+                <string>462 242 0 0</string>
             </attr>
         </node>
-        <edge from="n44" to="n44">
+        <edge from="n55" to="n55">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n55" to="n55">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n50">
+            <attr name="layout">
+                <string>62 87 0 0</string>
+            </attr>
+        </node>
+        <edge from="n50" to="n50">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n51">
+            <attr name="layout">
+                <string>402 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n51" to="n51">
+            <attr name="label">
+                <string>string:"linkEvent"</string>
+            </attr>
+        </edge>
+        <node id="n52">
+            <attr name="layout">
+                <string>402 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n52" to="n52">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n54">
+            <attr name="layout">
+                <string>692 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n54" to="n54">
             <attr name="label">
                 <string>string:"Link2_p2"</string>
             </attr>
         </edge>
-        <edge from="n42" to="n44">
+        <node id="n56">
+            <attr name="layout">
+                <string>692 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n56" to="n56">
+            <attr name="label">
+                <string>string:"Link2"</string>
+            </attr>
+        </edge>
+        <edge from="n50" to="n53">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n53" to="n54">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n42" to="n43">
+        <edge from="n50" to="n55">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n55" to="n56">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n40" to="n41">
+        <edge from="n50" to="n51">
             <attr name="label">
-                <string>state</string>
+                <string>name</string>
             </attr>
         </edge>
-        <edge from="n40" to="n42">
+        <edge from="n50" to="n52">
             <attr name="label">
-                <string>tokens</string>
+                <string>state</string>
             </attr>
         </edge>
     </graph>
