@@ -3,7 +3,7 @@ package groove.behaviorTransformer;
 import behavior.Behavior;
 import behavior.BehaviorVisitor;
 import behavior.activity.ActivityDiagram;
-import behavior.bpmn.BPMNProcessModel;
+import behavior.bpmn.BPMNProcess;
 import behavior.fsm.FiniteStateMachine;
 import behavior.petriNet.PetriNet;
 import behavior.piCalculus.NamedPiProcess;
@@ -32,6 +32,53 @@ import java.util.stream.Stream;
 public class BehaviorToGrooveTransformer {
     static final String START_GST = "/start.gst";
     static final String START = "start";
+
+    static Gxl createGxlFromGrooveGraph(GrooveGraph graph, boolean doLayout) {
+        String gxlGraphName = String.format("%s_%s", graph.getName(), START);
+        Gxl gxl = new Gxl();
+        Graph gxlGraph = GrooveGxlHelper.createStandardGxlGraph(gxlGraphName, gxl);
+
+        Map<String, String> idToNodeLabel = new HashMap<>();
+        Map<String, Node> grooveNodeIdToGxlNode = new HashMap<>();
+
+        graph.nodes().forEach(node -> {
+            Node gxlNode = GrooveGxlHelper.createNodeWithName(node.getId(), node.getName(), gxlGraph);
+            // Add flags
+            node.getFlags().forEach(flag -> GrooveGxlHelper.addFlagToNode(gxlGraph, gxlNode, flag));
+            // Add data nodes/attributes
+            node.getAttributes().forEach(
+                    (name, value) -> addNodeAttribute(gxlGraph, idToNodeLabel, gxlNode, name, value));
+
+            idToNodeLabel.put(node.getId(), node.getName());
+            grooveNodeIdToGxlNode.put(node.getId(), gxlNode);
+        });
+        graph.edges().forEach(edge -> GrooveGxlHelper.createEdgeWithName(
+                gxlGraph,
+                grooveNodeIdToGxlNode.get(edge.getSourceNode().getId()),
+                grooveNodeIdToGxlNode.get(edge.getTargetNode().getId()),
+                edge.getName()));
+
+        if (doLayout) {
+            GrooveGxlHelper.layoutGraph(gxlGraph, idToNodeLabel);
+        }
+        return gxl;
+    }
+
+    private static void addNodeAttribute(
+            Graph graph,
+            Map<String, String> idToNodeLabel,
+            Node attributeHolder,
+            String attributeName,
+            Value<?> attributeValue) {
+        String attributeNodeName = String.format("%s:%s", attributeValue.getTypeName(), attributeValue.getValue());
+        Node dataNode = GrooveGxlHelper.createNodeWithName(
+                GrooveNode.getNextNodeId(),
+                attributeNodeName,
+                graph);
+        GrooveGxlHelper.createEdgeWithName(graph, attributeHolder, dataNode, attributeName);
+
+        idToNodeLabel.put(dataNode.getId(), attributeNodeName);
+    }
 
     void generateGrooveGrammar(
             File grooveFolder,
@@ -62,11 +109,11 @@ public class BehaviorToGrooveTransformer {
             }
 
             @Override
-            public void handle(BPMNProcessModel bpmnProcessModel) {
+            public void handle(BPMNProcess bpmnProcess) {
                 BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer();
 
-                startGraphs.add(transformer.generateStartGraph(bpmnProcessModel, true));
-                transformer.generateRules(bpmnProcessModel, true).forEach(rule -> allRules.put(rule.getRuleName(), rule));
+                startGraphs.add(transformer.generateStartGraph(bpmnProcess, true));
+                transformer.generateRules(bpmnProcess, true).forEach(rule -> allRules.put(rule.getRuleName(), rule));
             }
 
             @Override
@@ -108,7 +155,7 @@ public class BehaviorToGrooveTransformer {
 
         nameToToBeSynchedRuleNames.forEach((newRuleName, ruleNames) -> {
             Set<GrooveGraphRule> rules = ruleNames.stream().map(indexedRules::get)
-                    .collect(Collectors.toSet());
+                                                  .collect(Collectors.toSet());
             rules.forEach(unsynchedRules::remove);
             nameToToBeSynchedRules.put(newRuleName, rules);
         });
@@ -124,7 +171,7 @@ public class BehaviorToGrooveTransformer {
 
     private void mergeAndWriteStartGraphs(File graphGrammarSubFolder, Set<GrooveGraph> startGraphs) {
         Optional<GrooveGraph> startGraph = startGraphs.stream()
-                .reduce((graph, graph2) -> graph.union(graph2, (name1, name2) -> name1));
+                                                      .reduce((graph, graph2) -> graph.union(graph2, (name1, name2) -> name1));
         startGraph.ifPresent(graph -> GrooveTransformer.writeStartGraph(graphGrammarSubFolder, graph, true));
     }
 
@@ -141,8 +188,8 @@ public class BehaviorToGrooveTransformer {
             }
 
             @Override
-            public void handle(BPMNProcessModel bpmnProcessModel) {
-                BehaviorToGrooveTransformer.this.generateGrooveGrammarForBPMNProcessModel(bpmnProcessModel, targetFolder, addPrefix);
+            public void handle(BPMNProcess bpmnProcess) {
+                BehaviorToGrooveTransformer.this.generateGrooveGrammarForBPMNProcessModel(bpmnProcess, targetFolder, addPrefix);
             }
 
             @Override
@@ -184,14 +231,14 @@ public class BehaviorToGrooveTransformer {
         this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
     }
 
-    private void generateGrooveGrammarForBPMNProcessModel(BPMNProcessModel bpmnProcessModel, File grooveDir, boolean addPrefix) {
-        File graphGrammarSubFolder = this.makeSubFolder(bpmnProcessModel, grooveDir);
+    private void generateGrooveGrammarForBPMNProcessModel(BPMNProcess bpmnProcess, File grooveDir, boolean addPrefix) {
+        File graphGrammarSubFolder = this.makeSubFolder(bpmnProcess, grooveDir);
         BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer();
 
         // Generate start graph
-        transformer.generateAndWriteStartGraph(bpmnProcessModel, addPrefix, graphGrammarSubFolder);
+        transformer.generateAndWriteStartGraph(bpmnProcess, addPrefix, graphGrammarSubFolder);
         // Generate rules
-        transformer.generateAndWriteRules(bpmnProcessModel, addPrefix, graphGrammarSubFolder);
+        transformer.generateAndWriteRules(bpmnProcess, addPrefix, graphGrammarSubFolder);
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
         additionalProperties.put("typeGraph", "type");
@@ -257,55 +304,8 @@ public class BehaviorToGrooveTransformer {
 
     private String getAdditionalProperties(Map<String, String> additionalProperties) {
         return additionalProperties.entrySet().stream()
-                .reduce("",
-                        (prop1, prop2) -> prop1 + prop2 + "\n",
-                        (key, value) -> key + "=" + value);
-    }
-
-    static Gxl createGxlFromGrooveGraph(GrooveGraph graph, boolean doLayout) {
-        String gxlGraphName = String.format("%s_%s", graph.getName(), START);
-        Gxl gxl = new Gxl();
-        Graph gxlGraph = GrooveGxlHelper.createStandardGxlGraph(gxlGraphName, gxl);
-
-        Map<String, String> idToNodeLabel = new HashMap<>();
-        Map<String, Node> grooveNodeIdToGxlNode = new HashMap<>();
-
-        graph.nodes().forEach(node -> {
-            Node gxlNode = GrooveGxlHelper.createNodeWithName(node.getId(), node.getName(), gxlGraph);
-            // Add flags
-            node.getFlags().forEach(flag -> GrooveGxlHelper.addFlagToNode(gxlGraph, gxlNode, flag));
-            // Add data nodes/attributes
-            node.getAttributes().forEach(
-                    (name, value) -> addNodeAttribute(gxlGraph, idToNodeLabel, gxlNode, name, value));
-
-            idToNodeLabel.put(node.getId(), node.getName());
-            grooveNodeIdToGxlNode.put(node.getId(), gxlNode);
-        });
-        graph.edges().forEach(edge -> GrooveGxlHelper.createEdgeWithName(
-                gxlGraph,
-                grooveNodeIdToGxlNode.get(edge.getSourceNode().getId()),
-                grooveNodeIdToGxlNode.get(edge.getTargetNode().getId()),
-                edge.getName()));
-
-        if (doLayout) {
-            GrooveGxlHelper.layoutGraph(gxlGraph, idToNodeLabel);
-        }
-        return gxl;
-    }
-
-    private static void addNodeAttribute(
-            Graph graph,
-            Map<String, String> idToNodeLabel,
-            Node attributeHolder,
-            String attributeName,
-            Value<?> attributeValue) {
-        String attributeNodeName = String.format("%s:%s", attributeValue.getTypeName(), attributeValue.getValue());
-        Node dataNode = GrooveGxlHelper.createNodeWithName(
-                GrooveNode.getNextNodeId(),
-                attributeNodeName,
-                graph);
-        GrooveGxlHelper.createEdgeWithName(graph, attributeHolder, dataNode, attributeName);
-
-        idToNodeLabel.put(dataNode.getId(), attributeNodeName);
+                                   .reduce("",
+                                           (prop1, prop2) -> prop1 + prop2 + "\n",
+                                           (key, value) -> key + "=" + value);
     }
 }

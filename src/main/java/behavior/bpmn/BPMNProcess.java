@@ -8,13 +8,13 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class BPMNProcessModel implements Behavior {
+public class BPMNProcess implements Behavior {
     // TODO: Add pools somehow.
     private final String name;
     private final StartEvent startEvent;
     private final Set<SequenceFlow> sequenceFlows;
 
-    public BPMNProcessModel(String name, StartEvent startEvent, Set<SequenceFlow> sequenceFlows) {
+    public BPMNProcess(String name, StartEvent startEvent, Set<SequenceFlow> sequenceFlows) {
         this.name = name;
         this.startEvent = startEvent;
         this.sequenceFlows = sequenceFlows;

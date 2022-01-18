@@ -1,7 +1,7 @@
 package groove.behaviorTransformer.bpmn;
 
-import behavior.bpmn.BPMNProcessModel;
-import behavior.bpmn.Task;
+import behavior.bpmn.BPMNProcess;
+import behavior.bpmn.activities.Task;
 import behavior.bpmn.auxiliary.BPMNProcessBuilder;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.StartEvent;
@@ -29,7 +29,7 @@ public class BPMNToGrooveComplexDiagramsTest extends BPMNToGrooveTestBase {
         final ExclusiveGateway e4 = new ExclusiveGateway("e4");
 
         final String modelName = "cyclic";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, a0)

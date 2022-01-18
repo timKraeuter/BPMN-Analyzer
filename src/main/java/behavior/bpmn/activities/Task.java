@@ -1,9 +1,9 @@
-package behavior.bpmn;
+package behavior.bpmn.activities;
 
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
 // TODO: Split up into: ReceiveTask, SendTask and ServiceTask.
-public class Task extends FlowNode {
+public class Task extends Activity {
     public Task(String name) {
         super(name);
     }
@@ -14,18 +14,7 @@ public class Task extends FlowNode {
     }
 
     @Override
-    public boolean isInclusiveGateway() {
-        return false;
-    }
-
-    @Override
     public boolean isTask() {
         return true;
     }
-
-    @Override
-    public boolean isGateway() {
-        return false;
-    }
-
 }

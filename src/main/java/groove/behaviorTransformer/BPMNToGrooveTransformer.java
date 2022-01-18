@@ -1,6 +1,10 @@
 package groove.behaviorTransformer;
 
-import behavior.bpmn.*;
+import behavior.bpmn.BPMNProcess;
+import behavior.bpmn.FlowNode;
+import behavior.bpmn.SequenceFlow;
+import behavior.bpmn.activities.CallActivity;
+import behavior.bpmn.activities.Task;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.IntermediateCatchEvent;
@@ -23,7 +27,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessModel> {
+public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcess> {
     public static final String THROW = "Throw_";
     public static final String CATCH = "Catch_";
     private static final String FIXED_RULES_AND_TYPE_GRAPH_DIR = "/BPMNFixedRulesAndTypeGraph";
@@ -42,7 +46,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     private static final String SUBPROCESS = "subprocess";
 
     @Override
-    public void generateAndWriteRulesFurther(BPMNProcessModel model, boolean addPrefix, File targetFolder) {
+    public void generateAndWriteRulesFurther(BPMNProcess model, boolean addPrefix, File targetFolder) {
         this.copyTypeGraphAndFixedRules(targetFolder);
     }
 
@@ -56,23 +60,23 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     }
 
     @Override
-    public GrooveGraph generateStartGraph(BPMNProcessModel bpmnProcessModel, boolean addPrefix) {
+    public GrooveGraph generateStartGraph(BPMNProcess bpmnProcess, boolean addPrefix) {
         // TODO: Add prefix if needed!
-        GrooveGraphBuilder startGraphBuilder = new GrooveGraphBuilder().setName(bpmnProcessModel.getName());
+        GrooveGraphBuilder startGraphBuilder = new GrooveGraphBuilder().setName(bpmnProcess.getName());
         GrooveNode processInstance = new GrooveNode(TYPE_PROCESS_INSTANCE);
         GrooveNode running = new GrooveNode(TYPE_RUNNING);
         startGraphBuilder.addEdge(STATE, processInstance, running);
 
         GrooveNode startToken = new GrooveNode(TYPE_TOKEN);
-        GrooveNode tokenName = new GrooveNode(this.createStringNodeLabel(getStartEventTokenName(bpmnProcessModel)));
+        GrooveNode tokenName = new GrooveNode(this.createStringNodeLabel(getStartEventTokenName(bpmnProcess)));
         startGraphBuilder.addEdge(POSITION, startToken, tokenName);
         startGraphBuilder.addEdge(TOKENS, processInstance, startToken);
 
         return startGraphBuilder.build();
     }
 
-    private String getStartEventTokenName(BPMNProcessModel bpmnProcessModel) {
-        return bpmnProcessModel.getName() + "_" + bpmnProcessModel.getStartEvent().getName();
+    private String getStartEventTokenName(BPMNProcess bpmnProcess) {
+        return bpmnProcess.getName() + "_" + bpmnProcess.getStartEvent().getName();
     }
 
     private void updateTokenPositionWhenRunning(String oldPosition, String newPosition, GrooveRuleBuilder ruleBuilder) {
@@ -97,17 +101,17 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
     }
 
     @Override
-    public Stream<GrooveGraphRule> generateRules(BPMNProcessModel bpmnProcessModel, boolean addPrefix) {
-        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(bpmnProcessModel, addPrefix);
-        Set<BPMNProcessModel> visitedProcessModels = Sets.newHashSet(bpmnProcessModel);
+    public Stream<GrooveGraphRule> generateRules(BPMNProcess bpmnProcess, boolean addPrefix) {
+        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(bpmnProcess, addPrefix);
+        Set<BPMNProcess> visitedProcessModels = Sets.newHashSet(bpmnProcess);
 
-        generateRules(bpmnProcessModel, ruleBuilder, visitedProcessModels);
+        generateRules(bpmnProcess, ruleBuilder, visitedProcessModels);
 
         return ruleBuilder.getRules();
     }
 
-    private void generateRules(BPMNProcessModel bpmnProcessModel, GrooveRuleBuilder ruleBuilder, Set<BPMNProcessModel> visitedProcessModels) {
-        bpmnProcessModel.getControlFlowNodes().forEach(node -> node.accept(new FlowNodeVisitor() {
+    private void generateRules(BPMNProcess bpmnProcess, GrooveRuleBuilder ruleBuilder, Set<BPMNProcess> visitedProcessModels) {
+        bpmnProcess.getControlFlowNodes().forEach(node -> node.accept(new FlowNodeVisitor() {
             @Override
             public void handle(StartEvent startEvent) {
                 if (startEvent.getOutgoingFlows().count() != 1) {
@@ -116,7 +120,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNProcessMod
                 final String outgoingFlowID = startEvent.getOutgoingFlows().findFirst().get().getID();
                 ruleBuilder.startRule(startEvent.getName());
                 BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
-                        getStartEventTokenName(bpmnProcessModel),
+                        getStartEventTokenName(bpmnProcess),
                         outgoingFlowID,
                         ruleBuilder);
                 ruleBuilder.buildRule();

@@ -1,7 +1,7 @@
 package behavior.bpmn.auxiliary;
 
-import behavior.bpmn.CallActivity;
-import behavior.bpmn.Task;
+import behavior.bpmn.activities.CallActivity;
+import behavior.bpmn.activities.Task;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.IntermediateCatchEvent;
 import behavior.bpmn.events.IntermediateThrowEvent;

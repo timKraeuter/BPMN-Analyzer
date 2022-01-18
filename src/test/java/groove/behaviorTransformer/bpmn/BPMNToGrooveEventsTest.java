@@ -1,7 +1,7 @@
 package groove.behaviorTransformer.bpmn;
 
-import behavior.bpmn.BPMNProcessModel;
-import behavior.bpmn.Task;
+import behavior.bpmn.BPMNProcess;
+import behavior.bpmn.activities.Task;
 import behavior.bpmn.auxiliary.BPMNProcessBuilder;
 import behavior.bpmn.events.*;
 import behavior.bpmn.gateways.ParallelGateway;
@@ -24,7 +24,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
         final EndEvent end2 = new EndEvent("end2");
 
         final String modelName = "twoEndEvents";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, p1)
@@ -52,7 +52,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "linkEvent";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, p1)
@@ -79,7 +79,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
         final EndEvent terminate_end = new EndEvent("terminate_end", EndEventType.TERMINATION);
 
         final String modelName = "terminateEndEvent";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, p1)
@@ -108,13 +108,13 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
 
         final String modelName = "messageEvents";
 
-        final BPMNProcessModel p1Model = new BPMNProcessBuilder()
+        final BPMNProcess p1Model = new BPMNProcessBuilder()
                 .name("p1")
                 .startEvent(start_p1)
                 .sequenceFlow(start_p1, catch_p2)
                 .sequenceFlow(catch_p2, end_p1)
                 .build();
-        final BPMNProcessModel p2Model = new BPMNProcessBuilder()
+        final BPMNProcess p2Model = new BPMNProcessBuilder()
                 .name("p2")
                 .startEvent(start_p2)
                 .sequenceFlow(start_p2, throw_p2)

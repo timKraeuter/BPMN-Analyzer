@@ -1,6 +1,6 @@
 package behavior.bpmn.auxiliary;
 
-import behavior.bpmn.BPMNProcessModel;
+import behavior.bpmn.BPMNProcess;
 import behavior.bpmn.FlowNode;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.events.StartEvent;
@@ -40,7 +40,7 @@ public class BPMNProcessBuilder {
         return sequenceFlow("", from, to);
     }
 
-    public BPMNProcessModel build() {
-        return new BPMNProcessModel(this.name, this.startEvent, this.sequenceFlows);
+    public BPMNProcess build() {
+        return new BPMNProcess(this.name, this.startEvent, this.sequenceFlows);
     }
 }

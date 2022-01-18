@@ -1,7 +1,7 @@
 package groove.behaviorTransformer.bpmn;
 
-import behavior.bpmn.BPMNProcessModel;
-import behavior.bpmn.Task;
+import behavior.bpmn.BPMNProcess;
+import behavior.bpmn.activities.Task;
 import behavior.bpmn.auxiliary.BPMNProcessBuilder;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.StartEvent;
@@ -31,7 +31,7 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
         Task a3 = new Task("a3");
 
         final String modelName = "exclusiveGateway";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, a0)
@@ -66,7 +66,7 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "parallelGateway";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, a0)
@@ -100,7 +100,7 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "parallelGateway_complex";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, a0)
@@ -132,7 +132,7 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "inclusiveGateway";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, i1)
@@ -162,7 +162,7 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "inclusiveGatewayComplex";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, i1)

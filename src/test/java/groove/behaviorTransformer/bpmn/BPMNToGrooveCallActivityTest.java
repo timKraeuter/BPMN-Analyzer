@@ -1,8 +1,8 @@
 package groove.behaviorTransformer.bpmn;
 
-import behavior.bpmn.BPMNProcessModel;
-import behavior.bpmn.CallActivity;
-import behavior.bpmn.Task;
+import behavior.bpmn.BPMNProcess;
+import behavior.bpmn.activities.CallActivity;
+import behavior.bpmn.activities.Task;
 import behavior.bpmn.auxiliary.BPMNProcessBuilder;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.EndEventType;
@@ -28,7 +28,7 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "callActivity";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, a)
@@ -52,7 +52,7 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "callActivityImplicitGateways";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, a)
@@ -78,7 +78,7 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
         final EndEvent terminate_end = new EndEvent("terminate_end", EndEventType.TERMINATION);
 
         final String modelName = "callActivityTerminateEvent";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, p1)
@@ -90,7 +90,7 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
         this.checkGrooveGeneration(processModel);
     }
 
-    private BPMNProcessModel buildSimpleSubProcess() {
+    private BPMNProcess buildSimpleSubProcess() {
         // TODO: Possible name crashes in rules!
         final StartEvent start = new StartEvent("start_sub");
         final Task a = new Task("Subactivity");
@@ -114,7 +114,7 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
         final EndEvent terminate_end = new EndEvent("terminate_end", EndEventType.TERMINATION);
 
         final String modelName = "callActivityNoStartEvent";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, subprocess)
@@ -124,7 +124,7 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
         this.checkGrooveGeneration(processModel);
     }
 
-    private BPMNProcessModel buildNoStartEventSubProcess() {
+    private BPMNProcess buildNoStartEventSubProcess() {
         final Task a = new Task("A");
         final EndEvent endA = new EndEvent("endA");
 
@@ -155,7 +155,7 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "callActivityComplex";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, a)
@@ -167,7 +167,7 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
         this.checkGrooveGeneration(processModel);
     }
 
-    private BPMNProcessModel buildComplexSubProcess() {
+    private BPMNProcess buildComplexSubProcess() {
         // TODO: Possible name crashes in rules!
         final StartEvent start = new StartEvent("start_sub");
         ExclusiveGateway e1 = new ExclusiveGateway("e1");

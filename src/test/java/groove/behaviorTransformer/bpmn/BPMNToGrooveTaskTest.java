@@ -1,7 +1,7 @@
 package groove.behaviorTransformer.bpmn;
 
-import behavior.bpmn.BPMNProcessModel;
-import behavior.bpmn.Task;
+import behavior.bpmn.BPMNProcess;
+import behavior.bpmn.activities.Task;
 import behavior.bpmn.auxiliary.BPMNProcessBuilder;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.StartEvent;
@@ -24,7 +24,7 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "sequentialActivities";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, a)
@@ -48,7 +48,7 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "implicitExclusiveGateway";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, e1)
@@ -73,7 +73,7 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "implicitParallelGateway";
-        final BPMNProcessModel processModel = new BPMNProcessBuilder()
+        final BPMNProcess processModel = new BPMNProcessBuilder()
                 .name(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, a)
