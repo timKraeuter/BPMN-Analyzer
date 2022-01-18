@@ -12,7 +12,7 @@ import java.io.IOException;
 class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
 
     /**
-     * See test case <a href="https://cawemo.com/share/e1777355-d0cc-45d0-8f01-87d08ba2b5ef">"[EXT]"</a> in cawemo.
+     * See test case <a href="https://cawemo.com/share/e1777355-d0cc-45d0-8f01-87d08ba2b5ef">"Two End Events"</a> in cawemo.
      */
     @Test
     void testTwoEndEvents() throws IOException {
