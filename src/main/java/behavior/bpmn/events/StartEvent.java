@@ -3,8 +3,15 @@ package behavior.bpmn.events;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
 public class StartEvent extends CatchEvent {
+    private StartEventType type;
+
     public StartEvent(String name) {
+        this(name, StartEventType.NONE);
+    }
+
+    public StartEvent(String name, StartEventType type) {
         super(name);
+        this.type = type;
     }
 
     @Override
@@ -12,4 +19,7 @@ public class StartEvent extends CatchEvent {
         visitor.handle(this);
     }
 
+    public StartEventType getType() {
+        return type;
+    }
 }

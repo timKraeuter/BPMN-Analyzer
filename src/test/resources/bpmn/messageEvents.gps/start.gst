@@ -101,6 +101,56 @@
                 <string>string:"p2_start_p2"</string>
             </attr>
         </edge>
+        <node id="n10">
+            <attr name="layout">
+                <string>62 565 0 0</string>
+            </attr>
+        </node>
+        <edge from="n10" to="n10">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n11">
+            <attr name="layout">
+                <string>392 712 0 0</string>
+            </attr>
+        </node>
+        <edge from="n11" to="n11">
+            <attr name="label">
+                <string>string:"p3"</string>
+            </attr>
+        </edge>
+        <node id="n12">
+            <attr name="layout">
+                <string>392 552 0 0</string>
+            </attr>
+        </node>
+        <edge from="n12" to="n12">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n13">
+            <attr name="layout">
+                <string>407 632 0 0</string>
+            </attr>
+        </node>
+        <edge from="n13" to="n13">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n14">
+            <attr name="layout">
+                <string>592 632 0 0</string>
+            </attr>
+        </node>
+        <edge from="n14" to="n14">
+            <attr name="label">
+                <string>string:"p3_start_p3"</string>
+            </attr>
+        </edge>
         <edge from="n0" to="n1">
             <attr name="label">
                 <string>name</string>
@@ -137,6 +187,26 @@
             </attr>
         </edge>
         <edge from="n5" to="n8">
+            <attr name="label">
+                <string>tokens</string>
+            </attr>
+        </edge>
+        <edge from="n10" to="n11">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n10" to="n12">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n13" to="n14">
+            <attr name="label">
+                <string>position</string>
+            </attr>
+        </edge>
+        <edge from="n10" to="n13">
             <attr name="label">
                 <string>tokens</string>
             </attr>

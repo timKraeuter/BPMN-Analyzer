@@ -107,7 +107,10 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
         final StartEvent start_p2 = new StartEvent("start_p2");
         IntermediateThrowEvent throw_p2 = new IntermediateThrowEvent("throw_p2", IntermediateEventType.MESSAGE);
         IntermediateCatchEvent catch_p2 = new IntermediateCatchEvent("catch_p2", IntermediateEventType.MESSAGE);
-        final EndEvent end_p2 = new EndEvent("end_p2");
+        final EndEvent end_p2 = new EndEvent("end_p2", EndEventType.MESSAGE);
+
+        final StartEvent start_p3 = new StartEvent("start_p3", StartEventType.MESSAGE);
+        final EndEvent end_p3 = new EndEvent("end_p3");
 
         final String modelName = "messageEvents";
 
@@ -115,6 +118,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
                 .name(modelName)
                 .messageFlow(throw_p2, catch_p1)
                 .messageFlow(end_p1, catch_p2)
+                .messageFlow(end_p2, start_p3)
                 .processName("p1")
                 .startEvent(start_p1)
                 .sequenceFlow(start_p1, catch_p1)
@@ -125,6 +129,10 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(start_p2, throw_p2)
                 .sequenceFlow(throw_p2, catch_p2)
                 .sequenceFlow(catch_p2, end_p2)
+                .buildProcess()
+                .processName("p3")
+                .startEvent(start_p3)
+                .sequenceFlow(start_p3, end_p3)
                 .build();
 
         this.checkGrooveGeneration(p1Model);
