@@ -99,7 +99,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
     void testMessageEvents() throws IOException {
         final StartEvent start_p1 = new StartEvent("start_p1");
         IntermediateCatchEvent catch_p1 = new IntermediateCatchEvent("catch_p1", IntermediateEventType.MESSAGE);
-        final EndEvent end_p1 = new EndEvent("end_p1", EndEventType.MESSAGE_THROW);
+        final EndEvent end_p1 = new EndEvent("end_p1", EndEventType.MESSAGE);
 
         final StartEvent start_p2 = new StartEvent("start_p2");
         IntermediateCatchEvent throw_p2 = new IntermediateCatchEvent("throw_p2", IntermediateEventType.MESSAGE);

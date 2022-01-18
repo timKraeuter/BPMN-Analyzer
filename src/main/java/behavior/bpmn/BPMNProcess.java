@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 public class BPMNProcess implements Behavior {
     // TODO: Add pools somehow.
+    // has a set of lanes according to bpmn
     private final String name;
     private final StartEvent startEvent;
     private final Set<SequenceFlow> sequenceFlows;

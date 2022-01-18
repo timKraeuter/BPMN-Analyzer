@@ -2,7 +2,7 @@ package behavior.bpmn.events;
 
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
-public class StartEvent extends Event {
+public class StartEvent extends CatchEvent {
     public StartEvent(String name) {
         super(name);
     }

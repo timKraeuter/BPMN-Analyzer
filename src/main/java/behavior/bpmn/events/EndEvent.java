@@ -2,7 +2,7 @@ package behavior.bpmn.events;
 
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
-public class EndEvent extends Event {
+public class EndEvent extends ThrowEvent {
 
     private final EndEventType type;
 
