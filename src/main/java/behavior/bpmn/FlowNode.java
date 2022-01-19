@@ -39,6 +39,8 @@ public abstract class FlowNode {
 
     public abstract boolean isInclusiveGateway();
 
+    public abstract boolean isInstantiateReceiveTask();
+
     public abstract boolean isTask();
 
     public abstract boolean isGateway();

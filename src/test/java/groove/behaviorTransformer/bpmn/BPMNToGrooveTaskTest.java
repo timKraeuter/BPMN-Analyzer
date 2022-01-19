@@ -130,4 +130,33 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
 
         this.checkGrooveGeneration(collaboration);
     }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/e76c1763-4842-493c-bebb-cfa41e5abb09">"Instantiate Receive Task"</a> in cawemo.
+     */
+    @Test
+    void testInstantiateReceiveTask() throws IOException {
+        ReceiveTask a = new ReceiveTask("A", true);
+        Task b = new Task("B");
+        EndEvent end_1 = new EndEvent("end_1");
+
+        final StartEvent start_p2 = new StartEvent("start_p2");
+        final EndEvent end_2 = new EndEvent("end_2", EndEventType.MESSAGE);
+
+
+        final String modelName = "instantiateReceiveTask";
+        final BPMNCollaboration collaboration = new BPMNCollaborationBuilder()
+                .name(modelName)
+                .messageFlow(end_2, a)
+                .processName("process1")
+                .sequenceFlow(a, b)
+                .sequenceFlow(b, end_1)
+                .buildProcess()
+                .processName("process2")
+                .startEvent(start_p2)
+                .sequenceFlow(start_p2, end_2)
+                .build();
+
+        this.checkGrooveGeneration(collaboration);
+    }
 }

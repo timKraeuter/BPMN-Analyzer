@@ -22,6 +22,11 @@ public class CallActivity extends Activity {
     }
 
     @Override
+    public boolean isInstantiateReceiveTask() {
+        return false;
+    }
+
+    @Override
     public boolean isTask() {
         return false;
     }

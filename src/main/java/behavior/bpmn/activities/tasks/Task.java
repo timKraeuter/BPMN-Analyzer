@@ -14,4 +14,9 @@ public class Task extends AbstractTask {
     public void accept(FlowNodeVisitor visitor) {
         visitor.handle(this);
     }
+
+    @Override
+    public boolean isInstantiateReceiveTask() {
+        return false;
+    }
 }

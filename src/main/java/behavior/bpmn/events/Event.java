@@ -22,4 +22,9 @@ public abstract class Event extends FlowNode {
     public boolean isGateway() {
         return false;
     }
+
+    @Override
+    public boolean isInstantiateReceiveTask() {
+        return false;
+    }
 }
