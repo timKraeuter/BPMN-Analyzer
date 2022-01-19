@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="Catch_EReceive_1" role="rule" edgeids="false" edgemode="directed">
+        <node id="n100">
+            <attr name="layout">
+                <string>427 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n100" to="n100">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n100" to="n100">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n102">
+            <attr name="layout">
+                <string>427 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n102" to="n102">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n102" to="n102">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n104">
+            <attr name="layout">
+                <string>412 422 0 0</string>
+            </attr>
+        </node>
+        <edge from="n104" to="n104">
+            <attr name="label">
+                <string>type:Message</string>
+            </attr>
+        </edge>
+        <edge from="n104" to="n104">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n97">
+            <attr name="layout">
+                <string>62 89 0 0</string>
+            </attr>
+        </node>
+        <edge from="n97" to="n97">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n98">
+            <attr name="layout">
+                <string>412 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n98" to="n98">
+            <attr name="label">
+                <string>string:"p2"</string>
+            </attr>
+        </edge>
+        <node id="n99">
+            <attr name="layout">
+                <string>412 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n99" to="n99">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n101">
+            <attr name="layout">
+                <string>612 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n101" to="n101">
+            <attr name="label">
+                <string>string:"EReceive_1_end_p2"</string>
+            </attr>
+        </edge>
+        <node id="n103">
+            <attr name="layout">
+                <string>612 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n103" to="n103">
+            <attr name="label">
+                <string>string:"TReceive_2_EReceive_1"</string>
+            </attr>
+        </edge>
+        <node id="n105">
+            <attr name="layout">
+                <string>612 422 0 0</string>
+            </attr>
+        </node>
+        <edge from="n105" to="n105">
+            <attr name="label">
+                <string>string:"TSend_2_EReceive_1"</string>
+            </attr>
+        </edge>
+        <edge from="n97" to="n100">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n100" to="n101">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n97" to="n102">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n102" to="n103">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n97" to="n104">
+            <attr name="label">
+                <string>del:messages</string>
+            </attr>
+        </edge>
+        <edge from="n104" to="n105">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n97" to="n98">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n97" to="n99">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

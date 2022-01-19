@@ -5,11 +5,15 @@ import behavior.bpmn.FlowNode;
 import behavior.bpmn.Process;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.activities.CallActivity;
+import behavior.bpmn.activities.tasks.AbstractTask;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
-import behavior.bpmn.events.*;
+import behavior.bpmn.events.EndEvent;
+import behavior.bpmn.events.IntermediateCatchEvent;
+import behavior.bpmn.events.IntermediateThrowEvent;
+import behavior.bpmn.events.StartEvent;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.InclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
@@ -24,6 +28,8 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -154,20 +160,44 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
 
             @Override
             public void handle(Task task) {
-                createTaskRule(task);
+                createTaskRule(
+                        task,
+                        (no, op) -> {
+                        },
+                        noop -> {
+                        });
             }
 
             @Override
-            public void handle(SendTask task) {
-                // TODO: implement
+            public void handle(SendTask sendTask) {
+                createTaskRule(
+                        sendTask,
+                        (no, op) -> {
+                        },
+                        ruleBuilder -> addOutgoingMessagesForFlowNode(
+                                sendTask,
+                                collaboration,
+                                ruleBuilder));
             }
 
             @Override
-            public void handle(ReceiveTask task) {
-                // TODO: implement
+            public void handle(ReceiveTask receiveTask) {
+                createTaskRule(
+                        receiveTask,
+                        (ruleBuilder, processInstance) ->
+                                deleteIncomingMessagesForFlowNode(
+                                        receiveTask,
+                                        processInstance,
+                                        collaboration,
+                                        ruleBuilder),
+                        noop -> {
+                        });
             }
 
-            private void createTaskRule(Task task) {
+            private void createTaskRule(
+                    AbstractTask task,
+                    BiConsumer<GrooveRuleBuilder, GrooveNode> startTaskRuleAdditions,
+                    Consumer<GrooveRuleBuilder> endTaskRuleAdditions) {
                 // Rules for starting the activity
                 task.getIncomingFlows().forEach(incomingFlow -> {
                     final String incomingFlowId = incomingFlow.getID();
@@ -177,6 +207,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                             ruleBuilder);
                     deleteTokenWithPosition(ruleBuilder, processInstance, incomingFlowId);
                     addTokenWithPosition(ruleBuilder, processInstance, task.getName());
+                    startTaskRuleAdditions.accept(ruleBuilder, processInstance);
                     ruleBuilder.buildRule();
                 });
                 // Rule for ending the activity
@@ -190,6 +221,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                     final String outgoingFlowID = outgoingFlow.getID();
                     addTokenWithPosition(ruleBuilder, processInstance, outgoingFlowID);
                 });
+                endTaskRuleAdditions.accept(ruleBuilder);
                 ruleBuilder.buildRule();
             }
 
@@ -370,7 +402,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                         // Consume incoming tokens
                         intermediateCatchEvent.getIncomingFlows().forEach(sequenceFlow -> deleteTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
                         // Consume incoming messages.
-                        deleteIncomingMessagesForEvent(intermediateCatchEvent, processInstance, collaboration, ruleBuilder);
+                        deleteIncomingMessagesForFlowNode(intermediateCatchEvent, processInstance, collaboration, ruleBuilder);
                         break;
                 }
                 ruleBuilder.buildRule();
@@ -396,7 +428,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                 break;
             case MESSAGE:
                 intermediateThrowEvent.getOutgoingFlows().forEach(sequenceFlow -> addTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
-                addOutgoingMessagesForEvent(
+                addOutgoingMessagesForFlowNode(
                         intermediateThrowEvent,
                         collaboration,
                         ruleBuilder);
@@ -422,28 +454,28 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
             case MESSAGE:
                 GrooveNode processInstance = createContextRunningProcessInstance(process, ruleBuilder);
                 updateTokenPositionForProcessInstance(getStartEventTokenName(process), outgoingFlowID, ruleBuilder, processInstance);
-                deleteIncomingMessagesForEvent(startEvent, processInstance, collaboration, ruleBuilder);
+                deleteIncomingMessagesForFlowNode(startEvent, processInstance, collaboration, ruleBuilder);
                 break;
         }
         ruleBuilder.buildRule();
     }
 
-    private void deleteIncomingMessagesForEvent(
-            Event catchEvent,
+    private void deleteIncomingMessagesForFlowNode(
+            FlowNode handleMessageFlowNode,
             GrooveNode processInstance,
             BPMNCollaboration collaboration,
             GrooveRuleBuilder ruleBuilder) {
         collaboration.getMessageFlows().stream()
-                     .filter(messageFlow -> messageFlow.getTarget() == catchEvent)
+                     .filter(messageFlow -> messageFlow.getTarget() == handleMessageFlowNode)
                      .forEach(messageFlow -> deleteMessageWithPosition(ruleBuilder, processInstance, messageFlow.getName()));
     }
 
-    private void addOutgoingMessagesForEvent(
-            Event messageThrowEvent,
+    private void addOutgoingMessagesForFlowNode(
+            FlowNode produceMessageFlowNode,
             BPMNCollaboration collaboration,
             GrooveRuleBuilder ruleBuilder) {
         collaboration.getMessageFlows().stream()
-                     .filter(messageFlow -> messageFlow.getSource() == messageThrowEvent)
+                     .filter(messageFlow -> messageFlow.getSource() == produceMessageFlowNode)
                      .forEach(eventMessageFlow -> {
                          Process messageFlowReceiver = collaboration.getMessageFlowReceiver(eventMessageFlow);
                          GrooveNode receiverInstance = createContextRunningProcessInstance(messageFlowReceiver, ruleBuilder);
@@ -590,7 +622,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                 ruleBuilder.addEdge(STATE, processInstance, terminated);
                 break;
             case MESSAGE:
-                addOutgoingMessagesForEvent(endEvent, collaboration, ruleBuilder);
+                addOutgoingMessagesForFlowNode(endEvent, collaboration, ruleBuilder);
                 break;
         }
 
