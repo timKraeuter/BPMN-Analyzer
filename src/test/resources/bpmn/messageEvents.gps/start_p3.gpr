@@ -3,12 +3,12 @@
     <graph id="start_p3" role="rule" edgeids="false" edgemode="directed">
         <node id="n81">
             <attr name="layout">
-                <string>417 162 0 0</string>
+                <string>402 162 0 0</string>
             </attr>
         </node>
         <edge from="n81" to="n81">
             <attr name="label">
-                <string>type:Token</string>
+                <string>type:Message</string>
             </attr>
         </edge>
         <edge from="n81" to="n81">
@@ -98,7 +98,7 @@
         </edge>
         <edge from="n75" to="n81">
             <attr name="label">
-                <string>del:tokens</string>
+                <string>del:messages</string>
             </attr>
         </edge>
         <edge from="n81" to="n82">

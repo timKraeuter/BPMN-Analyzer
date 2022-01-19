@@ -33,12 +33,12 @@
         </edge>
         <node id="n28">
             <attr name="layout">
-                <string>427 422 0 0</string>
+                <string>412 422 0 0</string>
             </attr>
         </node>
         <edge from="n28" to="n28">
             <attr name="label">
-                <string>type:Token</string>
+                <string>type:Message</string>
             </attr>
         </edge>
         <edge from="n28" to="n28">
@@ -128,7 +128,7 @@
         </edge>
         <edge from="n21" to="n28">
             <attr name="label">
-                <string>del:tokens</string>
+                <string>del:messages</string>
             </attr>
         </edge>
         <edge from="n28" to="n29">
