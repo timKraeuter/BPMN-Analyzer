@@ -29,7 +29,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -163,8 +162,6 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                 createTaskRule(
                         task,
                         (no, op) -> {
-                        },
-                        noop -> {
                         });
             }
 
@@ -172,9 +169,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
             public void handle(SendTask sendTask) {
                 createTaskRule(
                         sendTask,
-                        (no, op) -> {
-                        },
-                        ruleBuilder -> addOutgoingMessagesForFlowNode(
+                        (ruleBuilder, processInstance) -> addOutgoingMessagesForFlowNode(
                                 sendTask,
                                 collaboration,
                                 ruleBuilder));
@@ -189,15 +184,12 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                                         receiveTask,
                                         processInstance,
                                         collaboration,
-                                        ruleBuilder),
-                        noop -> {
-                        });
+                                        ruleBuilder));
             }
 
             private void createTaskRule(
                     AbstractTask task,
-                    BiConsumer<GrooveRuleBuilder, GrooveNode> startTaskRuleAdditions,
-                    Consumer<GrooveRuleBuilder> endTaskRuleAdditions) {
+                    BiConsumer<GrooveRuleBuilder, GrooveNode> endTaskRuleAdditions) {
                 // Rules for starting the activity
                 task.getIncomingFlows().forEach(incomingFlow -> {
                     final String incomingFlowId = incomingFlow.getID();
@@ -207,7 +199,6 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                             ruleBuilder);
                     deleteTokenWithPosition(ruleBuilder, processInstance, incomingFlowId);
                     addTokenWithPosition(ruleBuilder, processInstance, task.getName());
-                    startTaskRuleAdditions.accept(ruleBuilder, processInstance);
                     ruleBuilder.buildRule();
                 });
                 // Rule for ending the activity
@@ -221,7 +212,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                     final String outgoingFlowID = outgoingFlow.getID();
                     addTokenWithPosition(ruleBuilder, processInstance, outgoingFlowID);
                 });
-                endTaskRuleAdditions.accept(ruleBuilder);
+                endTaskRuleAdditions.accept(ruleBuilder, processInstance);
                 ruleBuilder.buildRule();
             }
 

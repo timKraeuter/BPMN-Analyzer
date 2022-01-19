@@ -1,147 +1,112 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="TReceive_2_start" role="rule" edgeids="false" edgemode="directed">
-        <node id="n86">
+        <node id="n99">
             <attr name="layout">
-                <string>427 162 0 0</string>
+                <string>417 332 0 0</string>
             </attr>
         </node>
-        <edge from="n86" to="n86">
+        <edge from="n99" to="n99">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n86" to="n86">
+        <edge from="n99" to="n99">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n84">
+        <node id="n97">
             <attr name="layout">
-                <string>427 252 0 0</string>
+                <string>417 242 0 0</string>
             </attr>
         </node>
-        <edge from="n84" to="n84">
+        <edge from="n97" to="n97">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n84" to="n84">
+        <edge from="n97" to="n97">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n88">
+        <node id="n94">
             <attr name="layout">
-                <string>412 422 0 0</string>
+                <string>62 87 0 0</string>
             </attr>
         </node>
-        <edge from="n88" to="n88">
-            <attr name="label">
-                <string>type:Message</string>
-            </attr>
-        </edge>
-        <edge from="n88" to="n88">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
-        <node id="n81">
-            <attr name="layout">
-                <string>62 89 0 0</string>
-            </attr>
-        </node>
-        <edge from="n81" to="n81">
+        <edge from="n94" to="n94">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n82">
+        <node id="n95">
             <attr name="layout">
-                <string>412 72 0 0</string>
+                <string>402 152 0 0</string>
             </attr>
         </node>
-        <edge from="n82" to="n82">
+        <edge from="n95" to="n95">
             <attr name="label">
                 <string>string:"p2"</string>
             </attr>
         </edge>
-        <node id="n83">
+        <node id="n96">
             <attr name="layout">
-                <string>412 332 0 0</string>
+                <string>402 72 0 0</string>
             </attr>
         </node>
-        <edge from="n83" to="n83">
+        <edge from="n96" to="n96">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n85">
+        <node id="n98">
             <attr name="layout">
-                <string>612 252 0 0</string>
+                <string>602 242 0 0</string>
             </attr>
         </node>
-        <edge from="n85" to="n85">
+        <edge from="n98" to="n98">
             <attr name="label">
-                <string>string:"start_p2_TReceive_2"</string>
+                <string>string:"TSend_2_TReceive_2"</string>
             </attr>
         </edge>
-        <node id="n87">
+        <node id="n100">
             <attr name="layout">
-                <string>612 162 0 0</string>
+                <string>602 332 0 0</string>
             </attr>
         </node>
-        <edge from="n87" to="n87">
+        <edge from="n100" to="n100">
             <attr name="label">
                 <string>string:"TReceive_2"</string>
             </attr>
         </edge>
-        <node id="n89">
-            <attr name="layout">
-                <string>612 422 0 0</string>
-            </attr>
-        </node>
-        <edge from="n89" to="n89">
-            <attr name="label">
-                <string>string:"TSend_1_TReceive_2"</string>
-            </attr>
-        </edge>
-        <edge from="n81" to="n86">
+        <edge from="n94" to="n99">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n86" to="n87">
+        <edge from="n99" to="n100">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n81" to="n84">
+        <edge from="n94" to="n97">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n84" to="n85">
+        <edge from="n97" to="n98">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n81" to="n88">
-            <attr name="label">
-                <string>del:messages</string>
-            </attr>
-        </edge>
-        <edge from="n88" to="n89">
-            <attr name="label">
-                <string>del:position</string>
-            </attr>
-        </edge>
-        <edge from="n81" to="n82">
+        <edge from="n94" to="n95">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n81" to="n83">
+        <edge from="n94" to="n96">
             <attr name="label">
                 <string>state</string>
             </attr>

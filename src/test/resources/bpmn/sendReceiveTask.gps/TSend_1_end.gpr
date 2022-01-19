@@ -93,7 +93,7 @@
         </node>
         <edge from="n29" to="n29">
             <attr name="label">
-                <string>string:"TSend_1_TSend_2"</string>
+                <string>string:"TSend_1_EReceive_1"</string>
             </attr>
         </edge>
         <node id="n30">
@@ -133,7 +133,7 @@
         </node>
         <edge from="n34" to="n34">
             <attr name="label">
-                <string>string:"TSend_1_TReceive_2"</string>
+                <string>string:"TSend_1_TReceive_1"</string>
             </attr>
         </edge>
         <edge from="n23" to="n28">
