@@ -661,6 +661,21 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
 
                 GrooveNode terminated = ruleBuilder.addNode(TYPE_TERMINATED);
                 ruleBuilder.addEdge(STATE, processInstance, terminated);
+
+                // Terminate possible subprocesses with a nested rule.
+                GrooveNode subProcess = ruleBuilder.contextNode(TYPE_PROCESS_INSTANCE);
+                ruleBuilder.contextEdge(SUBPROCESS, processInstance, subProcess);
+                GrooveNode subProcessRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
+                ruleBuilder.deleteEdge(STATE, subProcess, subProcessRunning);
+                GrooveNode subProcessTerminated = ruleBuilder.addNode(TYPE_TERMINATED);
+                ruleBuilder.addEdge(STATE, subProcess, subProcessTerminated);
+
+                GrooveNode forAll = ruleBuilder.contextNode(FORALL);
+                ruleBuilder.contextEdge(AT, subProcess, forAll);
+                ruleBuilder.contextEdge(AT, subProcessRunning, forAll);
+                ruleBuilder.contextEdge(AT, subProcessTerminated, forAll);
+                // We could also delete all tokens in the current and all subprocess instances.
+
                 break;
             case MESSAGE:
                 addOutgoingMessagesForFlowNode(endEvent, collaboration, ruleBuilder);

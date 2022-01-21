@@ -14,6 +14,9 @@ import static groove.behaviorTransformer.BehaviorToGrooveTransformer.START_GST;
 
 public interface GrooveTransformer<SOURCE extends Behavior> {
     // Special groove labels
+    String AT = "@";
+    String FORALL = "forall:";
+
     String BOOL = "bool:";
     String FALSE = BOOL + "false";
     String TRUE = BOOL + "true";
