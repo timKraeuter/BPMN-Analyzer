@@ -57,6 +57,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
     }
 
     private void copyTypeGraphAndFixedRules(File targetFolder) {
+        //noinspection ConstantConditions must be present!. Otherwise, tests will also fail!
         File sourceDirectory = new File(this.getClass().getResource(FIXED_RULES_AND_TYPE_GRAPH_DIR).getFile());
         try {
             FileUtils.copyDirectory(sourceDirectory, targetFolder);
