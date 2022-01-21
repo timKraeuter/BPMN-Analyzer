@@ -466,6 +466,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         if (startEvent.getOutgoingFlows().count() != 1) {
             throw new RuntimeException("Start events should have exactly one outgoing flow!");
         }
+        //noinspection OptionalGetWithoutIsPresent size of the stream is 1.
         final String outgoingFlowID = startEvent.getOutgoingFlows().findFirst().get().getID();
         ruleBuilder.startRule(startEvent.getName());
         switch (startEvent.getType()) {
@@ -520,7 +521,8 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         // Find the corresponding branching inclusive gateway
         Map<SequenceFlow, SequenceFlow> branchFlowsToInFlows = new HashMap<>();
         FlowNode branchGateway = this.findCorrespondingBranchGateway(inclusiveGateway, branchFlowsToInFlows);
-        SequenceFlow outFlow = inclusiveGateway.getOutgoingFlows().findFirst().get(); // size 1 means this operation is save.
+        //noinspection OptionalGetWithoutIsPresent size 1 means this operation is save.
+        SequenceFlow outFlow = inclusiveGateway.getOutgoingFlows().findFirst().get();
         int i = 1;
         for (Set<SequenceFlow> branchGatewayOutFlows : Sets.powerSet(branchGateway.getOutgoingFlows().collect(Collectors.toCollection(LinkedHashSet::new)))) {
             if (branchGatewayOutFlows.size() >= 1) { // Empty set is also part of the power set.
@@ -606,6 +608,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         if (endEvent.getIncomingFlows().count() != 1) {
             throw new RuntimeException("End events should have exactly one incoming flow!");
         }
+        //noinspection OptionalGetWithoutIsPresent size of the stream is 1
         final String incomingFlowId = endEvent.getIncomingFlows().findFirst().get().getID();
         ruleBuilder.startRule(endEvent.getName());
 
