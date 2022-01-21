@@ -17,4 +17,9 @@ public class InclusiveGateway extends Gateway {
         return true;
     }
 
+    @Override
+    public boolean isExclusiveEventBasedGateway() {
+        return false;
+    }
+
 }

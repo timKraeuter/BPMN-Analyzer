@@ -8,6 +8,7 @@ import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.IntermediateCatchEvent;
 import behavior.bpmn.events.IntermediateThrowEvent;
 import behavior.bpmn.events.StartEvent;
+import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.InclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
@@ -34,4 +35,6 @@ public interface FlowNodeVisitor {
     void handle(IntermediateCatchEvent intermediateCatchEvent);
 
     void handle(EndEvent endEvent);
+
+    void handle(EventBasedGateway eventBasedGateway);
 }

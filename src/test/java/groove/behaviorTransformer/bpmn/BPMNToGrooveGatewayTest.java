@@ -1,10 +1,11 @@
 package groove.behaviorTransformer.bpmn;
 
 import behavior.bpmn.BPMNCollaboration;
+import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.auxiliary.BPMNCollaborationBuilder;
-import behavior.bpmn.events.EndEvent;
-import behavior.bpmn.events.StartEvent;
+import behavior.bpmn.events.*;
+import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.InclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
@@ -123,7 +124,7 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
     }
 
     /**
-     * See test case <a href="https://cawemo.com/share/e5ab5920-be7c-435f-8d58-964760455caf">"Inclusive gateway"</a> in cawemo.
+     * See test case <a href="https://cawemo.com/share/e5ab5920-be7c-435f-8d58-964760455caf">"Inclusive Gateway"</a> in cawemo.
      */
     @Test
     void testInclusiveGateway() throws IOException {
@@ -151,7 +152,7 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
     }
 
     /**
-     * See test case <a href="https://cawemo.com/share/4edc1064-1a2f-46ba-b4bd-9bd3fceea7ae">"Inclusive gateway complex"</a> in cawemo.
+     * See test case <a href="https://cawemo.com/share/4edc1064-1a2f-46ba-b4bd-9bd3fceea7ae">"Inclusive Gateway - Complex"</a> in cawemo.
      */
     @Test
     void testInclusiveGatewayComplex() throws IOException {
@@ -180,6 +181,50 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(c, p2)
                 .sequenceFlow(p2, i2)
                 .sequenceFlow(i2, end)
+                .build();
+
+        this.checkGrooveGeneration(collaboration);
+    }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/c16c4923-dfa0-4a15-ade3-b47acb40ad66">"Exclusive Event Based Gateway"</a> in cawemo.
+     */
+    @Test
+    void testExclusiveEventBasedGateway() throws IOException {
+        final StartEvent start_p1 = new StartEvent("start_p1");
+        final EventBasedGateway eventG = new EventBasedGateway("eventG");
+        IntermediateCatchEvent r_msg1 = new IntermediateCatchEvent("r_msg1", IntermediateEventType.MESSAGE);
+        ReceiveTask r_msg2 = new ReceiveTask("r_msg2");
+        final EndEvent end1_p1 = new EndEvent("end1_p1");
+        final EndEvent end2_p1 = new EndEvent("end2_p1");
+
+        final StartEvent start_p2 = new StartEvent("start_p2");
+        ExclusiveGateway e1 = new ExclusiveGateway("e1");
+        IntermediateThrowEvent t_msg1 = new IntermediateThrowEvent("t_msg1", IntermediateEventType.MESSAGE);
+        IntermediateThrowEvent t_msg2 = new IntermediateThrowEvent("t_msg2", IntermediateEventType.MESSAGE);
+        final EndEvent end1_p2 = new EndEvent("end1_p2");
+        final EndEvent end2_p2 = new EndEvent("end2_p2");
+
+        final String modelName = "eventBasedGateway";
+        final BPMNCollaboration collaboration = new BPMNCollaborationBuilder()
+                .name(modelName)
+                .messageFlow(t_msg1, r_msg1)
+                .messageFlow(t_msg2, r_msg2)
+                .processName("p1")
+                .startEvent(start_p1)
+                .sequenceFlow(start_p1, eventG)
+                .sequenceFlow(eventG, r_msg1)
+                .sequenceFlow(eventG, r_msg2)
+                .sequenceFlow(r_msg1, end1_p1)
+                .sequenceFlow(r_msg2, end2_p1)
+                .buildProcess()
+                .processName("p2")
+                .startEvent(start_p2)
+                .sequenceFlow(start_p2, e1)
+                .sequenceFlow(e1, t_msg1)
+                .sequenceFlow(e1, t_msg2)
+                .sequenceFlow(t_msg1, end1_p2)
+                .sequenceFlow(t_msg2, end2_p2)
                 .build();
 
         this.checkGrooveGeneration(collaboration);

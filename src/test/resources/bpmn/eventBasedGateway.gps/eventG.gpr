@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="eventG" role="rule" edgeids="false" edgemode="directed">
+        <node id="n16">
+            <attr name="layout">
+                <string>62 85 0 0</string>
+            </attr>
+        </node>
+        <edge from="n16" to="n16">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n17">
+            <attr name="layout">
+                <string>392 232 0 0</string>
+            </attr>
+        </node>
+        <edge from="n17" to="n17">
+            <attr name="label">
+                <string>string:"p1"</string>
+            </attr>
+        </edge>
+        <node id="n18">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n18" to="n18">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n19">
+            <attr name="layout">
+                <string>412 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n19" to="n19">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n20">
+            <attr name="layout">
+                <string>592 224 0 0</string>
+            </attr>
+        </node>
+        <edge from="n20" to="n20">
+            <attr name="label">
+                <string>string:"start_p1_eventG"</string>
+            </attr>
+        </edge>
+        <node id="n21">
+            <attr name="layout">
+                <string>592 144 0 0</string>
+            </attr>
+        </node>
+        <edge from="n21" to="n21">
+            <attr name="label">
+                <string>string:"eventG"</string>
+            </attr>
+        </edge>
+        <edge from="n19" to="n21">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n19" to="n20">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n16" to="n17">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n16" to="n18">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n16" to="n19">
+            <attr name="label">
+                <string>tokens</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

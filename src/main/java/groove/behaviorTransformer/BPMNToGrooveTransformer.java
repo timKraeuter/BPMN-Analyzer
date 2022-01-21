@@ -12,9 +12,7 @@ import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.IntermediateCatchEvent;
 import behavior.bpmn.events.IntermediateThrowEvent;
 import behavior.bpmn.events.StartEvent;
-import behavior.bpmn.gateways.ExclusiveGateway;
-import behavior.bpmn.gateways.InclusiveGateway;
-import behavior.bpmn.gateways.ParallelGateway;
+import behavior.bpmn.gateways.*;
 import com.google.common.collect.Sets;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveGraphBuilder;
@@ -27,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -71,19 +70,17 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         // TODO: Add prefix if needed!
         GrooveGraphBuilder startGraphBuilder = new GrooveGraphBuilder().setName(collaboration.getName());
 
-        collaboration.getParticipants().stream()
-                     .filter(process -> process.getStartEvent() != null)
-                     .forEach(process -> {
-                         GrooveNode processInstance = new GrooveNode(TYPE_PROCESS_INSTANCE);
-                         GrooveNode processName = new GrooveNode(createStringNodeLabel(process.getName()));
-                         startGraphBuilder.addEdge(NAME, processInstance, processName);
-                         GrooveNode running = new GrooveNode(TYPE_RUNNING);
-                         startGraphBuilder.addEdge(STATE, processInstance, running);
-                         GrooveNode startToken = new GrooveNode(TYPE_TOKEN);
-                         GrooveNode tokenName = new GrooveNode(this.createStringNodeLabel(getStartEventTokenName(process)));
-                         startGraphBuilder.addEdge(POSITION, startToken, tokenName);
-                         startGraphBuilder.addEdge(TOKENS, processInstance, startToken);
-                     });
+        collaboration.getParticipants().stream().filter(process -> process.getStartEvent() != null).forEach(process -> {
+            GrooveNode processInstance = new GrooveNode(TYPE_PROCESS_INSTANCE);
+            GrooveNode processName = new GrooveNode(createStringNodeLabel(process.getName()));
+            startGraphBuilder.addEdge(NAME, processInstance, processName);
+            GrooveNode running = new GrooveNode(TYPE_RUNNING);
+            startGraphBuilder.addEdge(STATE, processInstance, running);
+            GrooveNode startToken = new GrooveNode(TYPE_TOKEN);
+            GrooveNode tokenName = new GrooveNode(this.createStringNodeLabel(getStartEventTokenName(process)));
+            startGraphBuilder.addEdge(POSITION, startToken, tokenName);
+            startGraphBuilder.addEdge(TOKENS, processInstance, startToken);
+        });
 
         return startGraphBuilder.build();
     }
@@ -92,11 +89,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         return process.getName() + "_" + process.getStartEvent().getName();
     }
 
-    private void updateTokenPositionWhenRunning(
-            Process process,
-            String oldPosition,
-            String newPosition,
-            GrooveRuleBuilder ruleBuilder) {
+    private void updateTokenPositionWhenRunning(Process process, String oldPosition, String newPosition, GrooveRuleBuilder ruleBuilder) {
         // Process instance has to be running
         GrooveNode processInstance = this.createContextRunningProcessInstance(process, ruleBuilder);
 
@@ -104,11 +97,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         updateTokenPositionForProcessInstance(oldPosition, newPosition, ruleBuilder, processInstance);
     }
 
-    private void updateTokenPositionForProcessInstance(
-            String oldPosition,
-            String newPosition,
-            GrooveRuleBuilder ruleBuilder,
-            GrooveNode processInstance) {
+    private void updateTokenPositionForProcessInstance(String oldPosition, String newPosition, GrooveRuleBuilder ruleBuilder, GrooveNode processInstance) {
         GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
         ruleBuilder.contextEdge(TOKENS, processInstance, token);
         GrooveNode oldTokenPosition = ruleBuilder.contextNode(this.createStringNodeLabel(oldPosition));
@@ -147,11 +136,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         return ruleBuilder.getRules();
     }
 
-    private void generateRules(
-            BPMNCollaboration collaboration,
-            Process process,
-            GrooveRuleBuilder ruleBuilder,
-            Set<Process> visitedProcessModels) {
+    private void generateRules(BPMNCollaboration collaboration, Process process, GrooveRuleBuilder ruleBuilder, Set<Process> visitedProcessModels) {
         process.getControlFlowNodes().forEach(node -> node.accept(new FlowNodeVisitor() {
             @Override
             public void handle(StartEvent startEvent) {
@@ -165,12 +150,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
 
             @Override
             public void handle(SendTask sendTask) {
-                createTaskRules(
-                        sendTask,
-                        (ruleBuilder, processInstance) -> addOutgoingMessagesForFlowNode(
-                                sendTask,
-                                collaboration,
-                                ruleBuilder));
+                createTaskRules(sendTask, (ruleBuilder) -> addOutgoingMessagesForFlowNode(sendTask, collaboration, ruleBuilder));
             }
 
             @Override
@@ -182,29 +162,42 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                     createInstantiateReceiveTaskRule(receiveTask);
                     return;
                 }
-                // Normally start the task and consume the message on task end.
-                createTaskRules(
-                        receiveTask,
-                        (ruleBuilder, processInstance) ->
-                                deleteIncomingMessagesForFlowNode(
-                                        receiveTask,
-                                        processInstance,
-                                        collaboration,
-                                        ruleBuilder));
+                // Create start task rules.
+                receiveTask.getIncomingFlows().forEach(incomingFlow ->
+                        createReceiveTaskStartRule(receiveTask, incomingFlow));
+                // End task rule is standard.
+                createEndTaskRule(receiveTask, (noop) -> {
+                });
+            }
+
+            private void createReceiveTaskStartRule(ReceiveTask receiveTask, SequenceFlow incomingFlow) {
+                if (incomingFlow.getSource().isExclusiveEventBasedGateway()) {
+                    createEventBasedGatewayStartTaskRule(receiveTask, incomingFlow);
+                } else {
+                    // Should only be able to start when the message is present.
+                    createStartTaskRule(receiveTask, incomingFlow, (ruleBuilder, processInstance) ->
+                            deleteIncomingMessagesForFlowNode(receiveTask, processInstance, collaboration, ruleBuilder));
+                }
+            }
+
+            private void createEventBasedGatewayStartTaskRule(ReceiveTask receiveTask, SequenceFlow incomingFlow) {
+                final String incomingFlowId = incomingFlow.getID();
+                ruleBuilder.startRule(this.getTaskOrCallActivityRuleName(receiveTask, incomingFlowId) + START);
+                GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(process, ruleBuilder);
+                deleteIncomingMessagesForFlowNode(receiveTask, processInstance, collaboration, ruleBuilder);
+                addTokenWithPosition(ruleBuilder, processInstance, receiveTask.getName());
+                // Consume the token at the event-based gateway.
+                deleteTokenWithPosition(ruleBuilder, processInstance, incomingFlow.getSource().getName());
+                ruleBuilder.buildRule();
             }
 
             private void createInstantiateReceiveTaskRule(ReceiveTask receiveTask) {
                 ruleBuilder.startRule(receiveTask.getName() + START);
 
                 // Consume the incoming message
-                Set<MessageFlow> incomingMessageFlows = collaboration.getMessageFlows().stream()
-                                                                     .filter(flow -> flow.getTarget() == receiveTask)
-                                                                     .collect(Collectors.toSet());
+                Set<MessageFlow> incomingMessageFlows = collaboration.getMessageFlows().stream().filter(flow -> flow.getTarget() == receiveTask).collect(Collectors.toSet());
                 if (incomingMessageFlows.size() != 1) {
-                    throw new RuntimeException(
-                            String.format(
-                                    "A instantiate receive task must have exactly one incoming message flow, but it had %s.",
-                                    incomingMessageFlows.size()));
+                    throw new RuntimeException(String.format("A instantiate receive task must have exactly one incoming message flow, but it had %s.", incomingMessageFlows.size()));
                 }
                 MessageFlow incomingMessageFlow = incomingMessageFlows.iterator().next();
                 Process receiverProcess = collaboration.getMessageFlowReceiver(incomingMessageFlow);
@@ -225,46 +218,48 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
             }
 
             private void createTaskRules(AbstractTask task) {
-                createTaskRules(
-                        task,
-                        (no, op) -> {
-                        });
+                createTaskRules(task, (noop) -> {
+                });
             }
 
-            private void createTaskRules(
+            private void createTaskRules(AbstractTask task, Consumer<GrooveRuleBuilder> endTaskRuleAdditions) {
+                // Rules for starting the task
+                task.getIncomingFlows().forEach(incomingFlow -> createStartTaskRule(task, incomingFlow, (grooveRuleBuilder, grooveNode) -> {
+                }));
+                // Rule for ending the task
+                createEndTaskRule(task, endTaskRuleAdditions);
+            }
+
+            private void createStartTaskRule(
                     AbstractTask task,
-                    BiConsumer<GrooveRuleBuilder, GrooveNode> endTaskRuleAdditions) {
-                // Rules for starting the activity
-                task.getIncomingFlows().forEach(incomingFlow -> {
-                    final String incomingFlowId = incomingFlow.getID();
-                    ruleBuilder.startRule(this.getTaskOrCallActivityRuleName(task, incomingFlowId) + START);
-                    GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(
-                            process,
-                            ruleBuilder);
-                    deleteTokenWithPosition(ruleBuilder, processInstance, incomingFlowId);
-                    addTokenWithPosition(ruleBuilder, processInstance, task.getName());
-                    ruleBuilder.buildRule();
-                });
-                // Rule for ending the activity
+                    SequenceFlow incomingFlow,
+                    BiConsumer<GrooveRuleBuilder, GrooveNode> startTaskRuleAdditions) {
+                final String incomingFlowId = incomingFlow.getID();
+                ruleBuilder.startRule(this.getTaskOrCallActivityRuleName(task, incomingFlowId) + START);
+                GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(process, ruleBuilder);
+                deleteTokenWithPosition(ruleBuilder, processInstance, incomingFlowId);
+                addTokenWithPosition(ruleBuilder, processInstance, task.getName());
+                startTaskRuleAdditions.accept(ruleBuilder, processInstance);
+                ruleBuilder.buildRule();
+            }
+
+            private void createEndTaskRule(AbstractTask task, Consumer<GrooveRuleBuilder> endTaskRuleAdditions) {
                 ruleBuilder.startRule(task.getName() + "_end");
-                GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(
-                        process,
-                        ruleBuilder);
+                GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(process, ruleBuilder);
                 deleteTokenWithPosition(ruleBuilder, processInstance, task.getName());
 
                 task.getOutgoingFlows().forEach(outgoingFlow -> {
                     final String outgoingFlowID = outgoingFlow.getID();
                     addTokenWithPosition(ruleBuilder, processInstance, outgoingFlowID);
                 });
-                endTaskRuleAdditions.accept(ruleBuilder, processInstance);
+                endTaskRuleAdditions.accept(ruleBuilder);
                 ruleBuilder.buildRule();
             }
 
             @Override
             public void handle(CallActivity callActivity) {
                 // Rules for instantiating a subprocess
-                callActivity.getIncomingFlows().forEach(
-                        incomingFlow -> createSubProcessInstantiationRule(callActivity, incomingFlow));
+                callActivity.getIncomingFlows().forEach(incomingFlow -> createSubProcessInstantiationRule(callActivity, incomingFlow));
 
                 // Rule for terminating a subprocess
                 createTerminateSubProcessRule(callActivity);
@@ -278,11 +273,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                     return;
                 }
                 visitedProcessModels.add(callActivity.getSubProcessModel());
-                BPMNToGrooveTransformer.this.generateRules(
-                        collaboration,
-                        callActivity.getSubProcessModel(),
-                        ruleBuilder,
-                        visitedProcessModels);
+                BPMNToGrooveTransformer.this.generateRules(collaboration, callActivity.getSubProcessModel(), ruleBuilder, visitedProcessModels);
             }
 
             private void createTerminateSubProcessRule(CallActivity callActivity) {
@@ -308,16 +299,11 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
             private void createSubProcessInstantiationRule(CallActivity callActivity, SequenceFlow incomingFlow) {
                 final String incomingFlowId = incomingFlow.getID();
                 ruleBuilder.startRule(this.getTaskOrCallActivityRuleName(callActivity, incomingFlowId));
-                GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(
-                        process,
-                        ruleBuilder);
+                GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(process, ruleBuilder);
                 deleteTokenWithPosition(ruleBuilder, processInstance, incomingFlowId);
 
                 GrooveNode subProcessInstance = ruleBuilder.addNode(TYPE_PROCESS_INSTANCE);
-                ruleBuilder.contextEdge(
-                        NAME,
-                        subProcessInstance,
-                        ruleBuilder.contextNode(createStringNodeLabel(callActivity.getSubProcessModel().getName())));
+                ruleBuilder.contextEdge(NAME, subProcessInstance, ruleBuilder.contextNode(createStringNodeLabel(callActivity.getSubProcessModel().getName())));
                 ruleBuilder.addEdge(SUBPROCESS, processInstance, subProcessInstance);
                 GrooveNode running = ruleBuilder.addNode(TYPE_RUNNING);
                 ruleBuilder.addEdge(STATE, subProcessInstance, running);
@@ -326,9 +312,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                     addTokenWithPosition(ruleBuilder, subProcessInstance, getStartEventTokenName(callActivity.getSubProcessModel()));
                 } else {
                     // All activites and gateways without incoming sequence flows get a token.
-                    callActivity.getSubProcessModel().getControlFlowNodes()
-                                .filter(controlFlowNode -> controlFlowNode.isTask() || controlFlowNode.isGateway())
-                                .forEach(controlFlowNode -> addTokenWithPosition(ruleBuilder, subProcessInstance, controlFlowNode.getName()));
+                    callActivity.getSubProcessModel().getControlFlowNodes().filter(controlFlowNode -> controlFlowNode.isTask() || controlFlowNode.isGateway()).forEach(controlFlowNode -> addTokenWithPosition(ruleBuilder, subProcessInstance, controlFlowNode.getName()));
                 }
 
                 ruleBuilder.buildRule();
@@ -349,33 +333,21 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
             private void createExclusiveGatewayRules(ExclusiveGateway exclusiveGateway) {
                 exclusiveGateway.getIncomingFlows().forEach(incomingFlow -> {
                     final String incomingFlowId = incomingFlow.getID();
-                    exclusiveGateway.getOutgoingFlows().forEach(
-                            outFlow -> createRuleExclusiveGatewayRule(
-                                    exclusiveGateway,
-                                    incomingFlowId,
-                                    outFlow.getID()));
+                    exclusiveGateway.getOutgoingFlows().forEach(outFlow -> createRuleExclusiveGatewayRule(exclusiveGateway, incomingFlowId, outFlow.getID()));
                 });
                 // No incoming flows means we expect a token sitting at the gateway.
                 if (exclusiveGateway.getIncomingFlows().findAny().isEmpty()) {
-                    exclusiveGateway.getOutgoingFlows().forEach(
-                            outFlow -> createRuleExclusiveGatewayRule(
-                                    exclusiveGateway,
-                                    exclusiveGateway.getName(),
-                                    outFlow.getID()
-                            ));
+                    exclusiveGateway.getOutgoingFlows().forEach(outFlow -> createRuleExclusiveGatewayRule(exclusiveGateway, exclusiveGateway.getName(), outFlow.getID()));
                 }
             }
 
-            private void createRuleExclusiveGatewayRule(
-                    ExclusiveGateway exclusiveGateway,
-                    String oldTokenPosition,
-                    String newTokenPosition) {
+            private void createRuleExclusiveGatewayRule(ExclusiveGateway exclusiveGateway, String oldTokenPosition, String newTokenPosition) {
                 ruleBuilder.startRule(this.getExclusiveGatewayName(exclusiveGateway, oldTokenPosition, newTokenPosition));
                 BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(process, oldTokenPosition, newTokenPosition, ruleBuilder);
                 ruleBuilder.buildRule();
             }
 
-            private String getExclusiveGatewayName(ExclusiveGateway exclusiveGateway, String incomingFlowId, String outFlowID) {
+            private String getExclusiveGatewayName(Gateway exclusiveGateway, String incomingFlowId, String outFlowID) {
                 final long inCount = exclusiveGateway.getIncomingFlows().count();
                 final long outCount = exclusiveGateway.getOutgoingFlows().count();
                 if (inCount <= 1 && outCount == 1) {
@@ -406,6 +378,26 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
             }
 
             @Override
+            public void handle(EventBasedGateway eventBasedGateway) {
+                boolean implicitExclusiveGateway = eventBasedGateway.getIncomingFlows().count() > 1;
+                eventBasedGateway.getIncomingFlows().forEach(inFlow -> {
+                    String ruleName = implicitExclusiveGateway ?
+                            inFlow.getID() + "_" + eventBasedGateway.getName() :
+                            eventBasedGateway.getName();
+                    ruleBuilder.startRule(ruleName);
+                    updateTokenPositionWhenRunning(
+                            process,
+                            inFlow.getID(),
+                            eventBasedGateway.getName(),
+                            ruleBuilder);
+                    ruleBuilder.buildRule();
+                });
+                // Effects the rules of the subsequent flow nodes!
+                // Possible subsequent nodes: Message catch, Receive task, Signal catch, timer and condition.
+                // We currently only implemented the first two.
+            }
+
+            @Override
             public void handle(IntermediateThrowEvent intermediateThrowEvent) {
                 createIntermediateThrowEventRule(intermediateThrowEvent, ruleBuilder, process, collaboration);
             }
@@ -418,9 +410,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
             private void createIntermediateCatchEventRule(IntermediateCatchEvent intermediateCatchEvent) {
                 String ruleName = CATCH + intermediateCatchEvent.getName();
                 ruleBuilder.startRule(ruleName);
-                GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(
-                        process,
-                        ruleBuilder);
+                GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(process, ruleBuilder);
                 intermediateCatchEvent.getOutgoingFlows().forEach(sequenceFlow -> addTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
                 switch (intermediateCatchEvent.getType()) {
                     case LINK:
@@ -434,8 +424,14 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                             // current restriction, again we would need implicit exclusive gateway.
                             throw new RuntimeException("Intermediate message catch events are only allowed to have one incoming sequence flow!");
                         }
-                        // Consume incoming tokens
-                        intermediateCatchEvent.getIncomingFlows().forEach(sequenceFlow -> deleteTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
+                        //noinspection OptionalGetWithoutIsPresent Size of the stream must be 1.
+                        SequenceFlow incFlow = intermediateCatchEvent.getIncomingFlows().findFirst().get();
+                        // Consume incoming token
+                        if (incFlow.getSource().isExclusiveEventBasedGateway()) {
+                            deleteTokenWithPosition(ruleBuilder, processInstance, incFlow.getSource().getName());
+                        } else {
+                            deleteTokenWithPosition(ruleBuilder, processInstance, incFlow.getID());
+                        }
                         // Consume incoming messages.
                         deleteIncomingMessagesForFlowNode(intermediateCatchEvent, processInstance, collaboration, ruleBuilder);
                         break;
@@ -448,25 +444,19 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
     private void createIntermediateThrowEventRule(IntermediateThrowEvent intermediateThrowEvent, GrooveRuleBuilder ruleBuilder, Process process, BPMNCollaboration collaboration) {
         String ruleName = THROW + intermediateThrowEvent.getName();
         ruleBuilder.startRule(ruleName);
-        GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(
-                process,
-                ruleBuilder);
+        GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(process, ruleBuilder);
         // We currently limit to one incoming token, but we could implement an implicit exclusive gateway.
         if (intermediateThrowEvent.getIncomingFlows().count() != 1) {
             throw new RuntimeException("Intermediate throw events should have exactly one incoming sequence flow!");
         }
-        intermediateThrowEvent.getIncomingFlows().forEach(
-                sequenceFlow -> deleteTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
+        intermediateThrowEvent.getIncomingFlows().forEach(sequenceFlow -> deleteTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
         switch (intermediateThrowEvent.getType()) {
             case LINK:
                 addTokenWithPosition(ruleBuilder, processInstance, intermediateThrowEvent.getName());
                 break;
             case MESSAGE:
                 intermediateThrowEvent.getOutgoingFlows().forEach(sequenceFlow -> addTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
-                addOutgoingMessagesForFlowNode(
-                        intermediateThrowEvent,
-                        collaboration,
-                        ruleBuilder);
+                addOutgoingMessagesForFlowNode(intermediateThrowEvent, collaboration, ruleBuilder);
                 break;
         }
         ruleBuilder.buildRule();
@@ -480,11 +470,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         ruleBuilder.startRule(startEvent.getName());
         switch (startEvent.getType()) {
             case NONE:
-                BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(
-                        process,
-                        getStartEventTokenName(process),
-                        outgoingFlowID,
-                        ruleBuilder);
+                BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(process, getStartEventTokenName(process), outgoingFlowID, ruleBuilder);
                 break;
             case MESSAGE:
                 GrooveNode processInstance = createContextRunningProcessInstance(process, ruleBuilder);
@@ -495,39 +481,25 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         ruleBuilder.buildRule();
     }
 
-    private void deleteIncomingMessagesForFlowNode(
-            FlowNode handleMessageFlowNode,
-            GrooveNode processInstance,
-            BPMNCollaboration collaboration,
-            GrooveRuleBuilder ruleBuilder) {
-        collaboration.getMessageFlows().stream()
-                     .filter(messageFlow -> messageFlow.getTarget() == handleMessageFlowNode)
-                     .forEach(messageFlow -> deleteMessageWithPosition(ruleBuilder, processInstance, messageFlow.getName()));
+    private void deleteIncomingMessagesForFlowNode(FlowNode handleMessageFlowNode, GrooveNode processInstance, BPMNCollaboration collaboration, GrooveRuleBuilder ruleBuilder) {
+        collaboration.getMessageFlows().stream().filter(messageFlow -> messageFlow.getTarget() == handleMessageFlowNode).forEach(messageFlow -> deleteMessageWithPosition(ruleBuilder, processInstance, messageFlow.getName()));
     }
 
-    private void addOutgoingMessagesForFlowNode(
-            FlowNode produceMessageFlowNode,
-            BPMNCollaboration collaboration,
-            GrooveRuleBuilder ruleBuilder) {
-        collaboration.getMessageFlows().stream()
-                     .filter(messageFlow -> messageFlow.getSource() == produceMessageFlowNode)
-                     .forEach(eventMessageFlow -> {
-                         if (eventMessageFlow.getTarget().isInstantiateReceiveTask()) {
-                             // In case of instantiate receive tasks and active process instance does not exist!
-                             GrooveNode newMessage = ruleBuilder.addNode(TYPE_MESSAGE);
-                             ruleBuilder.addEdge(POSITION, newMessage, ruleBuilder.contextNode(this.createStringNodeLabel(eventMessageFlow.getName())));
-                         } else {
-                             Process messageFlowReceiver = collaboration.getMessageFlowReceiver(eventMessageFlow);
-                             GrooveNode receiverInstance = createContextRunningProcessInstance(messageFlowReceiver, ruleBuilder);
-                             addMessageWithPosition(ruleBuilder, receiverInstance, eventMessageFlow.getName());
-                         }
-                     });
+    private void addOutgoingMessagesForFlowNode(FlowNode produceMessageFlowNode, BPMNCollaboration collaboration, GrooveRuleBuilder ruleBuilder) {
+        collaboration.getMessageFlows().stream().filter(messageFlow -> messageFlow.getSource() == produceMessageFlowNode).forEach(eventMessageFlow -> {
+            if (eventMessageFlow.getTarget().isInstantiateReceiveTask()) {
+                // In case of instantiate receive tasks and active process instance does not exist!
+                GrooveNode newMessage = ruleBuilder.addNode(TYPE_MESSAGE);
+                ruleBuilder.addEdge(POSITION, newMessage, ruleBuilder.contextNode(this.createStringNodeLabel(eventMessageFlow.getName())));
+            } else {
+                Process messageFlowReceiver = collaboration.getMessageFlowReceiver(eventMessageFlow);
+                GrooveNode receiverInstance = createContextRunningProcessInstance(messageFlowReceiver, ruleBuilder);
+                addMessageWithPosition(ruleBuilder, receiverInstance, eventMessageFlow.getName());
+            }
+        });
     }
 
-    private void createInclusiveGatewayRules(
-            Process process,
-            GrooveRuleBuilder ruleBuilder,
-            InclusiveGateway inclusiveGateway) {
+    private void createInclusiveGatewayRules(Process process, GrooveRuleBuilder ruleBuilder, InclusiveGateway inclusiveGateway) {
         long incomingFlowCount = inclusiveGateway.getIncomingFlows().count();
         long outgoingFlowCount = inclusiveGateway.getOutgoingFlows().count();
         if (incomingFlowCount <= 1 && outgoingFlowCount > 1) {
@@ -544,10 +516,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         throw new RuntimeException("Inclusive gateway should not have multiple incoming and outgoing flows.");
     }
 
-    private void createMergingInclusiveGatewayRules(
-            Process process,
-            GrooveRuleBuilder ruleBuilder,
-            InclusiveGateway inclusiveGateway) {
+    private void createMergingInclusiveGatewayRules(Process process, GrooveRuleBuilder ruleBuilder, InclusiveGateway inclusiveGateway) {
         // Find the corresponding branching inclusive gateway
         Map<SequenceFlow, SequenceFlow> branchFlowsToInFlows = new HashMap<>();
         FlowNode branchGateway = this.findCorrespondingBranchGateway(inclusiveGateway, branchFlowsToInFlows);
@@ -601,10 +570,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         }
     }
 
-    private void createBranchingInclusiveGatewayRules(
-            Process process,
-            GrooveRuleBuilder ruleBuilder,
-            InclusiveGateway inclusiveGateway) {
+    private void createBranchingInclusiveGatewayRules(Process process, GrooveRuleBuilder ruleBuilder, InclusiveGateway inclusiveGateway) {
         Optional<SequenceFlow> incFlow = inclusiveGateway.getIncomingFlows().findFirst();
         int i = 1;
         for (Set<SequenceFlow> outFlows : Sets.powerSet(inclusiveGateway.getOutgoingFlows().collect(Collectors.toCollection(LinkedHashSet::new)))) {

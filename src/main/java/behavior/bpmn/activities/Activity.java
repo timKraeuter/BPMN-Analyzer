@@ -17,4 +17,9 @@ public abstract class Activity extends FlowNode {
     public boolean isGateway() {
         return false;
     }
+
+    @Override
+    public boolean isExclusiveEventBasedGateway() {
+        return false;
+    }
 }

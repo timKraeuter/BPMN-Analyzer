@@ -17,4 +17,9 @@ public class ParallelGateway extends Gateway {
         return false;
     }
 
+    @Override
+    public boolean isExclusiveEventBasedGateway() {
+        return false;
+    }
+
 }
