@@ -5,7 +5,6 @@ import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.auxiliary.BPMNCollaborationBuilder;
 import behavior.bpmn.events.*;
 import behavior.bpmn.gateways.ParallelGateway;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -92,7 +91,6 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(a, end)
                 .sequenceFlow(b, terminate_end)
                 .build();
-        Assertions.fail();
 
         this.checkGrooveGeneration(collaboration);
     }
