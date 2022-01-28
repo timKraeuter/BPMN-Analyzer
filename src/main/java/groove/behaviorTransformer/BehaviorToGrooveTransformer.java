@@ -270,7 +270,9 @@ public class BehaviorToGrooveTransformer {
         // Generate rules
         transformer.generateAndWriteRules(finiteStateMachine, addPrefix, graphGrammarSubFolder);
 
-        this.generatePropertiesFile(graphGrammarSubFolder, START, Maps.newHashMap());
+        final Map<String, String> additionalProperties = Maps.newHashMap();
+        additionalProperties.put("typeGraph", "type");
+        this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
     }
 
     private File makeSubFolder(Behavior behavior, File grooveDir) {

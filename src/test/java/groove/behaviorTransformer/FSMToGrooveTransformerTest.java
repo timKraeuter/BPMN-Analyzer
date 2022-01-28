@@ -9,8 +9,12 @@ import java.io.IOException;
 
 class FSMToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
 
+    static final String TYPE_GRAPH_FILE_NAME = "type.gty";
+
     @Override
     protected void setUpFurther() {
+        // Default is to ignore the type graph and the terminate rule.
+        this.setFileNameFilter(x -> x.equals(TYPE_GRAPH_FILE_NAME));
     }
 
     @Override
@@ -20,6 +24,8 @@ class FSMToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
 
     @Test
     void testFSMGenerationABC() throws IOException {
+        setFileNameFilter(s -> false); // We want to check for the type graph in this testcase.
+
         State start = new State("start");
         String fsmName = "abc";
         FiniteStateMachine fsm = new FiniteStateMachine(fsmName, start);

@@ -1,34 +1,84 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="b" role="rule" edgeids="false" edgemode="directed">
-        <node id="n4">
+        <node id="n12">
             <attr name="layout">
-                <string>62 82 0 0</string>
+                <string>337 172 0 0</string>
             </attr>
         </node>
-        <edge from="n4" to="n4">
+        <edge from="n12" to="n12">
             <attr name="label">
-                <string>s2</string>
+                <string>type:State</string>
             </attr>
         </edge>
-        <edge from="n4" to="n4">
+        <edge from="n12" to="n12">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n3">
+        <node id="n10">
             <attr name="layout">
-                <string>112 82 0 0</string>
+                <string>337 82 0 0</string>
             </attr>
         </node>
-        <edge from="n3" to="n3">
+        <edge from="n10" to="n10">
             <attr name="label">
-                <string>s1</string>
+                <string>type:State</string>
             </attr>
         </edge>
-        <edge from="n3" to="n3">
+        <edge from="n10" to="n10">
             <attr name="label">
                 <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n9">
+            <attr name="layout">
+                <string>62 90 0 0</string>
+            </attr>
+        </node>
+        <edge from="n9" to="n9">
+            <attr name="label">
+                <string>type:StateMachine</string>
+            </attr>
+        </edge>
+        <node id="n11">
+            <attr name="layout">
+                <string>507 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n11" to="n11">
+            <attr name="label">
+                <string>string:"s1"</string>
+            </attr>
+        </edge>
+        <node id="n13">
+            <attr name="layout">
+                <string>507 172 0 0</string>
+            </attr>
+        </node>
+        <edge from="n13" to="n13">
+            <attr name="label">
+                <string>string:"s2"</string>
+            </attr>
+        </edge>
+        <edge from="n9" to="n12">
+            <attr name="label">
+                <string>new:currentState</string>
+            </attr>
+        </edge>
+        <edge from="n9" to="n10">
+            <attr name="label">
+                <string>del:currentState</string>
+            </attr>
+        </edge>
+        <edge from="n10" to="n11">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n12" to="n13">
+            <attr name="label">
+                <string>name</string>
             </attr>
         </edge>
     </graph>
