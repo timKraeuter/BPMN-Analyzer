@@ -32,6 +32,10 @@ import java.util.stream.Stream;
 public class BehaviorToGrooveTransformer {
     static final String START_GST = "/start.gst";
     static final String START = "start";
+    private static final String ACTIVITY_DIAGRAM_TYPE_GRAPH_FILE_NAME = "type";
+    private static final String PI_TYPE_GRAPH_FILE_NAME = "Type";
+    private static final String BPMN_DIAGRAM_TYPE_GRAPH_FILE_NAME = "type";
+    private static final String FSM_TYPE_GRAPH_FILE_NAME = "fsm_type";
 
     static Gxl createGxlFromGrooveGraph(GrooveGraph graph, boolean doLayout) {
         String gxlGraphName = String.format("%s_%s", graph.getName(), START);
@@ -88,6 +92,7 @@ public class BehaviorToGrooveTransformer {
         File graphGrammarSubFolder = this.makeSubFolder(graphGrammarName, grooveFolder);
 
         final boolean[] piProcessIncluded = {false};
+        Set<String> typeGraphs = new LinkedHashSet<>();
         Set<GrooveGraph> startGraphs = new LinkedHashSet<>();
         Map<String, GrooveGraphRule> allRules = new LinkedHashMap<>();
 
@@ -97,7 +102,10 @@ public class BehaviorToGrooveTransformer {
                 FSMToGrooveTransformer transformer = new FSMToGrooveTransformer();
 
                 startGraphs.add(transformer.generateStartGraph(finiteStateMachine, true));
-                transformer.generateRules(finiteStateMachine, true).forEach(rule -> allRules.put(rule.getRuleName(), rule));
+                transformer.generateRules(finiteStateMachine, false).forEach(rule -> allRules.put(rule.getRuleName(), rule));
+                // Copy type graph
+                transformer.generateAndWriteRulesFurther(finiteStateMachine, true, graphGrammarSubFolder);
+                typeGraphs.add(FSM_TYPE_GRAPH_FILE_NAME);
             }
 
             @Override
@@ -106,6 +114,7 @@ public class BehaviorToGrooveTransformer {
 
                 startGraphs.add(transformer.generateStartGraph(petriNet, true));
                 transformer.generateRules(petriNet, true).forEach(rule -> allRules.put(rule.getRuleName(), rule));
+                // Copy type graph if needed in the future!
             }
 
             @Override
@@ -114,6 +123,9 @@ public class BehaviorToGrooveTransformer {
 
                 startGraphs.add(transformer.generateStartGraph(collaboration, true));
                 transformer.generateRules(collaboration, true).forEach(rule -> allRules.put(rule.getRuleName(), rule));
+                // Copy type graph
+                transformer.generateAndWriteRulesFurther(collaboration, true, graphGrammarSubFolder);
+                typeGraphs.add(BPMN_DIAGRAM_TYPE_GRAPH_FILE_NAME);
             }
 
             @Override
@@ -124,19 +136,25 @@ public class BehaviorToGrooveTransformer {
 
                 startGraphs.add(transformer.generateStartGraph(piProcess, true));
                 transformer.generateRules(piProcess, true).forEach(rule -> allRules.put(rule.getRuleName(), rule));
+                // Copy type graph
+                transformer.generateAndWriteRulesFurther(piProcess, true, graphGrammarSubFolder);
+                typeGraphs.add(PI_TYPE_GRAPH_FILE_NAME);
             }
 
             @Override
             public void handle(ActivityDiagram activityDiagram) {
                 // TODO: implement ActivityDiagram
+                typeGraphs.add(ACTIVITY_DIAGRAM_TYPE_GRAPH_FILE_NAME);
                 throw new UnsupportedOperationException();
             }
         }));
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
         if (piProcessIncluded[0]) {
-            additionalProperties.put("typeGraph", "Type");
             additionalProperties.put("checkDangling", "true");
+        }
+        if (typeGraphs.size() > 0) {
+            additionalProperties.put("typeGraph", String.join(" ", typeGraphs));
         }
         this.generatePropertiesFile(graphGrammarSubFolder, "start", additionalProperties);
 
@@ -213,7 +231,7 @@ public class BehaviorToGrooveTransformer {
         transformer.generateAndWriteRules(activityDiagram, false, graphGrammarSubFolder);
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
-        additionalProperties.put("typeGraph", "type");
+        additionalProperties.put("typeGraph", ACTIVITY_DIAGRAM_TYPE_GRAPH_FILE_NAME);
         this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
     }
 
@@ -226,7 +244,7 @@ public class BehaviorToGrooveTransformer {
         transformer.generateAndWriteRules(piProcess, false, graphGrammarSubFolder);
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
-        additionalProperties.put("typeGraph", "Type");
+        additionalProperties.put("typeGraph", PI_TYPE_GRAPH_FILE_NAME);
         additionalProperties.put("checkDangling", "true");
         this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
     }
@@ -244,7 +262,7 @@ public class BehaviorToGrooveTransformer {
         transformer.generateAndWriteRules(collaboration, addPrefix, graphGrammarSubFolder);
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
-        additionalProperties.put("typeGraph", "type");
+        additionalProperties.put("typeGraph", BPMN_DIAGRAM_TYPE_GRAPH_FILE_NAME);
         this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
     }
 
@@ -271,7 +289,7 @@ public class BehaviorToGrooveTransformer {
         transformer.generateAndWriteRules(finiteStateMachine, addPrefix, graphGrammarSubFolder);
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
-        additionalProperties.put("typeGraph", "type");
+        additionalProperties.put("typeGraph", FSM_TYPE_GRAPH_FILE_NAME);
         this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
     }
 

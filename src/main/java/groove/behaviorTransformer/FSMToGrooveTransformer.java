@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMachine> {
 
-    private static final String FSM_TYPE_GRAPH_DIR = "/StateMachineTypeGraph";
+    public static final String FSM_TYPE_GRAPH_DIR = "/StateMachineTypeGraph";
 
     // Node types
     private static final String TYPE_STATE = TYPE + "State";

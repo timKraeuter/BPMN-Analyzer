@@ -9,11 +9,11 @@ import java.io.IOException;
 
 class FSMToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
 
-    static final String TYPE_GRAPH_FILE_NAME = "type.gty";
+    static final String TYPE_GRAPH_FILE_NAME = "fsm_type.gty";
 
     @Override
     protected void setUpFurther() {
-        // Default is to ignore the type graph and the terminate rule.
+        // Default is to ignore the type graph.
         this.setFileNameFilter(x -> x.equals(TYPE_GRAPH_FILE_NAME));
     }
 

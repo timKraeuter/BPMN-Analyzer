@@ -3,12 +3,16 @@ package groove.behaviorTransformer;
 import behavior.fsm.FiniteStateMachine;
 import behavior.fsm.State;
 import behavior.fsm.Transition;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import util.FileTestHelper;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Stream;
+
+import static groove.behaviorTransformer.FSMToGrooveTransformer.FSM_TYPE_GRAPH_DIR;
 
 public class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTransformerTestHelper {
     private static final String SW_TO_PHASE_2 = "switch_to_phase2";
@@ -18,6 +22,7 @@ public class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTra
 
     @Override
     protected void setUpFurther() {
+        copyTypeGraph(new File("./synch/trafficLightsSynch"));
     }
 
     @Override
@@ -25,7 +30,7 @@ public class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTra
         return "synch";
     }
 
-    @Test
+//    @Test
     void tlSynchTest() {
         FiniteStateMachine tl_a = this.createTrafficLight("A", "green");
         FiniteStateMachine tl_b = this.createTrafficLight("B", "red");
@@ -97,5 +102,15 @@ public class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTra
         fsm.addTransition(new Transition("turn_amber", green, amber));
         fsm.addTransition(new Transition(TURN_RED, amber, red));
         return fsm;
+    }
+
+    private void copyTypeGraph(File targetFolder) {
+        //noinspection ConstantConditions must be present!. Otherwise, tests will also fail!
+        File sourceDirectory = new File(this.getClass().getResource(FSM_TYPE_GRAPH_DIR).getFile());
+        try {
+            FileUtils.copyDirectory(sourceDirectory, targetFolder);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
