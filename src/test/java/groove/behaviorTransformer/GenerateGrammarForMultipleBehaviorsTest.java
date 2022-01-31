@@ -78,9 +78,8 @@ public class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTra
         FileTestHelper.testDirEquals(expected_dir, actual_dir, fileName -> fileName.equals("system.properties"));
 
         // Some safety LTL-Properties for the system:
-        // G!(A_is_Green & B_is_Green)
-        // G!(C_is_Green & B_is_Green)
-        // G!(A_is_Green & B_is_Green & C_is_Green) --> Already checked by the two previous ones!
+        // G!((A_green | A_amber) & (B_green | B_amber))
+        // G!((C_green | C_amber) & (B_green | B_amber))
     }
 
     private FiniteStateMachine createTrafficLight(String fsmName, String startStateName) {
