@@ -410,68 +410,130 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
 
             private void createIntermediateCatchEventRule(IntermediateCatchEvent intermediateCatchEvent) {
                 String ruleName = CATCH + intermediateCatchEvent.getName();
-                ruleBuilder.startRule(ruleName);
-                GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(process, ruleBuilder);
-                intermediateCatchEvent.getOutgoingFlows().forEach(sequenceFlow -> addTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
                 switch (intermediateCatchEvent.getType()) {
                     case LINK:
-                        if (intermediateCatchEvent.getIncomingFlows().findAny().isPresent()) {
-                            throw new RuntimeException("Link intermediate catch events are not allowed to have incoming sequence flows!");
-                        }
-                        deleteTokenWithPosition(ruleBuilder, processInstance, intermediateCatchEvent.getName());
+                        createIntermediateCatchLinkEventRule(
+                                intermediateCatchEvent,
+                                process,
+                                ruleName,
+                                ruleBuilder);
                         break;
                     case MESSAGE:
-                        if (intermediateCatchEvent.getIncomingFlows().count() != 1) {
-                            // current restriction, again we would need implicit exclusive gateway.
-                            throw new RuntimeException("Intermediate message catch events are only allowed to have one incoming sequence flow!");
-                        }
-                        //noinspection OptionalGetWithoutIsPresent Size of the stream must be 1.
-                        SequenceFlow incFlow = intermediateCatchEvent.getIncomingFlows().findFirst().get();
-                        // Consume incoming token
-                        if (incFlow.getSource().isExclusiveEventBasedGateway()) {
-                            deleteTokenWithPosition(ruleBuilder, processInstance, incFlow.getSource().getName());
-                        } else {
-                            deleteTokenWithPosition(ruleBuilder, processInstance, incFlow.getID());
-                        }
-                        // Consume incoming messages.
-                        deleteIncomingMessagesForFlowNode(intermediateCatchEvent, processInstance, collaboration, ruleBuilder);
+                        createIntermediateCatchMessageEventRule(
+                                intermediateCatchEvent,
+                                process,
+                                ruleName,
+                                ruleBuilder,
+                                collaboration);
                         break;
                     case SIGNAL:
-                        // TODO: signal event
+                        // no rule needed since it will be embedded in the throw rule.
                         break;
                 }
-                ruleBuilder.buildRule();
             }
         }));
     }
 
-    private void expectContextSignalToken(GrooveNode processInstance, String globalSignalName, GrooveRuleBuilder ruleBuilder) {
-        GrooveNode signalToken = ruleBuilder.contextNode(TYPE_TOKEN);
-        ruleBuilder.contextEdge(TOKENS, processInstance, signalToken);
-        ruleBuilder.contextEdge(POSITION, signalToken, ruleBuilder.contextNode(createStringNodeLabel(globalSignalName)));
+    private void createIntermediateCatchMessageEventRule(
+            IntermediateCatchEvent intermediateCatchEvent,
+            Process process,
+            String ruleName,
+            GrooveRuleBuilder ruleBuilder,
+            BPMNCollaboration collaboration) {
+        ruleBuilder.startRule(ruleName);
+
+        GrooveNode processInstance = addTokensForOutgoingFlowsToRunningInstance(
+                intermediateCatchEvent,
+                process,
+                ruleBuilder);
+        if (intermediateCatchEvent.getIncomingFlows().count() != 1) {
+            // current restriction, again we would need implicit exclusive gateway.
+            throw new RuntimeException("Intermediate message catch events are only allowed to have one incoming sequence flow!");
+        }
+        //noinspection OptionalGetWithoutIsPresent Size of the stream must be 1.
+        SequenceFlow incFlow = intermediateCatchEvent.getIncomingFlows().findFirst().get();
+        // Consume incoming token
+        if (incFlow.getSource().isExclusiveEventBasedGateway()) {
+            deleteTokenWithPosition(ruleBuilder, processInstance, incFlow.getSource().getName());
+        } else {
+            deleteTokenWithPosition(ruleBuilder, processInstance, incFlow.getID());
+        }
+        // Consume incoming messages.
+        deleteIncomingMessagesForFlowNode(intermediateCatchEvent, processInstance, collaboration, ruleBuilder);
+
+        ruleBuilder.buildRule();
     }
 
-    private void createIntermediateThrowEventRule(IntermediateThrowEvent intermediateThrowEvent, GrooveRuleBuilder ruleBuilder, Process process, BPMNCollaboration collaboration) {
-        String ruleName = THROW + intermediateThrowEvent.getName();
+    private void createIntermediateCatchLinkEventRule(
+            IntermediateCatchEvent intermediateCatchEvent,
+            Process process,
+            String ruleName,
+            GrooveRuleBuilder ruleBuilder) {
         ruleBuilder.startRule(ruleName);
+
+        GrooveNode processInstance = addTokensForOutgoingFlowsToRunningInstance(intermediateCatchEvent, process, ruleBuilder);
+        if (intermediateCatchEvent.getIncomingFlows().findAny().isPresent()) {
+            throw new RuntimeException("Link intermediate catch events are not allowed to have incoming sequence flows!");
+        }
+        deleteTokenWithPosition(ruleBuilder, processInstance, intermediateCatchEvent.getName());
+
+        ruleBuilder.buildRule();
+    }
+
+    private GrooveNode addTokensForOutgoingFlowsToRunningInstance(FlowNode flowNode, Process process, GrooveRuleBuilder ruleBuilder) {
         GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(process, ruleBuilder);
+        flowNode.getOutgoingFlows().forEach(sequenceFlow -> addTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
+        return processInstance;
+    }
+
+    private void createIntermediateThrowEventRule(
+            IntermediateThrowEvent intermediateThrowEvent,
+            GrooveRuleBuilder ruleBuilder,
+            Process process,
+            BPMNCollaboration collaboration) {
+        String ruleName = THROW + intermediateThrowEvent.getName();
         // We currently limit to one incoming token, but we could implement an implicit exclusive gateway.
         if (intermediateThrowEvent.getIncomingFlows().count() != 1) {
             throw new RuntimeException("Intermediate throw events should have exactly one incoming sequence flow!");
         }
-        intermediateThrowEvent.getIncomingFlows().forEach(sequenceFlow -> deleteTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
         switch (intermediateThrowEvent.getType()) {
             case LINK:
-                addTokenWithPosition(ruleBuilder, processInstance, intermediateThrowEvent.getName());
+                createIntermediateThrowLinkEventRule(intermediateThrowEvent, ruleName, ruleBuilder, process);
                 break;
             case MESSAGE:
-                intermediateThrowEvent.getOutgoingFlows().forEach(sequenceFlow -> addTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
-                addOutgoingMessagesForFlowNode(intermediateThrowEvent, collaboration, ruleBuilder);
+                createIntermediateThrowMessageEventRule(intermediateThrowEvent, ruleName, ruleBuilder, collaboration, process);
                 break;
             case SIGNAL:
                 // TODO: signal event
                 break;
         }
+    }
+
+    private void createIntermediateThrowMessageEventRule(
+            IntermediateThrowEvent intermediateThrowEvent,
+            String ruleName,
+            GrooveRuleBuilder ruleBuilder,
+            BPMNCollaboration collaboration,
+            Process process) {
+        ruleBuilder.startRule(ruleName);
+        GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(process, ruleBuilder);
+        intermediateThrowEvent.getOutgoingFlows().forEach(sequenceFlow -> addTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
+        addOutgoingMessagesForFlowNode(intermediateThrowEvent, collaboration, ruleBuilder);
+
+        ruleBuilder.buildRule();
+    }
+
+    private void createIntermediateThrowLinkEventRule(
+            IntermediateThrowEvent intermediateThrowEvent,
+            String ruleName,
+            GrooveRuleBuilder ruleBuilder,
+            Process process) {
+        ruleBuilder.startRule(ruleName);
+        GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(process, ruleBuilder);
+        intermediateThrowEvent.getIncomingFlows().forEach(
+                sequenceFlow -> deleteTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
+        addTokenWithPosition(ruleBuilder, processInstance, intermediateThrowEvent.getName());
+
         ruleBuilder.buildRule();
     }
 
@@ -489,7 +551,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                 createMessageStartEventRule(startEvent, ruleBuilder, process, collaboration);
                 break;
             case SIGNAL:
-                createSignalStartEventRule(startEvent, ruleBuilder, process);
+                // will be embedded in the throw rule.
                 break;
         }
         ruleBuilder.buildRule();
@@ -503,10 +565,6 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
     private void createMessageStartEventRule(StartEvent startEvent, GrooveRuleBuilder ruleBuilder, Process process, BPMNCollaboration collaboration) {
         GrooveNode processInstance = createProcessInstanceAndAddTokens(startEvent, ruleBuilder, process);
         deleteIncomingMessagesForFlowNode(startEvent, processInstance, collaboration, ruleBuilder);
-    }
-
-    private void createSignalStartEventRule(StartEvent startEvent, GrooveRuleBuilder ruleBuilder, Process process) {
-        // TODO: signal event
     }
 
     private GrooveNode createProcessInstanceAndAddTokens(StartEvent startEvent, GrooveRuleBuilder ruleBuilder, Process process) {

@@ -13,8 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
 public abstract class BehaviorToGrooveTransformerTestHelper {
-    //    private final String outputPath = "B:/Source/groove/bin";
-    String outputPath = "B:/Source/groove/bin";
+    private final String outputPath = "C:/Source/groove/bin";
 //    String outputPath = FileUtils.getTempDirectoryPath();
 
     private boolean addPrefix = false;
@@ -57,10 +56,7 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
 
         // assert
         File expectedDir = new File(this.getClass().getResource("/" + this.getOutputPathSubFolderName() + "/" + modelName + ".gps").getFile());
-        FileTestHelper.testDirEquals(
-                expectedDir,
-                new File(outputDir + "/" + modelName + ".gps"),
-                fileName -> fileName.equals("system.properties") || fileNameFilter.apply(fileName)); // Ignore the system.properties file because it contains a timestamp and a dir.
+        FileTestHelper.testDirEquals(expectedDir, new File(outputDir + "/" + modelName + ".gps"), fileName -> fileName.equals("system.properties") || fileNameFilter.apply(fileName)); // Ignore the system.properties file because it contains a timestamp and a dir.
 
         File propertiesFile = new File(outputDir + "/" + modelName + ".gps/system.properties");
         this.checkPropertiesFile(propertiesFile);
