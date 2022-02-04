@@ -1,187 +1,187 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="Throw_t_msg2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n92">
+        <node id="n94">
             <attr name="layout">
                 <string>417 582 0 0</string>
             </attr>
         </node>
-        <edge from="n92" to="n92">
+        <edge from="n94" to="n94">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n92" to="n92">
+        <edge from="n94" to="n94">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n97">
+        <node id="n99">
             <attr name="layout">
                 <string>392 242 0 0</string>
             </attr>
         </node>
-        <edge from="n97" to="n97">
+        <edge from="n99" to="n99">
             <attr name="label">
                 <string>type:Message</string>
             </attr>
         </edge>
-        <edge from="n97" to="n97">
+        <edge from="n99" to="n99">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n90">
+        <node id="n92">
             <attr name="layout">
                 <string>417 492 0 0</string>
             </attr>
         </node>
-        <edge from="n90" to="n90">
+        <edge from="n92" to="n92">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n90" to="n90">
+        <edge from="n92" to="n92">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n87">
+        <node id="n89">
             <attr name="layout">
                 <string>62 337 0 0</string>
             </attr>
         </node>
-        <edge from="n87" to="n87">
+        <edge from="n89" to="n89">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n88">
+        <node id="n90">
             <attr name="layout">
                 <string>402 402 0 0</string>
             </attr>
         </node>
-        <edge from="n88" to="n88">
+        <edge from="n90" to="n90">
             <attr name="label">
                 <string>string:"p2"</string>
             </attr>
         </edge>
-        <node id="n89">
+        <node id="n91">
             <attr name="layout">
                 <string>402 322 0 0</string>
             </attr>
         </node>
-        <edge from="n89" to="n89">
-            <attr name="label">
-                <string>type:Running</string>
-            </attr>
-        </edge>
-        <node id="n91">
-            <attr name="layout">
-                <string>602 492 0 0</string>
-            </attr>
-        </node>
         <edge from="n91" to="n91">
             <attr name="label">
-                <string>string:"e1_t_msg2"</string>
+                <string>type:Running</string>
             </attr>
         </edge>
         <node id="n93">
             <attr name="layout">
-                <string>602 582 0 0</string>
+                <string>602 492 0 0</string>
             </attr>
         </node>
         <edge from="n93" to="n93">
             <attr name="label">
-                <string>string:"t_msg2_end2_p2"</string>
-            </attr>
-        </edge>
-        <node id="n94">
-            <attr name="layout">
-                <string>62 85 0 0</string>
-            </attr>
-        </node>
-        <edge from="n94" to="n94">
-            <attr name="label">
-                <string>type:ProcessInstance</string>
+                <string>string:"e1_t_msg2"</string>
             </attr>
         </edge>
         <node id="n95">
             <attr name="layout">
-                <string>392 152 0 0</string>
+                <string>602 582 0 0</string>
             </attr>
         </node>
         <edge from="n95" to="n95">
             <attr name="label">
-                <string>string:"p1"</string>
+                <string>string:"t_msg2_end2_p2"</string>
             </attr>
         </edge>
         <node id="n96">
             <attr name="layout">
-                <string>392 72 0 0</string>
+                <string>62 85 0 0</string>
             </attr>
         </node>
         <edge from="n96" to="n96">
             <attr name="label">
-                <string>type:Running</string>
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n97">
+            <attr name="layout">
+                <string>392 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n97" to="n97">
+            <attr name="label">
+                <string>string:"p1"</string>
             </attr>
         </edge>
         <node id="n98">
             <attr name="layout">
-                <string>592 242 0 0</string>
+                <string>392 72 0 0</string>
             </attr>
         </node>
         <edge from="n98" to="n98">
             <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n100">
+            <attr name="layout">
+                <string>592 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n100" to="n100">
+            <attr name="label">
                 <string>string:"t_msg2_r_msg2"</string>
             </attr>
         </edge>
-        <edge from="n87" to="n92">
+        <edge from="n89" to="n94">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n92" to="n93">
+        <edge from="n94" to="n95">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n94" to="n97">
+        <edge from="n96" to="n99">
             <attr name="label">
                 <string>new:messages</string>
             </attr>
         </edge>
-        <edge from="n97" to="n98">
+        <edge from="n99" to="n100">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n87" to="n90">
+        <edge from="n89" to="n92">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n90" to="n91">
+        <edge from="n92" to="n93">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n87" to="n88">
+        <edge from="n89" to="n90">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n87" to="n89">
+        <edge from="n89" to="n91">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n94" to="n95">
+        <edge from="n96" to="n97">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n94" to="n96">
+        <edge from="n96" to="n98">
             <attr name="label">
                 <string>state</string>
             </attr>

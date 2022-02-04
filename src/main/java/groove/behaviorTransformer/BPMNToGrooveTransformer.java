@@ -517,6 +517,8 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
             Process process) {
         ruleBuilder.startRule(ruleName);
         GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(process, ruleBuilder);
+        intermediateThrowEvent.getIncomingFlows().forEach(
+                sequenceFlow -> deleteTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
         intermediateThrowEvent.getOutgoingFlows().forEach(sequenceFlow -> addTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
         addOutgoingMessagesForFlowNode(intermediateThrowEvent, collaboration, ruleBuilder);
 
