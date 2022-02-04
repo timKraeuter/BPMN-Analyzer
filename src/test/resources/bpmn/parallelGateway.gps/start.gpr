@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="start" role="rule" edgeids="false" edgemode="directed">
+        <node id="n8">
+            <attr name="layout">
+                <string>507 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n8" to="n8">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n8" to="n8">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n10">
+            <attr name="layout">
+                <string>507 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n10" to="n10">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n10" to="n10">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
         <node id="n5">
             <attr name="layout">
-                <string>62 85 0 0</string>
+                <string>62 87 0 0</string>
             </attr>
         </node>
         <edge from="n5" to="n5">
@@ -13,7 +43,7 @@
         </edge>
         <node id="n6">
             <attr name="layout">
-                <string>392 232 0 0</string>
+                <string>402 152 0 0</string>
             </attr>
         </node>
         <edge from="n6" to="n6">
@@ -23,7 +53,7 @@
         </edge>
         <node id="n7">
             <attr name="layout">
-                <string>392 72 0 0</string>
+                <string>402 72 0 0</string>
             </attr>
         </node>
         <edge from="n7" to="n7">
@@ -31,42 +61,42 @@
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n8">
-            <attr name="layout">
-                <string>532 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n8" to="n8">
-            <attr name="label">
-                <string>type:Token</string>
-            </attr>
-        </edge>
         <node id="n9">
             <attr name="layout">
-                <string>772 224 0 0</string>
+                <string>782 332 0 0</string>
             </attr>
         </node>
         <edge from="n9" to="n9">
             <attr name="label">
-                <string>string:"parallelGateway_start"</string>
-            </attr>
-        </edge>
-        <node id="n10">
-            <attr name="layout">
-                <string>772 144 0 0</string>
-            </attr>
-        </node>
-        <edge from="n10" to="n10">
-            <attr name="label">
                 <string>string:"start_a0"</string>
             </attr>
         </edge>
-        <edge from="n8" to="n10">
+        <node id="n11">
+            <attr name="layout">
+                <string>782 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n11" to="n11">
+            <attr name="label">
+                <string>string:"parallelGateway_start"</string>
+            </attr>
+        </edge>
+        <edge from="n5" to="n8">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n8" to="n9">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n8" to="n9">
+        <edge from="n5" to="n10">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n10" to="n11">
             <attr name="label">
                 <string>del:position</string>
             </attr>
@@ -79,11 +109,6 @@
         <edge from="n5" to="n7">
             <attr name="label">
                 <string>state</string>
-            </attr>
-        </edge>
-        <edge from="n5" to="n8">
-            <attr name="label">
-                <string>tokens</string>
             </attr>
         </edge>
     </graph>
