@@ -10,7 +10,11 @@ public class StartEvent extends CatchEvent {
     }
 
     public StartEvent(String name, StartEventType type) {
-        super(name);
+        this(name, type, EventDefinition.empty());
+    }
+
+    public StartEvent(String name, StartEventType type, EventDefinition eventDefinition) {
+        super(name, eventDefinition);
         this.type = type;
     }
 

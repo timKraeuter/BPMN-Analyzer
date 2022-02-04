@@ -6,7 +6,11 @@ public class IntermediateThrowEvent extends ThrowEvent {
     private final IntermediateEventType type;
 
     public IntermediateThrowEvent(String name, IntermediateEventType type) {
-        super(name);
+        this(name, type, EventDefinition.empty());
+    }
+
+    public IntermediateThrowEvent(String name, IntermediateEventType type, EventDefinition eventDefinition) {
+        super(name, eventDefinition);
         this.type = type;
     }
 

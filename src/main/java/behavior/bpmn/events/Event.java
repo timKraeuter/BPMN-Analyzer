@@ -4,8 +4,11 @@ import behavior.bpmn.FlowNode;
 
 public abstract class Event extends FlowNode {
 
-    public Event(String name) {
+    private EventDefinition eventDefinition;
+
+    public Event(String name, EventDefinition eventDefinition) {
         super(name);
+        this.eventDefinition = eventDefinition;
     }
 
     @Override
@@ -31,5 +34,9 @@ public abstract class Event extends FlowNode {
     @Override
     public boolean isExclusiveEventBasedGateway() {
         return false;
+    }
+
+    public EventDefinition getEventDefinition() {
+        return eventDefinition;
     }
 }

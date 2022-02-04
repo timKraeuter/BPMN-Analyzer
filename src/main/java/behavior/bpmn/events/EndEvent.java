@@ -17,7 +17,14 @@ public class EndEvent extends ThrowEvent {
      * Creates and end event of the given type.
      */
     public EndEvent(String name, EndEventType type) {
-        super(name);
+        this(name, type, EventDefinition.empty());
+    }
+
+    /**
+     * Creates and end event of the given type with an event definition.
+     */
+    public EndEvent(String name, EndEventType type, EventDefinition eventDefinition) {
+        super(name, eventDefinition);
         this.type = type;
     }
 

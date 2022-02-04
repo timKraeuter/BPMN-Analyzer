@@ -436,10 +436,19 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                         // Consume incoming messages.
                         deleteIncomingMessagesForFlowNode(intermediateCatchEvent, processInstance, collaboration, ruleBuilder);
                         break;
+                    case SIGNAL:
+                        // TODO: signal event
+                        break;
                 }
                 ruleBuilder.buildRule();
             }
         }));
+    }
+
+    private void expectContextSignalToken(GrooveNode processInstance, String globalSignalName, GrooveRuleBuilder ruleBuilder) {
+        GrooveNode signalToken = ruleBuilder.contextNode(TYPE_TOKEN);
+        ruleBuilder.contextEdge(TOKENS, processInstance, signalToken);
+        ruleBuilder.contextEdge(POSITION, signalToken, ruleBuilder.contextNode(createStringNodeLabel(globalSignalName)));
     }
 
     private void createIntermediateThrowEventRule(IntermediateThrowEvent intermediateThrowEvent, GrooveRuleBuilder ruleBuilder, Process process, BPMNCollaboration collaboration) {
@@ -459,28 +468,52 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                 intermediateThrowEvent.getOutgoingFlows().forEach(sequenceFlow -> addTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
                 addOutgoingMessagesForFlowNode(intermediateThrowEvent, collaboration, ruleBuilder);
                 break;
+            case SIGNAL:
+                // TODO: signal event
+                break;
         }
         ruleBuilder.buildRule();
     }
 
-    private void createStartEventRule(StartEvent startEvent, GrooveRuleBuilder ruleBuilder, Process process, BPMNCollaboration collaboration) {
-        if (startEvent.getOutgoingFlows().count() != 1) {
-            throw new RuntimeException("Start events should have exactly one outgoing flow!");
-        }
-        //noinspection OptionalGetWithoutIsPresent size of the stream is 1.
-        final String outgoingFlowID = startEvent.getOutgoingFlows().findFirst().get().getID();
+    private void createStartEventRule(
+            StartEvent startEvent,
+            GrooveRuleBuilder ruleBuilder,
+            Process process,
+            BPMNCollaboration collaboration) {
         ruleBuilder.startRule(startEvent.getName());
         switch (startEvent.getType()) {
             case NONE:
-                BPMNToGrooveTransformer.this.updateTokenPositionWhenRunning(process, getStartEventTokenName(process), outgoingFlowID, ruleBuilder);
+                createNoneStartEventRule(startEvent, ruleBuilder, process);
                 break;
             case MESSAGE:
-                GrooveNode processInstance = createContextRunningProcessInstance(process, ruleBuilder);
-                updateTokenPositionForProcessInstance(getStartEventTokenName(process), outgoingFlowID, ruleBuilder, processInstance);
-                deleteIncomingMessagesForFlowNode(startEvent, processInstance, collaboration, ruleBuilder);
+                createMessageStartEventRule(startEvent, ruleBuilder, process, collaboration);
+                break;
+            case SIGNAL:
+                createSignalStartEventRule(startEvent, ruleBuilder, process);
                 break;
         }
         ruleBuilder.buildRule();
+    }
+
+    private void createNoneStartEventRule(StartEvent startEvent, GrooveRuleBuilder ruleBuilder, Process process) {
+        GrooveNode processInstance = createProcessInstanceAndAddTokens(startEvent, ruleBuilder, process);
+        deleteTokenWithPosition(ruleBuilder, processInstance, getStartEventTokenName(process));
+    }
+
+    private void createMessageStartEventRule(StartEvent startEvent, GrooveRuleBuilder ruleBuilder, Process process, BPMNCollaboration collaboration) {
+        GrooveNode processInstance = createProcessInstanceAndAddTokens(startEvent, ruleBuilder, process);
+        deleteIncomingMessagesForFlowNode(startEvent, processInstance, collaboration, ruleBuilder);
+    }
+
+    private void createSignalStartEventRule(StartEvent startEvent, GrooveRuleBuilder ruleBuilder, Process process) {
+        // TODO: signal event
+    }
+
+    private GrooveNode createProcessInstanceAndAddTokens(StartEvent startEvent, GrooveRuleBuilder ruleBuilder, Process process) {
+        GrooveNode processInstance = createContextRunningProcessInstance(process, ruleBuilder);
+        startEvent.getOutgoingFlows().forEach(outFlow ->
+                addTokenWithPosition(ruleBuilder, processInstance, outFlow.getID()));
+        return processInstance;
     }
 
     private void deleteIncomingMessagesForFlowNode(FlowNode handleMessageFlowNode, GrooveNode processInstance, BPMNCollaboration collaboration, GrooveRuleBuilder ruleBuilder) {
