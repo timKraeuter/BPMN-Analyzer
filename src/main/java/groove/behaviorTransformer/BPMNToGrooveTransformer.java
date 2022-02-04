@@ -485,7 +485,11 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         ruleBuilder.buildRule();
     }
 
-    private void createSignalThrowRulePart(EventDefinition eventDefinition, GrooveRuleBuilder ruleBuilder, Process process, GrooveNode processInstance) {
+    private void createSignalThrowRulePart(
+            EventDefinition eventDefinition,
+            GrooveRuleBuilder ruleBuilder,
+            Process process, // TODO: Needs collaboration in the future.
+            GrooveNode processInstance) {
         Set<Event> correspondingSignalCatchEvents = this.findAllCorrespondingSignalCatchEvents(
                 process,
                 eventDefinition);
