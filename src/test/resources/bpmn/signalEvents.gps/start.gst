@@ -18,7 +18,7 @@
         </node>
         <edge from="n1" to="n1">
             <attr name="label">
-                <string>string:"null"</string>
+                <string>string:"signalEvents"</string>
             </attr>
         </edge>
         <node id="n2">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n3">
             <attr name="layout">
-                <string>415 232 0 0</string>
+                <string>475 232 0 0</string>
             </attr>
         </node>
         <edge from="n3" to="n3">
@@ -43,12 +43,12 @@
         </edge>
         <node id="n4">
             <attr name="layout">
-                <string>607 232 0 0</string>
+                <string>727 232 0 0</string>
             </attr>
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"null_start"</string>
+                <string>string:"signalEvents_start"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">

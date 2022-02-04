@@ -154,14 +154,13 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
         final EventBasedGateway e1 = new EventBasedGateway("e1");
         EndEvent s2_throw = new EndEvent("S2_Throw", EndEventType.SIGNAL, s2);
         IntermediateCatchEvent s2_catch = new IntermediateCatchEvent("S2_Catch", IntermediateEventType.SIGNAL, s2);
-        final StartEvent start_s2_catch = new StartEvent("Start_S2_Catch", StartEventType.SIGNAL, s2);
-        final ParallelGateway p2 = new ParallelGateway("p2");
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "signalEvents";
 
         final BPMNCollaboration signalModel = new BPMNCollaborationBuilder()
                 .name(modelName)
+                .processName(modelName)
                 .startEvent(start)
                 .sequenceFlow(start, s1_throw)
                 .sequenceFlow(s1_throw, s2_throw)
@@ -171,9 +170,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(s1_catch_2, p1)
                 .sequenceFlow(p1, e1)
                 .sequenceFlow(e1, s2_catch)
-                .sequenceFlow(s2_catch, p2)
-                .sequenceFlow(start_s2_catch, p2)
-                .sequenceFlow(p2, end)
+                .sequenceFlow(s2_catch, end)
                 .build();
 
         this.checkGrooveGeneration(signalModel);
