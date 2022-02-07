@@ -382,7 +382,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                 });
                 // Effects the rules of the subsequent flow nodes!
                 // Possible subsequent nodes: Message catch, Receive task, Signal catch, timer and condition.
-                // We currently only implemented the first two.
+                // We currently only implemented the first three.
             }
 
             @Override
@@ -500,7 +500,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
             BPMNCollaboration collaboration,
             Process process) {
         Set<Event> correspondingSignalCatchEvents = this.findAllCorrespondingSignalCatchEvents(
-                process,
+                collaboration,
                 eventDefinition);
 
         correspondingSignalCatchEvents.forEach(event -> {
@@ -541,17 +541,37 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
             if (processFound) {
                 return participant;
             }
-            return participant.getSubProcesses().filter(process -> process.getControlFlowNodes().anyMatch(flowNode -> flowNode.equals(event)))
-                              .findFirst()
-                              .get();
+            Optional<Process> optionalProcess = participant.getSubProcesses()
+                                                           .filter(process -> process.getControlFlowNodes().anyMatch(flowNode -> flowNode.equals(event)))
+                                                           .findFirst();
+            if (optionalProcess.isPresent()) {
+                return optionalProcess.get();
+            }
         }
         // Should not happen.
         throw new RuntimeException(String.format("No process for the event %s found!", event));
     }
 
-    private Set<Event> findAllCorrespondingSignalCatchEvents(Process process, EventDefinition eventDefinition) {
-        String globalSignalName = eventDefinition.getGlobalSignalName();
+    private Set<Event> findAllCorrespondingSignalCatchEvents(BPMNCollaboration collaboration, EventDefinition eventDefinition) {
         Set<Event> signalCatchEvents = new LinkedHashSet<>();
+        Set<Process> seenProcesses = new HashSet<>();
+        collaboration.getParticipants().forEach(process -> {
+            signalCatchEvents.addAll(findAllCorrespondingSignalCatchEvents(process, eventDefinition, seenProcesses));
+        });
+        return signalCatchEvents;
+    }
+
+    private Set<Event> findAllCorrespondingSignalCatchEvents(
+            Process process,
+            EventDefinition eventDefinition,
+            Set<Process> seenProcesses) {
+        Set<Event> signalCatchEvents = new LinkedHashSet<>();
+        if (seenProcesses.contains(process)) {
+            return signalCatchEvents;
+        }
+        seenProcesses.add(process);
+
+        String globalSignalName = eventDefinition.getGlobalSignalName();
         process.getControlFlowNodes().forEach(flowNode -> flowNode.accept(new FlowNodeVisitor() {
             @Override
             public void handle(Task task) {
@@ -573,7 +593,10 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
             public void handle(CallActivity callActivity) {
                 // not relevant
                 signalCatchEvents.addAll(
-                        findAllCorrespondingSignalCatchEvents(callActivity.getSubProcessModel(), eventDefinition));
+                        findAllCorrespondingSignalCatchEvents(
+                                callActivity.getSubProcessModel(),
+                                eventDefinition,
+                                seenProcesses));
             }
 
             @Override
@@ -593,7 +616,8 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
 
             @Override
             public void handle(StartEvent startEvent) {
-                if (startEvent.getType() == StartEventType.SIGNAL && startEvent.getEventDefinition().getGlobalSignalName().equals(globalSignalName)) {
+                if (startEvent.getType() == StartEventType.SIGNAL
+                        && startEvent.getEventDefinition().getGlobalSignalName().equals(globalSignalName)) {
                     signalCatchEvents.add(startEvent);
                 }
             }
@@ -605,7 +629,8 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
 
             @Override
             public void handle(IntermediateCatchEvent intermediateCatchEvent) {
-                if (intermediateCatchEvent.getType() == IntermediateEventType.SIGNAL && intermediateCatchEvent.getEventDefinition().getGlobalSignalName().equals(globalSignalName)) {
+                if (intermediateCatchEvent.getType() == IntermediateEventType.SIGNAL
+                        && intermediateCatchEvent.getEventDefinition().getGlobalSignalName().equals(globalSignalName)) {
                     signalCatchEvents.add(intermediateCatchEvent);
                 }
             }

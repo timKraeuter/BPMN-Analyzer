@@ -144,6 +144,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testSignalEvents() throws IOException {
+        // p1
         final StartEvent start = new StartEvent("start");
         final EventDefinition s1 = new EventDefinition("s1");
         final EventDefinition s2 = new EventDefinition("s2");
@@ -160,7 +161,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
 
         final BPMNCollaboration signalModel = new BPMNCollaborationBuilder()
                 .name(modelName)
-                .processName(modelName)
+                .processName("p1")
                 .startEvent(start)
                 .sequenceFlow(start, s1_throw)
                 .sequenceFlow(s1_throw, s2_throw)
@@ -176,5 +177,38 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
         this.checkGrooveGeneration(signalModel);
     }
 
-    // TODO: Cross process signal events test!
+    /**
+     * See test case <a href="https://cawemo.com/share/350bbe89-8c14-4ec2-a059-999a98ce92ea">"Signal events - Cross Process"</a> in cawemo.
+     */
+    @Test
+    void testSignalEventsCrossProcess() throws IOException {
+        final EventDefinition s1 = new EventDefinition("s1");
+        // p1
+        final StartEvent start_p1 = new StartEvent("start_p1");
+        IntermediateThrowEvent s1_throw = new IntermediateThrowEvent("S1_Throw", IntermediateEventType.SIGNAL, s1);
+        final EndEvent end_p1 = new EndEvent("end_p1");
+
+        // p2
+        StartEvent start_p2 = new StartEvent("start_p2");
+        IntermediateCatchEvent s1_catch = new IntermediateCatchEvent("S1_Catch", IntermediateEventType.SIGNAL, s1);
+        EndEvent end_p2 = new EndEvent("end_p2");
+
+        final String modelName = "signalEventsCrossProcess";
+
+        final BPMNCollaboration signalModel = new BPMNCollaborationBuilder()
+                .name(modelName)
+                .processName("p1")
+                .startEvent(start_p1)
+                .sequenceFlow(start_p1, s1_throw)
+                .sequenceFlow(s1_throw, end_p1)
+                .buildProcess()
+                .processName("p2")
+                .startEvent(start_p2)
+                .sequenceFlow(start_p2, s1_catch)
+                .sequenceFlow(s1_catch, end_p2)
+                .buildProcess()
+                .build();
+
+        this.checkGrooveGeneration(signalModel);
+    }
 }

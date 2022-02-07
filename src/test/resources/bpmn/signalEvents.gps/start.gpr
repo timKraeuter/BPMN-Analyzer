@@ -3,7 +3,7 @@
     <graph id="start" role="rule" edgeids="false" edgemode="directed">
         <node id="n8">
             <attr name="layout">
-                <string>505 252 0 0</string>
+                <string>437 252 0 0</string>
             </attr>
         </node>
         <edge from="n8" to="n8">
@@ -18,7 +18,7 @@
         </edge>
         <node id="n10">
             <attr name="layout">
-                <string>505 422 0 0</string>
+                <string>437 422 0 0</string>
             </attr>
         </node>
         <edge from="n10" to="n10">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n12">
             <attr name="layout">
-                <string>505 512 0 0</string>
+                <string>437 512 0 0</string>
             </attr>
         </node>
         <edge from="n12" to="n12">
@@ -48,7 +48,7 @@
         </edge>
         <node id="n14">
             <attr name="layout">
-                <string>505 162 0 0</string>
+                <string>437 162 0 0</string>
             </attr>
         </node>
         <edge from="n14" to="n14">
@@ -78,7 +78,7 @@
         </node>
         <edge from="n6" to="n6">
             <attr name="label">
-                <string>string:"signalEvents"</string>
+                <string>string:"p1"</string>
             </attr>
         </edge>
         <node id="n7">
@@ -93,7 +93,7 @@
         </edge>
         <node id="n9">
             <attr name="layout">
-                <string>757 252 0 0</string>
+                <string>622 252 0 0</string>
             </attr>
         </node>
         <edge from="n9" to="n9">
@@ -103,7 +103,7 @@
         </edge>
         <node id="n11">
             <attr name="layout">
-                <string>757 422 0 0</string>
+                <string>622 422 0 0</string>
             </attr>
         </node>
         <edge from="n11" to="n11">
@@ -113,7 +113,7 @@
         </edge>
         <node id="n13">
             <attr name="layout">
-                <string>757 512 0 0</string>
+                <string>622 512 0 0</string>
             </attr>
         </node>
         <edge from="n13" to="n13">
@@ -123,12 +123,12 @@
         </edge>
         <node id="n15">
             <attr name="layout">
-                <string>757 162 0 0</string>
+                <string>622 162 0 0</string>
             </attr>
         </node>
         <edge from="n15" to="n15">
             <attr name="label">
-                <string>string:"signalEvents_start"</string>
+                <string>string:"p1_start"</string>
             </attr>
         </edge>
         <edge from="n5" to="n8">
