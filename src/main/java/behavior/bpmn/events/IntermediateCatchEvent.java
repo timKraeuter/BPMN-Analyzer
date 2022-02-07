@@ -19,6 +19,11 @@ public class IntermediateCatchEvent extends CatchEvent {
         visitor.handle(this);
     }
 
+    @Override
+    public boolean isMessageOrSignalStartEvent() {
+        return false;
+    }
+
     public IntermediateEventType getType() {
         return type;
     }

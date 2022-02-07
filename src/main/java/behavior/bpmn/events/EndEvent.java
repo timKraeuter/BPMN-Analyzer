@@ -37,4 +37,9 @@ public class EndEvent extends ThrowEvent {
         visitor.handle(this);
     }
 
+    @Override
+    public boolean isMessageOrSignalStartEvent() {
+        return false;
+    }
+
 }

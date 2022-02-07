@@ -3,7 +3,7 @@ package behavior.bpmn.events;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
 public class StartEvent extends CatchEvent {
-    private StartEventType type;
+    private final StartEventType type;
 
     public StartEvent(String name) {
         this(name, StartEventType.NONE);
@@ -21,6 +21,11 @@ public class StartEvent extends CatchEvent {
     @Override
     public void accept(FlowNodeVisitor visitor) {
         visitor.handle(this);
+    }
+
+    @Override
+    public boolean isMessageOrSignalStartEvent() {
+        return this.type == StartEventType.MESSAGE || this.type == StartEventType.SIGNAL;
     }
 
     public StartEventType getType() {

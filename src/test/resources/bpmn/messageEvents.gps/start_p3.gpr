@@ -1,114 +1,119 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="start_p3" role="rule" edgeids="false" edgemode="directed">
-        <node id="n80">
+        <node id="n71">
             <attr name="layout">
-                <string>417 332 0 0</string>
+                <string>62 185 0 0</string>
             </attr>
         </node>
-        <edge from="n80" to="n80">
-            <attr name="label">
-                <string>type:Token</string>
-            </attr>
-        </edge>
-        <edge from="n80" to="n80">
-            <attr name="label">
-                <string>new:</string>
-            </attr>
-        </edge>
-        <node id="n82">
-            <attr name="layout">
-                <string>402 242 0 0</string>
-            </attr>
-        </node>
-        <edge from="n82" to="n82">
-            <attr name="label">
-                <string>type:Message</string>
-            </attr>
-        </edge>
-        <edge from="n82" to="n82">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
-        <node id="n77">
-            <attr name="layout">
-                <string>62 87 0 0</string>
-            </attr>
-        </node>
-        <edge from="n77" to="n77">
+        <edge from="n71" to="n71">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n78">
-            <attr name="layout">
-                <string>402 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n78" to="n78">
+        <edge from="n71" to="n71">
             <attr name="label">
-                <string>string:"p3"</string>
+                <string>new:</string>
             </attr>
         </edge>
-        <node id="n79">
+        <node id="n73">
             <attr name="layout">
-                <string>402 72 0 0</string>
+                <string>392 172 0 0</string>
             </attr>
         </node>
-        <edge from="n79" to="n79">
+        <edge from="n73" to="n73">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n81">
-            <attr name="layout">
-                <string>602 332 0 0</string>
-            </attr>
-        </node>
-        <edge from="n81" to="n81">
+        <edge from="n73" to="n73">
             <attr name="label">
-                <string>string:"start_p3_end_p3"</string>
+                <string>new:</string>
             </attr>
         </edge>
-        <node id="n83">
+        <node id="n74">
             <attr name="layout">
-                <string>602 242 0 0</string>
+                <string>407 342 0 0</string>
             </attr>
         </node>
-        <edge from="n83" to="n83">
+        <edge from="n74" to="n74">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n74" to="n74">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n69">
+            <attr name="layout">
+                <string>62 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n69" to="n69">
+            <attr name="label">
+                <string>type:Message</string>
+            </attr>
+        </edge>
+        <edge from="n69" to="n69">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n70">
+            <attr name="layout">
+                <string>262 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n70" to="n70">
             <attr name="label">
                 <string>string:"end_p2_start_p3"</string>
             </attr>
         </edge>
-        <edge from="n77" to="n80">
+        <node id="n72">
+            <attr name="layout">
+                <string>392 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n72" to="n72">
+            <attr name="label">
+                <string>string:"p3"</string>
+            </attr>
+        </edge>
+        <node id="n75">
+            <attr name="layout">
+                <string>592 342 0 0</string>
+            </attr>
+        </node>
+        <edge from="n75" to="n75">
+            <attr name="label">
+                <string>string:"start_p3_end_p3"</string>
+            </attr>
+        </edge>
+        <edge from="n71" to="n72">
+            <attr name="label">
+                <string>new:name</string>
+            </attr>
+        </edge>
+        <edge from="n71" to="n73">
+            <attr name="label">
+                <string>new:state</string>
+            </attr>
+        </edge>
+        <edge from="n71" to="n74">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n80" to="n81">
+        <edge from="n74" to="n75">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n77" to="n82">
-            <attr name="label">
-                <string>del:messages</string>
-            </attr>
-        </edge>
-        <edge from="n82" to="n83">
+        <edge from="n69" to="n70">
             <attr name="label">
                 <string>del:position</string>
-            </attr>
-        </edge>
-        <edge from="n77" to="n78">
-            <attr name="label">
-                <string>name</string>
-            </attr>
-        </edge>
-        <edge from="n77" to="n79">
-            <attr name="label">
-                <string>state</string>
             </attr>
         </edge>
     </graph>

@@ -46,4 +46,6 @@ public abstract class FlowNode {
     public abstract boolean isGateway();
 
     public abstract boolean isExclusiveEventBasedGateway();
+
+    public abstract boolean isMessageOrSignalStartEvent();
 }

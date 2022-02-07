@@ -21,4 +21,9 @@ public abstract class Gateway extends FlowNode {
     public boolean isInstantiateReceiveTask() {
         return false;
     }
+
+    @Override
+    public boolean isMessageOrSignalStartEvent() {
+        return false;
+    }
 }

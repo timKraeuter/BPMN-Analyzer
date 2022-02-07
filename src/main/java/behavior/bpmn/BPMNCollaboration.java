@@ -3,7 +3,9 @@ package behavior.bpmn;
 import behavior.Behavior;
 import behavior.BehaviorVisitor;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class BPMNCollaboration implements Behavior {
     private final String name;
@@ -22,6 +24,12 @@ public class BPMNCollaboration implements Behavior {
 
     public Set<MessageFlow> getMessageFlows() {
         return messageFlows;
+    }
+
+    public Set<MessageFlow> getIncomingMessageFlows(FlowNode node) {
+        return this.getMessageFlows().stream()
+                   .filter(flow -> flow.getTarget().equals(node))
+                   .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public Process getMessageFlowReceiver(MessageFlow flow) {

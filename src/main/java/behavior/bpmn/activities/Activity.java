@@ -22,4 +22,9 @@ public abstract class Activity extends FlowNode {
     public boolean isExclusiveEventBasedGateway() {
         return false;
     }
+
+    @Override
+    public boolean isMessageOrSignalStartEvent() {
+        return false;
+    }
 }

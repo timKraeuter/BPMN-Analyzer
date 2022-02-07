@@ -19,6 +19,11 @@ public class IntermediateThrowEvent extends ThrowEvent {
         visitor.handle(this);
     }
 
+    @Override
+    public boolean isMessageOrSignalStartEvent() {
+        return false;
+    }
+
     public IntermediateEventType getType() {
         return type;
     }

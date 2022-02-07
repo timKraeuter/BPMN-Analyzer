@@ -211,4 +211,40 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
 
         this.checkGrooveGeneration(signalModel);
     }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/b2db6ccf-1d3b-49c2-8739-0c53c069fd61">"Signal Start Events"</a> in cawemo.
+     */
+    @Test
+    void testSignalStartEvents() throws IOException {
+        final EventDefinition s1 = new EventDefinition("s1");
+        // p1
+        final StartEvent start_p1 = new StartEvent("start_p1");
+        IntermediateThrowEvent s1_throw = new IntermediateThrowEvent("S1_Throw", IntermediateEventType.SIGNAL, s1);
+        final EndEvent end_p1 = new EndEvent("end_p1");
+        StartEvent p1_s1_catch = new StartEvent("p1_S1_Catch", StartEventType.SIGNAL, s1);
+        EndEvent end = new EndEvent("end");
+
+        // p2
+        StartEvent p2_s1_catch = new StartEvent("p2_S1_Catch", StartEventType.SIGNAL, s1);
+        EndEvent end_p2 = new EndEvent("end_p2");
+
+        final String modelName = "singalStartEvents";
+
+        final BPMNCollaboration signalModel = new BPMNCollaborationBuilder()
+                .name(modelName)
+                .processName("p1")
+                .startEvent(start_p1)
+                .sequenceFlow(start_p1, s1_throw)
+                .sequenceFlow(s1_throw, end_p1)
+                .sequenceFlow(p1_s1_catch, end)
+                .buildProcess()
+                .processName("p2")
+                .startEvent(p2_s1_catch)
+                .sequenceFlow(p2_s1_catch, end_p2)
+                .buildProcess()
+                .build();
+
+        this.checkGrooveGeneration(signalModel);
+    }
 }
