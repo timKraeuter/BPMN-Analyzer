@@ -175,4 +175,6 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
 
         this.checkGrooveGeneration(signalModel);
     }
+
+    // TODO: Cross process signal events test!
 }

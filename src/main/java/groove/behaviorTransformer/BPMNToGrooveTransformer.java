@@ -452,7 +452,11 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         return processInstance;
     }
 
-    private void createIntermediateThrowEventRule(IntermediateThrowEvent intermediateThrowEvent, GrooveRuleBuilder ruleBuilder, Process process, BPMNCollaboration collaboration) {
+    private void createIntermediateThrowEventRule(
+            IntermediateThrowEvent intermediateThrowEvent,
+            GrooveRuleBuilder ruleBuilder,
+            Process process,
+            BPMNCollaboration collaboration) {
         String ruleName = THROW + intermediateThrowEvent.getName();
         // We currently limit to one incoming token, but we could implement an implicit exclusive gateway.
         if (intermediateThrowEvent.getIncomingFlows().count() != 1) {
@@ -466,12 +470,17 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                 createIntermediateThrowMessageEventRule(intermediateThrowEvent, ruleName, ruleBuilder, collaboration, process);
                 break;
             case SIGNAL:
-                createIntermediateThrowSignalEventRule(intermediateThrowEvent, ruleName, ruleBuilder, process);
+                createIntermediateThrowSignalEventRule(intermediateThrowEvent, ruleName, ruleBuilder, collaboration, process);
                 break;
         }
     }
 
-    private void createIntermediateThrowSignalEventRule(IntermediateThrowEvent intermediateThrowEvent, String ruleName, GrooveRuleBuilder ruleBuilder, Process process) {
+    private void createIntermediateThrowSignalEventRule(
+            IntermediateThrowEvent intermediateThrowEvent,
+            String ruleName,
+            GrooveRuleBuilder ruleBuilder,
+            BPMNCollaboration collaboration,
+            Process process) {
         ruleBuilder.startRule(ruleName);
         GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(process, ruleBuilder);
         intermediateThrowEvent.getIncomingFlows().forEach(sequenceFlow -> deleteTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID()));
@@ -480,26 +489,34 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         createSignalThrowRulePart(
                 intermediateThrowEvent.getEventDefinition(),
                 ruleBuilder,
-                process,
-                processInstance);
+                collaboration,
+                process);
         ruleBuilder.buildRule();
     }
 
     private void createSignalThrowRulePart(
             EventDefinition eventDefinition,
             GrooveRuleBuilder ruleBuilder,
-            Process process, // TODO: Needs collaboration in the future.
-            GrooveNode processInstance) {
+            BPMNCollaboration collaboration,
+            Process process) {
         Set<Event> correspondingSignalCatchEvents = this.findAllCorrespondingSignalCatchEvents(
                 process,
                 eventDefinition);
 
         correspondingSignalCatchEvents.forEach(event -> {
+            // TODO: Start events must spawn process instances.
+
             GrooveNode existsOptional = ruleBuilder.contextNode(EXISTS_OPTIONAL);
+            final Process processForEvent = findProcessForEvent(event, collaboration);
+            GrooveNode processInstance = createProcessInstanceWithName(processForEvent, ruleBuilder);
+            GrooveNode running = ruleBuilder.contextNode(TYPE_RUNNING);
+            ruleBuilder.contextEdge(STATE, processInstance, running);
+            ruleBuilder.contextEdge(AT, processInstance, existsOptional);
+            ruleBuilder.contextEdge(AT, running, existsOptional);
+
             event.getOutgoingFlows().forEach(outFlow -> {
                 GrooveNode newToken = ruleBuilder.addNode(TYPE_TOKEN);
                 ruleBuilder.contextEdge(AT, newToken, existsOptional);
-                // TODO: communication between multiple instances has to add tokens to the right process.
                 ruleBuilder.addEdge(TOKENS, processInstance, newToken);
                 ruleBuilder.addEdge(POSITION, newToken, ruleBuilder.contextNode(this.createStringNodeLabel(outFlow.getID())));
             });
@@ -512,11 +529,24 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                 }
                 GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
                 ruleBuilder.contextEdge(AT, token, existsOptional);
-                // TODO: communication between multiple instances has to delete tokens to the right process.
                 ruleBuilder.deleteEdge(TOKENS, processInstance, token);
                 ruleBuilder.deleteEdge(POSITION, token, ruleBuilder.contextNode(this.createStringNodeLabel(position)));
             });
         });
+    }
+
+    private Process findProcessForEvent(Event event, BPMNCollaboration collaboration) {
+        for (Process participant : collaboration.getParticipants()) {
+            final boolean processFound = participant.getControlFlowNodes().anyMatch(flowNode -> flowNode.equals(event));
+            if (processFound) {
+                return participant;
+            }
+            return participant.getSubProcesses().filter(process -> process.getControlFlowNodes().anyMatch(flowNode -> flowNode.equals(event)))
+                              .findFirst()
+                              .get();
+        }
+        // Should not happen.
+        throw new RuntimeException(String.format("No process for the event %s found!", event));
     }
 
     private Set<Event> findAllCorrespondingSignalCatchEvents(Process process, EventDefinition eventDefinition) {
@@ -814,7 +844,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                 addOutgoingMessagesForFlowNode(endEvent, collaboration, ruleBuilder);
                 break;
             case SIGNAL:
-                createSignalThrowRulePart(endEvent.getEventDefinition(), ruleBuilder, process, processInstance);
+                createSignalThrowRulePart(endEvent.getEventDefinition(), ruleBuilder, collaboration, process);
                 break;
         }
 
