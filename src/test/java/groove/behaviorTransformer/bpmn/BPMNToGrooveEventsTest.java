@@ -228,7 +228,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
         StartEvent p2_s1_catch = new StartEvent("p2_S1_Catch", StartEventType.SIGNAL, s1);
         EndEvent end_p2 = new EndEvent("end_p2");
 
-        final String modelName = "singalStartEvents";
+        final String modelName = "signalStartEvents";
 
         final BPMNCollaboration signalModel = new BPMNCollaborationBuilder()
                 .name(modelName)
