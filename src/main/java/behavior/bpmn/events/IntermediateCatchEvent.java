@@ -20,7 +20,7 @@ public class IntermediateCatchEvent extends CatchEvent {
     }
 
     @Override
-    public boolean isMessageOrSignalStartEvent() {
+    public boolean isInstantiateFlowNode() {
         return false;
     }
 

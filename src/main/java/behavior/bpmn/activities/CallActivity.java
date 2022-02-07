@@ -22,7 +22,7 @@ public class CallActivity extends Activity {
     }
 
     @Override
-    public boolean isInstantiateReceiveTask() {
+    public boolean isInstantiateFlowNode() {
         return false;
     }
 

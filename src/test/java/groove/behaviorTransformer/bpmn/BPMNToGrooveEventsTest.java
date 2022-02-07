@@ -219,9 +219,8 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
     void testSignalStartEvents() throws IOException {
         final EventDefinition s1 = new EventDefinition("s1");
         // p1
-        final StartEvent start_p1 = new StartEvent("start_p1");
-        IntermediateThrowEvent s1_throw = new IntermediateThrowEvent("S1_Throw", IntermediateEventType.SIGNAL, s1);
-        final EndEvent end_p1 = new EndEvent("end_p1");
+        final StartEvent start = new StartEvent("start");
+        final EndEvent s1_throw = new EndEvent("S1_Throw", EndEventType.SIGNAL, s1);
         StartEvent p1_s1_catch = new StartEvent("p1_S1_Catch", StartEventType.SIGNAL, s1);
         EndEvent end = new EndEvent("end");
 
@@ -234,9 +233,8 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
         final BPMNCollaboration signalModel = new BPMNCollaborationBuilder()
                 .name(modelName)
                 .processName("p1")
-                .startEvent(start_p1)
-                .sequenceFlow(start_p1, s1_throw)
-                .sequenceFlow(s1_throw, end_p1)
+                .startEvent(start)
+                .sequenceFlow(start, s1_throw)
                 .sequenceFlow(p1_s1_catch, end)
                 .buildProcess()
                 .processName("p2")

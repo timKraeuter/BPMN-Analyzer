@@ -38,8 +38,7 @@ public class EndEvent extends ThrowEvent {
     }
 
     @Override
-    public boolean isMessageOrSignalStartEvent() {
+    public boolean isInstantiateFlowNode() {
         return false;
     }
-
 }

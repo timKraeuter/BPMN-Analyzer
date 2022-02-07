@@ -4,7 +4,7 @@ import behavior.bpmn.FlowNode;
 
 public abstract class Event extends FlowNode {
 
-    private EventDefinition eventDefinition;
+    private final EventDefinition eventDefinition;
 
     public Event(String name, EventDefinition eventDefinition) {
         super(name);
@@ -23,11 +23,6 @@ public abstract class Event extends FlowNode {
 
     @Override
     public boolean isGateway() {
-        return false;
-    }
-
-    @Override
-    public boolean isInstantiateReceiveTask() {
         return false;
     }
 

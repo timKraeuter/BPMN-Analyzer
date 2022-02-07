@@ -39,13 +39,14 @@ public abstract class FlowNode {
 
     public abstract boolean isInclusiveGateway();
 
-    public abstract boolean isInstantiateReceiveTask();
+    /**
+     * @return is the flow nodes should instantiate the process, such as instantiate receive tasks, message start events or signal start events.
+     */
+    public abstract boolean isInstantiateFlowNode();
 
     public abstract boolean isTask();
 
     public abstract boolean isGateway();
 
     public abstract boolean isExclusiveEventBasedGateway();
-
-    public abstract boolean isMessageOrSignalStartEvent();
 }

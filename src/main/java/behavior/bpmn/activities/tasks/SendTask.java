@@ -13,7 +13,7 @@ public class SendTask extends AbstractTask {
     }
 
     @Override
-    public boolean isInstantiateReceiveTask() {
+    public boolean isInstantiateFlowNode() {
         return false;
     }
 }

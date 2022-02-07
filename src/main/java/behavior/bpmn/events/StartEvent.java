@@ -24,7 +24,7 @@ public class StartEvent extends CatchEvent {
     }
 
     @Override
-    public boolean isMessageOrSignalStartEvent() {
+    public boolean isInstantiateFlowNode() {
         return this.type == StartEventType.MESSAGE || this.type == StartEventType.SIGNAL;
     }
 
