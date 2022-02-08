@@ -3,7 +3,7 @@
     <graph id="Throw_t_msg1" role="rule" edgeids="false" edgemode="directed">
         <node id="n82">
             <attr name="layout">
-                <string>417 582 0 0</string>
+                <string>417 593 0 0</string>
             </attr>
         </node>
         <edge from="n82" to="n82">
@@ -16,24 +16,24 @@
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n87">
+        <node id="n88">
             <attr name="layout">
-                <string>392 242 0 0</string>
+                <string>402 82 0 0</string>
             </attr>
         </node>
-        <edge from="n87" to="n87">
+        <edge from="n88" to="n88">
             <attr name="label">
                 <string>type:Message</string>
             </attr>
         </edge>
-        <edge from="n87" to="n87">
+        <edge from="n88" to="n88">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
         <node id="n80">
             <attr name="layout">
-                <string>417 492 0 0</string>
+                <string>417 503 0 0</string>
             </attr>
         </node>
         <edge from="n80" to="n80">
@@ -48,7 +48,7 @@
         </edge>
         <node id="n77">
             <attr name="layout">
-                <string>62 337 0 0</string>
+                <string>62 348 0 0</string>
             </attr>
         </node>
         <edge from="n77" to="n77">
@@ -58,7 +58,7 @@
         </edge>
         <node id="n78">
             <attr name="layout">
-                <string>402 402 0 0</string>
+                <string>402 413 0 0</string>
             </attr>
         </node>
         <edge from="n78" to="n78">
@@ -68,7 +68,7 @@
         </edge>
         <node id="n79">
             <attr name="layout">
-                <string>402 322 0 0</string>
+                <string>402 333 0 0</string>
             </attr>
         </node>
         <edge from="n79" to="n79">
@@ -78,7 +78,7 @@
         </edge>
         <node id="n81">
             <attr name="layout">
-                <string>602 492 0 0</string>
+                <string>602 503 0 0</string>
             </attr>
         </node>
         <edge from="n81" to="n81">
@@ -88,7 +88,7 @@
         </edge>
         <node id="n83">
             <attr name="layout">
-                <string>602 582 0 0</string>
+                <string>602 593 0 0</string>
             </attr>
         </node>
         <edge from="n83" to="n83">
@@ -98,40 +98,50 @@
         </edge>
         <node id="n84">
             <attr name="layout">
-                <string>62 85 0 0</string>
+                <string>602 162 0 0</string>
             </attr>
         </node>
         <edge from="n84" to="n84">
             <attr name="label">
-                <string>type:ProcessInstance</string>
+                <string>existsx:</string>
             </attr>
         </edge>
         <node id="n85">
             <attr name="layout">
-                <string>392 152 0 0</string>
+                <string>62 97 0 0</string>
             </attr>
         </node>
         <edge from="n85" to="n85">
             <attr name="label">
-                <string>string:"p1"</string>
+                <string>type:ProcessInstance</string>
             </attr>
         </edge>
         <node id="n86">
             <attr name="layout">
-                <string>392 72 0 0</string>
+                <string>402 242 0 0</string>
             </attr>
         </node>
         <edge from="n86" to="n86">
             <attr name="label">
+                <string>string:"p1"</string>
+            </attr>
+        </edge>
+        <node id="n87">
+            <attr name="layout">
+                <string>402 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n87" to="n87">
+            <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n88">
+        <node id="n89">
             <attr name="layout">
-                <string>592 242 0 0</string>
+                <string>602 74 0 0</string>
             </attr>
         </node>
-        <edge from="n88" to="n88">
+        <edge from="n89" to="n89">
             <attr name="label">
                 <string>string:"t_msg1_r_msg1"</string>
             </attr>
@@ -146,12 +156,12 @@
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n84" to="n87">
+        <edge from="n85" to="n88">
             <attr name="label">
                 <string>new:messages</string>
             </attr>
         </edge>
-        <edge from="n87" to="n88">
+        <edge from="n88" to="n89">
             <attr name="label">
                 <string>new:position</string>
             </attr>
@@ -176,14 +186,29 @@
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n84" to="n85">
+        <edge from="n85" to="n86">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n84" to="n86">
+        <edge from="n85" to="n87">
             <attr name="label">
                 <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n85" to="n84">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n87" to="n84">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n88" to="n84">
+            <attr name="label">
+                <string>@</string>
             </attr>
         </edge>
     </graph>

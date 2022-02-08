@@ -1,112 +1,112 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="start_p2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n57">
+        <node id="n59">
             <attr name="layout">
                 <string>417 332 0 0</string>
             </attr>
         </node>
-        <edge from="n57" to="n57">
+        <edge from="n59" to="n59">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n57" to="n57">
+        <edge from="n59" to="n59">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n59">
+        <node id="n61">
             <attr name="layout">
                 <string>417 242 0 0</string>
             </attr>
         </node>
-        <edge from="n59" to="n59">
+        <edge from="n61" to="n61">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n59" to="n59">
+        <edge from="n61" to="n61">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n54">
+        <node id="n56">
             <attr name="layout">
                 <string>62 87 0 0</string>
             </attr>
         </node>
-        <edge from="n54" to="n54">
+        <edge from="n56" to="n56">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n55">
+        <node id="n57">
             <attr name="layout">
                 <string>402 152 0 0</string>
             </attr>
         </node>
-        <edge from="n55" to="n55">
+        <edge from="n57" to="n57">
             <attr name="label">
                 <string>string:"p2"</string>
             </attr>
         </edge>
-        <node id="n56">
+        <node id="n58">
             <attr name="layout">
                 <string>402 72 0 0</string>
             </attr>
         </node>
-        <edge from="n56" to="n56">
+        <edge from="n58" to="n58">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n58">
+        <node id="n60">
             <attr name="layout">
                 <string>602 332 0 0</string>
             </attr>
         </node>
-        <edge from="n58" to="n58">
+        <edge from="n60" to="n60">
             <attr name="label">
                 <string>string:"start_p2_TReceive_1"</string>
             </attr>
         </edge>
-        <node id="n60">
+        <node id="n62">
             <attr name="layout">
                 <string>602 242 0 0</string>
             </attr>
         </node>
-        <edge from="n60" to="n60">
+        <edge from="n62" to="n62">
             <attr name="label">
                 <string>string:"p2_start_p2"</string>
             </attr>
         </edge>
-        <edge from="n54" to="n57">
+        <edge from="n56" to="n59">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n57" to="n58">
+        <edge from="n59" to="n60">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n54" to="n59">
+        <edge from="n56" to="n61">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n59" to="n60">
+        <edge from="n61" to="n62">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n54" to="n55">
+        <edge from="n56" to="n57">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n54" to="n56">
+        <edge from="n56" to="n58">
             <attr name="label">
                 <string>state</string>
             </attr>

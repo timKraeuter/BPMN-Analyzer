@@ -504,11 +504,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                 // Send a signal only of the process instance exists.
                 GrooveNode existsOptional = ruleBuilder.contextNode(EXISTS_OPTIONAL);
 
-                processInstance = createProcessInstanceWithName(processForEvent, ruleBuilder);
-                GrooveNode running = ruleBuilder.contextNode(TYPE_RUNNING);
-                ruleBuilder.contextEdge(STATE, processInstance, running);
-                ruleBuilder.contextEdge(AT, processInstance, existsOptional);
-                ruleBuilder.contextEdge(AT, running, existsOptional);
+                processInstance = createRunningExistsOptionalProcessInstance(ruleBuilder, processForEvent, existsOptional);
 
                 event.getIncomingFlows().forEach(inFlow -> {
                     String position;
@@ -530,6 +526,16 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                 ruleBuilder.addEdge(POSITION, newToken, ruleBuilder.contextNode(this.createStringNodeLabel(outFlow.getID())));
             });
         });
+    }
+
+    private GrooveNode createRunningExistsOptionalProcessInstance(GrooveRuleBuilder ruleBuilder, Process processForEvent, GrooveNode existsOptional) {
+        GrooveNode processInstance;
+        processInstance = createProcessInstanceWithName(processForEvent, ruleBuilder);
+        GrooveNode running = ruleBuilder.contextNode(TYPE_RUNNING);
+        ruleBuilder.contextEdge(STATE, processInstance, running);
+        ruleBuilder.contextEdge(AT, processInstance, existsOptional);
+        ruleBuilder.contextEdge(AT, running, existsOptional);
+        return processInstance;
     }
 
     private Process findProcessForEvent(Event event, BPMNCollaboration collaboration) {
@@ -707,8 +713,13 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                 ruleBuilder.addEdge(POSITION, newMessage, ruleBuilder.contextNode(this.createStringNodeLabel(eventMessageFlow.getName())));
             } else {
                 Process messageFlowReceiver = collaboration.getMessageFlowReceiver(eventMessageFlow);
-                GrooveNode receiverInstance = createContextRunningProcessInstance(messageFlowReceiver, ruleBuilder);
-                addMessageWithPosition(ruleBuilder, receiverInstance, eventMessageFlow.getName());
+                // If a process instance exists, send a message.
+                GrooveNode existsOptional = ruleBuilder.contextNode(EXISTS_OPTIONAL);
+                GrooveNode receiverInstance = createRunningExistsOptionalProcessInstance(
+                        ruleBuilder,
+                        messageFlowReceiver,
+                        existsOptional);
+                addExistentialMessageWithPosition(ruleBuilder, receiverInstance, eventMessageFlow.getName(), existsOptional);
             }
         });
     }
@@ -903,8 +914,13 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         ruleBuilder.deleteEdge(POSITION, message, ruleBuilder.contextNode(this.createStringNodeLabel(position)));
     }
 
-    private void addMessageWithPosition(GrooveRuleBuilder ruleBuilder, GrooveNode processInstance, String position) {
+    private void addExistentialMessageWithPosition(
+            GrooveRuleBuilder ruleBuilder,
+            GrooveNode processInstance,
+            String position,
+            GrooveNode existsOptional) {
         GrooveNode newMessage = ruleBuilder.addNode(TYPE_MESSAGE);
+        ruleBuilder.contextEdge(AT, newMessage, existsOptional);
         ruleBuilder.addEdge(MESSAGES, processInstance, newMessage);
         ruleBuilder.addEdge(POSITION, newMessage, ruleBuilder.contextNode(this.createStringNodeLabel(position)));
     }
