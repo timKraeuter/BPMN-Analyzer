@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="Throw_P2_signal_t" role="rule" edgeids="false" edgemode="directed">
+        <node id="n207">
+            <attr name="layout">
+                <string>537 683 0 0</string>
+            </attr>
+        </node>
+        <edge from="n207" to="n207">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n207" to="n207">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n215">
+            <attr name="layout">
+                <string>510 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n215" to="n215">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n215" to="n215">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n205">
+            <attr name="layout">
+                <string>537 593 0 0</string>
+            </attr>
+        </node>
+        <edge from="n205" to="n205">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n205" to="n205">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n213">
+            <attr name="layout">
+                <string>542 172 0 0</string>
+            </attr>
+        </node>
+        <edge from="n213" to="n213">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n213" to="n213">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n202">
+            <attr name="layout">
+                <string>62 438 0 0</string>
+            </attr>
+        </node>
+        <edge from="n202" to="n202">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n203">
+            <attr name="layout">
+                <string>402 503 0 0</string>
+            </attr>
+        </node>
+        <edge from="n203" to="n203">
+            <attr name="label">
+                <string>string:"Junction_Controller"</string>
+            </attr>
+        </edge>
+        <node id="n204">
+            <attr name="layout">
+                <string>402 423 0 0</string>
+            </attr>
+        </node>
+        <edge from="n204" to="n204">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n206">
+            <attr name="layout">
+                <string>842 593 0 0</string>
+            </attr>
+        </node>
+        <edge from="n206" to="n206">
+            <attr name="label">
+                <string>string:"Switch_to_P2_P2_signal_t"</string>
+            </attr>
+        </edge>
+        <node id="n208">
+            <attr name="layout">
+                <string>842 683 0 0</string>
+            </attr>
+        </node>
+        <edge from="n208" to="n208">
+            <attr name="label">
+                <string>string:"P2_signal_t_e2"</string>
+            </attr>
+        </edge>
+        <node id="n209">
+            <attr name="layout">
+                <string>777 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n209" to="n209">
+            <attr name="label">
+                <string>existsx:</string>
+            </attr>
+        </edge>
+        <node id="n210">
+            <attr name="layout">
+                <string>62 99 0 0</string>
+            </attr>
+        </node>
+        <edge from="n210" to="n210">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n211">
+            <attr name="layout">
+                <string>412 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n211" to="n211">
+            <attr name="label">
+                <string>string:"Bus controller"</string>
+            </attr>
+        </edge>
+        <node id="n212">
+            <attr name="layout">
+                <string>495 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n212" to="n212">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n214">
+            <attr name="layout">
+                <string>777 164 0 0</string>
+            </attr>
+        </node>
+        <edge from="n214" to="n214">
+            <attr name="label">
+                <string>string:"Request_P2_P2_signal_r"</string>
+            </attr>
+        </edge>
+        <node id="n216">
+            <attr name="layout">
+                <string>777 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n216" to="n216">
+            <attr name="label">
+                <string>string:"P2_signal_r_e3"</string>
+            </attr>
+        </edge>
+        <edge from="n202" to="n207">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n207" to="n208">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n210" to="n215">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n215" to="n216">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n202" to="n205">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n205" to="n206">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n210" to="n213">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n213" to="n214">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n202" to="n203">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n202" to="n204">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n210" to="n211">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n210" to="n212">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n210" to="n209">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n212" to="n209">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n213" to="n209">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

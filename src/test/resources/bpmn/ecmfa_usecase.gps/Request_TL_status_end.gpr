@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="Request_TL_status_end" role="rule" edgeids="false" edgemode="directed">
+        <node id="n253">
+            <attr name="layout">
+                <string>500 832 0 0</string>
+            </attr>
+        </node>
+        <edge from="n253" to="n253">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n253" to="n253">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n258">
+            <attr name="layout">
+                <string>422 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n258" to="n258">
+            <attr name="label">
+                <string>type:Message</string>
+            </attr>
+        </edge>
+        <edge from="n258" to="n258">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n263">
+            <attr name="layout">
+                <string>422 412 0 0</string>
+            </attr>
+        </node>
+        <edge from="n263" to="n263">
+            <attr name="label">
+                <string>type:Message</string>
+            </attr>
+        </edge>
+        <edge from="n263" to="n263">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n251">
+            <attr name="layout">
+                <string>500 742 0 0</string>
+            </attr>
+        </node>
+        <edge from="n251" to="n251">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n251" to="n251">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n248">
+            <attr name="layout">
+                <string>62 587 0 0</string>
+            </attr>
+        </node>
+        <edge from="n248" to="n248">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n249">
+            <attr name="layout">
+                <string>402 652 0 0</string>
+            </attr>
+        </node>
+        <edge from="n249" to="n249">
+            <attr name="label">
+                <string>string:"Bus controller"</string>
+            </attr>
+        </edge>
+        <node id="n250">
+            <attr name="layout">
+                <string>402 572 0 0</string>
+            </attr>
+        </node>
+        <edge from="n250" to="n250">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n252">
+            <attr name="layout">
+                <string>767 742 0 0</string>
+            </attr>
+        </node>
+        <edge from="n252" to="n252">
+            <attr name="label">
+                <string>string:"Request_TL_status"</string>
+            </attr>
+        </edge>
+        <node id="n254">
+            <attr name="layout">
+                <string>767 832 0 0</string>
+            </attr>
+        </node>
+        <edge from="n254" to="n254">
+            <attr name="label">
+                <string>string:"Request_TL_status_ev1"</string>
+            </attr>
+        </edge>
+        <node id="n255">
+            <attr name="layout">
+                <string>62 85 0 0</string>
+            </attr>
+        </node>
+        <edge from="n255" to="n255">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n256">
+            <attr name="layout">
+                <string>392 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n256" to="n256">
+            <attr name="label">
+                <string>string:"Phase_1"</string>
+            </attr>
+        </edge>
+        <node id="n257">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n257" to="n257">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n259">
+            <attr name="layout">
+                <string>652 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n259" to="n259">
+            <attr name="label">
+                <string>string:"Request_TL_status_TL_status_requested1"</string>
+            </attr>
+        </edge>
+        <node id="n260">
+            <attr name="layout">
+                <string>62 335 0 0</string>
+            </attr>
+        </node>
+        <edge from="n260" to="n260">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n261">
+            <attr name="layout">
+                <string>392 492 0 0</string>
+            </attr>
+        </node>
+        <edge from="n261" to="n261">
+            <attr name="label">
+                <string>string:"Phase_2"</string>
+            </attr>
+        </edge>
+        <node id="n262">
+            <attr name="layout">
+                <string>392 322 0 0</string>
+            </attr>
+        </node>
+        <edge from="n262" to="n262">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n264">
+            <attr name="layout">
+                <string>652 412 0 0</string>
+            </attr>
+        </node>
+        <edge from="n264" to="n264">
+            <attr name="label">
+                <string>string:"Request_TL_status_TL_status_requested2"</string>
+            </attr>
+        </edge>
+        <edge from="n248" to="n253">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n253" to="n254">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n255" to="n258">
+            <attr name="label">
+                <string>new:messages</string>
+            </attr>
+        </edge>
+        <edge from="n258" to="n259">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n260" to="n263">
+            <attr name="label">
+                <string>new:messages</string>
+            </attr>
+        </edge>
+        <edge from="n263" to="n264">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n248" to="n251">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n251" to="n252">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n248" to="n249">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n248" to="n250">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n255" to="n256">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n255" to="n257">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n260" to="n261">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n260" to="n262">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

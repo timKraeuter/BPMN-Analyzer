@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="Request_P2_end" role="rule" edgeids="false" edgemode="directed">
+        <node id="n301">
+            <attr name="layout">
+                <string>500 582 0 0</string>
+            </attr>
+        </node>
+        <edge from="n301" to="n301">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n301" to="n301">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n306">
+            <attr name="layout">
+                <string>422 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n306" to="n306">
+            <attr name="label">
+                <string>type:Message</string>
+            </attr>
+        </edge>
+        <edge from="n306" to="n306">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n299">
+            <attr name="layout">
+                <string>500 492 0 0</string>
+            </attr>
+        </node>
+        <edge from="n299" to="n299">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n299" to="n299">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n296">
+            <attr name="layout">
+                <string>62 337 0 0</string>
+            </attr>
+        </node>
+        <edge from="n296" to="n296">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n297">
+            <attr name="layout">
+                <string>402 402 0 0</string>
+            </attr>
+        </node>
+        <edge from="n297" to="n297">
+            <attr name="label">
+                <string>string:"Bus controller"</string>
+            </attr>
+        </edge>
+        <node id="n298">
+            <attr name="layout">
+                <string>402 322 0 0</string>
+            </attr>
+        </node>
+        <edge from="n298" to="n298">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n300">
+            <attr name="layout">
+                <string>767 492 0 0</string>
+            </attr>
+        </node>
+        <edge from="n300" to="n300">
+            <attr name="label">
+                <string>string:"Request_P2"</string>
+            </attr>
+        </edge>
+        <node id="n302">
+            <attr name="layout">
+                <string>767 582 0 0</string>
+            </attr>
+        </node>
+        <edge from="n302" to="n302">
+            <attr name="label">
+                <string>string:"Request_P2_P2_signal_r"</string>
+            </attr>
+        </edge>
+        <node id="n303">
+            <attr name="layout">
+                <string>62 85 0 0</string>
+            </attr>
+        </node>
+        <edge from="n303" to="n303">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n304">
+            <attr name="layout">
+                <string>392 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n304" to="n304">
+            <attr name="label">
+                <string>string:"Phase_2"</string>
+            </attr>
+        </edge>
+        <node id="n305">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n305" to="n305">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n307">
+            <attr name="layout">
+                <string>652 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n307" to="n307">
+            <attr name="label">
+                <string>string:"Request_P2_P2_requested"</string>
+            </attr>
+        </edge>
+        <edge from="n296" to="n301">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n301" to="n302">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n303" to="n306">
+            <attr name="label">
+                <string>new:messages</string>
+            </attr>
+        </edge>
+        <edge from="n306" to="n307">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n296" to="n299">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n299" to="n300">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n296" to="n297">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n296" to="n298">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n303" to="n304">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n303" to="n305">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

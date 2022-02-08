@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="Phase1_end" role="rule" edgeids="false" edgemode="directed">
+        <node id="n185">
+            <attr name="layout">
+                <string>437 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n185" to="n185">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n185" to="n185">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n183">
+            <attr name="layout">
+                <string>62 85 0 0</string>
+            </attr>
+        </node>
+        <edge from="n183" to="n183">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n184">
+            <attr name="layout">
+                <string>392 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n184" to="n184">
+            <attr name="label">
+                <string>string:"Phase_1"</string>
+            </attr>
+        </edge>
+        <node id="n186">
+            <attr name="layout">
+                <string>652 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n186" to="n186">
+            <attr name="label">
+                <string>string:"P1_requested_Phase1_end"</string>
+            </attr>
+        </edge>
+        <node id="n187">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n187" to="n187">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <edge from="n185" to="n186">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n183" to="n185">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n183" to="n184">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n183" to="n187">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

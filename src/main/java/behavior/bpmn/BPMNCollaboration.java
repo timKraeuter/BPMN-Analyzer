@@ -4,17 +4,23 @@ import behavior.Behavior;
 import behavior.BehaviorVisitor;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BPMNCollaboration implements Behavior {
     private final String name;
     private final Set<Process> participants;
+    /**
+     * Derived from call activities of the participants.
+     */
+    private final Set<Process> subprocesses;
     private final Set<MessageFlow> messageFlows;
 
-    public BPMNCollaboration(String name, Set<Process> participants, Set<MessageFlow> messageFlows) {
+    public BPMNCollaboration(String name, Set<Process> participants, Set<Process> subprocesses, Set<MessageFlow> messageFlows) {
         this.name = name;
         this.participants = participants;
+        this.subprocesses = subprocesses;
         this.messageFlows = messageFlows;
     }
 
@@ -33,10 +39,16 @@ public class BPMNCollaboration implements Behavior {
     }
 
     public Process getMessageFlowReceiver(MessageFlow flow) {
-        return this.getParticipants().stream()
-                   .filter(process -> process.getControlFlowNodes().anyMatch(flowNode -> flowNode == flow.getTarget()))
-                   .findFirst()
-                   .get(); // Must exist.
+        Optional<Process> optionalProcess = this.getParticipants().stream()
+                                                .filter(process -> process.getControlFlowNodes().anyMatch(flowNode -> flowNode == flow.getTarget()))
+                                                .findFirst();
+        if (optionalProcess.isPresent()) {
+            return optionalProcess.get();
+        }
+        // The message flow must go to a subprocess!.
+        return subprocesses.stream()
+                           .filter(process -> process.getControlFlowNodes().anyMatch(flowNode -> flowNode == flow.getTarget()))
+                           .findFirst().get();
     }
 
     @Override

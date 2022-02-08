@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="Request_TL_status_start" role="rule" edgeids="false" edgemode="directed">
+        <node id="n246">
+            <attr name="layout">
+                <string>500 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n246" to="n246">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n246" to="n246">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n244">
+            <attr name="layout">
+                <string>500 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n244" to="n244">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n244" to="n244">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n241">
+            <attr name="layout">
+                <string>62 87 0 0</string>
+            </attr>
+        </node>
+        <edge from="n241" to="n241">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n242">
+            <attr name="layout">
+                <string>402 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n242" to="n242">
+            <attr name="label">
+                <string>string:"Bus controller"</string>
+            </attr>
+        </edge>
+        <node id="n243">
+            <attr name="layout">
+                <string>402 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n243" to="n243">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n245">
+            <attr name="layout">
+                <string>767 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n245" to="n245">
+            <attr name="label">
+                <string>string:"Approaching_Junction_Request_TL_status"</string>
+            </attr>
+        </edge>
+        <node id="n247">
+            <attr name="layout">
+                <string>767 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n247" to="n247">
+            <attr name="label">
+                <string>string:"Request_TL_status"</string>
+            </attr>
+        </edge>
+        <edge from="n241" to="n246">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n246" to="n247">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n241" to="n244">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n244" to="n245">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n241" to="n242">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n241" to="n243">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

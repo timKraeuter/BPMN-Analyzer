@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="Phase2_start_evp2_evp2" role="rule" edgeids="false" edgemode="directed">
+        <node id="n52">
+            <attr name="layout">
+                <string>62 85 0 0</string>
+            </attr>
+        </node>
+        <edge from="n52" to="n52">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n53">
+            <attr name="layout">
+                <string>392 232 0 0</string>
+            </attr>
+        </node>
+        <edge from="n53" to="n53">
+            <attr name="label">
+                <string>string:"Phase_2"</string>
+            </attr>
+        </edge>
+        <node id="n54">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n54" to="n54">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n55">
+            <attr name="layout">
+                <string>452 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n55" to="n55">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n56">
+            <attr name="layout">
+                <string>652 224 0 0</string>
+            </attr>
+        </node>
+        <edge from="n56" to="n56">
+            <attr name="label">
+                <string>string:"Phase2_start_evp2"</string>
+            </attr>
+        </edge>
+        <node id="n57">
+            <attr name="layout">
+                <string>652 144 0 0</string>
+            </attr>
+        </node>
+        <edge from="n57" to="n57">
+            <attr name="label">
+                <string>string:"evp2"</string>
+            </attr>
+        </edge>
+        <edge from="n55" to="n57">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n55" to="n56">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n52" to="n53">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n52" to="n54">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n52" to="n55">
+            <attr name="label">
+                <string>tokens</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="Phase_2" role="rule" edgeids="false" edgemode="directed">
+        <node id="n34">
+            <attr name="layout">
+                <string>492 345 0 0</string>
+            </attr>
+        </node>
+        <edge from="n34" to="n34">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <edge from="n34" to="n34">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n36">
+            <attr name="layout">
+                <string>852 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n36" to="n36">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <edge from="n36" to="n36">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n37">
+            <attr name="layout">
+                <string>920 422 0 0</string>
+            </attr>
+        </node>
+        <edge from="n37" to="n37">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n37" to="n37">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n32">
+            <attr name="layout">
+                <string>537 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n32" to="n32">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n32" to="n32">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n29">
+            <attr name="layout">
+                <string>62 87 0 0</string>
+            </attr>
+        </node>
+        <edge from="n29" to="n29">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n30">
+            <attr name="layout">
+                <string>402 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n30" to="n30">
+            <attr name="label">
+                <string>string:"Junction_Controller"</string>
+            </attr>
+        </edge>
+        <node id="n31">
+            <attr name="layout">
+                <string>402 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n31" to="n31">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n33">
+            <attr name="layout">
+                <string>852 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n33" to="n33">
+            <attr name="label">
+                <string>string:"e1_Phase_2"</string>
+            </attr>
+        </edge>
+        <node id="n35">
+            <attr name="layout">
+                <string>852 502 0 0</string>
+            </attr>
+        </node>
+        <edge from="n35" to="n35">
+            <attr name="label">
+                <string>string:"Phase_2"</string>
+            </attr>
+        </edge>
+        <node id="n38">
+            <attr name="layout">
+                <string>1157 422 0 0</string>
+            </attr>
+        </node>
+        <edge from="n38" to="n38">
+            <attr name="label">
+                <string>string:"Phase_2_Phase2_start"</string>
+            </attr>
+        </edge>
+        <edge from="n29" to="n34">
+            <attr name="label">
+                <string>new:subprocess</string>
+            </attr>
+        </edge>
+        <edge from="n34" to="n36">
+            <attr name="label">
+                <string>new:state</string>
+            </attr>
+        </edge>
+        <edge from="n34" to="n37">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n37" to="n38">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n29" to="n32">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n32" to="n33">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n29" to="n30">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n29" to="n31">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n34" to="n35">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

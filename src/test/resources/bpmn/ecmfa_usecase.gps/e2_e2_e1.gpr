@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="e2_e2_e1" role="rule" edgeids="false" edgemode="directed">
+        <node id="n217">
+            <attr name="layout">
+                <string>62 85 0 0</string>
+            </attr>
+        </node>
+        <edge from="n217" to="n217">
+            <attr name="label">
+                <string>type:ProcessInstance</string>
+            </attr>
+        </edge>
+        <node id="n218">
+            <attr name="layout">
+                <string>392 232 0 0</string>
+            </attr>
+        </node>
+        <edge from="n218" to="n218">
+            <attr name="label">
+                <string>string:"Junction_Controller"</string>
+            </attr>
+        </edge>
+        <node id="n219">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n219" to="n219">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n220">
+            <attr name="layout">
+                <string>572 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n220" to="n220">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n221">
+            <attr name="layout">
+                <string>832 224 0 0</string>
+            </attr>
+        </node>
+        <edge from="n221" to="n221">
+            <attr name="label">
+                <string>string:"P2_signal_t_e2"</string>
+            </attr>
+        </edge>
+        <node id="n222">
+            <attr name="layout">
+                <string>832 144 0 0</string>
+            </attr>
+        </node>
+        <edge from="n222" to="n222">
+            <attr name="label">
+                <string>string:"e2_e1"</string>
+            </attr>
+        </edge>
+        <edge from="n220" to="n222">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n220" to="n221">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n217" to="n218">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n217" to="n219">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n217" to="n220">
+            <attr name="label">
+                <string>tokens</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

@@ -1,4 +1,4 @@
-package ecmf;
+package ecmfa;
 
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.Process;
@@ -10,16 +10,17 @@ import behavior.bpmn.events.*;
 import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import groove.behaviorTransformer.bpmn.BPMNToGrooveTestBase;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class ECMFA extends BPMNToGrooveTestBase {
+public class Usecase extends BPMNToGrooveTestBase {
 
 
     /**
      * See test case <a href="https://cawemo.com/share/3da1f1ce-a0ca-4fa5-8caf-8bd04b879879">"Use Case Test"</a> in cawemo.
      */
-//    @Test
+    @Test
     void testUseCase() throws IOException {
         EventDefinition p1 = new EventDefinition("p1");
         EventDefinition p2 = new EventDefinition("p2");
@@ -93,7 +94,7 @@ public class ECMFA extends BPMNToGrooveTestBase {
         EndEvent passed_junction = new EndEvent("Passed_junction");
 
 
-        final String modelName = "usecase";
+        final String modelName = "ecmfa_usecase";
         final BPMNCollaboration collaboration = new BPMNCollaborationBuilder()
                 .name(modelName)
                 .messageFlow(request_tl_status, tl_status_requested1)
@@ -101,7 +102,7 @@ public class ECMFA extends BPMNToGrooveTestBase {
                 .messageFlow(phase2_t, phase2_message)
                 .messageFlow(phase1_t, phase1_message)
                 .messageFlow(request_p2, p2_requested)
-                .processName("Junction-Controller")
+                .processName("Junction_Controller")
                 .startEvent(start_c)
                 .sequenceFlow(start_c, e1)
                 .sequenceFlow(e1, phase2)
