@@ -270,6 +270,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                 ruleBuilder.contextEdge(STATE, processInstance, running);
 
                 GrooveNode subProcessInstance = ruleBuilder.deleteNode(TYPE_PROCESS_INSTANCE);
+                ruleBuilder.deleteEdge(NAME, subProcessInstance, ruleBuilder.contextNode(createStringNodeLabel(callActivity.getSubProcessModel().getName())));
                 ruleBuilder.deleteEdge(SUBPROCESS, processInstance, subProcessInstance);
                 GrooveNode terminated = ruleBuilder.deleteNode(TYPE_TERMINATED);
                 ruleBuilder.deleteEdge(STATE, subProcessInstance, terminated);
