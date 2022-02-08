@@ -29,7 +29,7 @@ public class Usecase extends BPMNToGrooveTestBase {
         StartEvent phase1_start = new StartEvent("Phase1_start");
         EventBasedGateway evp1 = new EventBasedGateway("evp1");
         IntermediateCatchEvent tl_status_requested1 = new IntermediateCatchEvent("TL_status_requested1", IntermediateEventType.MESSAGE);
-        IntermediateThrowEvent phase2_t = new IntermediateThrowEvent("Phase2_t", IntermediateEventType.MESSAGE);
+        IntermediateThrowEvent phase1_t = new IntermediateThrowEvent("Phase1_t", IntermediateEventType.MESSAGE);
         IntermediateCatchEvent p1_requested = new IntermediateCatchEvent("P1_requested", IntermediateEventType.MESSAGE);
         EndEvent phase1_end = new EndEvent("Phase1_end");
 
@@ -40,8 +40,8 @@ public class Usecase extends BPMNToGrooveTestBase {
                 .startEvent(phase1_start)
                 .sequenceFlow(phase1_start, evp1)
                 .sequenceFlow(evp1, tl_status_requested1)
-                .sequenceFlow(tl_status_requested1, phase2_t)
-                .sequenceFlow(phase2_t, evp1)
+                .sequenceFlow(tl_status_requested1, phase1_t)
+                .sequenceFlow(phase1_t, evp1)
                 .sequenceFlow(evp1, p1_requested)
                 .sequenceFlow(p1_requested, phase1_end)
                 .build()
@@ -51,7 +51,7 @@ public class Usecase extends BPMNToGrooveTestBase {
         StartEvent phase2_start = new StartEvent("Phase2_start");
         EventBasedGateway evp2 = new EventBasedGateway("evp2");
         IntermediateCatchEvent tl_status_requested2 = new IntermediateCatchEvent("TL_status_requested2", IntermediateEventType.MESSAGE);
-        IntermediateThrowEvent phase1_t = new IntermediateThrowEvent("Phase1_t", IntermediateEventType.MESSAGE);
+        IntermediateThrowEvent phase2_t = new IntermediateThrowEvent("Phase2_t", IntermediateEventType.MESSAGE);
         IntermediateCatchEvent p2_requested = new IntermediateCatchEvent("P2_requested", IntermediateEventType.MESSAGE);
         EndEvent phase2_end = new EndEvent("Phase2_end");
 
@@ -62,8 +62,8 @@ public class Usecase extends BPMNToGrooveTestBase {
                 .startEvent(phase2_start)
                 .sequenceFlow(phase2_start, evp2)
                 .sequenceFlow(evp2, tl_status_requested2)
-                .sequenceFlow(tl_status_requested2, phase1_t)
-                .sequenceFlow(phase1_t, evp2)
+                .sequenceFlow(tl_status_requested2, phase2_t)
+                .sequenceFlow(phase2_t, evp2)
                 .sequenceFlow(evp2, p2_requested)
                 .sequenceFlow(p2_requested, phase2_end)
                 .build()
