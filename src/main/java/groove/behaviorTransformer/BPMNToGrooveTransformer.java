@@ -625,7 +625,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
 
             @Override
             public void handle(IntermediateCatchEvent intermediateCatchEvent) {
-                if (intermediateCatchEvent.getType() == IntermediateEventType.SIGNAL && intermediateCatchEvent.getEventDefinition().getGlobalSignalName().equals(globalSignalName)) {
+                if (intermediateCatchEvent.getType() == IntermediateCatchEventType.SIGNAL && intermediateCatchEvent.getEventDefinition().getGlobalSignalName().equals(globalSignalName)) {
                     signalCatchEvents.add(intermediateCatchEvent);
                 }
             }

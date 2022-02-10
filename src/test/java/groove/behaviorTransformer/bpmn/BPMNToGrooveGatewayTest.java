@@ -193,15 +193,15 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
     void testExclusiveEventBasedGateway() throws IOException {
         final StartEvent start_p1 = new StartEvent("start_p1");
         final EventBasedGateway eventG = new EventBasedGateway("eventG");
-        IntermediateCatchEvent r_msg1 = new IntermediateCatchEvent("r_msg1", IntermediateEventType.MESSAGE);
+        IntermediateCatchEvent r_msg1 = new IntermediateCatchEvent("r_msg1", IntermediateCatchEventType.MESSAGE);
         ReceiveTask r_msg2 = new ReceiveTask("r_msg2");
         final EndEvent end1_p1 = new EndEvent("end1_p1");
         final EndEvent end2_p1 = new EndEvent("end2_p1");
 
         final StartEvent start_p2 = new StartEvent("start_p2");
         ExclusiveGateway e1 = new ExclusiveGateway("e1");
-        IntermediateThrowEvent t_msg1 = new IntermediateThrowEvent("t_msg1", IntermediateEventType.MESSAGE);
-        IntermediateThrowEvent t_msg2 = new IntermediateThrowEvent("t_msg2", IntermediateEventType.MESSAGE);
+        IntermediateThrowEvent t_msg1 = new IntermediateThrowEvent("t_msg1", IntermediateThrowEventType.MESSAGE);
+        IntermediateThrowEvent t_msg2 = new IntermediateThrowEvent("t_msg2", IntermediateThrowEventType.MESSAGE);
         final EndEvent end1_p2 = new EndEvent("end1_p2");
         final EndEvent end2_p2 = new EndEvent("end2_p2");
 

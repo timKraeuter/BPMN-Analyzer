@@ -98,7 +98,7 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
     void testSendReceiveTask() throws IOException {
         final StartEvent start_p1 = new StartEvent("start_p1");
         SendTask tSend_1 = new SendTask("TSend_1");
-        IntermediateCatchEvent eReceive_1 = new IntermediateCatchEvent("EReceive_1", IntermediateEventType.MESSAGE);
+        IntermediateCatchEvent eReceive_1 = new IntermediateCatchEvent("EReceive_1", IntermediateCatchEventType.MESSAGE);
         final EndEvent end_p1 = new EndEvent("end_p1", EndEventType.MESSAGE);
 
         final StartEvent start_p2 = new StartEvent("start_p2");

@@ -46,10 +46,10 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
     void testLinkEvent() throws IOException {
         final StartEvent start = new StartEvent("start");
         final ParallelGateway p1 = new ParallelGateway("p1");
-        IntermediateThrowEvent throw_link1 = new IntermediateThrowEvent("Link1", IntermediateEventType.LINK);
-        IntermediateThrowEvent throw_link2 = new IntermediateThrowEvent("Link2", IntermediateEventType.LINK);
-        IntermediateCatchEvent catch_link1 = new IntermediateCatchEvent("Link1", IntermediateEventType.LINK);
-        IntermediateCatchEvent catch_link2 = new IntermediateCatchEvent("Link2", IntermediateEventType.LINK);
+        IntermediateThrowEvent throw_link1 = new IntermediateThrowEvent("Link1", IntermediateThrowEventType.LINK);
+        IntermediateThrowEvent throw_link2 = new IntermediateThrowEvent("Link2", IntermediateThrowEventType.LINK);
+        IntermediateCatchEvent catch_link1 = new IntermediateCatchEvent("Link1", IntermediateCatchEventType.LINK);
+        IntermediateCatchEvent catch_link2 = new IntermediateCatchEvent("Link2", IntermediateCatchEventType.LINK);
         final ParallelGateway p2 = new ParallelGateway("p2");
         final EndEvent end = new EndEvent("end");
 
@@ -102,12 +102,12 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
     @Test
     void testMessageEvents() throws IOException {
         final StartEvent start_p1 = new StartEvent("start_p1");
-        IntermediateCatchEvent catch_p1 = new IntermediateCatchEvent("catch_p1", IntermediateEventType.MESSAGE);
+        IntermediateCatchEvent catch_p1 = new IntermediateCatchEvent("catch_p1", IntermediateCatchEventType.MESSAGE);
         final EndEvent end_p1 = new EndEvent("end_p1", EndEventType.MESSAGE);
 
         final StartEvent start_p2 = new StartEvent("start_p2");
-        IntermediateThrowEvent throw_p2 = new IntermediateThrowEvent("throw_p2", IntermediateEventType.MESSAGE);
-        IntermediateCatchEvent catch_p2 = new IntermediateCatchEvent("catch_p2", IntermediateEventType.MESSAGE);
+        IntermediateThrowEvent throw_p2 = new IntermediateThrowEvent("throw_p2", IntermediateThrowEventType.MESSAGE);
+        IntermediateCatchEvent catch_p2 = new IntermediateCatchEvent("catch_p2", IntermediateCatchEventType.MESSAGE);
         final EndEvent end_p2 = new EndEvent("end_p2", EndEventType.MESSAGE);
 
         final StartEvent start_p3 = new StartEvent("start_p3", StartEventType.MESSAGE);
@@ -148,13 +148,13 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
         final StartEvent start = new StartEvent("start");
         final EventDefinition s1 = new EventDefinition("s1");
         final EventDefinition s2 = new EventDefinition("s2");
-        IntermediateThrowEvent s1_throw = new IntermediateThrowEvent("S1_Throw", IntermediateEventType.SIGNAL, s1);
-        IntermediateCatchEvent s1_catch_1 = new IntermediateCatchEvent("S1_Catch_1", IntermediateEventType.SIGNAL, s1);
-        IntermediateCatchEvent s1_catch_2 = new IntermediateCatchEvent("S1_Catch_2", IntermediateEventType.SIGNAL, s1);
+        IntermediateThrowEvent s1_throw = new IntermediateThrowEvent("S1_Throw", IntermediateThrowEventType.SIGNAL, s1);
+        IntermediateCatchEvent s1_catch_1 = new IntermediateCatchEvent("S1_Catch_1", IntermediateCatchEventType.SIGNAL, s1);
+        IntermediateCatchEvent s1_catch_2 = new IntermediateCatchEvent("S1_Catch_2", IntermediateCatchEventType.SIGNAL, s1);
         final ParallelGateway p1 = new ParallelGateway("p1");
         final EventBasedGateway e1 = new EventBasedGateway("e1");
         EndEvent s2_throw = new EndEvent("S2_Throw", EndEventType.SIGNAL, s2);
-        IntermediateCatchEvent s2_catch = new IntermediateCatchEvent("S2_Catch", IntermediateEventType.SIGNAL, s2);
+        IntermediateCatchEvent s2_catch = new IntermediateCatchEvent("S2_Catch", IntermediateCatchEventType.SIGNAL, s2);
         final EndEvent end = new EndEvent("end");
 
         final String modelName = "signalEvents";
@@ -185,12 +185,12 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
         final EventDefinition s1 = new EventDefinition("s1");
         // p1
         final StartEvent start_p1 = new StartEvent("start_p1");
-        IntermediateThrowEvent s1_throw = new IntermediateThrowEvent("S1_Throw", IntermediateEventType.SIGNAL, s1);
+        IntermediateThrowEvent s1_throw = new IntermediateThrowEvent("S1_Throw", IntermediateThrowEventType.SIGNAL, s1);
         final EndEvent end_p1 = new EndEvent("end_p1");
 
         // p2
         StartEvent start_p2 = new StartEvent("start_p2");
-        IntermediateCatchEvent s1_catch = new IntermediateCatchEvent("S1_Catch", IntermediateEventType.SIGNAL, s1);
+        IntermediateCatchEvent s1_catch = new IntermediateCatchEvent("S1_Catch", IntermediateCatchEventType.SIGNAL, s1);
         EndEvent end_p2 = new EndEvent("end_p2");
 
         final String modelName = "signalEventsCrossProcess";

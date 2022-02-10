@@ -1,6 +1,6 @@
 package behavior.bpmn.events;
 
-public enum IntermediateEventType {
+public enum IntermediateThrowEventType {
     LINK,
     MESSAGE,
     SIGNAL

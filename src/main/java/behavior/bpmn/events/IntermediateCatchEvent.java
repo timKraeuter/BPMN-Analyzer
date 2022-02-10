@@ -3,13 +3,13 @@ package behavior.bpmn.events;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
 public class IntermediateCatchEvent extends CatchEvent {
-    private final IntermediateEventType type;
+    private final IntermediateCatchEventType type;
 
-    public IntermediateCatchEvent(String name, IntermediateEventType type) {
+    public IntermediateCatchEvent(String name, IntermediateCatchEventType type) {
         this(name, type, EventDefinition.empty());
     }
 
-    public IntermediateCatchEvent(String name, IntermediateEventType type, EventDefinition eventDefinition) {
+    public IntermediateCatchEvent(String name, IntermediateCatchEventType type, EventDefinition eventDefinition) {
         super(name, eventDefinition);
         this.type = type;
     }
@@ -24,7 +24,7 @@ public class IntermediateCatchEvent extends CatchEvent {
         return false;
     }
 
-    public IntermediateEventType getType() {
+    public IntermediateCatchEventType getType() {
         return type;
     }
 }

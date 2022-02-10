@@ -28,9 +28,9 @@ public class Usecase extends BPMNToGrooveTestBase {
         // Phase 1
         StartEvent phase1_start = new StartEvent("Phase1_start");
         EventBasedGateway evp1 = new EventBasedGateway("evp1");
-        IntermediateCatchEvent tl_status_requested1 = new IntermediateCatchEvent("TL_status_requested1", IntermediateEventType.MESSAGE);
-        IntermediateThrowEvent phase1_t = new IntermediateThrowEvent("Phase1_t", IntermediateEventType.MESSAGE);
-        IntermediateCatchEvent p1_requested = new IntermediateCatchEvent("P1_requested", IntermediateEventType.MESSAGE);
+        IntermediateCatchEvent tl_status_requested1 = new IntermediateCatchEvent("TL_status_requested1", IntermediateCatchEventType.MESSAGE);
+        IntermediateThrowEvent phase1_t = new IntermediateThrowEvent("Phase1_t", IntermediateThrowEventType.MESSAGE);
+        IntermediateCatchEvent p1_requested = new IntermediateCatchEvent("P1_requested", IntermediateCatchEventType.MESSAGE);
         EndEvent phase1_end = new EndEvent("Phase1_end");
 
         String phase_1 = "Phase_1";
@@ -50,9 +50,9 @@ public class Usecase extends BPMNToGrooveTestBase {
         // Phase 2
         StartEvent phase2_start = new StartEvent("Phase2_start");
         EventBasedGateway evp2 = new EventBasedGateway("evp2");
-        IntermediateCatchEvent tl_status_requested2 = new IntermediateCatchEvent("TL_status_requested2", IntermediateEventType.MESSAGE);
-        IntermediateThrowEvent phase2_t = new IntermediateThrowEvent("Phase2_t", IntermediateEventType.MESSAGE);
-        IntermediateCatchEvent p2_requested = new IntermediateCatchEvent("P2_requested", IntermediateEventType.MESSAGE);
+        IntermediateCatchEvent tl_status_requested2 = new IntermediateCatchEvent("TL_status_requested2", IntermediateCatchEventType.MESSAGE);
+        IntermediateThrowEvent phase2_t = new IntermediateThrowEvent("Phase2_t", IntermediateThrowEventType.MESSAGE);
+        IntermediateCatchEvent p2_requested = new IntermediateCatchEvent("P2_requested", IntermediateCatchEventType.MESSAGE);
         EndEvent phase2_end = new EndEvent("Phase2_end");
 
         String phase_2 = "Phase_2";
@@ -74,8 +74,8 @@ public class Usecase extends BPMNToGrooveTestBase {
         ExclusiveGateway e1 = new ExclusiveGateway("e1");
         CallActivity phase2 = new CallActivity(phase2_Process);
         Task switch_to_p1 = new Task("Switch_to_P1");
-        IntermediateThrowEvent p1_signal = new IntermediateThrowEvent("P1_signal_t", IntermediateEventType.SIGNAL, p1);
-        IntermediateThrowEvent p2_signal = new IntermediateThrowEvent("P2_signal_t", IntermediateEventType.SIGNAL, p2);
+        IntermediateThrowEvent p1_signal = new IntermediateThrowEvent("P1_signal_t", IntermediateThrowEventType.SIGNAL, p1);
+        IntermediateThrowEvent p2_signal = new IntermediateThrowEvent("P2_signal_t", IntermediateThrowEventType.SIGNAL, p2);
         Task switch_to_p2 = new Task("Switch_to_P2");
         CallActivity phase1 = new CallActivity(phase1_process);
         ExclusiveGateway e2 = new ExclusiveGateway("e2");
@@ -85,12 +85,12 @@ public class Usecase extends BPMNToGrooveTestBase {
         StartEvent approaching_junction = new StartEvent("Approaching_Junction");
         SendTask request_tl_status = new SendTask("Request_TL_status");
         EventBasedGateway ev1 = new EventBasedGateway("ev1");
-        IntermediateCatchEvent phase1_message = new IntermediateCatchEvent("Phase_1", IntermediateEventType.MESSAGE);
+        IntermediateCatchEvent phase1_message = new IntermediateCatchEvent("Phase_1", IntermediateCatchEventType.MESSAGE);
         SendTask request_p2 = new SendTask("Request_P2");
-        IntermediateCatchEvent p2_signal_r = new IntermediateCatchEvent("P2_signal_r", IntermediateEventType.SIGNAL, p2);
+        IntermediateCatchEvent p2_signal_r = new IntermediateCatchEvent("P2_signal_r", IntermediateCatchEventType.SIGNAL, p2);
         ExclusiveGateway e3 = new ExclusiveGateway("e3");
         Task pass_junction = new Task("Pass_Junction");
-        IntermediateCatchEvent phase2_message = new IntermediateCatchEvent("Phase_2", IntermediateEventType.MESSAGE);
+        IntermediateCatchEvent phase2_message = new IntermediateCatchEvent("Phase_2", IntermediateCatchEventType.MESSAGE);
         EndEvent passed_junction = new EndEvent("Passed_junction");
 
 
