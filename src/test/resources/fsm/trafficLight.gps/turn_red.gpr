@@ -3,7 +3,7 @@
     <graph id="turn_red" role="rule" edgeids="false" edgemode="directed">
         <node id="n22">
             <attr name="layout">
-                <string>337 172 0 0</string>
+                <string>457 172 0 0</string>
             </attr>
         </node>
         <edge from="n22" to="n22">
@@ -18,7 +18,7 @@
         </edge>
         <node id="n20">
             <attr name="layout">
-                <string>337 82 0 0</string>
+                <string>457 82 0 0</string>
             </attr>
         </node>
         <edge from="n20" to="n20">
@@ -38,12 +38,12 @@
         </node>
         <edge from="n19" to="n19">
             <attr name="label">
-                <string>type:StateMachine</string>
+                <string>type:StateMachineSnapshot</string>
             </attr>
         </edge>
         <node id="n21">
             <attr name="layout">
-                <string>507 82 0 0</string>
+                <string>627 82 0 0</string>
             </attr>
         </node>
         <edge from="n21" to="n21">
@@ -53,7 +53,7 @@
         </edge>
         <node id="n23">
             <attr name="layout">
-                <string>507 172 0 0</string>
+                <string>627 172 0 0</string>
             </attr>
         </node>
         <edge from="n23" to="n23">

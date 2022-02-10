@@ -9,7 +9,7 @@ import java.io.IOException;
 
 class FSMToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
 
-    static final String TYPE_GRAPH_FILE_NAME = "fsm_type.gty";
+    static final String TYPE_GRAPH_FILE_NAME = "fsm_e_model.gty";
 
     @Override
     protected void setUpFurther() {

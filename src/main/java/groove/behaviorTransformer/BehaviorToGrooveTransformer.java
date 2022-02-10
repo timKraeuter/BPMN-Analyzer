@@ -35,7 +35,7 @@ public class BehaviorToGrooveTransformer {
     private static final String ACTIVITY_DIAGRAM_TYPE_GRAPH_FILE_NAME = "type";
     private static final String PI_TYPE_GRAPH_FILE_NAME = "Type";
     private static final String BPMN_DIAGRAM_TYPE_GRAPH_FILE_NAME = "type";
-    private static final String FSM_TYPE_GRAPH_FILE_NAME = "fsm_type";
+    private static final String FSM_TYPE_GRAPH_FILE_NAME = "fsm_e_model";
 
     static Gxl createGxlFromGrooveGraph(GrooveGraph graph, boolean doLayout) {
         String gxlGraphName = String.format("%s_%s", graph.getName(), START);

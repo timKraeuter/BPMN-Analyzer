@@ -8,12 +8,12 @@
         </node>
         <edge from="n1" to="n1">
             <attr name="label">
-                <string>type:StateMachine</string>
+                <string>type:StateMachineSnapshot</string>
             </attr>
         </edge>
         <node id="n0">
             <attr name="layout">
-                <string>420 152 0 0</string>
+                <string>540 152 0 0</string>
             </attr>
         </node>
         <edge from="n0" to="n0">
@@ -23,7 +23,7 @@
         </edge>
         <node id="n2">
             <attr name="layout">
-                <string>337 72 0 0</string>
+                <string>457 72 0 0</string>
             </attr>
         </node>
         <edge from="n2" to="n2">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n3">
             <attr name="layout">
-                <string>672 152 0 0</string>
+                <string>792 152 0 0</string>
             </attr>
         </node>
         <edge from="n3" to="n3">

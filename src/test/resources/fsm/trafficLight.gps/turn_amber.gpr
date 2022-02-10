@@ -3,7 +3,7 @@
     <graph id="turn_amber" role="rule" edgeids="false" edgemode="directed">
         <node id="n17">
             <attr name="layout">
-                <string>337 172 0 0</string>
+                <string>457 172 0 0</string>
             </attr>
         </node>
         <edge from="n17" to="n17">
@@ -18,7 +18,7 @@
         </edge>
         <node id="n15">
             <attr name="layout">
-                <string>337 82 0 0</string>
+                <string>457 82 0 0</string>
             </attr>
         </node>
         <edge from="n15" to="n15">
@@ -38,12 +38,12 @@
         </node>
         <edge from="n14" to="n14">
             <attr name="label">
-                <string>type:StateMachine</string>
+                <string>type:StateMachineSnapshot</string>
             </attr>
         </edge>
         <node id="n16">
             <attr name="layout">
-                <string>507 82 0 0</string>
+                <string>627 82 0 0</string>
             </attr>
         </node>
         <edge from="n16" to="n16">
@@ -53,7 +53,7 @@
         </edge>
         <node id="n18">
             <attr name="layout">
-                <string>507 172 0 0</string>
+                <string>627 172 0 0</string>
             </attr>
         </node>
         <edge from="n18" to="n18">

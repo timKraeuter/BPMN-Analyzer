@@ -1,7 +1,6 @@
 package groove.behaviorTransformer;
 
 import behavior.fsm.FiniteStateMachine;
-import com.google.common.collect.Sets;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveGraphBuilder;
 import groove.graph.GrooveNode;
@@ -19,7 +18,7 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
 
     // Node types
     private static final String TYPE_STATE = TYPE + "State";
-    private static final String TYPE_STATE_MACHINE = TYPE + "StateMachine";
+    private static final String TYPE_STATE_MACHINE_SNAPSHOT = TYPE + "StateMachineSnapshot";
 
     // Edge names/attribute names
     private static final String NAME = "name";
@@ -47,7 +46,7 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
         final String stateMachineName = potentialPrefix + finiteStateMachine.getName();
         final GrooveGraphBuilder builder = new GrooveGraphBuilder().setName(stateMachineName);
         GrooveNode startStateNode = new GrooveNode(TYPE_STATE);
-        GrooveNode stateMachineNode = new GrooveNode(TYPE_STATE_MACHINE);
+        GrooveNode stateMachineNode = new GrooveNode(TYPE_STATE_MACHINE_SNAPSHOT);
         builder.addEdge(CURRENT_STATE, stateMachineNode, startStateNode);
 
         builder.addEdge(NAME, stateMachineNode, new GrooveNode(createStringNodeLabel(stateMachineName)));
@@ -63,7 +62,7 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
         finiteStateMachine.getTransitions().forEach(transition -> {
             ruleBuilder.startRule(transition.getName());
 
-            final GrooveNode stateMachine = ruleBuilder.contextNode(TYPE_STATE_MACHINE);
+            final GrooveNode stateMachine = ruleBuilder.contextNode(TYPE_STATE_MACHINE_SNAPSHOT);
 
             final GrooveNode previousState = ruleBuilder.deleteNode(TYPE_STATE);
             ruleBuilder.contextEdge(
