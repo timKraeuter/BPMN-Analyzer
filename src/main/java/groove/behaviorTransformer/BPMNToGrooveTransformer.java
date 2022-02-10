@@ -400,9 +400,34 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                     case SIGNAL:
                         // no rule needed since it will be embedded in the throw rule.
                         break;
+                    case TIMER:
+                        createIntermediateCatchTimerEventRule(intermediateCatchEvent, process, ruleBuilder);
+                        break;
                 }
             }
         }));
+    }
+
+    private void createIntermediateCatchTimerEventRule(
+            IntermediateCatchEvent intermediateCatchEvent,
+            Process process,
+            GrooveRuleBuilder ruleBuilder) {
+
+        ruleBuilder.startRule(intermediateCatchEvent.getName());
+        final GrooveNode processInstance = createContextRunningProcessInstance(process, ruleBuilder);
+
+        if (intermediateCatchEvent.getIncomingFlows().count() != 1) {
+            // current restriction, again we would need implicit exclusive gateway.
+            throw new RuntimeException("Intermediate message catch events are only allowed to have one incoming sequence flow!");
+        }
+        intermediateCatchEvent.getIncomingFlows().forEach(
+                inFlow -> deleteTokenWithPosition(ruleBuilder, processInstance, inFlow.getID()));
+
+        // Add tokens on outgoing flows.
+        intermediateCatchEvent.getOutgoingFlows().forEach(
+                outFlow -> addTokenWithPosition(ruleBuilder, processInstance, outFlow.getID()));
+
+        ruleBuilder.buildRule();
     }
 
     private GrooveNode deleteIncomingMessageAndCreateProcessInstance(

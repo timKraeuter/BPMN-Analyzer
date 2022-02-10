@@ -245,4 +245,26 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
 
         this.checkGrooveGeneration(signalModel);
     }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/15e29a24-e35b-40b8-b09a-b63f3bc91268">"Timer events"</a> in cawemo.
+     */
+    @Test
+    void testTimerEvents() throws IOException {
+        final StartEvent start = new StartEvent("start");
+        final IntermediateCatchEvent timer = new IntermediateCatchEvent("timer", IntermediateCatchEventType.TIMER);
+        EndEvent end = new EndEvent("end");
+
+        final String modelName = "timerEvents";
+
+        final BPMNCollaboration signalModel = new BPMNCollaborationBuilder()
+                .name(modelName)
+                .processName(modelName)
+                .startEvent(start)
+                .sequenceFlow(start, timer)
+                .sequenceFlow(timer, end)
+                .build();
+
+        this.checkGrooveGeneration(signalModel);
+    }
 }
