@@ -6,7 +6,7 @@
         </attr>
         <node id="n0">
             <attr name="layout">
-                <string>195 248 97 18</string>
+                <string>192 248 103 18</string>
             </attr>
         </node>
         <node id="n1">
@@ -31,15 +31,15 @@
         </node>
         <edge from="n0" to="n0">
             <attr name="label">
-                <string>type:ProcessInstance</string>
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <edge from="n0" to="n4">
+            <attr name="label">
+                <string>subprocess</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">
-            <attr name="label">
-                <string>state</string>
-            </attr>
-        </edge>
-        <edge from="n0" to="n2">
             <attr name="label">
                 <string>state</string>
             </attr>
@@ -49,9 +49,9 @@
                 <string>tokens</string>
             </attr>
         </edge>
-        <edge from="n0" to="n4">
+        <edge from="n0" to="n2">
             <attr name="label">
-                <string>subprocess</string>
+                <string>state</string>
             </attr>
         </edge>
         <edge from="n1" to="n1">
@@ -91,7 +91,7 @@
         </edge>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>type:ProcessInstance</string>
+                <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
     </graph>

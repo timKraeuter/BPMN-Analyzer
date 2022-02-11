@@ -8,7 +8,7 @@
         </node>
         <edge from="n0" to="n0">
             <attr name="label">
-                <string>type:ProcessInstance</string>
+                <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
         <node id="n1">

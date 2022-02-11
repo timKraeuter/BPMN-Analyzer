@@ -23,7 +23,7 @@
         </node>
         <edge from="n100" to="n100">
             <attr name="label">
-                <string>type:ProcessInstance</string>
+                <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
         <node id="n101">

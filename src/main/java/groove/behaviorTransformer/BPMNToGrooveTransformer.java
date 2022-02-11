@@ -34,7 +34,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
     private static final String FIXED_RULES_AND_TYPE_GRAPH_DIR = "/BPMNFixedRulesAndTypeGraph";
     // Node names
     private static final String TYPE_TOKEN = TYPE + "Token";
-    private static final String TYPE_PROCESS_INSTANCE = TYPE + "ProcessInstance";
+    private static final String TYPE_PROCESS_SNAPSHOT = TYPE + "ProcessSnapshot";
     private static final String TYPE_RUNNING = TYPE + "Running";
     private static final String TYPE_TERMINATED = TYPE + "Terminated";
     private static final String TYPE_DECISION = TYPE + "Decision";
@@ -71,7 +71,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
 
         collaboration.getParticipants().stream().filter(process -> process.getStartEvent() != null).forEach(process -> {
             if (process.getStartEvent().getType() == StartEventType.NONE) {
-                GrooveNode processInstance = new GrooveNode(TYPE_PROCESS_INSTANCE);
+                GrooveNode processInstance = new GrooveNode(TYPE_PROCESS_SNAPSHOT);
                 GrooveNode processName = new GrooveNode(createStringNodeLabel(process.getName()));
                 startGraphBuilder.addEdge(NAME, processInstance, processName);
                 GrooveNode running = new GrooveNode(TYPE_RUNNING);
@@ -116,7 +116,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
     }
 
     private GrooveNode createProcessInstanceWithName(Process process, GrooveRuleBuilder ruleBuilder) {
-        GrooveNode processInstance = ruleBuilder.contextNode(TYPE_PROCESS_INSTANCE);
+        GrooveNode processInstance = ruleBuilder.contextNode(TYPE_PROCESS_SNAPSHOT);
         ruleBuilder.contextEdge(NAME, processInstance, ruleBuilder.contextNode(createStringNodeLabel(process.getName())));
         return processInstance;
     }
@@ -266,7 +266,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
 
                     if (boundaryEvent.isCancelActivity()) {
                         // Terminate subprocess and delete all its tokens.
-                        GrooveNode subProcess = ruleBuilder.deleteNode(TYPE_PROCESS_INSTANCE);
+                        GrooveNode subProcess = ruleBuilder.deleteNode(TYPE_PROCESS_SNAPSHOT);
                         ruleBuilder.contextEdge(SUBPROCESS, processInstance, subProcess);
                         String subprocessName = callActivity.getSubProcessModel().getName();
                         ruleBuilder.contextEdge(NAME, subProcess, ruleBuilder.contextNode(createStringNodeLabel(subprocessName)));
@@ -299,11 +299,11 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
             private void createTerminateSubProcessRule(CallActivity callActivity) {
                 ruleBuilder.startRule(callActivity.getName() + "_end");
 
-                GrooveNode processInstance = ruleBuilder.contextNode(TYPE_PROCESS_INSTANCE);
+                GrooveNode processInstance = ruleBuilder.contextNode(TYPE_PROCESS_SNAPSHOT);
                 GrooveNode running = ruleBuilder.contextNode(TYPE_RUNNING);
                 ruleBuilder.contextEdge(STATE, processInstance, running);
 
-                GrooveNode subProcessInstance = ruleBuilder.deleteNode(TYPE_PROCESS_INSTANCE);
+                GrooveNode subProcessInstance = ruleBuilder.deleteNode(TYPE_PROCESS_SNAPSHOT);
                 ruleBuilder.deleteEdge(NAME, subProcessInstance, ruleBuilder.contextNode(createStringNodeLabel(callActivity.getSubProcessModel().getName())));
                 ruleBuilder.deleteEdge(SUBPROCESS, processInstance, subProcessInstance);
                 GrooveNode terminated = ruleBuilder.deleteNode(TYPE_TERMINATED);
@@ -323,7 +323,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                 GrooveNode processInstance = BPMNToGrooveTransformer.this.createContextRunningProcessInstance(process, ruleBuilder);
                 deleteTokenWithPosition(ruleBuilder, processInstance, incomingFlowId);
 
-                GrooveNode subProcessInstance = ruleBuilder.addNode(TYPE_PROCESS_INSTANCE);
+                GrooveNode subProcessInstance = ruleBuilder.addNode(TYPE_PROCESS_SNAPSHOT);
                 ruleBuilder.contextEdge(NAME, subProcessInstance, ruleBuilder.contextNode(createStringNodeLabel(callActivity.getSubProcessModel().getName())));
                 ruleBuilder.addEdge(SUBPROCESS, processInstance, subProcessInstance);
                 GrooveNode running = ruleBuilder.addNode(TYPE_RUNNING);
@@ -475,7 +475,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
     }
 
     private GrooveNode createNewProcessInstance(GrooveRuleBuilder ruleBuilder, Process receiverProcess) {
-        GrooveNode processInstance = ruleBuilder.addNode(TYPE_PROCESS_INSTANCE);
+        GrooveNode processInstance = ruleBuilder.addNode(TYPE_PROCESS_SNAPSHOT);
         ruleBuilder.addEdge(NAME, processInstance, ruleBuilder.contextNode(createStringNodeLabel(receiverProcess.getName())));
         ruleBuilder.addEdge(STATE, processInstance, ruleBuilder.addNode(TYPE_RUNNING));
         return processInstance;
@@ -935,7 +935,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                 ruleBuilder.addEdge(STATE, processInstance, terminated);
 
                 // Terminate possible subprocesses with a nested rule.
-                GrooveNode subProcess = ruleBuilder.contextNode(TYPE_PROCESS_INSTANCE);
+                GrooveNode subProcess = ruleBuilder.contextNode(TYPE_PROCESS_SNAPSHOT);
                 ruleBuilder.contextEdge(SUBPROCESS, processInstance, subProcess);
                 GrooveNode subProcessRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
                 ruleBuilder.deleteEdge(STATE, subProcess, subProcessRunning);
