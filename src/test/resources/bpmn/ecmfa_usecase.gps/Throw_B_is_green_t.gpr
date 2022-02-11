@@ -1,247 +1,252 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="Throw_P2_signal_t" role="rule" edgeids="false" edgemode="directed">
-        <node id="n211">
+    <graph id="Throw_B_is_green_t" role="rule" edgeids="false" edgemode="directed">
+        <node id="n130">
             <attr name="layout">
-                <string>537 683 0 0</string>
+                <string>537 332 0 0</string>
             </attr>
         </node>
-        <edge from="n211" to="n211">
+        <edge from="n130" to="n130">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n211" to="n211">
+        <edge from="n130" to="n130">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n219">
+        <node id="n138">
             <attr name="layout">
-                <string>510 82 0 0</string>
+                <string>542 502 0 0</string>
             </attr>
         </node>
-        <edge from="n219" to="n219">
+        <edge from="n138" to="n138">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n219" to="n219">
+        <edge from="n138" to="n138">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n209">
+        <node id="n128">
             <attr name="layout">
-                <string>537 593 0 0</string>
+                <string>537 242 0 0</string>
             </attr>
         </node>
-        <edge from="n209" to="n209">
+        <edge from="n128" to="n128">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n209" to="n209">
+        <edge from="n128" to="n128">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n217">
+        <node id="n136">
             <attr name="layout">
-                <string>542 172 0 0</string>
+                <string>542 673 0 0</string>
             </attr>
         </node>
-        <edge from="n217" to="n217">
+        <edge from="n136" to="n136">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n217" to="n217">
+        <edge from="n136" to="n136">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n206">
+        <node id="n125">
             <attr name="layout">
-                <string>62 438 0 0</string>
+                <string>62 87 0 0</string>
             </attr>
         </node>
-        <edge from="n206" to="n206">
+        <edge from="n125" to="n125">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n207">
+        <node id="n126">
             <attr name="layout">
-                <string>402 503 0 0</string>
+                <string>402 152 0 0</string>
             </attr>
         </node>
-        <edge from="n207" to="n207">
+        <edge from="n126" to="n126">
             <attr name="label">
-                <string>string:"Junction_Controller"</string>
+                <string>string:"Junction Controller"</string>
             </attr>
         </edge>
-        <node id="n208">
+        <node id="n127">
             <attr name="layout">
-                <string>402 423 0 0</string>
+                <string>402 72 0 0</string>
             </attr>
         </node>
-        <edge from="n208" to="n208">
+        <edge from="n127" to="n127">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n210">
+        <node id="n129">
             <attr name="layout">
-                <string>842 593 0 0</string>
+                <string>842 242 0 0</string>
             </attr>
         </node>
-        <edge from="n210" to="n210">
+        <edge from="n129" to="n129">
             <attr name="label">
-                <string>string:"Switch_to_P2_P2_signal_t"</string>
+                <string>string:"Switch_to_P1_B_is_green_t"</string>
             </attr>
         </edge>
-        <node id="n212">
+        <node id="n131">
             <attr name="layout">
-                <string>842 683 0 0</string>
+                <string>842 332 0 0</string>
             </attr>
         </node>
-        <edge from="n212" to="n212">
+        <edge from="n131" to="n131">
             <attr name="label">
-                <string>string:"P2_signal_t_e2"</string>
+                <string>string:"B_is_green_t_Phase_1"</string>
             </attr>
         </edge>
-        <node id="n213">
+        <node id="n132">
             <attr name="layout">
-                <string>777 252 0 0</string>
+                <string>787 578 0 0</string>
             </attr>
         </node>
-        <edge from="n213" to="n213">
+        <edge from="n132" to="n132">
             <attr name="label">
                 <string>existsx:</string>
             </attr>
         </edge>
-        <node id="n214">
+        <node id="n133">
             <attr name="layout">
-                <string>62 99 0 0</string>
+                <string>62 656 0 0</string>
             </attr>
         </node>
-        <edge from="n214" to="n214">
+        <edge from="n133" to="n133">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n215">
+        <node id="n134">
             <attr name="layout">
-                <string>412 332 0 0</string>
+                <string>412 412 0 0</string>
             </attr>
         </node>
-        <edge from="n215" to="n215">
+        <edge from="n134" to="n134">
             <attr name="label">
                 <string>string:"Bus controller"</string>
             </attr>
         </edge>
-        <node id="n216">
+        <node id="n135">
             <attr name="layout">
-                <string>495 252 0 0</string>
+                <string>495 583 0 0</string>
             </attr>
         </node>
-        <edge from="n216" to="n216">
+        <edge from="n135" to="n135">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n218">
+        <node id="n137">
             <attr name="layout">
-                <string>777 164 0 0</string>
+                <string>787 681 0 0</string>
             </attr>
         </node>
-        <edge from="n218" to="n218">
+        <edge from="n137" to="n137">
             <attr name="label">
-                <string>string:"Request_P2_P2_signal_r"</string>
+                <string>string:"Request_green_tl_B_is_green_signal"</string>
             </attr>
         </edge>
-        <node id="n220">
+        <node id="n139">
             <attr name="layout">
-                <string>777 82 0 0</string>
+                <string>787 494 0 0</string>
             </attr>
         </node>
-        <edge from="n220" to="n220">
+        <edge from="n139" to="n139">
             <attr name="label">
-                <string>string:"P2_signal_r_e3"</string>
+                <string>string:"B_is_green_signal_e3"</string>
             </attr>
         </edge>
-        <edge from="n206" to="n211">
+        <edge from="n125" to="n130">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n211" to="n212">
+        <edge from="n130" to="n131">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n214" to="n219">
+        <edge from="n133" to="n138">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n219" to="n220">
+        <edge from="n138" to="n139">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n206" to="n209">
+        <edge from="n125" to="n128">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n209" to="n210">
+        <edge from="n128" to="n129">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n214" to="n217">
+        <edge from="n133" to="n136">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n217" to="n218">
+        <edge from="n136" to="n137">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n206" to="n207">
+        <edge from="n125" to="n126">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n206" to="n208">
+        <edge from="n125" to="n127">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n214" to="n215">
+        <edge from="n133" to="n134">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n214" to="n216">
+        <edge from="n133" to="n135">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n214" to="n213">
+        <edge from="n133" to="n132">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n216" to="n213">
+        <edge from="n135" to="n132">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n217" to="n213">
+        <edge from="n136" to="n132">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n138" to="n132">
             <attr name="label">
                 <string>@</string>
             </attr>

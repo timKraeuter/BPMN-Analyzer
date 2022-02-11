@@ -18,7 +18,7 @@
         </edge>
         <node id="n30">
             <attr name="layout">
-                <string>427 422 0 0</string>
+                <string>432 502 0 0</string>
             </attr>
         </node>
         <edge from="n30" to="n30">
@@ -48,7 +48,7 @@
         </edge>
         <node id="n28">
             <attr name="layout">
-                <string>432 512 0 0</string>
+                <string>432 673 0 0</string>
             </attr>
         </node>
         <edge from="n28" to="n28">
@@ -113,7 +113,7 @@
         </edge>
         <node id="n24">
             <attr name="layout">
-                <string>612 592 0 0</string>
+                <string>622 578 0 0</string>
             </attr>
         </node>
         <edge from="n24" to="n24">
@@ -123,7 +123,7 @@
         </edge>
         <node id="n25">
             <attr name="layout">
-                <string>62 439 0 0</string>
+                <string>62 656 0 0</string>
             </attr>
         </node>
         <edge from="n25" to="n25">
@@ -133,7 +133,7 @@
         </edge>
         <node id="n26">
             <attr name="layout">
-                <string>412 672 0 0</string>
+                <string>412 412 0 0</string>
             </attr>
         </node>
         <edge from="n26" to="n26">
@@ -143,7 +143,7 @@
         </edge>
         <node id="n27">
             <attr name="layout">
-                <string>412 592 0 0</string>
+                <string>412 583 0 0</string>
             </attr>
         </node>
         <edge from="n27" to="n27">
@@ -153,7 +153,7 @@
         </edge>
         <node id="n29">
             <attr name="layout">
-                <string>612 504 0 0</string>
+                <string>622 681 0 0</string>
             </attr>
         </node>
         <edge from="n29" to="n29">
@@ -163,7 +163,7 @@
         </edge>
         <node id="n31">
             <attr name="layout">
-                <string>612 422 0 0</string>
+                <string>622 494 0 0</string>
             </attr>
         </node>
         <edge from="n31" to="n31">
@@ -242,6 +242,11 @@
             </attr>
         </edge>
         <edge from="n28" to="n24">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n30" to="n24">
             <attr name="label">
                 <string>@</string>
             </attr>

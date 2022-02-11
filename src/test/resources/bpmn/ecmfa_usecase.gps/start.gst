@@ -18,7 +18,7 @@
         </node>
         <edge from="n1" to="n1">
             <attr name="label">
-                <string>string:"Junction_Controller"</string>
+                <string>string:"Junction Controller"</string>
             </attr>
         </edge>
         <node id="n2">
@@ -48,7 +48,7 @@
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"Junction_Controller_start_c"</string>
+                <string>string:"Junction Controller_start_c"</string>
             </attr>
         </edge>
         <node id="n5">

@@ -1,77 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="Phase2_end" role="rule" edgeids="false" edgemode="directed">
-        <node id="n98">
+        <node id="n89">
             <attr name="layout">
                 <string>437 242 0 0</string>
             </attr>
         </node>
-        <edge from="n98" to="n98">
+        <edge from="n89" to="n89">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n98" to="n98">
+        <edge from="n89" to="n89">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n96">
+        <node id="n87">
             <attr name="layout">
                 <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n96" to="n96">
+        <edge from="n87" to="n87">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n97">
+        <node id="n88">
             <attr name="layout">
                 <string>392 152 0 0</string>
             </attr>
         </node>
-        <edge from="n97" to="n97">
+        <edge from="n88" to="n88">
             <attr name="label">
                 <string>string:"Phase_2"</string>
             </attr>
         </edge>
-        <node id="n99">
+        <node id="n90">
             <attr name="layout">
                 <string>652 242 0 0</string>
             </attr>
         </node>
-        <edge from="n99" to="n99">
+        <edge from="n90" to="n90">
             <attr name="label">
-                <string>string:"P2_requested_Phase2_end"</string>
+                <string>string:"A_C_green_requested_Phase2_end"</string>
             </attr>
         </edge>
-        <node id="n100">
+        <node id="n91">
             <attr name="layout">
                 <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n100" to="n100">
+        <edge from="n91" to="n91">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n98" to="n99">
+        <edge from="n89" to="n90">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n96" to="n98">
+        <edge from="n87" to="n89">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n96" to="n97">
+        <edge from="n87" to="n88">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n96" to="n100">
+        <edge from="n87" to="n91">
             <attr name="label">
                 <string>state</string>
             </attr>

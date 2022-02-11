@@ -1,147 +1,147 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="Catch_P2_requested" role="rule" edgeids="false" edgemode="directed">
-        <node id="n90">
+    <graph id="Catch_B_is_green_r" role="rule" edgeids="false" edgemode="directed">
+        <node id="n320">
             <attr name="layout">
-                <string>457 162 0 0</string>
+                <string>510 162 0 0</string>
             </attr>
         </node>
-        <edge from="n90" to="n90">
+        <edge from="n320" to="n320">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n90" to="n90">
+        <edge from="n320" to="n320">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n92">
+        <node id="n322">
             <attr name="layout">
-                <string>457 252 0 0</string>
+                <string>510 252 0 0</string>
             </attr>
         </node>
-        <edge from="n92" to="n92">
+        <edge from="n322" to="n322">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n92" to="n92">
+        <edge from="n322" to="n322">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n94">
+        <node id="n324">
             <attr name="layout">
-                <string>442 422 0 0</string>
+                <string>495 422 0 0</string>
             </attr>
         </node>
-        <edge from="n94" to="n94">
+        <edge from="n324" to="n324">
             <attr name="label">
                 <string>type:Message</string>
             </attr>
         </edge>
-        <edge from="n94" to="n94">
+        <edge from="n324" to="n324">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n87">
+        <node id="n317">
             <attr name="layout">
                 <string>62 89 0 0</string>
             </attr>
         </node>
-        <edge from="n87" to="n87">
+        <edge from="n317" to="n317">
             <attr name="label">
                 <string>type:ProcessInstance</string>
             </attr>
         </edge>
-        <node id="n88">
+        <node id="n318">
             <attr name="layout">
                 <string>412 72 0 0</string>
             </attr>
         </node>
-        <edge from="n88" to="n88">
+        <edge from="n318" to="n318">
             <attr name="label">
-                <string>string:"Phase_2"</string>
+                <string>string:"Bus controller"</string>
             </attr>
         </edge>
-        <node id="n89">
+        <node id="n319">
             <attr name="layout">
                 <string>412 332 0 0</string>
             </attr>
         </node>
-        <edge from="n89" to="n89">
+        <edge from="n319" to="n319">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n91">
+        <node id="n321">
             <attr name="layout">
-                <string>672 162 0 0</string>
+                <string>777 162 0 0</string>
             </attr>
         </node>
-        <edge from="n91" to="n91">
+        <edge from="n321" to="n321">
             <attr name="label">
-                <string>string:"P2_requested_Phase2_end"</string>
+                <string>string:"B_is_green_r_e3"</string>
             </attr>
         </edge>
-        <node id="n93">
+        <node id="n323">
             <attr name="layout">
-                <string>672 252 0 0</string>
+                <string>777 252 0 0</string>
             </attr>
         </node>
-        <edge from="n93" to="n93">
+        <edge from="n323" to="n323">
             <attr name="label">
-                <string>string:"evp2"</string>
+                <string>string:"ev1"</string>
             </attr>
         </edge>
-        <node id="n95">
+        <node id="n325">
             <attr name="layout">
-                <string>672 422 0 0</string>
+                <string>777 422 0 0</string>
             </attr>
         </node>
-        <edge from="n95" to="n95">
+        <edge from="n325" to="n325">
             <attr name="label">
-                <string>string:"Request_P2_P2_requested"</string>
+                <string>string:"B_green_t_B_is_green_r"</string>
             </attr>
         </edge>
-        <edge from="n87" to="n90">
+        <edge from="n317" to="n320">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n90" to="n91">
+        <edge from="n320" to="n321">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n87" to="n92">
+        <edge from="n317" to="n322">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n92" to="n93">
+        <edge from="n322" to="n323">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n87" to="n94">
+        <edge from="n317" to="n324">
             <attr name="label">
                 <string>del:messages</string>
             </attr>
         </edge>
-        <edge from="n94" to="n95">
+        <edge from="n324" to="n325">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n87" to="n88">
+        <edge from="n317" to="n318">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n87" to="n89">
+        <edge from="n317" to="n319">
             <attr name="label">
                 <string>state</string>
             </attr>
