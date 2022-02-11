@@ -252,6 +252,35 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
 
                 // Generate rules for the sub process
                 createRulesForExecutingTheSubProcess(callActivity);
+
+                createBoundaryEventRules(callActivity);
+            }
+
+            private void createBoundaryEventRules(CallActivity callActivity) {
+                callActivity.getBoundaryEvents().forEach(boundaryEvent -> {
+                    ruleBuilder.startRule(boundaryEvent.getName());
+                    GrooveNode processInstance = addTokensForOutgoingFlowsToRunningInstance(
+                            boundaryEvent,
+                            process,
+                            ruleBuilder);
+
+                    if (boundaryEvent.isCancelActivity()) {
+                        // Terminate subprocess and delete all its tokens.
+                        GrooveNode subProcess = ruleBuilder.deleteNode(TYPE_PROCESS_INSTANCE);
+                        ruleBuilder.contextEdge(SUBPROCESS, processInstance, subProcess);
+                        String subprocessName = callActivity.getSubProcessModel().getName();
+                        ruleBuilder.contextEdge(NAME, subProcess, ruleBuilder.contextNode(createStringNodeLabel(subprocessName)));
+                        GrooveNode subprocessRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
+                        ruleBuilder.deleteEdge(STATE, subProcess, subprocessRunning);
+
+                        GrooveNode arbitraryToken = ruleBuilder.deleteNode(TYPE_TOKEN);
+                        ruleBuilder.deleteEdge(TOKENS, subProcess, arbitraryToken);
+                        GrooveNode forAll = ruleBuilder.contextNode(FORALL);
+                        ruleBuilder.contextEdge(AT, arbitraryToken, forAll);
+                    }
+
+                    ruleBuilder.buildRule();
+                });
             }
 
             private void createRulesForExecutingTheSubProcess(CallActivity callActivity) {
