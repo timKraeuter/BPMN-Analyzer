@@ -63,6 +63,7 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
             ruleBuilder.startRule(transition.getName());
 
             final GrooveNode stateMachine = ruleBuilder.contextNode(TYPE_STATE_MACHINE_SNAPSHOT);
+            ruleBuilder.contextEdge(NAME, stateMachine, ruleBuilder.contextNode(createStringNodeLabel(finiteStateMachine.getName())));
 
             final GrooveNode previousState = ruleBuilder.deleteNode(TYPE_STATE);
             ruleBuilder.contextEdge(

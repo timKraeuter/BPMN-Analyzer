@@ -1,82 +1,97 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="release_r1" role="rule" edgeids="false" edgemode="directed">
-        <node id="n22">
+        <node id="n26">
             <attr name="layout">
-                <string>457 172 0 0</string>
+                <string>595 252 0 0</string>
             </attr>
         </node>
-        <edge from="n22" to="n22">
+        <edge from="n26" to="n26">
             <attr name="label">
                 <string>type:State</string>
             </attr>
         </edge>
-        <edge from="n22" to="n22">
+        <edge from="n26" to="n26">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n20">
+        <node id="n24">
             <attr name="layout">
-                <string>457 82 0 0</string>
+                <string>595 162 0 0</string>
             </attr>
         </node>
-        <edge from="n20" to="n20">
+        <edge from="n24" to="n24">
             <attr name="label">
                 <string>type:State</string>
             </attr>
         </edge>
-        <edge from="n20" to="n20">
+        <edge from="n24" to="n24">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n19">
+        <node id="n22">
             <attr name="layout">
-                <string>62 90 0 0</string>
+                <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n19" to="n19">
+        <edge from="n22" to="n22">
             <attr name="label">
                 <string>type:StateMachineSnapshot</string>
             </attr>
         </edge>
-        <node id="n21">
-            <attr name="layout">
-                <string>627 82 0 0</string>
-            </attr>
-        </node>
-        <edge from="n21" to="n21">
-            <attr name="label">
-                <string>string:"r2_released"</string>
-            </attr>
-        </edge>
         <node id="n23">
             <attr name="layout">
-                <string>627 172 0 0</string>
+                <string>467 72 0 0</string>
             </attr>
         </node>
         <edge from="n23" to="n23">
             <attr name="label">
+                <string>string:"2_Resource_Process"</string>
+            </attr>
+        </edge>
+        <node id="n25">
+            <attr name="layout">
+                <string>892 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n25" to="n25">
+            <attr name="label">
+                <string>string:"r2_released"</string>
+            </attr>
+        </edge>
+        <node id="n27">
+            <attr name="layout">
+                <string>892 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n27" to="n27">
+            <attr name="label">
                 <string>string:"end"</string>
             </attr>
         </edge>
-        <edge from="n19" to="n22">
+        <edge from="n22" to="n26">
             <attr name="label">
                 <string>new:currentState</string>
             </attr>
         </edge>
-        <edge from="n19" to="n20">
+        <edge from="n22" to="n24">
             <attr name="label">
                 <string>del:currentState</string>
             </attr>
         </edge>
-        <edge from="n20" to="n21">
+        <edge from="n22" to="n23">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n22" to="n23">
+        <edge from="n24" to="n25">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n26" to="n27">
             <attr name="label">
                 <string>name</string>
             </attr>

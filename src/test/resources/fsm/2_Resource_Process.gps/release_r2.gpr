@@ -1,82 +1,97 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="release_r2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n17">
+        <node id="n20">
             <attr name="layout">
-                <string>457 172 0 0</string>
+                <string>595 252 0 0</string>
             </attr>
         </node>
-        <edge from="n17" to="n17">
+        <edge from="n20" to="n20">
             <attr name="label">
                 <string>type:State</string>
             </attr>
         </edge>
-        <edge from="n17" to="n17">
+        <edge from="n20" to="n20">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n15">
-            <attr name="layout">
-                <string>457 82 0 0</string>
-            </attr>
-        </node>
-        <edge from="n15" to="n15">
-            <attr name="label">
-                <string>type:State</string>
-            </attr>
-        </edge>
-        <edge from="n15" to="n15">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
-        <node id="n14">
-            <attr name="layout">
-                <string>62 90 0 0</string>
-            </attr>
-        </node>
-        <edge from="n14" to="n14">
-            <attr name="label">
-                <string>type:StateMachineSnapshot</string>
-            </attr>
-        </edge>
-        <node id="n16">
-            <attr name="layout">
-                <string>627 82 0 0</string>
-            </attr>
-        </node>
-        <edge from="n16" to="n16">
-            <attr name="label">
-                <string>string:"work"</string>
-            </attr>
-        </edge>
         <node id="n18">
             <attr name="layout">
-                <string>627 172 0 0</string>
+                <string>595 162 0 0</string>
             </attr>
         </node>
         <edge from="n18" to="n18">
             <attr name="label">
+                <string>type:State</string>
+            </attr>
+        </edge>
+        <edge from="n18" to="n18">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n16">
+            <attr name="layout">
+                <string>62 85 0 0</string>
+            </attr>
+        </node>
+        <edge from="n16" to="n16">
+            <attr name="label">
+                <string>type:StateMachineSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n17">
+            <attr name="layout">
+                <string>467 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n17" to="n17">
+            <attr name="label">
+                <string>string:"2_Resource_Process"</string>
+            </attr>
+        </edge>
+        <node id="n19">
+            <attr name="layout">
+                <string>892 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n19" to="n19">
+            <attr name="label">
+                <string>string:"work"</string>
+            </attr>
+        </edge>
+        <node id="n21">
+            <attr name="layout">
+                <string>892 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n21" to="n21">
+            <attr name="label">
                 <string>string:"r2_released"</string>
             </attr>
         </edge>
-        <edge from="n14" to="n17">
+        <edge from="n16" to="n20">
             <attr name="label">
                 <string>new:currentState</string>
             </attr>
         </edge>
-        <edge from="n14" to="n15">
+        <edge from="n16" to="n18">
             <attr name="label">
                 <string>del:currentState</string>
             </attr>
         </edge>
-        <edge from="n15" to="n16">
+        <edge from="n16" to="n17">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n17" to="n18">
+        <edge from="n18" to="n19">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n20" to="n21">
             <attr name="label">
                 <string>name</string>
             </attr>

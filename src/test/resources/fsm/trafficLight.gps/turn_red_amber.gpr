@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="turn_red_amber" role="rule" edgeids="false" edgemode="directed">
-        <node id="n7">
+        <node id="n8">
             <attr name="layout">
-                <string>457 172 0 0</string>
+                <string>550 252 0 0</string>
             </attr>
         </node>
-        <edge from="n7" to="n7">
+        <edge from="n8" to="n8">
             <attr name="label">
                 <string>type:State</string>
             </attr>
         </edge>
-        <edge from="n7" to="n7">
+        <edge from="n8" to="n8">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n5">
+        <node id="n6">
             <attr name="layout">
-                <string>457 82 0 0</string>
+                <string>550 162 0 0</string>
             </attr>
         </node>
-        <edge from="n5" to="n5">
+        <edge from="n6" to="n6">
             <attr name="label">
                 <string>type:State</string>
             </attr>
         </edge>
-        <edge from="n5" to="n5">
+        <edge from="n6" to="n6">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
         <node id="n4">
             <attr name="layout">
-                <string>62 90 0 0</string>
+                <string>62 85 0 0</string>
             </attr>
         </node>
         <edge from="n4" to="n4">
@@ -41,42 +41,57 @@
                 <string>type:StateMachineSnapshot</string>
             </attr>
         </edge>
-        <node id="n6">
+        <node id="n5">
             <attr name="layout">
-                <string>627 82 0 0</string>
+                <string>467 72 0 0</string>
             </attr>
         </node>
-        <edge from="n6" to="n6">
+        <edge from="n5" to="n5">
+            <attr name="label">
+                <string>string:"trafficLight"</string>
+            </attr>
+        </edge>
+        <node id="n7">
+            <attr name="layout">
+                <string>802 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n7" to="n7">
             <attr name="label">
                 <string>string:"red"</string>
             </attr>
         </edge>
-        <node id="n8">
+        <node id="n9">
             <attr name="layout">
-                <string>627 172 0 0</string>
+                <string>802 252 0 0</string>
             </attr>
         </node>
-        <edge from="n8" to="n8">
+        <edge from="n9" to="n9">
             <attr name="label">
                 <string>string:"red-amber"</string>
             </attr>
         </edge>
-        <edge from="n4" to="n7">
+        <edge from="n4" to="n8">
             <attr name="label">
                 <string>new:currentState</string>
             </attr>
         </edge>
-        <edge from="n4" to="n5">
+        <edge from="n4" to="n6">
             <attr name="label">
                 <string>del:currentState</string>
             </attr>
         </edge>
-        <edge from="n5" to="n6">
+        <edge from="n4" to="n5">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n7" to="n8">
+        <edge from="n6" to="n7">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n8" to="n9">
             <attr name="label">
                 <string>name</string>
             </attr>
