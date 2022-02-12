@@ -58,7 +58,7 @@
         </node>
         <edge from="n28" to="n28">
             <attr name="label">
-                <string>string:"e1_Phase_2"</string>
+                <string>string:"e1_Phase_1"</string>
             </attr>
         </edge>
         <edge from="n26" to="n28">

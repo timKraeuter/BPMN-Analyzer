@@ -1,77 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="Phase2_end" role="rule" edgeids="false" edgemode="directed">
-        <node id="n209">
+    <graph id="controller_stopped" role="rule" edgeids="false" edgemode="directed">
+        <node id="n266">
             <attr name="layout">
-                <string>437 242 0 0</string>
+                <string>527 242 0 0</string>
             </attr>
         </node>
-        <edge from="n209" to="n209">
+        <edge from="n266" to="n266">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n209" to="n209">
+        <edge from="n266" to="n266">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n207">
+        <node id="n264">
             <attr name="layout">
                 <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n207" to="n207">
+        <edge from="n264" to="n264">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n208">
+        <node id="n265">
             <attr name="layout">
                 <string>392 152 0 0</string>
             </attr>
         </node>
-        <edge from="n208" to="n208">
+        <edge from="n265" to="n265">
             <attr name="label">
-                <string>string:"Phase_2"</string>
+                <string>string:"Junction Controller"</string>
             </attr>
         </edge>
-        <node id="n210">
+        <node id="n267">
             <attr name="layout">
-                <string>652 242 0 0</string>
+                <string>832 242 0 0</string>
             </attr>
         </node>
-        <edge from="n210" to="n210">
+        <edge from="n267" to="n267">
             <attr name="label">
-                <string>string:"A_C_green_requested_Phase2_end"</string>
+                <string>string:"stop"</string>
             </attr>
         </edge>
-        <node id="n211">
+        <node id="n268">
             <attr name="layout">
                 <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n211" to="n211">
+        <edge from="n268" to="n268">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n209" to="n210">
+        <edge from="n266" to="n267">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n207" to="n209">
+        <edge from="n264" to="n266">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n207" to="n208">
+        <edge from="n264" to="n265">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n207" to="n211">
+        <edge from="n264" to="n268">
             <attr name="label">
                 <string>state</string>
             </attr>

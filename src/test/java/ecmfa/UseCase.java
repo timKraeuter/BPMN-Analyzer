@@ -70,20 +70,23 @@ public class UseCase extends BPMNToGrooveTestBase {
                 .getParticipants().iterator().next();
 
         // Junction-Controller
-        final StartEvent start_c = new StartEvent("start_c");
+        final StartEvent controller_started = new StartEvent("controller_started");
         ExclusiveGateway e1 = new ExclusiveGateway("e1");
-        BoundaryEvent phase_2_over = new BoundaryEvent("Phase_2_over", BoundaryEventType.TIMER, true);
-        CallActivity phase2 = new CallActivity(phase2_Process);
-        phase2.attachBoundaryEvent(phase_2_over);
-        Task switch_to_p1 = new Task("Switch_to_P1");
-        IntermediateThrowEvent b_green_signal = new IntermediateThrowEvent("B_is_green_t", IntermediateThrowEventType.SIGNAL, b_is_green);
-        IntermediateThrowEvent ac_green_signal = new IntermediateThrowEvent("A_C_are_green_t", IntermediateThrowEventType.SIGNAL, a_c_are_green);
-        Task switch_to_p2 = new Task("Switch_to_P2");
+
         CallActivity phase1 = new CallActivity(phase1_process);
         BoundaryEvent phase_1_over = new BoundaryEvent("Phase_1_over", BoundaryEventType.TIMER, true);
         phase1.attachBoundaryEvent(phase_1_over);
+        Task switch_to_p2 = new Task("Switch_to_P2");
+        IntermediateThrowEvent b_green_signal = new IntermediateThrowEvent("B_is_green_t", IntermediateThrowEventType.SIGNAL, b_is_green);
+
+        CallActivity phase2 = new CallActivity(phase2_Process);
+        BoundaryEvent phase_2_over = new BoundaryEvent("Phase_2_over", BoundaryEventType.TIMER, true);
+        phase2.attachBoundaryEvent(phase_2_over);
+        Task switch_to_p1 = new Task("Switch_to_P1");
+        IntermediateThrowEvent ac_green_signal = new IntermediateThrowEvent("A_C_are_green_t", IntermediateThrowEventType.SIGNAL, a_c_are_green);
+
         ExclusiveGateway e2 = new ExclusiveGateway("e2");
-        final EndEvent end_c = new EndEvent("end_c");
+        final EndEvent controller_stopped = new EndEvent("controller_stopped");
 
         // Bus controller (B)
         StartEvent approaching_junction = new StartEvent("Approaching_Junction");
@@ -107,19 +110,19 @@ public class UseCase extends BPMNToGrooveTestBase {
                 .messageFlow(a_c_green_t, b_is_red_r)
                 .messageFlow(request_green_tl, b_green_requested)
                 .processName("Junction Controller")
-                .startEvent(start_c)
-                .sequenceFlow(start_c, e1)
-                .sequenceFlow(e1, phase2)
-                .sequenceFlow(phase_2_over, switch_to_p1)
-                .sequenceFlow(phase2, switch_to_p1)
-                .sequenceFlow(switch_to_p1, b_green_signal)
-                .sequenceFlow(b_green_signal, phase1)
+                .startEvent(controller_started)
+                .sequenceFlow(controller_started, e1)
+                .sequenceFlow(e1, phase1)
                 .sequenceFlow(phase1, switch_to_p2)
                 .sequenceFlow(phase_1_over, switch_to_p2)
-                .sequenceFlow(switch_to_p2, ac_green_signal)
+                .sequenceFlow(switch_to_p2, b_green_signal)
+                .sequenceFlow(b_green_signal, phase2)
+                .sequenceFlow(phase2, switch_to_p1)
+                .sequenceFlow(phase_2_over, switch_to_p1)
+                .sequenceFlow(switch_to_p1, ac_green_signal)
                 .sequenceFlow(ac_green_signal, e2)
                 .sequenceFlow(e2, e1)
-                .sequenceFlow("stop", e2, end_c)
+                .sequenceFlow("stop", e2, controller_stopped)
                 .buildProcess()
                 .processName("Bus controller")
                 .startEvent(approaching_junction)
