@@ -16,7 +16,7 @@
         </node>
         <node id="n1">
             <attr name="layout">
-                <string>492 96 129 18</string>
+                <string>540 96 32 18</string>
             </attr>
         </node>
         <node id="n2">
@@ -64,6 +64,11 @@
                 <string>string:name</string>
             </attr>
         </edge>
+        <edge from="n0" to="n5">
+            <attr name="label">
+                <string>subprocess</string>
+            </attr>
+        </edge>
         <edge from="n0" to="n13">
             <attr name="label">
                 <string>tokens</string>
@@ -72,11 +77,6 @@
         <edge from="n0" to="n4">
             <attr name="label">
                 <string>decisions</string>
-            </attr>
-        </edge>
-        <edge from="n0" to="n5">
-            <attr name="label">
-                <string>subprocess</string>
             </attr>
         </edge>
         <edge from="n0" to="n6">
@@ -101,7 +101,7 @@
         </edge>
         <edge from="n1" to="n1">
             <attr name="label">
-                <string>type:State</string>
+                <string>type:ProcessState</string>
             </attr>
         </edge>
         <edge from="n2" to="n2">
