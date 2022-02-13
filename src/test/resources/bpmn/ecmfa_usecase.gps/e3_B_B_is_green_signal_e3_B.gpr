@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="e3_B_B_is_green_signal_e3_B" role="rule" edgeids="false" edgemode="directed">
+        <node id="n414">
+            <attr name="layout">
+                <string>62 85 0 0</string>
+            </attr>
+        </node>
+        <edge from="n414" to="n414">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n415">
+            <attr name="layout">
+                <string>392 232 0 0</string>
+            </attr>
+        </node>
+        <edge from="n415" to="n415">
+            <attr name="label">
+                <string>string:"Bus controller (B)"</string>
+            </attr>
+        </edge>
+        <node id="n416">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n416" to="n416">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n417">
+            <attr name="layout">
+                <string>562 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n417" to="n417">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n418">
+            <attr name="layout">
+                <string>817 224 0 0</string>
+            </attr>
+        </node>
+        <edge from="n418" to="n418">
+            <attr name="label">
+                <string>string:"B_is_green_signal_e3_B"</string>
+            </attr>
+        </edge>
+        <node id="n419">
+            <attr name="layout">
+                <string>817 144 0 0</string>
+            </attr>
+        </node>
+        <edge from="n419" to="n419">
+            <attr name="label">
+                <string>string:"e3_B_Pass_Junction_B"</string>
+            </attr>
+        </edge>
+        <edge from="n417" to="n419">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n417" to="n418">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n414" to="n415">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n414" to="n416">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n414" to="n417">
+            <attr name="label">
+                <string>tokens</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

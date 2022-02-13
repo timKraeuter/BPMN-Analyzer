@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="Pass_Junction_B_end" role="rule" edgeids="false" edgemode="directed">
+        <node id="n438">
+            <attr name="layout">
+                <string>530 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n438" to="n438">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n438" to="n438">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n436">
+            <attr name="layout">
+                <string>530 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n436" to="n436">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n436" to="n436">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n433">
+            <attr name="layout">
+                <string>62 87 0 0</string>
+            </attr>
+        </node>
+        <edge from="n433" to="n433">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n434">
+            <attr name="layout">
+                <string>402 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n434" to="n434">
+            <attr name="label">
+                <string>string:"Bus controller (B)"</string>
+            </attr>
+        </edge>
+        <node id="n435">
+            <attr name="layout">
+                <string>402 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n435" to="n435">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n437">
+            <attr name="layout">
+                <string>827 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n437" to="n437">
+            <attr name="label">
+                <string>string:"Pass_Junction_B"</string>
+            </attr>
+        </edge>
+        <node id="n439">
+            <attr name="layout">
+                <string>827 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n439" to="n439">
+            <attr name="label">
+                <string>string:"Pass_Junction_B_Passed_junction_B"</string>
+            </attr>
+        </edge>
+        <edge from="n433" to="n438">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n438" to="n439">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n433" to="n436">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n436" to="n437">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n433" to="n434">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n433" to="n435">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

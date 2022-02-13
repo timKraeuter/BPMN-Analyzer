@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="TL_status_requested2_Request_TL_status_B_TL_status_requested2" role="rule" edgeids="false" edgemode="directed">
+        <node id="n222">
+            <attr name="layout">
+                <string>467 423 0 0</string>
+            </attr>
+        </node>
+        <edge from="n222" to="n222">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n222" to="n222">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n224">
+            <attr name="layout">
+                <string>467 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n224" to="n224">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n224" to="n224">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n226">
+            <attr name="layout">
+                <string>817 279 0 0</string>
+            </attr>
+        </node>
+        <edge from="n226" to="n226">
+            <attr name="label">
+                <string>type:Message</string>
+            </attr>
+        </edge>
+        <edge from="n226" to="n226">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n229">
+            <attr name="layout">
+                <string>462 172 0 0</string>
+            </attr>
+        </node>
+        <edge from="n229" to="n229">
+            <attr name="label">
+                <string>type:Message</string>
+            </attr>
+        </edge>
+        <edge from="n229" to="n229">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n219">
+            <attr name="layout">
+                <string>62 405 0 0</string>
+            </attr>
+        </node>
+        <edge from="n219" to="n219">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n220">
+            <attr name="layout">
+                <string>422 333 0 0</string>
+            </attr>
+        </node>
+        <edge from="n220" to="n220">
+            <attr name="label">
+                <string>string:"Phase_2"</string>
+            </attr>
+        </edge>
+        <node id="n221">
+            <attr name="layout">
+                <string>422 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n221" to="n221">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n223">
+            <attr name="layout">
+                <string>682 423 0 0</string>
+            </attr>
+        </node>
+        <edge from="n223" to="n223">
+            <attr name="label">
+                <string>string:"TL_status_requested2_B_green_t"</string>
+            </attr>
+        </edge>
+        <node id="n225">
+            <attr name="layout">
+                <string>682 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n225" to="n225">
+            <attr name="label">
+                <string>string:"evp2"</string>
+            </attr>
+        </edge>
+        <node id="n227">
+            <attr name="layout">
+                <string>1287 279 0 0</string>
+            </attr>
+        </node>
+        <edge from="n227" to="n227">
+            <attr name="label">
+                <string>string:"Request_TL_status_B_TL_status_requested2"</string>
+            </attr>
+        </edge>
+        <node id="n228">
+            <attr name="layout">
+                <string>682 164 0 0</string>
+            </attr>
+        </node>
+        <edge from="n228" to="n228">
+            <attr name="label">
+                <string>forall:</string>
+            </attr>
+        </edge>
+        <edge from="n219" to="n222">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n222" to="n223">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n219" to="n224">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n224" to="n225">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n219" to="n226">
+            <attr name="label">
+                <string>del:messages</string>
+            </attr>
+        </edge>
+        <edge from="n226" to="n227">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n219" to="n229">
+            <attr name="label">
+                <string>del:messages</string>
+            </attr>
+        </edge>
+        <edge from="n219" to="n220">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n219" to="n221">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n229" to="n228">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n229" to="n226">
+            <attr name="label">
+                <string>!=</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

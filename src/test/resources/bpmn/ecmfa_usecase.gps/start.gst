@@ -3,7 +3,7 @@
     <graph id="ecmfa_usecase_start" role="rule" edgeids="false" edgemode="directed">
         <node id="n0">
             <attr name="layout">
-                <string>62 325 0 0</string>
+                <string>62 85 0 0</string>
             </attr>
         </node>
         <edge from="n0" to="n0">
@@ -13,7 +13,7 @@
         </edge>
         <node id="n1">
             <attr name="layout">
-                <string>392 392 0 0</string>
+                <string>392 152 0 0</string>
             </attr>
         </node>
         <edge from="n1" to="n1">
@@ -23,7 +23,7 @@
         </edge>
         <node id="n2">
             <attr name="layout">
-                <string>392 312 0 0</string>
+                <string>392 72 0 0</string>
             </attr>
         </node>
         <edge from="n2" to="n2">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n3">
             <attr name="layout">
-                <string>527 472 0 0</string>
+                <string>527 232 0 0</string>
             </attr>
         </node>
         <edge from="n3" to="n3">
@@ -43,7 +43,7 @@
         </edge>
         <node id="n4">
             <attr name="layout">
-                <string>832 472 0 0</string>
+                <string>832 232 0 0</string>
             </attr>
         </node>
         <edge from="n4" to="n4">
@@ -53,7 +53,7 @@
         </edge>
         <node id="n5">
             <attr name="layout">
-                <string>62 85 0 0</string>
+                <string>62 325 0 0</string>
             </attr>
         </node>
         <edge from="n5" to="n5">
@@ -63,17 +63,17 @@
         </edge>
         <node id="n6">
             <attr name="layout">
-                <string>392 72 0 0</string>
+                <string>392 312 0 0</string>
             </attr>
         </node>
         <edge from="n6" to="n6">
             <attr name="label">
-                <string>string:"Bus controller"</string>
+                <string>string:"Bus controller (B)"</string>
             </attr>
         </edge>
         <node id="n7">
             <attr name="layout">
-                <string>392 152 0 0</string>
+                <string>392 392 0 0</string>
             </attr>
         </node>
         <edge from="n7" to="n7">
@@ -83,7 +83,7 @@
         </edge>
         <node id="n8">
             <attr name="layout">
-                <string>490 232 0 0</string>
+                <string>520 472 0 0</string>
             </attr>
         </node>
         <edge from="n8" to="n8">
@@ -93,12 +93,62 @@
         </edge>
         <node id="n9">
             <attr name="layout">
-                <string>757 232 0 0</string>
+                <string>817 472 0 0</string>
             </attr>
         </node>
         <edge from="n9" to="n9">
             <attr name="label">
-                <string>string:"Bus controller_Approaching_Junction"</string>
+                <string>string:"Bus controller (B)_Approaching_Junction_B"</string>
+            </attr>
+        </edge>
+        <node id="n10">
+            <attr name="layout">
+                <string>62 565 0 0</string>
+            </attr>
+        </node>
+        <edge from="n10" to="n10">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n11">
+            <attr name="layout">
+                <string>392 712 0 0</string>
+            </attr>
+        </node>
+        <edge from="n11" to="n11">
+            <attr name="label">
+                <string>string:"Bus controller (A)"</string>
+            </attr>
+        </edge>
+        <node id="n12">
+            <attr name="layout">
+                <string>392 552 0 0</string>
+            </attr>
+        </node>
+        <edge from="n12" to="n12">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n13">
+            <attr name="layout">
+                <string>520 632 0 0</string>
+            </attr>
+        </node>
+        <edge from="n13" to="n13">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n14">
+            <attr name="layout">
+                <string>817 632 0 0</string>
+            </attr>
+        </node>
+        <edge from="n14" to="n14">
+            <attr name="label">
+                <string>string:"Bus controller (A)_Approaching_Junction_A"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">
@@ -137,6 +187,26 @@
             </attr>
         </edge>
         <edge from="n5" to="n8">
+            <attr name="label">
+                <string>tokens</string>
+            </attr>
+        </edge>
+        <edge from="n10" to="n11">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n10" to="n12">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n13" to="n14">
+            <attr name="label">
+                <string>position</string>
+            </attr>
+        </edge>
+        <edge from="n10" to="n13">
             <attr name="label">
                 <string>tokens</string>
             </attr>

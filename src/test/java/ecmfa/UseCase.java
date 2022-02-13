@@ -89,26 +89,43 @@ public class UseCase extends BPMNToGrooveTestBase {
         final EndEvent controller_stopped = new EndEvent("controller_stopped");
 
         // Bus controller (B)
-        StartEvent approaching_junction = new StartEvent("Approaching_Junction");
-        SendTask request_tl_status = new SendTask("Request_TL_status");
-        EventBasedGateway ev1 = new EventBasedGateway("ev1");
+        StartEvent approaching_junction_B = new StartEvent("Approaching_Junction_B");
+        SendTask request_tl_status_B = new SendTask("Request_TL_status_B");
+        EventBasedGateway ev1_B = new EventBasedGateway("ev1_B");
         IntermediateCatchEvent b_is_red_r = new IntermediateCatchEvent("B_is_red", IntermediateCatchEventType.MESSAGE);
-        SendTask request_green_tl = new SendTask("Request_green_tl");
+        SendTask request_green_tl_B = new SendTask("Request_green_tl_B");
         IntermediateCatchEvent b_is_green_signal = new IntermediateCatchEvent("B_is_green_signal", IntermediateCatchEventType.SIGNAL, b_is_green);
-        ExclusiveGateway e3 = new ExclusiveGateway("e3");
-        Task pass_junction = new Task("Pass_Junction");
+        ExclusiveGateway e3_B = new ExclusiveGateway("e3_B");
+        Task pass_junction_B = new Task("Pass_Junction_B");
         IntermediateCatchEvent b_is_green_r = new IntermediateCatchEvent("B_is_green_r", IntermediateCatchEventType.MESSAGE);
-        EndEvent passed_junction = new EndEvent("Passed_junction");
+        EndEvent passed_junction_B = new EndEvent("Passed_junction_B");
+
+        // Bus controller (A)
+        StartEvent approaching_junction_A = new StartEvent("Approaching_Junction_A");
+        SendTask request_tl_status_A = new SendTask("Request_TL_status_A");
+        EventBasedGateway ev1_A = new EventBasedGateway("ev1_A");
+        IntermediateCatchEvent a_is_red_r = new IntermediateCatchEvent("A_is_red", IntermediateCatchEventType.MESSAGE);
+        SendTask request_green_tl_A = new SendTask("Request_green_tl_A");
+        IntermediateCatchEvent a_is_green_signal = new IntermediateCatchEvent("A_is_green_signal", IntermediateCatchEventType.SIGNAL, b_is_green);
+        ExclusiveGateway e3_A = new ExclusiveGateway("e3_A");
+        Task pass_junction_A = new Task("Pass_Junction_A");
+        IntermediateCatchEvent a_is_green_r = new IntermediateCatchEvent("A_is_green_r", IntermediateCatchEventType.MESSAGE);
+        EndEvent passed_junction_A = new EndEvent("Passed_junction_A");
 
 
         final String modelName = "ecmfa_usecase";
         final BPMNCollaboration collaboration = new BPMNCollaborationBuilder()
                 .name(modelName)
-                .messageFlow(request_tl_status, tl_status_requested1)
-                .messageFlow(request_tl_status, tl_status_requested2)
+                .messageFlow(request_tl_status_B, tl_status_requested1)
+                .messageFlow(request_tl_status_B, tl_status_requested2)
                 .messageFlow(b_green_t, b_is_green_r)
                 .messageFlow(a_c_green_t, b_is_red_r)
-                .messageFlow(request_green_tl, b_green_requested)
+                .messageFlow(request_green_tl_B, b_green_requested)
+                .messageFlow(request_tl_status_A, tl_status_requested1)
+                .messageFlow(request_tl_status_A, tl_status_requested2)
+                .messageFlow(b_green_t, a_is_red_r)
+                .messageFlow(a_c_green_t, a_is_green_r)
+                .messageFlow(request_green_tl_A, a_c_green_requested)
                 .processName("Junction Controller")
                 .startEvent(controller_started)
                 .sequenceFlow(controller_started, e1)
@@ -124,18 +141,31 @@ public class UseCase extends BPMNToGrooveTestBase {
                 .sequenceFlow(e2, e1)
                 .sequenceFlow("stop", e2, controller_stopped)
                 .buildProcess()
-                .processName("Bus controller")
-                .startEvent(approaching_junction)
-                .sequenceFlow(approaching_junction, request_tl_status)
-                .sequenceFlow(request_tl_status, ev1)
-                .sequenceFlow(ev1, b_is_red_r)
-                .sequenceFlow(ev1, b_is_green_r)
-                .sequenceFlow(b_is_red_r, request_green_tl)
-                .sequenceFlow(request_green_tl, b_is_green_signal)
-                .sequenceFlow(b_is_green_signal, e3)
-                .sequenceFlow(e3, pass_junction)
-                .sequenceFlow(pass_junction, passed_junction)
-                .sequenceFlow(b_is_green_r, e3)
+                .processName("Bus controller (B)")
+                .startEvent(approaching_junction_B)
+                .sequenceFlow(approaching_junction_B, request_tl_status_B)
+                .sequenceFlow(request_tl_status_B, ev1_B)
+                .sequenceFlow(ev1_B, b_is_red_r)
+                .sequenceFlow(ev1_B, b_is_green_r)
+                .sequenceFlow(b_is_red_r, request_green_tl_B)
+                .sequenceFlow(request_green_tl_B, b_is_green_signal)
+                .sequenceFlow(b_is_green_signal, e3_B)
+                .sequenceFlow(e3_B, pass_junction_B)
+                .sequenceFlow(pass_junction_B, passed_junction_B)
+                .sequenceFlow(b_is_green_r, e3_B)
+                .buildProcess()
+                .processName("Bus controller (A)")
+                .startEvent(approaching_junction_A)
+                .sequenceFlow(approaching_junction_A, request_tl_status_A)
+                .sequenceFlow(request_tl_status_A, ev1_A)
+                .sequenceFlow(ev1_A, a_is_red_r)
+                .sequenceFlow(ev1_A, a_is_green_r)
+                .sequenceFlow(a_is_red_r, request_green_tl_A)
+                .sequenceFlow(request_green_tl_A, a_is_green_signal)
+                .sequenceFlow(a_is_green_signal, e3_A)
+                .sequenceFlow(e3_A, pass_junction_A)
+                .sequenceFlow(pass_junction_A, passed_junction_A)
+                .sequenceFlow(a_is_green_r, e3_A)
                 .build();
 
         this.checkGrooveGeneration(collaboration);

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="ev1_B" role="rule" edgeids="false" edgemode="directed">
+        <node id="n366">
+            <attr name="layout">
+                <string>62 85 0 0</string>
+            </attr>
+        </node>
+        <edge from="n366" to="n366">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n367">
+            <attr name="layout">
+                <string>392 232 0 0</string>
+            </attr>
+        </node>
+        <edge from="n367" to="n367">
+            <attr name="label">
+                <string>string:"Bus controller (B)"</string>
+            </attr>
+        </edge>
+        <node id="n368">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n368" to="n368">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n369">
+            <attr name="layout">
+                <string>562 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n369" to="n369">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n370">
+            <attr name="layout">
+                <string>817 224 0 0</string>
+            </attr>
+        </node>
+        <edge from="n370" to="n370">
+            <attr name="label">
+                <string>string:"Request_TL_status_B_ev1_B"</string>
+            </attr>
+        </edge>
+        <node id="n371">
+            <attr name="layout">
+                <string>817 144 0 0</string>
+            </attr>
+        </node>
+        <edge from="n371" to="n371">
+            <attr name="label">
+                <string>string:"ev1_B"</string>
+            </attr>
+        </edge>
+        <edge from="n369" to="n371">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n369" to="n370">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n366" to="n367">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n366" to="n368">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n366" to="n369">
+            <attr name="label">
+                <string>tokens</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

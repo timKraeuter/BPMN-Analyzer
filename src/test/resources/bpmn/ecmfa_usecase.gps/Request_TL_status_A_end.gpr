@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="Request_TL_status_A_end" role="rule" edgeids="false" edgemode="directed">
+        <node id="n464">
+            <attr name="layout">
+                <string>530 854 0 0</string>
+            </attr>
+        </node>
+        <edge from="n464" to="n464">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n464" to="n464">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n470">
+            <attr name="layout">
+                <string>442 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n470" to="n470">
+            <attr name="label">
+                <string>type:Message</string>
+            </attr>
+        </edge>
+        <edge from="n470" to="n470">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n476">
+            <attr name="layout">
+                <string>442 423 0 0</string>
+            </attr>
+        </node>
+        <edge from="n476" to="n476">
+            <attr name="label">
+                <string>type:Message</string>
+            </attr>
+        </edge>
+        <edge from="n476" to="n476">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n462">
+            <attr name="layout">
+                <string>530 764 0 0</string>
+            </attr>
+        </node>
+        <edge from="n462" to="n462">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n462" to="n462">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n459">
+            <attr name="layout">
+                <string>62 609 0 0</string>
+            </attr>
+        </node>
+        <edge from="n459" to="n459">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n460">
+            <attr name="layout">
+                <string>402 674 0 0</string>
+            </attr>
+        </node>
+        <edge from="n460" to="n460">
+            <attr name="label">
+                <string>string:"Bus controller (A)"</string>
+            </attr>
+        </edge>
+        <node id="n461">
+            <attr name="layout">
+                <string>402 594 0 0</string>
+            </attr>
+        </node>
+        <edge from="n461" to="n461">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n463">
+            <attr name="layout">
+                <string>827 764 0 0</string>
+            </attr>
+        </node>
+        <edge from="n463" to="n463">
+            <attr name="label">
+                <string>string:"Request_TL_status_A"</string>
+            </attr>
+        </edge>
+        <node id="n465">
+            <attr name="layout">
+                <string>827 854 0 0</string>
+            </attr>
+        </node>
+        <edge from="n465" to="n465">
+            <attr name="label">
+                <string>string:"Request_TL_status_A_ev1_A"</string>
+            </attr>
+        </edge>
+        <node id="n466">
+            <attr name="layout">
+                <string>662 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n466" to="n466">
+            <attr name="label">
+                <string>existsx:</string>
+            </attr>
+        </edge>
+        <node id="n467">
+            <attr name="layout">
+                <string>62 97 0 0</string>
+            </attr>
+        </node>
+        <edge from="n467" to="n467">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n468">
+            <attr name="layout">
+                <string>402 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n468" to="n468">
+            <attr name="label">
+                <string>string:"Phase_1"</string>
+            </attr>
+        </edge>
+        <node id="n469">
+            <attr name="layout">
+                <string>432 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n469" to="n469">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n471">
+            <attr name="layout">
+                <string>662 74 0 0</string>
+            </attr>
+        </node>
+        <edge from="n471" to="n471">
+            <attr name="label">
+                <string>string:"Request_TL_status_A_TL_status_requested1"</string>
+            </attr>
+        </edge>
+        <node id="n472">
+            <attr name="layout">
+                <string>662 503 0 0</string>
+            </attr>
+        </node>
+        <edge from="n472" to="n472">
+            <attr name="label">
+                <string>existsx:</string>
+            </attr>
+        </edge>
+        <node id="n473">
+            <attr name="layout">
+                <string>62 348 0 0</string>
+            </attr>
+        </node>
+        <edge from="n473" to="n473">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n474">
+            <attr name="layout">
+                <string>402 333 0 0</string>
+            </attr>
+        </node>
+        <edge from="n474" to="n474">
+            <attr name="label">
+                <string>string:"Phase_2"</string>
+            </attr>
+        </edge>
+        <node id="n475">
+            <attr name="layout">
+                <string>432 503 0 0</string>
+            </attr>
+        </node>
+        <edge from="n475" to="n475">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n477">
+            <attr name="layout">
+                <string>662 415 0 0</string>
+            </attr>
+        </node>
+        <edge from="n477" to="n477">
+            <attr name="label">
+                <string>string:"Request_TL_status_A_TL_status_requested2"</string>
+            </attr>
+        </edge>
+        <edge from="n459" to="n464">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n464" to="n465">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n467" to="n470">
+            <attr name="label">
+                <string>new:messages</string>
+            </attr>
+        </edge>
+        <edge from="n470" to="n471">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n473" to="n476">
+            <attr name="label">
+                <string>new:messages</string>
+            </attr>
+        </edge>
+        <edge from="n476" to="n477">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n459" to="n462">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n462" to="n463">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n459" to="n460">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n459" to="n461">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n467" to="n468">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n467" to="n469">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n467" to="n466">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n469" to="n466">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n470" to="n466">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n473" to="n474">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n473" to="n475">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n473" to="n472">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n475" to="n472">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n476" to="n472">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>
