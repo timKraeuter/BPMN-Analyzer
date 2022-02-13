@@ -191,6 +191,7 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testExclusiveEventBasedGateway() throws IOException {
+        // TODO: Add Signal event to testcase.
         final StartEvent start_p1 = new StartEvent("start_p1");
         final EventBasedGateway eventG = new EventBasedGateway("eventG");
         IntermediateCatchEvent r_msg1 = new IntermediateCatchEvent("r_msg1", IntermediateCatchEventType.MESSAGE);

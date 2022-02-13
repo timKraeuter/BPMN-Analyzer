@@ -1,149 +1,189 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="TReceive_2_start" role="rule" edgeids="false" edgemode="directed">
-        <node id="n106">
+    <graph id="catch_p1" role="rule" edgeids="false" edgemode="directed">
+        <node id="n20">
             <attr name="layout">
-                <string>427 162 0 0</string>
+                <string>437 423 0 0</string>
             </attr>
         </node>
-        <edge from="n106" to="n106">
+        <edge from="n20" to="n20">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n106" to="n106">
+        <edge from="n20" to="n20">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n104">
+        <node id="n22">
             <attr name="layout">
-                <string>427 252 0 0</string>
+                <string>437 82 0 0</string>
             </attr>
         </node>
-        <edge from="n104" to="n104">
+        <edge from="n22" to="n22">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n104" to="n104">
+        <edge from="n22" to="n22">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n108">
+        <node id="n24">
             <attr name="layout">
-                <string>412 422 0 0</string>
+                <string>692 279 0 0</string>
             </attr>
         </node>
-        <edge from="n108" to="n108">
+        <edge from="n24" to="n24">
             <attr name="label">
                 <string>type:Message</string>
             </attr>
         </edge>
-        <edge from="n108" to="n108">
+        <edge from="n24" to="n24">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n101">
+        <node id="n27">
             <attr name="layout">
-                <string>62 89 0 0</string>
+                <string>422 172 0 0</string>
             </attr>
         </node>
-        <edge from="n101" to="n101">
+        <edge from="n27" to="n27">
+            <attr name="label">
+                <string>type:Message</string>
+            </attr>
+        </edge>
+        <edge from="n27" to="n27">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n17">
+            <attr name="layout">
+                <string>62 405 0 0</string>
+            </attr>
+        </node>
+        <edge from="n17" to="n17">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n102">
+        <node id="n18">
             <attr name="layout">
-                <string>412 72 0 0</string>
+                <string>422 333 0 0</string>
             </attr>
         </node>
-        <edge from="n102" to="n102">
+        <edge from="n18" to="n18">
             <attr name="label">
-                <string>string:"p2"</string>
+                <string>string:"p1"</string>
             </attr>
         </edge>
-        <node id="n103">
+        <node id="n19">
             <attr name="layout">
-                <string>412 332 0 0</string>
+                <string>422 252 0 0</string>
             </attr>
         </node>
-        <edge from="n103" to="n103">
+        <edge from="n19" to="n19">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n105">
+        <node id="n21">
             <attr name="layout">
-                <string>612 252 0 0</string>
+                <string>622 423 0 0</string>
             </attr>
         </node>
-        <edge from="n105" to="n105">
+        <edge from="n21" to="n21">
             <attr name="label">
-                <string>string:"TSend_2_TReceive_2"</string>
+                <string>string:"catch_p1_end_p1"</string>
             </attr>
         </edge>
-        <node id="n107">
+        <node id="n23">
             <attr name="layout">
-                <string>612 162 0 0</string>
+                <string>622 82 0 0</string>
             </attr>
         </node>
-        <edge from="n107" to="n107">
+        <edge from="n23" to="n23">
             <attr name="label">
-                <string>string:"TReceive_2"</string>
+                <string>string:"start_p1_catch_p1"</string>
             </attr>
         </edge>
-        <node id="n109">
+        <node id="n25">
             <attr name="layout">
-                <string>612 422 0 0</string>
+                <string>1032 279 0 0</string>
             </attr>
         </node>
-        <edge from="n109" to="n109">
+        <edge from="n25" to="n25">
             <attr name="label">
-                <string>string:"end_p1_TReceive_2"</string>
+                <string>string:"throw_p2_catch_p1"</string>
             </attr>
         </edge>
-        <edge from="n101" to="n106">
+        <node id="n26">
+            <attr name="layout">
+                <string>622 164 0 0</string>
+            </attr>
+        </node>
+        <edge from="n26" to="n26">
+            <attr name="label">
+                <string>forall:</string>
+            </attr>
+        </edge>
+        <edge from="n17" to="n20">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n106" to="n107">
+        <edge from="n20" to="n21">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n101" to="n104">
+        <edge from="n17" to="n22">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n104" to="n105">
+        <edge from="n22" to="n23">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n101" to="n108">
+        <edge from="n17" to="n24">
             <attr name="label">
                 <string>del:messages</string>
             </attr>
         </edge>
-        <edge from="n108" to="n109">
+        <edge from="n24" to="n25">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n101" to="n102">
+        <edge from="n17" to="n27">
+            <attr name="label">
+                <string>del:messages</string>
+            </attr>
+        </edge>
+        <edge from="n17" to="n18">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n101" to="n103">
+        <edge from="n17" to="n19">
             <attr name="label">
                 <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n27" to="n26">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n27" to="n24">
+            <attr name="label">
+                <string>!=</string>
             </attr>
         </edge>
     </graph>

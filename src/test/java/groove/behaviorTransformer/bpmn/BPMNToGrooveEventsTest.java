@@ -257,7 +257,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
 
         final String modelName = "timerEvents";
 
-        final BPMNCollaboration signalModel = new BPMNCollaborationBuilder()
+        final BPMNCollaboration timerModel = new BPMNCollaborationBuilder()
                 .name(modelName)
                 .processName(modelName)
                 .startEvent(start)
@@ -265,6 +265,44 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
                 .sequenceFlow(timer, end)
                 .build();
 
-        this.checkGrooveGeneration(signalModel);
+        this.checkGrooveGeneration(timerModel);
+    }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/44d74e7b-f940-48cd-8ceb-d23976b4da2b">"Two Incoming Message Flows"</a> in cawemo.
+     */
+    @Test
+    void testTwoIncomingMessageFlows() throws IOException {
+        final StartEvent start_p1 = new StartEvent("start_p1");
+        final EndEvent end_p1 = new EndEvent("end_p1", EndEventType.MESSAGE);
+
+        final StartEvent start_p2 = new StartEvent("start_p2");
+        final IntermediateCatchEvent catch_2 = new IntermediateCatchEvent("Catch_2", IntermediateCatchEventType.MESSAGE);
+        EndEvent end_p2 = new EndEvent("end_p2");
+
+        final StartEvent start_p3 = new StartEvent("start_p3");
+        final EndEvent end_p3 = new EndEvent("end_p3", EndEventType.MESSAGE);
+
+        final String modelName = "twoIncomingMessageFlows";
+
+        final BPMNCollaboration messageModel = new BPMNCollaborationBuilder()
+                .name(modelName)
+                .messageFlow(end_p1, catch_2)
+                .messageFlow(end_p3, catch_2)
+                .processName("p1")
+                .startEvent(start_p1)
+                .sequenceFlow(start_p1, end_p1)
+                .buildProcess()
+                .processName("p2")
+                .startEvent(start_p2)
+                .sequenceFlow(start_p2, catch_2)
+                .sequenceFlow(catch_2, end_p2)
+                .buildProcess()
+                .processName("p3")
+                .startEvent(start_p3)
+                .sequenceFlow(start_p3, end_p3)
+                .build();
+
+        this.checkGrooveGeneration(messageModel);
     }
 }
