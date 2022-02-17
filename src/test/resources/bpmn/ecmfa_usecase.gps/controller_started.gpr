@@ -3,7 +3,7 @@
     <graph id="controller_started" role="rule" edgeids="false" edgemode="directed">
         <node id="n18">
             <attr name="layout">
-                <string>537 332 0 0</string>
+                <string>552 332 0 0</string>
             </attr>
         </node>
         <edge from="n18" to="n18">
@@ -18,7 +18,7 @@
         </edge>
         <node id="n20">
             <attr name="layout">
-                <string>537 242 0 0</string>
+                <string>552 242 0 0</string>
             </attr>
         </node>
         <edge from="n20" to="n20">
@@ -48,7 +48,7 @@
         </node>
         <edge from="n16" to="n16">
             <attr name="label">
-                <string>string:"Junction Controller"</string>
+                <string>string:"T-Junction Controller"</string>
             </attr>
         </edge>
         <node id="n17">
@@ -63,7 +63,7 @@
         </edge>
         <node id="n19">
             <attr name="layout">
-                <string>842 332 0 0</string>
+                <string>872 332 0 0</string>
             </attr>
         </node>
         <edge from="n19" to="n19">
@@ -73,12 +73,12 @@
         </edge>
         <node id="n21">
             <attr name="layout">
-                <string>842 242 0 0</string>
+                <string>872 242 0 0</string>
             </attr>
         </node>
         <edge from="n21" to="n21">
             <attr name="label">
-                <string>string:"Junction Controller_controller_started"</string>
+                <string>string:"T-Junction Controller_controller_started"</string>
             </attr>
         </edge>
         <edge from="n15" to="n18">

@@ -3,7 +3,7 @@
     <graph id="ecmfa_usecase_start" role="rule" edgeids="false" edgemode="directed">
         <node id="n0">
             <attr name="layout">
-                <string>62 85 0 0</string>
+                <string>62 565 0 0</string>
             </attr>
         </node>
         <edge from="n0" to="n0">
@@ -13,17 +13,17 @@
         </edge>
         <node id="n1">
             <attr name="layout">
-                <string>392 152 0 0</string>
+                <string>392 632 0 0</string>
             </attr>
         </node>
         <edge from="n1" to="n1">
             <attr name="label">
-                <string>string:"Junction Controller"</string>
+                <string>string:"T-Junction Controller"</string>
             </attr>
         </edge>
         <node id="n2">
             <attr name="layout">
-                <string>392 72 0 0</string>
+                <string>392 552 0 0</string>
             </attr>
         </node>
         <edge from="n2" to="n2">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n3">
             <attr name="layout">
-                <string>527 232 0 0</string>
+                <string>542 712 0 0</string>
             </attr>
         </node>
         <edge from="n3" to="n3">
@@ -43,17 +43,17 @@
         </edge>
         <node id="n4">
             <attr name="layout">
-                <string>832 232 0 0</string>
+                <string>862 712 0 0</string>
             </attr>
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"Junction Controller_controller_started"</string>
+                <string>string:"T-Junction Controller_controller_started"</string>
             </attr>
         </edge>
         <node id="n5">
             <attr name="layout">
-                <string>62 325 0 0</string>
+                <string>62 85 0 0</string>
             </attr>
         </node>
         <edge from="n5" to="n5">
@@ -63,7 +63,7 @@
         </edge>
         <node id="n6">
             <attr name="layout">
-                <string>392 312 0 0</string>
+                <string>392 72 0 0</string>
             </attr>
         </node>
         <edge from="n6" to="n6">
@@ -73,7 +73,7 @@
         </edge>
         <node id="n7">
             <attr name="layout">
-                <string>392 392 0 0</string>
+                <string>392 152 0 0</string>
             </attr>
         </node>
         <edge from="n7" to="n7">
@@ -83,7 +83,7 @@
         </edge>
         <node id="n8">
             <attr name="layout">
-                <string>520 472 0 0</string>
+                <string>520 232 0 0</string>
             </attr>
         </node>
         <edge from="n8" to="n8">
@@ -93,7 +93,7 @@
         </edge>
         <node id="n9">
             <attr name="layout">
-                <string>817 472 0 0</string>
+                <string>817 232 0 0</string>
             </attr>
         </node>
         <edge from="n9" to="n9">
@@ -103,7 +103,7 @@
         </edge>
         <node id="n10">
             <attr name="layout">
-                <string>62 565 0 0</string>
+                <string>62 325 0 0</string>
             </attr>
         </node>
         <edge from="n10" to="n10">
@@ -113,7 +113,7 @@
         </edge>
         <node id="n11">
             <attr name="layout">
-                <string>392 712 0 0</string>
+                <string>392 472 0 0</string>
             </attr>
         </node>
         <edge from="n11" to="n11">
@@ -123,7 +123,7 @@
         </edge>
         <node id="n12">
             <attr name="layout">
-                <string>392 552 0 0</string>
+                <string>392 312 0 0</string>
             </attr>
         </node>
         <edge from="n12" to="n12">
@@ -133,7 +133,7 @@
         </edge>
         <node id="n13">
             <attr name="layout">
-                <string>520 632 0 0</string>
+                <string>520 392 0 0</string>
             </attr>
         </node>
         <edge from="n13" to="n13">
@@ -143,7 +143,7 @@
         </edge>
         <node id="n14">
             <attr name="layout">
-                <string>817 632 0 0</string>
+                <string>817 392 0 0</string>
             </attr>
         </node>
         <edge from="n14" to="n14">

@@ -3,7 +3,7 @@
     <graph id="end_p1" role="rule" edgeids="false" edgemode="directed">
         <node id="n36">
             <attr name="layout">
-                <string>402 252 0 0</string>
+                <string>412 332 0 0</string>
             </attr>
         </node>
         <edge from="n36" to="n36">
@@ -63,7 +63,7 @@
         </edge>
         <node id="n32">
             <attr name="layout">
-                <string>602 332 0 0</string>
+                <string>622 408 0 0</string>
             </attr>
         </node>
         <edge from="n32" to="n32">
@@ -73,7 +73,7 @@
         </edge>
         <node id="n33">
             <attr name="layout">
-                <string>62 267 0 0</string>
+                <string>62 476 0 0</string>
             </attr>
         </node>
         <edge from="n33" to="n33">
@@ -83,7 +83,7 @@
         </edge>
         <node id="n34">
             <attr name="layout">
-                <string>402 412 0 0</string>
+                <string>412 242 0 0</string>
             </attr>
         </node>
         <edge from="n34" to="n34">
@@ -93,7 +93,7 @@
         </edge>
         <node id="n35">
             <attr name="layout">
-                <string>402 332 0 0</string>
+                <string>412 413 0 0</string>
             </attr>
         </node>
         <edge from="n35" to="n35">
@@ -103,12 +103,32 @@
         </edge>
         <node id="n37">
             <attr name="layout">
-                <string>602 244 0 0</string>
+                <string>622 324 0 0</string>
             </attr>
         </node>
         <edge from="n37" to="n37">
             <attr name="label">
                 <string>string:"end_p1_catch_p2"</string>
+            </attr>
+        </edge>
+        <node id="n38">
+            <attr name="layout">
+                <string>432 493 0 0</string>
+            </attr>
+        </node>
+        <edge from="n38" to="n38">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n39">
+            <attr name="layout">
+                <string>622 501 0 0</string>
+            </attr>
+        </node>
+        <edge from="n39" to="n39">
+            <attr name="label">
+                <string>string:"throw_p2_catch_p2"</string>
             </attr>
         </edge>
         <edge from="n33" to="n36">
@@ -157,6 +177,21 @@
             </attr>
         </edge>
         <edge from="n36" to="n32">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n33" to="n38">
+            <attr name="label">
+                <string>tokens</string>
+            </attr>
+        </edge>
+        <edge from="n38" to="n39">
+            <attr name="label">
+                <string>position</string>
+            </attr>
+        </edge>
+        <edge from="n38" to="n32">
             <attr name="label">
                 <string>@</string>
             </attr>

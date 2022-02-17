@@ -18,7 +18,7 @@
         </node>
         <edge from="n29" to="n29">
             <attr name="label">
-                <string>string:"Junction Controller"</string>
+                <string>string:"T-Junction Controller"</string>
             </attr>
         </edge>
         <node id="n30">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n31">
             <attr name="layout">
-                <string>572 152 0 0</string>
+                <string>592 152 0 0</string>
             </attr>
         </node>
         <edge from="n31" to="n31">
@@ -43,7 +43,7 @@
         </edge>
         <node id="n32">
             <attr name="layout">
-                <string>832 224 0 0</string>
+                <string>862 224 0 0</string>
             </attr>
         </node>
         <edge from="n32" to="n32">
@@ -53,7 +53,7 @@
         </edge>
         <node id="n33">
             <attr name="layout">
-                <string>832 144 0 0</string>
+                <string>862 144 0 0</string>
             </attr>
         </node>
         <edge from="n33" to="n33">

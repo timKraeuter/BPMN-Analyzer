@@ -3,7 +3,7 @@
     <graph id="TSend_1_end" role="rule" edgeids="false" edgemode="directed">
         <node id="n29">
             <attr name="layout">
-                <string>417 593 0 0</string>
+                <string>417 332 0 0</string>
             </attr>
         </node>
         <edge from="n29" to="n29">
@@ -18,7 +18,7 @@
         </edge>
         <node id="n35">
             <attr name="layout">
-                <string>402 82 0 0</string>
+                <string>392 582 0 0</string>
             </attr>
         </node>
         <edge from="n35" to="n35">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n27">
             <attr name="layout">
-                <string>417 503 0 0</string>
+                <string>417 242 0 0</string>
             </attr>
         </node>
         <edge from="n27" to="n27">
@@ -48,7 +48,7 @@
         </edge>
         <node id="n24">
             <attr name="layout">
-                <string>62 348 0 0</string>
+                <string>62 87 0 0</string>
             </attr>
         </node>
         <edge from="n24" to="n24">
@@ -58,7 +58,7 @@
         </edge>
         <node id="n25">
             <attr name="layout">
-                <string>402 413 0 0</string>
+                <string>402 152 0 0</string>
             </attr>
         </node>
         <edge from="n25" to="n25">
@@ -68,7 +68,7 @@
         </edge>
         <node id="n26">
             <attr name="layout">
-                <string>402 333 0 0</string>
+                <string>402 72 0 0</string>
             </attr>
         </node>
         <edge from="n26" to="n26">
@@ -78,7 +78,7 @@
         </edge>
         <node id="n28">
             <attr name="layout">
-                <string>602 503 0 0</string>
+                <string>602 242 0 0</string>
             </attr>
         </node>
         <edge from="n28" to="n28">
@@ -88,7 +88,7 @@
         </edge>
         <node id="n30">
             <attr name="layout">
-                <string>602 593 0 0</string>
+                <string>602 332 0 0</string>
             </attr>
         </node>
         <edge from="n30" to="n30">
@@ -98,7 +98,7 @@
         </edge>
         <node id="n31">
             <attr name="layout">
-                <string>602 162 0 0</string>
+                <string>612 654 0 0</string>
             </attr>
         </node>
         <edge from="n31" to="n31">
@@ -108,7 +108,7 @@
         </edge>
         <node id="n32">
             <attr name="layout">
-                <string>62 97 0 0</string>
+                <string>62 582 0 0</string>
             </attr>
         </node>
         <edge from="n32" to="n32">
@@ -118,7 +118,7 @@
         </edge>
         <node id="n33">
             <attr name="layout">
-                <string>402 242 0 0</string>
+                <string>392 412 0 0</string>
             </attr>
         </node>
         <edge from="n33" to="n33">
@@ -128,7 +128,7 @@
         </edge>
         <node id="n34">
             <attr name="layout">
-                <string>402 162 0 0</string>
+                <string>392 669 0 0</string>
             </attr>
         </node>
         <edge from="n34" to="n34">
@@ -138,12 +138,32 @@
         </edge>
         <node id="n36">
             <attr name="layout">
-                <string>602 74 0 0</string>
+                <string>612 574 0 0</string>
             </attr>
         </node>
         <edge from="n36" to="n36">
             <attr name="label">
                 <string>string:"TSend_1_TReceive_1"</string>
+            </attr>
+        </edge>
+        <node id="n37">
+            <attr name="layout">
+                <string>412 492 0 0</string>
+            </attr>
+        </node>
+        <edge from="n37" to="n37">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n38">
+            <attr name="layout">
+                <string>612 484 0 0</string>
+            </attr>
+        </node>
+        <edge from="n38" to="n38">
+            <attr name="label">
+                <string>string:"start_p2_TReceive_1"</string>
             </attr>
         </edge>
         <edge from="n24" to="n29">
@@ -207,6 +227,21 @@
             </attr>
         </edge>
         <edge from="n35" to="n31">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n32" to="n37">
+            <attr name="label">
+                <string>tokens</string>
+            </attr>
+        </edge>
+        <edge from="n37" to="n38">
+            <attr name="label">
+                <string>position</string>
+            </attr>
+        </edge>
+        <edge from="n37" to="n31">
             <attr name="label">
                 <string>@</string>
             </attr>

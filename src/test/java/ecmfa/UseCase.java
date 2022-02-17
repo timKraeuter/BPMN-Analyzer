@@ -126,7 +126,7 @@ public class UseCase extends BPMNToGrooveTestBase {
                 .messageFlow(b_green_t, a_is_red_r)
                 .messageFlow(a_c_green_t, a_is_green_r)
                 .messageFlow(request_green_tl_A, a_c_green_requested)
-                .processName("Junction Controller")
+                .processName("T-Junction Controller")
                 .startEvent(controller_started)
                 .sequenceFlow(controller_started, e1)
                 .sequenceFlow(e1, phase1)

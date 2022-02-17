@@ -1,187 +1,187 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="B_is_red" role="rule" edgeids="false" edgemode="directed">
-        <node id="n375">
+        <node id="n387">
             <attr name="layout">
                 <string>550 423 0 0</string>
             </attr>
         </node>
-        <edge from="n375" to="n375">
+        <edge from="n387" to="n387">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n375" to="n375">
+        <edge from="n387" to="n387">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n377">
+        <node id="n389">
             <attr name="layout">
                 <string>550 82 0 0</string>
             </attr>
         </node>
-        <edge from="n377" to="n377">
+        <edge from="n389" to="n389">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n377" to="n377">
+        <edge from="n389" to="n389">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n379">
+        <node id="n391">
             <attr name="layout">
                 <string>967 279 0 0</string>
             </attr>
         </node>
-        <edge from="n379" to="n379">
+        <edge from="n391" to="n391">
             <attr name="label">
                 <string>type:Message</string>
             </attr>
         </edge>
-        <edge from="n379" to="n379">
+        <edge from="n391" to="n391">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n382">
+        <node id="n394">
             <attr name="layout">
                 <string>572 172 0 0</string>
             </attr>
         </node>
-        <edge from="n382" to="n382">
+        <edge from="n394" to="n394">
             <attr name="label">
                 <string>type:Message</string>
             </attr>
         </edge>
-        <edge from="n382" to="n382">
+        <edge from="n394" to="n394">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n372">
+        <node id="n384">
             <attr name="layout">
                 <string>62 405 0 0</string>
             </attr>
         </node>
-        <edge from="n372" to="n372">
+        <edge from="n384" to="n384">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n373">
+        <node id="n385">
             <attr name="layout">
                 <string>422 333 0 0</string>
             </attr>
         </node>
-        <edge from="n373" to="n373">
+        <edge from="n385" to="n385">
             <attr name="label">
                 <string>string:"Bus controller (B)"</string>
             </attr>
         </edge>
-        <node id="n374">
+        <node id="n386">
             <attr name="layout">
                 <string>422 252 0 0</string>
             </attr>
         </node>
-        <edge from="n374" to="n374">
+        <edge from="n386" to="n386">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n376">
+        <node id="n388">
             <attr name="layout">
                 <string>847 423 0 0</string>
             </attr>
         </node>
-        <edge from="n376" to="n376">
+        <edge from="n388" to="n388">
             <attr name="label">
                 <string>string:"B_is_red_Request_green_tl_B"</string>
             </attr>
         </edge>
-        <node id="n378">
+        <node id="n390">
             <attr name="layout">
                 <string>847 82 0 0</string>
             </attr>
         </node>
-        <edge from="n378" to="n378">
+        <edge from="n390" to="n390">
             <attr name="label">
                 <string>string:"ev1_B"</string>
             </attr>
         </edge>
-        <node id="n380">
+        <node id="n392">
             <attr name="layout">
                 <string>1407 279 0 0</string>
             </attr>
         </node>
-        <edge from="n380" to="n380">
+        <edge from="n392" to="n392">
             <attr name="label">
                 <string>string:"A_C_green_t_B_is_red"</string>
             </attr>
         </edge>
-        <node id="n381">
+        <node id="n393">
             <attr name="layout">
                 <string>847 164 0 0</string>
             </attr>
         </node>
-        <edge from="n381" to="n381">
+        <edge from="n393" to="n393">
             <attr name="label">
                 <string>forall:</string>
             </attr>
         </edge>
-        <edge from="n372" to="n375">
+        <edge from="n384" to="n387">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n375" to="n376">
+        <edge from="n387" to="n388">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n372" to="n377">
+        <edge from="n384" to="n389">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n377" to="n378">
+        <edge from="n389" to="n390">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n372" to="n379">
+        <edge from="n384" to="n391">
             <attr name="label">
                 <string>del:messages</string>
             </attr>
         </edge>
-        <edge from="n379" to="n380">
+        <edge from="n391" to="n392">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n372" to="n382">
+        <edge from="n384" to="n394">
             <attr name="label">
                 <string>del:messages</string>
             </attr>
         </edge>
-        <edge from="n372" to="n373">
+        <edge from="n384" to="n385">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n372" to="n374">
+        <edge from="n384" to="n386">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n382" to="n381">
+        <edge from="n394" to="n393">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n382" to="n379">
+        <edge from="n394" to="n391">
             <attr name="label">
                 <string>!=</string>
             </attr>

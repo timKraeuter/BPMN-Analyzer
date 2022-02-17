@@ -3,7 +3,7 @@
     <graph id="Phase_1" role="rule" edgeids="false" edgemode="directed">
         <node id="n39">
             <attr name="layout">
-                <string>492 345 0 0</string>
+                <string>515 345 0 0</string>
             </attr>
         </node>
         <edge from="n39" to="n39">
@@ -18,7 +18,7 @@
         </edge>
         <node id="n41">
             <attr name="layout">
-                <string>852 332 0 0</string>
+                <string>882 332 0 0</string>
             </attr>
         </node>
         <edge from="n41" to="n41">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n42">
             <attr name="layout">
-                <string>920 422 0 0</string>
+                <string>950 422 0 0</string>
             </attr>
         </node>
         <edge from="n42" to="n42">
@@ -48,7 +48,7 @@
         </edge>
         <node id="n37">
             <attr name="layout">
-                <string>537 242 0 0</string>
+                <string>552 242 0 0</string>
             </attr>
         </node>
         <edge from="n37" to="n37">
@@ -78,7 +78,7 @@
         </node>
         <edge from="n35" to="n35">
             <attr name="label">
-                <string>string:"Junction Controller"</string>
+                <string>string:"T-Junction Controller"</string>
             </attr>
         </edge>
         <node id="n36">
@@ -93,7 +93,7 @@
         </edge>
         <node id="n38">
             <attr name="layout">
-                <string>852 242 0 0</string>
+                <string>882 242 0 0</string>
             </attr>
         </node>
         <edge from="n38" to="n38">
@@ -103,7 +103,7 @@
         </edge>
         <node id="n40">
             <attr name="layout">
-                <string>852 502 0 0</string>
+                <string>882 502 0 0</string>
             </attr>
         </node>
         <edge from="n40" to="n40">
@@ -113,7 +113,7 @@
         </edge>
         <node id="n43">
             <attr name="layout">
-                <string>1157 422 0 0</string>
+                <string>1187 422 0 0</string>
             </attr>
         </node>
         <edge from="n43" to="n43">

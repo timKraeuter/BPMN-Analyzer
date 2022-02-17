@@ -815,21 +815,33 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
             FlowNode producingMessageFlowNode,
             BPMNCollaboration collaboration,
             GrooveRuleBuilder ruleBuilder) {
-        collaboration.getMessageFlows().stream().filter(messageFlow -> messageFlow.getSource() == producingMessageFlowNode).forEach(eventMessageFlow -> {
-            if (eventMessageFlow.getTarget().isInstantiateFlowNode()) {
+        collaboration.getMessageFlows().stream().filter(messageFlow -> messageFlow.getSource() == producingMessageFlowNode).forEach(messageFlow -> {
+            if (messageFlow.getTarget().isInstantiateFlowNode()) {
                 // In case of instantiate receive tasks or start events with trigger and active process instance does not exist!
                 GrooveNode newMessage = ruleBuilder.addNode(TYPE_MESSAGE);
-                ruleBuilder.addEdge(POSITION, newMessage, ruleBuilder.contextNode(this.createStringNodeLabel(eventMessageFlow.getName())));
+                ruleBuilder.addEdge(POSITION, newMessage, ruleBuilder.contextNode(this.createStringNodeLabel(messageFlow.getName())));
             } else {
-                Process messageFlowReceiver = collaboration.getMessageFlowReceiver(eventMessageFlow);
+                Process messageFlowReceiver = collaboration.getMessageFlowReceiver(messageFlow);
                 // If a process instance exists, send a message.
                 GrooveNode existsOptional = ruleBuilder.contextNode(EXISTS_OPTIONAL);
                 GrooveNode receiverInstance = createRunningExistsOptionalProcessInstance(
                         ruleBuilder,
                         messageFlowReceiver,
                         existsOptional);
-                addExistentialMessageWithPosition(ruleBuilder, receiverInstance, eventMessageFlow.getName(), existsOptional);
-                // TODO: only send the message if the receiving process is ready to handle it, i.e., has a token at the right position.
+                addExistentialMessageWithPosition(ruleBuilder, receiverInstance, messageFlow.getName(), existsOptional);
+                // We assume a message receiver can only have one incoming flow if any.
+                messageFlow.getTarget().getIncomingFlows().forEach(sequenceFlow -> {
+                    GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
+                    ruleBuilder.contextEdge(TOKENS, receiverInstance, token);
+                    String tokenPosition;
+                    if (sequenceFlow.getSource().isExclusiveEventBasedGateway()) {
+                        tokenPosition = sequenceFlow.getSource().getName();
+                    } else {
+                        tokenPosition = sequenceFlow.getID();
+                    }
+                    ruleBuilder.contextEdge(POSITION, token, ruleBuilder.contextNode(createStringNodeLabel(tokenPosition)));
+                    ruleBuilder.contextEdge(AT, token, existsOptional);
+                });
                 // TODO: Afterwards remove deleting messages from terminate rule.
             }
         });
