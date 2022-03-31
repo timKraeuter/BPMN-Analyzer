@@ -10,6 +10,10 @@ repositories {
 }
 
 dependencies {
+    // Use the camunda API to read BPMN models.
+    // https://mvnrepository.com/artifact/org.camunda.bpm.model/camunda-bpmn-model
+    implementation group: 'org.camunda.bpm.model', name: 'camunda-bpmn-model', version: '7.16.0'
+
     // XML-marshalling not part of jdk 11 anymore.
     // https://mvnrepository.com/artifact/jakarta.xml.bind/jaxb-api
     implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '3.0.1 '
@@ -18,7 +22,7 @@ dependencies {
     // https://mvnrepository.com/artifact/commons-io/commons-io
     implementation 'commons-io:commons-io:2.11.0'
     // https://mvnrepository.com/artifact/com.google.guava/guava
-    implementation 'com.google.guava:guava:31.0.1-jre'
+    implementation 'com.google.guava:guava:31.1-jre'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
@@ -30,8 +34,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.hamcrest/hamcrest
     testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 
 test {

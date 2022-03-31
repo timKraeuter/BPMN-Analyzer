@@ -37,6 +37,10 @@ public class Process {
         return this.startEvent;
     }
 
+    public Stream<SequenceFlow> getSequenceFlows() {
+        return sequenceFlows.stream();
+    }
+
     public Stream<FlowNode> getControlFlowNodes() {
         final LinkedHashSet<FlowNode> nodes = new LinkedHashSet<>();
         sequenceFlows.forEach(sequenceFlow -> {
