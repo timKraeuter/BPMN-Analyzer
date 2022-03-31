@@ -7,6 +7,9 @@ import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.auxiliary.BPMNCollaborationBuilder;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.StartEvent;
+import behavior.bpmn.gateways.EventBasedGateway;
+import behavior.bpmn.gateways.ExclusiveGateway;
+import behavior.bpmn.gateways.ParallelGateway;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
@@ -32,6 +35,7 @@ public class BPMNFileReader {
         // TODO: Do this for each pool?
         // Convert sequenceFlows
         convertSequenceFlows(bpmnModelInstance, bpmnCollaborationBuilder);
+        // TODO: what about flow nodes not connected by sequence flows?
         return bpmnCollaborationBuilder.build();
     }
 
@@ -68,6 +72,7 @@ public class BPMNFileReader {
         // TODO: We probably need to save the ID somehow or use it instead of the name!
         behavior.bpmn.FlowNode resultingFlowNode;
         switch (taskTypeName) {
+            // Tasks
             case "startEvent":
                 // TODO: Start event types???
                 StartEvent startEvent = new StartEvent(flowNode.getName());
@@ -100,6 +105,16 @@ public class BPMNFileReader {
                 // Call Activity = Reusable sub-processes (external).
                 // TODO: how to get the subprocess models? calledElement attribute --> Read a set of files simultaneously?
                 resultingFlowNode = new Task(flowNode.getName());
+                break;
+            // Gateways
+            case "parallelGateway":
+                resultingFlowNode = new ParallelGateway(flowNode.getName());
+                break;
+            case "exclusiveGateway":
+                resultingFlowNode = new ExclusiveGateway(flowNode.getName());
+                break;
+            case "eventBasedGateway":
+                resultingFlowNode = new EventBasedGateway(flowNode.getName());
                 break;
             default:
                 throw new RuntimeException(String.format("Unknown task type \"%s\" found!", taskTypeName));
