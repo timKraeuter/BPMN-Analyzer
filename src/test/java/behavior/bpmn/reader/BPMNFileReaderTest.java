@@ -72,6 +72,30 @@ class BPMNFileReaderTest {
                         "exclusive gateway_event gateway")));
     }
 
+    //    @Test
+    void readEvents() {
+        // headphone stand
+        BPMNCollaboration result = readModelFromResource("/bpmn/bpmnModels/events.bpmn");
+
+        // Expect the model shown here: https://cawemo.com/share/19b961cd-d4e2-4af8-8994-2e43e7ed094b
+        assertNotNull(result);
+        // No pools so only one participant.
+        assertThat(result.getParticipants().size(), is(1));
+        Process participant = result.getParticipants().iterator().next();
+
+        assertThat(participant.getSequenceFlows().count(), is(2L));
+        assertThat(participant.getControlFlowNodes().count(), is(3L));
+        // Sequence flows between the right flow nodes.
+        Set<String> sequenceFlowIds = participant.getSequenceFlows()
+                                                 .map(SequenceFlow::getID)
+                                                 .collect(Collectors.toCollection(LinkedHashSet::new));
+        assertThat(
+                sequenceFlowIds,
+                is(Sets.newHashSet(
+                        "parallel gateway_exclusive gateway",
+                        "exclusive gateway_event gateway")));
+    }
+
     private BPMNCollaboration readModelFromResource(String name) {
         @SuppressWarnings("ConstantConditions") File model = new File(this.getClass().getResource(name).getFile());
         BPMNFileReader bpmnFileReader = new BPMNFileReader();
