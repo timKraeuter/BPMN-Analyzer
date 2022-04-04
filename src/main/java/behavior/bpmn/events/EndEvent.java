@@ -1,6 +1,7 @@
 package behavior.bpmn.events;
 
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
+import com.google.common.base.Objects;
 
 public class EndEvent extends ThrowEvent {
 
@@ -40,5 +41,18 @@ public class EndEvent extends ThrowEvent {
     @Override
     public boolean isInstantiateFlowNode() {
         return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EndEvent endEvent = (EndEvent) o;
+        return type == endEvent.type && this.getEventDefinition().equals(endEvent.getEventDefinition());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(type, this.getEventDefinition());
     }
 }

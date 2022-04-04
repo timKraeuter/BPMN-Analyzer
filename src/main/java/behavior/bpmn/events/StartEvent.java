@@ -1,6 +1,7 @@
 package behavior.bpmn.events;
 
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
+import com.google.common.base.Objects;
 
 public class StartEvent extends CatchEvent {
     private final StartEventType type;
@@ -30,5 +31,18 @@ public class StartEvent extends CatchEvent {
 
     public StartEventType getType() {
         return type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StartEvent that = (StartEvent) o;
+        return type == that.type && getEventDefinition().equals(that.getEventDefinition());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(type, getEventDefinition());
     }
 }

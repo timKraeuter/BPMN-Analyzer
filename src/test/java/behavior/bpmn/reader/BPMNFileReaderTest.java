@@ -1,14 +1,18 @@
 package behavior.bpmn.reader;
 
 import behavior.bpmn.BPMNCollaboration;
+import behavior.bpmn.FlowNode;
 import behavior.bpmn.Process;
 import behavior.bpmn.SequenceFlow;
+import behavior.bpmn.events.*;
 import com.google.common.collect.Sets;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -72,9 +76,8 @@ class BPMNFileReaderTest {
                         "exclusive gateway_event gateway")));
     }
 
-    //    @Test
+    @Test
     void readEvents() {
-        // headphone stand
         BPMNCollaboration result = readModelFromResource("/bpmn/bpmnModels/events.bpmn");
 
         // Expect the model shown here: https://cawemo.com/share/19b961cd-d4e2-4af8-8994-2e43e7ed094b
@@ -83,8 +86,8 @@ class BPMNFileReaderTest {
         assertThat(result.getParticipants().size(), is(1));
         Process participant = result.getParticipants().iterator().next();
 
-        assertThat(participant.getSequenceFlows().count(), is(2L));
-        assertThat(participant.getControlFlowNodes().count(), is(3L));
+        assertThat(participant.getSequenceFlows().count(), is(14L));
+        assertThat(participant.getControlFlowNodes().count(), is(17L));
         // Sequence flows between the right flow nodes.
         Set<String> sequenceFlowIds = participant.getSequenceFlows()
                                                  .map(SequenceFlow::getID)
@@ -92,8 +95,48 @@ class BPMNFileReaderTest {
         assertThat(
                 sequenceFlowIds,
                 is(Sets.newHashSet(
-                        "parallel gateway_exclusive gateway",
-                        "exclusive gateway_event gateway")));
+                        "start_e1",
+                        "messageStart_e1",
+                        "signalStart_e1",
+                        "e3_messageEnd",
+                        "e3_signalEnd",
+                        "e3_terminateEnd",
+                        "e3_end",
+                        "linkCEvent_e2",
+                        "intermediateEvent_e2",
+                        "messageCEvent_e2",
+                        "messageTEvent_e2",
+                        "e2_linkTEvent",
+                        "signalCEvent_e2",
+                        "signalTEvent_e2")));
+
+        Map<String, FlowNode> flowNodes = participant.getControlFlowNodes()
+                                                     .collect(Collectors.toMap(
+                                                             FlowNode::getName,
+                                                             Function.identity()));
+        // Check start events
+        String startEventName = "start";
+        assertThat(flowNodes.get(startEventName), is(new StartEvent(startEventName)));
+        String messageStartEventName = "messageStart";
+        assertThat(flowNodes.get(messageStartEventName),
+                is(new StartEvent(messageStartEventName, StartEventType.MESSAGE)));
+        String signalStartEventName = "signalStart";
+        assertThat(flowNodes.get(signalStartEventName),
+                is(new StartEvent(
+                        signalStartEventName,
+                        StartEventType.SIGNAL,
+                        new EventDefinition(signalStartEventName))));
+        // TODO: check intermediate
+        // Check end events
+        String endEventName = "end";
+        assertThat(flowNodes.get(endEventName), is(new EndEvent(endEventName)));
+        String messageEndEventName = "messageEnd";
+        assertThat(flowNodes.get(messageEndEventName), is(new EndEvent(messageEndEventName, EndEventType.MESSAGE)));
+        String signalEndEventName = "signalEnd";
+        assertThat(flowNodes.get(signalEndEventName),
+                is(new EndEvent(signalEndEventName, EndEventType.SIGNAL, new EventDefinition(signalEndEventName))));
+        String terminateEndEventName = "terminateEnd";
+        assertThat(flowNodes.get(terminateEndEventName), is(new EndEvent(terminateEndEventName, EndEventType.TERMINATION)));
     }
 
     private BPMNCollaboration readModelFromResource(String name) {
