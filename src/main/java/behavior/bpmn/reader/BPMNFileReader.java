@@ -76,7 +76,6 @@ public class BPMNFileReader {
                 resultingFlowNode = this.convertIntermediateThrowEvent(flowNode);
                 break;
             case "intermediateCatchEvent":
-                // TODO: Type should be none! What does that mean for the semantics?
                 resultingFlowNode = this.convertIntermediateCatchEvent(flowNode);
                 break;
             case "endEvent":
@@ -217,29 +216,31 @@ public class BPMNFileReader {
         }
         if (eventDefinitions.size() == 1) {
             EventDefinition evDefinition = eventDefinitions.iterator().next();
-            EventDefinitionVisitor<IntermediateCatchEventType> eventVisitor = new EventDefinitionVisitor<>() {
+            EventDefinitionVisitor<IntermediateCatchEvent> eventVisitor = new EventDefinitionVisitor<>() {
                 @Override
-                public IntermediateCatchEventType handle(MessageEventDefinition evDefinition) {
-                    return IntermediateCatchEventType.MESSAGE;
+                public IntermediateCatchEvent handle(MessageEventDefinition evDefinition) {
+                    return new IntermediateCatchEvent(flowNode.getName(), IntermediateCatchEventType.MESSAGE);
                 }
 
                 @Override
-                public IntermediateCatchEventType handle(LinkEventDefinition evDefinition) {
-                    return IntermediateCatchEventType.LINK;
+                public IntermediateCatchEvent handle(LinkEventDefinition evDefinition) {
+                    return new IntermediateCatchEvent(flowNode.getName(), IntermediateCatchEventType.LINK);
                 }
 
                 @Override
-                public IntermediateCatchEventType handle(SignalEventDefinition evDefinition) {
-                    return IntermediateCatchEventType.SIGNAL;
+                public IntermediateCatchEvent handle(SignalEventDefinition evDefinition) {
+                    return new IntermediateCatchEvent(
+                            flowNode.getName(),
+                            IntermediateCatchEventType.SIGNAL,
+                            convertSignalEventDefinition(evDefinition, flowNode));
                 }
 
                 @Override
-                public IntermediateCatchEventType handle(TerminateEventDefinition evDefinition) {
+                public IntermediateCatchEvent handle(TerminateEventDefinition evDefinition) {
                     throw new RuntimeException("Intermediate catch event definitions should not be of type terminate!");
                 }
             };
-            IntermediateCatchEventType intermediateCatchEventType = this.visitDefinition(evDefinition, eventVisitor);
-            return new IntermediateCatchEvent(flowNode.getName(), intermediateCatchEventType);
+            return this.visitDefinition(evDefinition, eventVisitor);
         }
         throw new RuntimeException("Intermediate catch event has more than one event definition!");
     }
@@ -253,29 +254,31 @@ public class BPMNFileReader {
         }
         if (eventDefinitions.size() == 1) {
             EventDefinition evDefinition = eventDefinitions.iterator().next();
-            EventDefinitionVisitor<IntermediateThrowEventType> eventVisitor = new EventDefinitionVisitor<>() {
+            EventDefinitionVisitor<IntermediateThrowEvent> eventVisitor = new EventDefinitionVisitor<>() {
                 @Override
-                public IntermediateThrowEventType handle(MessageEventDefinition evDefinition) {
-                    return IntermediateThrowEventType.MESSAGE;
+                public IntermediateThrowEvent handle(MessageEventDefinition evDefinition) {
+                    return new IntermediateThrowEvent(flowNode.getName(), IntermediateThrowEventType.MESSAGE);
                 }
 
                 @Override
-                public IntermediateThrowEventType handle(LinkEventDefinition evDefinition) {
-                    return IntermediateThrowEventType.LINK;
+                public IntermediateThrowEvent handle(LinkEventDefinition evDefinition) {
+                    return new IntermediateThrowEvent(flowNode.getName(), IntermediateThrowEventType.LINK);
                 }
 
                 @Override
-                public IntermediateThrowEventType handle(SignalEventDefinition evDefinition) {
-                    return IntermediateThrowEventType.SIGNAL;
+                public IntermediateThrowEvent handle(SignalEventDefinition evDefinition) {
+                    return new IntermediateThrowEvent(
+                            flowNode.getName(),
+                            IntermediateThrowEventType.SIGNAL,
+                            convertSignalEventDefinition(evDefinition, flowNode));
                 }
 
                 @Override
-                public IntermediateThrowEventType handle(TerminateEventDefinition evDefinition) {
+                public IntermediateThrowEvent handle(TerminateEventDefinition evDefinition) {
                     throw new RuntimeException("Intermediate throw event definitions should not be of type terminate!");
                 }
             };
-            IntermediateThrowEventType intermediateThrowEventType = this.visitDefinition(evDefinition, eventVisitor);
-            return new IntermediateThrowEvent(flowNode.getName(), intermediateThrowEventType);
+            return this.visitDefinition(evDefinition, eventVisitor);
         }
         throw new RuntimeException("Intermediate throw event has more than one event definition!");
     }

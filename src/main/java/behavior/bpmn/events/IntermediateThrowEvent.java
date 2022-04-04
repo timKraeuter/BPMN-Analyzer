@@ -1,6 +1,7 @@
 package behavior.bpmn.events;
 
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
+import com.google.common.base.Objects;
 
 public class IntermediateThrowEvent extends ThrowEvent {
     private final IntermediateThrowEventType type;
@@ -26,5 +27,20 @@ public class IntermediateThrowEvent extends ThrowEvent {
 
     public IntermediateThrowEventType getType() {
         return type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IntermediateThrowEvent that = (IntermediateThrowEvent) o;
+        return getName().equals(that.getName())
+                && type == that.type
+                && getEventDefinition().equals(that.getEventDefinition());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getName(), type, getEventDefinition());
     }
 }

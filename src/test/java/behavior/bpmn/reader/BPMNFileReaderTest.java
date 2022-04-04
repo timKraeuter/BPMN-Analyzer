@@ -126,7 +126,38 @@ class BPMNFileReaderTest {
                         signalStartEventName,
                         StartEventType.SIGNAL,
                         new EventDefinition(signalStartEventName))));
-        // TODO: check intermediate
+
+        // Check intermediate events
+        String intermediateEventName = "intermediateEvent";
+        assertThat(flowNodes.get(intermediateEventName), is(new IntermediateThrowEvent(
+                intermediateEventName,
+                // TODO: Should be type none! But that does not exist yet.
+                IntermediateThrowEventType.MESSAGE)));
+        String messageCEventName = "messageCEvent";
+        assertThat(flowNodes.get(messageCEventName),
+                is(new IntermediateCatchEvent(messageCEventName, IntermediateCatchEventType.MESSAGE)));
+        String messageTEventName = "messageTEvent";
+        assertThat(flowNodes.get(messageTEventName),
+                is(new IntermediateThrowEvent(messageTEventName, IntermediateThrowEventType.MESSAGE)));
+        String linkCEventName = "linkCEvent";
+        assertThat(flowNodes.get(linkCEventName),
+                is(new IntermediateCatchEvent(linkCEventName, IntermediateCatchEventType.LINK)));
+        String signalCEventName = "signalCEvent";
+        assertThat(flowNodes.get(signalCEventName),
+                is(new IntermediateCatchEvent(
+                        signalCEventName,
+                        IntermediateCatchEventType.SIGNAL,
+                        new EventDefinition(signalCEventName))));
+        String signalTEventName = "signalTEvent";
+        assertThat(flowNodes.get(signalTEventName),
+                is(new IntermediateThrowEvent(
+                        signalTEventName,
+                        IntermediateThrowEventType.SIGNAL,
+                        new EventDefinition(signalTEventName))));
+        String linkTEventName = "linkTEvent";
+        assertThat(flowNodes.get(linkTEventName),
+                is(new IntermediateThrowEvent(linkTEventName, IntermediateThrowEventType.LINK)));
+
         // Check end events
         String endEventName = "end";
         assertThat(flowNodes.get(endEventName), is(new EndEvent(endEventName)));

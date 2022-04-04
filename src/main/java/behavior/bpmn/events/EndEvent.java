@@ -48,11 +48,13 @@ public class EndEvent extends ThrowEvent {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EndEvent endEvent = (EndEvent) o;
-        return type == endEvent.type && this.getEventDefinition().equals(endEvent.getEventDefinition());
+        return getName().equals(endEvent.getName())
+                && type == endEvent.type
+                && this.getEventDefinition().equals(endEvent.getEventDefinition());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(type, this.getEventDefinition());
+        return Objects.hashCode(getName(), type, this.getEventDefinition());
     }
 }

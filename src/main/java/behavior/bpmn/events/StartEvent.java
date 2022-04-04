@@ -38,11 +38,13 @@ public class StartEvent extends CatchEvent {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StartEvent that = (StartEvent) o;
-        return type == that.type && getEventDefinition().equals(that.getEventDefinition());
+        return getName().equals(that.getName())
+                && type == that.type
+                && getEventDefinition().equals(that.getEventDefinition());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(type, getEventDefinition());
+        return Objects.hashCode(getName(), type, getEventDefinition());
     }
 }
