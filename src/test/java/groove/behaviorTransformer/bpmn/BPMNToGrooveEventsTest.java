@@ -305,4 +305,26 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
 
         this.checkGrooveGeneration(messageModel);
     }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/0b3cb831-a6b2-4e7c-b064-0c83e887bf47">"Intermediate Throw Event"</a> in cawemo.
+     */
+    @Test
+    void testIntermediateThrowEvent() throws IOException {
+        final StartEvent start = new StartEvent("start");
+        IntermediateThrowEvent intermediate = new IntermediateThrowEvent("intermediate", IntermediateThrowEventType.NONE);
+        final EndEvent end = new EndEvent("end", EndEventType.MESSAGE);
+
+        final String modelName = "intermediateThrowEvent";
+
+        final BPMNCollaboration model = new BPMNCollaborationBuilder()
+                .name(modelName)
+                .processName("p1")
+                .startEvent(start)
+                .sequenceFlow(start, intermediate)
+                .sequenceFlow(intermediate, end)
+                .build();
+
+        this.checkGrooveGeneration(model);
+    }
 }
