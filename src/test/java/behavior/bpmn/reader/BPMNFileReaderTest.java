@@ -1,14 +1,13 @@
 package behavior.bpmn.reader;
 
-import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.FlowNode;
 import behavior.bpmn.Process;
-import behavior.bpmn.SequenceFlow;
+import behavior.bpmn.*;
 import behavior.bpmn.events.*;
 import com.google.common.collect.Sets;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -168,6 +167,37 @@ class BPMNFileReaderTest {
         String terminateEndEventName = "terminateEnd";
         assertThat(flowNodes.get(terminateEndEventName), is(new EndEvent(terminateEndEventName, EndEventType.TERMINATION)));
     }
+
+    @Test
+    void readPoolsAndMessageFlows() {
+        BPMNCollaboration result = readModelFromResource("/bpmn/bpmnModels/pools-message-flows.bpmn");
+
+        // Expect the model shown here: https://cawemo.com/share/a7b1034d-da01-4afd-afdc-26cfdb33ef06
+        assertNotNull(result);
+        // Two pools = two participants.
+        assertThat(result.getParticipants().size(), is(2));
+        Iterator<Process> it = result.getParticipants().iterator();
+
+        // Check p1
+        Process participant1 = it.next();
+        assertThat(participant1.getName(), is("p1"));
+        assertThat(participant1.getSequenceFlows().count(), is(3L));
+        assertThat(participant1.getControlFlowNodes().count(), is(4L));
+
+        // Check p2
+        Process participant2 = it.next();
+        assertThat(participant2.getName(), is("p2"));
+        assertThat(participant2.getSequenceFlows().count(), is(3L));
+        assertThat(participant2.getControlFlowNodes().count(), is(4L));
+
+        // Check message flows
+        assertThat(result.getMessageFlows().size(), is(3));
+        Set<String> messageFlowNames = result.getMessageFlows().stream()
+                                             .map(MessageFlow::getName)
+                                             .collect(Collectors.toSet());
+        assertThat(messageFlowNames, is(Sets.newHashSet("sendEvent_startP2", "SendTask_receiveEvent", "endP1_ReceiveTask")));
+    }
+
 
     private BPMNCollaboration readModelFromResource(String name) {
         @SuppressWarnings("ConstantConditions") File model = new File(this.getClass().getResource(name).getFile());

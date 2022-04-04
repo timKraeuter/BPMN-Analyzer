@@ -32,32 +32,113 @@ public class BPMNFileReader {
     }
 
     public BPMNCollaboration readModelFromFile(File file) {
-        BPMNCollaborationBuilder bpmnCollaborationBuilder = new BPMNCollaborationBuilder();
         BpmnModelInstance bpmnModelInstance = Bpmn.readModelFromFile(file);
-        // TODO: Read general information such as name?
-        // TODO: Do this for each pool?
-        // Convert sequenceFlows
-        convertSequenceFlows(bpmnModelInstance, bpmnCollaborationBuilder);
-        // TODO: what about flow nodes not connected by sequence flows?
+
+        // Map participants/pools
+        ModelElementType participantType = bpmnModelInstance.getModel().getType(Participant.class);
+        Collection<ModelElementInstance> participants = bpmnModelInstance.getModelElementsByType(participantType);
+        BPMNCollaborationBuilder bpmnCollaborationBuilder = new BPMNCollaborationBuilder();
+        Map<String, behavior.bpmn.FlowNode> mappedFlowNodes = new HashMap<>();
+        if (participants.isEmpty()) {
+            mapModelInstanceToOneParticipant(bpmnModelInstance, bpmnCollaborationBuilder, mappedFlowNodes);
+        } else {
+            // Map each participant
+            participants.forEach(modelElementInstance ->
+                    mapParticipant(bpmnCollaborationBuilder, mappedFlowNodes, (Participant) modelElementInstance));
+            // Map message flows
+            mapMessageFlows(bpmnModelInstance, bpmnCollaborationBuilder, mappedFlowNodes);
+        }
         return bpmnCollaborationBuilder.build();
     }
 
-    private void convertSequenceFlows(BpmnModelInstance bpmnModelInstance, BPMNCollaborationBuilder bpmnCollaborationBuilder) {
-        Map<String, behavior.bpmn.FlowNode> createdFlowNodes = new HashMap<>();
-        ModelElementType sequenceFlowType = bpmnModelInstance.getModel().getType(SequenceFlow.class);
-        Collection<ModelElementInstance> taskInstances = bpmnModelInstance.getModelElementsByType(sequenceFlowType);
-        taskInstances.forEach(sequenceFlowElement -> {
-            SequenceFlow sequenceFlow = (SequenceFlow) sequenceFlowElement;
-            if (sequenceFlow.getName() == null || sequenceFlow.getName().isEmpty()) {
-                bpmnCollaborationBuilder.sequenceFlow(createFlowNodeEquivalent(sequenceFlow.getSource(), createdFlowNodes, bpmnCollaborationBuilder), createFlowNodeEquivalent(sequenceFlow.getTarget(), createdFlowNodes, bpmnCollaborationBuilder));
-            } else {
-                bpmnCollaborationBuilder.sequenceFlow(sequenceFlow.getName(), createFlowNodeEquivalent(sequenceFlow.getSource(), createdFlowNodes, bpmnCollaborationBuilder), createFlowNodeEquivalent(sequenceFlow.getTarget(), createdFlowNodes, bpmnCollaborationBuilder));
-            }
+    private void mapMessageFlows(
+            BpmnModelInstance bpmnModelInstance,
+            BPMNCollaborationBuilder bpmnCollaborationBuilder,
+            Map<String, behavior.bpmn.FlowNode> mappedFlowNodes) {
+        ModelElementType mfType = bpmnModelInstance.getModel().getType(MessageFlow.class);
+        Collection<ModelElementInstance> messageFlowModelElements = bpmnModelInstance.getModelElementsByType(mfType);
+        messageFlowModelElements.forEach(modelElementInstance ->
+                mapMessageFlow((MessageFlow) modelElementInstance, bpmnCollaborationBuilder, mappedFlowNodes));
+    }
+
+    private void mapMessageFlow(
+            MessageFlow messageFlow,
+            BPMNCollaborationBuilder bpmnCollaborationBuilder,
+            Map<String, behavior.bpmn.FlowNode> mappedFlowNodes) {
+        InteractionNode sourceInteractionNode = messageFlow.getSource();
+        InteractionNode targetInteractionNode = messageFlow.getTarget();
+        if (!(sourceInteractionNode instanceof FlowNode)) {
+            throw new RuntimeException(String.format(
+                    "Message flow with id \"%s\" has an invalid source with id \"%s\", which is not a flow node (event, activity, ...)!",
+                    messageFlow.getId(),
+                    sourceInteractionNode.getId()));
+        }
+        if (!(targetInteractionNode instanceof FlowNode)) {
+            throw new RuntimeException(String.format(
+                    "Message flow with id \"%s\" has an invalid target with id \"%s\", which is not a flow node (event, activity, ...)!",
+                    messageFlow.getId(),
+                    targetInteractionNode.getId()));
+        }
+        FlowNode source = (FlowNode) sourceInteractionNode;
+        FlowNode target = (FlowNode) targetInteractionNode;
+        bpmnCollaborationBuilder.messageFlow(
+                mapFlowNode(source, mappedFlowNodes, bpmnCollaborationBuilder),
+                mapFlowNode(target, mappedFlowNodes, bpmnCollaborationBuilder));
+    }
+
+    private void mapModelInstanceToOneParticipant(
+            BpmnModelInstance bpmnModelInstance,
+            BPMNCollaborationBuilder bpmnCollaborationBuilder,
+            Map<String, behavior.bpmn.FlowNode> mappedFlowNodes) {
+        ModelElementType fnType = bpmnModelInstance.getModel().getType(FlowNode.class);
+        Collection<ModelElementInstance> flowNodeModelElements = bpmnModelInstance.getModelElementsByType(fnType);
+        flowNodeModelElements.forEach(flowNodeModelElement -> {
+            FlowNode flowNode = (FlowNode) flowNodeModelElement;
+            mapFlowNode(flowNode, mappedFlowNodes, bpmnCollaborationBuilder);
+        });
+        ModelElementType sfType = bpmnModelInstance.getModel().getType(SequenceFlow.class);
+        Collection<ModelElementInstance> sequenceFlowModelElements = bpmnModelInstance.getModelElementsByType(sfType);
+        sequenceFlowModelElements.forEach(sequenceFlowModelElement -> {
+            SequenceFlow sequenceFlow = (SequenceFlow) sequenceFlowModelElement;
+            mapSequenceFlow(sequenceFlow, mappedFlowNodes, bpmnCollaborationBuilder);
         });
     }
 
-    private behavior.bpmn.FlowNode createFlowNodeEquivalent(FlowNode flowNode, Map<String, behavior.bpmn.FlowNode> createdFlowNodes, BPMNCollaborationBuilder bpmnCollaborationBuilder) {
-        behavior.bpmn.FlowNode flowNodeIfExists = createdFlowNodes.get(flowNode.getId());
+    private void mapParticipant(
+            BPMNCollaborationBuilder bpmnCollaborationBuilder,
+            Map<String, behavior.bpmn.FlowNode> createdFlowNodes,
+            Participant participant) {
+        bpmnCollaborationBuilder.processName(participant.getName());
+        participant.getProcess().getFlowElements().forEach(flowElement -> {
+            // Map flow nodes
+            if (flowElement instanceof FlowNode) {
+                mapFlowNode((FlowNode) flowElement, createdFlowNodes, bpmnCollaborationBuilder);
+            }
+            // Map sequence flows
+            if (flowElement instanceof SequenceFlow) {
+                SequenceFlow sequenceFlow = (SequenceFlow) flowElement;
+                mapSequenceFlow(sequenceFlow, createdFlowNodes, bpmnCollaborationBuilder);
+            }
+        });
+        bpmnCollaborationBuilder.buildProcess();
+    }
+
+    private void mapSequenceFlow(
+            SequenceFlow sequenceFlow,
+            Map<String, behavior.bpmn.FlowNode> mappedFlowNodes,
+            BPMNCollaborationBuilder bpmnCollaborationBuilder) {
+        if (sequenceFlow.getName() == null || sequenceFlow.getName().isEmpty()) {
+            bpmnCollaborationBuilder.sequenceFlow(mapFlowNode(sequenceFlow.getSource(), mappedFlowNodes, bpmnCollaborationBuilder), mapFlowNode(sequenceFlow.getTarget(), mappedFlowNodes, bpmnCollaborationBuilder));
+        } else {
+            bpmnCollaborationBuilder.sequenceFlow(sequenceFlow.getName(), mapFlowNode(sequenceFlow.getSource(), mappedFlowNodes, bpmnCollaborationBuilder), mapFlowNode(sequenceFlow.getTarget(), mappedFlowNodes, bpmnCollaborationBuilder));
+        }
+    }
+
+    private behavior.bpmn.FlowNode mapFlowNode(
+            FlowNode flowNode,
+            Map<String, behavior.bpmn.FlowNode> mappedFlowNodes,
+            BPMNCollaborationBuilder bpmnCollaborationBuilder) {
+        behavior.bpmn.FlowNode flowNodeIfExists = mappedFlowNodes.get(flowNode.getId());
         if (flowNodeIfExists != null) {
             return flowNodeIfExists;
         }
@@ -67,19 +148,19 @@ public class BPMNFileReader {
         switch (taskTypeName) {
             // Events
             case "startEvent":
-                StartEvent startEvent = convertStartEvent(flowNode);
+                StartEvent startEvent = mapStartEvent(flowNode);
                 // TODO: Multiple start events?
                 bpmnCollaborationBuilder.startEvent(startEvent);
                 resultingFlowNode = startEvent;
                 break;
             case "intermediateThrowEvent":
-                resultingFlowNode = this.convertIntermediateThrowEvent(flowNode);
+                resultingFlowNode = this.mapIntermediateThrowEvent(flowNode);
                 break;
             case "intermediateCatchEvent":
-                resultingFlowNode = this.convertIntermediateCatchEvent(flowNode);
+                resultingFlowNode = this.mapIntermediateCatchEvent(flowNode);
                 break;
             case "endEvent":
-                resultingFlowNode = convertEndEvent(flowNode);
+                resultingFlowNode = mapEndEvent(flowNode);
                 break;
             // Tasks
             case "businessRuleTask":
@@ -118,11 +199,11 @@ public class BPMNFileReader {
             default:
                 throw new RuntimeException(String.format("Unknown task type \"%s\" found!", taskTypeName));
         }
-        createdFlowNodes.put(flowNode.getId(), resultingFlowNode);
+        mappedFlowNodes.put(flowNode.getId(), resultingFlowNode);
         return resultingFlowNode;
     }
 
-    private EndEvent convertEndEvent(FlowNode flowNode) {
+    private EndEvent mapEndEvent(FlowNode flowNode) {
         org.camunda.bpm.model.bpmn.instance.EndEvent endEvent = (org.camunda.bpm.model.bpmn.instance.EndEvent) flowNode;
         Collection<EventDefinition> eventDefinitions = endEvent.getEventDefinitions();
         if (eventDefinitions.isEmpty()) {
@@ -146,7 +227,7 @@ public class BPMNFileReader {
                     return new EndEvent(
                             flowNode.getName(),
                             EndEventType.SIGNAL,
-                            convertSignalEventDefinition(evDefinition, flowNode));
+                            mapSignalEventDefinition(evDefinition, flowNode));
                 }
 
                 @Override
@@ -159,7 +240,7 @@ public class BPMNFileReader {
         throw new RuntimeException("Start event has more than one event definition!");
     }
 
-    private StartEvent convertStartEvent(FlowNode flowNode) {
+    private StartEvent mapStartEvent(FlowNode flowNode) {
         org.camunda.bpm.model.bpmn.instance.StartEvent startEvent = (org.camunda.bpm.model.bpmn.instance.StartEvent) flowNode;
         Collection<EventDefinition> eventDefinitions = startEvent.getEventDefinitions();
         if (eventDefinitions.isEmpty()) {
@@ -183,7 +264,7 @@ public class BPMNFileReader {
                     return new StartEvent(
                             flowNode.getName(),
                             StartEventType.SIGNAL,
-                            convertSignalEventDefinition(evDefinition, flowNode));
+                            mapSignalEventDefinition(evDefinition, flowNode));
                 }
 
                 @Override
@@ -196,7 +277,7 @@ public class BPMNFileReader {
         throw new RuntimeException("Start event has more than one event definition!");
     }
 
-    private behavior.bpmn.events.EventDefinition convertSignalEventDefinition(
+    private behavior.bpmn.events.EventDefinition mapSignalEventDefinition(
             SignalEventDefinition evDefinition,
             FlowNode flowNode) {
         if (evDefinition.getSignal() != null
@@ -207,7 +288,7 @@ public class BPMNFileReader {
         return new behavior.bpmn.events.EventDefinition(flowNode.getName());
     }
 
-    private behavior.bpmn.FlowNode convertIntermediateCatchEvent(FlowNode flowNode) {
+    private behavior.bpmn.FlowNode mapIntermediateCatchEvent(FlowNode flowNode) {
         org.camunda.bpm.model.bpmn.instance.IntermediateCatchEvent intermediateCatchEvent = (org.camunda.bpm.model.bpmn.instance.IntermediateCatchEvent) flowNode;
         Collection<EventDefinition> eventDefinitions = intermediateCatchEvent.getEventDefinitions();
         if (eventDefinitions.isEmpty()) {
@@ -231,7 +312,7 @@ public class BPMNFileReader {
                     return new IntermediateCatchEvent(
                             flowNode.getName(),
                             IntermediateCatchEventType.SIGNAL,
-                            convertSignalEventDefinition(evDefinition, flowNode));
+                            mapSignalEventDefinition(evDefinition, flowNode));
                 }
 
                 @Override
@@ -244,7 +325,7 @@ public class BPMNFileReader {
         throw new RuntimeException("Intermediate catch event has more than one event definition!");
     }
 
-    private behavior.bpmn.FlowNode convertIntermediateThrowEvent(FlowNode flowNode) {
+    private behavior.bpmn.FlowNode mapIntermediateThrowEvent(FlowNode flowNode) {
         org.camunda.bpm.model.bpmn.instance.IntermediateThrowEvent intermediateThrowEvent = (org.camunda.bpm.model.bpmn.instance.IntermediateThrowEvent) flowNode;
         Collection<EventDefinition> eventDefinitions = intermediateThrowEvent.getEventDefinitions();
         if (eventDefinitions.isEmpty()) {
@@ -268,7 +349,7 @@ public class BPMNFileReader {
                     return new IntermediateThrowEvent(
                             flowNode.getName(),
                             IntermediateThrowEventType.SIGNAL,
-                            convertSignalEventDefinition(evDefinition, flowNode));
+                            mapSignalEventDefinition(evDefinition, flowNode));
                 }
 
                 @Override
