@@ -131,8 +131,7 @@ class BPMNFileReaderTest {
         String intermediateEventName = "intermediateEvent";
         assertThat(flowNodes.get(intermediateEventName), is(new IntermediateThrowEvent(
                 intermediateEventName,
-                // TODO: Should be type none! But that does not exist yet.
-                IntermediateThrowEventType.MESSAGE)));
+                IntermediateThrowEventType.NONE)));
         String messageCEventName = "messageCEvent";
         assertThat(flowNodes.get(messageCEventName),
                 is(new IntermediateCatchEvent(messageCEventName, IntermediateCatchEventType.MESSAGE)));

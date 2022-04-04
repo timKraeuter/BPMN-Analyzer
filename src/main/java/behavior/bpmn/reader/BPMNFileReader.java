@@ -211,8 +211,7 @@ public class BPMNFileReader {
         org.camunda.bpm.model.bpmn.instance.IntermediateCatchEvent intermediateCatchEvent = (org.camunda.bpm.model.bpmn.instance.IntermediateCatchEvent) flowNode;
         Collection<EventDefinition> eventDefinitions = intermediateCatchEvent.getEventDefinitions();
         if (eventDefinitions.isEmpty()) {
-            // TODO: Type should be none! What does that mean for the semantics?
-            return new IntermediateCatchEvent(flowNode.getName(), IntermediateCatchEventType.MESSAGE);
+            throw new RuntimeException("Intermediate catch events need an event definition!");
         }
         if (eventDefinitions.size() == 1) {
             EventDefinition evDefinition = eventDefinitions.iterator().next();
@@ -249,8 +248,7 @@ public class BPMNFileReader {
         org.camunda.bpm.model.bpmn.instance.IntermediateThrowEvent intermediateThrowEvent = (org.camunda.bpm.model.bpmn.instance.IntermediateThrowEvent) flowNode;
         Collection<EventDefinition> eventDefinitions = intermediateThrowEvent.getEventDefinitions();
         if (eventDefinitions.isEmpty()) {
-            // TODO: Type should be none! What does that mean for the semantics?
-            return new IntermediateThrowEvent(flowNode.getName(), IntermediateThrowEventType.MESSAGE);
+            return new IntermediateThrowEvent(flowNode.getName(), IntermediateThrowEventType.NONE);
         }
         if (eventDefinitions.size() == 1) {
             EventDefinition evDefinition = eventDefinitions.iterator().next();
