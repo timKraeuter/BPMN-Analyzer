@@ -46,7 +46,6 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testSignalEvents() throws IOException {
-        // TODO: Event definitions must be read correctly.
         testGrooveGenerationForBPMNResourceFile("signal-events.bpmn");
     }
 

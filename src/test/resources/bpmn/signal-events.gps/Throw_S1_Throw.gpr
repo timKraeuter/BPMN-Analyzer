@@ -188,7 +188,7 @@
         </node>
         <edge from="n28" to="n28">
             <attr name="label">
-                <string>string:"start_S1_Catch_1"</string>
+                <string>string:"start_S1_Catch_2"</string>
             </attr>
         </edge>
         <node id="n30">
@@ -198,7 +198,7 @@
         </node>
         <edge from="n30" to="n30">
             <attr name="label">
-                <string>string:"S1_Catch_1_p1"</string>
+                <string>string:"S1_Catch_2_p1"</string>
             </attr>
         </edge>
         <node id="n31">
@@ -248,7 +248,7 @@
         </node>
         <edge from="n36" to="n36">
             <attr name="label">
-                <string>string:"start_S1_Catch_2"</string>
+                <string>string:"start_S1_Catch_1"</string>
             </attr>
         </edge>
         <node id="n38">
@@ -258,7 +258,7 @@
         </node>
         <edge from="n38" to="n38">
             <attr name="label">
-                <string>string:"S1_Catch_2_p1"</string>
+                <string>string:"S1_Catch_1_p1"</string>
             </attr>
         </edge>
         <edge from="n16" to="n21">
