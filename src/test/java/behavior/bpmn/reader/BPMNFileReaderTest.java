@@ -55,6 +55,16 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
                         "scriptTask_callActivity",
                         "callActivity_subprocess",
                         "subprocess_end")));
+
+        // Check instantiate receive task
+        Map<String, FlowNode> flowNodes = participant.getControlFlowNodes()
+                                                     .collect(Collectors.toMap(
+                                                             FlowNode::getName,
+                                                             Function.identity()));
+        String receiveTaskName = "receiveTask";
+        FlowNode instantiateReceiveTask = flowNodes.get(receiveTaskName);
+        // Instantiate must be true!
+        assertThat(instantiateReceiveTask, is(new ReceiveTask(receiveTaskName, true)));
     }
 
     @Test
@@ -219,8 +229,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(messageFlowNames, is(Sets.newHashSet("sendEvent_startP2", "SendTask_receiveEvent", "endP1_ReceiveTask")));
     }
 
-    @Test
-    void readInstantiateReceiveTask() {
+    //    @Test
+    void readContainedSubprocess() {
         BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "instantiate-receive-task.bpmn");
 
         // Expect the model shown here: https://cawemo.com/share/f619d617-1cc6-4721-8b98-8327f86a41fb
