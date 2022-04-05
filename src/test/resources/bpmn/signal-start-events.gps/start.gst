@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="signalStartEvents_start" role="rule" edgeids="false" edgemode="directed">
+    <graph id="signal-start-events_start" role="rule" edgeids="false" edgemode="directed">
         <node id="n0">
             <attr name="layout">
                 <string>62 85 0 0</string>

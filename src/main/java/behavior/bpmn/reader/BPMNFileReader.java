@@ -152,8 +152,7 @@ public class BPMNFileReader {
             // Events
             case "startEvent":
                 StartEvent startEvent = mapStartEvent(flowNode);
-                // TODO: Multiple start events?
-                bpmnCollaborationBuilder.startEvent(startEvent);
+                setMostAppropriateStartEvent(bpmnCollaborationBuilder, startEvent);
                 resultingFlowNode = startEvent;
                 break;
             case "intermediateThrowEvent":
@@ -208,6 +207,21 @@ public class BPMNFileReader {
         }
         mappedFlowNodes.put(flowNode.getId(), resultingFlowNode);
         return resultingFlowNode;
+    }
+
+    private void setMostAppropriateStartEvent(
+            BPMNCollaborationBuilder bpmnCollaborationBuilder,
+            StartEvent startEvent) {
+        StartEvent currentStartEvent = bpmnCollaborationBuilder.getStartEvent();
+        // Prioritizes none start events over message
+        if (currentStartEvent == null || currentStartEvent.getType() != StartEventType.NONE) {
+            bpmnCollaborationBuilder.startEvent(startEvent);
+            return;
+        }
+        if (currentStartEvent.getType() == startEvent.getType()) {
+            // TODO: Multiple none start events?
+            throw new RuntimeException("Multiple none start events are currently not supported!");
+        }
     }
 
     private boolean isInstantiateReceiveTask(FlowNode flowNode) {

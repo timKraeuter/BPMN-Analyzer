@@ -35,6 +35,10 @@ public class BPMNCollaborationBuilder {
         subprocesses = new LinkedHashSet<>();
     }
 
+    public StartEvent getStartEvent() {
+        return startEvent;
+    }
+
     public BPMNCollaborationBuilder name(String name) {
         this.name = name;
         return this;
