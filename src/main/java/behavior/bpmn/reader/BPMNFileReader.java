@@ -12,6 +12,7 @@ import behavior.bpmn.events.StartEvent;
 import behavior.bpmn.events.*;
 import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
+import behavior.bpmn.gateways.InclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
 import org.apache.commons.io.FilenameUtils;
 import org.camunda.bpm.model.bpmn.Bpmn;
@@ -198,6 +199,9 @@ public class BPMNFileReader {
                 break;
             case "eventBasedGateway":
                 resultingFlowNode = new EventBasedGateway(flowNode.getName());
+                break;
+            case "inclusiveGateway":
+                resultingFlowNode = new InclusiveGateway(flowNode.getName());
                 break;
             default:
                 throw new RuntimeException(String.format("Unknown task type \"%s\" found!", taskTypeName));

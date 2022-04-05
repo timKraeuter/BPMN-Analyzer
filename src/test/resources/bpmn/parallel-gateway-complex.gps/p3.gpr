@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="p3" role="rule" edgeids="false" edgemode="directed">
+        <node id="n109">
+            <attr name="layout">
+                <string>595 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n109" to="n109">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n109" to="n109">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n103">
+            <attr name="layout">
+                <string>595 422 0 0</string>
+            </attr>
+        </node>
+        <edge from="n103" to="n103">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n103" to="n103">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n105">
+            <attr name="layout">
+                <string>595 512 0 0</string>
+            </attr>
+        </node>
+        <edge from="n105" to="n105">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n105" to="n105">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n107">
+            <attr name="layout">
+                <string>595 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n107" to="n107">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n107" to="n107">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n100">
+            <attr name="layout">
+                <string>62 90 0 0</string>
+            </attr>
+        </node>
+        <edge from="n100" to="n100">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n101">
+            <attr name="layout">
+                <string>422 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n101" to="n101">
+            <attr name="label">
+                <string>string:"parallel-gateway-complex"</string>
+            </attr>
+        </edge>
+        <node id="n102">
+            <attr name="layout">
+                <string>422 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n102" to="n102">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n104">
+            <attr name="layout">
+                <string>937 422 0 0</string>
+            </attr>
+        </node>
+        <edge from="n104" to="n104">
+            <attr name="label">
+                <string>string:"a2_1_p3"</string>
+            </attr>
+        </edge>
+        <node id="n106">
+            <attr name="layout">
+                <string>937 512 0 0</string>
+            </attr>
+        </node>
+        <edge from="n106" to="n106">
+            <attr name="label">
+                <string>string:"a3_p3"</string>
+            </attr>
+        </edge>
+        <node id="n108">
+            <attr name="layout">
+                <string>937 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n108" to="n108">
+            <attr name="label">
+                <string>string:"p2_p3"</string>
+            </attr>
+        </edge>
+        <node id="n110">
+            <attr name="layout">
+                <string>937 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n110" to="n110">
+            <attr name="label">
+                <string>string:"p3_end"</string>
+            </attr>
+        </edge>
+        <edge from="n100" to="n109">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n109" to="n110">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n100" to="n103">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n103" to="n104">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n100" to="n105">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n105" to="n106">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n100" to="n107">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n107" to="n108">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n100" to="n101">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n100" to="n102">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

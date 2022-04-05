@@ -70,15 +70,15 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         Process participant = result.getParticipants().iterator().next();
         assertThat(participant.getName(), is(name));
 
-        assertThat(participant.getSequenceFlows().count(), is(2L));
-        assertThat(participant.getControlFlowNodes().count(), is(3L));
+        assertThat(participant.getSequenceFlows().count(), is(3L));
+        assertThat(participant.getControlFlowNodes().count(), is(4L));
         // Sequence flows between the right flow nodes.
         Set<String> sequenceFlowIds = participant.getSequenceFlows()
                                                  .map(SequenceFlow::getID)
                                                  .collect(Collectors.toCollection(LinkedHashSet::new));
         assertThat(
                 sequenceFlowIds,
-                is(Sets.newHashSet(
+                is(Sets.newHashSet("inclusive gateway_parallel gateway",
                         "parallel gateway_exclusive gateway",
                         "exclusive gateway_event gateway")));
     }
