@@ -1,10 +1,13 @@
 package behavior.bpmn.reader;
 
 import behavior.bpmn.BPMNCollaboration;
+import behavior.bpmn.Process;
+import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.auxiliary.BPMNCollaborationBuilder;
+import behavior.bpmn.auxiliary.BPMNProcessBuilder;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.IntermediateCatchEvent;
 import behavior.bpmn.events.IntermediateThrowEvent;
@@ -112,18 +115,24 @@ public class BPMNFileReader {
             Map<String, behavior.bpmn.FlowNode> createdFlowNodes,
             Participant participant) {
         bpmnCollaborationBuilder.processName(participant.getName());
-        participant.getProcess().getFlowElements().forEach(flowElement -> {
-            // Map flow nodes
-            if (flowElement instanceof FlowNode) {
-                mapFlowNode((FlowNode) flowElement, createdFlowNodes, bpmnCollaborationBuilder);
-            }
-            // Map sequence flows
-            if (flowElement instanceof SequenceFlow) {
-                SequenceFlow sequenceFlow = (SequenceFlow) flowElement;
-                mapSequenceFlow(sequenceFlow, createdFlowNodes, bpmnCollaborationBuilder);
-            }
-        });
+        participant.getProcess().getFlowElements().forEach(flowElement ->
+                mapFlowElement(bpmnCollaborationBuilder, createdFlowNodes, flowElement));
         bpmnCollaborationBuilder.buildProcess();
+    }
+
+    private void mapFlowElement(
+            BPMNCollaborationBuilder bpmnCollaborationBuilder,
+            Map<String, behavior.bpmn.FlowNode> createdFlowNodes,
+            FlowElement flowElement) {
+        // Map flow nodes
+        if (flowElement instanceof FlowNode) {
+            mapFlowNode((FlowNode) flowElement, createdFlowNodes, bpmnCollaborationBuilder);
+        }
+        // Map sequence flows
+        if (flowElement instanceof SequenceFlow) {
+            SequenceFlow sequenceFlow = (SequenceFlow) flowElement;
+            mapSequenceFlow(sequenceFlow, createdFlowNodes, bpmnCollaborationBuilder);
+        }
     }
 
     private void mapSequenceFlow(
@@ -131,9 +140,26 @@ public class BPMNFileReader {
             Map<String, behavior.bpmn.FlowNode> mappedFlowNodes,
             BPMNCollaborationBuilder bpmnCollaborationBuilder) {
         if (sequenceFlow.getName() == null || sequenceFlow.getName().isEmpty()) {
-            bpmnCollaborationBuilder.sequenceFlow(mapFlowNode(sequenceFlow.getSource(), mappedFlowNodes, bpmnCollaborationBuilder), mapFlowNode(sequenceFlow.getTarget(), mappedFlowNodes, bpmnCollaborationBuilder));
+            bpmnCollaborationBuilder.sequenceFlow(
+                    mapFlowNode(
+                            sequenceFlow.getSource(),
+                            mappedFlowNodes,
+                            bpmnCollaborationBuilder),
+                    mapFlowNode(
+                            sequenceFlow.getTarget(),
+                            mappedFlowNodes,
+                            bpmnCollaborationBuilder));
         } else {
-            bpmnCollaborationBuilder.sequenceFlow(sequenceFlow.getName(), mapFlowNode(sequenceFlow.getSource(), mappedFlowNodes, bpmnCollaborationBuilder), mapFlowNode(sequenceFlow.getTarget(), mappedFlowNodes, bpmnCollaborationBuilder));
+            bpmnCollaborationBuilder.sequenceFlow(
+                    sequenceFlow.getName(),
+                    mapFlowNode(
+                            sequenceFlow.getSource(),
+                            mappedFlowNodes,
+                            bpmnCollaborationBuilder),
+                    mapFlowNode(
+                            sequenceFlow.getTarget(),
+                            mappedFlowNodes,
+                            bpmnCollaborationBuilder));
         }
     }
 
@@ -141,6 +167,7 @@ public class BPMNFileReader {
             FlowNode flowNode,
             Map<String, behavior.bpmn.FlowNode> mappedFlowNodes,
             BPMNCollaborationBuilder bpmnCollaborationBuilder) {
+        // TODO: Check if the father matches the father of the element in case of subprocesses.
         behavior.bpmn.FlowNode flowNodeIfExists = mappedFlowNodes.get(flowNode.getId());
         if (flowNodeIfExists != null) {
             return flowNodeIfExists;
@@ -181,15 +208,13 @@ public class BPMNFileReader {
                 resultingFlowNode = new ReceiveTask(flowNode.getName(), instantiate);
                 break;
             case "subProcess":
-                // TODO: Should be embedded. How do we handle this?
-                resultingFlowNode = new Task(flowNode.getName());
+                resultingFlowNode = new CallActivity(mapSubProcess(flowNode));
                 break;
             case "callActivity":
                 // Call Activity = Reusable sub-processes (external).
                 // TODO: how to get the subprocess models? calledElement attribute --> Read a set of files simultaneously?
-                resultingFlowNode = new Task(flowNode.getName());
-                break;
-            // Gateways
+                throw new RuntimeException("External subprocesses currently not supported!");
+                // Gateways
             case "parallelGateway":
                 resultingFlowNode = new ParallelGateway(flowNode.getName());
                 break;
@@ -207,6 +232,14 @@ public class BPMNFileReader {
         }
         mappedFlowNodes.put(flowNode.getId(), resultingFlowNode);
         return resultingFlowNode;
+    }
+
+    private Process mapSubProcess(FlowNode flowNode) {
+        SubProcess subprocess = (SubProcess) flowNode;
+        BPMNProcessBuilder subprocessBuilder = new BPMNProcessBuilder()
+                .name(subprocess.getName());
+        // TODO: Read everything and reuse code.
+        return null;
     }
 
     private void setMostAppropriateStartEvent(

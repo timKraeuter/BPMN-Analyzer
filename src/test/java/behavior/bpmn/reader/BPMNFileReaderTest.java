@@ -229,13 +229,13 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(messageFlowNames, is(Sets.newHashSet("sendEvent_startP2", "SendTask_receiveEvent", "endP1_ReceiveTask")));
     }
 
-    //    @Test
+    @Test
     void readContainedSubprocess() {
-        BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "instantiate-receive-task.bpmn");
+        BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "call-activity-simple.bpmn");
 
-        // Expect the model shown here: https://cawemo.com/share/f619d617-1cc6-4721-8b98-8327f86a41fb
+        // Expect the model shown here: https://cawemo.com/share/be4afe81-4adf-4b45-a933-5745316ee533
         assertNotNull(result);
-        assertThat(result.getName(), is("instantiate-receive-task"));
+        assertThat(result.getName(), is("call-activity-simple"));
         assertThat(result.getParticipants().size(), is(1));
         Process participant = result.getParticipants().iterator().next();
         assertThat(participant.getName(), is("process1"));

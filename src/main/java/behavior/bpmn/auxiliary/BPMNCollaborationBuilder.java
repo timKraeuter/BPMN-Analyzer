@@ -1,7 +1,9 @@
 package behavior.bpmn.auxiliary;
 
+import behavior.bpmn.BPMNCollaboration;
+import behavior.bpmn.FlowNode;
+import behavior.bpmn.MessageFlow;
 import behavior.bpmn.Process;
-import behavior.bpmn.*;
 import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
@@ -24,19 +26,18 @@ public class BPMNCollaborationBuilder {
     private final Set<Process> subprocesses;
     private String name;
 
-    private String processName;
-    private StartEvent startEvent;
-    private Set<SequenceFlow> sequenceFlows;
+    private BPMNProcessBuilder currentProcessBuilder;
 
     public BPMNCollaborationBuilder() {
-        this.sequenceFlows = new LinkedHashSet<>();
         messageFlows = new LinkedHashSet<>();
         participants = new LinkedHashSet<>();
         subprocesses = new LinkedHashSet<>();
+
+        currentProcessBuilder = new BPMNProcessBuilder();
     }
 
     public StartEvent getStartEvent() {
-        return startEvent;
+        return currentProcessBuilder.getStartEvent();
     }
 
     public BPMNCollaborationBuilder name(String name) {
@@ -45,20 +46,17 @@ public class BPMNCollaborationBuilder {
     }
 
     public BPMNCollaborationBuilder processName(String processName) {
-        this.processName = processName;
+        currentProcessBuilder.name(processName);
         return this;
     }
 
     public BPMNCollaborationBuilder startEvent(StartEvent event) {
-        this.startEvent = event;
+        currentProcessBuilder.startEvent(event);
         return this;
     }
 
     public BPMNCollaborationBuilder sequenceFlow(String name, FlowNode from, FlowNode to) {
-        final SequenceFlow sequenceFlow = new SequenceFlow(name, from, to);
-        this.sequenceFlows.add(sequenceFlow);
-        from.addOutgoingSequenceFlow(sequenceFlow);
-        to.addIncomingSequenceFlow(sequenceFlow);
+        currentProcessBuilder.sequenceFlow(name, from, to);
 
         this.findAndAddSubProcessIfPresent(from);
         this.findAndAddSubProcessIfPresent(to);
@@ -127,10 +125,8 @@ public class BPMNCollaborationBuilder {
     }
 
     public BPMNCollaborationBuilder buildProcess() {
-        this.participants.add(new Process(processName, startEvent, sequenceFlows));
-        processName = "";
-        startEvent = null;
-        sequenceFlows = new LinkedHashSet<>();
+        this.participants.add(currentProcessBuilder.build());
+        currentProcessBuilder = new BPMNProcessBuilder();
         return this;
     }
 
@@ -140,7 +136,7 @@ public class BPMNCollaborationBuilder {
     }
 
     public BPMNCollaboration build() {
-        if (startEvent != null || sequenceFlows.size() >= 1) {
+        if (currentProcessBuilder.getStartEvent() != null || currentProcessBuilder.getSequenceFlows().size() >= 1) {
             this.buildProcess();
         }
         return new BPMNCollaboration(name, participants, subprocesses, messageFlows);
