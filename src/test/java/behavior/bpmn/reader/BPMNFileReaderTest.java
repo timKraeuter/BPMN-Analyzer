@@ -20,9 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class BPMNFileReaderTest {
 
+    public static final String BPMN_BPMN_MODELS_READER_TEST = "/bpmn/bpmnModelsReaderTest/";
+
     @Test
     void readTasks() {
-        BPMNCollaboration result = readModelFromResource("/bpmn/bpmnModels/tasks.bpmn");
+        BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "tasks.bpmn");
 
         // Expect the model shown here: https://cawemo.com/share/882d7c5b-bff0-4244-a39f-a234795035e5
         assertNotNull(result);
@@ -54,7 +56,7 @@ class BPMNFileReaderTest {
 
     @Test
     void readGateways() {
-        BPMNCollaboration result = readModelFromResource("/bpmn/bpmnModels/gateways.bpmn");
+        BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "gateways.bpmn");
 
         // Expect the model shown here: https://cawemo.com/share/bfb5f9e4-1b24-4ff7-bee1-278ea6aa80bc
         assertNotNull(result);
@@ -77,7 +79,7 @@ class BPMNFileReaderTest {
 
     @Test
     void readEvents() {
-        BPMNCollaboration result = readModelFromResource("/bpmn/bpmnModels/events.bpmn");
+        BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "events.bpmn");
 
         // Expect the model shown here: https://cawemo.com/share/19b961cd-d4e2-4af8-8994-2e43e7ed094b
         assertNotNull(result);
@@ -170,7 +172,7 @@ class BPMNFileReaderTest {
 
     @Test
     void readPoolsAndMessageFlows() {
-        BPMNCollaboration result = readModelFromResource("/bpmn/bpmnModels/pools-message-flows.bpmn");
+        BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "pools-message-flows.bpmn");
 
         // Expect the model shown here: https://cawemo.com/share/a7b1034d-da01-4afd-afdc-26cfdb33ef06
         assertNotNull(result);
