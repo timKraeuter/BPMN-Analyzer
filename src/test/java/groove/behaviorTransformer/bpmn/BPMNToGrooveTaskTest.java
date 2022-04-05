@@ -1,6 +1,5 @@
 package groove.behaviorTransformer.bpmn;
 
-import behavior.bpmn.BPMNCollaboration;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -12,11 +11,9 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testSequentialActivities() throws IOException {
-        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + "sequential-activities.bpmn";
-        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
         // TODO: test prefix
         this.setFileNameFilter(x -> false); // Expect type graph here.
-        this.checkGrooveGeneration(collaboration);
+        testGrooveGenerationForBPMNResourceFile("sequential-activities.bpmn");
     }
 
     /**
@@ -24,10 +21,7 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testImplicitExclusiveGateway() throws IOException {
-        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + "implicit-exclusive-gateway.bpmn";
-        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
-
-        this.checkGrooveGeneration(collaboration);
+        testGrooveGenerationForBPMNResourceFile("implicit-exclusive-gateway.bpmn");
     }
 
     /**
@@ -35,10 +29,7 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testImplicitParallelGateway() throws IOException {
-        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + "implicit-parallel-gateway.bpmn";
-        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
-
-        this.checkGrooveGeneration(collaboration);
+        testGrooveGenerationForBPMNResourceFile("implicit-parallel-gateway.bpmn");
     }
 
     /**
@@ -46,10 +37,7 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testSendReceiveTask() throws IOException {
-        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + "send-receive-message-tasks.bpmn";
-        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
-
-        this.checkGrooveGeneration(collaboration);
+        testGrooveGenerationForBPMNResourceFile("send-receive-message-tasks.bpmn");
     }
 
     /**
@@ -57,9 +45,6 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testInstantiateReceiveTask() throws IOException {
-        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + "instantiate-receive-task.bpmn";
-        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
-
-        this.checkGrooveGeneration(collaboration);
+        testGrooveGenerationForBPMNResourceFile("instantiate-receive-task.bpmn");
     }
 }

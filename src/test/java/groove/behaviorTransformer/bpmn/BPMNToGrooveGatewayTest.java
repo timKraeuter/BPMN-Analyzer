@@ -1,6 +1,5 @@
 package groove.behaviorTransformer.bpmn;
 
-import behavior.bpmn.BPMNCollaboration;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -12,13 +11,10 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testExclusiveGateway() throws IOException {
-        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + "exclusive-gateway.bpmn";
-        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
-
         // Exclusive Gateways rules could be optimized, by setting the token position to the exclusive gateway not the individual flow incoming.
         // This leads to only one rule for each outgoing flow not also incoming flow and combinations but two rule activations for exclusive gateways.
         // Maybe we can do something with nested rules?
-        this.checkGrooveGeneration(collaboration);
+        testGrooveGenerationForBPMNResourceFile("exclusive-gateway.bpmn");
     }
 
     /**
@@ -26,10 +22,7 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testParallelGateway() throws IOException {
-        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + "parallel-gateway.bpmn";
-        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
-
-        this.checkGrooveGeneration(collaboration);
+        testGrooveGenerationForBPMNResourceFile("parallel-gateway.bpmn");
     }
 
     /**
@@ -37,10 +30,7 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testParallelGatewayComplex() throws IOException {
-        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + "parallel-gateway-complex.bpmn";
-        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
-
-        this.checkGrooveGeneration(collaboration);
+        testGrooveGenerationForBPMNResourceFile("parallel-gateway-complex.bpmn");
     }
 
     /**
@@ -48,10 +38,7 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testInclusiveGateway() throws IOException {
-        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + "inclusive-gateway.bpmn";
-        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
-
-        this.checkGrooveGeneration(collaboration);
+        testGrooveGenerationForBPMNResourceFile("inclusive-gateway.bpmn");
     }
 
     /**
@@ -59,10 +46,7 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testInclusiveGatewayComplex() throws IOException {
-        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + "inclusive-gateway-complex.bpmn";
-        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
-
-        this.checkGrooveGeneration(collaboration);
+        testGrooveGenerationForBPMNResourceFile("inclusive-gateway-complex.bpmn");
     }
 
     /**
@@ -71,10 +55,7 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
     @Test
     void testExclusiveEventBasedGateway() throws IOException {
         // TODO: Add Signal event to testcase.
-        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + "exclusive-event-based-gateway.bpmn";
-        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
-
-        this.checkGrooveGeneration(collaboration);
+        testGrooveGenerationForBPMNResourceFile("exclusive-event-based-gateway.bpmn");
     }
 
 }

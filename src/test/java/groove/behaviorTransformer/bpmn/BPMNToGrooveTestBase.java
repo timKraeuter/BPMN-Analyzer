@@ -1,7 +1,10 @@
 package groove.behaviorTransformer.bpmn;
 
+import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.reader.BPMNFileReaderTestHelper;
 import groove.behaviorTransformer.BehaviorToGrooveTransformerTestHelper;
+
+import java.io.IOException;
 
 public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTestHelper implements BPMNFileReaderTestHelper {
     public static final String BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER = "/bpmn/bpmnModelsSemanticsTest/";
@@ -19,5 +22,12 @@ public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTe
     @Override
     public String getOutputPathSubFolderName() {
         return BPMN;
+    }
+
+    protected void testGrooveGenerationForBPMNResourceFile(String resourceFileName) throws IOException {
+        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + resourceFileName;
+        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
+
+        this.checkGrooveGeneration(collaboration);
     }
 }
