@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="instantiateReceiveTask_start" role="rule" edgeids="false" edgemode="directed">
+    <graph id="instantiate-receive-task_start" role="rule" edgeids="false" edgemode="directed">
         <node id="n0">
             <attr name="layout">
                 <string>62 85 0 0</string>
@@ -48,7 +48,7 @@
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"process2_start_p2"</string>
+                <string>string:"process2_start_2"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">

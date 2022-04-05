@@ -1,6 +1,7 @@
 package behavior.bpmn.activities.tasks;
 
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
+import com.google.common.base.Objects;
 
 /**
  * Represents a ReceiveTask.
@@ -30,5 +31,18 @@ public class ReceiveTask extends AbstractTask {
     @Override
     public boolean isInstantiateFlowNode() {
         return isInstantiate();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ReceiveTask that = (ReceiveTask) o;
+        return getName().equals(that.getName()) && instantiate == that.instantiate;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getName(), instantiate);
     }
 }

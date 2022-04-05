@@ -1,11 +1,6 @@
 package groove.behaviorTransformer.bpmn;
 
 import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.activities.tasks.ReceiveTask;
-import behavior.bpmn.activities.tasks.SendTask;
-import behavior.bpmn.activities.tasks.Task;
-import behavior.bpmn.auxiliary.BPMNCollaborationBuilder;
-import behavior.bpmn.events.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -51,37 +46,8 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testSendReceiveTask() throws IOException {
-        final StartEvent start_p1 = new StartEvent("start_p1");
-        SendTask tSend_1 = new SendTask("TSend_1");
-        IntermediateCatchEvent eReceive_1 = new IntermediateCatchEvent("EReceive_1", IntermediateCatchEventType.MESSAGE);
-        final EndEvent end_p1 = new EndEvent("end_p1", EndEventType.MESSAGE);
-
-        final StartEvent start_p2 = new StartEvent("start_p2");
-        ReceiveTask tReceive_1 = new ReceiveTask("TReceive_1");
-        ReceiveTask tReceive_2 = new ReceiveTask("TReceive_2");
-        SendTask tSend_2 = new SendTask("TSend_2");
-        final EndEvent end_p2 = new EndEvent("end_p2");
-
-
-        final String modelName = "sendReceiveTask";
-        final BPMNCollaboration collaboration = new BPMNCollaborationBuilder()
-                .name(modelName)
-                .messageFlow(tSend_1, tReceive_1)
-                .messageFlow(tSend_2, eReceive_1)
-                .messageFlow(end_p1, tReceive_2)
-                .processName("p1")
-                .startEvent(start_p1)
-                .sequenceFlow(start_p1, tSend_1)
-                .sequenceFlow(tSend_1, eReceive_1)
-                .sequenceFlow(eReceive_1, end_p1)
-                .buildProcess()
-                .processName("p2")
-                .startEvent(start_p2)
-                .sequenceFlow(start_p2, tReceive_1)
-                .sequenceFlow(tReceive_1, tSend_2)
-                .sequenceFlow(tSend_2, tReceive_2)
-                .sequenceFlow(tReceive_2, end_p2)
-                .build();
+        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + "send-receive-message-tasks.bpmn";
+        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
 
         this.checkGrooveGeneration(collaboration);
     }
@@ -91,26 +57,8 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testInstantiateReceiveTask() throws IOException {
-        ReceiveTask a = new ReceiveTask("A", true);
-        Task b = new Task("B");
-        EndEvent end_1 = new EndEvent("end_1");
-
-        final StartEvent start_p2 = new StartEvent("start_p2");
-        final EndEvent end_2 = new EndEvent("end_2", EndEventType.MESSAGE);
-
-
-        final String modelName = "instantiateReceiveTask";
-        final BPMNCollaboration collaboration = new BPMNCollaborationBuilder()
-                .name(modelName)
-                .messageFlow(end_2, a)
-                .processName("process1")
-                .sequenceFlow(a, b)
-                .sequenceFlow(b, end_1)
-                .buildProcess()
-                .processName("process2")
-                .startEvent(start_p2)
-                .sequenceFlow(start_p2, end_2)
-                .build();
+        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + "instantiate-receive-task.bpmn";
+        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
 
         this.checkGrooveGeneration(collaboration);
     }

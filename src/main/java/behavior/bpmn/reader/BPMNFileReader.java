@@ -18,6 +18,7 @@ import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.EventDefinition;
 import org.camunda.bpm.model.bpmn.instance.*;
+import org.camunda.bpm.model.bpmn.instance.camunda.CamundaProperties;
 import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 import org.camunda.bpm.model.xml.type.ModelElementType;
 
@@ -176,7 +177,8 @@ public class BPMNFileReader {
                 resultingFlowNode = new SendTask(flowNode.getName());
                 break;
             case "receiveTask":
-                resultingFlowNode = new ReceiveTask(flowNode.getName());
+                boolean instantiate = isInstantiateReceiveTask(flowNode);
+                resultingFlowNode = new ReceiveTask(flowNode.getName(), instantiate);
                 break;
             case "subProcess":
                 // TODO: Should be embedded. How do we handle this?
@@ -202,6 +204,23 @@ public class BPMNFileReader {
         }
         mappedFlowNodes.put(flowNode.getId(), resultingFlowNode);
         return resultingFlowNode;
+    }
+
+    private boolean isInstantiateReceiveTask(FlowNode flowNode) {
+        ExtensionElements extensionElements = flowNode.getExtensionElements();
+        if (extensionElements == null) {
+            return false;
+        }
+        // Instantiate is set as a camunda property using the camunda modeler.
+        CamundaProperties properties = extensionElements
+                .getElementsQuery()
+                .filterByType(CamundaProperties.class)
+                .singleResult();
+
+        return properties.getCamundaProperties().stream().anyMatch(camundaProperty ->
+                camundaProperty.getCamundaName().equals("instantiate")
+                        && camundaProperty.getCamundaValue().equals("true")
+        );
     }
 
     private EndEvent mapEndEvent(FlowNode flowNode) {
