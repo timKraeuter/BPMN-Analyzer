@@ -6,7 +6,6 @@ import behavior.bpmn.events.*;
 import com.google.common.collect.Sets;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -18,7 +17,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class BPMNFileReaderTest {
+class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
 
     public static final String BPMN_BPMN_MODELS_READER_TEST = "/bpmn/bpmnModelsReaderTest/";
 
@@ -28,9 +27,12 @@ class BPMNFileReaderTest {
 
         // Expect the model shown here: https://cawemo.com/share/882d7c5b-bff0-4244-a39f-a234795035e5
         assertNotNull(result);
+        String name = "tasks";
+        assertThat(result.getName(), is(name));
         // No pools so only one participant.
         assertThat(result.getParticipants().size(), is(1));
         Process participant = result.getParticipants().iterator().next();
+        assertThat(participant.getName(), is(name));
 
         assertThat(participant.getSequenceFlows().count(), is(11L));
         assertThat(participant.getControlFlowNodes().count(), is(12L));
@@ -60,9 +62,12 @@ class BPMNFileReaderTest {
 
         // Expect the model shown here: https://cawemo.com/share/bfb5f9e4-1b24-4ff7-bee1-278ea6aa80bc
         assertNotNull(result);
+        String name = "gateways";
+        assertThat(result.getName(), is(name));
         // No pools so only one participant.
         assertThat(result.getParticipants().size(), is(1));
         Process participant = result.getParticipants().iterator().next();
+        assertThat(participant.getName(), is(name));
 
         assertThat(participant.getSequenceFlows().count(), is(2L));
         assertThat(participant.getControlFlowNodes().count(), is(3L));
@@ -83,9 +88,12 @@ class BPMNFileReaderTest {
 
         // Expect the model shown here: https://cawemo.com/share/19b961cd-d4e2-4af8-8994-2e43e7ed094b
         assertNotNull(result);
+        String name = "events";
+        assertThat(result.getName(), is(name));
         // No pools so only one participant.
         assertThat(result.getParticipants().size(), is(1));
         Process participant = result.getParticipants().iterator().next();
+        assertThat(participant.getName(), is(name));
 
         assertThat(participant.getSequenceFlows().count(), is(14L));
         assertThat(participant.getControlFlowNodes().count(), is(17L));
@@ -176,6 +184,7 @@ class BPMNFileReaderTest {
 
         // Expect the model shown here: https://cawemo.com/share/a7b1034d-da01-4afd-afdc-26cfdb33ef06
         assertNotNull(result);
+        assertThat(result.getName(), is("pools-message-flows"));
         // Two pools = two participants.
         assertThat(result.getParticipants().size(), is(2));
         Iterator<Process> it = result.getParticipants().iterator();
@@ -198,12 +207,5 @@ class BPMNFileReaderTest {
                                              .map(MessageFlow::getName)
                                              .collect(Collectors.toSet());
         assertThat(messageFlowNames, is(Sets.newHashSet("sendEvent_startP2", "SendTask_receiveEvent", "endP1_ReceiveTask")));
-    }
-
-
-    private BPMNCollaboration readModelFromResource(String name) {
-        @SuppressWarnings("ConstantConditions") File model = new File(this.getClass().getResource(name).getFile());
-        BPMNFileReader bpmnFileReader = new BPMNFileReader();
-        return bpmnFileReader.readModelFromFile(model);
     }
 }

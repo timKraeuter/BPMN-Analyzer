@@ -13,6 +13,7 @@ import behavior.bpmn.events.*;
 import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
+import org.apache.commons.io.FilenameUtils;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.EventDefinition;
@@ -27,19 +28,19 @@ import java.util.Map;
 
 public class BPMNFileReader {
 
-    public BPMNCollaboration readModelFromFile(String filePath) {
-        return readModelFromFile(new File(filePath));
-    }
-
     public BPMNCollaboration readModelFromFile(File file) {
         BpmnModelInstance bpmnModelInstance = Bpmn.readModelFromFile(file);
 
+        String fileName = FilenameUtils.removeExtension(file.getName());
+        BPMNCollaborationBuilder bpmnCollaborationBuilder = new BPMNCollaborationBuilder()
+                .name(fileName);
+
         // Map participants/pools
+        Map<String, behavior.bpmn.FlowNode> mappedFlowNodes = new HashMap<>();
         ModelElementType participantType = bpmnModelInstance.getModel().getType(Participant.class);
         Collection<ModelElementInstance> participants = bpmnModelInstance.getModelElementsByType(participantType);
-        BPMNCollaborationBuilder bpmnCollaborationBuilder = new BPMNCollaborationBuilder();
-        Map<String, behavior.bpmn.FlowNode> mappedFlowNodes = new HashMap<>();
         if (participants.isEmpty()) {
+            bpmnCollaborationBuilder.processName(fileName);
             mapModelInstanceToOneParticipant(bpmnModelInstance, bpmnCollaborationBuilder, mappedFlowNodes);
         } else {
             // Map each participant
