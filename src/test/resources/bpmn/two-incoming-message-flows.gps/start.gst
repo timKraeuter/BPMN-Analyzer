@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="twoIncomingMessageFlows_start" role="rule" edgeids="false" edgemode="directed">
+    <graph id="two-incoming-message-flows_start" role="rule" edgeids="false" edgemode="directed">
         <node id="n0">
             <attr name="layout">
                 <string>62 85 0 0</string>
@@ -18,7 +18,7 @@
         </node>
         <edge from="n1" to="n1">
             <attr name="label">
-                <string>string:"p1"</string>
+                <string>string:"p2"</string>
             </attr>
         </edge>
         <node id="n2">
@@ -48,7 +48,7 @@
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"p1_start_p1"</string>
+                <string>string:"p2_start_p2"</string>
             </attr>
         </edge>
         <node id="n5">
@@ -68,7 +68,7 @@
         </node>
         <edge from="n6" to="n6">
             <attr name="label">
-                <string>string:"p2"</string>
+                <string>string:"p3"</string>
             </attr>
         </edge>
         <node id="n7">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n9" to="n9">
             <attr name="label">
-                <string>string:"p2_start_p2"</string>
+                <string>string:"p3_start_p3"</string>
             </attr>
         </edge>
         <node id="n10">
@@ -118,7 +118,7 @@
         </node>
         <edge from="n11" to="n11">
             <attr name="label">
-                <string>string:"p3"</string>
+                <string>string:"p1"</string>
             </attr>
         </edge>
         <node id="n12">
@@ -148,7 +148,7 @@
         </node>
         <edge from="n14" to="n14">
             <attr name="label">
-                <string>string:"p3_start_p3"</string>
+                <string>string:"p1_start_p1"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">

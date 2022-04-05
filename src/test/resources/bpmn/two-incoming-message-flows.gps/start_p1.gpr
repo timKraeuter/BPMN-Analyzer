@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="start_p3" role="rule" edgeids="false" edgemode="directed">
+    <graph id="start_p1" role="rule" edgeids="false" edgemode="directed">
         <node id="n71">
             <attr name="layout">
                 <string>417 332 0 0</string>
@@ -48,7 +48,7 @@
         </node>
         <edge from="n69" to="n69">
             <attr name="label">
-                <string>string:"p3"</string>
+                <string>string:"p1"</string>
             </attr>
         </edge>
         <node id="n70">
@@ -68,7 +68,7 @@
         </node>
         <edge from="n72" to="n72">
             <attr name="label">
-                <string>string:"start_p3_end_p3"</string>
+                <string>string:"start_p1_end_p1"</string>
             </attr>
         </edge>
         <node id="n74">
@@ -78,7 +78,7 @@
         </node>
         <edge from="n74" to="n74">
             <attr name="label">
-                <string>string:"p3_start_p3"</string>
+                <string>string:"p1_start_p1"</string>
             </attr>
         </edge>
         <edge from="n68" to="n71">

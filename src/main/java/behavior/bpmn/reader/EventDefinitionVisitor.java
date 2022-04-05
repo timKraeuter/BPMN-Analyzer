@@ -1,9 +1,6 @@
 package behavior.bpmn.reader;
 
-import org.camunda.bpm.model.bpmn.instance.LinkEventDefinition;
-import org.camunda.bpm.model.bpmn.instance.MessageEventDefinition;
-import org.camunda.bpm.model.bpmn.instance.SignalEventDefinition;
-import org.camunda.bpm.model.bpmn.instance.TerminateEventDefinition;
+import org.camunda.bpm.model.bpmn.instance.*;
 
 public interface EventDefinitionVisitor<T> {
 
@@ -14,4 +11,6 @@ public interface EventDefinitionVisitor<T> {
     T handle(SignalEventDefinition evDefinition);
 
     T handle(TerminateEventDefinition evDefinition);
+
+    T handle(TimerEventDefinition evDefinition);
 }

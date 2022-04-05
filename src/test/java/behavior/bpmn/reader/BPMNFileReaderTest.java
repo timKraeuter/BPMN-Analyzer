@@ -96,8 +96,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         Process participant = result.getParticipants().iterator().next();
         assertThat(participant.getName(), is(name));
 
-        assertThat(participant.getSequenceFlows().count(), is(14L));
-        assertThat(participant.getControlFlowNodes().count(), is(17L));
+        assertThat(participant.getSequenceFlows().count(), is(15L));
+        assertThat(participant.getControlFlowNodes().count(), is(18L));
         // Sequence flows between the right flow nodes.
         Set<String> sequenceFlowIds = participant.getSequenceFlows()
                                                  .map(SequenceFlow::getID)
@@ -113,6 +113,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
                         "e3_terminateEnd",
                         "e3_end",
                         "linkCEvent_e2",
+                        "timerCEvent_e2",
                         "intermediateEvent_e2",
                         "messageCEvent_e2",
                         "messageTEvent_e2",
@@ -168,6 +169,9 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         String linkTEventName = "linkTEvent";
         assertThat(flowNodes.get(linkTEventName),
                 is(new IntermediateThrowEvent(linkTEventName, IntermediateThrowEventType.LINK)));
+        String timerCEventName = "timerCEvent";
+        assertThat(flowNodes.get(timerCEventName),
+                is(new IntermediateCatchEvent(timerCEventName, IntermediateCatchEventType.TIMER)));
 
         // Check end events
         String endEventName = "end";

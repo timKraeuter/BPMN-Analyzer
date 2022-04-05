@@ -258,6 +258,11 @@ public class BPMNFileReader {
                 public EndEvent handle(TerminateEventDefinition evDefinition) {
                     return new EndEvent(flowNode.getName(), EndEventType.TERMINATION);
                 }
+
+                @Override
+                public EndEvent handle(TimerEventDefinition evDefinition) {
+                    throw new RuntimeException("End event definitions should not be of type timer!");
+                }
             };
             return this.visitDefinition(eventDefinition, visitor);
         }
@@ -294,6 +299,11 @@ public class BPMNFileReader {
                 @Override
                 public StartEvent handle(TerminateEventDefinition evDefinition) {
                     throw new RuntimeException("Start event definitions should not be of type terminate!");
+                }
+
+                @Override
+                public StartEvent handle(TimerEventDefinition evDefinition) {
+                    throw new RuntimeException("Timer start events currently not supported!");
                 }
             };
             return this.visitDefinition(eventDefinition, visitor);
@@ -343,6 +353,11 @@ public class BPMNFileReader {
                 public IntermediateCatchEvent handle(TerminateEventDefinition evDefinition) {
                     throw new RuntimeException("Intermediate catch event definitions should not be of type terminate!");
                 }
+
+                @Override
+                public IntermediateCatchEvent handle(TimerEventDefinition evDefinition) {
+                    return new IntermediateCatchEvent(flowNode.getName(), IntermediateCatchEventType.TIMER);
+                }
             };
             return this.visitDefinition(evDefinition, eventVisitor);
         }
@@ -380,6 +395,11 @@ public class BPMNFileReader {
                 public IntermediateThrowEvent handle(TerminateEventDefinition evDefinition) {
                     throw new RuntimeException("Intermediate throw event definitions should not be of type terminate!");
                 }
+
+                @Override
+                public IntermediateThrowEvent handle(TimerEventDefinition evDefinition) {
+                    throw new RuntimeException("Intermediate throw event definitions should not be of type timer!");
+                }
             };
             return this.visitDefinition(evDefinition, eventVisitor);
         }
@@ -398,6 +418,9 @@ public class BPMNFileReader {
         }
         if (evDefinition instanceof TerminateEventDefinition) {
             return eventVisitor.handle((TerminateEventDefinition) evDefinition);
+        }
+        if (evDefinition instanceof TimerEventDefinition) {
+            return eventVisitor.handle((TimerEventDefinition) evDefinition);
         }
         throw new RuntimeException("Unknown event definition found!" + evDefinition);
     }

@@ -1,8 +1,5 @@
 package groove.behaviorTransformer.bpmn;
 
-import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.auxiliary.BPMNCollaborationBuilder;
-import behavior.bpmn.events.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -54,34 +51,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testSignalEventsCrossProcess() throws IOException {
-        final EventDefinition s1 = new EventDefinition("s1");
-        // p1
-        final StartEvent start_p1 = new StartEvent("start_p1");
-        IntermediateThrowEvent s1_throw = new IntermediateThrowEvent("S1_Throw", IntermediateThrowEventType.SIGNAL, s1);
-        final EndEvent end_p1 = new EndEvent("end_p1");
-
-        // p2
-        StartEvent start_p2 = new StartEvent("start_p2");
-        IntermediateCatchEvent s1_catch = new IntermediateCatchEvent("S1_Catch", IntermediateCatchEventType.SIGNAL, s1);
-        EndEvent end_p2 = new EndEvent("end_p2");
-
-        final String modelName = "signalEventsCrossProcess";
-
-        final BPMNCollaboration signalModel = new BPMNCollaborationBuilder()
-                .name(modelName)
-                .processName("p1")
-                .startEvent(start_p1)
-                .sequenceFlow(start_p1, s1_throw)
-                .sequenceFlow(s1_throw, end_p1)
-                .buildProcess()
-                .processName("p2")
-                .startEvent(start_p2)
-                .sequenceFlow(start_p2, s1_catch)
-                .sequenceFlow(s1_catch, end_p2)
-                .buildProcess()
-                .build();
-
-        this.checkGrooveGeneration(signalModel);
+        testGrooveGenerationForBPMNResourceFile("signal-events-cross-process.bpmn");
     }
 
     /**
@@ -89,33 +59,8 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testSignalStartEvents() throws IOException {
-        final EventDefinition s1 = new EventDefinition("s1");
-        // p1
-        final StartEvent start = new StartEvent("start");
-        final EndEvent s1_throw = new EndEvent("S1_Throw", EndEventType.SIGNAL, s1);
-        StartEvent p1_s1_catch = new StartEvent("p1_S1_Catch", StartEventType.SIGNAL, s1);
-        EndEvent end = new EndEvent("end");
-
-        // p2
-        StartEvent p2_s1_catch = new StartEvent("p2_S1_Catch", StartEventType.SIGNAL, s1);
-        EndEvent end_p2 = new EndEvent("end_p2");
-
-        final String modelName = "signalStartEvents";
-
-        final BPMNCollaboration signalModel = new BPMNCollaborationBuilder()
-                .name(modelName)
-                .processName("p1")
-                .startEvent(start)
-                .sequenceFlow(start, s1_throw)
-                .sequenceFlow(p1_s1_catch, end)
-                .buildProcess()
-                .processName("p2")
-                .startEvent(p2_s1_catch)
-                .sequenceFlow(p2_s1_catch, end_p2)
-                .buildProcess()
-                .build();
-
-        this.checkGrooveGeneration(signalModel);
+        // TODO: How to deal with multiple start events?
+        testGrooveGenerationForBPMNResourceFile("signal-start-events.bpmn");
     }
 
     /**
@@ -123,21 +68,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testTimerEvents() throws IOException {
-        final StartEvent start = new StartEvent("start");
-        final IntermediateCatchEvent timer = new IntermediateCatchEvent("timer", IntermediateCatchEventType.TIMER);
-        EndEvent end = new EndEvent("end");
-
-        final String modelName = "timerEvents";
-
-        final BPMNCollaboration timerModel = new BPMNCollaborationBuilder()
-                .name(modelName)
-                .processName(modelName)
-                .startEvent(start)
-                .sequenceFlow(start, timer)
-                .sequenceFlow(timer, end)
-                .build();
-
-        this.checkGrooveGeneration(timerModel);
+        testGrooveGenerationForBPMNResourceFile("timer-events.bpmn");
     }
 
     /**
@@ -145,37 +76,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testTwoIncomingMessageFlows() throws IOException {
-        final StartEvent start_p1 = new StartEvent("start_p1");
-        final EndEvent end_p1 = new EndEvent("end_p1", EndEventType.MESSAGE);
-
-        final StartEvent start_p2 = new StartEvent("start_p2");
-        final IntermediateCatchEvent catch_2 = new IntermediateCatchEvent("Catch_2", IntermediateCatchEventType.MESSAGE);
-        EndEvent end_p2 = new EndEvent("end_p2");
-
-        final StartEvent start_p3 = new StartEvent("start_p3");
-        final EndEvent end_p3 = new EndEvent("end_p3", EndEventType.MESSAGE);
-
-        final String modelName = "twoIncomingMessageFlows";
-
-        final BPMNCollaboration messageModel = new BPMNCollaborationBuilder()
-                .name(modelName)
-                .messageFlow(end_p1, catch_2)
-                .messageFlow(end_p3, catch_2)
-                .processName("p1")
-                .startEvent(start_p1)
-                .sequenceFlow(start_p1, end_p1)
-                .buildProcess()
-                .processName("p2")
-                .startEvent(start_p2)
-                .sequenceFlow(start_p2, catch_2)
-                .sequenceFlow(catch_2, end_p2)
-                .buildProcess()
-                .processName("p3")
-                .startEvent(start_p3)
-                .sequenceFlow(start_p3, end_p3)
-                .build();
-
-        this.checkGrooveGeneration(messageModel);
+        testGrooveGenerationForBPMNResourceFile("two-incoming-message-flows.bpmn");
     }
 
     /**
@@ -183,20 +84,6 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testIntermediateThrowEvent() throws IOException {
-        final StartEvent start = new StartEvent("start");
-        IntermediateThrowEvent intermediate = new IntermediateThrowEvent("intermediate", IntermediateThrowEventType.NONE);
-        final EndEvent end = new EndEvent("end", EndEventType.MESSAGE);
-
-        final String modelName = "intermediateThrowEvent";
-
-        final BPMNCollaboration model = new BPMNCollaborationBuilder()
-                .name(modelName)
-                .processName("p1")
-                .startEvent(start)
-                .sequenceFlow(start, intermediate)
-                .sequenceFlow(intermediate, end)
-                .build();
-
-        this.checkGrooveGeneration(model);
+        testGrooveGenerationForBPMNResourceFile("intermediate-throw-event.bpmn");
     }
 }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" camunda:diagramRelationId="6b53e743-386d-469a-b0de-ef518fcada71">
+  <bpmn:process id="Process_fe81b6d3-f0c8-431f-b77a-0e1a25134b06" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="start">
+      <bpmn:outgoing>Flow_0f6lljq</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0f6lljq" sourceRef="StartEvent_1" targetRef="Event_18xqymg"/>
+    <bpmn:endEvent id="Event_0shqoph" name="end">
+      <bpmn:incoming>Flow_0nw006b</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0nw006b" sourceRef="Event_18xqymg" targetRef="Event_0shqoph"/>
+    <bpmn:intermediateCatchEvent id="Event_18xqymg" name="timer">
+      <bpmn:incoming>Flow_0f6lljq</bpmn:incoming>
+      <bpmn:outgoing>Flow_0nw006b</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_00wa269"/>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:textAnnotation id="TextAnnotation_1eu68ol">
+      <bpmn:text>We do not allow timer start events since they lead to infinite state spaces.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_02aqqli" sourceRef="StartEvent_1" targetRef="TextAnnotation_1eu68ol"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_fe81b6d3-f0c8-431f-b77a-0e1a25134b06">
+      <bpmndi:BPMNShape id="TextAnnotation_1eu68ol_di" bpmnElement="TextAnnotation_1eu68ol" bioc:stroke="#e53935" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#e53935">
+        <dc:Bounds x="118" y="-40" width="100" height="98"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0nw006b_di" bpmnElement="Flow_0nw006b">
+        <di:waypoint x="278" y="118"/>
+        <di:waypoint x="342" y="118"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0f6lljq_di" bpmnElement="Flow_0f6lljq">
+        <di:waypoint x="186" y="118"/>
+        <di:waypoint x="242" y="118"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="150" y="100" width="36" height="36"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="157" y="143" width="23" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0shqoph_di" bpmnElement="Event_0shqoph">
+        <dc:Bounds x="342" y="100" width="36" height="36"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="351" y="143" width="19" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0dt00kl_di" bpmnElement="Event_18xqymg">
+        <dc:Bounds x="242" y="100" width="36" height="36"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="248" y="143" width="24" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_02aqqli_di" bpmnElement="Association_02aqqli">
+        <di:waypoint x="168" y="100"/>
+        <di:waypoint x="168" y="58"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
