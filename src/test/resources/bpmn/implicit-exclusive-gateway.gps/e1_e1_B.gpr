@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="e1_e1_A" role="rule" edgeids="false" edgemode="directed">
+    <graph id="e1_e1_B" role="rule" edgeids="false" edgemode="directed">
         <node id="n12">
             <attr name="layout">
                 <string>62 85 0 0</string>
@@ -18,7 +18,7 @@
         </node>
         <edge from="n13" to="n13">
             <attr name="label">
-                <string>string:"implicitExclusiveGateway"</string>
+                <string>string:"implicit-exclusive-gateway"</string>
             </attr>
         </edge>
         <node id="n14">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n15">
             <attr name="layout">
-                <string>622 152 0 0</string>
+                <string>642 152 0 0</string>
             </attr>
         </node>
         <edge from="n15" to="n15">
@@ -43,7 +43,7 @@
         </edge>
         <node id="n16">
             <attr name="layout">
-                <string>907 224 0 0</string>
+                <string>937 224 0 0</string>
             </attr>
         </node>
         <edge from="n16" to="n16">
@@ -53,12 +53,12 @@
         </edge>
         <node id="n17">
             <attr name="layout">
-                <string>907 144 0 0</string>
+                <string>937 144 0 0</string>
             </attr>
         </node>
         <edge from="n17" to="n17">
             <attr name="label">
-                <string>string:"e1_A"</string>
+                <string>string:"e1_B"</string>
             </attr>
         </edge>
         <edge from="n15" to="n17">

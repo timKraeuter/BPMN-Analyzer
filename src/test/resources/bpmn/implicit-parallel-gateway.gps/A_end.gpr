@@ -3,7 +3,7 @@
     <graph id="A_end" role="rule" edgeids="false" edgemode="directed">
         <node id="n24">
             <attr name="layout">
-                <string>577 162 0 0</string>
+                <string>592 162 0 0</string>
             </attr>
         </node>
         <edge from="n24" to="n24">
@@ -18,7 +18,7 @@
         </edge>
         <node id="n26">
             <attr name="layout">
-                <string>577 252 0 0</string>
+                <string>592 252 0 0</string>
             </attr>
         </node>
         <edge from="n26" to="n26">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n22">
             <attr name="layout">
-                <string>577 422 0 0</string>
+                <string>592 422 0 0</string>
             </attr>
         </node>
         <edge from="n22" to="n22">
@@ -63,7 +63,7 @@
         </node>
         <edge from="n20" to="n20">
             <attr name="label">
-                <string>string:"implicitParallelGateway"</string>
+                <string>string:"implicit-parallel-gateway"</string>
             </attr>
         </edge>
         <node id="n21">
@@ -78,7 +78,7 @@
         </edge>
         <node id="n23">
             <attr name="layout">
-                <string>912 422 0 0</string>
+                <string>942 422 0 0</string>
             </attr>
         </node>
         <edge from="n23" to="n23">
@@ -88,7 +88,7 @@
         </edge>
         <node id="n25">
             <attr name="layout">
-                <string>912 162 0 0</string>
+                <string>942 162 0 0</string>
             </attr>
         </node>
         <edge from="n25" to="n25">
@@ -98,7 +98,7 @@
         </edge>
         <node id="n27">
             <attr name="layout">
-                <string>912 252 0 0</string>
+                <string>942 252 0 0</string>
             </attr>
         </node>
         <edge from="n27" to="n27">

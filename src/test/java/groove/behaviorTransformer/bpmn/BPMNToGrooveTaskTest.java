@@ -6,8 +6,6 @@ import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.auxiliary.BPMNCollaborationBuilder;
 import behavior.bpmn.events.*;
-import behavior.bpmn.gateways.ExclusiveGateway;
-import behavior.bpmn.gateways.ParallelGateway;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -19,20 +17,8 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testSequentialActivities() throws IOException {
-        final StartEvent start = new StartEvent("start");
-        Task a = new Task("A");
-        Task b = new Task("B");
-        final EndEvent end = new EndEvent("end");
-
-        final String modelName = "sequentialActivities";
-        final BPMNCollaboration collaboration = new BPMNCollaborationBuilder()
-                .name(modelName)
-                .processName(modelName)
-                .startEvent(start)
-                .sequenceFlow(start, a)
-                .sequenceFlow(a, b)
-                .sequenceFlow(b, end)
-                .build();
+        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + "sequential-activities.bpmn";
+        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
         // TODO: test prefix
         this.setFileNameFilter(x -> false); // Expect type graph here.
         this.checkGrooveGeneration(collaboration);
@@ -43,22 +29,8 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testImplicitExclusiveGateway() throws IOException {
-        final StartEvent start = new StartEvent("start");
-        final ExclusiveGateway e1 = new ExclusiveGateway("e1");
-        Task a = new Task("A");
-        Task b = new Task("B");
-        final EndEvent end = new EndEvent("end");
-
-        final String modelName = "implicitExclusiveGateway";
-        final BPMNCollaboration collaboration = new BPMNCollaborationBuilder()
-                .name(modelName)
-                .processName(modelName)
-                .startEvent(start)
-                .sequenceFlow(start, e1)
-                .sequenceFlow(e1, a)
-                .sequenceFlow(e1, b)
-                .sequenceFlow(a, b).sequenceFlow(b, end)
-                .build();
+        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + "implicit-exclusive-gateway.bpmn";
+        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
 
         this.checkGrooveGeneration(collaboration);
     }
@@ -68,25 +40,8 @@ public class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testImplicitParallelGateway() throws IOException {
-        final StartEvent start = new StartEvent("start");
-        final ParallelGateway p1 = new ParallelGateway("p1");
-        Task a = new Task("A");
-        Task b = new Task("B");
-        Task c = new Task("C");
-        final EndEvent end = new EndEvent("end");
-
-        final String modelName = "implicitParallelGateway";
-        final BPMNCollaboration collaboration = new BPMNCollaborationBuilder()
-                .name(modelName)
-                .processName(modelName)
-                .startEvent(start)
-                .sequenceFlow(start, a)
-                .sequenceFlow(a, b)
-                .sequenceFlow(a, c)
-                .sequenceFlow(b, p1)
-                .sequenceFlow(c, p1)
-                .sequenceFlow(p1, end)
-                .build();
+        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + "implicit-parallel-gateway.bpmn";
+        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
 
         this.checkGrooveGeneration(collaboration);
     }

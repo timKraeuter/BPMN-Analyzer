@@ -1,8 +1,10 @@
 package groove.behaviorTransformer.bpmn;
 
+import behavior.bpmn.reader.BPMNFileReaderTestHelper;
 import groove.behaviorTransformer.BehaviorToGrooveTransformerTestHelper;
 
-public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTestHelper {
+public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTestHelper implements BPMNFileReaderTestHelper {
+    public static final String BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER = "/bpmn/bpmnModelsSemanticsTest/";
 
     static final String TYPE_GRAPH_FILE_NAME = "bpmn_e_model.gty";
     static final String TERMINATE_RULE_FILE_NAME = "Terminate.gpr";
