@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="p2" role="rule" edgeids="false" edgemode="directed">
+        <node id="n151">
+            <attr name="layout">
+                <string>532 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n151" to="n151">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n151" to="n151">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n147">
+            <attr name="layout">
+                <string>532 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n147" to="n147">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n147" to="n147">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n149">
+            <attr name="layout">
+                <string>532 422 0 0</string>
+            </attr>
+        </node>
+        <edge from="n149" to="n149">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n149" to="n149">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n144">
+            <attr name="layout">
+                <string>62 89 0 0</string>
+            </attr>
+        </node>
+        <edge from="n144" to="n144">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n145">
+            <attr name="layout">
+                <string>412 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n145" to="n145">
+            <attr name="label">
+                <string>string:"ComplexSubprocess"</string>
+            </attr>
+        </edge>
+        <node id="n146">
+            <attr name="layout">
+                <string>412 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n146" to="n146">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n148">
+            <attr name="layout">
+                <string>822 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n148" to="n148">
+            <attr name="label">
+                <string>string:"E_p2"</string>
+            </attr>
+        </edge>
+        <node id="n150">
+            <attr name="layout">
+                <string>822 422 0 0</string>
+            </attr>
+        </node>
+        <edge from="n150" to="n150">
+            <attr name="label">
+                <string>string:"F_p2"</string>
+            </attr>
+        </edge>
+        <node id="n152">
+            <attr name="layout">
+                <string>822 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n152" to="n152">
+            <attr name="label">
+                <string>string:"p2_e2"</string>
+            </attr>
+        </edge>
+        <edge from="n144" to="n151">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n151" to="n152">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n144" to="n147">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n147" to="n148">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n144" to="n149">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n149" to="n150">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n144" to="n145">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n144" to="n146">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>
