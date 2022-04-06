@@ -2,6 +2,7 @@ package behavior.bpmn.reader;
 
 import behavior.bpmn.Process;
 import behavior.bpmn.*;
+import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.events.*;
 import com.google.common.collect.Sets;
@@ -38,9 +39,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(participant.getSequenceFlows().count(), is(11L));
         assertThat(participant.getControlFlowNodes().count(), is(12L));
         // Sequence flows between the right flow nodes.
-        Set<String> sequenceFlowIds = participant.getSequenceFlows()
-                                                 .map(SequenceFlow::getID)
-                                                 .collect(Collectors.toCollection(LinkedHashSet::new));
+        Set<String> sequenceFlowIds = getSequenceFlowIdsForProcess(participant);
         assertThat(
                 sequenceFlowIds,
                 is(Sets.newHashSet(
@@ -57,10 +56,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
                         "subprocess_end")));
 
         // Check instantiate receive task
-        Map<String, FlowNode> flowNodes = participant.getControlFlowNodes()
-                                                     .collect(Collectors.toMap(
-                                                             FlowNode::getName,
-                                                             Function.identity()));
+        Map<String, FlowNode> flowNodes = createFlowNodeNameToFlowNodeMap(participant);
         String receiveTaskName = "receiveTask";
         FlowNode instantiateReceiveTask = flowNodes.get(receiveTaskName);
         // Instantiate must be true!
@@ -83,9 +79,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(participant.getSequenceFlows().count(), is(3L));
         assertThat(participant.getControlFlowNodes().count(), is(4L));
         // Sequence flows between the right flow nodes.
-        Set<String> sequenceFlowIds = participant.getSequenceFlows()
-                                                 .map(SequenceFlow::getID)
-                                                 .collect(Collectors.toCollection(LinkedHashSet::new));
+        Set<String> sequenceFlowIds = getSequenceFlowIdsForProcess(participant);
         assertThat(
                 sequenceFlowIds,
                 is(Sets.newHashSet("inclusive gateway_parallel gateway",
@@ -109,9 +103,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(participant.getSequenceFlows().count(), is(15L));
         assertThat(participant.getControlFlowNodes().count(), is(18L));
         // Sequence flows between the right flow nodes.
-        Set<String> sequenceFlowIds = participant.getSequenceFlows()
-                                                 .map(SequenceFlow::getID)
-                                                 .collect(Collectors.toCollection(LinkedHashSet::new));
+        Set<String> sequenceFlowIds = getSequenceFlowIdsForProcess(participant);
         assertThat(
                 sequenceFlowIds,
                 is(Sets.newHashSet(
@@ -131,10 +123,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
                         "signalCEvent_e2",
                         "signalTEvent_e2")));
 
-        Map<String, FlowNode> flowNodes = participant.getControlFlowNodes()
-                                                     .collect(Collectors.toMap(
-                                                             FlowNode::getName,
-                                                             Function.identity()));
+        Map<String, FlowNode> flowNodes = createFlowNodeNameToFlowNodeMap(participant);
         // Check start events
         String startEventName = "start";
         assertThat(flowNodes.get(startEventName), is(new StartEvent(startEventName)));
@@ -198,6 +187,12 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(flowNodes.get(terminateEndEventName), is(new EndEvent(terminateEndEventName, EndEventType.TERMINATION)));
     }
 
+    private Set<String> getSequenceFlowIdsForProcess(Process participant) {
+        return participant.getSequenceFlows()
+                          .map(SequenceFlow::getID)
+                          .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
     @Test
     void readPoolsAndMessageFlows() {
         BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "pools-message-flows.bpmn");
@@ -231,22 +226,57 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
 
     @Test
     void readContainedSubprocess() {
-        BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "call-activity-simple.bpmn");
+        BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "subprocesses.bpmn");
 
-        // Expect the model shown here: https://cawemo.com/share/be4afe81-4adf-4b45-a933-5745316ee533
+        // Expect the model shown here: https://cawemo.com/share/f26bcf22-fbb8-4cf7-8fd9-1b9004163e8d
         assertNotNull(result);
-        assertThat(result.getName(), is("call-activity-simple"));
+        assertThat(result.getName(), is("subprocesses"));
         assertThat(result.getParticipants().size(), is(1));
         Process participant = result.getParticipants().iterator().next();
-        assertThat(participant.getName(), is("process1"));
+        assertThat(participant.getName(), is("subprocesses"));
 
-        assertThat(participant.getControlFlowNodes().count(), is(2L));
-        Map<String, FlowNode> flowNodes = participant.getControlFlowNodes()
-                                                     .collect(Collectors.toMap(
-                                                             FlowNode::getName,
-                                                             Function.identity()));
-        FlowNode instantiateReceiveTask = flowNodes.get("A");
-        // Instantiate must be true!
-        assertThat(instantiateReceiveTask, is(new ReceiveTask("A", true)));
+        assertThat(participant.getControlFlowNodes().count(), is(3L));
+        // Check sequence flows
+        Set<String> sequenceFlowIds = getSequenceFlowIdsForProcess(participant);
+        assertThat(sequenceFlowIds, is(Sets.newHashSet("start_Sub1", "Sub1_end")));
+
+        // Check Sub1 subprocess
+        Map<String, FlowNode> flowNodesSub1 = createFlowNodeNameToFlowNodeMap(participant);
+        CallActivity sub1 = getCallActivityForName(flowNodesSub1, "Sub1");
+        // Check sequence flows for Sub1
+        Set<String> sequenceFlowIdsSub1 = getSequenceFlowIdsForProcess(sub1.getSubProcessModel());
+        assertThat(sequenceFlowIdsSub1, is(Sets.newHashSet("start_sub1_Sub2", "Sub2_end_sub1")));
+
+        // Check Sub2 subprocess
+        Map<String, FlowNode> flowNodesSub2 = createFlowNodeNameToFlowNodeMap(sub1.getSubProcessModel());
+        CallActivity sub2 = getCallActivityForName(flowNodesSub2, "Sub2");
+        // Check sequence flows for Sub2
+        Set<String> sequenceFlowIdsSub2 = getSequenceFlowIdsForProcess(sub2.getSubProcessModel());
+        assertThat(sequenceFlowIdsSub2, is(Sets.newHashSet("start_sub2_Sub3", "Sub3_end_sub2")));
+
+        // Check Sub3 subprocess
+        Map<String, FlowNode> flowNodesSub3 = createFlowNodeNameToFlowNodeMap(sub2.getSubProcessModel());
+        CallActivity sub3 = getCallActivityForName(flowNodesSub3, "Sub3");
+        // Check sequence flows for Sub3
+        Set<String> sequenceFlowIdsSub3 = getSequenceFlowIdsForProcess(sub3.getSubProcessModel());
+        assertThat(sequenceFlowIdsSub3, is(Sets.newHashSet("start_sub3_end_sub3")));
+    }
+
+    private CallActivity getCallActivityForName(Map<String, FlowNode> flowNodes, String name) {
+        FlowNode subprocess = flowNodes.get(name);
+        if (subprocess instanceof CallActivity) {
+            return (CallActivity) subprocess;
+        }
+        throw new RuntimeException(
+                String.format(
+                        "Expected a call activity with name \"%s\" but it was not a call activity or null!",
+                        name));
+    }
+
+    private Map<String, FlowNode> createFlowNodeNameToFlowNodeMap(Process participant) {
+        return participant.getControlFlowNodes()
+                          .collect(Collectors.toMap(
+                                  FlowNode::getName,
+                                  Function.identity()));
     }
 }

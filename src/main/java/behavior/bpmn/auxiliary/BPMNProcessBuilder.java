@@ -8,15 +8,16 @@ import behavior.bpmn.events.StartEvent;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class BPMNProcessBuilder {
+public class BPMNProcessBuilder implements BPMNModelBuilder {
+    private final Set<SequenceFlow> sequenceFlows;
     private String name;
     private StartEvent startEvent;
-    private Set<SequenceFlow> sequenceFlows;
 
     public BPMNProcessBuilder() {
         this.sequenceFlows = new LinkedHashSet<>();
     }
 
+    @Override
     public StartEvent getStartEvent() {
         return startEvent;
     }
@@ -30,11 +31,13 @@ public class BPMNProcessBuilder {
         return this;
     }
 
+    @Override
     public BPMNProcessBuilder startEvent(StartEvent event) {
         this.startEvent = event;
         return this;
     }
 
+    @Override
     public BPMNProcessBuilder sequenceFlow(String name, FlowNode from, FlowNode to) {
         final SequenceFlow sequenceFlow = new SequenceFlow(name, from, to);
         this.sequenceFlows.add(sequenceFlow);
@@ -43,6 +46,7 @@ public class BPMNProcessBuilder {
         return this;
     }
 
+    @Override
     public BPMNProcessBuilder sequenceFlow(FlowNode from, FlowNode to) {
         return sequenceFlow("", from, to);
     }

@@ -1,12 +1,12 @@
 package behavior.bpmn.reader;
 
 import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.Process;
 import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.auxiliary.BPMNCollaborationBuilder;
+import behavior.bpmn.auxiliary.BPMNModelBuilder;
 import behavior.bpmn.auxiliary.BPMNProcessBuilder;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.IntermediateCatchEvent;
@@ -40,19 +40,40 @@ public class BPMNFileReader {
         BPMNCollaborationBuilder bpmnCollaborationBuilder = new BPMNCollaborationBuilder()
                 .name(fileName);
 
-        // Map participants/pools
         Map<String, behavior.bpmn.FlowNode> mappedFlowNodes = new HashMap<>();
+        Map<String, Boolean> sequenceFlowsMapped = new HashMap<>();
+
+        // Map subprocesses
+        ModelElementType subprocessType = bpmnModelInstance.getModel().getType(SubProcess.class);
+        Collection<ModelElementInstance> subprocesses = bpmnModelInstance.getModelElementsByType(subprocessType);
+        subprocesses.forEach(subProcessModelElement -> {
+            SubProcess subProcess = (SubProcess) subProcessModelElement;
+            behavior.bpmn.FlowNode mappedSubprocessIfExists = mappedFlowNodes.get(subProcess.getId());
+            if (mappedSubprocessIfExists == null) {
+                mapSubProcess(subProcess, mappedFlowNodes, sequenceFlowsMapped);
+            }
+        });
+
+        // Map participants/pools
         ModelElementType participantType = bpmnModelInstance.getModel().getType(Participant.class);
         Collection<ModelElementInstance> participants = bpmnModelInstance.getModelElementsByType(participantType);
         if (participants.isEmpty()) {
             bpmnCollaborationBuilder.processName(fileName);
-            mapModelInstanceToOneParticipant(bpmnModelInstance, bpmnCollaborationBuilder, mappedFlowNodes);
+            mapModelInstanceToOneParticipant(
+                    bpmnModelInstance,
+                    bpmnCollaborationBuilder,
+                    mappedFlowNodes,
+                    sequenceFlowsMapped);
         } else {
             // Map each participant
             participants.forEach(modelElementInstance ->
-                    mapParticipant(bpmnCollaborationBuilder, mappedFlowNodes, (Participant) modelElementInstance));
+                    mapParticipant(
+                            bpmnCollaborationBuilder,
+                            mappedFlowNodes,
+                            sequenceFlowsMapped,
+                            (Participant) modelElementInstance));
             // Map message flows
-            mapMessageFlows(bpmnModelInstance, bpmnCollaborationBuilder, mappedFlowNodes);
+            mapMessageFlows(bpmnModelInstance, bpmnCollaborationBuilder, mappedFlowNodes, sequenceFlowsMapped);
         }
         return bpmnCollaborationBuilder.build();
     }
@@ -60,17 +81,19 @@ public class BPMNFileReader {
     private void mapMessageFlows(
             BpmnModelInstance bpmnModelInstance,
             BPMNCollaborationBuilder bpmnCollaborationBuilder,
-            Map<String, behavior.bpmn.FlowNode> mappedFlowNodes) {
+            Map<String, behavior.bpmn.FlowNode> mappedFlowNodes,
+            Map<String, Boolean> sequenceFlowsMapped) {
         ModelElementType mfType = bpmnModelInstance.getModel().getType(MessageFlow.class);
         Collection<ModelElementInstance> messageFlowModelElements = bpmnModelInstance.getModelElementsByType(mfType);
         messageFlowModelElements.forEach(modelElementInstance ->
-                mapMessageFlow((MessageFlow) modelElementInstance, bpmnCollaborationBuilder, mappedFlowNodes));
+                mapMessageFlow((MessageFlow) modelElementInstance, bpmnCollaborationBuilder, mappedFlowNodes, sequenceFlowsMapped));
     }
 
     private void mapMessageFlow(
             MessageFlow messageFlow,
             BPMNCollaborationBuilder bpmnCollaborationBuilder,
-            Map<String, behavior.bpmn.FlowNode> mappedFlowNodes) {
+            Map<String, behavior.bpmn.FlowNode> mappedFlowNodes,
+            Map<String, Boolean> sequenceFlowsMapped) {
         InteractionNode sourceInteractionNode = messageFlow.getSource();
         InteractionNode targetInteractionNode = messageFlow.getTarget();
         if (!(sourceInteractionNode instanceof FlowNode)) {
@@ -88,85 +111,100 @@ public class BPMNFileReader {
         FlowNode source = (FlowNode) sourceInteractionNode;
         FlowNode target = (FlowNode) targetInteractionNode;
         bpmnCollaborationBuilder.messageFlow(
-                mapFlowNode(source, mappedFlowNodes, bpmnCollaborationBuilder),
-                mapFlowNode(target, mappedFlowNodes, bpmnCollaborationBuilder));
+                mapFlowNode(source, mappedFlowNodes, sequenceFlowsMapped, bpmnCollaborationBuilder),
+                mapFlowNode(target, mappedFlowNodes, sequenceFlowsMapped, bpmnCollaborationBuilder));
     }
 
     private void mapModelInstanceToOneParticipant(
             BpmnModelInstance bpmnModelInstance,
             BPMNCollaborationBuilder bpmnCollaborationBuilder,
-            Map<String, behavior.bpmn.FlowNode> mappedFlowNodes) {
+            Map<String, behavior.bpmn.FlowNode> mappedFlowNodes,
+            Map<String, Boolean> sequenceFlowsMapped) {
         ModelElementType fnType = bpmnModelInstance.getModel().getType(FlowNode.class);
         Collection<ModelElementInstance> flowNodeModelElements = bpmnModelInstance.getModelElementsByType(fnType);
         flowNodeModelElements.forEach(flowNodeModelElement -> {
             FlowNode flowNode = (FlowNode) flowNodeModelElement;
-            mapFlowNode(flowNode, mappedFlowNodes, bpmnCollaborationBuilder);
+            mapFlowNode(flowNode, mappedFlowNodes, sequenceFlowsMapped, bpmnCollaborationBuilder);
         });
         ModelElementType sfType = bpmnModelInstance.getModel().getType(SequenceFlow.class);
         Collection<ModelElementInstance> sequenceFlowModelElements = bpmnModelInstance.getModelElementsByType(sfType);
         sequenceFlowModelElements.forEach(sequenceFlowModelElement -> {
             SequenceFlow sequenceFlow = (SequenceFlow) sequenceFlowModelElement;
-            mapSequenceFlow(sequenceFlow, mappedFlowNodes, bpmnCollaborationBuilder);
+            mapSequenceFlow(sequenceFlow, mappedFlowNodes, sequenceFlowsMapped, bpmnCollaborationBuilder);
         });
     }
 
     private void mapParticipant(
             BPMNCollaborationBuilder bpmnCollaborationBuilder,
             Map<String, behavior.bpmn.FlowNode> createdFlowNodes,
+            Map<String, Boolean> sequenceFlowsMapped,
             Participant participant) {
         bpmnCollaborationBuilder.processName(participant.getName());
         participant.getProcess().getFlowElements().forEach(flowElement ->
-                mapFlowElement(bpmnCollaborationBuilder, createdFlowNodes, flowElement));
+                mapFlowElement(bpmnCollaborationBuilder, createdFlowNodes, sequenceFlowsMapped, flowElement));
         bpmnCollaborationBuilder.buildProcess();
     }
 
     private void mapFlowElement(
-            BPMNCollaborationBuilder bpmnCollaborationBuilder,
-            Map<String, behavior.bpmn.FlowNode> createdFlowNodes,
+            BPMNModelBuilder bpmnModelBuilder,
+            Map<String, behavior.bpmn.FlowNode> mappedFlowNodes,
+            Map<String, Boolean> sequenceFlowsMapped,
             FlowElement flowElement) {
         // Map flow nodes
         if (flowElement instanceof FlowNode) {
-            mapFlowNode((FlowNode) flowElement, createdFlowNodes, bpmnCollaborationBuilder);
+            mapFlowNode((FlowNode) flowElement, mappedFlowNodes, sequenceFlowsMapped, bpmnModelBuilder);
         }
         // Map sequence flows
         if (flowElement instanceof SequenceFlow) {
             SequenceFlow sequenceFlow = (SequenceFlow) flowElement;
-            mapSequenceFlow(sequenceFlow, createdFlowNodes, bpmnCollaborationBuilder);
+            mapSequenceFlow(sequenceFlow, mappedFlowNodes, sequenceFlowsMapped, bpmnModelBuilder);
         }
     }
 
     private void mapSequenceFlow(
             SequenceFlow sequenceFlow,
             Map<String, behavior.bpmn.FlowNode> mappedFlowNodes,
-            BPMNCollaborationBuilder bpmnCollaborationBuilder) {
+            Map<String, Boolean> sequenceFlowsMapped,
+            BPMNModelBuilder bpmnModelBuilder) {
+        Boolean sequenceFlowMapped = sequenceFlowsMapped.get(sequenceFlow.getId());
+        if (sequenceFlowMapped != null && sequenceFlowMapped) {
+            // Sequence flow has been mapped already.
+            return;
+        }
         if (sequenceFlow.getName() == null || sequenceFlow.getName().isEmpty()) {
-            bpmnCollaborationBuilder.sequenceFlow(
+            bpmnModelBuilder.sequenceFlow(
                     mapFlowNode(
                             sequenceFlow.getSource(),
                             mappedFlowNodes,
-                            bpmnCollaborationBuilder),
+                            sequenceFlowsMapped,
+                            bpmnModelBuilder),
                     mapFlowNode(
                             sequenceFlow.getTarget(),
                             mappedFlowNodes,
-                            bpmnCollaborationBuilder));
+                            sequenceFlowsMapped,
+                            bpmnModelBuilder));
         } else {
-            bpmnCollaborationBuilder.sequenceFlow(
+            bpmnModelBuilder.sequenceFlow(
                     sequenceFlow.getName(),
                     mapFlowNode(
                             sequenceFlow.getSource(),
                             mappedFlowNodes,
-                            bpmnCollaborationBuilder),
+                            sequenceFlowsMapped,
+                            bpmnModelBuilder),
                     mapFlowNode(
                             sequenceFlow.getTarget(),
                             mappedFlowNodes,
-                            bpmnCollaborationBuilder));
+                            sequenceFlowsMapped,
+                            bpmnModelBuilder));
         }
+        sequenceFlowsMapped.put(sequenceFlow.getId(), true);
     }
 
     private behavior.bpmn.FlowNode mapFlowNode(
             FlowNode flowNode,
             Map<String, behavior.bpmn.FlowNode> mappedFlowNodes,
-            BPMNCollaborationBuilder bpmnCollaborationBuilder) {
+            Map<String, Boolean> sequenceFlowsMapped,
+            BPMNModelBuilder bpmnModelBuilder) {
         // TODO: Check if the father matches the father of the element in case of subprocesses.
         behavior.bpmn.FlowNode flowNodeIfExists = mappedFlowNodes.get(flowNode.getId());
         if (flowNodeIfExists != null) {
@@ -179,7 +217,7 @@ public class BPMNFileReader {
             // Events
             case "startEvent":
                 StartEvent startEvent = mapStartEvent(flowNode);
-                setMostAppropriateStartEvent(bpmnCollaborationBuilder, startEvent);
+                setMostAppropriateStartEvent(bpmnModelBuilder, startEvent);
                 resultingFlowNode = startEvent;
                 break;
             case "intermediateThrowEvent":
@@ -208,7 +246,7 @@ public class BPMNFileReader {
                 resultingFlowNode = new ReceiveTask(flowNode.getName(), instantiate);
                 break;
             case "subProcess":
-                resultingFlowNode = new CallActivity(mapSubProcess(flowNode));
+                resultingFlowNode = mapSubProcess((SubProcess) flowNode, mappedFlowNodes, sequenceFlowsMapped);
                 break;
             case "callActivity":
                 // Call Activity = Reusable sub-processes (external).
@@ -234,21 +272,27 @@ public class BPMNFileReader {
         return resultingFlowNode;
     }
 
-    private Process mapSubProcess(FlowNode flowNode) {
-        SubProcess subprocess = (SubProcess) flowNode;
+    private CallActivity mapSubProcess(
+            SubProcess subprocess,
+            Map<String, behavior.bpmn.FlowNode> mappedFlowNodes,
+            Map<String, Boolean> sequenceFlowsMapped) {
         BPMNProcessBuilder subprocessBuilder = new BPMNProcessBuilder()
                 .name(subprocess.getName());
-        // TODO: Read everything and reuse code.
-        return null;
+        subprocess.getFlowElements().forEach(flowElement ->
+                mapFlowElement(subprocessBuilder, mappedFlowNodes, sequenceFlowsMapped, flowElement));
+
+        CallActivity subProcessCallActivity = new CallActivity(subprocessBuilder.build());
+        mappedFlowNodes.put(subprocess.getId(), subProcessCallActivity);
+        return subProcessCallActivity;
     }
 
     private void setMostAppropriateStartEvent(
-            BPMNCollaborationBuilder bpmnCollaborationBuilder,
+            BPMNModelBuilder bpmnModelBuilder,
             StartEvent startEvent) {
-        StartEvent currentStartEvent = bpmnCollaborationBuilder.getStartEvent();
+        StartEvent currentStartEvent = bpmnModelBuilder.getStartEvent();
         // Prioritizes none start events over message
         if (currentStartEvent == null || currentStartEvent.getType() != StartEventType.NONE) {
-            bpmnCollaborationBuilder.startEvent(startEvent);
+            bpmnModelBuilder.startEvent(startEvent);
             return;
         }
         if (currentStartEvent.getType() == startEvent.getType()) {

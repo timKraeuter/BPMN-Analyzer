@@ -20,7 +20,7 @@ import behavior.bpmn.gateways.ParallelGateway;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class BPMNCollaborationBuilder {
+public class BPMNCollaborationBuilder implements BPMNModelBuilder {
     private final Set<MessageFlow> messageFlows;
     private final Set<Process> participants;
     private final Set<Process> subprocesses;
@@ -36,6 +36,7 @@ public class BPMNCollaborationBuilder {
         currentProcessBuilder = new BPMNProcessBuilder();
     }
 
+    @Override
     public StartEvent getStartEvent() {
         return currentProcessBuilder.getStartEvent();
     }
@@ -50,11 +51,13 @@ public class BPMNCollaborationBuilder {
         return this;
     }
 
+    @Override
     public BPMNCollaborationBuilder startEvent(StartEvent event) {
         currentProcessBuilder.startEvent(event);
         return this;
     }
 
+    @Override
     public BPMNCollaborationBuilder sequenceFlow(String name, FlowNode from, FlowNode to) {
         currentProcessBuilder.sequenceFlow(name, from, to);
 
@@ -120,6 +123,7 @@ public class BPMNCollaborationBuilder {
         });
     }
 
+    @Override
     public BPMNCollaborationBuilder sequenceFlow(FlowNode from, FlowNode to) {
         return sequenceFlow("", from, to);
     }
