@@ -36,8 +36,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         Process participant = result.getParticipants().iterator().next();
         assertThat(participant.getName(), is(name));
 
-        assertThat(participant.getSequenceFlows().count(), is(11L));
-        assertThat(participant.getControlFlowNodes().count(), is(12L));
+        assertThat(participant.getSequenceFlows().count(), is(10L));
+        assertThat(participant.getControlFlowNodes().count(), is(11L));
         // Sequence flows between the right flow nodes.
         Set<String> sequenceFlowIds = getSequenceFlowIdsForProcess(participant);
         assertThat(
@@ -51,8 +51,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
                         "manualTask_businessRTask",
                         "businessRTask_serviceTask",
                         "serviceTask_scriptTask",
-                        "scriptTask_callActivity",
-                        "callActivity_subprocess",
+                        "scriptTask_subprocess",
                         "subprocess_end")));
 
         // Check instantiate receive task

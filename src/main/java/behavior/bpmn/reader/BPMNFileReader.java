@@ -205,7 +205,6 @@ public class BPMNFileReader {
             Map<String, behavior.bpmn.FlowNode> mappedFlowNodes,
             Map<String, Boolean> sequenceFlowsMapped,
             BPMNModelBuilder bpmnModelBuilder) {
-        // TODO: Check if the father matches the father of the element in case of subprocesses.
         behavior.bpmn.FlowNode flowNodeIfExists = mappedFlowNodes.get(flowNode.getId());
         if (flowNodeIfExists != null) {
             return flowNodeIfExists;
@@ -250,7 +249,6 @@ public class BPMNFileReader {
                 break;
             case "callActivity":
                 // Call Activity = Reusable sub-processes (external).
-                // TODO: how to get the subprocess models? calledElement attribute --> Read a set of files simultaneously?
                 throw new RuntimeException("External subprocesses currently not supported!");
                 // Gateways
             case "parallelGateway":
