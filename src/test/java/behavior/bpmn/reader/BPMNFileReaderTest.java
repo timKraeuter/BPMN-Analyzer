@@ -183,7 +183,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
                         EndEventType.SIGNAL,
                         new EventDefinition(startEndSignalEventDefinition))));
         String terminateEndEventName = "terminateEnd";
-        assertThat(flowNodes.get(terminateEndEventName), is(new EndEvent(terminateEndEventName, EndEventType.TERMINATION)));
+        assertThat(flowNodes.get(terminateEndEventName), is(new EndEvent(terminateEndEventName,
+                EndEventType.TERMINATION)));
     }
 
     private Set<String> getSequenceFlowIdsForProcess(Process participant) {
@@ -220,7 +221,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         Set<String> messageFlowNames = result.getMessageFlows().stream()
                                              .map(MessageFlow::getName)
                                              .collect(Collectors.toSet());
-        assertThat(messageFlowNames, is(Sets.newHashSet("sendEvent_startP2", "SendTask_receiveEvent", "endP1_ReceiveTask")));
+        assertThat(messageFlowNames, is(Sets.newHashSet("sendEvent_startP2", "SendTask_receiveEvent",
+                "endP1_ReceiveTask")));
     }
 
     @Test
@@ -276,11 +278,12 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(participant.getEventSubprocesses().count(), is(1L));
 
         @SuppressWarnings("OptionalGetWithoutIsPresent") // Count is 1 means exactly one is present.
-        EventSubprocess eventSubprocess = participant.getEventSubprocesses().findFirst().get();
-        assertThat(eventSubprocess.getControlFlowNodes().count(), is(8L));
-        assertThat(eventSubprocess.getSequenceFlows().count(), is(4L));
+        EventSubprocess eventSubprocess1 = participant.getEventSubprocesses().findFirst().get();
+        assertThat(eventSubprocess1.getName(), is("Event subprocess1"));
+        assertThat(eventSubprocess1.getControlFlowNodes().count(), is(8L));
+        assertThat(eventSubprocess1.getSequenceFlows().count(), is(4L));
 
-        Set<StartEvent> startEvents = eventSubprocess.getStartEvents();
+        Set<StartEvent> startEvents = eventSubprocess1.getStartEvents();
         assertThat(startEvents.size(), is(4));
 
         String signalNonStartName = "signalNon";
@@ -288,9 +291,19 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(startEvents, is(Sets.newHashSet(
                 new StartEvent("msgNon", StartEventType.MESSAGE_NON_INTERRUPTING),
                 new StartEvent("msg", StartEventType.MESSAGE),
-                new StartEvent(signalNonStartName, StartEventType.SIGNAL_NON_INTERRUPTING, new EventDefinition(signalNonStartName)),
+                new StartEvent(signalNonStartName, StartEventType.SIGNAL_NON_INTERRUPTING,
+                        new EventDefinition(signalNonStartName)),
                 new StartEvent(signalStartName, StartEventType.SIGNAL, new EventDefinition(signalStartName))
         )));
+
+        // Check event subprocess inside event subprocess
+        assertThat(eventSubprocess1.getEventSubprocesses().count(), is(1L));
+        @SuppressWarnings("OptionalGetWithoutIsPresent") // Count is 1 means exactly one is present.
+        EventSubprocess eventSubprocess2 = eventSubprocess1.getEventSubprocesses().findFirst().get();
+        assertThat(eventSubprocess2.getName(), is("Event subprocess2"));
+        assertThat(eventSubprocess2.getControlFlowNodes().count(), is(2L));
+        assertThat(eventSubprocess2.getSequenceFlows().count(), is(1L));
+
     }
 
     private CallActivity getCallActivityForName(Map<String, FlowNode> flowNodes, String name) {
