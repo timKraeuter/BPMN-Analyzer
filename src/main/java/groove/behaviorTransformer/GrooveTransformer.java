@@ -16,6 +16,7 @@ public interface GrooveTransformer<SOURCE extends Behavior> {
     // Special groove labels
     String AT = "@";
     String FORALL = "forall:";
+    String EXISTS_OPTIONAL = "existsx:";
 
     String BOOL = "bool:";
     String FALSE = BOOL + "false";
@@ -44,10 +45,6 @@ public interface GrooveTransformer<SOURCE extends Behavior> {
         File startGraphFile = new File(targetFolder.getPath() + START_GST);
 
         GxlToXMLConverter.toXml(gxl, startGraphFile);
-    }
-
-    default String createStringNodeLabel(String stringValue) {
-        return String.format("%s\"%s\"", STRING, stringValue);
     }
 
     GrooveGraph generateStartGraph(SOURCE source, boolean addPrefix);

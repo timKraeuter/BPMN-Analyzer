@@ -9,6 +9,7 @@ import behavior.petriNet.PetriNet;
 import behavior.piCalculus.NamedPiProcess;
 import com.google.common.collect.Maps;
 import groove.GrooveGxlHelper;
+import groove.behaviorTransformer.bpmn.BPMNToGrooveTransformer;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
 import groove.graph.Value;
@@ -102,7 +103,8 @@ public class BehaviorToGrooveTransformer {
                 FSMToGrooveTransformer transformer = new FSMToGrooveTransformer();
 
                 startGraphs.add(transformer.generateStartGraph(finiteStateMachine, true));
-                transformer.generateRules(finiteStateMachine, false).forEach(rule -> allRules.put(rule.getRuleName(), rule));
+                transformer.generateRules(finiteStateMachine, false).forEach(rule -> allRules.put(rule.getRuleName(),
+                                                                                                  rule));
                 // Copy type graph
                 transformer.generateAndWriteRulesFurther(finiteStateMachine, true, graphGrammarSubFolder);
                 typeGraphs.add(FSM_TYPE_GRAPH_FILE_NAME);
@@ -189,7 +191,8 @@ public class BehaviorToGrooveTransformer {
 
     private void mergeAndWriteStartGraphs(File graphGrammarSubFolder, Set<GrooveGraph> startGraphs) {
         Optional<GrooveGraph> startGraph = startGraphs.stream()
-                                                      .reduce((graph, graph2) -> graph.union(graph2, (name1, name2) -> name1));
+                                                      .reduce((graph, graph2) -> graph.union(graph2,
+                                                                                             (name1, name2) -> name1));
         startGraph.ifPresent(graph -> GrooveTransformer.writeStartGraph(graphGrammarSubFolder, graph, true));
     }
 
@@ -197,7 +200,9 @@ public class BehaviorToGrooveTransformer {
         behavior.accept(new BehaviorVisitor() {
             @Override
             public void handle(FiniteStateMachine finiteStateMachine) {
-                BehaviorToGrooveTransformer.this.generateGrooveGrammarForFSM(finiteStateMachine, targetFolder, addPrefix);
+                BehaviorToGrooveTransformer.this.generateGrooveGrammarForFSM(finiteStateMachine,
+                                                                             targetFolder,
+                                                                             addPrefix);
             }
 
             @Override
@@ -207,7 +212,9 @@ public class BehaviorToGrooveTransformer {
 
             @Override
             public void handle(BPMNCollaboration collaboration) {
-                BehaviorToGrooveTransformer.this.generateGrooveGrammarForBPMNProcessModel(collaboration, targetFolder, addPrefix);
+                BehaviorToGrooveTransformer.this.generateGrooveGrammarForBPMNProcessModel(collaboration,
+                                                                                          targetFolder,
+                                                                                          addPrefix);
             }
 
             @Override
@@ -217,12 +224,16 @@ public class BehaviorToGrooveTransformer {
 
             @Override
             public void handle(ActivityDiagram activityDiagram) {
-                BehaviorToGrooveTransformer.this.generateGrooveGrammarForActivityDiagram(activityDiagram, targetFolder, addPrefix);
+                BehaviorToGrooveTransformer.this.generateGrooveGrammarForActivityDiagram(activityDiagram,
+                                                                                         targetFolder,
+                                                                                         addPrefix);
             }
         });
     }
 
-    private void generateGrooveGrammarForActivityDiagram(ActivityDiagram activityDiagram, File targetFolder, boolean addPrefix) {
+    private void generateGrooveGrammarForActivityDiagram(ActivityDiagram activityDiagram,
+                                                         File targetFolder,
+                                                         boolean addPrefix) {
         File graphGrammarSubFolder = this.makeSubFolder(activityDiagram, targetFolder);
         ActivityDiagramToGrooveTransformer transformer = new ActivityDiagramToGrooveTransformer(true);
 
@@ -309,18 +320,19 @@ public class BehaviorToGrooveTransformer {
         LocalDateTime now = LocalDateTime.now();
 
         String propertiesContent = String.format("# %s (Groove rule generator)\n" +
-                        "location=%s\n" +
-                        "startGraph=%s\n" +
-                        this.getAdditionalProperties(additionalProperties) +
-                        "grooveVersion=5.8.1\n" +
-                        "grammarVersion=3.7",
-                dtf.format(now),
-                subFolder.getPath(),
-                startGraph);
+                                                         "location=%s\n" +
+                                                         "startGraph=%s\n" +
+                                                         this.getAdditionalProperties(additionalProperties) +
+                                                         "grooveVersion=5.8.1\n" +
+                                                         "grammarVersion=3.7",
+                                                 dtf.format(now),
+                                                 subFolder.getPath(),
+                                                 startGraph);
         File properties_file = new File(subFolder + "/" + "system.properties");
         try {
             FileUtils.writeStringToFile(properties_file, propertiesContent, StandardCharsets.UTF_8, false);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

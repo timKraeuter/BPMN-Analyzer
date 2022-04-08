@@ -121,12 +121,16 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                     String targetName = controlFlow.getTarget().getName();
                     ruleBuilder.startRule(decisionNode.getName() + "_to_" + targetName);
 
-                    ActivityDiagramToGrooveTransformer.this.updateTokenPosition(decisionNode.getName(), targetName, ruleBuilder);
+                    ActivityDiagramToGrooveTransformer.this.updateTokenPosition(decisionNode.getName(),
+                                                                                targetName,
+                                                                                ruleBuilder);
 
                     // Guard
                     BooleanVariable guardIfExists = controlFlow.getGuardIfExists();
                     if (guardIfExists != null) {
-                        GrooveNode guardVar = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(guardIfExists.getName(), ruleBuilder);
+                        GrooveNode guardVar = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
+                                guardIfExists.getName(),
+                                ruleBuilder);
 
                         GrooveNode boolValue = ruleBuilder.contextNode(TYPE_BOOLEAN_VALUE);
                         ruleBuilder.contextEdge(VALUE, guardVar, boolValue);
@@ -146,14 +150,14 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
                 GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
                 GrooveNode oldTokenPosition = ruleBuilder.contextNode(
-                        ActivityDiagramToGrooveTransformer.this.createStringNodeLabel(forkNodeName));
+                        GrooveTransformerHelper.createStringNodeLabel(forkNodeName));
                 ruleBuilder.deleteEdge(POSITION, token, oldTokenPosition);
 
                 forkNode.getOutgoingFlows().forEach(controlFlow -> {
                     GrooveNode forkedToken = ruleBuilder.addNode(TYPE_FORKED_TOKEN);
                     ruleBuilder.addEdge(BASE_TOKEN, forkedToken, token);
                     GrooveNode forkedTokenPosition = ruleBuilder.contextNode(
-                            ActivityDiagramToGrooveTransformer.this.createStringNodeLabel(controlFlow.getTarget().getName()));
+                            GrooveTransformerHelper.createStringNodeLabel(controlFlow.getTarget().getName()));
                     ruleBuilder.addEdge(POSITION, forkedToken, forkedTokenPosition);
                 });
 
@@ -187,7 +191,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
                     GrooveNode baseToken = ruleBuilder.contextNode(TYPE_TOKEN);
                     GrooveNode newTokenPosition = ruleBuilder.contextNode(
-                            ActivityDiagramToGrooveTransformer.this.createStringNodeLabel(outFlow.getTarget().getName()));
+                            GrooveTransformerHelper.createStringNodeLabel(outFlow.getTarget().getName()));
                     ruleBuilder.addEdge(POSITION, baseToken, newTokenPosition);
 
                     AtomicReference<GrooveNode> previousToken = new AtomicReference<>();
@@ -199,7 +203,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                         previousToken.set(forkedToken);
 
                         GrooveNode forkedTokenPosition = ruleBuilder.contextNode(
-                                ActivityDiagramToGrooveTransformer.this.createStringNodeLabel(joinNodeName));
+                                GrooveTransformerHelper.createStringNodeLabel(joinNodeName));
                         ruleBuilder.contextEdge(POSITION, forkedToken, forkedTokenPosition);
                         ruleBuilder.deleteEdge(BASE_TOKEN, forkedToken, baseToken);
                     });
@@ -247,13 +251,15 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
             public void handle(ActivityFinalNode activityFinalNode) {
                 String finalNodeName = activityFinalNode.getName();
                 ruleBuilder.startRule(finalNodeName);
-                GrooveNode activityDiagramNode = ActivityDiagramToGrooveTransformer.this.createDiagramNodeWithName(ruleBuilder, activityDiagram);
+                GrooveNode activityDiagramNode = ActivityDiagramToGrooveTransformer.this.createDiagramNodeWithName(
+                        ruleBuilder,
+                        activityDiagram);
                 ruleBuilder.addEdge(RUNNING, activityDiagramNode, ruleBuilder.contextNode(FALSE));
                 ruleBuilder.deleteEdge(RUNNING, activityDiagramNode, ruleBuilder.contextNode(TRUE));
 
                 GrooveNode token = ruleBuilder.deleteNode(TYPE_CONTROL_TOKEN);
                 GrooveNode initStringAttribute = ruleBuilder.contextNode(
-                        ActivityDiagramToGrooveTransformer.this.createStringNodeLabel(finalNodeName));
+                        GrooveTransformerHelper.createStringNodeLabel(finalNodeName));
                 ruleBuilder.deleteEdge(POSITION, token, initStringAttribute);
 
                 ruleBuilder.buildRule();
@@ -266,11 +272,11 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     private void updateTokenPosition(String oldPosition, String newPosition, GrooveRuleBuilder ruleBuilder) {
         GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
         GrooveNode oldTokenPosition = ruleBuilder.contextNode(
-                ActivityDiagramToGrooveTransformer.this.createStringNodeLabel(oldPosition));
+                GrooveTransformerHelper.createStringNodeLabel(oldPosition));
         ruleBuilder.deleteEdge(POSITION, token, oldTokenPosition);
 
         GrooveNode newTokenPosition = ruleBuilder.contextNode(
-                ActivityDiagramToGrooveTransformer.this.createStringNodeLabel(newPosition));
+                GrooveTransformerHelper.createStringNodeLabel(newPosition));
         ruleBuilder.addEdge(POSITION, token, newTokenPosition);
     }
 
@@ -534,7 +540,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
             String attributeName) {
         GrooveNode var = ruleBuilder.contextNode(nodeType);
         GrooveNode varName = ruleBuilder.contextNode(
-                ActivityDiagramToGrooveTransformer.this.createStringNodeLabel(attributeValue));
+                GrooveTransformerHelper.createStringNodeLabel(attributeValue));
         ruleBuilder.contextEdge(attributeName, var, varName);
         return var;
     }
@@ -559,7 +565,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
         GrooveNode token = ruleBuilder.addNode(TYPE_CONTROL_TOKEN);
         GrooveNode initStringAttribute = ruleBuilder.contextNode(
-                ActivityDiagramToGrooveTransformer.this.createStringNodeLabel(activityDiagram.getInitialNode().getName()));
+                GrooveTransformerHelper.createStringNodeLabel(activityDiagram.getInitialNode().getName()));
         ruleBuilder.addEdge(POSITION, token, initStringAttribute);
 
         ruleBuilder.buildRule();
@@ -579,7 +585,8 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
         File sourceDirectory = new File(this.getClass().getResource(TYPE_GRAPH_DIR).getFile());
         try {
             FileUtils.copyDirectory(sourceDirectory, targetFolder);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

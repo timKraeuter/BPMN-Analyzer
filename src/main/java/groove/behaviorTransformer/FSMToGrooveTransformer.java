@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.stream.Stream;
 
+import static groove.behaviorTransformer.GrooveTransformerHelper.createStringNodeLabel;
+
 public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMachine> {
 
     public static final String FSM_TYPE_GRAPH_DIR = "/StateMachineTypeGraph";
@@ -34,7 +36,8 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
         File sourceDirectory = new File(this.getClass().getResource(FSM_TYPE_GRAPH_DIR).getFile());
         try {
             FileUtils.copyDirectory(sourceDirectory, targetFolder);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -63,7 +66,9 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
             ruleBuilder.startRule(transition.getName());
 
             final GrooveNode stateMachine = ruleBuilder.contextNode(TYPE_STATE_MACHINE_SNAPSHOT);
-            ruleBuilder.contextEdge(NAME, stateMachine, ruleBuilder.contextNode(createStringNodeLabel(finiteStateMachine.getName())));
+            ruleBuilder.contextEdge(NAME,
+                                    stateMachine,
+                                    ruleBuilder.contextNode(createStringNodeLabel(finiteStateMachine.getName())));
 
             final GrooveNode previousState = ruleBuilder.deleteNode(TYPE_STATE);
             ruleBuilder.contextEdge(
