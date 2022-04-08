@@ -1,5 +1,7 @@
 package behavior.bpmn;
 
+import behavior.bpmn.auxiliary.AbstractProcessVisitor;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -35,4 +37,6 @@ public abstract class AbstractProcess {
     public String getName() {
         return name;
     }
+
+    public abstract void accept(AbstractProcessVisitor visitor);
 }

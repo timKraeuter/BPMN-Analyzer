@@ -26,7 +26,10 @@ public class StartEvent extends CatchEvent {
 
     @Override
     public boolean isInstantiateFlowNode() {
-        return this.type == StartEventType.MESSAGE || this.type == StartEventType.SIGNAL;
+        return this.type == StartEventType.MESSAGE ||
+                this.type == StartEventType.SIGNAL ||
+                this.type == StartEventType.MESSAGE_NON_INTERRUPTING ||
+                this.type == StartEventType.SIGNAL_NON_INTERRUPTING;
     }
 
     public StartEventType getType() {
@@ -35,8 +38,12 @@ public class StartEvent extends CatchEvent {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         StartEvent that = (StartEvent) o;
         return getName().equals(that.getName())
                 && type == that.type

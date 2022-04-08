@@ -303,7 +303,6 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(eventSubprocess2.getName(), is("Event subprocess2"));
         assertThat(eventSubprocess2.getControlFlowNodes().count(), is(2L));
         assertThat(eventSubprocess2.getSequenceFlows().count(), is(1L));
-
     }
 
     private CallActivity getCallActivityForName(Map<String, FlowNode> flowNodes, String name) {

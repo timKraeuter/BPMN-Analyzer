@@ -4,6 +4,7 @@ import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
+import behavior.bpmn.auxiliary.AbstractProcessVisitor;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.IntermediateCatchEvent;
@@ -23,6 +24,11 @@ import java.util.stream.Collectors;
 public class EventSubprocess extends AbstractProcess {
     public EventSubprocess(String name, Set<SequenceFlow> sequenceFlows, Set<EventSubprocess> eventSubprocesses) {
         super(name, sequenceFlows, eventSubprocesses);
+    }
+
+    @Override
+    public void accept(AbstractProcessVisitor visitor) {
+        visitor.handle(this);
     }
 
     public Set<StartEvent> getStartEvents() {
