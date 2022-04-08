@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="startSignal" role="rule" edgeids="false" edgemode="directed">
+        <node id="n90">
+            <attr name="layout">
+                <string>540 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n90" to="n90">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n90" to="n90">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n88">
+            <attr name="layout">
+                <string>62 80 0 0</string>
+            </attr>
+        </node>
+        <edge from="n88" to="n88">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n89">
+            <attr name="layout">
+                <string>382 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n89" to="n89">
+            <attr name="label">
+                <string>string:"eventSubprocessTrigger"</string>
+            </attr>
+        </edge>
+        <node id="n91">
+            <attr name="layout">
+                <string>867 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n91" to="n91">
+            <attr name="label">
+                <string>string:"signalOrMessage_startSignal"</string>
+            </attr>
+        </edge>
+        <edge from="n90" to="n91">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n88" to="n90">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n88" to="n89">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>
