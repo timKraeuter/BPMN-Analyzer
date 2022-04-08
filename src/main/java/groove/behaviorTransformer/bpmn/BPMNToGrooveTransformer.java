@@ -21,22 +21,6 @@ import static groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerConstants.*
 public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaboration> {
 
     @Override
-    public void generateAndWriteRulesFurther(BPMNCollaboration collaboration, boolean addPrefix, File targetFolder) {
-        this.copyTypeGraphAndFixedRules(targetFolder);
-    }
-
-    private void copyTypeGraphAndFixedRules(File targetFolder) {
-        //noinspection ConstantConditions must be present!. Otherwise, tests will also fail!
-        File sourceDirectory = new File(this.getClass().getResource(FIXED_RULES_AND_TYPE_GRAPH_DIR).getFile());
-        try {
-            FileUtils.copyDirectory(sourceDirectory, targetFolder);
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public GrooveGraph generateStartGraph(BPMNCollaboration collaboration, boolean addPrefix) {
         // TODO: Add prefix if needed!
         GrooveGraphBuilder startGraphBuilder = new GrooveGraphBuilder().setName(collaboration.getName());
@@ -69,6 +53,22 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         BPMNRuleGenerator bpmnRuleGenerator = new BPMNRuleGenerator(ruleBuilder, collaboration);
 
         return bpmnRuleGenerator.getRules();
+    }
+
+    @Override
+    public void generateAndWriteRulesFurther(BPMNCollaboration collaboration, boolean addPrefix, File targetFolder) {
+        this.copyTypeGraphAndFixedRules(targetFolder);
+    }
+
+    private void copyTypeGraphAndFixedRules(File targetFolder) {
+        //noinspection ConstantConditions must be present!. Otherwise, tests will also fail!
+        File sourceDirectory = new File(this.getClass().getResource(FIXED_RULES_AND_TYPE_GRAPH_DIR).getFile());
+        try {
+            FileUtils.copyDirectory(sourceDirectory, targetFolder);
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
