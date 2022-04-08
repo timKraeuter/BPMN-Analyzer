@@ -22,32 +22,20 @@ import java.util.stream.Stream;
 /**
  * Represents a process modeled in BPMN.
  */
-public class Process {
-    private final String name;
+public class Process extends AbstractProcess {
     private final StartEvent startEvent;
-    private final Set<SequenceFlow> sequenceFlows;
 
-    public Process(String name, StartEvent startEvent, Set<SequenceFlow> sequenceFlows) {
-        this.name = name;
+    public Process(
+            String name,
+            StartEvent startEvent,
+            Set<SequenceFlow> sequenceFlows,
+            Set<EventSubprocess> eventSubprocesses) {
+        super(name, sequenceFlows, eventSubprocesses);
         this.startEvent = startEvent;
-        this.sequenceFlows = sequenceFlows;
     }
 
     public StartEvent getStartEvent() {
         return this.startEvent;
-    }
-
-    public Stream<SequenceFlow> getSequenceFlows() {
-        return sequenceFlows.stream();
-    }
-
-    public Stream<FlowNode> getControlFlowNodes() {
-        final LinkedHashSet<FlowNode> nodes = new LinkedHashSet<>();
-        sequenceFlows.forEach(sequenceFlow -> {
-            nodes.add(sequenceFlow.getSource());
-            nodes.add(sequenceFlow.getTarget());
-        });
-        return nodes.stream();
     }
 
     public Stream<Process> getSubProcesses() {
@@ -104,10 +92,6 @@ public class Process {
             }
         }));
         return subProcesses.stream();
-    }
-
-    public String getName() {
-        return name;
     }
 
     /*

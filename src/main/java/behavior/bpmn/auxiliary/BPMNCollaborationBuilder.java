@@ -1,9 +1,7 @@
 package behavior.bpmn.auxiliary;
 
-import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.FlowNode;
-import behavior.bpmn.MessageFlow;
 import behavior.bpmn.Process;
+import behavior.bpmn.*;
 import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
@@ -54,6 +52,12 @@ public class BPMNCollaborationBuilder implements BPMNModelBuilder {
     @Override
     public BPMNCollaborationBuilder startEvent(StartEvent event) {
         currentProcessBuilder.startEvent(event);
+        return this;
+    }
+
+    @Override
+    public BPMNCollaborationBuilder eventSubprocess(EventSubprocess eventSubprocess) {
+        currentProcessBuilder.eventSubprocess(eventSubprocess);
         return this;
     }
 

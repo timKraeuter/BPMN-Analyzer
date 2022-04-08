@@ -261,6 +261,38 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(sequenceFlowIdsSub3, is(Sets.newHashSet("start_sub3_end_sub3")));
     }
 
+    @Test
+    void readEventSubprocess() {
+        BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "event-subprocesses.bpmn");
+
+        // Expect the model shown here: https://cawemo.com/share/1d7d7d68-c480-45f1-85e4-ed579c944295
+        assertNotNull(result);
+        assertThat(result.getName(), is("event-subprocesses"));
+        assertThat(result.getParticipants().size(), is(1));
+        Process participant = result.getParticipants().iterator().next();
+        assertThat(participant.getName(), is("process"));
+
+        assertThat(participant.getControlFlowNodes().count(), is(0L));
+        assertThat(participant.getEventSubprocesses().count(), is(1L));
+
+        @SuppressWarnings("OptionalGetWithoutIsPresent") // Count is 1 means exactly one is present.
+        EventSubprocess eventSubprocess = participant.getEventSubprocesses().findFirst().get();
+        assertThat(eventSubprocess.getControlFlowNodes().count(), is(8L));
+        assertThat(eventSubprocess.getSequenceFlows().count(), is(4L));
+
+        Set<StartEvent> startEvents = eventSubprocess.getStartEvents();
+        assertThat(startEvents.size(), is(4));
+
+        String signalNonStartName = "signalNon";
+        String signalStartName = "signal";
+        assertThat(startEvents, is(Sets.newHashSet(
+                new StartEvent("msgNon", StartEventType.MESSAGE_NON_INTERRUPTING),
+                new StartEvent("msg", StartEventType.MESSAGE),
+                new StartEvent(signalNonStartName, StartEventType.SIGNAL_NON_INTERRUPTING, new EventDefinition(signalNonStartName)),
+                new StartEvent(signalStartName, StartEventType.SIGNAL, new EventDefinition(signalStartName))
+        )));
+    }
+
     private CallActivity getCallActivityForName(Map<String, FlowNode> flowNodes, String name) {
         FlowNode subprocess = flowNodes.get(name);
         if (subprocess instanceof CallActivity) {
