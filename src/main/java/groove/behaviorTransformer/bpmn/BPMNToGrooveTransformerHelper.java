@@ -31,10 +31,10 @@ public class BPMNToGrooveTransformerHelper {
         ruleBuilder.addEdge(POSITION, token, newTokenPosition);
     }
 
-    static void updateTokenPositionWhenRunning(AbstractProcess process,
-                                               String oldPosition,
-                                               String newPosition,
-                                               GrooveRuleBuilder ruleBuilder) {
+    public static void updateTokenPositionWhenRunning(AbstractProcess process,
+                                                      String oldPosition,
+                                                      String newPosition,
+                                                      GrooveRuleBuilder ruleBuilder) {
         // Process instance has to be running
         GrooveNode processInstance = createContextRunningProcessInstance(process, ruleBuilder);
 

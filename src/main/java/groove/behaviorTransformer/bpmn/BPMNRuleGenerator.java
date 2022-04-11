@@ -3,14 +3,10 @@ package groove.behaviorTransformer.bpmn;
 import behavior.bpmn.Process;
 import behavior.bpmn.*;
 import behavior.bpmn.activities.CallActivity;
-import behavior.bpmn.activities.tasks.AbstractTask;
 import behavior.bpmn.events.StartEvent;
-import behavior.bpmn.gateways.*;
+import behavior.bpmn.gateways.InclusiveGateway;
 import com.google.common.collect.Sets;
-import groove.behaviorTransformer.bpmn.generators.BPMNEventRuleGenerator;
-import groove.behaviorTransformer.bpmn.generators.BPMNEventRuleGeneratorImpl;
-import groove.behaviorTransformer.bpmn.generators.BPMNTaskRuleGenerator;
-import groove.behaviorTransformer.bpmn.generators.BPMNTaskRuleGeneratorImpl;
+import groove.behaviorTransformer.bpmn.generators.*;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveGraphRule;
 import groove.graph.rule.GrooveRuleBuilder;
@@ -32,6 +28,7 @@ public class BPMNRuleGenerator {
     // Subgenerators
     private final BPMNTaskRuleGenerator taskRuleGenerator;
     private final BPMNEventRuleGenerator eventRuleGenerator;
+    private final BPMNGatewayRuleGenerator gatewayRuleGenerator;
 
     public BPMNRuleGenerator(GrooveRuleBuilder ruleBuilder, BPMNCollaboration collaboration) {
         this.ruleBuilder = ruleBuilder;
@@ -40,12 +37,17 @@ public class BPMNRuleGenerator {
 
         taskRuleGenerator = new BPMNTaskRuleGeneratorImpl(collaboration, ruleBuilder);
         eventRuleGenerator = new BPMNEventRuleGeneratorImpl(collaboration, ruleBuilder);
+        gatewayRuleGenerator = new BPMNGatewayRuleGeneratorImpl(collaboration, ruleBuilder);
 
         generateRules();
     }
 
     public Stream<GrooveGraphRule> getRules() {
         return ruleBuilder.getRules();
+    }
+
+    public BPMNGatewayRuleGenerator getGatewayRuleGenerator() {
+        return gatewayRuleGenerator;
     }
 
     public BPMNTaskRuleGenerator getTaskRuleGenerator() {
@@ -70,9 +72,6 @@ public class BPMNRuleGenerator {
 
         process.getEventSubprocesses().forEach(eventSubprocess -> this.generateRulesForEventSubprocess(process,
                                                                                                        eventSubprocess));
-    }
-
-    void createTaskRulesForProcess(AbstractProcess process, AbstractTask task) {
     }
 
     void createSubProcessInstantiationRule(AbstractProcess process,
@@ -180,70 +179,6 @@ public class BPMNRuleGenerator {
         });
 
         ruleBuilder.buildRule();
-    }
-
-    void createExclusiveGatewayRules(AbstractProcess process, ExclusiveGateway exclusiveGateway) {
-        exclusiveGateway.getIncomingFlows().forEach(incomingFlow -> {
-            final String incomingFlowId = incomingFlow.getID();
-            exclusiveGateway.getOutgoingFlows().forEach(outFlow -> createRuleExclusiveGatewayRule(process,
-                                                                                                  ruleBuilder,
-                                                                                                  exclusiveGateway,
-                                                                                                  incomingFlowId,
-                                                                                                  outFlow.getID()));
-        });
-        // No incoming flows means we expect a token sitting at the gateway.
-        if (exclusiveGateway.getIncomingFlows().findAny().isEmpty()) {
-            exclusiveGateway.getOutgoingFlows().forEach(outFlow -> createRuleExclusiveGatewayRule(process,
-                                                                                                  ruleBuilder,
-                                                                                                  exclusiveGateway,
-                                                                                                  exclusiveGateway.getName(),
-                                                                                                  outFlow.getID()));
-        }
-    }
-
-    private void createRuleExclusiveGatewayRule(AbstractProcess process,
-                                                GrooveRuleBuilder ruleBuilder,
-                                                ExclusiveGateway exclusiveGateway,
-                                                String oldTokenPosition,
-                                                String newTokenPosition) {
-        ruleBuilder.startRule(this.getExclusiveGatewayName(exclusiveGateway, oldTokenPosition, newTokenPosition));
-        BPMNToGrooveTransformerHelper.updateTokenPositionWhenRunning(process,
-                                                                     oldTokenPosition,
-                                                                     newTokenPosition,
-                                                                     ruleBuilder);
-        ruleBuilder.buildRule();
-    }
-
-    private String getExclusiveGatewayName(Gateway exclusiveGateway, String incomingFlowId, String outFlowID) {
-        final long inCount = exclusiveGateway.getIncomingFlows().count();
-        final long outCount = exclusiveGateway.getOutgoingFlows().count();
-        if (inCount <= 1 && outCount == 1) {
-            return exclusiveGateway.getName();
-        }
-        if (inCount <= 1) {
-            return exclusiveGateway.getName() + "_" + outFlowID;
-        }
-        if (outCount == 1) {
-            return exclusiveGateway.getName() + "_" + incomingFlowId;
-        }
-        return exclusiveGateway.getName() + "_" + incomingFlowId + "_" + outFlowID;
-    }
-
-    void createEventBasedGatewayRule(EventBasedGateway eventBasedGateway, AbstractProcess process) {
-        boolean implicitExclusiveGateway = eventBasedGateway.getIncomingFlows().count() > 1;
-        eventBasedGateway.getIncomingFlows().forEach(inFlow -> {
-            String ruleName = implicitExclusiveGateway ? inFlow.getID() + "_" + eventBasedGateway.getName() :
-                    eventBasedGateway.getName();
-            ruleBuilder.startRule(ruleName);
-            BPMNToGrooveTransformerHelper.updateTokenPositionWhenRunning(process,
-                                                                         inFlow.getID(),
-                                                                         eventBasedGateway.getName(),
-                                                                         ruleBuilder);
-            ruleBuilder.buildRule();
-        });
-        // Effects the rules of the subsequent flow nodes!
-        // Possible subsequent nodes: Message catch, Receive task, Signal catch, timer and condition.
-        // We currently only implemented the first three.
     }
 
     private void generateRulesForEventSubprocess(AbstractProcess process, EventSubprocess eventSubprocess) {
@@ -469,28 +404,5 @@ public class BPMNRuleGenerator {
                 i++;
             }
         }
-    }
-
-    void createParallelGatewayRule(AbstractProcess process, ParallelGateway parallelGateway) {
-        ruleBuilder.startRule(parallelGateway.getName());
-        GrooveNode processInstance = BPMNToGrooveTransformerHelper.createContextRunningProcessInstance(process,
-                                                                                                       ruleBuilder);
-
-        parallelGateway.getIncomingFlows().forEach(sequenceFlow -> BPMNToGrooveTransformerHelper.deleteTokenWithPosition(
-                ruleBuilder,
-                processInstance,
-                sequenceFlow.getID()));
-        // If no incoming flows we consume a token at the position of the gateway.
-        if (parallelGateway.getIncomingFlows().findAny().isEmpty()) {
-            BPMNToGrooveTransformerHelper.deleteTokenWithPosition(ruleBuilder,
-                                                                  processInstance,
-                                                                  parallelGateway.getName());
-        }
-
-        BPMNToGrooveTransformerHelper.addOutgoingTokensForFlowNodeToProcessInstance(parallelGateway,
-                                                                                    ruleBuilder,
-                                                                                    processInstance);
-
-        ruleBuilder.buildRule();
     }
 }

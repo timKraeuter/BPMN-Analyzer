@@ -62,12 +62,12 @@ public class RuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
 
     @Override
     public void handle(ExclusiveGateway exclusiveGateway) {
-        generator.createExclusiveGatewayRules(process, exclusiveGateway);
+        generator.getGatewayRuleGenerator().createExclusiveGatewayRules(process, exclusiveGateway);
     }
 
     @Override
     public void handle(ParallelGateway parallelGateway) {
-        generator.createParallelGatewayRule(process, parallelGateway);
+        generator.getGatewayRuleGenerator().createParallelGatewayRule(process, parallelGateway);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class RuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
 
     @Override
     public void handle(EventBasedGateway eventBasedGateway) {
-        generator.createEventBasedGatewayRule(eventBasedGateway, process);
+        generator.getGatewayRuleGenerator().createEventBasedGatewayRule(eventBasedGateway, process);
     }
 
     @Override
