@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 class GrooveRunnerTest {
-    private final String grooveBinDir = "C:\\Source\\groove\\bin";
+    private final String grooveBinDir = new File(this.getClass().getResource("/groove/bin").getFile()).getPath();
 
     @Test
     void testGenerateStateSpace() throws IOException {
