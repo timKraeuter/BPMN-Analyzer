@@ -13,16 +13,13 @@ public class GrooveRunner {
         this.grooveBinDir = grooveBinDir;
     }
 
-    public File generateStateSpace(String graphGrammar,
-                                   String resultFilePath) throws IOException {
-        ProcessBuilder builder = new ProcessBuilder(
-
-                "cmd.exe",
-                "/c",
-                String.format("cd \"%s\" && java -jar Generator.jar %s -o \"%s\"",
-                              grooveBinDir,
-                              graphGrammar,
-                              resultFilePath));
+    public File generateStateSpace(String graphGrammar, String resultFilePath) throws IOException {
+        ProcessBuilder builder = new ProcessBuilder("java",
+                                                    "-jar",
+                                                    grooveBinDir + "\\Generator.jar",
+                                                    graphGrammar,
+                                                    "-o",
+                                                    String.format("\"%s\"", resultFilePath));
         builder.redirectErrorStream(true);
         Process p = builder.start();
         printOutput(p);
