@@ -50,7 +50,7 @@ public class BPMNToGrooveTransformerHelper {
         return processInstance;
     }
 
-    static GrooveNode createProcessInstanceWithName(AbstractProcess process, GrooveRuleBuilder ruleBuilder) {
+    public static GrooveNode createProcessInstanceWithName(AbstractProcess process, GrooveRuleBuilder ruleBuilder) {
         GrooveNode processInstance = ruleBuilder.contextNode(TYPE_PROCESS_SNAPSHOT);
         ruleBuilder.contextEdge(NAME,
                                 processInstance,
@@ -99,9 +99,9 @@ public class BPMNToGrooveTransformerHelper {
         ruleBuilder.addEdge(POSITION, newMessage, ruleBuilder.contextNode(createStringNodeLabel(position)));
     }
 
-    static GrooveNode createRunningExistsOptionalProcessInstance(GrooveRuleBuilder ruleBuilder,
-                                                                 Process processForEvent,
-                                                                 GrooveNode existsOptional) {
+    public static GrooveNode createRunningExistsOptionalProcessInstance(GrooveRuleBuilder ruleBuilder,
+                                                                        Process processForEvent,
+                                                                        GrooveNode existsOptional) {
         GrooveNode processInstance;
         processInstance = createProcessInstanceWithName(processForEvent, ruleBuilder);
         GrooveNode running = ruleBuilder.contextNode(TYPE_RUNNING);
@@ -169,7 +169,7 @@ public class BPMNToGrooveTransformerHelper {
         return createNewProcessInstance(ruleBuilder, receiverProcess.getName());
     }
 
-    static GrooveNode createNewProcessInstance(GrooveRuleBuilder ruleBuilder, String processName) {
+    public static GrooveNode createNewProcessInstance(GrooveRuleBuilder ruleBuilder, String processName) {
         GrooveNode processInstance = ruleBuilder.addNode(TYPE_PROCESS_SNAPSHOT);
         ruleBuilder.addEdge(NAME, processInstance, ruleBuilder.contextNode(createStringNodeLabel(processName)));
         ruleBuilder.addEdge(STATE, processInstance, ruleBuilder.addNode(TYPE_RUNNING));
@@ -182,6 +182,17 @@ public class BPMNToGrooveTransformerHelper {
         GrooveNode processInstance = createContextRunningProcessInstance(process,
                                                                          ruleBuilder);
         addOutgoingTokensForFlowNodeToProcessInstance(startEvent,
+                                                      ruleBuilder,
+                                                      processInstance);
+        return processInstance;
+    }
+
+    public static GrooveNode addTokensForOutgoingFlowsToRunningInstance(FlowNode flowNode,
+                                                                        AbstractProcess process,
+                                                                        GrooveRuleBuilder ruleBuilder) {
+        GrooveNode processInstance = createContextRunningProcessInstance(process,
+                                                                         ruleBuilder);
+        addOutgoingTokensForFlowNodeToProcessInstance(flowNode,
                                                       ruleBuilder,
                                                       processInstance);
         return processInstance;

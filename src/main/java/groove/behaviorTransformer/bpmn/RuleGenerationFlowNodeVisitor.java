@@ -77,7 +77,7 @@ public class RuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
 
     @Override
     public void handle(EndEvent endEvent) {
-        generator.createEndEventRule(process, endEvent);
+        generator.getEventRuleGenerator().createEndEventRule(process, endEvent);
     }
 
     @Override
@@ -87,11 +87,11 @@ public class RuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
 
     @Override
     public void handle(IntermediateThrowEvent intermediateThrowEvent) {
-        generator.createIntermediateThrowEventRule(intermediateThrowEvent, process);
+        generator.getEventRuleGenerator().createIntermediateThrowEventRule(process, intermediateThrowEvent);
     }
 
     @Override
     public void handle(IntermediateCatchEvent intermediateCatchEvent) {
-        generator.createIntermediateCatchEventRule(intermediateCatchEvent, process);
+        generator.getEventRuleGenerator().createIntermediateCatchEventRule(process, intermediateCatchEvent);
     }
 }
