@@ -22,7 +22,7 @@ public class GrooveRunner {
                                                     grooveBinDir + File.separator + "Generator.jar",
                                                     graphGrammar,
                                                     "-o",
-                                                    String.format("\"%s\"", resultFilePath));
+                                                    String.format("%s", resultFilePath));
         builder.redirectErrorStream(true);
         Process p = builder.start();
         p.waitFor();

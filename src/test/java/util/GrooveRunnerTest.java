@@ -1,6 +1,5 @@
 package util;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -15,7 +14,7 @@ class GrooveRunnerTest {
         try {
             File stateSpace =
                     grooveRunner.generateStateSpace(grooveBinDir + File.separator + "bpmn" + File.separator + "call-activity-complex.gps",
-                                                    FileUtils.getTempDirectoryPath() + File.separator + "statespaces" + File.separator +
+                                                    grooveBinDir + File.separator + "statespaces" + File.separator +
                                                             "statespace.txt",
                                                     true);
 
