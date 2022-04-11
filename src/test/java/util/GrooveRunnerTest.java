@@ -3,7 +3,6 @@ package util;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 class GrooveRunnerTest {
@@ -14,7 +13,7 @@ class GrooveRunnerTest {
         GrooveRunner grooveRunner = new GrooveRunner(grooveBinDir);
         try {
             File stateSpace =
-                    grooveRunner.generateStateSpace(grooveBinDir + File.separator + "bpmn" + File.separator + "call" + "-activity-complex.gps",
+                    grooveRunner.generateStateSpace(grooveBinDir + File.separator + "bpmn" + File.separator + "call-activity-complex.gps",
                                                     grooveBinDir + File.separator + "statespaces" + File.separator +
                                                             "statespace.txt",
                                                     true);
@@ -25,7 +24,7 @@ class GrooveRunnerTest {
             System.out.println("Actual: " + stateSpace);
             FileTestHelper.testFileEquals(expected, stateSpace);
         }
-        catch (FileNotFoundException e) {
+        catch (RuntimeException e) {
             e.printStackTrace();
             throw e;
         }
