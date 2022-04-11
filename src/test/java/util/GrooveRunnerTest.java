@@ -1,0 +1,21 @@
+package util;
+
+import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.io.IOException;
+
+class GrooveRunnerTest {
+    private final String grooveBinDir = "C:\\Source\\groove\\bin";
+
+    @Test
+    void testGenerateStateSpace() throws IOException {
+        GrooveRunner grooveRunner = new GrooveRunner(grooveBinDir);
+        File stateSpace = grooveRunner.generateStateSpace(grooveBinDir + "\\bpmn\\call-activity-complex.gps",
+                                                          grooveBinDir + "\\statespaces\\statespace.txt");
+
+        // Check state space files
+        File expected = new File(this.getClass().getResource("/statespace.txt").getFile());
+        FileTestHelper.testFileEquals(expected, stateSpace);
+    }
+}
