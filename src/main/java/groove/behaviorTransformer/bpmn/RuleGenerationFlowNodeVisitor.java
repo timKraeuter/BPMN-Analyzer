@@ -44,33 +44,17 @@ public class RuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
 
     @Override
     public void handle(Task task) {
-        generator.createTaskRules(process, task);
+        generator.getTaskRuleGenerator().createTaskRulesForProcess(process, task);
     }
 
     @Override
     public void handle(SendTask sendTask) {
-        generator.createTaskRules(process,
-                                  sendTask,
-                                  (ruleBuilder) -> generator.addOutgoingMessagesForFlowNode(sendTask));
+        generator.getTaskRuleGenerator().createSendTaskRulesForProcess(process, sendTask);
     }
 
     @Override
     public void handle(ReceiveTask receiveTask) {
-        if (receiveTask.isInstantiate()) {
-            if (receiveTask.getIncomingFlows().findAny().isPresent()) {
-                throw new RuntimeException("Instantiate receive tasks should not have incoming sequence " +
-                                                   "flows!");
-            }
-            generator.createInstantiateReceiveTaskRule(process, receiveTask);
-            return;
-        }
-        // Create start task rules.
-        receiveTask.getIncomingFlows().forEach(incomingFlow -> generator.createReceiveTaskStartRule(process,
-                                                                                                    receiveTask,
-                                                                                                    incomingFlow));
-        // End task rule is standard.
-        generator.createEndTaskRule(process, receiveTask, (noop) -> {
-        });
+        generator.getTaskRuleGenerator().createReceiveTaskRulesForProcess(process, receiveTask);
     }
 
     @Override
