@@ -21,10 +21,9 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
     private final GrooveRuleBuilder ruleBuilder;
 
     public BPMNEventSubprocessRuleGeneratorImpl(BPMNRuleGenerator bpmnRuleGenerator,
-                                                BPMNCollaboration collaboration,
                                                 GrooveRuleBuilder ruleBuilder) {
         this.bpmnRuleGenerator = bpmnRuleGenerator;
-        this.collaboration = collaboration;
+        this.collaboration = bpmnRuleGenerator.getCollaboration();
         this.ruleBuilder = ruleBuilder;
     }
 

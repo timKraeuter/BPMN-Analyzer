@@ -46,18 +46,7 @@ public class RuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
 
     @Override
     public void handle(CallActivity callActivity) {
-        // Rules for instantiating a subprocess
-        callActivity.getIncomingFlows().forEach(incomingFlow -> generator.createSubProcessInstantiationRule(process,
-                                                                                                            callActivity,
-                                                                                                            incomingFlow));
-
-        // Rule for terminating a subprocess
-        generator.createTerminateSubProcessRule(process, callActivity);
-
-        // Generate rules for the sub process
-        generator.createRulesForExecutingTheSubProcess(callActivity);
-
-        generator.createBoundaryEventRules(process, callActivity);
+        generator.getSubprocessRuleGenerator().createCallActivityRulesForProcess(process, callActivity);
     }
 
     @Override

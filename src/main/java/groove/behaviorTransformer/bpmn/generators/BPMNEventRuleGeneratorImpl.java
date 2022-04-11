@@ -13,6 +13,7 @@ import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.InclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
+import groove.behaviorTransformer.bpmn.BPMNRuleGenerator;
 import groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerHelper;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveRuleBuilder;
@@ -28,11 +29,14 @@ import static groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerConstants.*
 import static groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerHelper.*;
 
 public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
+    private final BPMNRuleGenerator bpmnRuleGenerator;
     private final BPMNCollaboration collaboration;
     private final GrooveRuleBuilder ruleBuilder;
 
-    public BPMNEventRuleGeneratorImpl(BPMNCollaboration collaboration, GrooveRuleBuilder ruleBuilder) {
-        this.collaboration = collaboration;
+    public BPMNEventRuleGeneratorImpl(BPMNRuleGenerator bpmnRuleGenerator,
+                                      GrooveRuleBuilder ruleBuilder) {
+        this.bpmnRuleGenerator = bpmnRuleGenerator;
+        this.collaboration = bpmnRuleGenerator.getCollaboration();
         this.ruleBuilder = ruleBuilder;
     }
 
@@ -494,12 +498,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         GrooveNode processInstance = createProcessInstanceAndAddTokens(startEvent, ruleBuilder, process);
         BPMNToGrooveTransformerHelper.deleteTokenWithPosition(ruleBuilder,
                                                               processInstance,
-                                                              getStartEventTokenName(process));
+                                                              bpmnRuleGenerator.getStartEventTokenName(process));
         ruleBuilder.buildRule();
-    }
-
-    private String getStartEventTokenName(Process process) {
-        return process.getName() + "_" + process.getStartEvent().getName();
     }
 
     private void createMessageStartEventRule(StartEvent startEvent) {
