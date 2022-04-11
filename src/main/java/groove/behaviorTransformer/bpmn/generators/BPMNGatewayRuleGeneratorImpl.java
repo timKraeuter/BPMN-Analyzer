@@ -1,7 +1,6 @@
 package groove.behaviorTransformer.bpmn.generators;
 
 import behavior.bpmn.AbstractProcess;
-import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.FlowNode;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.gateways.*;
@@ -18,11 +17,9 @@ import static groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerConstants.*
 import static groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerHelper.updateTokenPositionWhenRunning;
 
 public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
-    private final BPMNCollaboration collaboration;
     private final GrooveRuleBuilder ruleBuilder;
 
-    public BPMNGatewayRuleGeneratorImpl(BPMNCollaboration collaboration, GrooveRuleBuilder ruleBuilder) {
-        this.collaboration = collaboration;
+    public BPMNGatewayRuleGeneratorImpl(GrooveRuleBuilder ruleBuilder) {
         this.ruleBuilder = ruleBuilder;
     }
 

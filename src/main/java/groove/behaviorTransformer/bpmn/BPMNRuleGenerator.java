@@ -35,7 +35,7 @@ public class BPMNRuleGenerator {
 
         taskRuleGenerator = new BPMNTaskRuleGeneratorImpl(collaboration, ruleBuilder);
         eventRuleGenerator = new BPMNEventRuleGeneratorImpl(this, ruleBuilder);
-        gatewayRuleGenerator = new BPMNGatewayRuleGeneratorImpl(collaboration, ruleBuilder);
+        gatewayRuleGenerator = new BPMNGatewayRuleGeneratorImpl(ruleBuilder);
         eventSubprocessRuleGenerator = new BPMNEventSubprocessRuleGeneratorImpl(this, ruleBuilder);
         subprocessRuleGenerator = new BPMNSubprocessRuleGeneratorImpl(this, ruleBuilder);
 
