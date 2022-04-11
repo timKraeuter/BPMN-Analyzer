@@ -13,9 +13,11 @@ class GrooveRunnerTest {
     void testGenerateStateSpace() throws IOException, InterruptedException {
         GrooveRunner grooveRunner = new GrooveRunner(grooveBinDir);
         try {
-            File stateSpace = grooveRunner.generateStateSpace(grooveBinDir + "\\bpmn\\call-activity-complex.gps",
-                                                              grooveBinDir + "\\statespaces\\statespace.txt",
-                                                              true);
+            File stateSpace =
+                    grooveRunner.generateStateSpace(grooveBinDir + File.separator + "bpmn" + File.separator + "call" + "-activity-complex.gps",
+                                                    grooveBinDir + File.separator + "statespaces" + File.separator +
+                                                            "statespace.txt",
+                                                    true);
 
             // Check state space files
             File expected = new File(this.getClass().getResource("/statespace.txt").getFile());
