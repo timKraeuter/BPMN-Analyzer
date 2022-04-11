@@ -19,7 +19,7 @@ public class GrooveRunner {
         // java -jar GraphGrammarPath -o "StateSpaceFilePath"
         ProcessBuilder builder = new ProcessBuilder("java",
                                                     "-jar",
-                                                    grooveBinDir + "\\Generator.jar",
+                                                    grooveBinDir + File.separator + "Generator.jar",
                                                     graphGrammar,
                                                     "-o",
                                                     String.format("\"%s\"", resultFilePath));
