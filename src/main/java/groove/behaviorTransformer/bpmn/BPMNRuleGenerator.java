@@ -11,8 +11,10 @@ import behavior.bpmn.auxiliary.FlowNodeVisitor;
 import behavior.bpmn.events.*;
 import behavior.bpmn.gateways.*;
 import com.google.common.collect.Sets;
-import groove.behaviorTransformer.bpmn.generators.BPMNTaskRuleGeneratorImpl;
+import groove.behaviorTransformer.bpmn.generators.BPMNEventRuleGenerator;
+import groove.behaviorTransformer.bpmn.generators.BPMNEventRuleGeneratorImpl;
 import groove.behaviorTransformer.bpmn.generators.BPMNTaskRuleGenerator;
+import groove.behaviorTransformer.bpmn.generators.BPMNTaskRuleGeneratorImpl;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveGraphRule;
 import groove.graph.rule.GrooveRuleBuilder;
@@ -32,6 +34,7 @@ public class BPMNRuleGenerator {
 
     // Subgenerators
     private final BPMNTaskRuleGenerator taskRuleGenerator;
+    private final BPMNEventRuleGenerator eventRuleGenerator;
 
     public BPMNRuleGenerator(GrooveRuleBuilder ruleBuilder, BPMNCollaboration collaboration) {
         this.ruleBuilder = ruleBuilder;
@@ -39,6 +42,7 @@ public class BPMNRuleGenerator {
         visitedProcessModels = Sets.newHashSet();
 
         taskRuleGenerator = new BPMNTaskRuleGeneratorImpl(collaboration, ruleBuilder);
+        eventRuleGenerator = new BPMNEventRuleGeneratorImpl(collaboration, ruleBuilder);
 
         generateRules();
     }
@@ -49,6 +53,10 @@ public class BPMNRuleGenerator {
 
     public BPMNTaskRuleGenerator getTaskRuleGenerator() {
         return taskRuleGenerator;
+    }
+
+    public BPMNEventRuleGenerator getEventRuleGenerator() {
+        return eventRuleGenerator;
     }
 
     private void generateRules() {
@@ -717,57 +725,6 @@ public class BPMNRuleGenerator {
                                                            intermediateThrowEvent.getName());
 
         ruleBuilder.buildRule();
-    }
-
-    void createStartEventRule(StartEvent startEvent, Process process) {
-        switch (startEvent.getType()) {
-            case NONE:
-                createNoneStartEventRule(startEvent, ruleBuilder, process);
-                break;
-            case MESSAGE:
-                createMessageStartEventRule(startEvent, ruleBuilder, collaboration);
-                break;
-            case SIGNAL:
-                // will be embedded in the throw rule.
-                break;
-        }
-    }
-
-    private void createNoneStartEventRule(StartEvent startEvent, GrooveRuleBuilder ruleBuilder, Process process) {
-        ruleBuilder.startRule(startEvent.getName());
-        GrooveNode processInstance = createProcessInstanceAndAddTokens(startEvent, ruleBuilder, process);
-        BPMNToGrooveTransformerHelper.deleteTokenWithPosition(ruleBuilder,
-                                                              processInstance,
-                                                              getStartEventTokenName(process));
-        ruleBuilder.buildRule();
-    }
-
-    private void createMessageStartEventRule(StartEvent startEvent,
-                                             GrooveRuleBuilder ruleBuilder,
-                                             BPMNCollaboration collaboration) {
-        Set<MessageFlow> incomingMessageFlows = collaboration.getIncomingMessageFlows(startEvent);
-        incomingMessageFlows.forEach(incomingMessageFlow -> {
-            ruleBuilder.startRule(incomingMessageFlows.size() > 1 ? incomingMessageFlow.getName() :
-                                          startEvent.getName());
-            GrooveNode processInstance = BPMNToGrooveTransformerHelper.deleteIncomingMessageAndCreateProcessInstance(incomingMessageFlow,
-                                                                                                                     collaboration,
-                                                                                                                     ruleBuilder);
-            BPMNToGrooveTransformerHelper.addOutgoingTokensForFlowNodeToProcessInstance(startEvent,
-                                                                                        ruleBuilder,
-                                                                                        processInstance);
-            ruleBuilder.buildRule();
-        });
-    }
-
-    private GrooveNode createProcessInstanceAndAddTokens(StartEvent startEvent,
-                                                         GrooveRuleBuilder ruleBuilder,
-                                                         AbstractProcess process) {
-        GrooveNode processInstance = BPMNToGrooveTransformerHelper.createContextRunningProcessInstance(process,
-                                                                                                       ruleBuilder);
-        BPMNToGrooveTransformerHelper.addOutgoingTokensForFlowNodeToProcessInstance(startEvent,
-                                                                                    ruleBuilder,
-                                                                                    processInstance);
-        return processInstance;
     }
 
     void createInclusiveGatewayRules(AbstractProcess process, InclusiveGateway inclusiveGateway) {

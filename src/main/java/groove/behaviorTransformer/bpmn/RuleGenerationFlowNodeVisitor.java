@@ -1,13 +1,10 @@
 package groove.behaviorTransformer.bpmn;
 
 import behavior.bpmn.AbstractProcess;
-import behavior.bpmn.EventSubprocess;
-import behavior.bpmn.Process;
 import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
-import behavior.bpmn.auxiliary.AbstractProcessVisitor;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.IntermediateCatchEvent;
@@ -29,17 +26,7 @@ public class RuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
 
     @Override
     public void handle(StartEvent startEvent) {
-        process.accept(new AbstractProcessVisitor() {
-            @Override
-            public void handle(EventSubprocess eventSubprocess) {
-                // Handled elsewhere for event subprocesses.
-            }
-
-            @Override
-            public void handle(Process process) {
-                generator.createStartEventRule(startEvent, process);
-            }
-        });
+        generator.getEventRuleGenerator().createStartEventRulesForProcess(process, startEvent);
     }
 
     @Override

@@ -1,7 +1,8 @@
 package groove.behaviorTransformer.bpmn;
 
-import behavior.bpmn.*;
 import behavior.bpmn.Process;
+import behavior.bpmn.*;
+import behavior.bpmn.events.StartEvent;
 import groove.behaviorTransformer.GrooveTransformer;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveRuleBuilder;
@@ -57,9 +58,9 @@ public class BPMNToGrooveTransformerHelper {
         return processInstance;
     }
 
-    static void addOutgoingTokensForFlowNodeToProcessInstance(FlowNode flowNode,
-                                                              GrooveRuleBuilder ruleBuilder,
-                                                              GrooveNode processInstance) {
+    public static void addOutgoingTokensForFlowNodeToProcessInstance(FlowNode flowNode,
+                                                                     GrooveRuleBuilder ruleBuilder,
+                                                                     GrooveNode processInstance) {
         flowNode.getOutgoingFlows().forEach(sequenceFlow -> addTokenWithPosition(ruleBuilder,
                                                                                  processInstance,
                                                                                  sequenceFlow.getID()));
@@ -172,6 +173,17 @@ public class BPMNToGrooveTransformerHelper {
         GrooveNode processInstance = ruleBuilder.addNode(TYPE_PROCESS_SNAPSHOT);
         ruleBuilder.addEdge(NAME, processInstance, ruleBuilder.contextNode(createStringNodeLabel(processName)));
         ruleBuilder.addEdge(STATE, processInstance, ruleBuilder.addNode(TYPE_RUNNING));
+        return processInstance;
+    }
+
+    public static GrooveNode createProcessInstanceAndAddTokens(StartEvent startEvent,
+                                                               GrooveRuleBuilder ruleBuilder,
+                                                               AbstractProcess process) {
+        GrooveNode processInstance = createContextRunningProcessInstance(process,
+                                                                         ruleBuilder);
+        addOutgoingTokensForFlowNodeToProcessInstance(startEvent,
+                                                      ruleBuilder,
+                                                      processInstance);
         return processInstance;
     }
 }
