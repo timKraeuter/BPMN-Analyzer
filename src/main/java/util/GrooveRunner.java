@@ -16,10 +16,10 @@ public class GrooveRunner {
     public File generateStateSpace(String graphGrammar,
                                    String resultFilePath,
                                    boolean printOutput) throws IOException, InterruptedException {
-        // java -jar GraphGrammarPath -o "StateSpaceFilePath"
+        // java -jar GraphGrammarPath -o StateSpaceFilePath
         ProcessBuilder builder = new ProcessBuilder("java",
                                                     "-jar",
-                                                    grooveBinDir + File.separator + "Generator.jar",
+                                                    grooveBinDir + "/Generator.jar",
                                                     graphGrammar,
                                                     "-o",
                                                     String.format("%s", resultFilePath));
