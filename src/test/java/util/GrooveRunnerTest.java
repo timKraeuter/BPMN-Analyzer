@@ -9,7 +9,7 @@ class GrooveRunnerTest {
     private final String grooveBinDir = new File(this.getClass().getResource("/groove/bin").getFile()).getPath();
 
     @Test
-    void testGenerateStateSpace() throws IOException {
+    void testGenerateStateSpace() throws IOException, InterruptedException {
         GrooveRunner grooveRunner = new GrooveRunner(grooveBinDir);
         File stateSpace = grooveRunner.generateStateSpace(grooveBinDir + "\\bpmn\\call-activity-complex.gps",
                                                           grooveBinDir + "\\statespaces\\statespace.txt",

@@ -13,7 +13,9 @@ public class GrooveRunner {
         this.grooveBinDir = grooveBinDir;
     }
 
-    public File generateStateSpace(String graphGrammar, String resultFilePath, boolean printOutput) throws IOException {
+    public File generateStateSpace(String graphGrammar,
+                                   String resultFilePath,
+                                   boolean printOutput) throws IOException, InterruptedException {
         // java -jar GraphGrammarPath -o "StateSpaceFilePath"
         ProcessBuilder builder = new ProcessBuilder("java",
                                                     "-jar",
@@ -23,6 +25,7 @@ public class GrooveRunner {
                                                     String.format("\"%s\"", resultFilePath));
         builder.redirectErrorStream(true);
         Process p = builder.start();
+        p.waitFor();
         if (printOutput) {
             printOutput(p);
         }
