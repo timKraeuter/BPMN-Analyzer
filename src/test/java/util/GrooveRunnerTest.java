@@ -21,6 +21,8 @@ class GrooveRunnerTest {
 
             // Check state space files
             File expected = new File(this.getClass().getResource("/statespace.txt").getFile());
+            System.out.println("Expected: " + expected);
+            System.out.println("Actual: " + stateSpace);
             FileTestHelper.testFileEquals(expected, stateSpace);
         }
         catch (FileNotFoundException e) {
