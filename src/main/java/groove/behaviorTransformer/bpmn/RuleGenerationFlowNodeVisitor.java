@@ -61,7 +61,7 @@ public class RuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
 
     @Override
     public void handle(InclusiveGateway inclusiveGateway) {
-        generator.createInclusiveGatewayRules(process, inclusiveGateway);
+        generator.getGatewayRuleGenerator().createInclusiveGatewayRules(process, inclusiveGateway);
     }
 
     @Override
