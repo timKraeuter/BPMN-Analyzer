@@ -1,44 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="Phase_2_over" role="rule" edgeids="false" edgemode="directed">
-        <node id="n287">
+        <node id="n289">
             <attr name="layout">
                 <string>552 422 0 0</string>
             </attr>
         </node>
-        <edge from="n287" to="n287">
+        <edge from="n289" to="n289">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n287" to="n287">
+        <edge from="n289" to="n289">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n289">
+        <node id="n291">
             <attr name="layout">
                 <string>522 327 0 0</string>
             </attr>
         </node>
-        <edge from="n289" to="n289">
-            <attr name="label">
-                <string>type:ProcessSnapshot</string>
-            </attr>
-        </edge>
-        <edge from="n289" to="n289">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
-        <node id="n291">
-            <attr name="layout">
-                <string>892 162 0 0</string>
-            </attr>
-        </node>
         <edge from="n291" to="n291">
             <attr name="label">
-                <string>type:Running</string>
+                <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
         <edge from="n291" to="n291">
@@ -48,12 +33,12 @@
         </edge>
         <node id="n293">
             <attr name="layout">
-                <string>1072 252 0 0</string>
+                <string>892 162 0 0</string>
             </attr>
         </node>
         <edge from="n293" to="n293">
             <attr name="label">
-                <string>type:Token</string>
+                <string>type:Running</string>
             </attr>
         </edge>
         <edge from="n293" to="n293">
@@ -63,12 +48,12 @@
         </edge>
         <node id="n295">
             <attr name="layout">
-                <string>1057 342 0 0</string>
+                <string>1072 252 0 0</string>
             </attr>
         </node>
         <edge from="n295" to="n295">
             <attr name="label">
-                <string>type:Message</string>
+                <string>type:Token</string>
             </attr>
         </edge>
         <edge from="n295" to="n295">
@@ -76,69 +61,74 @@
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n284">
+        <node id="n297">
             <attr name="layout">
-                <string>62 407 0 0</string>
+                <string>1057 342 0 0</string>
             </attr>
         </node>
-        <edge from="n284" to="n284">
+        <edge from="n297" to="n297">
             <attr name="label">
-                <string>type:ProcessSnapshot</string>
+                <string>type:Message</string>
             </attr>
         </edge>
-        <node id="n285">
-            <attr name="layout">
-                <string>402 237 0 0</string>
-            </attr>
-        </node>
-        <edge from="n285" to="n285">
+        <edge from="n297" to="n297">
             <attr name="label">
-                <string>string:"T-Junction Controller"</string>
+                <string>del:</string>
             </attr>
         </edge>
         <node id="n286">
             <attr name="layout">
-                <string>402 157 0 0</string>
+                <string>62 407 0 0</string>
             </attr>
         </node>
         <edge from="n286" to="n286">
             <attr name="label">
-                <string>type:Running</string>
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n287">
+            <attr name="layout">
+                <string>402 237 0 0</string>
+            </attr>
+        </node>
+        <edge from="n287" to="n287">
+            <attr name="label">
+                <string>string:"T-Junction Controller"</string>
             </attr>
         </edge>
         <node id="n288">
             <attr name="layout">
-                <string>892 422 0 0</string>
+                <string>402 157 0 0</string>
             </attr>
         </node>
         <edge from="n288" to="n288">
             <attr name="label">
-                <string>string:"Phase_2_over_Switch_to_P1"</string>
+                <string>type:Running</string>
             </attr>
         </edge>
         <node id="n290">
             <attr name="layout">
-                <string>892 72 0 0</string>
+                <string>892 422 0 0</string>
             </attr>
         </node>
         <edge from="n290" to="n290">
             <attr name="label">
-                <string>string:"Phase_2"</string>
+                <string>string:"Phase_2_over_Switch_to_P1"</string>
             </attr>
         </edge>
         <node id="n292">
             <attr name="layout">
-                <string>1422 252 0 0</string>
+                <string>892 72 0 0</string>
             </attr>
         </node>
         <edge from="n292" to="n292">
             <attr name="label">
-                <string>forall:</string>
+                <string>string:"Phase_2"</string>
             </attr>
         </edge>
         <node id="n294">
             <attr name="layout">
-                <string>1422 342 0 0</string>
+                <string>1422 252 0 0</string>
             </attr>
         </node>
         <edge from="n294" to="n294">
@@ -146,57 +136,67 @@
                 <string>forall:</string>
             </attr>
         </edge>
-        <edge from="n284" to="n287">
+        <node id="n296">
+            <attr name="layout">
+                <string>1422 342 0 0</string>
+            </attr>
+        </node>
+        <edge from="n296" to="n296">
+            <attr name="label">
+                <string>forall:</string>
+            </attr>
+        </edge>
+        <edge from="n286" to="n289">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n287" to="n288">
+        <edge from="n289" to="n290">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n289" to="n291">
+        <edge from="n291" to="n293">
             <attr name="label">
                 <string>del:state</string>
             </attr>
         </edge>
-        <edge from="n289" to="n293">
+        <edge from="n291" to="n295">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n289" to="n295">
+        <edge from="n291" to="n297">
             <attr name="label">
                 <string>del:messages</string>
             </attr>
         </edge>
-        <edge from="n284" to="n285">
+        <edge from="n286" to="n287">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n284" to="n286">
+        <edge from="n286" to="n288">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n284" to="n289">
+        <edge from="n286" to="n291">
             <attr name="label">
                 <string>subprocess</string>
             </attr>
         </edge>
-        <edge from="n289" to="n290">
+        <edge from="n291" to="n292">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n293" to="n292">
+        <edge from="n295" to="n294">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n295" to="n294">
+        <edge from="n297" to="n296">
             <attr name="label">
                 <string>@</string>
             </attr>

@@ -163,19 +163,19 @@ public class BPMNRuleGenerator {
         ruleBuilder.startRule(callActivity.getName() + END);
 
         // Parent process is running
-        // TODO: Shouldnt the parent have a name?
-        GrooveNode processInstance = ruleBuilder.contextNode(TYPE_PROCESS_SNAPSHOT);
-        GrooveNode running = ruleBuilder.contextNode(TYPE_RUNNING);
-        ruleBuilder.contextEdge(STATE, processInstance, running);
+        final GrooveNode parentProcess =
+                BPMNToGrooveTransformerHelper.createContextRunningProcessInstance(
+                process,
+                ruleBuilder);
 
         // Delete subprocess
         String subProcessName = callActivity.getSubProcessModel().getName();
-        deleteTerminatedSubprocess(ruleBuilder, subProcessName, processInstance);
+        deleteTerminatedSubprocess(ruleBuilder, subProcessName, parentProcess);
 
         // Add outgoing tokens
         callActivity.getOutgoingFlows().forEach(outgoingFlow -> {
             final String outgoingFlowID = outgoingFlow.getID();
-            BPMNToGrooveTransformerHelper.addTokenWithPosition(ruleBuilder, processInstance, outgoingFlowID);
+            BPMNToGrooveTransformerHelper.addTokenWithPosition(ruleBuilder, parentProcess, outgoingFlowID);
         });
 
         ruleBuilder.buildRule();
