@@ -14,6 +14,7 @@ public class GrooveRunner {
     }
 
     public File generateStateSpace(String graphGrammar, String resultFilePath) throws IOException {
+        // java -jar GraphGrammarPath -o "StateSpaceFilePath"
         ProcessBuilder builder = new ProcessBuilder("java",
                                                     "-jar",
                                                     grooveBinDir + "\\Generator.jar",
