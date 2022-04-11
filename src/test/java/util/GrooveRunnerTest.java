@@ -12,12 +12,13 @@ class GrooveRunnerTest {
     void testGenerateStateSpace() throws IOException {
         GrooveRunner grooveRunner = new GrooveRunner(grooveBinDir);
         File stateSpace = grooveRunner.generateStateSpace(grooveBinDir + "\\bpmn\\call-activity-complex.gps",
-                                                          grooveBinDir + "\\statespaces\\statespace.txt");
+                                                          grooveBinDir + "\\statespaces\\statespace.txt",
+                                                          false);
 
         // Check state space files
         File expected = new File(this.getClass().getResource("/statespace.txt").getFile());
-        System.out.println("Expected" + expected);
-        System.out.println("State space" + stateSpace);
+        System.out.println("Expected " + expected);
+        System.out.println("State space " + stateSpace);
         FileTestHelper.testFileEquals(expected, stateSpace);
     }
 }
