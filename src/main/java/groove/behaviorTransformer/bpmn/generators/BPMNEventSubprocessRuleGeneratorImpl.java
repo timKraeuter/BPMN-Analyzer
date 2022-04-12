@@ -74,10 +74,10 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
 
                     break;
                 case SIGNAL:
-                    // TODO: Implement interrupting behavior.
+                    // TODO: Implement in the throw part.
                     break;
                 case SIGNAL_NON_INTERRUPTING:
-                    // TODO: Implement.
+                    // TODO: Implement in the throw part.
                     break;
                 default:
                     throw new RuntimeException("Unexpected start event type encountered: " + startEvent.getType());

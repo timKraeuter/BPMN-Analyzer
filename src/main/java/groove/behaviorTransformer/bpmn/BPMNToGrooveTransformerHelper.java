@@ -100,7 +100,7 @@ public class BPMNToGrooveTransformerHelper {
     }
 
     public static GrooveNode createRunningExistsOptionalProcessInstance(GrooveRuleBuilder ruleBuilder,
-                                                                        Process processForEvent,
+                                                                        AbstractProcess processForEvent,
                                                                         GrooveNode existsOptional) {
         GrooveNode processInstance;
         processInstance = createProcessInstanceWithName(processForEvent, ruleBuilder);

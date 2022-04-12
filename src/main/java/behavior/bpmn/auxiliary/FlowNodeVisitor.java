@@ -4,16 +4,12 @@ import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
-import behavior.bpmn.events.EndEvent;
-import behavior.bpmn.events.IntermediateCatchEvent;
-import behavior.bpmn.events.IntermediateThrowEvent;
-import behavior.bpmn.events.StartEvent;
 import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.InclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
 
-public interface FlowNodeVisitor {
+public interface FlowNodeVisitor extends EventVisitor {
     void handle(Task task);
 
     void handle(SendTask task);
@@ -27,14 +23,6 @@ public interface FlowNodeVisitor {
     void handle(ParallelGateway parallelGateway);
 
     void handle(InclusiveGateway inclusiveGateway);
-
-    void handle(StartEvent startEvent);
-
-    void handle(IntermediateThrowEvent intermediateThrowEvent);
-
-    void handle(IntermediateCatchEvent intermediateCatchEvent);
-
-    void handle(EndEvent endEvent);
 
     void handle(EventBasedGateway eventBasedGateway);
 }

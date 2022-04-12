@@ -1,5 +1,6 @@
 package behavior.bpmn.events;
 
+import behavior.bpmn.auxiliary.EventVisitor;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
 public class BoundaryEvent extends CatchEvent {
@@ -29,6 +30,11 @@ public class BoundaryEvent extends CatchEvent {
 
     @Override
     public void accept(FlowNodeVisitor visitor) {
+        // Never appears in the flow.
+    }
+
+    @Override
+    public void accept(EventVisitor visitor) {
         // Never appears in the flow.
     }
 

@@ -1,5 +1,6 @@
 package behavior.bpmn.events;
 
+import behavior.bpmn.auxiliary.EventVisitor;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 import com.google.common.base.Objects;
 
@@ -21,6 +22,11 @@ public class StartEvent extends CatchEvent {
 
     @Override
     public void accept(FlowNodeVisitor visitor) {
+        visitor.handle(this);
+    }
+
+    @Override
+    public void accept(EventVisitor visitor) {
         visitor.handle(this);
     }
 
@@ -54,4 +60,5 @@ public class StartEvent extends CatchEvent {
     public int hashCode() {
         return Objects.hashCode(getName(), type, getEventDefinition());
     }
+
 }

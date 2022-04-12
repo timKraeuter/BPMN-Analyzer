@@ -17,7 +17,10 @@ public class BPMNCollaboration implements Behavior {
     private final Set<Process> subprocesses;
     private final Set<MessageFlow> messageFlows;
 
-    public BPMNCollaboration(String name, Set<Process> participants, Set<Process> subprocesses, Set<MessageFlow> messageFlows) {
+    public BPMNCollaboration(String name,
+                             Set<Process> participants,
+                             Set<Process> subprocesses,
+                             Set<MessageFlow> messageFlows) {
         this.name = name;
         this.participants = participants;
         this.subprocesses = subprocesses;
@@ -59,5 +62,19 @@ public class BPMNCollaboration implements Behavior {
     @Override
     public void accept(BehaviorVisitor visitor) {
         visitor.handle(this);
+    }
+
+    public AbstractProcess getParentProcessForEventSubprocess(EventSubprocess eventSubprocess) {
+        // TODO: Digg multiple levels deep!
+        final Optional<Process> foundParentProcess = this.participants.stream()
+                                                                      .filter(process -> process.getEventSubprocesses()
+                                                                                                .anyMatch(
+                                                                                                        eventSubprocess1 -> eventSubprocess1.equals(
+                                                                                                                eventSubprocess)))
+                                                                      .findFirst();
+        if (foundParentProcess.isPresent()) {
+            return foundParentProcess.get();
+        }
+        throw new RuntimeException("Parent process could not be found for event subprocess!" + eventSubprocess);
     }
 }

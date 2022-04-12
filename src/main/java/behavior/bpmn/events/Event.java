@@ -1,6 +1,7 @@
 package behavior.bpmn.events;
 
 import behavior.bpmn.FlowNode;
+import behavior.bpmn.auxiliary.EventVisitor;
 
 public abstract class Event extends FlowNode {
 
@@ -10,6 +11,8 @@ public abstract class Event extends FlowNode {
         super(name);
         this.eventDefinition = eventDefinition;
     }
+
+    public abstract void accept(EventVisitor eventVisitor);
 
     @Override
     public boolean isInclusiveGateway() {

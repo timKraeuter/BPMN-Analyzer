@@ -1,5 +1,6 @@
 package behavior.bpmn.events;
 
+import behavior.bpmn.auxiliary.EventVisitor;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 import com.google.common.base.Objects;
 
@@ -17,6 +18,11 @@ public class IntermediateThrowEvent extends ThrowEvent {
 
     @Override
     public void accept(FlowNodeVisitor visitor) {
+        visitor.handle(this);
+    }
+
+    @Override
+    public void accept(EventVisitor visitor) {
         visitor.handle(this);
     }
 
