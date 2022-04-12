@@ -46,8 +46,8 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
     @Override
     public void createParallelGatewayRule(AbstractProcess process, ParallelGateway parallelGateway) {
         ruleBuilder.startRule(parallelGateway.getName());
-        GrooveNode processInstance = BPMNToGrooveTransformerHelper.createContextRunningProcessInstance(process,
-                                                                                                       ruleBuilder);
+        GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process,
+                                                                                          ruleBuilder);
 
         parallelGateway.getIncomingFlows().forEach(sequenceFlow -> BPMNToGrooveTransformerHelper.deleteTokenWithPosition(
                 ruleBuilder,
@@ -115,8 +115,8 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
                         LinkedHashSet::new)))) {
             if (branchGatewayOutFlows.size() >= 1) { // Empty set is also part of the power set.
                 ruleBuilder.startRule(inclusiveGateway.getName() + "_" + i);
-                GrooveNode processInstance = BPMNToGrooveTransformerHelper.createContextRunningProcessInstance(process,
-                                                                                                               ruleBuilder);
+                GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process,
+                                                                                                  ruleBuilder);
                 GrooveNode newToken = ruleBuilder.addNode(TYPE_TOKEN);
                 ruleBuilder.addEdge(TOKENS, processInstance, newToken);
                 String outFlowID = outFlow.getID();
@@ -184,8 +184,8 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
                         LinkedHashSet::new)))) {
             if (outFlows.size() >= 1) { // Empty set is also part of the power set.
                 ruleBuilder.startRule(inclusiveGateway.getName() + "_" + i);
-                GrooveNode processInstance = BPMNToGrooveTransformerHelper.createContextRunningProcessInstance(process,
-                                                                                                               ruleBuilder);
+                GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process,
+                                                                                                  ruleBuilder);
                 String deleteTokenPosition;
                 if (incFlow.isPresent()) {
                     deleteTokenPosition = incFlow.get().getID();

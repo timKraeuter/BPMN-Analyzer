@@ -48,7 +48,7 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
                                                       GrooveRuleBuilder ruleBuilder) {
         String eSubprocessName = eventSubprocess.getName();
         ruleBuilder.startRule(eSubprocessName + END);
-        GrooveNode processInstance = BPMNToGrooveTransformerHelper.createProcessInstanceWithName(process, ruleBuilder);
+        GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstanceWithName(process, ruleBuilder);
         bpmnRuleGenerator.deleteTerminatedSubprocess(ruleBuilder, eSubprocessName, processInstance);
         ruleBuilder.buildRule();
     }
@@ -77,7 +77,7 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
                     // TODO: Implement in the throw part.
                     break;
                 case SIGNAL_NON_INTERRUPTING:
-                    // TODO: Implement in the throw part.
+                    // Implemented in the throw part.
                     break;
                 default:
                     throw new RuntimeException("Unexpected start event type encountered: " + startEvent.getType());
@@ -95,11 +95,12 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
             ruleBuilder.startRule(incomingMessageFlows.size() > 1 ? incomingMessageFlow.getName() :
                                           startEvent.getName());
             // Needs a running parent process
-            GrooveNode processInstance = BPMNToGrooveTransformerHelper.createContextRunningProcessInstance(process,
-                                                                                                           ruleBuilder);
+            GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process,
+                                                                                              ruleBuilder);
 
             // Start new subprocess instance of process
-            GrooveNode eventSubProcessInstance = BPMNToGrooveTransformerHelper.createNewProcessInstance(ruleBuilder, eventSubprocess.getName());
+            GrooveNode eventSubProcessInstance = BPMNToGrooveTransformerHelper.addProcessInstance(ruleBuilder,
+                                                                                                  eventSubprocess.getName());
             ruleBuilder.addEdge(SUBPROCESS, processInstance, eventSubProcessInstance);
 
             // Consumes the message

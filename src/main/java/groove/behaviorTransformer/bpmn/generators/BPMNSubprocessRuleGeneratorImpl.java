@@ -27,8 +27,8 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
     public void createCallActivityRulesForProcess(AbstractProcess process, CallActivity callActivity) {
         // Rules for instantiating a subprocess
         callActivity.getIncomingFlows().forEach(incomingFlow -> this.createSubProcessInstantiationRule(process,
-                                                                                                            callActivity,
-                                                                                                            incomingFlow));
+                                                                                                       callActivity,
+                                                                                                       incomingFlow));
 
         // Rule for terminating a subprocess
         this.createTerminateSubProcessRule(process, callActivity);
@@ -44,8 +44,8 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
                                            SequenceFlow incomingFlow) {
         final String incomingFlowId = incomingFlow.getID();
         ruleBuilder.startRule(bpmnRuleGenerator.getTaskOrCallActivityRuleName(callActivity, incomingFlowId));
-        GrooveNode processInstance = BPMNToGrooveTransformerHelper.createContextRunningProcessInstance(process,
-                                                                                                       ruleBuilder);
+        GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process,
+                                                                                          ruleBuilder);
         BPMNToGrooveTransformerHelper.deleteTokenWithPosition(ruleBuilder, processInstance, incomingFlowId);
 
         // TODO: reuse createNewProcessInstance
@@ -77,7 +77,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
 
         // Parent process is running
         final GrooveNode parentProcess =
-                BPMNToGrooveTransformerHelper.createContextRunningProcessInstance(
+                BPMNToGrooveTransformerHelper.contextProcessInstance(
                         process,
                         ruleBuilder);
 
