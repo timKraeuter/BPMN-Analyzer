@@ -6,8 +6,7 @@ import groove.behaviorTransformer.GrooveTransformer;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveRuleBuilder;
 
-import static groove.behaviorTransformer.GrooveTransformer.AT;
-import static groove.behaviorTransformer.GrooveTransformer.EXISTS_OPTIONAL;
+import static groove.behaviorTransformer.GrooveTransformer.*;
 import static groove.behaviorTransformer.GrooveTransformerHelper.createStringNodeLabel;
 import static groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerConstants.*;
 
@@ -196,5 +195,14 @@ public class BPMNToGrooveTransformerHelper {
         GrooveNode processInstance = contextProcessInstance(process, ruleBuilder);
         addOutgoingTokensForFlowNodeToProcessInstance(flowNode, ruleBuilder, processInstance);
         return processInstance;
+    }
+
+    public static GrooveNode deleteAllTokensForProcess(GrooveRuleBuilder ruleBuilder,
+                                                       GrooveNode parentProcessInstance) {
+        GrooveNode forAll = ruleBuilder.contextNode(FORALL);
+        GrooveNode parentToken = ruleBuilder.deleteNode(TYPE_TOKEN);
+        ruleBuilder.deleteEdge(TOKENS, parentProcessInstance, parentToken);
+        ruleBuilder.contextEdge(AT, parentToken, forAll);
+        return forAll;
     }
 }

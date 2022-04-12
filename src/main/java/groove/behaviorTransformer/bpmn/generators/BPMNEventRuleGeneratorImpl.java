@@ -432,11 +432,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         addExistsOptionalOutgoingTokensForFlowNode(event, existsOptional, eventSubProcessInstance);
 
         // Interrupt parent process means deleting all its tokens.
-        GrooveNode forAll = ruleBuilder.contextNode(FORALL);
+        GrooveNode forAll = deleteAllTokensForProcess(ruleBuilder, parentProcessInstance);
         ruleBuilder.contextEdge(IN, forAll, existsOptional);
-        GrooveNode parentToken = ruleBuilder.deleteNode(TYPE_TOKEN);
-        ruleBuilder.deleteEdge(TOKENS, parentProcessInstance, parentToken);
-        ruleBuilder.contextEdge(AT, parentToken, forAll);
     }
 
     private void createSignalNonInterruptingStartRulePart(EventSubprocess eventSubprocess, Event event) {

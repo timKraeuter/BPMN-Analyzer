@@ -20,8 +20,7 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
     private final BPMNCollaboration collaboration;
     private final GrooveRuleBuilder ruleBuilder;
 
-    public BPMNEventSubprocessRuleGeneratorImpl(BPMNRuleGenerator bpmnRuleGenerator,
-                                                GrooveRuleBuilder ruleBuilder) {
+    public BPMNEventSubprocessRuleGeneratorImpl(BPMNRuleGenerator bpmnRuleGenerator, GrooveRuleBuilder ruleBuilder) {
         this.bpmnRuleGenerator = bpmnRuleGenerator;
         this.collaboration = bpmnRuleGenerator.getCollaboration();
         this.ruleBuilder = ruleBuilder;
@@ -63,7 +62,11 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
                 case NONE:
                     throw new RuntimeException("None start events in event subprocesses are useless!");
                 case MESSAGE:
-                    // TODO: Implement interrupting behavior.
+                    createStartInterruptingEvenSubprocessFromMessageRules(process,
+                                                                          eventSubprocess,
+                                                                          collaboration,
+                                                                          ruleBuilder,
+                                                                          startEvent);
                     break;
                 case MESSAGE_NON_INTERRUPTING:
                     createStartNonInterruptingEvenSubprocessFromMessageRules(process,
@@ -74,8 +77,7 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
 
                     break;
                 case SIGNAL:
-                    // TODO: Implement in the throw part.
-                    break;
+                    // Implemented in the throw part.
                 case SIGNAL_NON_INTERRUPTING:
                     // Implemented in the throw part.
                     break;
@@ -85,6 +87,60 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
         });
     }
 
+    private void createStartInterruptingEvenSubprocessFromMessageRules(AbstractProcess parentProcess,
+                                                                       EventSubprocess eventSubprocess,
+                                                                       BPMNCollaboration collaboration,
+                                                                       GrooveRuleBuilder ruleBuilder,
+                                                                       StartEvent startEvent) {
+        Set<MessageFlow> incomingMessageFlows = collaboration.getIncomingMessageFlows(startEvent);
+        incomingMessageFlows.forEach(incomingMessageFlow -> {
+            ruleBuilder.startRule(getMessageStartEventRuleName(incomingMessageFlows, incomingMessageFlow, startEvent));
+            GrooveNode parentProcessInstance = createMessageStartEventRulePart(parentProcess,
+                                                                               ruleBuilder,
+                                                                               eventSubprocess,
+                                                                               incomingMessageFlow,
+                                                                               startEvent);
+            // The parent is interrupted, i.e., all its tokens are deleted.
+            BPMNToGrooveTransformerHelper.deleteAllTokensForProcess(ruleBuilder, parentProcessInstance);
+            ruleBuilder.buildRule();
+        });
+
+    }
+
+    private GrooveNode createMessageStartEventRulePart(AbstractProcess parentProcess,
+                                                       GrooveRuleBuilder ruleBuilder,
+                                                       EventSubprocess eventSubprocess,
+                                                       MessageFlow incomingMessageFlow,
+                                                       StartEvent startEvent) {
+        // Needs a running parent process
+        GrooveNode parentProcessInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(parentProcess,
+                                                                                                ruleBuilder);
+
+        // Start new subprocess instance of process
+        GrooveNode eventSubProcessInstance = BPMNToGrooveTransformerHelper.addProcessInstance(ruleBuilder,
+                                                                                              eventSubprocess.getName());
+        ruleBuilder.addEdge(SUBPROCESS, parentProcessInstance, eventSubProcessInstance);
+
+        // Consumes the message
+        GrooveNode message = ruleBuilder.deleteNode(TYPE_MESSAGE);
+        ruleBuilder.deleteEdge(POSITION,
+                               message,
+                               ruleBuilder.contextNode(createStringNodeLabel(incomingMessageFlow.getName())));
+
+        // Spawns a new token at each outgoing flow.
+        BPMNToGrooveTransformerHelper.addOutgoingTokensForFlowNodeToProcessInstance(startEvent,
+                                                                                    ruleBuilder,
+                                                                                    eventSubProcessInstance);
+        return parentProcessInstance;
+    }
+
+    private String getMessageStartEventRuleName(Set<MessageFlow> incomingMessageFlows,
+                                                MessageFlow incomingMessageFlow,
+                                                StartEvent startEvent) {
+        return incomingMessageFlows.size() > 1 ? incomingMessageFlow.getName() :
+                startEvent.getName();
+    }
+
     private void createStartNonInterruptingEvenSubprocessFromMessageRules(AbstractProcess process,
                                                                           EventSubprocess eventSubprocess,
                                                                           BPMNCollaboration collaboration,
@@ -92,27 +148,8 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
                                                                           StartEvent startEvent) {
         Set<MessageFlow> incomingMessageFlows = collaboration.getIncomingMessageFlows(startEvent);
         incomingMessageFlows.forEach(incomingMessageFlow -> {
-            ruleBuilder.startRule(incomingMessageFlows.size() > 1 ? incomingMessageFlow.getName() :
-                                          startEvent.getName());
-            // Needs a running parent process
-            GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process,
-                                                                                              ruleBuilder);
-
-            // Start new subprocess instance of process
-            GrooveNode eventSubProcessInstance = BPMNToGrooveTransformerHelper.addProcessInstance(ruleBuilder,
-                                                                                                  eventSubprocess.getName());
-            ruleBuilder.addEdge(SUBPROCESS, processInstance, eventSubProcessInstance);
-
-            // Consumes the message
-            GrooveNode message = ruleBuilder.deleteNode(TYPE_MESSAGE);
-            ruleBuilder.deleteEdge(POSITION,
-                                   message,
-                                   ruleBuilder.contextNode(createStringNodeLabel(incomingMessageFlow.getName())));
-
-            // Spawns a new token at each outgoing flow.
-            BPMNToGrooveTransformerHelper.addOutgoingTokensForFlowNodeToProcessInstance(startEvent,
-                                                                                        ruleBuilder,
-                                                                                        eventSubProcessInstance);
+            ruleBuilder.startRule(getMessageStartEventRuleName(incomingMessageFlows, incomingMessageFlow, startEvent));
+            createMessageStartEventRulePart(process, ruleBuilder, eventSubprocess, incomingMessageFlow, startEvent);
             ruleBuilder.buildRule();
         });
     }
