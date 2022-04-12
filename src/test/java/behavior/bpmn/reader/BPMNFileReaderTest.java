@@ -4,6 +4,7 @@ import behavior.bpmn.Process;
 import behavior.bpmn.*;
 import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
+import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.events.*;
 import behavior.bpmn.gateways.EventBasedGateway;
 import com.google.common.collect.Sets;
@@ -194,6 +195,67 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         String terminateEndEventName = "terminateEnd";
         assertThat(flowNodes.get(terminateEndEventName), is(new EndEvent(terminateEndEventName,
                                                                          EndEventType.TERMINATION)));
+    }
+
+    @Test
+    void readBoundaryEvents() {
+        BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "boundary-events.bpmn");
+
+        // Expect the model shown here: https://cawemo.com/share/9831098e-dba7-446c-9f35-d1af37295551
+        assertNotNull(result);
+        String name = "boundary-events";
+        assertThat(result.getName(), is(name));
+        // No pools so only one participant.
+        assertThat(result.getParticipants().size(), is(2));
+        Iterator<Process> it = result.getParticipants().iterator();
+        Process participant1 = it.next();
+        Process participant2 = it.next();
+        assertThat(participant2.getName(), is("Activity boundary events"));
+        assertThat(participant2.getSequenceFlows().count(), is(8L));
+        assertThat(participant2.getControlFlowNodes().count(), is(15L));
+
+        // Check boundary events for activity 1 and 2.
+        Map<String, FlowNode> p2flowNodes = createFlowNodeNameToFlowNodeMap(participant2);
+        String activity1Name = "Activity1";
+        Task activity1Expected = new Task(activity1Name);
+        activity1Expected.attachBoundaryEvent(new BoundaryEvent("m1", BoundaryEventType.MESSAGE, true));
+        activity1Expected.attachBoundaryEvent(new BoundaryEvent("t1", BoundaryEventType.TIMER, true));
+        activity1Expected.attachBoundaryEvent(new BoundaryEvent("s1", BoundaryEventType.SIGNAL, true));
+
+        FlowNode activity1 = p2flowNodes.get(activity1Name);
+        assertThat(activity1, is(activity1));
+
+        String activity2Name = "Activity2";
+        Task activity2Expected = new Task(activity2Name);
+        activity2Expected.attachBoundaryEvent(new BoundaryEvent("m2", BoundaryEventType.MESSAGE, false));
+        activity2Expected.attachBoundaryEvent(new BoundaryEvent("t2", BoundaryEventType.TIMER, false));
+        activity2Expected.attachBoundaryEvent(new BoundaryEvent("s2", BoundaryEventType.SIGNAL, false));
+
+        FlowNode activity2 = p2flowNodes.get(activity2Name);
+        assertThat(activity2, is(activity2Expected));
+
+        Set<String> sequenceFlowIdsForProcess = getSequenceFlowIdsForProcess(participant2);
+        assertThat(sequenceFlowIdsForProcess,
+                   is(Sets.newHashSet("start_Activity1",
+                                      "s1_s1_end",
+                                      "t1_t1_end",
+                                      "m1_m1_end",
+                                      "Activity1_Activity2",
+                                      "m2_m2_end",
+                                      "t2_t2_end",
+                                      "s2_s2_end")));
+
+        assertThat(participant1.getName(), is("Subprocess boundary events"));
+        assertThat(participant1.getSequenceFlows().count(), is(9L));
+        assertThat(participant1.getControlFlowNodes().count(), is(13L));
+
+        // Check boundary events for subprocess s1 and s2.
+        Map<String, FlowNode> p1FlowNodes = createFlowNodeNameToFlowNodeMap(participant1);
+        CallActivity subprocess1 = (CallActivity) p1FlowNodes.get("S1");
+        CallActivity subprocess2 = (CallActivity) p1FlowNodes.get("S2");
+        // S1 has the same boundary events as activity 1 same for s2 and activity 2.
+        assertThat(subprocess1.getBoundaryEvents(), is(Sets.newHashSet(activity1Expected.getBoundaryEvents())));
+        assertThat(subprocess2.getBoundaryEvents(), is(Sets.newHashSet(activity2Expected.getBoundaryEvents())));
     }
 
     private Set<String> getSequenceFlowIdsForProcess(Process participant) {

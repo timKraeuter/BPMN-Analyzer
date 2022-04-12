@@ -2,30 +2,31 @@ package behavior.bpmn.events;
 
 import behavior.bpmn.auxiliary.EventVisitor;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
+import com.google.common.base.Objects;
 
 public class BoundaryEvent extends CatchEvent {
     private final BoundaryEventType type;
     /**
      * Decides if the event is interrupting or non-interrupting.
      */
-    private final boolean cancelActivity;
+    private final boolean interrupt;
 
-    public BoundaryEvent(String name, BoundaryEventType type, boolean cancelActivity, EventDefinition eventDefinition) {
+    public BoundaryEvent(String name, BoundaryEventType type, boolean interrupt, EventDefinition eventDefinition) {
         super(name, eventDefinition);
         this.type = type;
-        this.cancelActivity = cancelActivity;
+        this.interrupt = interrupt;
     }
 
-    public BoundaryEvent(String name, BoundaryEventType type, boolean cancelActivity) {
-        this(name, type, cancelActivity, EventDefinition.empty());
+    public BoundaryEvent(String name, BoundaryEventType type, boolean interrupt) {
+        this(name, type, interrupt, EventDefinition.empty());
     }
 
     public BoundaryEventType getType() {
         return type;
     }
 
-    public boolean isCancelActivity() {
-        return cancelActivity;
+    public boolean isInterrupt() {
+        return interrupt;
     }
 
     @Override
@@ -41,5 +42,22 @@ public class BoundaryEvent extends CatchEvent {
     @Override
     public boolean isInstantiateFlowNode() {
         return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        BoundaryEvent that = (BoundaryEvent) o;
+        return getName().equals(that.getName()) && interrupt == that.interrupt && type == that.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getName(), type, interrupt);
     }
 }

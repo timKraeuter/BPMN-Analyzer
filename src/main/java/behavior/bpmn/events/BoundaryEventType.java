@@ -1,7 +1,7 @@
 package behavior.bpmn.events;
 
 public enum BoundaryEventType {
-    TIMER,
+    TIMER, MESSAGE, SIGNAL,
     // Signal,
     // Message,
     // Escalation,
