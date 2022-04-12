@@ -8,7 +8,6 @@ import com.google.common.base.Objects;
  */
 public class EventBasedGateway extends Gateway {
 
-    // TODO: Implement instantiate exclusive gateway.
     private final boolean instantiate;
 
     public EventBasedGateway(String name) {

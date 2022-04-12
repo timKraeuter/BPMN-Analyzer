@@ -21,7 +21,6 @@ import groove.graph.rule.GrooveRuleBuilder;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import static groove.behaviorTransformer.GrooveTransformer.*;
@@ -99,7 +98,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
                 break;
             case MESSAGE:
-                BPMNToGrooveTransformerHelper.addOutgoingMessagesForFlowNode(collaboration, ruleBuilder, endEvent);
+                BPMNToGrooveTransformerHelper.addMessageFlowBehaviorForFlowNode(collaboration, ruleBuilder, endEvent);
                 break;
             case SIGNAL:
                 createSignalThrowRulePart(endEvent.getEventDefinition());
@@ -166,7 +165,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         if (intermediateCatchEvent.getIncomingFlows().count() != 1) {
             // current restriction, again we would need implicit exclusive gateway.
             throw new RuntimeException("Intermediate message catch events are only allowed to have one incoming " +
-                                               "sequence flow!");
+                                       "sequence flow!");
         }
         intermediateCatchEvent.getIncomingFlows().forEach(inFlow -> deleteTokenWithPosition(ruleBuilder,
                                                                                             processInstance,
@@ -184,6 +183,11 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                                                          AbstractProcess process,
                                                          GrooveRuleBuilder ruleBuilder,
                                                          BPMNCollaboration collaboration) {
+        if (BPMNToGrooveTransformerHelper.isAfterInstantiateEventBasedGateway(intermediateCatchEvent)) {
+            // Not needed to create rules in this case.
+            return;
+        }
+
         collaboration.getIncomingMessageFlows(intermediateCatchEvent).forEach(messageFlow -> {
             ruleBuilder.startRule(createCatchMessageRuleName(messageFlow, intermediateCatchEvent, collaboration));
 
@@ -192,7 +196,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                                                                                     ruleBuilder);
             if (intermediateCatchEvent.getIncomingFlows().count() != 1) {
                 // current restriction, again we would need implicit exclusive gateway.
-                throw new RuntimeException("Intermediate message catch events are only allowed to have one incoming " + "sequence flow!");
+                throw new RuntimeException("Intermediate message catch events are only allowed to have one incoming " +
+                                           "sequence flow!");
             }
             //noinspection OptionalGetWithoutIsPresent Size of the stream must be 1.
             SequenceFlow incFlow = intermediateCatchEvent.getIncomingFlows().findFirst().get();
@@ -240,7 +245,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                                                                                 ruleBuilder);
         if (intermediateCatchEvent.getIncomingFlows().findAny().isPresent()) {
             throw new RuntimeException("Link intermediate catch events are not allowed to have incoming sequence " +
-                                               "flows!");
+                                       "flows!");
         }
         deleteTokenWithPosition(ruleBuilder, processInstance, intermediateCatchEvent.getName());
 
@@ -292,9 +297,9 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         BPMNToGrooveTransformerHelper.addOutgoingTokensForFlowNodeToProcessInstance(intermediateThrowEvent,
                                                                                     ruleBuilder,
                                                                                     processInstance);
-        BPMNToGrooveTransformerHelper.addOutgoingMessagesForFlowNode(collaboration,
-                                                                     ruleBuilder,
-                                                                     intermediateThrowEvent);
+        BPMNToGrooveTransformerHelper.addMessageFlowBehaviorForFlowNode(collaboration,
+                                                                        ruleBuilder,
+                                                                        intermediateThrowEvent);
 
         ruleBuilder.buildRule();
     }
@@ -319,8 +324,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         Set<Event> correspondingSignalCatchEvents = this.findAllCorrespondingSignalCatchEvents(eventDefinition);
 
         correspondingSignalCatchEvents.forEach(event -> {
-            final AbstractProcess processForEvent = findProcessForEvent(event);
-            if (event.isInstantiateFlowNode()) {
+            final AbstractProcess processForEvent = collaboration.findProcessForFlowNode(event);
+            if (event.isInstantiateFlowNode() || isAfterInstantiateEventBasedGateway(event)) {
                 createSignalThrowInstantiateRulePart(event, processForEvent);
             } else {
                 // Send a signal only if the process instance exists.
@@ -471,30 +476,6 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                 existsOptional);
     }
 
-    private AbstractProcess findProcessForEvent(Event event) {
-        for (Process participant : collaboration.getParticipants()) {
-            final boolean processFound = participant.getControlFlowNodes().anyMatch(flowNode -> flowNode.equals(event));
-            if (processFound) {
-                return participant;
-            }
-            // TODO: Subprocesses of subprocesses?
-            Optional<Process> optionalSubprocess =
-                    participant.getSubProcesses().filter(subprocess -> subprocess.getControlFlowNodes().anyMatch(
-                            flowNode -> flowNode.equals(event))).findFirst();
-            if (optionalSubprocess.isPresent()) {
-                return optionalSubprocess.get();
-            }
-            final Optional<EventSubprocess> optionalEventSubprocess = participant.getEventSubprocesses().filter(
-                    eventSubprocess -> eventSubprocess.getStartEvents().stream().anyMatch(startEvent -> startEvent.equals(
-                            event))).findFirst();
-            if (optionalEventSubprocess.isPresent()) {
-                return optionalEventSubprocess.get();
-            }
-        }
-        // Should not happen.
-        throw new RuntimeException(String.format("No process for the event %s found!", event));
-    }
-
     private Set<Event> findAllCorrespondingSignalCatchEvents(EventDefinition eventDefinition) {
         Set<Event> signalCatchEvents = new LinkedHashSet<>();
         Set<Process> seenProcesses = new HashSet<>();
@@ -617,8 +598,10 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
         @Override
         public void handle(StartEvent startEvent) {
-            if ((startEvent.getType() == StartEventType.SIGNAL || startEvent.getType() == StartEventType.SIGNAL_NON_INTERRUPTING) && startEvent.getEventDefinition().getGlobalSignalName().equals(
-                    eventDefinition.getGlobalSignalName())) {
+            if ((startEvent.getType() == StartEventType.SIGNAL ||
+                 startEvent.getType() == StartEventType.SIGNAL_NON_INTERRUPTING) &&
+                startEvent.getEventDefinition().getGlobalSignalName().equals(
+                        eventDefinition.getGlobalSignalName())) {
                 signalCatchEvents.add(startEvent);
             }
         }
@@ -630,8 +613,9 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
         @Override
         public void handle(IntermediateCatchEvent intermediateCatchEvent) {
-            if (intermediateCatchEvent.getType() == IntermediateCatchEventType.SIGNAL && intermediateCatchEvent.getEventDefinition().getGlobalSignalName().equals(
-                    eventDefinition.getGlobalSignalName())) {
+            if (intermediateCatchEvent.getType() == IntermediateCatchEventType.SIGNAL &&
+                intermediateCatchEvent.getEventDefinition().getGlobalSignalName().equals(
+                        eventDefinition.getGlobalSignalName())) {
                 signalCatchEvents.add(intermediateCatchEvent);
             }
         }

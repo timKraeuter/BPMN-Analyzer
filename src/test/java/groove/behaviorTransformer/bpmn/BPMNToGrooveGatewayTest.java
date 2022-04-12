@@ -68,4 +68,14 @@ public class BPMNToGrooveGatewayTest extends BPMNToGrooveTestBase {
         testGrooveGenerationForBPMNResourceFile("exclusive-event-based-gateway.bpmn");
     }
 
+    /**
+     * See test case
+     * <a href="https://cawemo.com/share/6db8059f-911b-4d2b-a8b3-83efb99ceed2">"Exclusive Event Based Gateway - Instantiate"</a>
+     * in cawemo.
+     */
+    @Test
+    void testExclusiveEventBasedGatewayInstantiate() throws IOException {
+        testGrooveGenerationForBPMNResourceFile("exclusive-event-based-gateway-instantiate.bpmn");
+    }
+
 }

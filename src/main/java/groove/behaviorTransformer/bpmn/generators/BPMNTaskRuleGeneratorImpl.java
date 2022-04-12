@@ -37,9 +37,9 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
     public void createSendTaskRulesForProcess(AbstractProcess process, SendTask sendTask) {
         createTaskRulesForProcess(process,
                                   sendTask,
-                                  (ruleBuilder) -> addOutgoingMessagesForFlowNode(collaboration,
-                                                                                  ruleBuilder,
-                                                                                  sendTask));
+                                  (ruleBuilder) -> addMessageFlowBehaviorForFlowNode(collaboration,
+                                                                                     ruleBuilder,
+                                                                                     sendTask));
 
     }
 
@@ -50,6 +50,11 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
                 throw new RuntimeException("Instantiate receive tasks should not have incoming sequence " + "flows!");
             }
             this.createInstantiateReceiveTaskRule(process, receiveTask);
+            return;
+        }
+        if (isAfterInstantiateEventBasedGateway(receiveTask)) {
+            // Process instantiation is handled in the throw rule in this case, analog to catch events.
+            // We could make a distinction here if wanted, such that the task end rules are executed.
             return;
         }
         // Create start task rules.
