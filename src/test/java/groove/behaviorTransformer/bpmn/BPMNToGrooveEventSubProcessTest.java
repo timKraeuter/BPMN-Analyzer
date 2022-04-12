@@ -15,4 +15,15 @@ public class BPMNToGrooveEventSubProcessTest extends BPMNToGrooveTestBase {
     void testEventSubProcessNonInterrupting() throws IOException {
         testGrooveGenerationForBPMNResourceFile("event-sub-process-non-interrupting.bpmn");
     }
+
+
+    /**
+     * See test case
+     * <a href="https://cawemo.com/share/ebb4b70a-f16a-4716-963e-2e6cda16550f">"Event sub process - Interrupting"</a>
+     * in cawemo.
+     */
+    @Test
+    void testEventSubProcessInterrupting() throws IOException {
+        testGrooveGenerationForBPMNResourceFile("event-sub-process-interrupting.bpmn");
+    }
 }

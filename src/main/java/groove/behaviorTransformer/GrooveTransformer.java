@@ -17,6 +17,8 @@ public interface GrooveTransformer<SOURCE extends Behavior> {
     String AT = "@";
     String FORALL = "forall:";
     String EXISTS_OPTIONAL = "existsx:";
+    // Nesting of quantifiers
+    String IN = "in";
 
     String BOOL = "bool:";
     String FALSE = BOOL + "false";
