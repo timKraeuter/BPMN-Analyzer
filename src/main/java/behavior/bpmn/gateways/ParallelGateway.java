@@ -18,6 +18,11 @@ public class ParallelGateway extends Gateway {
     }
 
     @Override
+    public boolean isInstantiateFlowNode() {
+        return false;
+    }
+
+    @Override
     public boolean isExclusiveEventBasedGateway() {
         return false;
     }

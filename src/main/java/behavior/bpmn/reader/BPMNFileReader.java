@@ -61,11 +61,13 @@ public class BPMNFileReader {
         if (participants.isEmpty()) {
             bpmnCollaborationBuilder.processName(fileName);
             mapModelInstanceToOneParticipant(bpmnModelInstance, bpmnCollaborationBuilder, mappedFlowNodes,
-                    mappedSequenceFlows);
+                                             mappedSequenceFlows);
         } else {
             // Map each participant
-            participants.forEach(modelElementInstance -> mapParticipant(bpmnCollaborationBuilder, mappedFlowNodes,
-                    mappedSequenceFlows, (Participant) modelElementInstance));
+            participants.forEach(modelElementInstance -> mapParticipant(bpmnCollaborationBuilder,
+                                                                        mappedFlowNodes,
+                                                                        mappedSequenceFlows,
+                                                                        (Participant) modelElementInstance));
             // Map message flows
             mapMessageFlows(bpmnModelInstance, bpmnCollaborationBuilder, mappedFlowNodes, mappedSequenceFlows);
         }
@@ -78,7 +80,9 @@ public class BPMNFileReader {
         ModelElementType mfType = bpmnModelInstance.getModel().getType(MessageFlow.class);
         Collection<ModelElementInstance> messageFlowModelElements = bpmnModelInstance.getModelElementsByType(mfType);
         messageFlowModelElements.forEach(modelElementInstance -> mapMessageFlow((MessageFlow) modelElementInstance,
-                bpmnCollaborationBuilder, mappedFlowNodes, mappedSequenceFlows));
+                                                                                bpmnCollaborationBuilder,
+                                                                                mappedFlowNodes,
+                                                                                mappedSequenceFlows));
     }
 
     private void mapMessageFlow(MessageFlow messageFlow, BPMNCollaborationBuilder bpmnCollaborationBuilder,
@@ -88,19 +92,22 @@ public class BPMNFileReader {
         InteractionNode targetInteractionNode = messageFlow.getTarget();
         if (!(sourceInteractionNode instanceof FlowNode)) {
             throw new RuntimeException(String.format("Message flow with id \"%s\" has an invalid source with id " +
-                            "\"%s\", which is not a flow node (event, activity, ...)!", messageFlow.getId(),
-                    sourceInteractionNode.getId()));
+                                                             "\"%s\", which is not a flow node (event, activity, ...)!",
+                                                     messageFlow.getId(),
+                                                     sourceInteractionNode.getId()));
         }
         if (!(targetInteractionNode instanceof FlowNode)) {
             throw new RuntimeException(String.format("Message flow with id \"%s\" has an invalid target with id " +
-                            "\"%s\", which is not a flow node (event, activity, ...)!", messageFlow.getId(),
-                    targetInteractionNode.getId()));
+                                                             "\"%s\", which is not a flow node (event, activity, ...)!",
+                                                     messageFlow.getId(),
+                                                     targetInteractionNode.getId()));
         }
         FlowNode source = (FlowNode) sourceInteractionNode;
         FlowNode target = (FlowNode) targetInteractionNode;
         bpmnCollaborationBuilder.messageFlow(mapFlowNode(source, mappedFlowNodes, mappedSequenceFlows,
-                bpmnCollaborationBuilder), mapFlowNode(target, mappedFlowNodes, mappedSequenceFlows,
-                bpmnCollaborationBuilder));
+                                                         bpmnCollaborationBuilder),
+                                             mapFlowNode(target, mappedFlowNodes, mappedSequenceFlows,
+                                                         bpmnCollaborationBuilder));
     }
 
     private void mapModelInstanceToOneParticipant(BpmnModelInstance bpmnModelInstance,
@@ -126,7 +133,9 @@ public class BPMNFileReader {
                                 Participant participant) {
         bpmnCollaborationBuilder.processName(participant.getName());
         participant.getProcess().getFlowElements().forEach(flowElement -> mapFlowElement(bpmnCollaborationBuilder,
-                createdFlowNodes, mappedSequenceFlows, flowElement));
+                                                                                         createdFlowNodes,
+                                                                                         mappedSequenceFlows,
+                                                                                         flowElement));
         bpmnCollaborationBuilder.buildProcess();
     }
 
@@ -153,12 +162,17 @@ public class BPMNFileReader {
         }
         if (sequenceFlow.getName() == null || sequenceFlow.getName().isEmpty()) {
             bpmnModelBuilder.sequenceFlow(mapFlowNode(sequenceFlow.getSource(), mappedFlowNodes, mappedSequenceFlows,
-                    bpmnModelBuilder), mapFlowNode(sequenceFlow.getTarget(), mappedFlowNodes, mappedSequenceFlows,
-                    bpmnModelBuilder));
+                                                      bpmnModelBuilder),
+                                          mapFlowNode(sequenceFlow.getTarget(), mappedFlowNodes, mappedSequenceFlows,
+                                                      bpmnModelBuilder));
         } else {
-            bpmnModelBuilder.sequenceFlow(sequenceFlow.getName(), mapFlowNode(sequenceFlow.getSource(),
-                    mappedFlowNodes, mappedSequenceFlows, bpmnModelBuilder), mapFlowNode(sequenceFlow.getTarget(),
-                    mappedFlowNodes, mappedSequenceFlows, bpmnModelBuilder));
+            bpmnModelBuilder.sequenceFlow(sequenceFlow.getName(),
+                                          mapFlowNode(sequenceFlow.getSource(),
+                                                      mappedFlowNodes,
+                                                      mappedSequenceFlows,
+                                                      bpmnModelBuilder),
+                                          mapFlowNode(sequenceFlow.getTarget(),
+                                                      mappedFlowNodes, mappedSequenceFlows, bpmnModelBuilder));
         }
         mappedSequenceFlows.put(sequenceFlow.getId(), true);
     }
@@ -201,7 +215,7 @@ public class BPMNFileReader {
                 resultingFlowNode = new SendTask(flowNode.getName());
                 break;
             case "receiveTask":
-                boolean instantiate = isInstantiateReceiveTask(flowNode);
+                boolean instantiate = hasInstantiateCamundaProperty(flowNode);
                 resultingFlowNode = new ReceiveTask(flowNode.getName(), instantiate);
                 break;
             case "subProcess":
@@ -225,7 +239,8 @@ public class BPMNFileReader {
                 resultingFlowNode = new ExclusiveGateway(flowNode.getName());
                 break;
             case "eventBasedGateway":
-                resultingFlowNode = new EventBasedGateway(flowNode.getName());
+                boolean instantiateGateway = hasInstantiateCamundaProperty(flowNode);
+                resultingFlowNode = new EventBasedGateway(flowNode.getName(), instantiateGateway);
                 break;
             case "inclusiveGateway":
                 resultingFlowNode = new InclusiveGateway(flowNode.getName());
@@ -244,7 +259,7 @@ public class BPMNFileReader {
         BPMNEventSubprocessBuilder subprocessBuilder = new BPMNEventSubprocessBuilder()
                 .name(subprocess.getName());
         subprocess.getFlowElements().forEach(flowElement -> mapFlowElement(subprocessBuilder, mappedFlowNodes,
-                mappedSequenceFlows, flowElement));
+                                                                           mappedSequenceFlows, flowElement));
 
         bpmnModelBuilder.eventSubprocess(subprocessBuilder.build());
     }
@@ -254,7 +269,7 @@ public class BPMNFileReader {
                                        Map<String, Boolean> mappedSequenceFlows) {
         BPMNProcessBuilder subprocessBuilder = new BPMNProcessBuilder().name(subprocess.getName());
         subprocess.getFlowElements().forEach(flowElement -> mapFlowElement(subprocessBuilder, mappedFlowNodes,
-                mappedSequenceFlows, flowElement));
+                                                                           mappedSequenceFlows, flowElement));
 
         CallActivity subProcessCallActivity = new CallActivity(subprocessBuilder.build());
         mappedFlowNodes.put(subprocess.getId(), subProcessCallActivity);
@@ -274,7 +289,7 @@ public class BPMNFileReader {
         }
     }
 
-    private boolean isInstantiateReceiveTask(FlowNode flowNode) {
+    private boolean hasInstantiateCamundaProperty(FlowNode flowNode) {
         ExtensionElements extensionElements = flowNode.getExtensionElements();
         if (extensionElements == null) {
             return false;
@@ -283,7 +298,8 @@ public class BPMNFileReader {
         CamundaProperties properties =
                 extensionElements.getElementsQuery().filterByType(CamundaProperties.class).singleResult();
 
-        return properties.getCamundaProperties().stream().anyMatch(camundaProperty -> camundaProperty.getCamundaName().equals("instantiate") && camundaProperty.getCamundaValue().equals("true"));
+        return properties.getCamundaProperties().stream().anyMatch(camundaProperty -> camundaProperty.getCamundaName().equals(
+                "instantiate") && camundaProperty.getCamundaValue().equals("true"));
     }
 
     private EndEvent mapEndEvent(FlowNode flowNode) {
@@ -308,7 +324,7 @@ public class BPMNFileReader {
                 @Override
                 public EndEvent handle(SignalEventDefinition evDefinition) {
                     return new EndEvent(flowNode.getName(), EndEventType.SIGNAL,
-                            mapSignalEventDefinition(evDefinition, flowNode));
+                                        mapSignalEventDefinition(evDefinition, flowNode));
                 }
 
                 @Override
@@ -354,10 +370,10 @@ public class BPMNFileReader {
                 public StartEvent handle(SignalEventDefinition evDefinition) {
                     if (startEvent.isInterrupting()) {
                         return new StartEvent(flowNode.getName(), StartEventType.SIGNAL,
-                                mapSignalEventDefinition(evDefinition, flowNode));
+                                              mapSignalEventDefinition(evDefinition, flowNode));
                     } else {
                         return new StartEvent(flowNode.getName(), StartEventType.SIGNAL_NON_INTERRUPTING,
-                                mapSignalEventDefinition(evDefinition, flowNode));
+                                              mapSignalEventDefinition(evDefinition, flowNode));
                     }
                 }
 
@@ -407,7 +423,7 @@ public class BPMNFileReader {
                 @Override
                 public IntermediateCatchEvent handle(SignalEventDefinition evDefinition) {
                     return new IntermediateCatchEvent(flowNode.getName(), IntermediateCatchEventType.SIGNAL,
-                            mapSignalEventDefinition(evDefinition, flowNode));
+                                                      mapSignalEventDefinition(evDefinition, flowNode));
                 }
 
                 @Override
@@ -448,7 +464,7 @@ public class BPMNFileReader {
                 @Override
                 public IntermediateThrowEvent handle(SignalEventDefinition evDefinition) {
                     return new IntermediateThrowEvent(flowNode.getName(), IntermediateThrowEventType.SIGNAL,
-                            mapSignalEventDefinition(evDefinition, flowNode));
+                                                      mapSignalEventDefinition(evDefinition, flowNode));
                 }
 
                 @Override

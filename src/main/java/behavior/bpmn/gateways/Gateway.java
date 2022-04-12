@@ -17,8 +17,4 @@ public abstract class Gateway extends FlowNode {
         return false;
     }
 
-    @Override
-    public boolean isInstantiateFlowNode() {
-        return false;
-    }
 }

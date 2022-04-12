@@ -5,6 +5,7 @@ import behavior.bpmn.*;
 import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.events.*;
+import behavior.bpmn.gateways.EventBasedGateway;
 import com.google.common.collect.Sets;
 import org.junit.jupiter.api.Test;
 
@@ -75,15 +76,23 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         Process participant = result.getParticipants().iterator().next();
         assertThat(participant.getName(), is(name));
 
-        assertThat(participant.getSequenceFlows().count(), is(3L));
-        assertThat(participant.getControlFlowNodes().count(), is(4L));
+        assertThat(participant.getSequenceFlows().count(), is(4L));
+        assertThat(participant.getControlFlowNodes().count(), is(5L));
+
         // Sequence flows between the right flow nodes.
         Set<String> sequenceFlowIds = getSequenceFlowIdsForProcess(participant);
         assertThat(
                 sequenceFlowIds,
                 is(Sets.newHashSet("inclusive gateway_parallel gateway",
-                        "parallel gateway_exclusive gateway",
-                        "exclusive gateway_event gateway")));
+                                   "parallel gateway_exclusive gateway",
+                                   "exclusive gateway_event gateway",
+                                   "exclusive gateway_instantiate event gateway")));
+
+        // Check if instantiate was read correctly for the event gateway.
+        Map<String, FlowNode> flowNodes = createFlowNodeNameToFlowNodeMap(participant);
+        String evGatewayName = "instantiate event gateway";
+        FlowNode instantiate_event_gateway = flowNodes.get(evGatewayName);
+        assertThat(instantiate_event_gateway, is(new EventBasedGateway(evGatewayName, true)));
     }
 
     @Test
@@ -128,14 +137,14 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(flowNodes.get(startEventName), is(new StartEvent(startEventName)));
         String messageStartEventName = "messageStart";
         assertThat(flowNodes.get(messageStartEventName),
-                is(new StartEvent(messageStartEventName, StartEventType.MESSAGE)));
+                   is(new StartEvent(messageStartEventName, StartEventType.MESSAGE)));
         String signalStartEventName = "signalStart";
         String startEndSignalEventDefinition = "Signal_113rm6n";
         assertThat(flowNodes.get(signalStartEventName),
-                is(new StartEvent(
-                        signalStartEventName,
-                        StartEventType.SIGNAL,
-                        new EventDefinition(startEndSignalEventDefinition))));
+                   is(new StartEvent(
+                           signalStartEventName,
+                           StartEventType.SIGNAL,
+                           new EventDefinition(startEndSignalEventDefinition))));
 
         // Check intermediate events
         String intermediateEventName = "intermediateEvent";
@@ -144,32 +153,32 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
                 IntermediateThrowEventType.NONE)));
         String messageCEventName = "messageCEvent";
         assertThat(flowNodes.get(messageCEventName),
-                is(new IntermediateCatchEvent(messageCEventName, IntermediateCatchEventType.MESSAGE)));
+                   is(new IntermediateCatchEvent(messageCEventName, IntermediateCatchEventType.MESSAGE)));
         String messageTEventName = "messageTEvent";
         assertThat(flowNodes.get(messageTEventName),
-                is(new IntermediateThrowEvent(messageTEventName, IntermediateThrowEventType.MESSAGE)));
+                   is(new IntermediateThrowEvent(messageTEventName, IntermediateThrowEventType.MESSAGE)));
         String linkCEventName = "linkCEvent";
         assertThat(flowNodes.get(linkCEventName),
-                is(new IntermediateCatchEvent(linkCEventName, IntermediateCatchEventType.LINK)));
+                   is(new IntermediateCatchEvent(linkCEventName, IntermediateCatchEventType.LINK)));
         String signalCEventName = "signalCEvent";
         String intermediateSignalEventDefinition = "Signal_1ni52ju";
         assertThat(flowNodes.get(signalCEventName),
-                is(new IntermediateCatchEvent(
-                        signalCEventName,
-                        IntermediateCatchEventType.SIGNAL,
-                        new EventDefinition(intermediateSignalEventDefinition))));
+                   is(new IntermediateCatchEvent(
+                           signalCEventName,
+                           IntermediateCatchEventType.SIGNAL,
+                           new EventDefinition(intermediateSignalEventDefinition))));
         String signalTEventName = "signalTEvent";
         assertThat(flowNodes.get(signalTEventName),
-                is(new IntermediateThrowEvent(
-                        signalTEventName,
-                        IntermediateThrowEventType.SIGNAL,
-                        new EventDefinition(intermediateSignalEventDefinition))));
+                   is(new IntermediateThrowEvent(
+                           signalTEventName,
+                           IntermediateThrowEventType.SIGNAL,
+                           new EventDefinition(intermediateSignalEventDefinition))));
         String linkTEventName = "linkTEvent";
         assertThat(flowNodes.get(linkTEventName),
-                is(new IntermediateThrowEvent(linkTEventName, IntermediateThrowEventType.LINK)));
+                   is(new IntermediateThrowEvent(linkTEventName, IntermediateThrowEventType.LINK)));
         String timerCEventName = "timerCEvent";
         assertThat(flowNodes.get(timerCEventName),
-                is(new IntermediateCatchEvent(timerCEventName, IntermediateCatchEventType.TIMER)));
+                   is(new IntermediateCatchEvent(timerCEventName, IntermediateCatchEventType.TIMER)));
 
         // Check end events
         String endEventName = "end";
@@ -178,13 +187,13 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(flowNodes.get(messageEndEventName), is(new EndEvent(messageEndEventName, EndEventType.MESSAGE)));
         String signalEndEventName = "signalEnd";
         assertThat(flowNodes.get(signalEndEventName),
-                is(new EndEvent(
-                        signalEndEventName,
-                        EndEventType.SIGNAL,
-                        new EventDefinition(startEndSignalEventDefinition))));
+                   is(new EndEvent(
+                           signalEndEventName,
+                           EndEventType.SIGNAL,
+                           new EventDefinition(startEndSignalEventDefinition))));
         String terminateEndEventName = "terminateEnd";
         assertThat(flowNodes.get(terminateEndEventName), is(new EndEvent(terminateEndEventName,
-                EndEventType.TERMINATION)));
+                                                                         EndEventType.TERMINATION)));
     }
 
     private Set<String> getSequenceFlowIdsForProcess(Process participant) {
@@ -222,7 +231,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
                                              .map(MessageFlow::getName)
                                              .collect(Collectors.toSet());
         assertThat(messageFlowNames, is(Sets.newHashSet("sendEvent_startP2", "SendTask_receiveEvent",
-                "endP1_ReceiveTask")));
+                                                        "endP1_ReceiveTask")));
     }
 
     @Test
@@ -292,7 +301,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
                 new StartEvent("msgNon", StartEventType.MESSAGE_NON_INTERRUPTING),
                 new StartEvent("msg", StartEventType.MESSAGE),
                 new StartEvent(signalNonStartName, StartEventType.SIGNAL_NON_INTERRUPTING,
-                        new EventDefinition(signalNonStartName)),
+                               new EventDefinition(signalNonStartName)),
                 new StartEvent(signalStartName, StartEventType.SIGNAL, new EventDefinition(signalStartName))
         )));
 
