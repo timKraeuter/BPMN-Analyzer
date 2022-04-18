@@ -1,0 +1,29 @@
+plugins {
+	id 'org.springframework.boot' version '3.0.0-M2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'no.hvl.tk'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+}
+
+dependencies {
+	implementation 'no.hvl.tk:rule_generator:1'
+
+	// Spring
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

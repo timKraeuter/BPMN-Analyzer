@@ -2,8 +2,8 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+group 'no.hvl.tk'
+version '1'
 
 repositories {
     mavenCentral()
