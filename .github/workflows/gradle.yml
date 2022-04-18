@@ -22,6 +22,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
       - name: Grant execute permission for gradlew
+        working-directory: ./generator
         run: chmod +x gradlew
       - name: Test
+        working-directory: ./generator
         run: ./gradlew build
