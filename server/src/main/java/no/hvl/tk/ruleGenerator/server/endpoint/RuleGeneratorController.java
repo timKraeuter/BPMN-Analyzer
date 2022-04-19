@@ -15,9 +15,7 @@ import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.reader.BPMNFileReader;
 import groove.behaviorTransformer.BehaviorToGrooveTransformer;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +25,8 @@ public class RuleGeneratorController {
 
     // One Method to generate the GG (+ download zip)
     @RequestMapping(value = "/zip", produces = "application/zip")
-    public void generateGGAndReturnZIP(@RequestParam("file") MultipartFile file,
+    @CrossOrigin(origins = "http://localhost:4200")
+    public void generateGGAndReturnZIP(@RequestPart("file") MultipartFile file,
                                        HttpServletResponse response) throws IOException {
 
         BPMNFileReader bpmnFileReader = new BPMNFileReader();
