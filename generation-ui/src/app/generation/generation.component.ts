@@ -1,24 +1,9 @@
 import {
-  AfterContentInit,
   Component,
-  ElementRef, EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output, SimpleChanges,
-  ViewChild
 } from '@angular/core';
-/**
- * You may include a different variant of BpmnJS:
- *
- * bpmn-viewer  - displays BPMN diagrams without the ability
- *                to navigate them
- * bpmn-modeler - bootstraps a full-fledged BPMN editor
- */
 // @ts-ignore
-import * as BpmnJS from 'bpmn-js/dist/bpmn-modeler.production.min.js';
-import {HttpClient} from "@angular/common/http";
+import { saveAs } from 'file-saver';
+import {BPMNModelerService} from "../services/bpmnmodeler.service";
 
 @Component({
   selector: 'app-generation',
@@ -26,9 +11,11 @@ import {HttpClient} from "@angular/common/http";
   styleUrls: ['./generation.component.scss']
 })
 export class GenerationComponent {
-  title = 'bpmn-js-angular';
   diagramUrl = 'https://cdn.staticaly.com/gh/bpmn-io/bpmn-js-examples/dfceecba/starter/diagram.bpmn';
   importError?: Error;
+
+  constructor(private bpmnModeler: BPMNModelerService) {
+  }
 
   // @ts-ignore
   handleImported(event) {
@@ -47,5 +34,18 @@ export class GenerationComponent {
     }
 
     this.importError = error;
+  }
+
+
+  downloadBPMNClicked() {
+    // @ts-ignore
+    this.bpmnModeler.getBPMNJs().saveXML({ format: true }).then((result) => {
+      saveAs(
+        new Blob([result.xml], {
+          type: 'text/xml;charset=utf-8',
+        }),
+        "model.bpmn"
+      );
+    });
   }
 }

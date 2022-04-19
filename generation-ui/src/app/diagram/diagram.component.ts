@@ -25,6 +25,7 @@ import { map, switchMap } from 'rxjs/operators';
 import * as BpmnJS from 'bpmn-js/dist/bpmn-modeler.production.min.js';
 
 import { from, Observable, Subscription } from 'rxjs';
+import {BPMNModelerService} from "../services/bpmnmodeler.service";
 
 @Component({
   selector: 'app-diagram',
@@ -48,9 +49,9 @@ export class DiagramComponent implements AfterContentInit, OnChanges, OnDestroy 
 
   @Input() public url!: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private bpmnModeler:BPMNModelerService, private http: HttpClient) {
 
-    this.bpmnJS = new BpmnJS({ keyboard: { bindTo: document }});
+    this.bpmnJS = bpmnModeler.getBPMNJs();
 
     // @ts-ignore
     this.bpmnJS.on('import.done', ({ error }) => {
@@ -58,6 +59,7 @@ export class DiagramComponent implements AfterContentInit, OnChanges, OnDestroy 
         this.bpmnJS.get('canvas').zoom('fit-viewport');
       }
     });
+
   }
 
   ngAfterContentInit(): void {
