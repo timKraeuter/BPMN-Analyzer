@@ -48,4 +48,11 @@ export class GenerationComponent {
       );
     });
   }
+
+  async uploadFile(event: Event) {
+    // @ts-ignore
+    let file = (event.target as HTMLInputElement).files[0];
+    const fileText: string = await file.text();
+    this.bpmnModeler.getBPMNJs().importXML(fileText);
+  }
 }

@@ -13,7 +13,7 @@
     </div>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button color="primary">
+    <button mat-raised-button color="primary" (click)="uploader.click()">
       <mat-icon>upload</mat-icon>
       Upload BPMN model
     </button>
@@ -27,4 +27,10 @@
     </button>
   </mat-card-actions>
 </mat-card>
+<input
+  hidden
+  type="file"
+  #uploader
+  (change)="uploadFile($event)"
+/>
 
