@@ -4,9 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ccb2585d-62d3-4130-a395-43b60d5aafaa" name="Changes" comment="generation ui initialized">
+    <list default="true" id="ccb2585d-62d3-4130-a395-43b60d5aafaa" name="Changes" comment="Change favicon and title">
+      <change afterPath="$PROJECT_DIR$/generation-ui/src/app/diagram/diagram.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/generation-ui/src/app/diagram/diagram.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generation-ui/src/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/generation-ui/src/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generation-ui/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/generation-ui/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generation-ui/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/generation-ui/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generation-ui/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generation-ui/src/app/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generation-ui/src/app/generation/generation.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/generation-ui/src/app/generation/generation.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generation-ui/src/app/generation/generation.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/generation-ui/src/app/generation/generation.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generation-ui/src/app/generation/generation.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generation-ui/src/app/generation/generation.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/generation-ui/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/generation-ui/src/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -48,6 +55,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/generation-ui/package.json" />
+  </component>
   <component name="ProjectId" id="27yeqSk3DnpmSF1Wwa1sBL2oCea" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -59,6 +69,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Source/Groove_Rule_Generation/generation-ui/src/app",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -73,6 +84,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Source\Groove_Rule_Generation\generation-ui\src\app" />
       <recent name="C:\Source\Groove_Rule_Generation\generation-ui\src" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -174,7 +186,7 @@
       <workItem from="1650307864380" duration="935000" />
       <workItem from="1650308826599" duration="64000" />
       <workItem from="1650350924095" duration="1275000" />
-      <workItem from="1650352611848" duration="1021000" />
+      <workItem from="1650352611848" duration="5221000" />
     </task>
     <task id="LOCAL−00001" summary="Moved files to subdir">
       <created>1650308254439</created>
@@ -200,7 +212,13 @@
       <option name="presentableId" value="LOCAL−00004" />
       <updated>1650353245405</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL−00005" summary="Change favicon and title">
+      <created>1650353965689</created>
+      <option name="number" value="LOCAL−00005" />
+      <option name="presentableId" value="LOCAL−00005" />
+      <updated>1650353965689</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -222,6 +240,7 @@
     <MESSAGE value="Using java 17" />
     <MESSAGE value="Using java 11" />
     <MESSAGE value="generation ui initialized" />
-    <option name="LAST_COMMIT_MESSAGE" value="generation ui initialized" />
+    <MESSAGE value="Change favicon and title" />
+    <option name="LAST_COMMIT_MESSAGE" value="Change favicon and title" />
   </component>
 </project>
