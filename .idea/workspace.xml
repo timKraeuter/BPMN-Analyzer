@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ccb2585d-62d3-4130-a395-43b60d5aafaa" name="Changes" comment="Using java 11">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+    <list default="true" id="ccb2585d-62d3-4130-a395-43b60d5aafaa" name="Changes" comment="generation ui initialized">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generation-ui/src/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/generation-ui/src/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generation-ui/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/generation-ui/src/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,6 +71,16 @@
     "ts.external.directory.path": "C:\\Source\\Groove_Rule_Generation\\generation-ui\\node_modules\\typescript\\lib"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Source\Groove_Rule_Generation\generation-ui\src" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Source\Groove_Rule_Generation\generation-ui\src" />
+      <recent name="C:\Source\Groove_Rule_Generation\generation-ui\src\app" />
+      <recent name="C:\Source\Groove_Rule_Generation\generation-ui" />
+    </key>
+  </component>
   <component name="RunManager" selected="npm.Angular CLI Server (generation-ui)">
     <configuration name="GrooveRunnerTest.testGenerateStateSpace" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
@@ -163,7 +174,7 @@
       <workItem from="1650307864380" duration="935000" />
       <workItem from="1650308826599" duration="64000" />
       <workItem from="1650350924095" duration="1275000" />
-      <workItem from="1650352611848" duration="510000" />
+      <workItem from="1650352611848" duration="1021000" />
     </task>
     <task id="LOCAL−00001" summary="Moved files to subdir">
       <created>1650308254439</created>
@@ -183,7 +194,13 @@
       <option name="presentableId" value="LOCAL−00003" />
       <updated>1650351927708</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL−00004" summary="generation ui initialized">
+      <created>1650353245405</created>
+      <option name="number" value="LOCAL−00004" />
+      <option name="presentableId" value="LOCAL−00004" />
+      <updated>1650353245405</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -204,6 +221,7 @@
     <MESSAGE value="Moved files to subdir" />
     <MESSAGE value="Using java 17" />
     <MESSAGE value="Using java 11" />
-    <option name="LAST_COMMIT_MESSAGE" value="Using java 11" />
+    <MESSAGE value="generation ui initialized" />
+    <option name="LAST_COMMIT_MESSAGE" value="generation ui initialized" />
   </component>
 </project>
