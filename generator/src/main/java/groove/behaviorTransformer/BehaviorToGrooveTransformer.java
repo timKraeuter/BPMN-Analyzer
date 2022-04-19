@@ -196,7 +196,7 @@ public class BehaviorToGrooveTransformer {
         startGraph.ifPresent(graph -> GrooveTransformer.writeStartGraph(graphGrammarSubFolder, graph, true));
     }
 
-    void generateGrooveGrammar(Behavior behavior, File targetFolder, boolean addPrefix) {
+    public void generateGrooveGrammar(Behavior behavior, File targetFolder, boolean addPrefix) {
         behavior.accept(new BehaviorVisitor() {
             @Override
             public void handle(FiniteStateMachine finiteStateMachine) {
