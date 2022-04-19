@@ -10,6 +10,9 @@ import behavior.bpmn.gateways.EventBasedGateway;
 import com.google.common.collect.Sets;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -374,6 +377,18 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(eventSubprocess2.getName(), is("Event subprocess2"));
         assertThat(eventSubprocess2.getControlFlowNodes().count(), is(2L));
         assertThat(eventSubprocess2.getSequenceFlows().count(), is(1L));
+    }
+
+    @Test
+    void readFromStream() throws FileNotFoundException {
+        String resourcePath = BPMN_BPMN_MODELS_READER_TEST + "pools-message-flows.bpmn";
+        @SuppressWarnings("ConstantConditions") File model = new File(this.getClass().getResource(resourcePath).getFile());
+        BPMNFileReader bpmnFileReader = new BPMNFileReader();
+        BPMNCollaboration bpmnCollaboration = bpmnFileReader.readModelFromStream(new FileInputStream(model));
+
+        assertNotNull(bpmnCollaboration);
+        assertThat(bpmnCollaboration.getParticipants().size(), is(2));
+        // Rest is checked in the real testcase above.
     }
 
     private CallActivity getCallActivityForName(Map<String, FlowNode> flowNodes, String name) {

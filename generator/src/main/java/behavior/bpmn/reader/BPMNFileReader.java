@@ -29,6 +29,7 @@ import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 import org.camunda.bpm.model.xml.type.ModelElementType;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,9 +38,16 @@ public class BPMNFileReader {
 
     public BPMNCollaboration readModelFromFile(File file) {
         BpmnModelInstance bpmnModelInstance = Bpmn.readModelFromFile(file);
+        return convertModel(FilenameUtils.removeExtension(file.getName()), bpmnModelInstance);
+    }
 
-        String fileName = FilenameUtils.removeExtension(file.getName());
-        BPMNCollaborationBuilder bpmnCollaborationBuilder = new BPMNCollaborationBuilder().name(fileName);
+    public BPMNCollaboration readModelFromStream(InputStream stream) {
+        BpmnModelInstance bpmnModelInstance = Bpmn.readModelFromStream(stream);
+        return convertModel("model", bpmnModelInstance);
+    }
+
+    private BPMNCollaboration convertModel(String collaborationName, BpmnModelInstance bpmnModelInstance) {
+        BPMNCollaborationBuilder bpmnCollaborationBuilder = new BPMNCollaborationBuilder().name(collaborationName);
 
         Map<String, behavior.bpmn.FlowNode> mappedFlowNodes = new HashMap<>();
         Map<String, Boolean> mappedSequenceFlows = new HashMap<>();
@@ -60,7 +68,7 @@ public class BPMNFileReader {
         ModelElementType participantType = bpmnModelInstance.getModel().getType(Participant.class);
         Collection<ModelElementInstance> participants = bpmnModelInstance.getModelElementsByType(participantType);
         if (participants.isEmpty()) {
-            bpmnCollaborationBuilder.processName(fileName);
+            bpmnCollaborationBuilder.processName(collaborationName);
             mapModelInstanceToOneParticipant(bpmnModelInstance,
                                              bpmnCollaborationBuilder,
                                              mappedFlowNodes,
