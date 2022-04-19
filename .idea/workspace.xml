@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ccb2585d-62d3-4130-a395-43b60d5aafaa" name="Changes" comment="Using java 17">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="ccb2585d-62d3-4130-a395-43b60d5aafaa" name="Changes" comment="Using java 11">
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generator/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/generator/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/server/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/server/settings.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,12 +62,15 @@
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2"
+    "project.structure.side.proportion": "0.2",
+    "spring.configuration.checksum": "5194348973c5d0ff53c3ea13d95e185f",
+    "ts.external.directory.path": "C:\\Source\\Groove_Rule_Generation\\generation-ui\\node_modules\\typescript\\lib"
   }
 }]]></component>
-  <component name="RunManager" selected="Spring Boot.Application">
+  <component name="RunManager" selected="npm.Angular CLI Server (generation-ui)">
     <configuration name="GrooveRunnerTest.testGenerateStateSpace" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -115,12 +115,32 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="Tests (generation-ui)" type="JavaScriptTestRunnerKarma">
+      <config-file value="$PROJECT_DIR$/generation-ui/karma.conf.js" />
+      <working-directory value="$PROJECT_DIR$/generation-ui" />
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="Angular Application (generation-ui)" type="JavascriptDebugType" uri="http://localhost:4200">
+      <method v="2" />
+    </configuration>
     <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="ruleGenerator.server.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="no.hvl.tk.ruleGenerator.server.Application" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration name="Angular CLI Server (generation-ui)" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/generation-ui/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
@@ -142,7 +162,8 @@
       <workItem from="1650298364659" duration="63000" />
       <workItem from="1650307864380" duration="935000" />
       <workItem from="1650308826599" duration="64000" />
-      <workItem from="1650350924095" duration="892000" />
+      <workItem from="1650350924095" duration="1275000" />
+      <workItem from="1650352611848" duration="510000" />
     </task>
     <task id="LOCAL−00001" summary="Moved files to subdir">
       <created>1650308254439</created>
@@ -156,7 +177,13 @@
       <option name="presentableId" value="LOCAL−00002" />
       <updated>1650351295354</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL−00003" summary="Using java 11">
+      <created>1650351927708</created>
+      <option name="number" value="LOCAL−00003" />
+      <option name="presentableId" value="LOCAL−00003" />
+      <updated>1650351927708</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -176,6 +203,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Moved files to subdir" />
     <MESSAGE value="Using java 17" />
-    <option name="LAST_COMMIT_MESSAGE" value="Using java 17" />
+    <MESSAGE value="Using java 11" />
+    <option name="LAST_COMMIT_MESSAGE" value="Using java 11" />
   </component>
 </project>
