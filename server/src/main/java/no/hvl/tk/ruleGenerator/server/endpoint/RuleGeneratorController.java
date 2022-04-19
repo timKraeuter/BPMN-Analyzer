@@ -38,9 +38,10 @@ public class RuleGeneratorController {
         File outputDir = new File(randomTempDir);
         transformer.generateGrooveGrammar(bpmnCollaboration, outputDir, false);
 
-
+        // TODO: clean up. Make transformer return this dir.
+        File resultDir = new File(outputDir.getAbsolutePath() + "/" + bpmnCollaboration.getName() + ".gps");
         // create a list to add files to be zipped
-        File[] allFiles = outputDir.listFiles();
+        File[] allFiles = resultDir.listFiles();
         List<File> graphGrammarFiles = Arrays.asList(allFiles != null ? allFiles : new File[]{});
 
         zipAndReturnFiles(response, graphGrammarFiles);
@@ -49,7 +50,7 @@ public class RuleGeneratorController {
     private void zipAndReturnFiles(HttpServletResponse response, List<File> files) throws IOException {
         // Setting headers
         response.setStatus(HttpServletResponse.SC_OK);
-        response.addHeader("Content-Disposition", "attachment; filename=\"graphGrammar.zip\"");
+        response.addHeader("Content-Disposition", "attachment; filename=\"graphGrammar.gps.zip\"");
 
         // Zipping files
         try (ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())) {
