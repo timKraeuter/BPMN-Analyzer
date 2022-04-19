@@ -78,6 +78,7 @@ describe('DiagramComponent', () => {
     // given
     const diagramURL = 'some-url';
 
+    // @ts-ignore
     component.importDone.subscribe(result => {
       // then
       expect(result).toEqual({
@@ -102,6 +103,7 @@ describe('DiagramComponent', () => {
     // given
     const diagramURL = 'some-url';
 
+    // @ts-ignore
     component.importDone.subscribe(result => {
       // then
       expect(result.type).toEqual('success');
@@ -129,6 +131,7 @@ describe('DiagramComponent', () => {
     // when
     component.loadUrl(diagramURL);
 
+    // @ts-ignore
     component.importDone.subscribe(result => {
 
       // then

@@ -3,6 +3,14 @@
     <mat-card-title>BPMN Analyzer</mat-card-title>
   </mat-card-header>
   <mat-card-content>
+    <div class="diagram-parent">
+      <app-diagram [url]="diagramUrl" (importDone)="handleImported($event)"></app-diagram>
+
+      <div class="import-error" *ngIf="importError">
+        <strong>Failed to render diagram: </strong>
+        {{ importError.message }}
+      </div>
+    </div>
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button color="primary">
@@ -20,11 +28,3 @@
   </mat-card-actions>
 </mat-card>
 
-<div class="diagram-parent">
-  <app-diagram [url]="diagramUrl" (importDone)="handleImported($event)"></app-diagram>
-
-  <div class="import-error" *ngIf="importError">
-    <strong>Failed to render diagram: </strong>
-    {{ importError.message }}
-  </div>
-</div>
