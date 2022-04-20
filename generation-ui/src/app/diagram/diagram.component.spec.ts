@@ -3,12 +3,11 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { DebugNode } from '@angular/core';
 
 import {
-  HttpClientTestingModule,
-  HttpTestingController
+    HttpClientTestingModule,
+    HttpTestingController,
 } from '@angular/common/http/testing';
 
 import { DiagramComponent } from './diagram.component';
-
 
 const BPMN_DIAGRAM = `
   <?xml version="1.0" encoding="UTF-8"?>
@@ -42,111 +41,104 @@ const BPMN_DIAGRAM_WITH_WARNINGS = `
   </definitions>
 `;
 
-
 describe('DiagramComponent', () => {
+    let httpMock: HttpTestingController;
+    let fixture: ComponentFixture<DiagramComponent>;
+    let component: DebugNode['componentInstance'];
 
-  let httpMock: HttpTestingController;
-  let fixture: ComponentFixture<DiagramComponent>;
-  let component: DebugNode['componentInstance'];
+    beforeEach(waitForAsync(() => {
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule],
+            declarations: [DiagramComponent],
+        });
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [DiagramComponent]
+        fixture = TestBed.createComponent(DiagramComponent);
+        component = fixture.debugElement.componentInstance;
+        httpMock = TestBed.inject(HttpTestingController);
+        fixture.detectChanges();
+    }));
+
+    afterEach(() => {
+        httpMock.verify();
+
+        fixture.destroy();
     });
 
-    fixture = TestBed.createComponent(DiagramComponent);
-    component = fixture.debugElement.componentInstance;
-    httpMock = TestBed.inject(HttpTestingController);
-    fixture.detectChanges();
-  }));
-
-  afterEach(() => {
-    httpMock.verify();
-
-    fixture.destroy();
-  });
-
-
-  it('should create and tear down', () => {
-    expect(component).toBeTruthy();
-  });
-
-
-  it('should load and render successfully', (done) => {
-
-    // given
-    const diagramURL = 'some-url';
-
-    // @ts-ignore
-    component.importDone.subscribe(result => {
-      // then
-      expect(result).toEqual({
-        type: 'success',
-        warnings: []
-      });
-
-      done();
+    it('should create and tear down', () => {
+        expect(component).toBeTruthy();
     });
 
-    // when
-    component.loadUrl(diagramURL);
+    it('should load and render successfully', (done) => {
+        // given
+        const diagramURL = 'some-url';
 
-    const request = httpMock.expectOne({ url: diagramURL, method: 'GET' });
+        // @ts-ignore
+        component.importDone.subscribe((result) => {
+            // then
+            expect(result).toEqual({
+                type: 'success',
+                warnings: [],
+            });
 
-    request.flush(BPMN_DIAGRAM);
-  });
+            done();
+        });
 
+        // when
+        component.loadUrl(diagramURL);
 
-  it('should expose import warnings', (done) => {
+        const request = httpMock.expectOne({ url: diagramURL, method: 'GET' });
 
-    // given
-    const diagramURL = 'some-url';
-
-    // @ts-ignore
-    component.importDone.subscribe(result => {
-      // then
-      expect(result.type).toEqual('success');
-
-      expect(result.warnings.length).toEqual(1);
-      expect(result.warnings[0].message).toContain('unparsable content <process> detected');
-
-      done();
+        request.flush(BPMN_DIAGRAM);
     });
 
-    // when
-    component.loadUrl(diagramURL);
+    it('should expose import warnings', (done) => {
+        // given
+        const diagramURL = 'some-url';
 
-    const request = httpMock.expectOne({ url: diagramURL, method: 'GET' });
+        // @ts-ignore
+        component.importDone.subscribe((result) => {
+            // then
+            expect(result.type).toEqual('success');
 
-    request.flush(BPMN_DIAGRAM_WITH_WARNINGS);
-  });
+            expect(result.warnings.length).toEqual(1);
+            expect(result.warnings[0].message).toContain(
+                'unparsable content <process> detected'
+            );
 
+            done();
+        });
 
-  it('should fail to load and render', (done) => {
+        // when
+        component.loadUrl(diagramURL);
 
-    // given
-    const diagramURL = 'some-url';
+        const request = httpMock.expectOne({ url: diagramURL, method: 'GET' });
 
-    // when
-    component.loadUrl(diagramURL);
-
-    // @ts-ignore
-    component.importDone.subscribe(result => {
-
-      // then
-      expect(result.type).toEqual('error');
-      expect(result.error.message).toEqual('Http failure response for some-url: 404 FOO');
-
-      done();
+        request.flush(BPMN_DIAGRAM_WITH_WARNINGS);
     });
 
-    const request = httpMock.expectOne({ url: diagramURL, method: 'GET' });
+    it('should fail to load and render', (done) => {
+        // given
+        const diagramURL = 'some-url';
 
-    request.flush('Not Found', {
-      status: 404,
-      statusText: 'FOO'
+        // when
+        component.loadUrl(diagramURL);
+
+        // @ts-ignore
+        component.importDone.subscribe((result) => {
+            // then
+            expect(result.type).toEqual('error');
+            expect(result.error.message).toEqual(
+                'Http failure response for some-url: 404 FOO'
+            );
+
+            done();
+        });
+
+        const request = httpMock.expectOne({ url: diagramURL, method: 'GET' });
+
+        request.flush('Not Found', {
+            status: 404,
+            statusText: 'FOO',
+        });
     });
-  });
-
 });

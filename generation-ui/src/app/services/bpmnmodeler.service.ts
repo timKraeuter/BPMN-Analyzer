@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 /**
  * You may include a different variant of BpmnJS:
@@ -11,18 +11,17 @@ import {Injectable} from '@angular/core';
 import * as BpmnJS from 'bpmn-js/dist/bpmn-modeler.production.min.js';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class BPMNModelerService {
-  private bpmnJS: BpmnJS;
+    private bpmnJS: BpmnJS;
 
-  constructor() {
-  }
+    constructor() {}
 
-  getBPMNJs(): BpmnJS {
-    if (!this.bpmnJS) {
-      this.bpmnJS = new BpmnJS({keyboard: {bindTo: document}});
+    getBPMNJs(): BpmnJS {
+        if (!this.bpmnJS) {
+            this.bpmnJS = new BpmnJS({ keyboard: { bindTo: document } });
+        }
+        return this.bpmnJS;
     }
-    return this.bpmnJS;
-  }
 }
