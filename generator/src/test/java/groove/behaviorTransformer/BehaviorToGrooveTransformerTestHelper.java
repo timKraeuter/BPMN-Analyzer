@@ -13,8 +13,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
 public abstract class BehaviorToGrooveTransformerTestHelper {
-    //    private final String outputPath = "C:/Source/groove/bin";
-    String outputPath = FileUtils.getTempDirectoryPath();
+    private final String outputPath = "C:/Source/groove/bin";
+//    String outputPath = FileUtils.getTempDirectoryPath();
 
     private boolean addPrefix = false;
     private Function<String, Boolean> fileNameFilter = x -> false;
@@ -48,22 +48,33 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
     }
 
     @SuppressWarnings("ConstantConditions")
-    private void checkGrooveGeneration(Behavior behavior, boolean addPrefix, Function<String, Boolean> fileNameFilter) throws IOException {
+    private void checkGrooveGeneration(Behavior behavior,
+                                       boolean addPrefix,
+                                       Function<String, Boolean> fileNameFilter) throws IOException {
         String modelName = behavior.getName();
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
         File outputDir = new File(this.getOutputPathIncludingSubFolder());
         transformer.generateGrooveGrammar(behavior, outputDir, addPrefix);
 
         // assert
-        File expectedDir = new File(this.getClass().getResource("/" + this.getOutputPathSubFolderName() + "/" + modelName + ".gps").getFile());
-        FileTestHelper.testDirEquals(expectedDir, new File(outputDir + "/" + modelName + ".gps"), fileName -> fileName.equals("system.properties") || fileNameFilter.apply(fileName)); // Ignore the system.properties file because it contains a timestamp and a dir.
+        File expectedDir = new File(this.getClass().getResource("/" +
+                                                                this.getOutputPathSubFolderName() +
+                                                                "/" +
+                                                                modelName +
+                                                                ".gps").getFile());
+        FileTestHelper.testDirEquals(expectedDir,
+                                     new File(outputDir + "/" + modelName + ".gps"),
+                                     fileName -> fileName.equals("system.properties") ||
+                                                 fileNameFilter.apply(fileName)); // Ignore the system.properties
+        // file because it contains a timestamp and a dir.
 
         File propertiesFile = new File(outputDir + "/" + modelName + ".gps/system.properties");
         this.checkPropertiesFile(propertiesFile);
     }
 
     void checkPropertiesFile(File propertiesFile) throws IOException {
-        Assertions.assertTrue(FileUtils.readFileToString(propertiesFile, StandardCharsets.UTF_8).replaceAll("\r?\n", "\r\n") // force identical line separators
+        Assertions.assertTrue(FileUtils.readFileToString(propertiesFile, StandardCharsets.UTF_8).replaceAll("\r?\n",
+                                                                                                            "\r\n") // force identical line separators
                                        .endsWith("grooveVersion=5.8.1\r\n" + "grammarVersion=3.7"));
     }
 }
