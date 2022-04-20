@@ -294,10 +294,28 @@ public class BPMNFileReader {
                                                        BPMNModelBuilder bpmnModelBuilder) {
         BoundaryEvent event = (BoundaryEvent) flowNode;
         Collection<EventDefinition> eventDefinitions = event.getEventDefinitions();
+        behavior.bpmn.events.BoundaryEvent boundaryEvent;
         if (eventDefinitions.size() != 1) {
-            throw new RuntimeException("Boundary event must have exactly one event definition!");
+            boundaryEvent = new behavior.bpmn.events.BoundaryEvent(event.getName(),
+                                                                   BoundaryEventType.NONE,
+                                                                   event.cancelActivity());
+        } else {
+            boundaryEvent = getBoundaryEventWithDefinition(event, eventDefinitions.iterator().next());
+
         }
-        EventDefinition eventDefinition = eventDefinitions.iterator().next();
+        // AttachedTo must be an activity
+        behavior.bpmn.activities.Activity attachedTo =
+                (behavior.bpmn.activities.Activity) mapFlowNode(event.getAttachedTo(),
+                                                                mappedFlowNodes,
+                                                                mappedSequenceFlows,
+                                                                bpmnModelBuilder);
+        attachedTo.attachBoundaryEvent(boundaryEvent);
+        return boundaryEvent;
+    }
+
+    private behavior.bpmn.events.BoundaryEvent getBoundaryEventWithDefinition(BoundaryEvent event,
+                                                                              EventDefinition eventDefinition) {
+        behavior.bpmn.events.BoundaryEvent boundaryEvent;
         // Create the boundary event.
         EventDefinitionVisitor<behavior.bpmn.events.BoundaryEvent> visitor = new EventDefinitionVisitor<>() {
             @Override
@@ -331,14 +349,7 @@ public class BPMNFileReader {
                                                               event.cancelActivity());
             }
         };
-        behavior.bpmn.events.BoundaryEvent boundaryEvent = this.visitDefinition(eventDefinition, visitor);
-        // AttachedTo must be an activity
-        behavior.bpmn.activities.Activity attachedTo =
-                (behavior.bpmn.activities.Activity) mapFlowNode(event.getAttachedTo(),
-                                                                mappedFlowNodes,
-                                                                mappedSequenceFlows,
-                                                                bpmnModelBuilder);
-        attachedTo.attachBoundaryEvent(boundaryEvent);
+        boundaryEvent = this.visitDefinition(eventDefinition, visitor);
         return boundaryEvent;
     }
 

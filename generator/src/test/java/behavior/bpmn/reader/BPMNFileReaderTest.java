@@ -214,8 +214,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         Process participant1 = it.next();
         Process participant2 = it.next();
         assertThat(participant2.getName(), is("Activity boundary events"));
-        assertThat(participant2.getSequenceFlows().count(), is(8L));
-        assertThat(participant2.getControlFlowNodes().count(), is(15L));
+        assertThat(participant2.getSequenceFlows().count(), is(9L));
+        assertThat(participant2.getControlFlowNodes().count(), is(17L));
 
         // Check boundary events for activity 1 and 2.
         Map<String, FlowNode> p2flowNodes = createFlowNodeNameToFlowNodeMap(participant2);
@@ -224,6 +224,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         activity1Expected.attachBoundaryEvent(new BoundaryEvent("m1", BoundaryEventType.MESSAGE, true));
         activity1Expected.attachBoundaryEvent(new BoundaryEvent("t1", BoundaryEventType.TIMER, true));
         activity1Expected.attachBoundaryEvent(new BoundaryEvent("s1", BoundaryEventType.SIGNAL, true));
+        activity1Expected.attachBoundaryEvent(new BoundaryEvent("n1", BoundaryEventType.NONE, true));
 
         FlowNode activity1 = p2flowNodes.get(activity1Name);
         assertThat(activity1, is(activity1));
@@ -241,6 +242,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(sequenceFlowIdsForProcess,
                    is(Sets.newHashSet("start_Activity1",
                                       "s1_s1_end",
+                                      "n1_n1_end",
                                       "t1_t1_end",
                                       "m1_m1_end",
                                       "Activity1_Activity2",
@@ -249,8 +251,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
                                       "s2_s2_end")));
 
         assertThat(participant1.getName(), is("Subprocess boundary events"));
-        assertThat(participant1.getSequenceFlows().count(), is(9L));
-        assertThat(participant1.getControlFlowNodes().count(), is(13L));
+        assertThat(participant1.getSequenceFlows().count(), is(10L));
+        assertThat(participant1.getControlFlowNodes().count(), is(15L));
 
         // Check boundary events for subprocess s1 and s2.
         Map<String, FlowNode> p1FlowNodes = createFlowNodeNameToFlowNodeMap(participant1);
