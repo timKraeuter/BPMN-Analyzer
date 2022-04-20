@@ -37,6 +37,7 @@ public class RuleGeneratorController {
         File outputDir = new File(randomTempDir);
         transformer.generateGrooveGrammar(bpmnCollaboration, outputDir, false);
 
+        // TODO: generate all files in a subfolder of a fixed subfolder and wipe the fixed subfolder after zipping.
         // TODO: clean up. Make transformer return this dir.
         File resultDir = new File(outputDir.getAbsolutePath() + "/" + bpmnCollaboration.getName() + ".gps");
         // create a list to add files to be zipped

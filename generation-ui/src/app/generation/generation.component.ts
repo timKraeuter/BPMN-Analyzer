@@ -35,10 +35,10 @@ export class GenerationComponent {
     }
 
     downloadBPMNClicked() {
-        // @ts-ignore
         this.bpmnModeler
             .getBPMNJs()
             .saveXML({ format: true })
+            // @ts-ignore
             .then((result) => {
                 saveAs(
                     new Blob([result.xml], {
