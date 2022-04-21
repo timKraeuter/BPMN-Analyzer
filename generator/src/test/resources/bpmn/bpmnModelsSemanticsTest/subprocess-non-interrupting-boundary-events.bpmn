@@ -9,7 +9,7 @@
     <bpmn:startEvent id="StartEvent_1" name="start">
       <bpmn:outgoing>Flow_0rt92qb</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:subProcess id="Activity_0zu4scn">
+    <bpmn:subProcess id="Activity_0zu4scn" name="Subprocess">
       <bpmn:incoming>Flow_0rt92qb</bpmn:incoming>
       <bpmn:outgoing>Flow_0q4s0e5</bpmn:outgoing>
       <bpmn:startEvent id="Event_0mt4q3x" name="start_sub">

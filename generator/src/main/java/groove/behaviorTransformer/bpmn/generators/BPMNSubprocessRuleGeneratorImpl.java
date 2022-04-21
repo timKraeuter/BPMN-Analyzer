@@ -1,24 +1,28 @@
 package groove.behaviorTransformer.bpmn.generators;
 
 import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.activities.CallActivity;
+import behavior.bpmn.events.BoundaryEvent;
 import groove.behaviorTransformer.bpmn.BPMNRuleGenerator;
 import groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerHelper;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveRuleBuilder;
 
+import java.util.function.Consumer;
+
 import static groove.behaviorTransformer.GrooveTransformer.AT;
 import static groove.behaviorTransformer.GrooveTransformer.FORALL;
 import static groove.behaviorTransformer.GrooveTransformerHelper.createStringNodeLabel;
 import static groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerConstants.*;
+import static groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerHelper.deleteMessageToProcessInstanceWithPosition;
 
 public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenerator {
     private final BPMNRuleGenerator bpmnRuleGenerator;
     private final GrooveRuleBuilder ruleBuilder;
 
-    public BPMNSubprocessRuleGeneratorImpl(BPMNRuleGenerator bpmnRuleGenerator,
-                                           GrooveRuleBuilder ruleBuilder) {
+    public BPMNSubprocessRuleGeneratorImpl(BPMNRuleGenerator bpmnRuleGenerator, GrooveRuleBuilder ruleBuilder) {
         this.bpmnRuleGenerator = bpmnRuleGenerator;
         this.ruleBuilder = ruleBuilder;
     }
@@ -36,7 +40,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
         // Generate rules for the sub process
         this.createRulesForExecutingTheSubProcess(callActivity);
 
-        this.createBoundaryEventRules(process, callActivity);
+        this.createBoundaryEventRules(process, callActivity, bpmnRuleGenerator.getCollaboration());
     }
 
     void createSubProcessInstantiationRule(AbstractProcess process,
@@ -44,8 +48,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
                                            SequenceFlow incomingFlow) {
         final String incomingFlowId = incomingFlow.getID();
         ruleBuilder.startRule(bpmnRuleGenerator.getTaskOrCallActivityRuleName(callActivity, incomingFlowId));
-        GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process,
-                                                                                          ruleBuilder);
+        GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
         BPMNToGrooveTransformerHelper.deleteTokenWithPosition(ruleBuilder, processInstance, incomingFlowId);
 
         // TODO: reuse createNewProcessInstance
@@ -77,10 +80,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
         ruleBuilder.startRule(callActivity.getName() + END);
 
         // Parent process is running
-        final GrooveNode parentProcess =
-                BPMNToGrooveTransformerHelper.contextProcessInstance(
-                        process,
-                        ruleBuilder);
+        final GrooveNode parentProcess = BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
 
         // Delete subprocess
         String subProcessName = callActivity.getSubProcessModel().getName();
@@ -103,37 +103,77 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
         bpmnRuleGenerator.generateRulesForProcess(callActivity.getSubProcessModel());
     }
 
-    void createBoundaryEventRules(AbstractProcess process, CallActivity callActivity) {
+    void createBoundaryEventRules(AbstractProcess process, CallActivity callActivity, BPMNCollaboration collaboration) {
         callActivity.getBoundaryEvents().forEach(boundaryEvent -> {
-            ruleBuilder.startRule(boundaryEvent.getName());
-            GrooveNode processInstance = BPMNToGrooveTransformerHelper.addTokensForOutgoingFlowsToRunningInstance(
-                    boundaryEvent,
-                    process,
-                    ruleBuilder);
+            switch (boundaryEvent.getType()) {
+                case NONE:
+                case TIMER:
+                    createSubProcessBoundaryEventRule(process, callActivity, boundaryEvent, (x) -> {
+                    });
+                    break;
+                case MESSAGE:
+                    collaboration.getIncomingMessageFlows(boundaryEvent).forEach(messageFlow -> createSubProcessBoundaryEventRule(
+                            process,
+                            callActivity,
+                            boundaryEvent,
+                            (processInstance) -> deleteMessageToProcessInstanceWithPosition(ruleBuilder,
+                                                                                            processInstance,
+                                                                                            messageFlow.getName())));
 
-            if (boundaryEvent.isInterrupt()) {
-                // Terminate subprocess and delete all its tokens.
-                GrooveNode subProcess = ruleBuilder.deleteNode(TYPE_PROCESS_SNAPSHOT);
-                ruleBuilder.contextEdge(SUBPROCESS, processInstance, subProcess);
-                String subprocessName = callActivity.getSubProcessModel().getName();
-                ruleBuilder.contextEdge(NAME,
-                                        subProcess,
-                                        ruleBuilder.contextNode(createStringNodeLabel(subprocessName)));
-                GrooveNode subprocessRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
-                ruleBuilder.deleteEdge(STATE, subProcess, subprocessRunning);
-
-                GrooveNode forAllTokens = ruleBuilder.contextNode(FORALL);
-                GrooveNode arbitraryToken = ruleBuilder.deleteNode(TYPE_TOKEN);
-                ruleBuilder.deleteEdge(TOKENS, subProcess, arbitraryToken);
-                ruleBuilder.contextEdge(AT, arbitraryToken, forAllTokens);
-
-                GrooveNode forAllMessages = ruleBuilder.contextNode(FORALL);
-                GrooveNode arbitraryMessage = ruleBuilder.deleteNode(TYPE_MESSAGE);
-                ruleBuilder.deleteEdge(MESSAGES, subProcess, arbitraryMessage);
-                ruleBuilder.contextEdge(AT, arbitraryMessage, forAllMessages);
+                    break;
+                case SIGNAL:
+                    // TODO: IMplement elsewhere.
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + boundaryEvent.getType());
             }
-
-            ruleBuilder.buildRule();
         });
+    }
+
+    private void createSubProcessBoundaryEventRule(AbstractProcess process,
+                                                   CallActivity callActivity,
+                                                   BoundaryEvent boundaryEvent,
+                                                   Consumer<GrooveNode> additionalActions) {
+        ruleBuilder.startRule(boundaryEvent.getName());
+        GrooveNode processInstance = BPMNToGrooveTransformerHelper.addTokensForOutgoingFlowsToRunningInstance(
+                boundaryEvent,
+                process,
+                ruleBuilder);
+        additionalActions.accept(processInstance);
+
+        if (boundaryEvent.isInterrupt()) {
+            interruptSubprocess(callActivity, processInstance);
+        } else {
+            // Subprocess must be running
+            GrooveNode subprocessInstance =
+                    BPMNToGrooveTransformerHelper.contextProcessInstanceWithName(callActivity.getSubProcessModel(),
+                                                                                                         ruleBuilder);
+            ruleBuilder.contextEdge(SUBPROCESS, processInstance, subprocessInstance);
+            ruleBuilder.contextEdge(STATE, subprocessInstance, ruleBuilder.contextNode(TYPE_RUNNING));
+        }
+
+        ruleBuilder.buildRule();
+    }
+
+    private void interruptSubprocess(CallActivity callActivity, GrooveNode processInstance) {
+        // Terminate subprocess and delete all its tokens.
+        GrooveNode subprocessInstance = ruleBuilder.deleteNode(TYPE_PROCESS_SNAPSHOT);
+        ruleBuilder.contextEdge(SUBPROCESS, processInstance, subprocessInstance);
+        String subprocessName = callActivity.getSubProcessModel().getName();
+        ruleBuilder.contextEdge(NAME,
+                                subprocessInstance,
+                                ruleBuilder.contextNode(createStringNodeLabel(subprocessName)));
+        GrooveNode subprocessRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
+        ruleBuilder.deleteEdge(STATE, subprocessInstance, subprocessRunning);
+
+        GrooveNode forAllTokens = ruleBuilder.contextNode(FORALL);
+        GrooveNode arbitraryToken = ruleBuilder.deleteNode(TYPE_TOKEN);
+        ruleBuilder.deleteEdge(TOKENS, subprocessInstance, arbitraryToken);
+        ruleBuilder.contextEdge(AT, arbitraryToken, forAllTokens);
+
+        GrooveNode forAllMessages = ruleBuilder.contextNode(FORALL);
+        GrooveNode arbitraryMessage = ruleBuilder.deleteNode(TYPE_MESSAGE);
+        ruleBuilder.deleteEdge(MESSAGES, subprocessInstance, arbitraryMessage);
+        ruleBuilder.contextEdge(AT, arbitraryMessage, forAllMessages);
     }
 }
