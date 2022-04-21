@@ -98,6 +98,14 @@ public class BPMNToGrooveTransformerHelper {
                                                                                  sequenceFlow.getID()));
     }
 
+    public static void contextTokenWithPosition(GrooveRuleBuilder ruleBuilder,
+                                                GrooveNode processInstance,
+                                                String position) {
+        GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
+        ruleBuilder.contextEdge(TOKENS, processInstance, token);
+        ruleBuilder.contextEdge(POSITION, token, ruleBuilder.contextNode(createStringNodeLabel(position)));
+    }
+
     public static void deleteTokenWithPosition(GrooveRuleBuilder ruleBuilder,
                                                GrooveNode processInstance,
                                                String position) {

@@ -188,6 +188,8 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         // Delete token in task if interrupt.
         if (boundaryEvent.isInterrupt()) {
             BPMNToGrooveTransformerHelper.deleteTokenWithPosition(ruleBuilder, processInstance, task.getName());
+        } else {
+            BPMNToGrooveTransformerHelper.contextTokenWithPosition(ruleBuilder, processInstance, task.getName());
         }
         // WARNING: If not interrupt the state space grows indefinitely!
         ruleBuilder.buildRule();
