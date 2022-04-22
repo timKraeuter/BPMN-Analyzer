@@ -1,54 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="end3_p1" role="rule" edgeids="false" edgemode="directed">
-        <node id="n62">
+        <node id="n65">
             <attr name="layout">
-                <string>407 242 0 0</string>
+                <string>417 242 0 0</string>
             </attr>
         </node>
-        <edge from="n62" to="n62">
+        <edge from="n65" to="n65">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n62" to="n62">
+        <edge from="n65" to="n65">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n60">
+        <node id="n62">
             <attr name="layout">
-                <string>62 85 0 0</string>
+                <string>62 87 0 0</string>
             </attr>
         </node>
-        <edge from="n60" to="n60">
+        <edge from="n62" to="n62">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n61">
-            <attr name="layout">
-                <string>392 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n61" to="n61">
-            <attr name="label">
-                <string>string:"p1"</string>
-            </attr>
-        </edge>
         <node id="n63">
             <attr name="layout">
-                <string>592 242 0 0</string>
+                <string>402 152 0 0</string>
             </attr>
         </node>
         <edge from="n63" to="n63">
             <attr name="label">
-                <string>string:"signal_end3_p1"</string>
+                <string>string:"p1"</string>
             </attr>
         </edge>
         <node id="n64">
             <attr name="layout">
-                <string>392 72 0 0</string>
+                <string>402 72 0 0</string>
             </attr>
         </node>
         <edge from="n64" to="n64">
@@ -56,22 +46,47 @@
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n62" to="n63">
+        <node id="n66">
+            <attr name="layout">
+                <string>602 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n66" to="n66">
+            <attr name="label">
+                <string>string:"signal_end3_p1"</string>
+            </attr>
+        </edge>
+        <node id="n67">
+            <attr name="layout">
+                <string>402 322 0 0</string>
+            </attr>
+        </node>
+        <edge from="n67" to="n67">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <edge from="n65" to="n66">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n60" to="n62">
+        <edge from="n62" to="n65">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n60" to="n61">
+        <edge from="n62" to="n63">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n60" to="n64">
+        <edge from="n62" to="n64">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n62" to="n67">
             <attr name="label">
                 <string>state</string>
             </attr>

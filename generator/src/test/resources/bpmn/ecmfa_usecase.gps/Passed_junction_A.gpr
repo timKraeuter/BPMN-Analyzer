@@ -1,54 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="Passed_junction_A" role="rule" edgeids="false" edgemode="directed">
-        <node id="n576">
+        <node id="n579">
             <attr name="layout">
-                <string>520 242 0 0</string>
+                <string>530 242 0 0</string>
             </attr>
         </node>
-        <edge from="n576" to="n576">
+        <edge from="n579" to="n579">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n576" to="n576">
+        <edge from="n579" to="n579">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n574">
+        <node id="n576">
             <attr name="layout">
-                <string>62 85 0 0</string>
+                <string>62 87 0 0</string>
             </attr>
         </node>
-        <edge from="n574" to="n574">
+        <edge from="n576" to="n576">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n575">
-            <attr name="layout">
-                <string>392 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n575" to="n575">
-            <attr name="label">
-                <string>string:"Bus controller (A)"</string>
-            </attr>
-        </edge>
         <node id="n577">
             <attr name="layout">
-                <string>817 242 0 0</string>
+                <string>402 152 0 0</string>
             </attr>
         </node>
         <edge from="n577" to="n577">
             <attr name="label">
-                <string>string:"Pass_Junction_A_Passed_junction_A"</string>
+                <string>string:"Bus controller (A)"</string>
             </attr>
         </edge>
         <node id="n578">
             <attr name="layout">
-                <string>392 72 0 0</string>
+                <string>402 72 0 0</string>
             </attr>
         </node>
         <edge from="n578" to="n578">
@@ -56,22 +46,47 @@
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n576" to="n577">
+        <node id="n580">
+            <attr name="layout">
+                <string>827 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n580" to="n580">
+            <attr name="label">
+                <string>string:"Pass_Junction_A_Passed_junction_A"</string>
+            </attr>
+        </edge>
+        <node id="n581">
+            <attr name="layout">
+                <string>402 322 0 0</string>
+            </attr>
+        </node>
+        <edge from="n581" to="n581">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <edge from="n579" to="n580">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n574" to="n576">
+        <edge from="n576" to="n579">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n574" to="n575">
+        <edge from="n576" to="n577">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n574" to="n578">
+        <edge from="n576" to="n578">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n576" to="n581">
             <attr name="label">
                 <string>state</string>
             </attr>

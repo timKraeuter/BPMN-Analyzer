@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="end" role="rule" edgeids="false" edgemode="directed">
-        <node id="n113">
+        <node id="n114">
             <attr name="layout">
-                <string>565 242 0 0</string>
+                <string>575 242 0 0</string>
             </attr>
         </node>
-        <edge from="n113" to="n113">
+        <edge from="n114" to="n114">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n113" to="n113">
+        <edge from="n114" to="n114">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
         <node id="n111">
             <attr name="layout">
-                <string>62 85 0 0</string>
+                <string>62 87 0 0</string>
             </attr>
         </node>
         <edge from="n111" to="n111">
@@ -28,7 +28,7 @@
         </edge>
         <node id="n112">
             <attr name="layout">
-                <string>392 152 0 0</string>
+                <string>402 152 0 0</string>
             </attr>
         </node>
         <edge from="n112" to="n112">
@@ -36,32 +36,42 @@
                 <string>string:"parallel-gateway-complex"</string>
             </attr>
         </edge>
-        <node id="n114">
+        <node id="n113">
             <attr name="layout">
-                <string>907 242 0 0</string>
+                <string>402 72 0 0</string>
             </attr>
         </node>
-        <edge from="n114" to="n114">
-            <attr name="label">
-                <string>string:"p3_end"</string>
-            </attr>
-        </edge>
-        <node id="n115">
-            <attr name="layout">
-                <string>392 72 0 0</string>
-            </attr>
-        </node>
-        <edge from="n115" to="n115">
+        <edge from="n113" to="n113">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n113" to="n114">
+        <node id="n115">
+            <attr name="layout">
+                <string>917 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n115" to="n115">
+            <attr name="label">
+                <string>string:"p3_end"</string>
+            </attr>
+        </edge>
+        <node id="n116">
+            <attr name="layout">
+                <string>402 322 0 0</string>
+            </attr>
+        </node>
+        <edge from="n116" to="n116">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <edge from="n114" to="n115">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n111" to="n113">
+        <edge from="n111" to="n114">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
@@ -71,7 +81,12 @@
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n111" to="n115">
+        <edge from="n111" to="n113">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n111" to="n116">
             <attr name="label">
                 <string>state</string>
             </attr>

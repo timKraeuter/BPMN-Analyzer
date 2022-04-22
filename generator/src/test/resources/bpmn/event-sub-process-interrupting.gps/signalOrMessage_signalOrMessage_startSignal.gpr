@@ -1,87 +1,87 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="signalOrMessage_signalOrMessage_startSignal" role="rule" edgeids="false" edgemode="directed">
-        <node id="n78">
+        <node id="n81">
             <attr name="layout">
                 <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n78" to="n78">
+        <edge from="n81" to="n81">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n79">
+        <node id="n82">
             <attr name="layout">
                 <string>392 232 0 0</string>
             </attr>
         </node>
-        <edge from="n79" to="n79">
+        <edge from="n82" to="n82">
             <attr name="label">
                 <string>string:"eventSubprocessTrigger"</string>
             </attr>
         </edge>
-        <node id="n80">
+        <node id="n83">
             <attr name="layout">
                 <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n80" to="n80">
+        <edge from="n83" to="n83">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n81">
+        <node id="n84">
             <attr name="layout">
                 <string>602 152 0 0</string>
             </attr>
         </node>
-        <edge from="n81" to="n81">
+        <edge from="n84" to="n84">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n82">
+        <node id="n85">
             <attr name="layout">
                 <string>877 224 0 0</string>
             </attr>
         </node>
-        <edge from="n82" to="n82">
+        <edge from="n85" to="n85">
             <attr name="label">
                 <string>string:"start_trigger_signalOrMessage"</string>
             </attr>
         </edge>
-        <node id="n83">
+        <node id="n86">
             <attr name="layout">
                 <string>877 144 0 0</string>
             </attr>
         </node>
-        <edge from="n83" to="n83">
+        <edge from="n86" to="n86">
             <attr name="label">
                 <string>string:"signalOrMessage_startSignal"</string>
             </attr>
         </edge>
-        <edge from="n81" to="n83">
+        <edge from="n84" to="n86">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n81" to="n82">
+        <edge from="n84" to="n85">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n78" to="n79">
+        <edge from="n81" to="n82">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n78" to="n80">
+        <edge from="n81" to="n83">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n78" to="n81">
+        <edge from="n81" to="n84">
             <attr name="label">
                 <string>tokens</string>
             </attr>

@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="end2_p1" role="rule" edgeids="false" edgemode="directed">
-        <node id="n7">
+        <node id="n8">
             <attr name="layout">
-                <string>407 242 0 0</string>
+                <string>417 242 0 0</string>
             </attr>
         </node>
-        <edge from="n7" to="n7">
+        <edge from="n8" to="n8">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n7" to="n7">
+        <edge from="n8" to="n8">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
         <node id="n5">
             <attr name="layout">
-                <string>62 85 0 0</string>
+                <string>62 87 0 0</string>
             </attr>
         </node>
         <edge from="n5" to="n5">
@@ -28,7 +28,7 @@
         </edge>
         <node id="n6">
             <attr name="layout">
-                <string>392 152 0 0</string>
+                <string>402 152 0 0</string>
             </attr>
         </node>
         <edge from="n6" to="n6">
@@ -36,32 +36,42 @@
                 <string>string:"p1"</string>
             </attr>
         </edge>
-        <node id="n8">
+        <node id="n7">
             <attr name="layout">
-                <string>592 242 0 0</string>
+                <string>402 72 0 0</string>
             </attr>
         </node>
-        <edge from="n8" to="n8">
-            <attr name="label">
-                <string>string:"r_msg2_end2_p1"</string>
-            </attr>
-        </edge>
-        <node id="n9">
-            <attr name="layout">
-                <string>392 72 0 0</string>
-            </attr>
-        </node>
-        <edge from="n9" to="n9">
+        <edge from="n7" to="n7">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n7" to="n8">
+        <node id="n9">
+            <attr name="layout">
+                <string>602 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n9" to="n9">
+            <attr name="label">
+                <string>string:"r_msg2_end2_p1"</string>
+            </attr>
+        </edge>
+        <node id="n10">
+            <attr name="layout">
+                <string>402 322 0 0</string>
+            </attr>
+        </node>
+        <edge from="n10" to="n10">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <edge from="n8" to="n9">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n5" to="n7">
+        <edge from="n5" to="n8">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
@@ -71,7 +81,12 @@
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n5" to="n9">
+        <edge from="n5" to="n7">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n5" to="n10">
             <attr name="label">
                 <string>state</string>
             </attr>
