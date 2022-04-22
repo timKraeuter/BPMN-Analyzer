@@ -83,7 +83,7 @@ public class BPMNToGrooveTransformerHelper {
         return processInstance;
     }
 
-    public static GrooveNode contextProcessInstanceWithName(AbstractProcess process, GrooveRuleBuilder ruleBuilder) {
+    private static GrooveNode contextProcessInstanceWithName(AbstractProcess process, GrooveRuleBuilder ruleBuilder) {
         GrooveNode processInstance = ruleBuilder.contextNode(TYPE_PROCESS_SNAPSHOT);
         ruleBuilder.contextEdge(NAME,
                                 processInstance,
@@ -286,13 +286,22 @@ public class BPMNToGrooveTransformerHelper {
                                 ruleBuilder.contextNode(createStringNodeLabel(subprocessName)));
         GrooveNode subprocessRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
         ruleBuilder.deleteEdge(STATE, subprocessInstance, subprocessRunning);
-        GrooveNode subprocessInterrupted = ruleBuilder.addNode(TYPE_INTERRUPTED);
-        ruleBuilder.addEdge(STATE, subprocessInstance, subprocessInterrupted);
+        GrooveNode subprocessTerminated = ruleBuilder.addNode(TYPE_TERMINATED);
+        ruleBuilder.addEdge(STATE, subprocessInstance, subprocessTerminated);
+
+        // Delete all tokens
+        GrooveNode forAllTokens = ruleBuilder.contextNode(FORALL);
+        GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
+        ruleBuilder.deleteEdge(TOKENS, subprocessInstance, token);
+        ruleBuilder.contextEdge(AT, token, forAllTokens);
+
 
         if (quantifierIfExists != null) {
             ruleBuilder.contextEdge(AT, subprocessInstance, quantifierIfExists);
             ruleBuilder.contextEdge(AT, subprocessRunning, quantifierIfExists);
-            ruleBuilder.contextEdge(AT, subprocessInterrupted, quantifierIfExists);
+            ruleBuilder.contextEdge(AT, subprocessTerminated, quantifierIfExists);
+
+            ruleBuilder.contextEdge(IN, forAllTokens, quantifierIfExists);
         }
     }
 }

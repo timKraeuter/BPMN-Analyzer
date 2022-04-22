@@ -42,13 +42,14 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
         generateTerminateEventSubProcessRule(process, eventSubprocess, ruleBuilder);
     }
 
-    private void generateTerminateEventSubProcessRule(AbstractProcess process,
+    private void generateTerminateEventSubProcessRule(AbstractProcess parentProcess,
                                                       EventSubprocess eventSubprocess,
                                                       GrooveRuleBuilder ruleBuilder) {
         String eSubprocessName = eventSubprocess.getName();
         ruleBuilder.startRule(eSubprocessName + END);
-        GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstanceWithName(process, ruleBuilder);
-        bpmnRuleGenerator.deleteTerminatedSubprocess(ruleBuilder, eSubprocessName, processInstance);
+        GrooveNode parentProcessInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(parentProcess,
+                                                                                                ruleBuilder);
+        bpmnRuleGenerator.deleteTerminatedSubprocess(ruleBuilder, eSubprocessName, parentProcessInstance);
         ruleBuilder.buildRule();
     }
 
@@ -137,8 +138,7 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
     private String getMessageStartEventRuleName(Set<MessageFlow> incomingMessageFlows,
                                                 MessageFlow incomingMessageFlow,
                                                 StartEvent startEvent) {
-        return incomingMessageFlows.size() > 1 ? incomingMessageFlow.getName() :
-                startEvent.getName();
+        return incomingMessageFlows.size() > 1 ? incomingMessageFlow.getName() : startEvent.getName();
     }
 
     private void createStartNonInterruptingEvenSubprocessFromMessageRules(AbstractProcess process,

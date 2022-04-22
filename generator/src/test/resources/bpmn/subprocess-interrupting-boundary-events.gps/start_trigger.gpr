@@ -1,112 +1,112 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="start_trigger" role="rule" edgeids="false" edgemode="directed">
-        <node id="n118">
+        <node id="n130">
             <attr name="layout">
                 <string>515 332 0 0</string>
             </attr>
         </node>
-        <edge from="n118" to="n118">
+        <edge from="n130" to="n130">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n118" to="n118">
+        <edge from="n130" to="n130">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n120">
+        <node id="n132">
             <attr name="layout">
                 <string>515 242 0 0</string>
             </attr>
         </node>
-        <edge from="n120" to="n120">
+        <edge from="n132" to="n132">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n120" to="n120">
+        <edge from="n132" to="n132">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n115">
+        <node id="n127">
             <attr name="layout">
                 <string>62 87 0 0</string>
             </attr>
         </node>
-        <edge from="n115" to="n115">
+        <edge from="n127" to="n127">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n116">
+        <node id="n128">
             <attr name="layout">
                 <string>402 152 0 0</string>
             </attr>
         </node>
-        <edge from="n116" to="n116">
+        <edge from="n128" to="n128">
             <attr name="label">
                 <string>string:"interruptTrigger"</string>
             </attr>
         </edge>
-        <node id="n117">
+        <node id="n129">
             <attr name="layout">
                 <string>402 72 0 0</string>
             </attr>
         </node>
-        <edge from="n117" to="n117">
+        <edge from="n129" to="n129">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n119">
+        <node id="n131">
             <attr name="layout">
                 <string>797 332 0 0</string>
             </attr>
         </node>
-        <edge from="n119" to="n119">
+        <edge from="n131" to="n131">
             <attr name="label">
                 <string>string:"start_trigger_signalOrMessage"</string>
             </attr>
         </edge>
-        <node id="n121">
+        <node id="n133">
             <attr name="layout">
                 <string>797 242 0 0</string>
             </attr>
         </node>
-        <edge from="n121" to="n121">
+        <edge from="n133" to="n133">
             <attr name="label">
                 <string>string:"interruptTrigger_start_trigger"</string>
             </attr>
         </edge>
-        <edge from="n115" to="n118">
+        <edge from="n127" to="n130">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n118" to="n119">
+        <edge from="n130" to="n131">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n115" to="n120">
+        <edge from="n127" to="n132">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n120" to="n121">
+        <edge from="n132" to="n133">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n115" to="n116">
+        <edge from="n127" to="n128">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n115" to="n117">
+        <edge from="n127" to="n129">
             <attr name="label">
                 <string>state</string>
             </attr>

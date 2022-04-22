@@ -1,77 +1,92 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="signal_end" role="rule" edgeids="false" edgemode="directed">
-        <node id="n96">
+        <node id="n101">
             <attr name="layout">
-                <string>407 242 0 0</string>
+                <string>417 242 0 0</string>
             </attr>
         </node>
-        <edge from="n96" to="n96">
+        <edge from="n101" to="n101">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n96" to="n96">
+        <edge from="n101" to="n101">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n94">
-            <attr name="layout">
-                <string>62 85 0 0</string>
-            </attr>
-        </node>
-        <edge from="n94" to="n94">
-            <attr name="label">
-                <string>type:ProcessSnapshot</string>
-            </attr>
-        </edge>
-        <node id="n95">
-            <attr name="layout">
-                <string>392 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n95" to="n95">
-            <attr name="label">
-                <string>string:"p1"</string>
-            </attr>
-        </edge>
-        <node id="n97">
-            <attr name="layout">
-                <string>592 242 0 0</string>
-            </attr>
-        </node>
-        <edge from="n97" to="n97">
-            <attr name="label">
-                <string>string:"signal_signal_end"</string>
-            </attr>
-        </edge>
         <node id="n98">
             <attr name="layout">
-                <string>392 72 0 0</string>
+                <string>62 87 0 0</string>
             </attr>
         </node>
         <edge from="n98" to="n98">
             <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n99">
+            <attr name="layout">
+                <string>402 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n99" to="n99">
+            <attr name="label">
+                <string>string:"p1"</string>
+            </attr>
+        </edge>
+        <node id="n100">
+            <attr name="layout">
+                <string>402 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n100" to="n100">
+            <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n96" to="n97">
+        <node id="n102">
+            <attr name="layout">
+                <string>602 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n102" to="n102">
+            <attr name="label">
+                <string>string:"signal_signal_end"</string>
+            </attr>
+        </edge>
+        <node id="n103">
+            <attr name="layout">
+                <string>402 322 0 0</string>
+            </attr>
+        </node>
+        <edge from="n103" to="n103">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <edge from="n101" to="n102">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n94" to="n96">
+        <edge from="n98" to="n101">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n94" to="n95">
+        <edge from="n98" to="n99">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n94" to="n98">
+        <edge from="n98" to="n100">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n98" to="n103">
             <attr name="label">
                 <string>state</string>
             </attr>
