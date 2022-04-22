@@ -21,7 +21,7 @@ public class FileTestHelper {
                                                  .replaceAll("\r?\n", "\r\n"); // force consistent line separators
             final String expectedString = FileUtils.readFileToString(expected, StandardCharsets.UTF_8)
                                                    .replaceAll("\r?\n", "\r\n"); // force consistent line separators
-            assertThat(
+            assertThat(String.format("The file %s is not equal to the file %s!", expected.getName(), actual.getName()),
                     actualString,
                     is(expectedString));
         } catch (IOException e) {

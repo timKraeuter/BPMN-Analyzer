@@ -55,45 +55,4 @@ public class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
     void testCallActivityComplex() throws IOException {
         testGrooveGenerationForBPMNResourceFile("call-activity-complex.bpmn");
     }
-
-    /**
-     * See test case <a href="https://cawemo.com/share/3b55577a-e7ed-4729-a046-4d79fd11c941">"Interrupting Timer Boundary Events"</a> in cawemo.
-     */
-    @Test
-    void testInterruptingTimerBoundaryEvents() throws IOException {
-        final StartEvent start = new StartEvent("start");
-        final CallActivity subprocess = new CallActivity(this.buildSimpleSubProcess());
-        BoundaryEvent timerBoundaryEvent = new BoundaryEvent("timer", BoundaryEventType.TIMER, true);
-        subprocess.attachBoundaryEvent(timerBoundaryEvent);
-        final EndEvent end1 = new EndEvent("end1");
-        final EndEvent end2 = new EndEvent("end2");
-
-        final String modelName = "timerBoundaryEvent";
-        final BPMNCollaboration collaboration = new BPMNCollaborationBuilder()
-                .name(modelName)
-                .processName(modelName)
-                .startEvent(start)
-                .sequenceFlow(start, subprocess)
-                .sequenceFlow(subprocess, end1)
-                .sequenceFlow(timerBoundaryEvent, end2)
-                .build();
-
-        this.checkGrooveGeneration(collaboration);
-    }
-
-    private Process buildSimpleSubProcess() {
-        // TODO: Possible name crashes in rules!
-        final StartEvent start = new StartEvent("start_sub");
-        final Task a = new Task("Subactivity");
-        final EndEvent end = new EndEvent("end_sub");
-        return new BPMNCollaborationBuilder()
-                .processName("Subprocess")
-                .startEvent(start)
-                .sequenceFlow(start, a)
-                .sequenceFlow(a, end)
-                .build()
-                .getParticipants()
-                .iterator()
-                .next();
-    }
 }
