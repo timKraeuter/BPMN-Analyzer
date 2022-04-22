@@ -1,112 +1,112 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="start_trigger" role="rule" edgeids="false" edgemode="directed">
-        <node id="n82">
+        <node id="n87">
             <attr name="layout">
                 <string>515 332 0 0</string>
             </attr>
         </node>
-        <edge from="n82" to="n82">
+        <edge from="n87" to="n87">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n82" to="n82">
+        <edge from="n87" to="n87">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n84">
+        <node id="n89">
             <attr name="layout">
                 <string>515 242 0 0</string>
             </attr>
         </node>
-        <edge from="n84" to="n84">
+        <edge from="n89" to="n89">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n84" to="n84">
+        <edge from="n89" to="n89">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n79">
+        <node id="n84">
             <attr name="layout">
                 <string>62 87 0 0</string>
             </attr>
         </node>
-        <edge from="n79" to="n79">
+        <edge from="n84" to="n84">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n80">
+        <node id="n85">
             <attr name="layout">
                 <string>402 152 0 0</string>
             </attr>
         </node>
-        <edge from="n80" to="n80">
+        <edge from="n85" to="n85">
             <attr name="label">
                 <string>string:"interruptTrigger"</string>
             </attr>
         </edge>
-        <node id="n81">
+        <node id="n86">
             <attr name="layout">
                 <string>402 72 0 0</string>
             </attr>
         </node>
-        <edge from="n81" to="n81">
+        <edge from="n86" to="n86">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n83">
+        <node id="n88">
             <attr name="layout">
                 <string>797 332 0 0</string>
             </attr>
         </node>
-        <edge from="n83" to="n83">
+        <edge from="n88" to="n88">
             <attr name="label">
                 <string>string:"start_trigger_signalOrMessage"</string>
             </attr>
         </edge>
-        <node id="n85">
+        <node id="n90">
             <attr name="layout">
                 <string>797 242 0 0</string>
             </attr>
         </node>
-        <edge from="n85" to="n85">
+        <edge from="n90" to="n90">
             <attr name="label">
                 <string>string:"interruptTrigger_start_trigger"</string>
             </attr>
         </edge>
-        <edge from="n79" to="n82">
+        <edge from="n84" to="n87">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n82" to="n83">
+        <edge from="n87" to="n88">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n79" to="n84">
+        <edge from="n84" to="n89">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n84" to="n85">
+        <edge from="n89" to="n90">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n79" to="n80">
+        <edge from="n84" to="n85">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n79" to="n81">
+        <edge from="n84" to="n86">
             <attr name="label">
                 <string>state</string>
             </attr>
