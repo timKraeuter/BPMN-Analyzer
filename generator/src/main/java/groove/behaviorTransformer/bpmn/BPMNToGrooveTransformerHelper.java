@@ -47,15 +47,15 @@ public class BPMNToGrooveTransformerHelper {
         return processInstance;
     }
 
-    public static GrooveNode contextExistsOptionalProcessInstance(AbstractProcess processForEvent,
+    public static GrooveNode contextProcessInstanceWithQuantifier(AbstractProcess process,
                                                                   GrooveRuleBuilder ruleBuilder,
-                                                                  GrooveNode existsOptional) {
+                                                                  GrooveNode quantifier) {
         GrooveNode processInstance;
-        processInstance = contextProcessInstanceWithName(processForEvent, ruleBuilder);
+        processInstance = contextProcessInstanceWithName(process, ruleBuilder);
         GrooveNode running = ruleBuilder.contextNode(TYPE_RUNNING);
         ruleBuilder.contextEdge(STATE, processInstance, running);
-        ruleBuilder.contextEdge(GrooveTransformer.AT, processInstance, existsOptional);
-        ruleBuilder.contextEdge(GrooveTransformer.AT, running, existsOptional);
+        ruleBuilder.contextEdge(GrooveTransformer.AT, processInstance, quantifier);
+        ruleBuilder.contextEdge(GrooveTransformer.AT, running, quantifier);
         return processInstance;
     }
 
@@ -71,14 +71,14 @@ public class BPMNToGrooveTransformerHelper {
         return processInstance;
     }
 
-    public static GrooveNode addExistsOptionalProcessInstance(GrooveRuleBuilder ruleBuilder,
+    public static GrooveNode addProcessInstanceWithQuantifier(GrooveRuleBuilder ruleBuilder,
                                                               String processName,
-                                                              GrooveNode existsOptional) {
+                                                              GrooveNode quantifier) {
         GrooveNode processInstance = addProcessInstanceWithName(ruleBuilder, processName);
         GrooveNode running = ruleBuilder.addNode(TYPE_RUNNING);
         ruleBuilder.addEdge(STATE, processInstance, running);
-        ruleBuilder.contextEdge(GrooveTransformer.AT, processInstance, existsOptional);
-        ruleBuilder.contextEdge(GrooveTransformer.AT, running, existsOptional);
+        ruleBuilder.contextEdge(GrooveTransformer.AT, processInstance, quantifier);
+        ruleBuilder.contextEdge(GrooveTransformer.AT, running, quantifier);
         return processInstance;
     }
 
@@ -98,28 +98,44 @@ public class BPMNToGrooveTransformerHelper {
                                                                                  sequenceFlow.getID()));
     }
 
-    public static void contextTokenWithPosition(GrooveRuleBuilder ruleBuilder,
-                                                GrooveNode processInstance,
-                                                String position) {
+    public static void addOutgoingTokensForFlowNodeToProcessInstanceWithQuantifier(FlowNode flowNode,
+                                                                                   GrooveRuleBuilder ruleBuilder,
+                                                                                   GrooveNode processInstance,
+                                                                                   GrooveNode quantifier) {
+        flowNode.getOutgoingFlows().forEach(sequenceFlow -> {
+            GrooveNode addedToken = addTokenWithPosition(ruleBuilder,
+                                                         processInstance,
+                                                         sequenceFlow.getID());
+            ruleBuilder.contextEdge(AT, addedToken, quantifier);
+        });
+    }
+
+    public static GrooveNode contextTokenWithPosition(GrooveRuleBuilder ruleBuilder,
+                                                      GrooveNode processInstance,
+                                                      String position) {
         GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
         ruleBuilder.contextEdge(TOKENS, processInstance, token);
         ruleBuilder.contextEdge(POSITION, token, ruleBuilder.contextNode(createStringNodeLabel(position)));
+        return token;
     }
 
-    public static void deleteTokenWithPosition(GrooveRuleBuilder ruleBuilder,
-                                               GrooveNode processInstance,
-                                               String position) {
+    public static GrooveNode deleteTokenWithPosition(GrooveRuleBuilder ruleBuilder,
+                                                     GrooveNode processInstance,
+                                                     String position) {
         GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
         ruleBuilder.deleteEdge(TOKENS, processInstance, token);
         ruleBuilder.deleteEdge(POSITION, token, ruleBuilder.contextNode(createStringNodeLabel(position)));
+
+        return token;
     }
 
-    public static void addTokenWithPosition(GrooveRuleBuilder ruleBuilder,
-                                            GrooveNode processInstance,
-                                            String position) {
+    public static GrooveNode addTokenWithPosition(GrooveRuleBuilder ruleBuilder,
+                                                  GrooveNode processInstance,
+                                                  String position) {
         GrooveNode newToken = ruleBuilder.addNode(TYPE_TOKEN);
         ruleBuilder.addEdge(TOKENS, processInstance, newToken);
         ruleBuilder.addEdge(POSITION, newToken, ruleBuilder.contextNode(createStringNodeLabel(position)));
+        return newToken;
     }
 
     public static GrooveNode deleteMessageToProcessInstanceWithPosition(GrooveRuleBuilder ruleBuilder,
@@ -162,7 +178,7 @@ public class BPMNToGrooveTransformerHelper {
         Process messageFlowReceiver = collaboration.getMessageFlowReceiver(messageFlow);
         // If a process instance exists, send a message.
         GrooveNode existsOptional = ruleBuilder.contextNode(EXISTS_OPTIONAL);
-        GrooveNode receiverInstance = contextExistsOptionalProcessInstance(messageFlowReceiver,
+        GrooveNode receiverInstance = contextProcessInstanceWithQuantifier(messageFlowReceiver,
                                                                            ruleBuilder,
                                                                            existsOptional);
         addExistentialMessageWithPosition(ruleBuilder, receiverInstance, messageFlow.getName(), existsOptional);
@@ -234,6 +250,15 @@ public class BPMNToGrooveTransformerHelper {
                                                                         GrooveRuleBuilder ruleBuilder) {
         GrooveNode processInstance = contextProcessInstance(process, ruleBuilder);
         addOutgoingTokensForFlowNodeToProcessInstance(flowNode, ruleBuilder, processInstance);
+        return processInstance;
+    }
+
+    public static GrooveNode addTokensForOutgoingFlowsToRunningInstanceWithQuantifier(FlowNode flowNode,
+                                                                                      AbstractProcess process,
+                                                                                      GrooveRuleBuilder ruleBuilder,
+                                                                                      GrooveNode quantifier) {
+        GrooveNode processInstance = contextProcessInstanceWithQuantifier(process, ruleBuilder, quantifier);
+        addOutgoingTokensForFlowNodeToProcessInstanceWithQuantifier(flowNode, ruleBuilder, processInstance, quantifier);
         return processInstance;
     }
 

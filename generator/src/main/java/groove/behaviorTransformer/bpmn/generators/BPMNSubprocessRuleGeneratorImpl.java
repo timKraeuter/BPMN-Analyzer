@@ -122,7 +122,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
 
                     break;
                 case SIGNAL:
-                    // TODO: IMplement elsewhere.
+                    // Handled in the throw rule part.
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + boundaryEvent.getType());

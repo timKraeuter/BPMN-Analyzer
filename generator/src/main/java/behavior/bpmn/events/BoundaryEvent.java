@@ -1,5 +1,7 @@
 package behavior.bpmn.events;
 
+import behavior.bpmn.activities.Activity;
+import behavior.bpmn.activities.tasks.AbstractTask;
 import behavior.bpmn.auxiliary.EventVisitor;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 import com.google.common.base.Objects;
@@ -10,6 +12,7 @@ public class BoundaryEvent extends CatchEvent {
      * Decides if the event is interrupting or non-interrupting.
      */
     private final boolean interrupt;
+    private Activity attachedTo;
 
     public BoundaryEvent(String name, BoundaryEventType type, boolean interrupt, EventDefinition eventDefinition) {
         super(name, eventDefinition);
@@ -59,5 +62,13 @@ public class BoundaryEvent extends CatchEvent {
     @Override
     public int hashCode() {
         return Objects.hashCode(getName(), type, interrupt);
+    }
+
+    public Activity getAttachedTo() {
+        return attachedTo;
+    }
+
+    public void setAttachedTo(Activity attachedTo) {
+        this.attachedTo = attachedTo;
     }
 }

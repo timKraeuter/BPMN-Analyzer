@@ -9,15 +9,7 @@ import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.InclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
 
-public interface FlowNodeVisitor extends EventVisitor {
-    void handle(Task task);
-
-    void handle(SendTask task);
-
-    void handle(ReceiveTask task);
-
-    void handle(CallActivity callActivity);
-
+public interface FlowNodeVisitor extends EventVisitor, ActivityVisitor {
     void handle(ExclusiveGateway exclusiveGateway);
 
     void handle(ParallelGateway parallelGateway);

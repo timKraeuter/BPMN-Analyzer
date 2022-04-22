@@ -1,6 +1,7 @@
 package behavior.bpmn.activities;
 
 import behavior.bpmn.Process;
+import behavior.bpmn.auxiliary.ActivityVisitor;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
 public class CallActivity extends Activity {
@@ -29,5 +30,10 @@ public class CallActivity extends Activity {
     @Override
     public boolean isTask() {
         return false;
+    }
+
+    @Override
+    public void accept(ActivityVisitor visitor) {
+        visitor.handle(this);
     }
 }

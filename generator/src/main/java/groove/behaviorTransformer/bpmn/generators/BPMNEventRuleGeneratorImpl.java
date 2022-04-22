@@ -2,22 +2,21 @@ package groove.behaviorTransformer.bpmn.generators;
 
 import behavior.bpmn.Process;
 import behavior.bpmn.*;
+import behavior.bpmn.activities.Activity;
 import behavior.bpmn.activities.CallActivity;
+import behavior.bpmn.activities.tasks.AbstractTask;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.auxiliary.AbstractProcessVisitor;
+import behavior.bpmn.auxiliary.ActivityVisitor;
 import behavior.bpmn.auxiliary.EventVisitor;
-import behavior.bpmn.auxiliary.FlowNodeVisitor;
 import behavior.bpmn.events.*;
-import behavior.bpmn.gateways.EventBasedGateway;
-import behavior.bpmn.gateways.ExclusiveGateway;
-import behavior.bpmn.gateways.InclusiveGateway;
-import behavior.bpmn.gateways.ParallelGateway;
 import groove.behaviorTransformer.bpmn.BPMNRuleGenerator;
 import groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerHelper;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveRuleBuilder;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -321,35 +320,86 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     }
 
     private void createSignalThrowRulePart(EventDefinition eventDefinition) {
-        Set<Event> correspondingSignalCatchEvents = this.findAllCorrespondingSignalCatchEvents(eventDefinition);
+        Pair<Set<Event>, Set<BoundaryEvent>> correspondingSignalCatchEvents =
+                this.findAllCorrespondingSignalCatchEvents(
+                        eventDefinition);
 
-        correspondingSignalCatchEvents.forEach(event -> {
-            final AbstractProcess processForEvent = collaboration.findProcessForFlowNode(event);
-            if (event.isInstantiateFlowNode() || isAfterInstantiateEventBasedGateway(event)) {
-                createSignalThrowInstantiateRulePart(event, processForEvent);
-            } else {
-                // Send a signal only if the process instance exists.
-                GrooveNode existsOptional = ruleBuilder.contextNode(EXISTS_OPTIONAL);
-                GrooveNode processInstance = contextExistsOptionalProcessInstance(processForEvent,
-                                                                                  ruleBuilder,
-                                                                                  existsOptional);
+        correspondingSignalCatchEvents.getLeft().forEach(this::createCatchSignalEventRulePart);
+        correspondingSignalCatchEvents.getRight().forEach(this::createBoundarySignalCatchEventRulePart);
+    }
 
-                event.getIncomingFlows().forEach(inFlow -> {
-                    String position;
-                    if (inFlow.getSource().isExclusiveEventBasedGateway()) {
-                        position = inFlow.getSource().getName();
-                    } else {
-                        position = inFlow.getID();
-                    }
-                    GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
-                    ruleBuilder.contextEdge(AT, token, existsOptional);
-                    ruleBuilder.deleteEdge(TOKENS, processInstance, token);
-                    ruleBuilder.deleteEdge(POSITION, token, ruleBuilder.contextNode(createStringNodeLabel(position)));
+    private void createBoundarySignalCatchEventRulePart(BoundaryEvent boundarySignalEvent) {
+        Activity activity = boundarySignalEvent.getAttachedTo();
+        activity.accept(new ActivityVisitor() {
+            @Override
+            public void handle(Task task) {
+                createBoundarySignalCatchEventRulePartForTask(task);
+            }
 
-                    addExistsOptionalOutgoingTokensForFlowNode(event, existsOptional, processInstance);
-                });
+            @Override
+            public void handle(SendTask task) {
+                createBoundarySignalCatchEventRulePartForTask(task);
+            }
+
+            @Override
+            public void handle(ReceiveTask task) {
+                createBoundarySignalCatchEventRulePartForTask(task);
+            }
+
+            private void createBoundarySignalCatchEventRulePartForTask(AbstractTask task) {
+                // Multiple boundary events can be triggered
+                GrooveNode forAll = ruleBuilder.contextNode(FORALL);
+                AbstractProcess process = collaboration.findProcessForFlowNode(task);
+                // Must also be forAll
+                GrooveNode processInstance = addTokensForOutgoingFlowsToRunningInstanceWithQuantifier(
+                        boundarySignalEvent,
+                        process,
+                        ruleBuilder,
+                        forAll);
+
+                // Delete token in task if interrupt.
+                if (boundarySignalEvent.isInterrupt()) {
+                    GrooveNode deletedToken = deleteTokenWithPosition(ruleBuilder, processInstance, task.getName());
+                    ruleBuilder.contextEdge(AT, deletedToken, forAll);
+                } else {
+                    GrooveNode contextToken = contextTokenWithPosition(ruleBuilder, processInstance, task.getName());
+                    ruleBuilder.contextEdge(AT, contextToken, forAll);
+                }
+            }
+
+            @Override
+            public void handle(CallActivity callActivity) {
+                // TODO: Create part for call activity, i.e., interrupt process etc.
             }
         });
+    }
+
+    private void createCatchSignalEventRulePart(Event catchSignalEvent) {
+        final AbstractProcess processForEvent = collaboration.findProcessForFlowNode(catchSignalEvent);
+        if (catchSignalEvent.isInstantiateFlowNode() || isAfterInstantiateEventBasedGateway(catchSignalEvent)) {
+            createSignalThrowInstantiateRulePart(catchSignalEvent, processForEvent);
+        } else {
+            // Send a signal only if the process instance exists.
+            GrooveNode existsOptional = ruleBuilder.contextNode(EXISTS_OPTIONAL);
+            GrooveNode processInstance = contextProcessInstanceWithQuantifier(processForEvent,
+                                                                              ruleBuilder,
+                                                                              existsOptional);
+
+            catchSignalEvent.getIncomingFlows().forEach(inFlow -> {
+                String position;
+                if (inFlow.getSource().isExclusiveEventBasedGateway()) {
+                    position = inFlow.getSource().getName();
+                } else {
+                    position = inFlow.getID();
+                }
+                GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
+                ruleBuilder.contextEdge(AT, token, existsOptional);
+                ruleBuilder.deleteEdge(TOKENS, processInstance, token);
+                ruleBuilder.deleteEdge(POSITION, token, ruleBuilder.contextNode(createStringNodeLabel(position)));
+
+                addExistsOptionalOutgoingTokensForFlowNode(catchSignalEvent, existsOptional, processInstance);
+            });
+        }
     }
 
     private void addExistsOptionalOutgoingTokensForFlowNode(Event event,
@@ -426,8 +476,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         GrooveNode existsOptional = ruleBuilder.contextNode(EXISTS_OPTIONAL);
 
         // Needs a running parent process
-        GrooveNode parentProcessInstance = contextExistsOptionalParentProcess(eventSubprocess,
-                                                                              existsOptional);
+        GrooveNode parentProcessInstance = contextExistsOptionalParentProcess(eventSubprocess, existsOptional);
 
         // Start new subprocess instance of process
         GrooveNode eventSubProcessInstance = startNewEventSubprocess(existsOptional,
@@ -459,49 +508,60 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     private GrooveNode startNewEventSubprocess(GrooveNode existsOptional,
                                                GrooveNode parentProcessInstance,
                                                EventSubprocess eventSubprocess) {
-        GrooveNode eventSubProcessInstance =
-                BPMNToGrooveTransformerHelper.addExistsOptionalProcessInstance(
-                        ruleBuilder,
-                        eventSubprocess.getName(),
-                        existsOptional);
+        GrooveNode eventSubProcessInstance = BPMNToGrooveTransformerHelper.addProcessInstanceWithQuantifier(ruleBuilder,
+                                                                                                            eventSubprocess.getName(),
+                                                                                                            existsOptional);
         ruleBuilder.addEdge(SUBPROCESS, parentProcessInstance, eventSubProcessInstance);
         return eventSubProcessInstance;
     }
 
     private GrooveNode contextExistsOptionalParentProcess(EventSubprocess eventSubprocess, GrooveNode existsOptional) {
         AbstractProcess parentProcess = collaboration.getParentProcessForEventSubprocess(eventSubprocess);
-        return BPMNToGrooveTransformerHelper.contextExistsOptionalProcessInstance(
-                parentProcess,
-                ruleBuilder,
-                existsOptional);
+        return BPMNToGrooveTransformerHelper.contextProcessInstanceWithQuantifier(parentProcess,
+                                                                                  ruleBuilder,
+                                                                                  existsOptional);
     }
 
-    private Set<Event> findAllCorrespondingSignalCatchEvents(EventDefinition eventDefinition) {
+    private Pair<Set<Event>, Set<BoundaryEvent>> findAllCorrespondingSignalCatchEvents(EventDefinition eventDefinition) {
         Set<Event> signalCatchEvents = new LinkedHashSet<>();
+        Set<BoundaryEvent> signalBoundaryCatchEvents = new LinkedHashSet<>();
         Set<Process> seenProcesses = new HashSet<>();
-        collaboration.getParticipants().forEach(process -> signalCatchEvents.addAll(
-                findAllCorrespondingSignalCatchEvents(process, eventDefinition, seenProcesses)));
-        return signalCatchEvents;
+        collaboration.getParticipants().forEach(process -> {
+            Pair<Set<Event>, Set<BoundaryEvent>> signalAndSignalBoundaryCatchEvents =
+                    findAllCorrespondingSignalCatchEvents(
+                            process,
+                            eventDefinition,
+                            seenProcesses);
+            signalCatchEvents.addAll(signalAndSignalBoundaryCatchEvents.getLeft());
+            signalBoundaryCatchEvents.addAll(signalAndSignalBoundaryCatchEvents.getRight());
+        });
+        return Pair.of(signalCatchEvents, signalBoundaryCatchEvents);
     }
 
-    private Set<Event> findAllCorrespondingSignalCatchEvents(Process process,
-                                                             EventDefinition eventDefinition,
-                                                             Set<Process> seenProcesses) {
+    Pair<Set<Event>, Set<BoundaryEvent>> findAllCorrespondingSignalCatchEvents(Process process,
+                                                                               EventDefinition eventDefinition,
+                                                                               Set<Process> seenProcesses) {
         Set<Event> signalCatchEvents = new LinkedHashSet<>();
+        Set<BoundaryEvent> signalBoundaryCatchEvents = new LinkedHashSet<>();
         if (seenProcesses.contains(process)) {
-            return signalCatchEvents;
+            return Pair.of(signalCatchEvents, signalBoundaryCatchEvents);
         }
         seenProcesses.add(process);
 
         process.getControlFlowNodes().forEach(flowNode -> flowNode.accept(new SignalCatchEventFlowNodeVisitor(this,
                                                                                                               eventDefinition,
                                                                                                               signalCatchEvents,
+                                                                                                              signalBoundaryCatchEvents,
                                                                                                               seenProcesses)
 
         ));
         process.getEventSubprocesses().forEach(eventSubprocess -> eventSubprocess.getControlFlowNodes().forEach(flowNode -> flowNode.accept(
-                new SignalCatchEventFlowNodeVisitor(this, eventDefinition, signalCatchEvents, seenProcesses))));
-        return signalCatchEvents;
+                new SignalCatchEventFlowNodeVisitor(this,
+                                                    eventDefinition,
+                                                    signalCatchEvents,
+                                                    signalBoundaryCatchEvents,
+                                                    seenProcesses))));
+        return Pair.of(signalCatchEvents, signalBoundaryCatchEvents);
     }
 
     void createStartEventRule(StartEvent startEvent, Process process) {
@@ -529,8 +589,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     private void createMessageStartEventRule(StartEvent startEvent) {
         Set<MessageFlow> incomingMessageFlows = collaboration.getIncomingMessageFlows(startEvent);
         incomingMessageFlows.forEach(incomingMessageFlow -> {
-            ruleBuilder.startRule(incomingMessageFlows.size() > 1 ? incomingMessageFlow.getName() :
-                                          startEvent.getName());
+            ruleBuilder.startRule(incomingMessageFlows.size() >
+                                  1 ? incomingMessageFlow.getName() : startEvent.getName());
             GrooveNode processInstance = BPMNToGrooveTransformerHelper.deleteIncomingMessageAndCreateProcessInstance(
                     incomingMessageFlow,
                     collaboration,
@@ -540,94 +600,4 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         });
     }
 
-    static class SignalCatchEventFlowNodeVisitor implements FlowNodeVisitor {
-
-
-        private final BPMNEventRuleGeneratorImpl bpmnEventRuleGenerator;
-        private final EventDefinition eventDefinition;
-        private final Set<Event> signalCatchEvents;
-        private final Set<Process> seenProcesses;
-
-        public SignalCatchEventFlowNodeVisitor(BPMNEventRuleGeneratorImpl bpmnEventRuleGenerator,
-                                               EventDefinition eventDefinition,
-                                               Set<Event> signalCatchEvents,
-                                               Set<Process> seenProcesses) {
-            this.bpmnEventRuleGenerator = bpmnEventRuleGenerator;
-            this.eventDefinition = eventDefinition;
-            this.signalCatchEvents = signalCatchEvents;
-            this.seenProcesses = seenProcesses;
-        }
-
-        @Override
-        public void handle(Task task) {
-            // not relevant
-        }
-
-        @Override
-        public void handle(SendTask task) {
-            // not relevant
-        }
-
-        @Override
-        public void handle(ReceiveTask task) {
-            // not relevant
-
-        }
-
-        @Override
-        public void handle(CallActivity callActivity) {
-            signalCatchEvents.addAll(bpmnEventRuleGenerator.findAllCorrespondingSignalCatchEvents(callActivity.getSubProcessModel(),
-                                                                                                  eventDefinition,
-                                                                                                  seenProcesses));
-        }
-
-        @Override
-        public void handle(ExclusiveGateway exclusiveGateway) {
-            // not relevant
-        }
-
-        @Override
-        public void handle(ParallelGateway parallelGateway) {
-            // not relevant
-        }
-
-        @Override
-        public void handle(InclusiveGateway inclusiveGateway) {
-            // not relevant
-        }
-
-        @Override
-        public void handle(StartEvent startEvent) {
-            if ((startEvent.getType() == StartEventType.SIGNAL ||
-                 startEvent.getType() == StartEventType.SIGNAL_NON_INTERRUPTING) &&
-                startEvent.getEventDefinition().getGlobalSignalName().equals(
-                        eventDefinition.getGlobalSignalName())) {
-                signalCatchEvents.add(startEvent);
-            }
-        }
-
-        @Override
-        public void handle(IntermediateThrowEvent intermediateThrowEvent) {
-            // not relevant
-        }
-
-        @Override
-        public void handle(IntermediateCatchEvent intermediateCatchEvent) {
-            if (intermediateCatchEvent.getType() == IntermediateCatchEventType.SIGNAL &&
-                intermediateCatchEvent.getEventDefinition().getGlobalSignalName().equals(
-                        eventDefinition.getGlobalSignalName())) {
-                signalCatchEvents.add(intermediateCatchEvent);
-            }
-        }
-
-        @Override
-        public void handle(EndEvent endEvent) {
-            // not relevant
-        }
-
-        @Override
-        public void handle(EventBasedGateway eventBasedGateway) {
-            // not relevant
-        }
-    }
 }

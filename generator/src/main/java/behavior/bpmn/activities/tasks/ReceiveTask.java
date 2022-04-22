@@ -1,5 +1,6 @@
 package behavior.bpmn.activities.tasks;
 
+import behavior.bpmn.auxiliary.ActivityVisitor;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 import com.google.common.base.Objects;
 
@@ -12,6 +13,11 @@ public class ReceiveTask extends AbstractTask {
 
     public ReceiveTask(String name) {
         this(name, false);
+    }
+
+    @Override
+    public void accept(ActivityVisitor visitor) {
+        visitor.handle(this);
     }
 
     public ReceiveTask(String name, boolean instantiate) {

@@ -1,10 +1,16 @@
 package behavior.bpmn.activities.tasks;
 
+import behavior.bpmn.auxiliary.ActivityVisitor;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
 public class SendTask extends AbstractTask {
     public SendTask(String name) {
         super(name);
+    }
+
+    @Override
+    public void accept(ActivityVisitor visitor) {
+        visitor.handle(this);
     }
 
     @Override

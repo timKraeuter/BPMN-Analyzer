@@ -168,7 +168,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
                                                                                             messageFlow.getName())));
                     break;
                 case SIGNAL:
-                    // TODO: Handle elsewhere!
+                    // Handled in the throw rule part.
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + boundaryEvent.getType());

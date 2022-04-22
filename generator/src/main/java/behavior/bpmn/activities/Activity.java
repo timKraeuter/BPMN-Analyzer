@@ -1,6 +1,8 @@
 package behavior.bpmn.activities;
 
 import behavior.bpmn.FlowNode;
+import behavior.bpmn.auxiliary.ActivityVisitor;
+import behavior.bpmn.auxiliary.FlowNodeVisitor;
 import behavior.bpmn.events.BoundaryEvent;
 
 import java.util.LinkedHashSet;
@@ -13,6 +15,7 @@ public abstract class Activity extends FlowNode {
         super(name);
         boundaryEvents = new LinkedHashSet<>();
     }
+    public abstract void accept(ActivityVisitor visitor);
 
     @Override
     public boolean isInclusiveGateway() {
@@ -30,7 +33,14 @@ public abstract class Activity extends FlowNode {
     }
 
     public void attachBoundaryEvent(BoundaryEvent boundaryEvent) {
+        if (boundaryEvent.getAttachedTo() != null) {
+            throw new IllegalArgumentException(String.format(
+                    "The boundary event %s cannot be attached to two activities! It is already attached to %s.",
+                    boundaryEvent.getName(),
+                    boundaryEvent.getAttachedTo().getName()));
+        }
         boundaryEvents.add(boundaryEvent);
+        boundaryEvent.setAttachedTo(this);
     }
 
     public Set<BoundaryEvent> getBoundaryEvents() {
