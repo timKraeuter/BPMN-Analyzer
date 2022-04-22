@@ -104,9 +104,7 @@ public class BPMNToGrooveTransformerHelper {
                                                                                    GrooveNode processInstance,
                                                                                    GrooveNode quantifier) {
         flowNode.getOutgoingFlows().forEach(sequenceFlow -> {
-            GrooveNode addedToken = addTokenWithPosition(ruleBuilder,
-                                                         processInstance,
-                                                         sequenceFlow.getID());
+            GrooveNode addedToken = addTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID());
             ruleBuilder.contextEdge(AT, addedToken, quantifier);
         });
     }
@@ -193,9 +191,7 @@ public class BPMNToGrooveTransformerHelper {
             } else {
                 tokenPosition = sequenceFlow.getID();
             }
-            ruleBuilder.contextEdge(POSITION,
-                                    token,
-                                    ruleBuilder.contextNode(createStringNodeLabel(tokenPosition)));
+            ruleBuilder.contextEdge(POSITION, token, ruleBuilder.contextNode(createStringNodeLabel(tokenPosition)));
             ruleBuilder.contextEdge(AT, token, existsOptional);
         });
         // TODO: Afterwards remove deleting messages from terminate rule.
@@ -225,7 +221,7 @@ public class BPMNToGrooveTransformerHelper {
     public static boolean isAfterInstantiateEventBasedGateway(FlowNode target) {
         boolean isAfterInstantiateEVGateway =
                 target.getIncomingFlows().anyMatch(sequenceFlow -> sequenceFlow.getSource().isExclusiveEventBasedGateway() &&
-                                                                   sequenceFlow.getSource().isInstantiateFlowNode());
+                                                                                                 sequenceFlow.getSource().isInstantiateFlowNode());
         if (isAfterInstantiateEVGateway && target.getIncomingFlows().count() > 1) {
             throw new RuntimeException(
                     "Multiple incoming sequence flows into a message event after an instantiate event based gateway! " +
@@ -278,30 +274,35 @@ public class BPMNToGrooveTransformerHelper {
                                            GrooveNode processInstance,
                                            GrooveNode quantifierIfExists) {
         // Terminate subprocess and delete all its tokens.
-        GrooveNode subprocessInstance = ruleBuilder.contextNode(TYPE_PROCESS_SNAPSHOT);
-        ruleBuilder.contextEdge(SUBPROCESS, processInstance, subprocessInstance);
+        GrooveNode subprocessInstance = ruleBuilder.deleteNode(TYPE_PROCESS_SNAPSHOT);
+        ruleBuilder.deleteEdge(SUBPROCESS, processInstance, subprocessInstance);
         String subprocessName = callActivity.getSubProcessModel().getName();
-        ruleBuilder.contextEdge(NAME,
-                                subprocessInstance,
-                                ruleBuilder.contextNode(createStringNodeLabel(subprocessName)));
+        ruleBuilder.deleteEdge(NAME,
+                               subprocessInstance,
+                               ruleBuilder.contextNode(createStringNodeLabel(subprocessName)));
         GrooveNode subprocessRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
         ruleBuilder.deleteEdge(STATE, subprocessInstance, subprocessRunning);
-        GrooveNode subprocessTerminated = ruleBuilder.addNode(TYPE_TERMINATED);
-        ruleBuilder.addEdge(STATE, subprocessInstance, subprocessTerminated);
 
         // Delete all tokens
         GrooveNode forAllTokens = ruleBuilder.contextNode(FORALL);
         GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
         ruleBuilder.deleteEdge(TOKENS, subprocessInstance, token);
         ruleBuilder.contextEdge(AT, token, forAllTokens);
+        // Delete all messages
+        GrooveNode forAllMessages = (quantifierIfExists !=
+                                     null) ? ruleBuilder.contextNode(FORALL_NON_VACUOUS) : ruleBuilder.contextNode(
+                FORALL); // TODO: Add some explanation. Probably not the final say yet.
+        GrooveNode message = ruleBuilder.deleteNode(TYPE_MESSAGE);
+        ruleBuilder.deleteEdge(MESSAGES, subprocessInstance, message);
+        ruleBuilder.contextEdge(AT, message, forAllMessages);
 
 
         if (quantifierIfExists != null) {
             ruleBuilder.contextEdge(AT, subprocessInstance, quantifierIfExists);
             ruleBuilder.contextEdge(AT, subprocessRunning, quantifierIfExists);
-            ruleBuilder.contextEdge(AT, subprocessTerminated, quantifierIfExists);
 
             ruleBuilder.contextEdge(IN, forAllTokens, quantifierIfExists);
+            ruleBuilder.contextEdge(IN, forAllMessages, quantifierIfExists);
         }
     }
 }

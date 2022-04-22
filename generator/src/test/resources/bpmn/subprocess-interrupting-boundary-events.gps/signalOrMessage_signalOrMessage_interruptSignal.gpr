@@ -1,87 +1,87 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="signalOrMessage_signalOrMessage_interruptSignal" role="rule" edgeids="false" edgemode="directed">
-        <node id="n140">
+        <node id="n143">
             <attr name="layout">
                 <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n140" to="n140">
+        <edge from="n143" to="n143">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n141">
+        <node id="n144">
             <attr name="layout">
                 <string>392 232 0 0</string>
             </attr>
         </node>
-        <edge from="n141" to="n141">
+        <edge from="n144" to="n144">
             <attr name="label">
                 <string>string:"interruptTrigger"</string>
             </attr>
         </edge>
-        <node id="n142">
+        <node id="n145">
             <attr name="layout">
                 <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n142" to="n142">
+        <edge from="n145" to="n145">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n143">
+        <node id="n146">
             <attr name="layout">
                 <string>542 152 0 0</string>
             </attr>
         </node>
-        <edge from="n143" to="n143">
+        <edge from="n146" to="n146">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n144">
+        <node id="n147">
             <attr name="layout">
                 <string>787 224 0 0</string>
             </attr>
         </node>
-        <edge from="n144" to="n144">
+        <edge from="n147" to="n147">
             <attr name="label">
                 <string>string:"start_trigger_signalOrMessage"</string>
             </attr>
         </edge>
-        <node id="n145">
+        <node id="n148">
             <attr name="layout">
                 <string>787 144 0 0</string>
             </attr>
         </node>
-        <edge from="n145" to="n145">
+        <edge from="n148" to="n148">
             <attr name="label">
                 <string>string:"signalOrMessage_interruptSignal"</string>
             </attr>
         </edge>
-        <edge from="n143" to="n145">
+        <edge from="n146" to="n148">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n143" to="n144">
+        <edge from="n146" to="n147">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n140" to="n141">
+        <edge from="n143" to="n144">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n140" to="n142">
+        <edge from="n143" to="n145">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n140" to="n143">
+        <edge from="n143" to="n146">
             <attr name="label">
                 <string>tokens</string>
             </attr>
