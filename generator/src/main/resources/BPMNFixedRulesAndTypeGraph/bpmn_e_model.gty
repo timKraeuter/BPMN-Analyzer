@@ -16,7 +16,7 @@
         </node>
         <node id="n1">
             <attr name="layout">
-                <string>540 96 32 18</string>
+                <string>517 96 77 18</string>
             </attr>
         </node>
         <node id="n2">
@@ -44,6 +44,11 @@
                 <string>362 195 90 36</string>
             </attr>
         </node>
+        <node id="n7">
+            <attr name="layout">
+                <string>733 191 70 18</string>
+            </attr>
+        </node>
         <edge from="n13" to="n13">
             <attr name="label">
                 <string>type:Token</string>
@@ -64,19 +69,19 @@
                 <string>string:name</string>
             </attr>
         </edge>
-        <edge from="n0" to="n5">
-            <attr name="label">
-                <string>subprocess</string>
-            </attr>
-        </edge>
-        <edge from="n0" to="n13">
-            <attr name="label">
-                <string>tokens</string>
-            </attr>
-        </edge>
         <edge from="n0" to="n4">
             <attr name="label">
                 <string>decisions</string>
+            </attr>
+        </edge>
+        <edge from="n0" to="n1">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n0" to="n5">
+            <attr name="label">
+                <string>subprocess</string>
             </attr>
         </edge>
         <edge from="n0" to="n6">
@@ -89,9 +94,9 @@
                 <string>sub:</string>
             </attr>
         </edge>
-        <edge from="n0" to="n1">
+        <edge from="n0" to="n13">
             <attr name="label">
-                <string>state</string>
+                <string>tokens</string>
             </attr>
         </edge>
         <edge from="n1" to="n1">
@@ -152,6 +157,16 @@
         <edge from="n6" to="n6">
             <attr name="label">
                 <string>string:position</string>
+            </attr>
+        </edge>
+        <edge from="n7" to="n7">
+            <attr name="label">
+                <string>type:Interrupted</string>
+            </attr>
+        </edge>
+        <edge from="n7" to="n1">
+            <attr name="label">
+                <string>sub:</string>
             </attr>
         </edge>
     </graph>

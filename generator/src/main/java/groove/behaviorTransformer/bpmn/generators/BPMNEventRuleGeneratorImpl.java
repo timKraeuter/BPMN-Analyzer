@@ -369,7 +369,26 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
             @Override
             public void handle(CallActivity callActivity) {
-                // TODO: Create part for call activity, i.e., interrupt process etc.
+                // Multiple boundary events can be triggered
+                GrooveNode forAll = ruleBuilder.contextNode(FORALL);
+                AbstractProcess process = collaboration.findProcessForFlowNode(callActivity);
+                GrooveNode processInstance =
+                        BPMNToGrooveTransformerHelper.addTokensForOutgoingFlowsToRunningInstanceWithQuantifier(
+                                boundarySignalEvent,
+                                process,
+                                ruleBuilder,
+                                forAll);
+
+                if (boundarySignalEvent.isInterrupt()) {
+                    interruptSubprocess(ruleBuilder, callActivity, processInstance, forAll);
+                } else {
+                    // Subprocess must be running
+                    GrooveNode subprocessInstance = BPMNToGrooveTransformerHelper.contextProcessInstanceWithQuantifier(
+                            callActivity.getSubProcessModel(),
+                            ruleBuilder,
+                            forAll);
+                    ruleBuilder.contextEdge(SUBPROCESS, processInstance, subprocessInstance);
+                }
             }
         });
     }

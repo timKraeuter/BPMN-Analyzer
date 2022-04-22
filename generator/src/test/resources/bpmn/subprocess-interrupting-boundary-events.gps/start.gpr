@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="start" role="rule" edgeids="false" edgemode="directed">
+        <node id="n101">
+            <attr name="layout">
+                <string>417 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n101" to="n101">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n101" to="n101">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n103">
+            <attr name="layout">
+                <string>417 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n103" to="n103">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n103" to="n103">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n98">
+            <attr name="layout">
+                <string>62 87 0 0</string>
+            </attr>
+        </node>
+        <edge from="n98" to="n98">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n99">
+            <attr name="layout">
+                <string>402 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n99" to="n99">
+            <attr name="label">
+                <string>string:"p1"</string>
+            </attr>
+        </edge>
+        <node id="n100">
+            <attr name="layout">
+                <string>402 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n100" to="n100">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n102">
+            <attr name="layout">
+                <string>602 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n102" to="n102">
+            <attr name="label">
+                <string>string:"start_Subprocess"</string>
+            </attr>
+        </edge>
+        <node id="n104">
+            <attr name="layout">
+                <string>602 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n104" to="n104">
+            <attr name="label">
+                <string>string:"p1_start"</string>
+            </attr>
+        </edge>
+        <edge from="n98" to="n101">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n101" to="n102">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n98" to="n103">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n103" to="n104">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n98" to="n99">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n98" to="n100">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

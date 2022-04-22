@@ -11,12 +11,13 @@ public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTe
 
     static final String TYPE_GRAPH_FILE_NAME = "bpmn_e_model.gty";
     static final String TERMINATE_RULE_FILE_NAME = "Terminate.gpr";
+    static final String INTERRUPTED_RULE_FILE_NAME = "SubprocessInterrupted.gpr";
     private static final String BPMN = "bpmn";
 
     @Override
     protected void setUpFurther() {
-        // Default is to ignore the type graph and the terminate rule.
-        this.setFileNameFilter(x -> x.equals(TYPE_GRAPH_FILE_NAME) || x.equals(TERMINATE_RULE_FILE_NAME));
+        // Default is to ignore the type graph, the terminate rule and the interrupt rule.
+        this.setFileNameFilter(x -> x.equals(TYPE_GRAPH_FILE_NAME) || x.equals(TERMINATE_RULE_FILE_NAME) || x.equals(INTERRUPTED_RULE_FILE_NAME));
     }
 
     @Override

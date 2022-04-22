@@ -2,6 +2,7 @@ package groove.behaviorTransformer.bpmn;
 
 import behavior.bpmn.Process;
 import behavior.bpmn.*;
+import behavior.bpmn.activities.CallActivity;
 import groove.behaviorTransformer.GrooveTransformer;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveRuleBuilder;
@@ -269,5 +270,29 @@ public class BPMNToGrooveTransformerHelper {
         ruleBuilder.deleteEdge(TOKENS, parentProcessInstance, parentToken);
         ruleBuilder.contextEdge(AT, parentToken, forAll);
         return forAll;
+    }
+
+
+    public static void interruptSubprocess(GrooveRuleBuilder ruleBuilder,
+                                           CallActivity callActivity,
+                                           GrooveNode processInstance,
+                                           GrooveNode quantifierIfExists) {
+        // Terminate subprocess and delete all its tokens.
+        GrooveNode subprocessInstance = ruleBuilder.contextNode(TYPE_PROCESS_SNAPSHOT);
+        ruleBuilder.contextEdge(SUBPROCESS, processInstance, subprocessInstance);
+        String subprocessName = callActivity.getSubProcessModel().getName();
+        ruleBuilder.contextEdge(NAME,
+                                subprocessInstance,
+                                ruleBuilder.contextNode(createStringNodeLabel(subprocessName)));
+        GrooveNode subprocessRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
+        ruleBuilder.deleteEdge(STATE, subprocessInstance, subprocessRunning);
+        GrooveNode subprocessInterrupted = ruleBuilder.addNode(TYPE_INTERRUPTED);
+        ruleBuilder.addEdge(STATE, subprocessInstance, subprocessInterrupted);
+
+        if (quantifierIfExists != null) {
+            ruleBuilder.contextEdge(AT, subprocessInstance, quantifierIfExists);
+            ruleBuilder.contextEdge(AT, subprocessRunning, quantifierIfExists);
+            ruleBuilder.contextEdge(AT, subprocessInterrupted, quantifierIfExists);
+        }
     }
 }
