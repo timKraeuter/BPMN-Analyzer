@@ -18,11 +18,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatChipsModule } from '@angular/material/chips';
 import { LTlSyntaxComponent } from './ltl-syntax/ltl-syntax.component';
 
 @NgModule({
-    declarations: [AppComponent, GenerationComponent, DiagramComponent, LTlSyntaxComponent],
+    declarations: [
+        AppComponent,
+        GenerationComponent,
+        DiagramComponent,
+        LTlSyntaxComponent,
+    ],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -39,7 +43,6 @@ import { LTlSyntaxComponent } from './ltl-syntax/ltl-syntax.component';
         MatButtonToggleModule,
         FormsModule,
         MatSnackBarModule,
-        MatChipsModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
