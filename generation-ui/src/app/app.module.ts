@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { HttpClientModule } from '@angular/common/http';
 import { DiagramComponent } from './diagram/diagram.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [AppComponent, GenerationComponent, DiagramComponent],
@@ -21,6 +22,7 @@ import { DiagramComponent } from './diagram/diagram.component';
         MatButtonModule,
         MatCardModule,
         HttpClientModule,
+        MatTooltipModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
