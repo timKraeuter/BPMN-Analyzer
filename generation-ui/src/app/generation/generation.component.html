@@ -47,7 +47,7 @@
   <mat-tab-group animationDuration='0ms'>
     <mat-tab label='General properties'>
       <mat-card-content class='top-margin'>
-        Select one or more of the following properties to check.
+        Select one or more of the following general properties to check for the BPMN model.
         <br>
         <mat-button-toggle-group name='properties' [(ngModel)]='generalProperties' aria-label='General Properties' multiple class='top-margin'>
           <mat-button-toggle value='completion'>Completion</mat-button-toggle>
@@ -58,25 +58,28 @@
         <button mat-raised-button color='primary'
                 matTooltip='Checking general properties is not implemented yet.'
                 class='top-margin'
+                disabled
                 (click)='checkGeneralPropertiesClicked()'
         >
-          <mat-icon>check</mat-icon>
+          <mat-icon>done_all</mat-icon>
           Check selected properties
         </button>
       </mat-card-content>
     </mat-tab>
     <mat-tab label='LTL properties'>
-      <mat-card-content class='tab-content'>
-        <form class='form'>
+      <mat-card-content class='top-margin'>
+        Specify a LTL property to check for the BPMN model.
+        <br>
+        <form class='form top-margin'>
           <mat-form-field class='full-width' appearance='fill'>
             <mat-label>LTL Property</mat-label>
-            <textarea matInput placeholder='G(F(AllTerminate))'></textarea>
+            <textarea matInput [(ngModel)]="ltlProperty" placeholder='G(F(AllTerminated))' name='ltlProperty'></textarea>
           </mat-form-field>
         </form>
-
         <button mat-raised-button color='primary'
                 matTooltip='Checking custom LTL properties is not implemented yet.'
-                disabled>
+                disabled
+        (click)='checkLTLPropertyClicked()'>
           <mat-icon>check</mat-icon>
           Check LTL property
         </button>

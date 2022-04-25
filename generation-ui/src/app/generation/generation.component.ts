@@ -21,9 +21,11 @@ export class GenerationComponent {
         private snackBar: MatSnackBar
     ) {
         this.generalProperties = [];
+        this.ltlProperty = '';
     }
 
     generalProperties: string[];
+    ltlProperty: string;
 
     // @ts-ignore
     handleImported(event) {
@@ -99,6 +101,12 @@ export class GenerationComponent {
         console.log(
             'Check general properties clicked with the following selection: ' +
                 this.generalProperties
+        );
+    }
+
+    checkLTLPropertyClicked() {
+        console.log(
+            'Check LTL property clicked with input: ' + this.ltlProperty
         );
     }
 }
