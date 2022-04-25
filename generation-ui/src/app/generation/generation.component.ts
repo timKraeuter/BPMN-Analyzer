@@ -4,6 +4,7 @@ import { saveAs } from 'file-saver';
 import { BPMNModelerService } from '../services/bpmnmodeler.service';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LTlSyntaxComponent } from '../ltl-syntax/ltl-syntax.component';
 
 @Component({
     selector: 'app-generation',
@@ -108,5 +109,11 @@ export class GenerationComponent {
         console.log(
             'Check LTL property clicked with input: ' + this.ltlProperty
         );
+    }
+
+    ltlInfoClicked() {
+        this.snackBar.openFromComponent(LTlSyntaxComponent, {
+            duration: 10000,
+        });
     }
 }
