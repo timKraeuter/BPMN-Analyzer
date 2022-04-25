@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { BPMNModelerService } from '../services/bpmnmodeler.service';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-generation',
@@ -16,8 +17,13 @@ export class GenerationComponent {
 
     constructor(
         private bpmnModeler: BPMNModelerService,
-        private httpClient: HttpClient
-    ) {}
+        private httpClient: HttpClient,
+        private snackBar: MatSnackBar
+    ) {
+        this.generalProperties = [];
+    }
+
+    generalProperties: string[];
 
     // @ts-ignore
     handleImported(event) {
@@ -78,5 +84,21 @@ export class GenerationComponent {
                 });
                 saveAs(blob, 'model.gps.zip');
             });
+    }
+
+    checkGeneralPropertiesClicked(): void {
+        if (this.generalProperties.length == 0) {
+            this.snackBar.open(
+                'Please select at least one property for verification.',
+                'close',
+                {
+                    duration: 5000,
+                }
+            );
+        }
+        console.log(
+            'Check general properties clicked with the following selection: ' +
+                this.generalProperties
+        );
     }
 }

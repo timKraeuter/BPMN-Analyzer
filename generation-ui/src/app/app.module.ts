@@ -11,6 +11,13 @@ import { MatCardModule } from '@angular/material/card';
 import { HttpClientModule } from '@angular/common/http';
 import { DiagramComponent } from './diagram/diagram.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { FormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
     declarations: [AppComponent, GenerationComponent, DiagramComponent],
@@ -23,6 +30,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatCardModule,
         HttpClientModule,
         MatTooltipModule,
+        MatDividerModule,
+        MatTabsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonToggleModule,
+        FormsModule,
+        MatSnackBarModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

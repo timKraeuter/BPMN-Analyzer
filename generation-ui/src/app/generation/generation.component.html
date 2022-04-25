@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card class='card'>
   <mat-card-header>
     <mat-card-title>BPMN Analyzer</mat-card-title>
   </mat-card-header>
@@ -37,12 +37,51 @@
       <mat-icon>cloud_download</mat-icon>
       Download graph grammar
     </button>
-    <button mat-raised-button color='primary'
-            matTooltip='Checking custom LTL properties is not implemented yet.'
-            disabled>
-      <mat-icon>check</mat-icon>
-      Check LTL property
-    </button>
   </mat-card-actions>
+</mat-card>
+<mat-divider></mat-divider>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Verification</mat-card-title>
+  </mat-card-header>
+  <mat-tab-group animationDuration='0ms'>
+    <mat-tab label='General properties'>
+      <mat-card-content class='top-margin'>
+        Select one or more of the following properties to check.
+        <br>
+        <mat-button-toggle-group name='properties' [(ngModel)]='generalProperties' aria-label='General Properties' multiple class='top-margin'>
+          <mat-button-toggle value='completion'>Completion</mat-button-toggle>
+          <mat-button-toggle value='prop2'>Prop2</mat-button-toggle>
+          <mat-button-toggle value='prop3'>Prop3</mat-button-toggle>
+        </mat-button-toggle-group>
+        <br>
+        <button mat-raised-button color='primary'
+                matTooltip='Checking general properties is not implemented yet.'
+                class='top-margin'
+                (click)='checkGeneralPropertiesClicked()'
+        >
+          <mat-icon>check</mat-icon>
+          Check selected properties
+        </button>
+      </mat-card-content>
+    </mat-tab>
+    <mat-tab label='LTL properties'>
+      <mat-card-content class='tab-content'>
+        <form class='form'>
+          <mat-form-field class='full-width' appearance='fill'>
+            <mat-label>LTL Property</mat-label>
+            <textarea matInput placeholder='G(F(AllTerminate))'></textarea>
+          </mat-form-field>
+        </form>
+
+        <button mat-raised-button color='primary'
+                matTooltip='Checking custom LTL properties is not implemented yet.'
+                disabled>
+          <mat-icon>check</mat-icon>
+          Check LTL property
+        </button>
+      </mat-card-content>
+    </mat-tab>
+  </mat-tab-group>
 </mat-card>
 <input hidden type='file' #uploader (change)='uploadFile($event)' />
