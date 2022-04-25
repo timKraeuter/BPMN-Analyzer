@@ -116,4 +116,11 @@ export class GenerationComponent {
             duration: 10000,
         });
     }
+
+    ggInfoClicked() {
+        this.snackBar.open(
+            'Graph grammars are generated for the graph transformation tool Groove. You can find Groove at https://groove.ewi.utwente.nl/.',
+            'close'
+        );
+    }
 }

@@ -37,6 +37,9 @@
       <mat-icon>cloud_download</mat-icon>
       Download graph grammar
     </button>
+    <button mat-icon-button aria-label="Graph grammar download info button" color='accent' (click)='ggInfoClicked()'>
+      <mat-icon>info</mat-icon>
+    </button>
   </mat-card-actions>
 </mat-card>
 <mat-divider></mat-divider>
@@ -85,7 +88,7 @@
           <mat-icon>check</mat-icon>
           Check LTL property
         </button>
-        <button mat-icon-button aria-label="LTL Property info button" color='accent' (click)='ltlInfoClicked()'>
+        <button mat-icon-button aria-label="LTL syntax info button" color='accent' (click)='ltlInfoClicked()'>
           <mat-icon>info</mat-icon>
         </button>
       </mat-card-content>
