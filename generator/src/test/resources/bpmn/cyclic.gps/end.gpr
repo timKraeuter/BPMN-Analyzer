@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="end" role="rule" edgeids="false" edgemode="directed">
-        <node id="n119">
+        <node id="n118">
             <attr name="layout">
-                <string>440 242 0 0</string>
+                <string>430 242 0 0</string>
             </attr>
         </node>
-        <edge from="n119" to="n119">
+        <edge from="n118" to="n118">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n119" to="n119">
+        <edge from="n118" to="n118">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
         <node id="n116">
             <attr name="layout">
-                <string>62 87 0 0</string>
+                <string>62 85 0 0</string>
             </attr>
         </node>
         <edge from="n116" to="n116">
@@ -28,7 +28,7 @@
         </edge>
         <node id="n117">
             <attr name="layout">
-                <string>402 152 0 0</string>
+                <string>392 152 0 0</string>
             </attr>
         </node>
         <edge from="n117" to="n117">
@@ -36,42 +36,32 @@
                 <string>string:"cyclic"</string>
             </attr>
         </edge>
-        <node id="n118">
+        <node id="n119">
             <attr name="layout">
-                <string>402 72 0 0</string>
+                <string>637 242 0 0</string>
             </attr>
         </node>
-        <edge from="n118" to="n118">
-            <attr name="label">
-                <string>type:Running</string>
-            </attr>
-        </edge>
-        <node id="n120">
-            <attr name="layout">
-                <string>647 242 0 0</string>
-            </attr>
-        </node>
-        <edge from="n120" to="n120">
+        <edge from="n119" to="n119">
             <attr name="label">
                 <string>string:"e4_end"</string>
             </attr>
         </edge>
-        <node id="n121">
+        <node id="n120">
             <attr name="layout">
-                <string>402 322 0 0</string>
+                <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n121" to="n121">
+        <edge from="n120" to="n120">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n119" to="n120">
+        <edge from="n118" to="n119">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n116" to="n119">
+        <edge from="n116" to="n118">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
@@ -81,12 +71,7 @@
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n116" to="n118">
-            <attr name="label">
-                <string>state</string>
-            </attr>
-        </edge>
-        <edge from="n116" to="n121">
+        <edge from="n116" to="n120">
             <attr name="label">
                 <string>state</string>
             </attr>

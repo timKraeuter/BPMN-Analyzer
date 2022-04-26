@@ -42,7 +42,7 @@ public class BPMNToGrooveTransformerHelper {
     }
 
     public static GrooveNode contextProcessInstance(AbstractProcess process, GrooveRuleBuilder ruleBuilder) {
-        GrooveNode processInstance = contextProcessInstanceWithName(process, ruleBuilder);
+        GrooveNode processInstance = contextProcessInstanceWithOnlyName(process, ruleBuilder);
         GrooveNode running = ruleBuilder.contextNode(TYPE_RUNNING);
         ruleBuilder.contextEdge(STATE, processInstance, running);
         return processInstance;
@@ -52,7 +52,7 @@ public class BPMNToGrooveTransformerHelper {
                                                                   GrooveRuleBuilder ruleBuilder,
                                                                   GrooveNode quantifier) {
         GrooveNode processInstance;
-        processInstance = contextProcessInstanceWithName(process, ruleBuilder);
+        processInstance = contextProcessInstanceWithOnlyName(process, ruleBuilder);
         GrooveNode running = ruleBuilder.contextNode(TYPE_RUNNING);
         ruleBuilder.contextEdge(STATE, processInstance, running);
         ruleBuilder.contextEdge(GrooveTransformer.AT, processInstance, quantifier);
@@ -83,7 +83,7 @@ public class BPMNToGrooveTransformerHelper {
         return processInstance;
     }
 
-    private static GrooveNode contextProcessInstanceWithName(AbstractProcess process, GrooveRuleBuilder ruleBuilder) {
+    public static GrooveNode contextProcessInstanceWithOnlyName(AbstractProcess process, GrooveRuleBuilder ruleBuilder) {
         GrooveNode processInstance = ruleBuilder.contextNode(TYPE_PROCESS_SNAPSHOT);
         ruleBuilder.contextEdge(NAME,
                                 processInstance,

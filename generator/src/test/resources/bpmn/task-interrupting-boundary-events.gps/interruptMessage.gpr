@@ -1,39 +1,79 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="interruptMessage" role="rule" edgeids="false" edgemode="directed">
-        <node id="n112">
+        <node id="n106">
             <attr name="layout">
-                <string>612 82 0 0</string>
+                <string>612 252 0 0</string>
             </attr>
         </node>
-        <edge from="n112" to="n112">
+        <edge from="n106" to="n106">
             <attr name="label">
                 <string>type:Message</string>
             </attr>
         </edge>
-        <edge from="n112" to="n112">
+        <edge from="n106" to="n106">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n106">
+        <node id="n100">
             <attr name="layout">
-                <string>505 503 0 0</string>
+                <string>495 162 0 0</string>
             </attr>
         </node>
-        <edge from="n106" to="n106">
+        <edge from="n100" to="n100">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n106" to="n106">
+        <edge from="n100" to="n100">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
+        <node id="n98">
+            <attr name="layout">
+                <string>62 80 0 0</string>
+            </attr>
+        </node>
+        <edge from="n98" to="n98">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n99">
+            <attr name="layout">
+                <string>382 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n99" to="n99">
+            <attr name="label">
+                <string>string:"interruptTrigger"</string>
+            </attr>
+        </edge>
+        <node id="n101">
+            <attr name="layout">
+                <string>777 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n101" to="n101">
+            <attr name="label">
+                <string>string:"signalOrMessage_interruptMessage"</string>
+            </attr>
+        </edge>
+        <node id="n102">
+            <attr name="layout">
+                <string>917 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n102" to="n102">
+            <attr name="label">
+                <string>existsx:</string>
+            </attr>
+        </edge>
         <node id="n103">
             <attr name="layout">
-                <string>62 346 0 0</string>
+                <string>62 267 0 0</string>
             </attr>
         </node>
         <edge from="n103" to="n103">
@@ -43,17 +83,17 @@
         </edge>
         <node id="n104">
             <attr name="layout">
-                <string>392 333 0 0</string>
+                <string>402 412 0 0</string>
             </attr>
         </node>
         <edge from="n104" to="n104">
             <attr name="label">
-                <string>string:"interruptTrigger"</string>
+                <string>string:"Activity boundary events"</string>
             </attr>
         </edge>
         <node id="n105">
             <attr name="layout">
-                <string>392 413 0 0</string>
+                <string>560 332 0 0</string>
             </attr>
         </node>
         <edge from="n105" to="n105">
@@ -63,82 +103,37 @@
         </edge>
         <node id="n107">
             <attr name="layout">
-                <string>787 503 0 0</string>
+                <string>917 244 0 0</string>
             </attr>
         </node>
         <edge from="n107" to="n107">
             <attr name="label">
-                <string>string:"signalOrMessage_interruptMessage"</string>
-            </attr>
-        </edge>
-        <node id="n108">
-            <attr name="layout">
-                <string>917 162 0 0</string>
-            </attr>
-        </node>
-        <edge from="n108" to="n108">
-            <attr name="label">
-                <string>existsx:</string>
-            </attr>
-        </edge>
-        <node id="n109">
-            <attr name="layout">
-                <string>62 97 0 0</string>
-            </attr>
-        </node>
-        <edge from="n109" to="n109">
-            <attr name="label">
-                <string>type:ProcessSnapshot</string>
-            </attr>
-        </edge>
-        <node id="n110">
-            <attr name="layout">
-                <string>402 242 0 0</string>
-            </attr>
-        </node>
-        <edge from="n110" to="n110">
-            <attr name="label">
-                <string>string:"Activity boundary events"</string>
-            </attr>
-        </edge>
-        <node id="n111">
-            <attr name="layout">
-                <string>560 162 0 0</string>
-            </attr>
-        </node>
-        <edge from="n111" to="n111">
-            <attr name="label">
-                <string>type:Running</string>
-            </attr>
-        </edge>
-        <node id="n113">
-            <attr name="layout">
-                <string>917 74 0 0</string>
-            </attr>
-        </node>
-        <edge from="n113" to="n113">
-            <attr name="label">
                 <string>string:"interruptMessage_m1"</string>
-            </attr>
-        </edge>
-        <edge from="n109" to="n112">
-            <attr name="label">
-                <string>new:messages</string>
-            </attr>
-        </edge>
-        <edge from="n112" to="n113">
-            <attr name="label">
-                <string>new:position</string>
-            </attr>
-        </edge>
-        <edge from="n106" to="n107">
-            <attr name="label">
-                <string>del:position</string>
             </attr>
         </edge>
         <edge from="n103" to="n106">
             <attr name="label">
+                <string>new:messages</string>
+            </attr>
+        </edge>
+        <edge from="n106" to="n107">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n100" to="n101">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n98" to="n100">
+            <attr name="label">
                 <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n98" to="n99">
+            <attr name="label">
+                <string>name</string>
             </attr>
         </edge>
         <edge from="n103" to="n104">
@@ -151,27 +146,17 @@
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n109" to="n110">
-            <attr name="label">
-                <string>name</string>
-            </attr>
-        </edge>
-        <edge from="n109" to="n111">
-            <attr name="label">
-                <string>state</string>
-            </attr>
-        </edge>
-        <edge from="n109" to="n108">
+        <edge from="n103" to="n102">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n111" to="n108">
+        <edge from="n105" to="n102">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n112" to="n108">
+        <edge from="n106" to="n102">
             <attr name="label">
                 <string>@</string>
             </attr>

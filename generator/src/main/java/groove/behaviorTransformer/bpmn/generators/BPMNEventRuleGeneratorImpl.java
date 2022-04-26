@@ -62,7 +62,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         final String incomingFlowId = endEvent.getIncomingFlows().findFirst().get().getID();
         ruleBuilder.startRule(endEvent.getName());
 
-        GrooveNode processInstance = contextProcessInstance(process, ruleBuilder);
+        GrooveNode processInstance = contextProcessInstanceWithOnlyName(process, ruleBuilder);
 
         GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
         GrooveNode position = ruleBuilder.contextNode(createStringNodeLabel(incomingFlowId));

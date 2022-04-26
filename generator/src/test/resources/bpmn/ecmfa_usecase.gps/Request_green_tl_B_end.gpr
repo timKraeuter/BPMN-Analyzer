@@ -1,247 +1,247 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="Request_green_tl_B_end" role="rule" edgeids="false" edgemode="directed">
-        <node id="n423">
+        <node id="n420">
             <attr name="layout">
                 <string>530 669 0 0</string>
             </attr>
         </node>
-        <edge from="n423" to="n423">
-            <attr name="label">
-                <string>type:Token</string>
-            </attr>
-        </edge>
-        <edge from="n423" to="n423">
-            <attr name="label">
-                <string>new:</string>
-            </attr>
-        </edge>
-        <node id="n429">
-            <attr name="layout">
-                <string>432 242 0 0</string>
-            </attr>
-        </node>
-        <edge from="n429" to="n429">
-            <attr name="label">
-                <string>type:Message</string>
-            </attr>
-        </edge>
-        <edge from="n429" to="n429">
-            <attr name="label">
-                <string>new:</string>
-            </attr>
-        </edge>
-        <node id="n421">
-            <attr name="layout">
-                <string>530 579 0 0</string>
-            </attr>
-        </node>
-        <edge from="n421" to="n421">
-            <attr name="label">
-                <string>type:Token</string>
-            </attr>
-        </edge>
-        <edge from="n421" to="n421">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
-        <node id="n418">
-            <attr name="layout">
-                <string>62 424 0 0</string>
-            </attr>
-        </node>
-        <edge from="n418" to="n418">
-            <attr name="label">
-                <string>type:ProcessSnapshot</string>
-            </attr>
-        </edge>
-        <node id="n419">
-            <attr name="layout">
-                <string>402 489 0 0</string>
-            </attr>
-        </node>
-        <edge from="n419" to="n419">
-            <attr name="label">
-                <string>string:"Bus controller (B)"</string>
-            </attr>
-        </edge>
-        <node id="n420">
-            <attr name="layout">
-                <string>402 409 0 0</string>
-            </attr>
-        </node>
         <edge from="n420" to="n420">
             <attr name="label">
-                <string>type:Running</string>
+                <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n422">
-            <attr name="layout">
-                <string>827 579 0 0</string>
-            </attr>
-        </node>
-        <edge from="n422" to="n422">
+        <edge from="n420" to="n420">
             <attr name="label">
-                <string>string:"Request_green_tl_B"</string>
-            </attr>
-        </edge>
-        <node id="n424">
-            <attr name="layout">
-                <string>827 669 0 0</string>
-            </attr>
-        </node>
-        <edge from="n424" to="n424">
-            <attr name="label">
-                <string>string:"Request_green_tl_B_B_is_green_signal"</string>
-            </attr>
-        </edge>
-        <node id="n425">
-            <attr name="layout">
-                <string>672 314 0 0</string>
-            </attr>
-        </node>
-        <edge from="n425" to="n425">
-            <attr name="label">
-                <string>existsx:</string>
+                <string>new:</string>
             </attr>
         </edge>
         <node id="n426">
             <attr name="layout">
-                <string>62 242 0 0</string>
+                <string>432 242 0 0</string>
             </attr>
         </node>
         <edge from="n426" to="n426">
             <attr name="label">
-                <string>type:ProcessSnapshot</string>
+                <string>type:Message</string>
             </attr>
         </edge>
-        <node id="n427">
-            <attr name="layout">
-                <string>392 72 0 0</string>
-            </attr>
-        </node>
-        <edge from="n427" to="n427">
+        <edge from="n426" to="n426">
             <attr name="label">
-                <string>string:"Phase_1"</string>
+                <string>new:</string>
             </attr>
         </edge>
-        <node id="n428">
+        <node id="n418">
             <attr name="layout">
-                <string>422 329 0 0</string>
+                <string>530 579 0 0</string>
             </attr>
         </node>
-        <edge from="n428" to="n428">
-            <attr name="label">
-                <string>type:Running</string>
-            </attr>
-        </edge>
-        <node id="n430">
-            <attr name="layout">
-                <string>672 234 0 0</string>
-            </attr>
-        </node>
-        <edge from="n430" to="n430">
-            <attr name="label">
-                <string>string:"Request_green_tl_B_B_green_requested"</string>
-            </attr>
-        </edge>
-        <node id="n431">
-            <attr name="layout">
-                <string>452 152 0 0</string>
-            </attr>
-        </node>
-        <edge from="n431" to="n431">
+        <edge from="n418" to="n418">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n432">
+        <edge from="n418" to="n418">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n415">
+            <attr name="layout">
+                <string>62 424 0 0</string>
+            </attr>
+        </node>
+        <edge from="n415" to="n415">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n416">
+            <attr name="layout">
+                <string>402 489 0 0</string>
+            </attr>
+        </node>
+        <edge from="n416" to="n416">
+            <attr name="label">
+                <string>string:"Bus controller (B)"</string>
+            </attr>
+        </edge>
+        <node id="n417">
+            <attr name="layout">
+                <string>402 409 0 0</string>
+            </attr>
+        </node>
+        <edge from="n417" to="n417">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n419">
+            <attr name="layout">
+                <string>827 579 0 0</string>
+            </attr>
+        </node>
+        <edge from="n419" to="n419">
+            <attr name="label">
+                <string>string:"Request_green_tl_B"</string>
+            </attr>
+        </edge>
+        <node id="n421">
+            <attr name="layout">
+                <string>827 669 0 0</string>
+            </attr>
+        </node>
+        <edge from="n421" to="n421">
+            <attr name="label">
+                <string>string:"Request_green_tl_B_B_is_green_signal"</string>
+            </attr>
+        </edge>
+        <node id="n422">
+            <attr name="layout">
+                <string>672 314 0 0</string>
+            </attr>
+        </node>
+        <edge from="n422" to="n422">
+            <attr name="label">
+                <string>existsx:</string>
+            </attr>
+        </edge>
+        <node id="n423">
+            <attr name="layout">
+                <string>62 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n423" to="n423">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n424">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n424" to="n424">
+            <attr name="label">
+                <string>string:"Phase_1"</string>
+            </attr>
+        </edge>
+        <node id="n425">
+            <attr name="layout">
+                <string>422 329 0 0</string>
+            </attr>
+        </node>
+        <edge from="n425" to="n425">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n427">
+            <attr name="layout">
+                <string>672 234 0 0</string>
+            </attr>
+        </node>
+        <edge from="n427" to="n427">
+            <attr name="label">
+                <string>string:"Request_green_tl_B_B_green_requested"</string>
+            </attr>
+        </edge>
+        <node id="n428">
+            <attr name="layout">
+                <string>452 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n428" to="n428">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n429">
             <attr name="layout">
                 <string>672 144 0 0</string>
             </attr>
         </node>
-        <edge from="n432" to="n432">
+        <edge from="n429" to="n429">
             <attr name="label">
                 <string>string:"evp1"</string>
             </attr>
         </edge>
-        <edge from="n418" to="n423">
+        <edge from="n415" to="n420">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n423" to="n424">
+        <edge from="n420" to="n421">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n426" to="n429">
+        <edge from="n423" to="n426">
             <attr name="label">
                 <string>new:messages</string>
             </attr>
         </edge>
-        <edge from="n429" to="n430">
+        <edge from="n426" to="n427">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n418" to="n421">
+        <edge from="n415" to="n418">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n421" to="n422">
+        <edge from="n418" to="n419">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n418" to="n419">
+        <edge from="n415" to="n416">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n418" to="n420">
+        <edge from="n415" to="n417">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n426" to="n427">
+        <edge from="n423" to="n424">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n426" to="n428">
+        <edge from="n423" to="n425">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n426" to="n425">
+        <edge from="n423" to="n422">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n428" to="n425">
+        <edge from="n425" to="n422">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n429" to="n425">
+        <edge from="n426" to="n422">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n426" to="n431">
+        <edge from="n423" to="n428">
             <attr name="label">
                 <string>tokens</string>
             </attr>
         </edge>
-        <edge from="n431" to="n432">
+        <edge from="n428" to="n429">
             <attr name="label">
                 <string>position</string>
             </attr>
         </edge>
-        <edge from="n431" to="n425">
+        <edge from="n428" to="n422">
             <attr name="label">
                 <string>@</string>
             </attr>

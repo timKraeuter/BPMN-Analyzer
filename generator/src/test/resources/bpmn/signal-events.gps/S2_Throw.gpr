@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="S2_Throw" role="rule" edgeids="false" edgemode="directed">
-        <node id="n50">
+        <node id="n49">
             <attr name="layout">
-                <string>432 412 0 0</string>
+                <string>432 332 0 0</string>
             </attr>
         </node>
-        <edge from="n50" to="n50">
+        <edge from="n49" to="n49">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n50" to="n50">
+        <edge from="n49" to="n49">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n42">
+        <node id="n41">
             <attr name="layout">
-                <string>407 82 0 0</string>
+                <string>390 82 0 0</string>
             </attr>
         </node>
-        <edge from="n42" to="n42">
+        <edge from="n41" to="n41">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n42" to="n42">
+        <edge from="n41" to="n41">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n48">
+        <node id="n47">
             <attr name="layout">
-                <string>432 583 0 0</string>
+                <string>432 503 0 0</string>
             </attr>
         </node>
-        <edge from="n48" to="n48">
+        <edge from="n47" to="n47">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n48" to="n48">
+        <edge from="n47" to="n47">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
         <node id="n39">
             <attr name="layout">
-                <string>62 95 0 0</string>
+                <string>62 90 0 0</string>
             </attr>
         </node>
         <edge from="n39" to="n39">
@@ -58,7 +58,7 @@
         </edge>
         <node id="n40">
             <attr name="layout">
-                <string>392 162 0 0</string>
+                <string>382 162 0 0</string>
             </attr>
         </node>
         <edge from="n40" to="n40">
@@ -66,112 +66,102 @@
                 <string>string:"p1"</string>
             </attr>
         </edge>
-        <node id="n41">
+        <node id="n42">
             <attr name="layout">
-                <string>392 242 0 0</string>
+                <string>567 82 0 0</string>
             </attr>
         </node>
-        <edge from="n41" to="n41">
-            <attr name="label">
-                <string>type:Running</string>
-            </attr>
-        </edge>
-        <node id="n43">
-            <attr name="layout">
-                <string>592 82 0 0</string>
-            </attr>
-        </node>
-        <edge from="n43" to="n43">
+        <edge from="n42" to="n42">
             <attr name="label">
                 <string>string:"S1_Throw_S2_Throw"</string>
             </attr>
         </edge>
-        <node id="n44">
+        <node id="n43">
             <attr name="layout">
-                <string>622 488 0 0</string>
+                <string>622 408 0 0</string>
             </attr>
         </node>
-        <edge from="n44" to="n44">
+        <edge from="n43" to="n43">
             <attr name="label">
                 <string>existsx:</string>
             </attr>
         </edge>
-        <node id="n45">
+        <node id="n44">
             <attr name="layout">
-                <string>62 566 0 0</string>
+                <string>62 486 0 0</string>
             </attr>
         </node>
-        <edge from="n45" to="n45">
+        <edge from="n44" to="n44">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n46">
+        <node id="n45">
             <attr name="layout">
-                <string>412 322 0 0</string>
+                <string>412 242 0 0</string>
             </attr>
         </node>
-        <edge from="n46" to="n46">
+        <edge from="n45" to="n45">
             <attr name="label">
                 <string>string:"p1"</string>
             </attr>
         </edge>
-        <node id="n47">
+        <node id="n46">
             <attr name="layout">
-                <string>412 493 0 0</string>
+                <string>412 413 0 0</string>
             </attr>
         </node>
-        <edge from="n47" to="n47">
+        <edge from="n46" to="n46">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n49">
+        <node id="n48">
             <attr name="layout">
-                <string>622 591 0 0</string>
+                <string>622 511 0 0</string>
             </attr>
         </node>
-        <edge from="n49" to="n49">
+        <edge from="n48" to="n48">
             <attr name="label">
                 <string>string:"e1"</string>
             </attr>
         </edge>
-        <node id="n51">
+        <node id="n50">
             <attr name="layout">
-                <string>622 404 0 0</string>
+                <string>622 324 0 0</string>
             </attr>
         </node>
-        <edge from="n51" to="n51">
+        <edge from="n50" to="n50">
             <attr name="label">
                 <string>string:"S2_Catch_end"</string>
             </attr>
         </edge>
-        <edge from="n45" to="n50">
+        <edge from="n44" to="n49">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n50" to="n51">
+        <edge from="n49" to="n50">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n42" to="n43">
+        <edge from="n41" to="n42">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n39" to="n42">
+        <edge from="n39" to="n41">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n45" to="n48">
+        <edge from="n44" to="n47">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n48" to="n49">
+        <edge from="n47" to="n48">
             <attr name="label">
                 <string>del:position</string>
             </attr>
@@ -181,37 +171,32 @@
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n39" to="n41">
-            <attr name="label">
-                <string>state</string>
-            </attr>
-        </edge>
-        <edge from="n45" to="n46">
+        <edge from="n44" to="n45">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n45" to="n47">
+        <edge from="n44" to="n46">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n45" to="n44">
+        <edge from="n44" to="n43">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n47" to="n44">
+        <edge from="n46" to="n43">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n48" to="n44">
+        <edge from="n47" to="n43">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n50" to="n44">
+        <edge from="n49" to="n43">
             <attr name="label">
                 <string>@</string>
             </attr>
