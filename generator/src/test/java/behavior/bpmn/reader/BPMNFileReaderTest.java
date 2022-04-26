@@ -392,6 +392,33 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(bpmnCollaboration.getParticipants().size(), is(2));
         // Rest is checked in the real testcase above.
     }
+    @Test
+    void readWithElementNameTransformer() {
+        BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "tasks.bpmn", (name) -> {
+            if (name.equals("start")) {
+                return "startNameChanged";
+            }
+            return name;
+        });
+
+        // Expect the model shown here: https://cawemo.com/share/882d7c5b-bff0-4244-a39f-a234795035e5
+        Process participant = result.getParticipants().iterator().next();
+        // Sequence flows between the right flow nodes. Now with an updated name!
+        Set<String> sequenceFlowIds = getSequenceFlowIdsForProcess(participant);
+        assertThat(
+                sequenceFlowIds,
+                is(Sets.newHashSet(
+                        "startNameChanged_task",
+                        "task_sendTask",
+                        "sendTask_receiveTask",
+                        "receiveTask_userTask",
+                        "userTask_manualTask",
+                        "manualTask_businessRTask",
+                        "businessRTask_serviceTask",
+                        "serviceTask_scriptTask",
+                        "scriptTask_subprocess",
+                        "subprocess_end")));
+    }
 
     private CallActivity getCallActivityForName(Map<String, FlowNode> flowNodes, String name) {
         FlowNode subprocess = flowNodes.get(name);
