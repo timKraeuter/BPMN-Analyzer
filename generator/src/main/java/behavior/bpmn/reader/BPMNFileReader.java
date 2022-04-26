@@ -297,6 +297,9 @@ public class BPMNFileReader {
     }
 
     private String getFlowElementName(FlowElement flowElement) {
+        if (flowElement.getName() == null) {
+            return flowElement.getId();
+        }
         if (this.elementNameTransformer != null) {
             return elementNameTransformer.apply(flowElement.getName());
         }

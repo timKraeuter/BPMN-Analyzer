@@ -39,7 +39,8 @@ public class RuleGeneratorController {
     }
 
     private File generateGGForBPMNFile(MultipartFile file, File tempSubDir) throws IOException {
-        BPMNFileReader bpmnFileReader = new BPMNFileReader();
+        BPMNFileReader bpmnFileReader = new BPMNFileReader(name -> name.replaceAll("[\\\\/:*?\"<>|]", "") // windows filename
+                                                                   .replaceAll("\\s+", "_"));
         BPMNCollaboration bpmnCollaboration = bpmnFileReader.readModelFromStream(file.getInputStream());
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
         return transformer.generateGrooveGrammar(bpmnCollaboration, tempSubDir, false);
