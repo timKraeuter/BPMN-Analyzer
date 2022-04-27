@@ -7,3 +7,11 @@ Run image:
 ```console
 docker run -p 4300:8080 -e PORT=4300 bpmnanalyzer
 ```
+
+Deploy to Heroku:
+```console
+heroku container:push web
+```
+```console
+heroku container:release web
+```
