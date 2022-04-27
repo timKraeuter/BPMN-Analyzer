@@ -37,7 +37,8 @@
       <mat-icon>cloud_download</mat-icon>
       Download graph grammar
     </button>
-    <button mat-icon-button aria-label="Graph grammar download info button" color='primary' (click)='ggInfoClicked()'>
+    <button mat-icon-button aria-label='Graph grammar download info button' color='primary' (click)='ggInfoClicked()'
+            matTooltip='Further graph grammar information.'>
       <mat-icon>info</mat-icon>
     </button>
   </mat-card-actions>
@@ -55,11 +56,11 @@
         <mat-button-toggle-group name='properties' [(ngModel)]='generalProperties' aria-label='BPMN specific Properties'
                                  multiple class='top-margin'>
           <mat-button-toggle value='safeness'
-                             matTooltip="Safeness means that during process execution no more than one token occurs along the same sequence flow.">
+                             matTooltip='Safeness means that during process execution no more than one token occurs along the same sequence flow.'>
             Safeness
           </mat-button-toggle>
           <mat-button-toggle value='option to complete'
-                             matTooltip="Option to complete means that any running process instance must eventually complete.">
+                             matTooltip='Option to complete means that any running process instance must eventually complete.'>
             Option to complete
           </mat-button-toggle>
         </mat-button-toggle-group>
@@ -93,11 +94,12 @@
           <mat-icon>check</mat-icon>
           Check LTL property
         </button>
-        <button mat-icon-button aria-label="LTL syntax info button" color='primary' (click)='ltlInfoClicked()'>
+        <button mat-icon-button aria-label='LTL syntax info button' color='primary' (click)='ltlInfoClicked()'
+                matTooltip='Show LTL syntax.'>
           <mat-icon>info</mat-icon>
         </button>
       </mat-card-content>
     </mat-tab>
   </mat-tab-group>
 </mat-card>
-<input hidden type='file' #uploader (change)='uploadFile($event)'/>
+<input hidden type='file' #uploader (change)='uploadFile($event)' />
