@@ -25,7 +25,7 @@ public class BPMNToGrooveTransformerConstants {
     public static final String DECISION = "decision";
     public static final String SUBPROCESS = "subprocess";
     public static final String NAME = "name";
-    public static final String FIXED_RULES_AND_TYPE_GRAPH_DIR = "/BPMNFixedRulesAndTypeGraph";
+    public static final String FIXED_RULES_AND_TYPE_GRAPH_DIR = "/BPMNFixedRulesAndTypeGraph/";
 
     private BPMNToGrooveTransformerConstants() {
         // Only constants

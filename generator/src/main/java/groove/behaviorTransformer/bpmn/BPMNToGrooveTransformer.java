@@ -13,12 +13,16 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.stream.Stream;
 
 import static groove.behaviorTransformer.GrooveTransformerHelper.createStringNodeLabel;
 import static groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerConstants.*;
 
 public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaboration> {
+
+    private static final String TYPE_GRAPH_FILE_NAME = "bpmn_e_model.gty";
+    private static final String TERMINATE_RULE_FILE_NAME = "Terminate.gpr";
 
     @Override
     public GrooveGraph generateStartGraph(BPMNCollaboration collaboration, boolean addPrefix) {
@@ -62,9 +66,11 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
 
     private void copyTypeGraphAndFixedRules(File targetFolder) {
         //noinspection ConstantConditions must be present!. Otherwise, tests will also fail!
-        File sourceDirectory = new File(this.getClass().getResource(FIXED_RULES_AND_TYPE_GRAPH_DIR).getFile());
+        InputStream typeGraph = this.getClass().getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR + TYPE_GRAPH_FILE_NAME);
+        InputStream terminateRule = this.getClass().getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR + TERMINATE_RULE_FILE_NAME);
         try {
-            FileUtils.copyDirectory(sourceDirectory, targetFolder);
+            FileUtils.copyInputStreamToFile(typeGraph, new File(targetFolder, TYPE_GRAPH_FILE_NAME));
+            FileUtils.copyInputStreamToFile(terminateRule, new File(targetFolder, TERMINATE_RULE_FILE_NAME));
         }
         catch (IOException e) {
             throw new RuntimeException(e);
