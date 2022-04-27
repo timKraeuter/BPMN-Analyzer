@@ -5,6 +5,9 @@ import { BPMNModelerService } from '../services/bpmnmodeler.service';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LTlSyntaxComponent } from '../ltl-syntax/ltl-syntax.component';
+import { environment } from '../../environments/environment';
+
+const zipURL = environment.apiURL + '/zip';
 
 @Component({
     selector: 'app-generation',
@@ -79,7 +82,7 @@ export class GenerationComponent {
 
         // Send it.
         return this.httpClient
-            .post('http://localhost:8080/zip', formData, options)
+            .post(zipURL, formData, options)
             .subscribe((data) => {
                 // Receive and save as zip.
                 const blob = new Blob([data], {
