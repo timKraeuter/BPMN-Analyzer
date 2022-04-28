@@ -55,6 +55,14 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
     }
 
     /**
+     * See test case <a href="https://cawemo.com/share/b2db6ccf-1d3b-49c2-8739-0c53c069fd61">"Signal Start Events"</a> in cawemo.
+     */
+    @Test
+    void testSignalStartEvents() throws IOException {
+        testGrooveGenerationForBPMNResourceFile("signal-start-events.bpmn");
+    }
+
+    /**
      * See test case <a href="https://cawemo.com/share/13dda53f-c28d-446f-9330-2cf73814c657">"Signal Events"</a> in cawemo.
      */
     @Test
@@ -68,14 +76,6 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
     @Test
     void testSignalEventsCrossProcess() throws IOException {
         testGrooveGenerationForBPMNResourceFile("signal-events-cross-process.bpmn");
-    }
-
-    /**
-     * See test case <a href="https://cawemo.com/share/b2db6ccf-1d3b-49c2-8739-0c53c069fd61">"Signal Start Events"</a> in cawemo.
-     */
-    @Test
-    void testSignalStartEvents() throws IOException {
-        testGrooveGenerationForBPMNResourceFile("signal-start-events.bpmn");
     }
 
     /**
