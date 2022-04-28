@@ -23,6 +23,9 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
 
     private static final String TYPE_GRAPH_FILE_NAME = "bpmn_e_model.gty";
     private static final String TERMINATE_RULE_FILE_NAME = "Terminate.gpr";
+    // Graph conditions for model-checking
+    private static final String ALL_TERMINATED_FILE_NAME = "AllTerminated.gpr";
+    private static final String UNSAFE_FILE_NAME = "Unsafe.gpr";
 
     @Override
     public GrooveGraph generateStartGraph(BPMNCollaboration collaboration, boolean addPrefix) {
@@ -65,12 +68,15 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
     }
 
     private void copyTypeGraphAndFixedRules(File targetFolder) {
-        //noinspection ConstantConditions must be present!. Otherwise, tests will also fail!
         InputStream typeGraph = this.getClass().getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR + TYPE_GRAPH_FILE_NAME);
         InputStream terminateRule = this.getClass().getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR + TERMINATE_RULE_FILE_NAME);
+        InputStream unsafeGraph = this.getClass().getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR + UNSAFE_FILE_NAME);
+        InputStream allterminatedGraph = this.getClass().getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR + ALL_TERMINATED_FILE_NAME);
         try {
             FileUtils.copyInputStreamToFile(typeGraph, new File(targetFolder, TYPE_GRAPH_FILE_NAME));
             FileUtils.copyInputStreamToFile(terminateRule, new File(targetFolder, TERMINATE_RULE_FILE_NAME));
+            FileUtils.copyInputStreamToFile(unsafeGraph, new File(targetFolder, UNSAFE_FILE_NAME));
+            FileUtils.copyInputStreamToFile(allterminatedGraph, new File(targetFolder, ALL_TERMINATED_FILE_NAME));
         }
         catch (IOException e) {
             throw new RuntimeException(e);
