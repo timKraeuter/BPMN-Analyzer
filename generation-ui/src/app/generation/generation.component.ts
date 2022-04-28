@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { LTlSyntaxComponent } from '../ltl-syntax/ltl-syntax.component';
 import { environment } from '../../environments/environment';
 
-const zipURL = environment.apiURL + '/zip';
+const zipURL = environment.production ? window.location.href + 'zip' : environment.apiURL + '/zip';
 
 @Component({
     selector: 'app-generation',
