@@ -21,11 +21,11 @@ import static groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerConstants.*
 
 public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaboration> {
 
-    private static final String TYPE_GRAPH_FILE_NAME = "bpmn_e_model.gty";
-    private static final String TERMINATE_RULE_FILE_NAME = "Terminate.gpr";
+    public static final String TYPE_GRAPH_FILE_NAME = "bpmn_e_model.gty";
+    public static final String TERMINATE_RULE_FILE_NAME = "Terminate.gpr";
     // Graph conditions for model-checking
-    private static final String ALL_TERMINATED_FILE_NAME = "AllTerminated.gpr";
-    private static final String UNSAFE_FILE_NAME = "Unsafe.gpr";
+    public static final String ALL_TERMINATED_FILE_NAME = "AllTerminated.gpr";
+    public static final String UNSAFE_FILE_NAME = "Unsafe.gpr";
 
     @Override
     public GrooveGraph generateStartGraph(BPMNCollaboration collaboration, boolean addPrefix) {
