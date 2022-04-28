@@ -1,7 +1,7 @@
 # Groove_Rule_Generation
 Generate graph-transformation rules for the graph-transformation tool [Groove](https://groove.ewi.utwente.nl/about) from different behavioral languages.
 
-## Structure
+## Contained projects
 This repository contains multiple related projects.
 1. **generator** contains the source code to generate Groove rules from different behavioral languages, for example, BPMN.
 2. **generation-ui** contains the ui code for the generation of Groove rules from BPMN files. Including model-checking of BPMN models.
