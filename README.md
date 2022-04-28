@@ -12,6 +12,6 @@ This repository contains multiple related projects.
 ## BPMN generation
 A demo version of the tool is also hosted [here](https://bpmn-analyzer.herokuapp.com/).
 
-[![Atomic property Unsafe implemented in Groove.](./documentation/impl.png)](https://bpmn-analyzer.herokuapp.com/)
+[![Tool screenshot](./documentation/impl.png)](https://bpmn-analyzer.herokuapp.com/)
 
 Go [here](/server/README.md) if you want to run the tool to generate graph-transformation rules for BPMN locally
