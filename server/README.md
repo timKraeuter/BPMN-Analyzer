@@ -31,6 +31,15 @@ This will start the application at [localhost:8080](http://localhost:8080/).
 # Deployment to Heroku
 Change the application.properties file.
 
+Login:
+```console
+heroku login
+```
+Container login:
+```console
+heroku container:login
+```
+
 Push the container:
 ```console
 heroku container:push web
