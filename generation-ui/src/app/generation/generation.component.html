@@ -49,27 +49,30 @@
     <mat-card-title>Verification</mat-card-title>
   </mat-card-header>
   <mat-tab-group animationDuration='0ms'>
-    <mat-tab label='BPMN specific properties'>
+    <mat-tab label='BPMN-specific properties'>
       <mat-card-content class='top-margin'>
         Select one or more of the following properties to check for the BPMN model.
         <br>
-        <mat-button-toggle-group name='properties' [(ngModel)]='generalProperties' aria-label='BPMN specific Properties'
+        <mat-button-toggle-group name='bpmnProperties' [(ngModel)]='bpmnProperties' aria-label='BPMN-specific Properties'
                                  multiple class='top-margin'>
-          <mat-button-toggle value='safeness'
+          <mat-button-toggle value='SAFENESS'
                              matTooltip='Safeness means that during process execution no more than one token occurs along the same sequence flow.'>
             Safeness
           </mat-button-toggle>
-          <mat-button-toggle value='option to complete'
+          <mat-button-toggle value='OPTION_TO_COMPLETE'
                              matTooltip='Option to complete means that any running process instance must eventually complete.'>
             Option to complete
+          </mat-button-toggle>
+          <mat-button-toggle value='NO_DEAD_ACTIVITIES'
+                             matTooltip='Check if any activities will never be executed.'>
+            No dead activities
           </mat-button-toggle>
         </mat-button-toggle-group>
         <br>
         <button mat-raised-button color='primary'
-                matTooltip='Checking general properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/.'
+                matTooltip='Checking BPMN-specific properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/.'
                 class='top-margin'
-                disabled
-                (click)='checkGeneralPropertiesClicked()'
+                (click)='checkBPMNSpecificPropertiesClicked()'
         >
           <mat-icon>done_all</mat-icon>
           Check selected properties

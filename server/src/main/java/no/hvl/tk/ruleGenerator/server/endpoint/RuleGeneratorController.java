@@ -12,6 +12,8 @@ import java.util.zip.ZipOutputStream;
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.reader.BPMNFileReader;
 import groove.behaviorTransformer.BehaviorToGrooveTransformer;
+import no.hvl.tk.ruleGenerator.server.endpoint.dtos.ModelCheckingRequest;
+import no.hvl.tk.ruleGenerator.server.endpoint.dtos.ModelCheckingResponse;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +22,15 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class RuleGeneratorController {
     private final String tempDir = System.getProperty("java.io.tmpdir") + "bpmnAnalyzerRules/";
 
     // One Method to generate the GG (+ download zip)
     @RequestMapping(value = "/zip", produces = "application/zip")
-    @CrossOrigin(origins = "http://localhost:4200")
     public void generateGGAndReturnZIP(@RequestPart("file") MultipartFile file,
                                        HttpServletResponse response) throws IOException {
+        // TODO: This is problematic during concurrent access of the application!
         File tempSubDir = deleteOldGGSAndCreateNewDir();
 
         File resultDir = generateGGForBPMNFile(file, tempSubDir);
@@ -39,8 +42,9 @@ public class RuleGeneratorController {
     }
 
     private File generateGGForBPMNFile(MultipartFile file, File tempSubDir) throws IOException {
-        BPMNFileReader bpmnFileReader = new BPMNFileReader(name -> name.replaceAll("[\\\\/:*?\"<>|]", "") // windows filename
-                                                                   .replaceAll("\\s+", "_"));
+        BPMNFileReader bpmnFileReader = new BPMNFileReader(name -> name.replaceAll("[\\\\/:*?\"<>|]",
+                                                                                   "") // windows filename
+                                                                       .replaceAll("\\s+", "_"));
         BPMNCollaboration bpmnCollaboration = bpmnFileReader.readModelFromStream(file.getInputStream());
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
         return transformer.generateGrooveGrammar(bpmnCollaboration, tempSubDir, false);
@@ -70,5 +74,12 @@ public class RuleGeneratorController {
         }
     }
 
-    // One method to generate the state space (and do model-checking).
+    @RequestMapping(value = "/modelCheckBPMN")
+    public ModelCheckingResponse modelCheckBPMN(@ModelAttribute ModelCheckingRequest request) throws IOException {
+        File tempSubDir = deleteOldGGSAndCreateNewDir();
+
+        File resultDir = generateGGForBPMNFile(request.getFile(), tempSubDir);
+
+        return new BPMNModelChecker(resultDir).runModelChecking(request);
+    }
 }
