@@ -2,6 +2,7 @@ package groove.behaviorTransformer.bpmn;
 
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.Process;
+import behavior.bpmn.events.StartEvent;
 import behavior.bpmn.events.StartEventType;
 import groove.behaviorTransformer.GrooveTransformer;
 import groove.graph.GrooveGraph;
@@ -18,6 +19,7 @@ import java.util.stream.Stream;
 
 import static groove.behaviorTransformer.GrooveTransformerHelper.createStringNodeLabel;
 import static groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerConstants.*;
+import static groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerHelper.getStartEventTokenName;
 
 public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaboration> {
 
@@ -32,26 +34,30 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         // TODO: Add prefix if needed!
         GrooveGraphBuilder startGraphBuilder = new GrooveGraphBuilder().setName(collaboration.getName());
 
-        collaboration.getParticipants().stream().filter(process -> process.getStartEvent() != null).forEach(process -> {
-            if (process.getStartEvent().getType() == StartEventType.NONE) {
-                // TODO: Maybe reuse helper method?
-                GrooveNode processInstance = new GrooveNode(TYPE_PROCESS_SNAPSHOT);
-                GrooveNode processName = new GrooveNode(createStringNodeLabel(process.getName()));
-                startGraphBuilder.addEdge(NAME, processInstance, processName);
-                GrooveNode running = new GrooveNode(TYPE_RUNNING);
-                startGraphBuilder.addEdge(STATE, processInstance, running);
-                GrooveNode startToken = new GrooveNode(TYPE_TOKEN);
-                GrooveNode tokenName = new GrooveNode(createStringNodeLabel(getStartEventTokenName(process)));
-                startGraphBuilder.addEdge(POSITION, startToken, tokenName);
-                startGraphBuilder.addEdge(TOKENS, processInstance, startToken);
-            }
+        collaboration.getParticipants().stream().filter(process -> process.getStartEvents().stream()
+                                                                          .anyMatch(startEvent -> startEvent.getType() == StartEventType.NONE))
+                                                .forEach(process -> {
+            GrooveNode processInstance = new GrooveNode(TYPE_PROCESS_SNAPSHOT);
+            GrooveNode processName = new GrooveNode(createStringNodeLabel(process.getName()));
+            startGraphBuilder.addEdge(NAME, processInstance, processName);
+            GrooveNode running = new GrooveNode(TYPE_RUNNING);
+            startGraphBuilder.addEdge(STATE, processInstance, running);
+            addStartTokens(startGraphBuilder, process, processInstance);
         });
 
         return startGraphBuilder.build();
     }
 
-    private String getStartEventTokenName(Process process) {
-        return process.getName() + "_" + process.getStartEvent().getName();
+    private void addStartTokens(GrooveGraphBuilder startGraphBuilder, Process process, GrooveNode processInstance) {
+        process.getStartEvents().forEach(startEvent -> {
+            if (startEvent.getType() == StartEventType.NONE) {
+                GrooveNode startToken = new GrooveNode(TYPE_TOKEN);
+                GrooveNode tokenName = new GrooveNode(createStringNodeLabel(getStartEventTokenName(process,
+                                                                                                   startEvent)));
+                startGraphBuilder.addEdge(POSITION, startToken, tokenName);
+                startGraphBuilder.addEdge(TOKENS, processInstance, startToken);
+            }
+        });
     }
 
     @Override
@@ -68,10 +74,14 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
     }
 
     private void copyTypeGraphAndFixedRules(File targetFolder) {
-        InputStream typeGraph = this.getClass().getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR + TYPE_GRAPH_FILE_NAME);
-        InputStream terminateRule = this.getClass().getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR + TERMINATE_RULE_FILE_NAME);
-        InputStream unsafeGraph = this.getClass().getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR + UNSAFE_FILE_NAME);
-        InputStream allterminatedGraph = this.getClass().getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR + ALL_TERMINATED_FILE_NAME);
+        InputStream typeGraph = this.getClass().getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR +
+                                                                    TYPE_GRAPH_FILE_NAME);
+        InputStream terminateRule = this.getClass().getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR +
+                                                                        TERMINATE_RULE_FILE_NAME);
+        InputStream unsafeGraph = this.getClass().getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR +
+                                                                      UNSAFE_FILE_NAME);
+        InputStream allterminatedGraph = this.getClass().getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR +
+                                                                             ALL_TERMINATED_FILE_NAME);
         try {
             FileUtils.copyInputStreamToFile(typeGraph, new File(targetFolder, TYPE_GRAPH_FILE_NAME));
             FileUtils.copyInputStreamToFile(terminateRule, new File(targetFolder, TERMINATE_RULE_FILE_NAME));

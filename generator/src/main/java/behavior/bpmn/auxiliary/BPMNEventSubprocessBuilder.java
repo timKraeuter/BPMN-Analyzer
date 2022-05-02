@@ -5,6 +5,7 @@ import behavior.bpmn.FlowNode;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.events.StartEvent;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -12,7 +13,6 @@ public class BPMNEventSubprocessBuilder implements BPMNModelBuilder {
     private final Set<SequenceFlow> sequenceFlows;
     private final Set<EventSubprocess> eventSubprocesses;
     private String name;
-    private StartEvent startEvent;
 
     public BPMNEventSubprocessBuilder() {
         this.sequenceFlows = new LinkedHashSet<>();
@@ -43,13 +43,13 @@ public class BPMNEventSubprocessBuilder implements BPMNModelBuilder {
     }
 
     @Override
-    public StartEvent getStartEvent() {
-        return startEvent;
+    public Set<StartEvent> getStartEvents() {
+        return new HashSet<>();
     }
 
     @Override
     public BPMNEventSubprocessBuilder startEvent(StartEvent startEvent) {
-        this.startEvent = startEvent;
+        // NOOP since it is not needed.
         return this;
     }
 

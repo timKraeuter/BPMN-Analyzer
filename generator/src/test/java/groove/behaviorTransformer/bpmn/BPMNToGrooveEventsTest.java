@@ -7,6 +7,14 @@ import java.io.IOException;
 class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
 
     /**
+     * See test case <a href="https://cawemo.com/share/b115e18b-0136-41a7-940a-8190c97da07e">"Multiple Start Events"</a> in cawemo.
+     */
+    @Test
+    void testMultipleStartEvents() throws IOException {
+        testGrooveGenerationForBPMNResourceFile("multiple-start-events.bpmn");
+    }
+
+    /**
      * See test case <a href="https://cawemo.com/share/e6a2eb93-b0e7-4c09-baa0-93ff18084d0e">"Message Events"</a> in cawemo.
      */
     @Test

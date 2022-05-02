@@ -35,8 +35,8 @@ public class BPMNCollaborationBuilder implements BPMNModelBuilder {
     }
 
     @Override
-    public StartEvent getStartEvent() {
-        return currentProcessBuilder.getStartEvent();
+    public Set<StartEvent> getStartEvents() {
+        return currentProcessBuilder.getStartEvents();
     }
 
     public BPMNCollaborationBuilder name(String name) {
@@ -144,7 +144,7 @@ public class BPMNCollaborationBuilder implements BPMNModelBuilder {
     }
 
     public BPMNCollaboration build() {
-        if (currentProcessBuilder.getStartEvent() != null || currentProcessBuilder.getSequenceFlows().size() >= 1) {
+        if (!currentProcessBuilder.getStartEvents().isEmpty() || currentProcessBuilder.getSequenceFlows().size() >= 1) {
             this.buildProcess();
         }
         return new BPMNCollaboration(name, participants, subprocesses, messageFlows);

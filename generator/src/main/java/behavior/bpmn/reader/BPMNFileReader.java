@@ -228,7 +228,7 @@ public class BPMNFileReader {
             // Events
             case "startEvent":
                 StartEvent startEvent = mapStartEvent(flowNode);
-                setMostAppropriateStartEvent(bpmnModelBuilder, startEvent);
+                bpmnModelBuilder.startEvent(startEvent);
                 resultingFlowNode = startEvent;
                 break;
             case "intermediateThrowEvent":
@@ -397,20 +397,6 @@ public class BPMNFileReader {
         mappedFlowNodes.put(subprocess.getId(), subProcessCallActivity);
         return subProcessCallActivity;
     }
-
-    private void setMostAppropriateStartEvent(BPMNModelBuilder bpmnModelBuilder, StartEvent startEvent) {
-        StartEvent currentStartEvent = bpmnModelBuilder.getStartEvent();
-        // Prioritizes none start events over message
-        if (currentStartEvent == null || currentStartEvent.getType() != StartEventType.NONE) {
-            bpmnModelBuilder.startEvent(startEvent);
-            return;
-        }
-        if (currentStartEvent.getType() == startEvent.getType()) {
-            // TODO: Multiple none start events?
-            throw new RuntimeException("Multiple none start events are currently not supported!");
-        }
-    }
-
     private boolean hasInstantiateCamundaProperty(FlowNode flowNode) {
         ExtensionElements extensionElements = flowNode.getExtensionElements();
         if (extensionElements == null) {

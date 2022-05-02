@@ -3,6 +3,7 @@ package groove.behaviorTransformer.bpmn;
 import behavior.bpmn.Process;
 import behavior.bpmn.*;
 import behavior.bpmn.activities.CallActivity;
+import behavior.bpmn.events.StartEvent;
 import groove.behaviorTransformer.GrooveTransformer;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveRuleBuilder;
@@ -304,5 +305,9 @@ public class BPMNToGrooveTransformerHelper {
             ruleBuilder.contextEdge(IN, forAllTokens, quantifierIfExists);
             ruleBuilder.contextEdge(IN, forAllMessages, quantifierIfExists);
         }
+    }
+
+    public static String getStartEventTokenName(Process process, StartEvent event) {
+        return process.getName() + "_" + event.getName();
     }
 }

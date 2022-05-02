@@ -13,16 +13,17 @@ public class BPMNProcessBuilder implements BPMNModelBuilder {
     private final Set<SequenceFlow> sequenceFlows;
     private final Set<EventSubprocess> eventSubprocesses;
     private String name;
-    private StartEvent startEvent;
+    private final Set<StartEvent> startEvents;
 
     public BPMNProcessBuilder() {
         this.sequenceFlows = new LinkedHashSet<>();
         eventSubprocesses = new LinkedHashSet<>();
+        startEvents = new LinkedHashSet<>();
     }
 
     @Override
-    public StartEvent getStartEvent() {
-        return startEvent;
+    public Set<StartEvent> getStartEvents() {
+        return startEvents;
     }
 
     public Set<SequenceFlow> getSequenceFlows() {
@@ -36,7 +37,7 @@ public class BPMNProcessBuilder implements BPMNModelBuilder {
 
     @Override
     public BPMNProcessBuilder startEvent(StartEvent event) {
-        this.startEvent = event;
+        this.startEvents.add(event);
         return this;
     }
 
@@ -61,6 +62,6 @@ public class BPMNProcessBuilder implements BPMNModelBuilder {
     }
 
     public Process build() {
-        return new Process(name, startEvent, sequenceFlows, eventSubprocesses);
+        return new Process(name, startEvents, sequenceFlows, eventSubprocesses);
     }
 }

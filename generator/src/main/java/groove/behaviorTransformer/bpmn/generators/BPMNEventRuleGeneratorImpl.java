@@ -28,12 +28,10 @@ import static groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerConstants.*
 import static groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerHelper.*;
 
 public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
-    private final BPMNRuleGenerator bpmnRuleGenerator;
     private final BPMNCollaboration collaboration;
     private final GrooveRuleBuilder ruleBuilder;
 
     public BPMNEventRuleGeneratorImpl(BPMNRuleGenerator bpmnRuleGenerator, GrooveRuleBuilder ruleBuilder) {
-        this.bpmnRuleGenerator = bpmnRuleGenerator;
         this.collaboration = bpmnRuleGenerator.getCollaboration();
         this.ruleBuilder = ruleBuilder;
     }
@@ -601,7 +599,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         ruleBuilder.startRule(startEvent.getName());
         GrooveNode processInstance = contextProcessInstance(process, ruleBuilder);
         addOutgoingTokensForFlowNodeToProcessInstance(startEvent, ruleBuilder, processInstance);
-        deleteTokenWithPosition(ruleBuilder, processInstance, bpmnRuleGenerator.getStartEventTokenName(process));
+        deleteTokenWithPosition(ruleBuilder, processInstance, getStartEventTokenName(process, startEvent));
         ruleBuilder.buildRule();
     }
 

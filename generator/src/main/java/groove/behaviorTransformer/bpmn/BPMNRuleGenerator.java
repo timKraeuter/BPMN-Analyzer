@@ -90,11 +90,6 @@ public class BPMNRuleGenerator {
     }
 
     // Methods shared between the generators.
-
-    public String getStartEventTokenName(Process process) {
-        return process.getName() + "_" + process.getStartEvent().getName();
-    }
-
     public String getTaskOrCallActivityRuleName(FlowNode taskOrCallActivity, String incomingFlowId) {
         if (taskOrCallActivity.getIncomingFlows().count() > 1) {
             return taskOrCallActivity.getName() + "_" + incomingFlowId;

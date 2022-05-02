@@ -24,19 +24,19 @@ import java.util.stream.Stream;
  * Represents a process modeled in BPMN.
  */
 public class Process extends AbstractProcess {
-    private final StartEvent startEvent;
+    private final Set<StartEvent> startEvents;
 
     public Process(
             String name,
-            StartEvent startEvent,
+            Set<StartEvent> startEvents,
             Set<SequenceFlow> sequenceFlows,
             Set<EventSubprocess> eventSubprocesses) {
         super(name, sequenceFlows, eventSubprocesses);
-        this.startEvent = startEvent;
+        this.startEvents = startEvents;
     }
 
-    public StartEvent getStartEvent() {
-        return this.startEvent;
+    public Set<StartEvent> getStartEvents() {
+        return this.startEvents;
     }
 
     public Stream<Process> getSubProcesses() {
