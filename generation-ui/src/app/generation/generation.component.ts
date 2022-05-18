@@ -6,6 +6,7 @@ import {HttpClient} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {LTlSyntaxComponent} from '../ltl-syntax/ltl-syntax.component';
 import {environment} from '../../environments/environment';
+import {BPMNProperty} from "../verification-result-component/verification-result-component.component";
 
 const baseURL = environment.production ? window.location.href : environment.apiURL;
 const zipURL = baseURL + 'zip';
@@ -21,17 +22,21 @@ export class GenerationComponent {
     'https://cdn.staticaly.com/gh/bpmn-io/bpmn-js-examples/dfceecba/starter/diagram.bpmn';
   importError?: Error;
 
+  // BPMN-specific property checking.
+  public bpmnSpecificPropertiesToBeChecked: string[];
+  public bpmnSpecificVerificationRunning: boolean = false;
+  public bpmnPropertyCheckingResults: BPMNProperty[]  = [];
+
+  public ltlProperty: string = "";
+
   constructor(
     private bpmnModeler: BPMNModelerService,
     private httpClient: HttpClient,
     private snackBar: MatSnackBar
   ) {
-    this.bpmnProperties = [];
+    this.bpmnSpecificPropertiesToBeChecked = [];
     this.ltlProperty = '';
   }
-
-  bpmnProperties: string[];
-  ltlProperty: string;
 
   // @ts-ignore
   handleImported(event) {
@@ -99,7 +104,7 @@ export class GenerationComponent {
   }
 
   async checkBPMNSpecificPropertiesClicked() {
-    if (this.bpmnProperties.length == 0) {
+    if (this.bpmnSpecificPropertiesToBeChecked.length == 0) {
       this.snackBar.open(
         'Please select at least one property for verification.',
         'close',
@@ -108,18 +113,17 @@ export class GenerationComponent {
         }
       );
     }
-    console.log(
-      'Check general properties clicked with the following selection: ' +
-      this.bpmnProperties
-    );
+    this.bpmnSpecificVerificationRunning = true;
     const formData = await this.createBPMNFileFormData();
-    this.bpmnProperties.forEach(property =>
+    this.bpmnSpecificPropertiesToBeChecked.forEach(property =>
       formData.append("propertiesToBeChecked[]", property));
 
     this.httpClient
       .post(modelCheckURL, formData)
       .subscribe((data) => {
-        console.log(data);
+        // @ts-ignore
+        this.bpmnPropertyCheckingResults = JSON.parse(JSON.stringify(data["propertyCheckingResults"]));
+        this.bpmnSpecificVerificationRunning = false;
       });
   }
 

@@ -1,33 +1,22 @@
 package no.hvl.tk.ruleGenerator.server.endpoint.dtos;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ModelCheckingResponse {
-    Map<ModelCheckingProperty, Boolean> propertyCheckingResults;
-    Set<String> deadActivities;
-
+    List<BPMNPropertyCheckingResult> propertyCheckingResults;
     public ModelCheckingResponse() {
-        this.propertyCheckingResults = new HashMap<>();
-        this.deadActivities = new HashSet<>();
+        this.propertyCheckingResults = new ArrayList<>();
     }
 
-    // Getters needed for request mapping.
-    public Map<ModelCheckingProperty, Boolean> getPropertyCheckingResults() {
+    public void addPropertyCheckingResult(BPMNPropertyCheckingResult result) {
+        this.propertyCheckingResults.add(result);
+    }
+
+    public List<BPMNPropertyCheckingResult> getPropertyCheckingResults() {
         return propertyCheckingResults;
     }
 
-    public Set<String> getDeadActivities() {
-        return deadActivities;
-    }
-
-    public void setPropertyCheckingResult(ModelCheckingProperty property, Boolean propertyFulfilled) {
-        propertyCheckingResults.put(property, propertyFulfilled);
-    }
-
-    public void addDeadActivity(String activityNameOrId) {
-        deadActivities.add(activityNameOrId);
+    public void setPropertyCheckingResults(List<BPMNPropertyCheckingResult> propertyCheckingResults) {
+        this.propertyCheckingResults = propertyCheckingResults;
     }
 }

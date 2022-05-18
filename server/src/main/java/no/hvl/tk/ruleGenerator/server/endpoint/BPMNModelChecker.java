@@ -1,5 +1,6 @@
 package no.hvl.tk.ruleGenerator.server.endpoint;
 
+import no.hvl.tk.ruleGenerator.server.endpoint.dtos.BPMNPropertyCheckingResult;
 import no.hvl.tk.ruleGenerator.server.endpoint.dtos.ModelCheckingProperty;
 import no.hvl.tk.ruleGenerator.server.endpoint.dtos.ModelCheckingRequest;
 import no.hvl.tk.ruleGenerator.server.endpoint.dtos.ModelCheckingResponse;
@@ -14,9 +15,13 @@ public class BPMNModelChecker {
     }
 
     public ModelCheckingResponse runModelChecking(ModelCheckingRequest modelCheckingRequest) {
-        System.out.println(modelCheckingRequest.getPropertiesToBeChecked());
         ModelCheckingResponse response = new ModelCheckingResponse();
-        response.setPropertyCheckingResult(ModelCheckingProperty.NO_DEAD_ACTIVITIES, true);
+
+        // TODO: Just for testing
+        response.addPropertyCheckingResult(new BPMNPropertyCheckingResult(ModelCheckingProperty.SAFENESS, true, ""));
+        response.addPropertyCheckingResult(new BPMNPropertyCheckingResult(ModelCheckingProperty.OPTION_TO_COMPLETE, true, ""));
+        response.addPropertyCheckingResult(new BPMNPropertyCheckingResult(ModelCheckingProperty.NO_DEAD_ACTIVITIES, false, "A1"));
+
         modelCheckingRequest.getPropertiesToBeChecked().forEach(modelCheckingProperty -> this.checkPropertyAndRecordResult(
                 modelCheckingProperty,
                 response));
@@ -28,7 +33,6 @@ public class BPMNModelChecker {
         switch (modelCheckingProperty) {
             case NO_DEAD_ACTIVITIES:
                 // TODO: Implement checking.
-                response.setPropertyCheckingResult(modelCheckingProperty, true);
                 break;
             // Not supported atm.
             case SAFENESS:

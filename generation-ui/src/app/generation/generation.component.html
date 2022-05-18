@@ -44,7 +44,7 @@
   </mat-card-actions>
 </mat-card>
 <mat-divider></mat-divider>
-<mat-card>
+<mat-card class="card">
   <mat-card-header>
     <mat-card-title>Verification</mat-card-title>
   </mat-card-header>
@@ -53,7 +53,7 @@
       <mat-card-content class='top-margin'>
         Select one or more of the following properties to check for the BPMN model.
         <br>
-        <mat-button-toggle-group name='bpmnProperties' [(ngModel)]='bpmnProperties' aria-label='BPMN-specific Properties'
+        <mat-button-toggle-group name='bpmnProperties' [(ngModel)]='bpmnSpecificPropertiesToBeChecked' aria-label='BPMN-specific Properties'
                                  multiple class='top-margin'>
           <mat-button-toggle value='SAFENESS'
                              matTooltip='Safeness means that during process execution no more than one token occurs along the same sequence flow.'>
@@ -105,4 +105,5 @@
     </mat-tab>
   </mat-tab-group>
 </mat-card>
+<verification-result-component [running]="bpmnSpecificVerificationRunning" [properties]="bpmnPropertyCheckingResults"></verification-result-component>
 <input hidden type='file' #uploader (change)='uploadFile($event)' />
