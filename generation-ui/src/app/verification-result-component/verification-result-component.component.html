@@ -1,0 +1,24 @@
+<mat-card *ngIf="running || properties.length > 0">
+  <mat-card-header>
+    <mat-card-title>Verification results</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+  <span *ngIf="running; else results">
+    <mat-spinner></mat-spinner>
+  </span>
+    <ng-template #results>
+      <mat-list>
+        <div mat-subheader>BPMN-specific properties</div>
+        <mat-list-item *ngFor="let property of properties">
+          <mat-icon mat-list-icon class="green-icon" *ngIf="property.holds; else doesNotHold">check</mat-icon>
+          <ng-template #doesNotHold>
+            <mat-icon mat-list-icon class="red-icon">close</mat-icon>
+          </ng-template>
+          <div mat-line>{{property.name}} <span *ngIf="property.additionalInfo">({{property.additionalInfo}})</span>
+          </div>
+        </mat-list-item>
+      </mat-list>
+
+    </ng-template>
+  </mat-card-content>
+</mat-card>
