@@ -25,9 +25,6 @@ import static no.hvl.tk.ruleGenerator.server.endpoint.RuleGeneratorControllerHel
 @CrossOrigin(origins = "http://localhost:4200")
 public class RuleGeneratorController {
 
-    // TODO: Testcase zip
-    // TODO: Testcase model checking
-
     /**
      * Generate a graph grammar for a given BPMN file.
      * @param file BPMN file defining a collaboration.
