@@ -1,7 +1,6 @@
 package no.hvl.tk.ruleGenerator.server.endpoint;
 
-import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.FlowNode;
+import behavior.bpmn.*;
 import behavior.bpmn.Process;
 import no.hvl.tk.ruleGenerator.server.endpoint.dtos.BPMNPropertyCheckingResult;
 import no.hvl.tk.ruleGenerator.server.endpoint.dtos.ModelCheckingProperty;
@@ -15,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -58,31 +56,36 @@ public class BPMNModelChecker {
         try {
             // Generate state space for graph grammar.
             final GrooveRunner grooveRunner = new GrooveRunner();
-            // TODO: Fix naming
-            final String stateSpaceTempFile = RuleGeneratorControllerHelper.stateSpaceTempDir +
-                                              graphGrammarDir.getName();
+            final String stateSpaceTempFile = String.format("%s%s.txt",
+                                                            RuleGeneratorControllerHelper.stateSpaceTempDir,
+                                                            bpmnModel.getName());
             grooveRunner.generateStateSpace(graphGrammarDir.getPath(), stateSpaceTempFile, true);
 
-            // Read the file and find the executed activities
+            // Read the state space file and find the executed activities
             final Set<String> executedActivities = findExecutedActivitiesInStateSpace(stateSpaceTempFile);
 
             // TODO: Not connected activities are not found due to the nature of my BPMN model.
-            // Compare to all activities (needs BPMN model)
+            // Compare to all activities
             final Set<String> allActivityNames = getAllActivityNames();
             allActivityNames.removeAll(executedActivities);
 
-            if (allActivityNames.isEmpty()) {
-                response.addPropertyCheckingResult(new BPMNPropertyCheckingResult(ModelCheckingProperty.NO_DEAD_ACTIVITIES,
-                                                                                  true,
-                                                                                  ""));
-            } else {
-                response.addPropertyCheckingResult(new BPMNPropertyCheckingResult(ModelCheckingProperty.NO_DEAD_ACTIVITIES,
-                                                                                  false,
-                                                                                  String.format("Dead activities: %s", String.join(",", allActivityNames))));
-            }
+            recordNoDeadActivitiesResult(response, allActivityNames);
         }
         catch (InterruptedException | IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void recordNoDeadActivitiesResult(ModelCheckingResponse response, Set<String> deadActivities) {
+        if (deadActivities.isEmpty()) {
+            response.addPropertyCheckingResult(new BPMNPropertyCheckingResult(ModelCheckingProperty.NO_DEAD_ACTIVITIES,
+                                                                              true,
+                                                                              ""));
+        } else {
+            String deadActivitiesHint = String.format("Dead activities: %s", String.join(",", deadActivities));
+            response.addPropertyCheckingResult(new BPMNPropertyCheckingResult(ModelCheckingProperty.NO_DEAD_ACTIVITIES,
+                                                                              false,
+                                                                              deadActivitiesHint));
         }
     }
 
@@ -95,18 +98,36 @@ public class BPMNModelChecker {
     private Set<String> getAllActivityNames(Process process) {
         // Get all activities from subprocesses
         final Set<String> allActivityNames =
-                process.getSubProcesses().flatMap(subprocess -> getAllActivityNames(subprocess).stream()).collect(
-                Collectors.toSet());
-        // TODO: Get all activities from event subprocesses
+                process.getSubProcesses()
+                       .flatMap(subprocess -> getAllActivityNames(subprocess).stream())
+                       .collect(Collectors.toSet());
+        // Get all activities from event subprocesses
+        process.getEventSubprocesses()
+               .flatMap(eventSubprocess -> getAllActivityNames(eventSubprocess).stream())
+               .forEach(allActivityNames::add);
 
-        process.getControlFlowNodes().filter(FlowNode::isTask)
-                                     .map(FlowNode::getName)
-                                     .forEach(allActivityNames::add);
+        addActivityNamesForProcess(process, allActivityNames);
         return allActivityNames;
     }
 
+    private Set<String> getAllActivityNames(EventSubprocess process) {
+        // Get all activities from subprocesses
+        Set<String> allActivityNames = process.getEventSubprocesses()
+                                              .flatMap(eventSubprocess -> getAllActivityNames(eventSubprocess).stream())
+                                              .collect(Collectors.toSet());
+
+        addActivityNamesForProcess(process, allActivityNames);
+        return allActivityNames;
+    }
+
+    private void addActivityNamesForProcess(AbstractProcess process, Set<String> allActivityNames) {
+        process.getControlFlowNodes().filter(FlowNode::isTask)
+               .map(FlowNode::getName)
+               .forEach(allActivityNames::add);
+    }
+
     private Set<String> findExecutedActivitiesInStateSpace(String stateSpaceTempFile) throws IOException {
-        final Pattern regEx = Pattern.compile("<string>(.*)_start</string>");
+        final Pattern regEx = Pattern.compile("<string>(.*)_end</string>");
 
         // Read the file in chunks if needed in the future!
         final String stateSpaceString = Files.readString(Path.of(stateSpaceTempFile));
