@@ -25,11 +25,15 @@ import static no.hvl.tk.ruleGenerator.server.endpoint.RuleGeneratorControllerHel
 @CrossOrigin(origins = "http://localhost:4200")
 public class RuleGeneratorController {
 
-    // One Method to generate the GG (+ download zip)
-    @RequestMapping(value = "/zip", produces = "application/zip")
+    /**
+     * Generate a graph grammar for a given BPMN file.
+     * @param file BPMN file defining a collaboration.
+     * @param response will be a ZIP of the graph grammar for the BPMN file.
+     */
+    @RequestMapping(value = "/generateGGAndZip", produces = "application/zip")
     public void generateGGAndReturnZIP(@RequestPart("file") MultipartFile file,
                                        HttpServletResponse response) throws IOException {
-        // TODO: This is problematic during concurrent access of the application!
+        // Not made for concurrent access of the application!
         deleteOldGGsAndCreateNewDir();
 
         File resultDir = generateGGForBPMNFile(file).getLeft();
@@ -59,7 +63,12 @@ public class RuleGeneratorController {
         }
     }
 
-    @RequestMapping(value = "/modelCheckBPMN")
+    /**
+     * Run model-checking of certain BPMN-specific properties for a BPMN collaboration.
+     * @param request contains the BPMN file and properties to be checked.
+     * @return model-checking results for the requested properties.
+     */
+    @RequestMapping(value = "/checkBPMNSpecificProperties")
     public ModelCheckingResponse modelCheckBPMN(@ModelAttribute ModelCheckingRequest request) throws IOException {
         deleteOldGGsAndCreateNewDir();
 

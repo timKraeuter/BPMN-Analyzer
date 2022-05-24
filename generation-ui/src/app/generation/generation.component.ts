@@ -9,8 +9,8 @@ import {environment} from '../../environments/environment';
 import {BPMNProperty} from "../verification-result-component/verification-result-component.component";
 
 const baseURL = environment.production ? window.location.href : environment.apiURL;
-const zipURL = baseURL + 'zip';
-const modelCheckURL = baseURL + 'modelCheckBPMN';
+const generateGGAndZipURL = baseURL + 'generateGGAndZip';
+const checkBPMNSpecificPropsURL = baseURL + 'checkBPMNSpecificProperties';
 
 @Component({
   selector: 'app-generation',
@@ -82,7 +82,7 @@ export class GenerationComponent {
     const formData = await this.createBPMNFileFormData();
 
     this.httpClient
-      .post(zipURL, formData, options)
+      .post(generateGGAndZipURL, formData, options)
       .subscribe((data) => {
         // Receive and save as zip.
         const blob = new Blob([data], {
@@ -119,7 +119,7 @@ export class GenerationComponent {
       formData.append("propertiesToBeChecked[]", property));
 
     this.httpClient
-      .post(modelCheckURL, formData)
+      .post(checkBPMNSpecificPropsURL, formData)
       .subscribe((data) => {
         // @ts-ignore
         this.bpmnPropertyCheckingResults = JSON.parse(JSON.stringify(data["propertyCheckingResults"]));
