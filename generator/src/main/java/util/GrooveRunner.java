@@ -6,10 +6,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class GrooveRunner {
+    public static final String packagedGrooveBinDir = new File(GrooveRunner.class.getResource("/groove/bin").getFile()).getPath();
     private final String grooveBinDir;
 
-    public GrooveRunner(String grooveBinDir) {
+    public GrooveRunner() {
+        this(packagedGrooveBinDir);
+    }
 
+    public GrooveRunner(String grooveBinDir) {
         this.grooveBinDir = grooveBinDir;
     }
 
@@ -22,7 +26,8 @@ public class GrooveRunner {
                                                     grooveBinDir + "/Generator.jar",
                                                     graphGrammar,
                                                     "-o",
-                                                    String.format("%s", resultFilePath));
+                                                    resultFilePath);
+
         builder.redirectErrorStream(true);
         Process p = builder.start();
         p.waitFor();

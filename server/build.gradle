@@ -23,6 +23,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api
 	implementation group: 'jakarta.activation', name: 'jakarta.activation-api', version: '2.1.0'
 
+	// Add pair class
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
 	// Spring
 	implementation 'org.springframework.boot:spring-boot-starter-web'
