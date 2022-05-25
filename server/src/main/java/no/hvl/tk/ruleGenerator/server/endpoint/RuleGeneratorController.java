@@ -11,6 +11,7 @@ import java.util.zip.ZipOutputStream;
 import behavior.bpmn.BPMNCollaboration;
 import no.hvl.tk.ruleGenerator.server.endpoint.dtos.ModelCheckingRequest;
 import no.hvl.tk.ruleGenerator.server.endpoint.dtos.ModelCheckingResponse;
+import no.hvl.tk.ruleGenerator.server.endpoint.verification.BPMNModelChecker;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.web.bind.annotation.*;

@@ -125,6 +125,7 @@ export class GenerationComponent {
           this.bpmnSpecificVerificationRunning = false;
         },
         error: (error) => {
+          console.log(error);
           this.snackBar.open(
             error.error.message,
             'close',
