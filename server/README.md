@@ -4,7 +4,7 @@ Start the main method in the class **Application**.
 This will start the application at [localhost:8080](http://localhost:8080/).
 
 ## Jar File
-Run the application (execute in this directory):
+Run the application (execute in the **Groove_Rule_Generation**, i.e., root directory):
 ```console
 java -jar ruleGeneratorServer-1.0.0.jar
 ```
