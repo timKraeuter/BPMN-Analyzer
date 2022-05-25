@@ -23,11 +23,25 @@ dependencies {
 	// https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api
 	implementation group: 'jakarta.activation', name: 'jakarta.activation-api', version: '2.1.0'
 
+	// Add pair class
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
 	// Spring
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// Form data request for testing
+	// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime
+	testImplementation 'org.apache.httpcomponents:httpmime:4.5.13'
+	// Guava
+	// https://mvnrepository.com/artifact/com.google.guava/guava
+	testImplementation 'com.google.guava:guava:31.1-jre'
+	// toString of input streams.
+	// https://mvnrepository.com/artifact/commons-io/commons-io
+	testImplementation 'commons-io:commons-io:2.11.0'
+
+
 }
 
 tasks.named('test') {

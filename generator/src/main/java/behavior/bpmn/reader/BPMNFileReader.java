@@ -222,7 +222,6 @@ public class BPMNFileReader {
             return flowNodeIfExists;
         }
         String taskTypeName = flowNode.getElementType().getTypeName();
-        // TODO: We probably need to save the ID somehow or use it instead of the name!
         behavior.bpmn.FlowNode resultingFlowNode;
         switch (taskTypeName) {
             // Events

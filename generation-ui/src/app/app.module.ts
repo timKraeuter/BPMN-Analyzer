@@ -19,6 +19,9 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { LTlSyntaxComponent } from './ltl-syntax/ltl-syntax.component';
+import { VerificationResultComponentComponent } from './verification-result-component/verification-result-component.component';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatListModule} from "@angular/material/list";
 
 @NgModule({
     declarations: [
@@ -26,24 +29,27 @@ import { LTlSyntaxComponent } from './ltl-syntax/ltl-syntax.component';
         GenerationComponent,
         DiagramComponent,
         LTlSyntaxComponent,
+        VerificationResultComponentComponent,
     ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatIconModule,
-        MatButtonModule,
-        MatCardModule,
-        HttpClientModule,
-        MatTooltipModule,
-        MatDividerModule,
-        MatTabsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonToggleModule,
-        FormsModule,
-        MatSnackBarModule,
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
+    HttpClientModule,
+    MatTooltipModule,
+    MatDividerModule,
+    MatTabsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonToggleModule,
+    FormsModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    MatListModule,
+  ],
     providers: [],
     bootstrap: [AppComponent],
 })

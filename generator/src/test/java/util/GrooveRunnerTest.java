@@ -6,14 +6,16 @@ import java.io.File;
 import java.io.IOException;
 
 class GrooveRunnerTest {
-    private final String grooveBinDir = new File(this.getClass().getResource("/groove/bin").getFile()).getPath();
 
+    /**
+     * If this tests does not terminate, one possible reasons is that the gradle JVM/JDK does not match the Java JDK.
+     */
     @Test
     void testGenerateStateSpace() throws IOException, InterruptedException {
-        GrooveRunner grooveRunner = new GrooveRunner(grooveBinDir);
+        GrooveRunner grooveRunner = new GrooveRunner("../groove/bin");
         File stateSpace =
-                grooveRunner.generateStateSpace(grooveBinDir + "/bpmn/call-activity-complex.gps",
-                                                grooveBinDir + "/statespaces/statespace.txt",
+                grooveRunner.generateStateSpace("../groove/bin/circular.gps",
+                                                "../groove/bin/statespaces/statespace.txt",
                                                 true);
 
         // Check state space files

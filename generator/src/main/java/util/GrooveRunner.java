@@ -1,15 +1,17 @@
 package util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.concurrent.TimeUnit;
 
 public class GrooveRunner {
+    private static final String defaultGrooveDir = "groove/bin";
     private final String grooveBinDir;
 
-    public GrooveRunner(String grooveBinDir) {
+    public GrooveRunner() {
+        this(defaultGrooveDir);
+    }
 
+    public GrooveRunner(String grooveBinDir) {
         this.grooveBinDir = grooveBinDir;
     }
 
@@ -22,25 +24,28 @@ public class GrooveRunner {
                                                     grooveBinDir + "/Generator.jar",
                                                     graphGrammar,
                                                     "-o",
-                                                    String.format("%s", resultFilePath));
+                                                    resultFilePath);
+
         builder.redirectErrorStream(true);
-        Process p = builder.start();
-        p.waitFor();
+        Process process = builder.start();
         if (printOutput) {
-            printOutput(p);
+            new Thread(() -> printOutput(process)).start();
         }
+        process.waitFor(60, TimeUnit.SECONDS);
+        process.destroy(); // no op if already stopped.
+        process.waitFor();
         return new File(resultFilePath);
     }
 
-    private void printOutput(Process p) throws IOException {
-        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String line;
-        while (true) {
-            line = r.readLine();
-            if (line == null) {
-                break;
+    private void printOutput(Process p) {
+        try {
+            byte[] buffer = new byte[1024];
+            for (int length; (length = p.getInputStream().read(buffer)) != -1; ) {
+                System.out.write(buffer, 0, length);
             }
-            System.out.println(line);
+        }
+        catch (IOException e) {
+            System.out.println("Process output could not be read! " + e.getMessage());
         }
     }
 }
