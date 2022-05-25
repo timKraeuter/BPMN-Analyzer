@@ -77,6 +77,7 @@ public class BPMNModelChecker {
             final Set<String> executedActivities = findExecutedActivitiesInStateSpace(stateSpaceTempFile);
 
             // TODO: Not connected activities are not found due to the nature of my BPMN model.
+            // TODO: Groove does not allow names to start with numbers!
             // Compare to all activities
             final Set<String> allActivityNames = getAllActivityNames();
             allActivityNames.removeAll(executedActivities);
@@ -84,7 +85,7 @@ public class BPMNModelChecker {
             recordNoDeadActivitiesResult(response, allActivityNames);
         }
         catch (NoSuchFileException exception) {
-            throw new ModelCheckingException("Checking for dead activities timed out after 60 seconds. The state space is too large or infinite.");
+            throw new ModelCheckingException("The state space could not be generated or timed out after 60 seconds.");
         }
     }
 
