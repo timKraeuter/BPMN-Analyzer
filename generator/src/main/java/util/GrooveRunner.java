@@ -1,9 +1,7 @@
 package util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 public class GrooveRunner {
@@ -40,15 +38,18 @@ public class GrooveRunner {
         return new File(resultFilePath);
     }
 
-    private void printOutput(Process p) throws IOException {
-        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String line;
-        while (true) {
-            line = r.readLine();
-            if (line == null) {
-                break;
+    private void printOutput(Process p) {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        try {
+
+            byte[] buffer = new byte[1024];
+            for (int length; (length = p.getInputStream().read(buffer)) != -1; ) {
+                result.write(buffer, 0, length);
             }
-            System.out.println(line);
         }
+        catch (IOException e) {
+            System.out.println("Process output could not be read! " + e.getMessage());
+        }
+        System.out.println(result.toString(StandardCharsets.UTF_8));
     }
 }
