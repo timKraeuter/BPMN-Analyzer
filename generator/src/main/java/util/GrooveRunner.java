@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class GrooveRunner {
-    public static final String packagedGrooveBinDir = new File(GrooveRunner.class.getResource("/groove/bin").getFile()).getPath();
+    private static final String defaultGrooveDir = "groove/bin";
     private final String grooveBinDir;
 
     public GrooveRunner() {
-        this(packagedGrooveBinDir);
+        this(defaultGrooveDir);
     }
 
     public GrooveRunner(String grooveBinDir) {
