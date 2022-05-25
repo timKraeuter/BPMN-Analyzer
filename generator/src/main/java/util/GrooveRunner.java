@@ -30,11 +30,11 @@ public class GrooveRunner {
         builder.redirectErrorStream(true);
         Process process = builder.start();
         process.waitFor(60, TimeUnit.SECONDS);
-        process.destroy(); // no op if already stopped.
-        process.waitFor();
         if (printOutput) {
             printOutput(process);
         }
+        process.destroy(); // no op if already stopped.
+        process.waitFor();
         return new File(resultFilePath);
     }
 
