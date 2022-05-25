@@ -25,14 +25,14 @@ export class GenerationComponent {
   // BPMN-specific property checking.
   public bpmnSpecificPropertiesToBeChecked: string[];
   public bpmnSpecificVerificationRunning: boolean = false;
-  public bpmnPropertyCheckingResults: BPMNProperty[]  = [];
+  public bpmnPropertyCheckingResults: BPMNProperty[] = [];
 
   public ltlProperty: string = "";
 
   constructor(
     private bpmnModeler: BPMNModelerService,
     private httpClient: HttpClient,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) {
     this.bpmnSpecificPropertiesToBeChecked = [];
     this.ltlProperty = '';
@@ -120,10 +120,22 @@ export class GenerationComponent {
 
     this.httpClient
       .post(checkBPMNSpecificPropsURL, formData)
-      .subscribe((data) => {
-        // @ts-ignore
-        this.bpmnPropertyCheckingResults = JSON.parse(JSON.stringify(data["propertyCheckingResults"]));
-        this.bpmnSpecificVerificationRunning = false;
+      .subscribe({
+        complete: () => {
+          this.bpmnSpecificVerificationRunning = false;
+        },
+        error: (error) => {
+          this.snackBar.open(
+            error.error.message,
+            'close',
+          );
+          this.bpmnSpecificVerificationRunning = false;
+          this.bpmnPropertyCheckingResults = [];
+        },
+        next: (data) => {
+          // @ts-ignore
+          this.bpmnPropertyCheckingResults = JSON.parse(JSON.stringify(data["propertyCheckingResults"]));
+        },
       });
   }
 

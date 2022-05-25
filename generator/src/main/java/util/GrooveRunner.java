@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.TimeUnit;
 
 public class GrooveRunner {
     private static final String defaultGrooveDir = "groove/bin";
@@ -29,10 +30,12 @@ public class GrooveRunner {
                                                     resultFilePath);
 
         builder.redirectErrorStream(true);
-        Process p = builder.start();
-        p.waitFor();
+        Process process = builder.start();
+        process.waitFor(60, TimeUnit.SECONDS);
+        process.destroy(); // no op if already stopped.
+        process.waitFor();
         if (printOutput) {
-            printOutput(p);
+            printOutput(process);
         }
         return new File(resultFilePath);
     }

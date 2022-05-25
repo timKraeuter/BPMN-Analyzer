@@ -11,6 +11,7 @@ import util.GrooveRunner;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
@@ -61,6 +62,15 @@ public class BPMNModelChecker {
                                                             bpmnModel.getName());
             grooveRunner.generateStateSpace(graphGrammarDir.getPath(), stateSpaceTempFile, true);
 
+            readStateSpaceAndCheckActivities(response, stateSpaceTempFile);
+        }
+        catch (InterruptedException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void readStateSpaceAndCheckActivities(ModelCheckingResponse response, String stateSpaceTempFile) throws IOException {
+        try {
             // Read the state space file and find the executed activities
             final Set<String> executedActivities = findExecutedActivitiesInStateSpace(stateSpaceTempFile);
 
@@ -71,8 +81,8 @@ public class BPMNModelChecker {
 
             recordNoDeadActivitiesResult(response, allActivityNames);
         }
-        catch (InterruptedException | IOException e) {
-            throw new RuntimeException(e);
+        catch (NoSuchFileException exception) {
+            throw new RuntimeException("Checking for dead activities timed out after 60 seconds. The state space is too large or infinite.");
         }
     }
 

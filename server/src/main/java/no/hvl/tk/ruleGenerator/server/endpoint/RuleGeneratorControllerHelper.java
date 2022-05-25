@@ -22,6 +22,7 @@ public class RuleGeneratorControllerHelper {
 
     public static File deleteOldGGsAndCreateNewDir() throws IOException {
         FileUtils.deleteDirectory(new File(graphGrammarTempDir));
+        FileUtils.deleteDirectory(new File(stateSpaceTempDir));
         return new File(graphGrammarTempDir + UUID.randomUUID() + "/");
     }
 
