@@ -10,7 +10,7 @@ java -jar ruleGeneratorServer-1.0.0.jar
 ```
 This will start the application at [localhost:8080](http://localhost:8080/).
 
-Run the application on a specific port, for example 4300 (execute in this directory):
+Run the application on a specific port, for example 4300 (execute in the **Groove_Rule_Generation**, i.e., root directory):
 ```console
 java -jar ruleGeneratorServer-1.0.0.jar --server.port=4300
 ```
