@@ -2,7 +2,9 @@ plugins {
 	id 'org.springframework.boot' version '2.6.6'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	// Analysis
 	id "org.sonarqube" version "3.4.0.2513"
+	id 'jacoco'
 }
 
 group = 'no.hvl.tk'
@@ -47,8 +49,15 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
 }
 
+jacocoTestReport {
+	reports {
+		xml.enabled true
+		xml.destination file("${buildDir}/reports/jacoco.xml")
+	}
+}
 
 sonarqube {
 	properties {
