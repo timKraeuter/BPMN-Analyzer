@@ -1,4 +1,4 @@
-package no.hvl.tk.ruleGenerator.server.endpoint;
+package no.hvl.tk.rulegenerator.server.endpoint;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,9 +9,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import behavior.bpmn.BPMNCollaboration;
-import no.hvl.tk.ruleGenerator.server.endpoint.dtos.ModelCheckingRequest;
-import no.hvl.tk.ruleGenerator.server.endpoint.dtos.ModelCheckingResponse;
-import no.hvl.tk.ruleGenerator.server.endpoint.verification.BPMNModelChecker;
+import no.hvl.tk.rulegenerator.server.endpoint.verification.BPMNModelChecker;
+import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingRequest;
+import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 
-import static no.hvl.tk.ruleGenerator.server.endpoint.RuleGeneratorControllerHelper.deleteOldGGsAndCreateNewDir;
-import static no.hvl.tk.ruleGenerator.server.endpoint.RuleGeneratorControllerHelper.generateGGForBPMNFile;
+import static no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper.deleteOldGGsAndCreateNewDir;
+import static no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper.generateGGForBPMNFile;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")

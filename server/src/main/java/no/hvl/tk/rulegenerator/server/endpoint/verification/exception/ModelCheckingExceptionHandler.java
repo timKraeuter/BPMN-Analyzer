@@ -1,4 +1,4 @@
-package no.hvl.tk.ruleGenerator.server.endpoint.verification.exception;
+package no.hvl.tk.rulegenerator.server.endpoint.verification.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

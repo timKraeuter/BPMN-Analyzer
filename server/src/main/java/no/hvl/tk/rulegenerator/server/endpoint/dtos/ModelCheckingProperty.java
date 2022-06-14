@@ -1,4 +1,4 @@
-package no.hvl.tk.ruleGenerator.server.endpoint.dtos;
+package no.hvl.tk.rulegenerator.server.endpoint.dtos;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

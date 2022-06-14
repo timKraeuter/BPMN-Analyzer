@@ -1,4 +1,4 @@
-package no.hvl.tk.ruleGenerator.server;
+package no.hvl.tk.rulegenerator.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

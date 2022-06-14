@@ -1,4 +1,4 @@
-package no.hvl.tk.ruleGenerator.server.endpoint;
+package no.hvl.tk.rulegenerator.server.endpoint;
 
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.reader.BPMNFileReader;

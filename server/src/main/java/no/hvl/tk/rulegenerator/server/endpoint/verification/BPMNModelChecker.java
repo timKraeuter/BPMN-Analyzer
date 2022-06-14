@@ -1,13 +1,13 @@
-package no.hvl.tk.ruleGenerator.server.endpoint.verification;
+package no.hvl.tk.rulegenerator.server.endpoint.verification;
 
 import behavior.bpmn.*;
 import behavior.bpmn.Process;
-import no.hvl.tk.ruleGenerator.server.endpoint.RuleGeneratorControllerHelper;
-import no.hvl.tk.ruleGenerator.server.endpoint.dtos.BPMNPropertyCheckingResult;
-import no.hvl.tk.ruleGenerator.server.endpoint.dtos.ModelCheckingProperty;
-import no.hvl.tk.ruleGenerator.server.endpoint.dtos.ModelCheckingRequest;
-import no.hvl.tk.ruleGenerator.server.endpoint.dtos.ModelCheckingResponse;
-import no.hvl.tk.ruleGenerator.server.endpoint.verification.exception.ModelCheckingException;
+import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper;
+import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNPropertyCheckingResult;
+import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingProperty;
+import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingRequest;
+import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
+import no.hvl.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
 import util.GrooveRunner;
 
 import java.io.File;

@@ -1,7 +1,7 @@
 package no.hvl.tk.ruleGenerator.server;
 
 import com.google.common.collect.Sets;
-import no.hvl.tk.ruleGenerator.server.endpoint.RuleGeneratorController;
+import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorController;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
