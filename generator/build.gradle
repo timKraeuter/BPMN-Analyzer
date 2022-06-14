@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id "org.sonarqube" version "3.4.0.2513"
+    id 'jacoco'
 }
 
 group = 'no.hvl.tk'
@@ -46,6 +47,14 @@ test {
     useJUnitPlatform()
     testLogging {
         showStandardStreams = true
+    }
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        xml.destination file("${buildDir}/reports/jacoco.xml")
     }
 }
 
