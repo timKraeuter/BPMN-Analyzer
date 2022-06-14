@@ -1,4 +1,4 @@
-package no.hvl.tk.ruleGenerator.server;
+package no.hvl.tk.rulegenerator.server;
 
 import com.google.common.collect.Sets;
 import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorController;
