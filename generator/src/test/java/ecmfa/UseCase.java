@@ -9,7 +9,7 @@ import behavior.bpmn.auxiliary.BPMNCollaborationBuilder;
 import behavior.bpmn.events.*;
 import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
-import groove.behaviorTransformer.bpmn.BPMNToGrooveTestBase;
+import groove.behaviortransformer.bpmn.BPMNToGrooveTestBase;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

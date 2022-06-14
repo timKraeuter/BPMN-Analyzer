@@ -2,7 +2,7 @@ package no.hvl.tk.rulegenerator.server.endpoint;
 
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.reader.BPMNFileReader;
-import groove.behaviorTransformer.BehaviorToGrooveTransformer;
+import groove.behaviortransformer.BehaviorToGrooveTransformer;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
