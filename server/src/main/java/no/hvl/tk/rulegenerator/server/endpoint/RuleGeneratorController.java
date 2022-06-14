@@ -31,8 +31,8 @@ public class RuleGeneratorController {
      * @param file BPMN file defining a collaboration.
      * @param response will be a ZIP of the graph grammar for the BPMN file.
      */
-    @RequestMapping(value = "/generateGGAndZip", produces = "application/zip", method = RequestMethod.POST)
-    public void generateGGAndZip(@RequestPart("file") MultipartFile file,
+    @PostMapping(value = "/generateGGAndZip", produces = "application/zip")
+    public void generateGGAndZip(@RequestParam("file") MultipartFile file,
                                  HttpServletResponse response) throws IOException {
         // Not made for concurrent access of the application!
         deleteOldGGsAndCreateNewDir();
@@ -69,7 +69,7 @@ public class RuleGeneratorController {
      * @param request contains the BPMN file and properties to be checked.
      * @return model-checking results for the requested properties.
      */
-    @RequestMapping(value = "/checkBPMNSpecificProperties", method = RequestMethod.POST)
+    @PostMapping(value = "/checkBPMNSpecificProperties")
     public ModelCheckingResponse checkBPMNSpecificProperties(@ModelAttribute ModelCheckingRequest request) throws IOException {
         deleteOldGGsAndCreateNewDir();
 
