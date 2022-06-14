@@ -142,8 +142,8 @@ public class GrooveGxlHelper {
         final ElkNode elkNode = layoutNodes.get(id);
         if (elkNode == null) {
             ElkNode node = ElkGraphUtil.createNode(layoutGraph);
-            node.setHeight(50);
-            node.setWidth(nodeLabels.get(id).length() * 15);
+            node.setHeight(50d);
+            node.setWidth(nodeLabels.get(id).length() * 15d);
             layoutNodes.put(id, node);
             return node;
         }
