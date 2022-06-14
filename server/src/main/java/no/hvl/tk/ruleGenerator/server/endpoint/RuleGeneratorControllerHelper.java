@@ -31,7 +31,7 @@ public class RuleGeneratorControllerHelper {
     public static File deleteOldGGsAndCreateNewDir() throws IOException {
         FileUtils.deleteDirectory(new File(GRAPH_GRAMMAR_TEMP_DIR));
         FileUtils.deleteDirectory(new File(STATE_SPACE_TEMP_DIR));
-        return new File(GRAPH_GRAMMAR_TEMP_DIR + UUID.randomUUID() + "/");
+        return new File(GRAPH_GRAMMAR_TEMP_DIR + UUID.randomUUID() + File.separator);
     }
 
     public static Pair<File, BPMNCollaboration> generateGGForBPMNFile(MultipartFile file) throws IOException {
