@@ -20,6 +20,7 @@ public class GxlToXMLConverter {
     public static void toXml(final Gxl gxl, File outputFile) {
         createJAXBObjectsIfNeeded();
         try {
+            System.out.println(outputFile.getPath());
             outputFile.getParentFile().mkdirs();
             outputFile.createNewFile();
             jaxbMarshaller.marshal(gxl, outputFile);
