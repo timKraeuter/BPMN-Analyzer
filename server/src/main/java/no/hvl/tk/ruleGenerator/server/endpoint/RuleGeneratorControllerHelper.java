@@ -3,7 +3,6 @@ package no.hvl.tk.ruleGenerator.server.endpoint;
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.reader.BPMNFileReader;
 import groove.behaviorTransformer.BehaviorToGrooveTransformer;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,9 +12,9 @@ import java.io.IOException;
 import java.util.UUID;
 
 public class RuleGeneratorControllerHelper {
-    public static final String graphGrammarTempDir = getTempDir() +
-                                                     "bpmnAnalyzerGraphGrammars/";
-    public static final String stateSpaceTempDir = getTempDir() + "bpmnAnalyzerStateSpaces/";
+    public static final String GRAPH_GRAMMAR_TEMP_DIR = getTempDir() +
+                                                        "bpmnAnalyzerGraphGrammars/";
+    public static final String STATE_SPACE_TEMP_DIR = getTempDir() + "bpmnAnalyzerStateSpaces/";
 
     private static String getTempDir() {
         String tempDir = System.getProperty("java.io.tmpdir");
@@ -30,9 +29,9 @@ public class RuleGeneratorControllerHelper {
     }
 
     public static File deleteOldGGsAndCreateNewDir() throws IOException {
-        FileUtils.deleteDirectory(new File(graphGrammarTempDir));
-        FileUtils.deleteDirectory(new File(stateSpaceTempDir));
-        return new File(graphGrammarTempDir + UUID.randomUUID() + "/");
+        FileUtils.deleteDirectory(new File(GRAPH_GRAMMAR_TEMP_DIR));
+        FileUtils.deleteDirectory(new File(STATE_SPACE_TEMP_DIR));
+        return new File(GRAPH_GRAMMAR_TEMP_DIR + UUID.randomUUID() + "/");
     }
 
     public static Pair<File, BPMNCollaboration> generateGGForBPMNFile(MultipartFile file) throws IOException {
@@ -46,7 +45,7 @@ public class RuleGeneratorControllerHelper {
 
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
         final File grooveGrammarFolder = transformer.generateGrooveGrammar(bpmnCollaboration,
-                                                                           new File(graphGrammarTempDir),
+                                                                           new File(GRAPH_GRAMMAR_TEMP_DIR),
                                                                            false);
 
         return Pair.of(grooveGrammarFolder, bpmnCollaboration);

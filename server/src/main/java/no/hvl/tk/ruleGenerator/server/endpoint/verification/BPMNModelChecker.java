@@ -60,7 +60,7 @@ public class BPMNModelChecker {
             // Generate state space for graph grammar.
             final GrooveRunner grooveRunner = new GrooveRunner();
             final String stateSpaceTempFile = String.format("%s%s.txt",
-                                                            RuleGeneratorControllerHelper.stateSpaceTempDir,
+                                                            RuleGeneratorControllerHelper.STATE_SPACE_TEMP_DIR,
                                                             bpmnModel.getName());
             grooveRunner.generateStateSpace(graphGrammarDir.getPath(), stateSpaceTempFile, true);
 
@@ -85,7 +85,6 @@ public class BPMNModelChecker {
             recordNoDeadActivitiesResult(response, allActivityNames);
         }
         catch (NoSuchFileException exception) {
-            exception.printStackTrace();
             throw new ModelCheckingException("The state space could not be generated or generation timed out after 60 seconds.");
         }
     }
