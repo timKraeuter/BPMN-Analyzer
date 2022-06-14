@@ -13,9 +13,18 @@ import java.io.IOException;
 import java.util.UUID;
 
 public class RuleGeneratorControllerHelper {
-    public static final String graphGrammarTempDir = System.getProperty("java.io.tmpdir") +
+    public static final String graphGrammarTempDir = getTempDir() +
                                                      "bpmnAnalyzerGraphGrammars/";
-    public static final String stateSpaceTempDir = System.getProperty("java.io.tmpdir") + "bpmnAnalyzerStateSpaces/";
+    public static final String stateSpaceTempDir = getTempDir() + "bpmnAnalyzerStateSpaces/";
+
+    private static String getTempDir() {
+        String tempDir = System.getProperty("java.io.tmpdir");
+        if (tempDir.endsWith(File.separator)) {
+            return tempDir;
+        }
+        return tempDir + File.separator;
+    }
+
 
     private RuleGeneratorControllerHelper() {
     }
@@ -37,8 +46,8 @@ public class RuleGeneratorControllerHelper {
 
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
         final File grooveGrammarFolder = transformer.generateGrooveGrammar(bpmnCollaboration,
-                                                                     new File(graphGrammarTempDir),
-                                                                     false);
+                                                                           new File(graphGrammarTempDir),
+                                                                           false);
 
         return Pair.of(grooveGrammarFolder, bpmnCollaboration);
     }
