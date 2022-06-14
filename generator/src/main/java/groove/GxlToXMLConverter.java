@@ -6,6 +6,7 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
 
 public class GxlToXMLConverter {
@@ -19,8 +20,10 @@ public class GxlToXMLConverter {
     public static void toXml(final Gxl gxl, File outputFile) {
         createJAXBObjectsIfNeeded();
         try {
+            outputFile.getParentFile().mkdirs();
+            outputFile.createNewFile();
             jaxbMarshaller.marshal(gxl, outputFile);
-        } catch (final JAXBException e) {
+        } catch (final JAXBException | IOException e) {
             throw new RuntimeException(e);
         }
     }

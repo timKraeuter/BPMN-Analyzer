@@ -60,7 +60,7 @@ public class BPMNModelChecker {
             // Generate state space for graph grammar.
             final GrooveRunner grooveRunner = new GrooveRunner();
             final String stateSpaceTempFile = String.format("%s%s.txt",
-                                                            RuleGeneratorControllerHelper.stateSpaceTempDir,
+                                                            RuleGeneratorControllerHelper.STATE_SPACE_TEMP_DIR,
                                                             bpmnModel.getName());
             grooveRunner.generateStateSpace(graphGrammarDir.getPath(), stateSpaceTempFile, true);
 

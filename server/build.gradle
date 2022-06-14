@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.6.6'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id "org.sonarqube" version "3.4.0.2513"
 }
 
 group = 'no.hvl.tk'
@@ -46,4 +47,13 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+
+sonarqube {
+	properties {
+		property "sonar.projectKey", "timkraeuter_Groove_Rule_Generation_Server"
+		property "sonar.organization", "timkraeuter"
+		property "sonar.host.url", "https://sonarcloud.io"
+	}
 }

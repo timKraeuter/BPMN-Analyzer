@@ -1,11 +1,13 @@
-name: Build
+name: Build, test & analyze generator
 on:
   push:
+    paths:
+      - "generator/**"
   pull_request:
     types: [ opened, synchronize, reopened ]
 jobs:
   build:
-    name: Build & Test generator
+    name: Build, test & analyze generator
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,6 +17,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
       - name: Cache Gradle packages
         uses: actions/cache@v1
         with:
@@ -24,6 +32,9 @@ jobs:
       - name: Grant execute permission for gradlew
         working-directory: ./generator
         run: chmod +x gradlew
-      - name: Test
+      - name: Build and analyze
         working-directory: ./generator
-        run: ./gradlew build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew build sonarqube --info
