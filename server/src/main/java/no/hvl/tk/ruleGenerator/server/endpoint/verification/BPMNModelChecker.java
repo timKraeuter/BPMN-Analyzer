@@ -85,6 +85,7 @@ public class BPMNModelChecker {
             recordNoDeadActivitiesResult(response, allActivityNames);
         }
         catch (NoSuchFileException exception) {
+            exception.printStackTrace();
             throw new ModelCheckingException("The state space could not be generated or generation timed out after 60 seconds.");
         }
     }
