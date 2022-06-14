@@ -44,14 +44,17 @@ public class Process extends AbstractProcess {
         getControlFlowNodes().forEach(flowNode -> flowNode.accept(new FlowNodeVisitor() {
             @Override
             public void handle(Task task) {
+                // Not a subprocess
             }
 
             @Override
             public void handle(SendTask task) {
+                // Not a subprocess
             }
 
             @Override
             public void handle(ReceiveTask task) {
+                // Not a subprocess
             }
 
             @Override
@@ -62,34 +65,42 @@ public class Process extends AbstractProcess {
 
             @Override
             public void handle(ExclusiveGateway exclusiveGateway) {
+                // Not a subprocess
             }
 
             @Override
             public void handle(ParallelGateway parallelGateway) {
+                // Not a subprocess
             }
 
             @Override
             public void handle(InclusiveGateway inclusiveGateway) {
+                // Not a subprocess
             }
 
             @Override
             public void handle(StartEvent startEvent) {
+                // Not a subprocess
             }
 
             @Override
             public void handle(IntermediateThrowEvent intermediateThrowEvent) {
+                // Not a subprocess
             }
 
             @Override
             public void handle(IntermediateCatchEvent intermediateCatchEvent) {
+                // Not a subprocess
             }
 
             @Override
             public void handle(EndEvent endEvent) {
+                // Not a subprocess
             }
 
             @Override
             public void handle(EventBasedGateway eventBasedGateway) {
+                // Not a subprocess
             }
         }));
         return subProcesses.stream();

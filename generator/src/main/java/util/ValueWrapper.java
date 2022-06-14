@@ -3,9 +3,6 @@ package util;
 public class ValueWrapper<T> {
     private T value;
 
-    public ValueWrapper() {
-    }
-
     /**
      * @return the wrapped value which might be null.
      */

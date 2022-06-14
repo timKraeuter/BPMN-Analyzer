@@ -9,20 +9,20 @@ import behavior.activity.variables.Variable;
  * x = 5,
  * containsBugs = false.
  */
-public class SetVariableExpression<VALUE extends Value> implements Expression {
-    private final VALUE value;
-    private final Variable<VALUE> variableToBeSet;
+public class SetVariableExpression<V extends Value> implements Expression {
+    private final V value;
+    private final Variable<V> variableToBeSet;
 
-    public SetVariableExpression(VALUE value, Variable<VALUE> variableToBeSet) {
+    public SetVariableExpression(V value, Variable<V> variableToBeSet) {
         this.value = value;
         this.variableToBeSet = variableToBeSet;
     }
 
-    public VALUE getValue() {
+    public V getValue() {
         return this.value;
     }
 
-    public Variable<VALUE> getVariableToBeSet() {
+    public Variable<V> getVariableToBeSet() {
         return this.variableToBeSet;
     }
 

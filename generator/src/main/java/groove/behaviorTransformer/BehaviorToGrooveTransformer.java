@@ -38,6 +38,7 @@ public class BehaviorToGrooveTransformer {
     private static final String PI_TYPE_GRAPH_FILE_NAME = "Type";
     private static final String BPMN_DIAGRAM_TYPE_GRAPH_FILE_NAME = "bpmn_e_model";
     private static final String FSM_TYPE_GRAPH_FILE_NAME = "fsm_e_model";
+    public static final String TYPE_GRAPH = "typeGraph";
 
     static Gxl createGxlFromGrooveGraph(GrooveGraph graph, boolean doLayout) {
         String gxlGraphName = String.format("%s_%s", graph.getName(), START);
@@ -157,9 +158,9 @@ public class BehaviorToGrooveTransformer {
             additionalProperties.put("checkDangling", "true");
         }
         if (typeGraphs.size() > 0) {
-            additionalProperties.put("typeGraph", String.join(" ", typeGraphs));
+            additionalProperties.put(TYPE_GRAPH, String.join(" ", typeGraphs));
         }
-        this.generatePropertiesFile(graphGrammarSubFolder, "start", additionalProperties);
+        this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
 
         // Merge start graphs and write the final one.
         this.mergeAndWriteStartGraphs(graphGrammarSubFolder, startGraphs);
@@ -245,7 +246,7 @@ public class BehaviorToGrooveTransformer {
         transformer.generateAndWriteRules(activityDiagram, false, graphGrammarSubFolder);
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
-        additionalProperties.put("typeGraph", ACTIVITY_DIAGRAM_TYPE_GRAPH_FILE_NAME);
+        additionalProperties.put(TYPE_GRAPH, ACTIVITY_DIAGRAM_TYPE_GRAPH_FILE_NAME);
         this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
 
         return graphGrammarSubFolder;
@@ -260,7 +261,7 @@ public class BehaviorToGrooveTransformer {
         transformer.generateAndWriteRules(piProcess, false, graphGrammarSubFolder);
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
-        additionalProperties.put("typeGraph", PI_TYPE_GRAPH_FILE_NAME);
+        additionalProperties.put(TYPE_GRAPH, PI_TYPE_GRAPH_FILE_NAME);
         additionalProperties.put("checkDangling", "true");
         this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
 
@@ -280,7 +281,7 @@ public class BehaviorToGrooveTransformer {
         transformer.generateAndWriteRules(collaboration, addPrefix, graphGrammarSubFolder);
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
-        additionalProperties.put("typeGraph", BPMN_DIAGRAM_TYPE_GRAPH_FILE_NAME);
+        additionalProperties.put(TYPE_GRAPH, BPMN_DIAGRAM_TYPE_GRAPH_FILE_NAME);
         this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
 
         return graphGrammarSubFolder;
@@ -311,7 +312,7 @@ public class BehaviorToGrooveTransformer {
         transformer.generateAndWriteRules(finiteStateMachine, addPrefix, graphGrammarSubFolder);
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
-        additionalProperties.put("typeGraph", FSM_TYPE_GRAPH_FILE_NAME);
+        additionalProperties.put(TYPE_GRAPH, FSM_TYPE_GRAPH_FILE_NAME);
         this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
 
         return graphGrammarSubFolder;

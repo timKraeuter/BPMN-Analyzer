@@ -28,6 +28,7 @@ import static groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerConstants.*
 import static groove.behaviorTransformer.bpmn.BPMNToGrooveTransformerHelper.*;
 
 public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
+    public static final String SHOULD_NOT_HAPPEN = "Should not happen!";
     private final BPMNCollaboration collaboration;
     private final GrooveRuleBuilder ruleBuilder;
 
@@ -471,19 +472,19 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
             @Override
             public void handle(IntermediateThrowEvent intermediateThrowEvent) {
                 // Must be a start event if instantiate is true.
-                throw new RuntimeException("Should not happen!");
+                throw new RuntimeException(SHOULD_NOT_HAPPEN);
             }
 
             @Override
             public void handle(IntermediateCatchEvent intermediateCatchEvent) {
                 // Must be a start event if instantiate is true.
-                throw new RuntimeException("Should not happen!");
+                throw new RuntimeException(SHOULD_NOT_HAPPEN);
             }
 
             @Override
             public void handle(EndEvent endEvent) {
                 // Must be a start event if instantiate is true.
-                throw new RuntimeException("Should not happen!");
+                throw new RuntimeException(SHOULD_NOT_HAPPEN);
             }
         });
     }
@@ -589,8 +590,14 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
             case MESSAGE:
                 createMessageStartEventRule(startEvent);
                 break;
+            case MESSAGE_NON_INTERRUPTING:
+                // Implemented in the event subprocess rule generator.
+                break;
             case SIGNAL:
                 // Done in the corresponding throw rule.
+                break;
+            case SIGNAL_NON_INTERRUPTING:
+                // Implemented in the throw part.
                 break;
         }
     }

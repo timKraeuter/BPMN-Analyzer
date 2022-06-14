@@ -37,30 +37,37 @@ public class EventSubprocess extends AbstractProcess {
                        flowNode.accept(new FlowNodeVisitor() {
                            @Override
                            public void handle(Task task) {
+                               // Not a start event
                            }
 
                            @Override
                            public void handle(SendTask task) {
+                               // Not a start event
                            }
 
                            @Override
                            public void handle(ReceiveTask task) {
+                               // Not a start event
                            }
 
                            @Override
                            public void handle(CallActivity callActivity) {
+                               // Not a start event
                            }
 
                            @Override
                            public void handle(ExclusiveGateway exclusiveGateway) {
+                               // Not a start event
                            }
 
                            @Override
                            public void handle(ParallelGateway parallelGateway) {
+                               // Not a start event
                            }
 
                            @Override
                            public void handle(InclusiveGateway inclusiveGateway) {
+                               // Not a start event
                            }
 
                            @Override
@@ -70,18 +77,22 @@ public class EventSubprocess extends AbstractProcess {
 
                            @Override
                            public void handle(IntermediateThrowEvent intermediateThrowEvent) {
+                               // Not a start event
                            }
 
                            @Override
                            public void handle(IntermediateCatchEvent intermediateCatchEvent) {
+                               // Not a start event
                            }
 
                            @Override
                            public void handle(EndEvent endEvent) {
+                               // Not a start event
                            }
 
                            @Override
                            public void handle(EventBasedGateway eventBasedGateway) {
+                               // Not a start event
                            }
                        });
                        return valueWrapper.getValueIfExists();
