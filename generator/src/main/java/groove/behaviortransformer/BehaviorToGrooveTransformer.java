@@ -157,7 +157,7 @@ public class BehaviorToGrooveTransformer {
         if (piProcessIncluded[0]) {
             additionalProperties.put("checkDangling", "true");
         }
-        if (typeGraphs.size() > 0) {
+        if (!typeGraphs.isEmpty()) {
             additionalProperties.put(TYPE_GRAPH, String.join(" ", typeGraphs));
         }
         this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
