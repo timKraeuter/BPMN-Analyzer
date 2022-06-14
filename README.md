@@ -20,7 +20,7 @@ The project **Generation-ui** contains the ui code for the generation of Groove 
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=timkraeuter_Groove_Rule_Generation_Server&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=timkraeuter_Groove_Rule_Generation_Server)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=timkraeuter_Groove_Rule_Generation_Server&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=timkraeuter_Groove_Rule_Generation_Server)
 
-The project **server** contains server code hosting the ui and some services used by it.
+The project **server** contains the webservices used by the generation-ui for BPMN rule generation and model-checking.
 
 ## BPMN generation
 A demo version of the tool is also hosted [here](https://bpmn-analyzer.herokuapp.com/).
