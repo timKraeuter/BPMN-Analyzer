@@ -4,6 +4,7 @@ import behavior.bpmn.BPMNCollaboration;
 
 import java.io.File;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public interface BPMNFileReaderTestHelper {
 
@@ -15,7 +16,7 @@ public interface BPMNFileReaderTestHelper {
     }
 
     default BPMNCollaboration readModelFromResource(String resourcePath,
-                                                    Function<String, String> elementNameTransformer) {
+                                                    UnaryOperator<String> elementNameTransformer) {
         @SuppressWarnings("ConstantConditions") File model =
                 new File(this.getClass().getResource(resourcePath).getFile());
         BPMNFileReader bpmnFileReader = new BPMNFileReader(elementNameTransformer);

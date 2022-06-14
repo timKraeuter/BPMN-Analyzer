@@ -15,6 +15,10 @@ public class GrooveGxlHelper {
     private static final String LABEL = "label";
     private static final String FLAG = "flag:";
 
+    private GrooveGxlHelper() {
+        // Helper methods.
+    }
+
     public static Graph createStandardGxlGraph(String id, Gxl gxl) {
         Graph graph = new Graph();
         gxl.getGraph().add(graph);
@@ -108,7 +112,9 @@ public class GrooveGxlHelper {
         gxlNode.getAttr().add(layoutAttr);
     }
 
-    private static ElkNode createElkGraph(Graph graph, Map<String, String> nodeLabels, Map<String, ElkNode> layoutNodes) {
+    private static ElkNode createElkGraph(Graph graph,
+                                          Map<String, String> nodeLabels,
+                                          Map<String, ElkNode> layoutNodes) {
         ElkNode layoutGraph = ElkGraphUtil.createGraph();
 
         graph.getNodeOrEdgeOrRel().forEach(nodeOrEdge -> {
@@ -129,7 +135,10 @@ public class GrooveGxlHelper {
         return layoutGraph;
     }
 
-    private static ElkNode createNodeIfNeeded(Map<String, ElkNode> layoutNodes, ElkNode layoutGraph, String id, Map<String, String> nodeLabels) {
+    private static ElkNode createNodeIfNeeded(Map<String, ElkNode> layoutNodes,
+                                              ElkNode layoutGraph,
+                                              String id,
+                                              Map<String, String> nodeLabels) {
         final ElkNode elkNode = layoutNodes.get(id);
         if (elkNode == null) {
             ElkNode node = ElkGraphUtil.createNode(layoutGraph);

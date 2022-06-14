@@ -34,13 +34,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class BPMNFileReader {
     private Function<String, String> elementNameTransformer;
 
     public BPMNFileReader() {
     }
-    public BPMNFileReader(Function<String, String> elementNameTransformer) {
+    public BPMNFileReader(UnaryOperator<String> elementNameTransformer) {
         this.elementNameTransformer = elementNameTransformer;
     }
 
