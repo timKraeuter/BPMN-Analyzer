@@ -54,7 +54,7 @@ public class BPMNCollaboration implements Behavior {
         return subprocesses.stream()
                            .filter(process -> process.getControlFlowNodes().anyMatch(flowNode -> flowNode ==
                                                                                                  flow.getTarget()))
-                           .findFirst().get();
+                           .findFirst().orElseThrow(() -> new RuntimeException("Message flow receiver not found!"));
     }
 
     @Override
