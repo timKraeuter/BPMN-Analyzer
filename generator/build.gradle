@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "org.sonarqube" version "3.4.0.2513"
 }
 
 group = 'no.hvl.tk'
@@ -45,5 +46,13 @@ test {
     useJUnitPlatform()
     testLogging {
         showStandardStreams = true
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "timkraeuter_Groove_Rule_Generation_Generator"
+        property "sonar.organization", "timkraeuter"
+        property "sonar.host.url", "https://sonarcloud.io"
     }
 }
