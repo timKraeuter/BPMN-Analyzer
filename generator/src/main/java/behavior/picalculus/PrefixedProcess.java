@@ -1,4 +1,4 @@
-package behavior.piCalculus;
+package behavior.picalculus;
 
 import java.util.Objects;
 import java.util.Set;

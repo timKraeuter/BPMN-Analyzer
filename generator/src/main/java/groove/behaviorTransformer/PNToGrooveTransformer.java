@@ -1,7 +1,7 @@
 package groove.behaviorTransformer;
 
-import behavior.petriNet.PetriNet;
-import behavior.petriNet.Place;
+import behavior.petrinet.PetriNet;
+import behavior.petrinet.Place;
 import groove.graph.GrooveEdge;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;

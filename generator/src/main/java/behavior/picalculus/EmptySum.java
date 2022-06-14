@@ -1,4 +1,4 @@
-package behavior.piCalculus;
+package behavior.picalculus;
 
 public class EmptySum extends Sum {
     @Override

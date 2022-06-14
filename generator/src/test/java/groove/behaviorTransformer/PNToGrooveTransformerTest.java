@@ -1,7 +1,7 @@
 package groove.behaviorTransformer;
 
-import behavior.petriNet.PetriNet;
-import behavior.petriNet.Place;
+import behavior.petrinet.PetriNet;
+import behavior.petrinet.Place;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -30,22 +30,22 @@ class PNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
         Place end = new Place("end");
 
         // Transitions
-        behavior.petriNet.Transition acquire_r1 = new behavior.petriNet.Transition("acquire_r1");
+        behavior.petrinet.Transition acquire_r1 = new behavior.petrinet.Transition("acquire_r1");
         acquire_r1.addIncomingEdge(start);
         acquire_r1.addOutgoingEdge(r1_preWork);
-        behavior.petriNet.Transition acquire_r2 = new behavior.petriNet.Transition("acquire_r2");
+        behavior.petrinet.Transition acquire_r2 = new behavior.petrinet.Transition("acquire_r2");
         acquire_r2.addIncomingEdge(start);
         acquire_r2.addOutgoingEdge(r2_preWork);
-        behavior.petriNet.Transition work_r1 = new behavior.petriNet.Transition("work_r1");
+        behavior.petrinet.Transition work_r1 = new behavior.petrinet.Transition("work_r1");
         work_r1.addIncomingEdge(r1_preWork);
         work_r1.addOutgoingEdge(r1_postWork);
-        behavior.petriNet.Transition work_r2 = new behavior.petriNet.Transition("work_r2");
+        behavior.petrinet.Transition work_r2 = new behavior.petrinet.Transition("work_r2");
         work_r2.addIncomingEdge(r2_preWork);
         work_r2.addOutgoingEdge(r2_postWork);
-        behavior.petriNet.Transition release_r1 = new behavior.petriNet.Transition("release_r1");
+        behavior.petrinet.Transition release_r1 = new behavior.petrinet.Transition("release_r1");
         release_r1.addIncomingEdge(r1_postWork);
         release_r1.addOutgoingEdge(end);
-        behavior.petriNet.Transition release_r2 = new behavior.petriNet.Transition("release_r2");
+        behavior.petrinet.Transition release_r2 = new behavior.petrinet.Transition("release_r2");
         release_r2.addIncomingEdge(r2_postWork);
         release_r2.addOutgoingEdge(end);
 

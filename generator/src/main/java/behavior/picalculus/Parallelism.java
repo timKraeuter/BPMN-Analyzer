@@ -1,4 +1,4 @@
-package behavior.piCalculus;
+package behavior.picalculus;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;

@@ -1,6 +1,6 @@
 package groove.behaviorTransformer;
 
-import behavior.piCalculus.*;
+import behavior.picalculus.*;
 import groove.graph.GrooveEdge;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;

@@ -1,6 +1,6 @@
 package groove.behaviorTransformer;
 
-import behavior.piCalculus.*;
+import behavior.picalculus.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.commons.io.FileUtils;

@@ -1,4 +1,4 @@
-package behavior.petriNet;
+package behavior.petrinet;
 
 import behavior.Behavior;
 import behavior.BehaviorVisitor;

@@ -1,4 +1,4 @@
-package behavior.piCalculus;
+package behavior.picalculus;
 
 import behavior.Behavior;
 import behavior.BehaviorVisitor;

@@ -3,8 +3,8 @@ package behavior;
 import behavior.activity.ActivityDiagram;
 import behavior.bpmn.BPMNCollaboration;
 import behavior.fsm.FiniteStateMachine;
-import behavior.petriNet.PetriNet;
-import behavior.piCalculus.NamedPiProcess;
+import behavior.petrinet.PetriNet;
+import behavior.picalculus.NamedPiProcess;
 
 public interface BehaviorVisitor {
     void handle(FiniteStateMachine finiteStateMachine);

@@ -1,4 +1,4 @@
-package behavior.petriNet;
+package behavior.petrinet;
 
 public class Place {
     private final String name;

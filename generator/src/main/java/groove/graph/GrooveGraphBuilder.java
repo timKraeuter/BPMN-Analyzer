@@ -6,8 +6,8 @@ import java.util.Set;
 public class GrooveGraphBuilder {
 
     private String name;
-    private Set<GrooveNode> nodes;
-    private Set<GrooveEdge> edges;
+    private final Set<GrooveNode> nodes;
+    private final Set<GrooveEdge> edges;
 
     public GrooveGraphBuilder() {
         this.nodes = new LinkedHashSet<>();

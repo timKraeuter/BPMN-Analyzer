@@ -1,4 +1,4 @@
-package behavior.piCalculus;
+package behavior.picalculus;
 
 public interface PiProcessVisitor<RETURN> {
     RETURN handle(Parallelism parallelism);
