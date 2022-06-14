@@ -38,12 +38,12 @@ class RuleGeneratorControllerTests {
     private RuleGeneratorController restController;
 
     @Test
-    public void testContextLoads() {
+    void testContextLoads() {
         assertNotNull(restController);
     }
 
     @Test
-    public void testGenerateGGAndZip() throws Exception {
+    void testGenerateGGAndZip() throws Exception {
         String URL = String.format("http://localhost:%s/%s", port, "generateGGAndZip");
 
         @SuppressWarnings("ConstantConditions") File bpmnModelFile =
@@ -104,7 +104,7 @@ class RuleGeneratorControllerTests {
     }
 
     @Test
-    public void testCheckBPMNSpecificProperties() throws Exception {
+    void testCheckBPMNSpecificProperties() throws Exception {
         String URL = String.format("http://localhost:%s/%s", port, "checkBPMNSpecificProperties");
 
         @SuppressWarnings("ConstantConditions") File bpmnModelFile =

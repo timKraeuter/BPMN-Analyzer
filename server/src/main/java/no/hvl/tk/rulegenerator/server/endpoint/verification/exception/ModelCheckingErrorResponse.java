@@ -1,9 +1,5 @@
 package no.hvl.tk.rulegenerator.server.endpoint.verification.exception;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.time.LocalDateTime;
-
 public class ModelCheckingErrorResponse {
 
     private String message;
