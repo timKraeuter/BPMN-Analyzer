@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class GrooveRunner {
-    private static final String defaultGrooveBinDir = findGrooveBinDir();
+    private static final String GROOVE_BIN_DIR = findGrooveBinDir();
 
     private static String findGrooveBinDir() {
         List<String> possibleLocations = Lists.newArrayList("groove/bin", "../groove/bin");
@@ -18,14 +18,14 @@ public class GrooveRunner {
             }
         }
         String currentPath = Path.of("").toAbsolutePath().toString();
-        throw new RuntimeException(String.format("Groove binaries not found in this directory(%s) or above!",
+        throw new GrooveRunnerException(String.format("Groove binaries not found in this directory(%s) or above!",
                                                  currentPath));
     }
 
     private final String grooveBinDir;
 
     public GrooveRunner() {
-        this(defaultGrooveBinDir);
+        this(GROOVE_BIN_DIR);
     }
 
     private GrooveRunner(String grooveBinDir) {
