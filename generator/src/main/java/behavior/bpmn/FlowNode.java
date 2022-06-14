@@ -11,7 +11,7 @@ public abstract class FlowNode {
     private final Set<SequenceFlow> outgoingFlows = new LinkedHashSet<>();
     private final Set<SequenceFlow> incomingFlows = new LinkedHashSet<>();
 
-    public FlowNode(String name) {
+    protected FlowNode(String name) {
         this.name = name;
     }
 

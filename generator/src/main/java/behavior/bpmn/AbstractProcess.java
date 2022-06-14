@@ -11,7 +11,7 @@ public abstract class AbstractProcess {
     private final Set<SequenceFlow> sequenceFlows;
     private final Set<EventSubprocess> eventSubprocesses;
 
-    public AbstractProcess(String name, Set<SequenceFlow> sequenceFlows, Set<EventSubprocess> eventSubprocesses) {
+    protected AbstractProcess(String name, Set<SequenceFlow> sequenceFlows, Set<EventSubprocess> eventSubprocesses) {
         this.name = name;
         this.sequenceFlows = sequenceFlows;
         this.eventSubprocesses = eventSubprocesses;

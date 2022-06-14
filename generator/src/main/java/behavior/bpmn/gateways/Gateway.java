@@ -3,7 +3,7 @@ package behavior.bpmn.gateways;
 import behavior.bpmn.FlowNode;
 
 public abstract class Gateway extends FlowNode {
-    public Gateway(String name) {
+    protected Gateway(String name) {
         super(name);
     }
 

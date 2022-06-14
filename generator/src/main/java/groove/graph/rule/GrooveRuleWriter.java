@@ -15,6 +15,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GrooveRuleWriter {
+
+    private GrooveRuleWriter() {
+        // Helper class
+    }
+
     public static final String ASPECT_LABEL_NEW = "new:";
     public static final String ASPECT_LABEL_DEL = "del:";
 

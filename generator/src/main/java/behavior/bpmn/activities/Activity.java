@@ -11,7 +11,7 @@ import java.util.Set;
 public abstract class Activity extends FlowNode {
     private final Set<BoundaryEvent> boundaryEvents;
 
-    public Activity(String name) {
+    protected Activity(String name) {
         super(name);
         boundaryEvents = new LinkedHashSet<>();
     }

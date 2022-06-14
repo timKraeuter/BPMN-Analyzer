@@ -5,7 +5,7 @@ import behavior.bpmn.activities.Activity;
 // Possible task markers: loop, multi-instance and compensation (fig. 10.9)
 public abstract class AbstractTask extends Activity {
 
-    public AbstractTask(String name) {
+    protected AbstractTask(String name) {
         super(name);
     }
 

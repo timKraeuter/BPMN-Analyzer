@@ -14,6 +14,10 @@ public abstract class ActivityEdge {
         this.target = target;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public ActivityNode getSource() {
         return this.source;
     }

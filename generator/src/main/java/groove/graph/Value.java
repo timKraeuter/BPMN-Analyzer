@@ -3,7 +3,7 @@ package groove.graph;
 public abstract class Value<TYPE> {
     protected final TYPE value;
 
-    public Value(TYPE value) {
+    protected Value(TYPE value) {
         this.value = value;
     }
 
