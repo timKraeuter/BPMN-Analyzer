@@ -1,5 +1,3 @@
-[![Build](https://github.com/timKraeuter/Groove_Rule_Generation/actions/workflows/gradle.yml/badge.svg)](https://github.com/timKraeuter/Groove_Rule_Generation/actions/workflows/gradle.yml)
-
 # Groove_Rule_Generation
 Generates graph-transformation rules for the graph-transformation tool [Groove](https://groove.ewi.utwente.nl/about) from different behavioral languages (mostly BPMN).
 
