@@ -111,7 +111,6 @@ class RuleGeneratorControllerTests {
                 new File(this.getClass().getResource(BPMN_FILE).getFile());
         assertNotNull(bpmnModelFile);
 
-
         CloseableHttpResponse response;
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             // Build request
