@@ -63,5 +63,6 @@ sonarqube {
         property "sonar.projectKey", "timkraeuter_Groove_Rule_Generation_Generator"
         property "sonar.organization", "timkraeuter"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.exclusions", "src/main/java/groove/gxl/**"
     }
 }
