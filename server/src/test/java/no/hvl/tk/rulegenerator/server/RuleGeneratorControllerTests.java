@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RuleGeneratorControllerTests {
-    public static final String BPMN_FILE = "/ruleGeneratorController/event-sub-process-interrupting.bpmn";
+    public static final String BPMN_FILE = "/ruleGeneratorController/name-with-numbers.bpmn";
     @LocalServerPort
     private int port;
 
@@ -72,25 +72,16 @@ class RuleGeneratorControllerTests {
             Set<String> zipEntryNames = this.getZipEntryNames(zis);
             // We only check file names not content since the content contains timestamps etc.
             assertThat(zipEntryNames,
-                       is(Sets.newHashSet("Unsafe.gpr",
-                                          "startMessage.gpr",
-                                          "Terminate.gpr",
-                                          "start_trigger.gpr",
-                                          "Subactivity_end.gpr",
-                                          "EventSubprocess_end.gpr",
-                                          "startSignal.gpr",
-                                          "signalOrMessage_signalOrMessage_startMessage.gpr",
-                                          "Subactivity_signalStartSub_Subactivity_start.gpr",
+                       is(Sets.newHashSet("_1.gpr",
+                                          "_2__345_end.gpr",
+                                          "_2__345_start.gpr",
+                                          "_3.gpr",
                                           "bpmn_e_model.gty",
                                           "AllTerminated.gpr",
-                                          "end.gpr",
-                                          "Subactivity_messageStartSub_Subactivity_start.gpr",
-                                          "messageStartSub.gpr",
                                           "start.gst",
-                                          "signalOrMessage_signalOrMessage_startSignal.gpr",
-                                          "start.gpr",
                                           "system.properties",
-                                          "endSub.gpr")));
+                                          "Terminate.gpr",
+                                          "Unsafe.gpr")));
         }
     }
 

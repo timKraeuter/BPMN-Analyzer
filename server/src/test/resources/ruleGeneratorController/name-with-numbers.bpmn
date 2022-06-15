@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" camunda:diagramRelationId="439ba76a-acd8-4b3e-a962-444a03729ab0">
+  <bpmn:process id="Process_5a5e2a2f-7090-4095-86fd-0180e218bb8e" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="1">
+      <bpmn:outgoing>Flow_1rbfsr2</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Activity_0wwjo1h" name="2  345">
+      <bpmn:incoming>Flow_1rbfsr2</bpmn:incoming>
+      <bpmn:outgoing>Flow_0n5q8f9</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_1rbfsr2" sourceRef="StartEvent_1" targetRef="Activity_0wwjo1h"/>
+    <bpmn:endEvent id="Event_1e26bbh" name="3">
+      <bpmn:incoming>Flow_0n5q8f9</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0n5q8f9" sourceRef="Activity_0wwjo1h" targetRef="Event_1e26bbh"/>
+    <bpmn:textAnnotation id="TextAnnotation_06nyh5a">
+      <bpmn:text>If names start with numbers a generation in groove is not possible.
+Thus, we expect a prefix to be added.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1s1fwhh" sourceRef="StartEvent_1" targetRef="TextAnnotation_06nyh5a"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_5a5e2a2f-7090-4095-86fd-0180e218bb8e">
+      <bpmndi:BPMNEdge id="Flow_0n5q8f9_di" bpmnElement="Flow_0n5q8f9">
+        <di:waypoint x="290" y="70"/>
+        <di:waypoint x="352" y="70"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1rbfsr2_di" bpmnElement="Flow_1rbfsr2">
+        <di:waypoint x="136" y="70"/>
+        <di:waypoint x="190" y="70"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="100" y="52" width="36" height="36"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="115" y="95" width="7" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0wwjo1h_di" bpmnElement="Activity_0wwjo1h">
+        <dc:Bounds x="190" y="30" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1e26bbh_di" bpmnElement="Event_1e26bbh">
+        <dc:Bounds x="352" y="52" width="36" height="36"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="367" y="95" width="7" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_06nyh5a_di" bpmnElement="TextAnnotation_06nyh5a">
+        <dc:Bounds x="120" y="172" width="100" height="127"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1s1fwhh_di" bpmnElement="Association_1s1fwhh">
+        <di:waypoint x="125" y="86"/>
+        <di:waypoint x="163" y="172"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

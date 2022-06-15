@@ -77,7 +77,6 @@ public class BPMNModelChecker {
             final Set<String> executedActivities = findExecutedActivitiesInStateSpace(stateSpaceTempFile);
 
             // TODO: Not connected activities are not found due to the nature of my BPMN model.
-            // TODO: Groove does not allow names to start with numbers!
             // Compare to all activities
             final Set<String> allActivityNames = getAllActivityNames();
             allActivityNames.removeAll(executedActivities);
