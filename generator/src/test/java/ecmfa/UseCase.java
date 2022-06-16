@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class UseCase extends BPMNToGrooveTestBase {
+class UseCase extends BPMNToGrooveTestBase {
 
 
     /**

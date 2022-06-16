@@ -74,8 +74,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                 ruleBuilder.contextEdge(STATE, processInstance, running);
                 break;
             case TERMINATION:
-                GrooveNode delete_running = ruleBuilder.deleteNode(TYPE_RUNNING);
-                ruleBuilder.deleteEdge(STATE, processInstance, delete_running);
+                GrooveNode deletedRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
+                ruleBuilder.deleteEdge(STATE, processInstance, deletedRunning);
 
                 GrooveNode terminated = ruleBuilder.addNode(TYPE_TERMINATED);
                 ruleBuilder.addEdge(STATE, processInstance, terminated);

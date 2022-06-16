@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 @SuppressWarnings("ConstantConditions")
-public class RuleGenerationTest {
+class RuleGenerationTest {
 
     public static final String CONTEXT_EDGE_GPR = "/contextEdge.gpr";
 

@@ -111,7 +111,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
             switch (boundaryEvent.getType()) {
                 case NONE:
                 case TIMER:
-                    createSubProcessBoundaryEventRule(process, callActivity, boundaryEvent, (x) -> {
+                    createSubProcessBoundaryEventRule(process, callActivity, boundaryEvent, x -> {
                     });
                     break;
                 case MESSAGE:
@@ -119,9 +119,9 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
                             process,
                             callActivity,
                             boundaryEvent,
-                            (processInstance) -> deleteMessageToProcessInstanceWithPosition(ruleBuilder,
-                                                                                            processInstance,
-                                                                                            messageFlow.getName())));
+                            processInstance -> deleteMessageToProcessInstanceWithPosition(ruleBuilder,
+                                                                                          processInstance,
+                                                                                          messageFlow.getName())));
 
                     break;
                 case SIGNAL:
@@ -150,7 +150,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
             // Subprocess must be running
             GrooveNode subprocessInstance =
                     BPMNToGrooveTransformerHelper.contextProcessInstance(callActivity.getSubProcessModel(),
-                                                                                                 ruleBuilder);
+                                                                         ruleBuilder);
             ruleBuilder.contextEdge(SUBPROCESS, processInstance, subprocessInstance);
         }
 

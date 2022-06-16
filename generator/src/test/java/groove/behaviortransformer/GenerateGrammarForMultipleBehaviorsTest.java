@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 import static groove.behaviortransformer.FSMToGrooveTransformer.FSM_TYPE_GRAPH_DIR;
 
-public class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTransformerTestHelper {
+class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTransformerTestHelper {
     private static final String SW_TO_PHASE_2 = "switch_to_phase2";
     private static final String SW_TO_PHASE_1 = "switch_to_phase1";
     private static final String TURN_RED = "turn_red";

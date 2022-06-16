@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class BPMNToGrooveEventSubProcessTest extends BPMNToGrooveTestBase {
+class BPMNToGrooveEventSubProcessTest extends BPMNToGrooveTestBase {
 
 
     /**

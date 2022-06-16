@@ -5,6 +5,7 @@ import api.Graph;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 import java.util.stream.Stream;
 
 /**
@@ -42,17 +43,17 @@ public class GrooveGraph implements Graph {
      * Union of edges.
      * Does not check if nodes have distinct names (we assume the graphs are prefixed using the name)!
      */
-    public GrooveGraph union(GrooveGraph graph, BiFunction<String, String, String> nameResolver) {
+    public GrooveGraph union(GrooveGraph graph, BinaryOperator<String> nameResolver) {
         assert !this.name.equals(graph.name);
 
-        Set<GrooveNode> nodes = new LinkedHashSet<>();
-        Set<GrooveEdge> edges = new LinkedHashSet<>();
+        Set<GrooveNode> unionNodes = new LinkedHashSet<>();
+        Set<GrooveEdge> unionEdges = new LinkedHashSet<>();
 
-        nodes.addAll(this.nodes);
-        nodes.addAll(graph.nodes);
-        edges.addAll(this.edges);
-        edges.addAll(graph.edges);
+        unionNodes.addAll(this.nodes);
+        unionNodes.addAll(graph.nodes);
+        unionEdges.addAll(this.edges);
+        unionEdges.addAll(graph.edges);
 
-        return new GrooveGraph(nameResolver.apply(this.getName(), graph.getName()), nodes, edges);
+        return new GrooveGraph(nameResolver.apply(this.getName(), graph.getName()), unionNodes, unionEdges);
     }
 }

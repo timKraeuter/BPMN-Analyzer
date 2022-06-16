@@ -29,7 +29,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
 
     @Override
     public void createTaskRulesForProcess(AbstractProcess process, Task task) {
-        createTaskRulesForProcess(process, task, (noop) -> {
+        createTaskRulesForProcess(process, task, noop -> {
         });
     }
 
@@ -37,9 +37,9 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
     public void createSendTaskRulesForProcess(AbstractProcess process, SendTask sendTask) {
         createTaskRulesForProcess(process,
                                   sendTask,
-                                  (ruleBuilder) -> addMessageFlowBehaviorForFlowNode(collaboration,
-                                                                                     ruleBuilder,
-                                                                                     sendTask));
+                                  ruleBuilder -> addMessageFlowBehaviorForFlowNode(collaboration,
+                                                                                   ruleBuilder,
+                                                                                   sendTask));
 
     }
 
@@ -65,7 +65,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
                                                                                                receiveTask,
                                                                                                incomingFlow));
         // End task rule is standard.
-        this.createEndTaskRule(process, receiveTask, (noop) -> {
+        this.createEndTaskRule(process, receiveTask, noop -> {
         });
 
     }
@@ -81,9 +81,9 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
                 createStartTaskRule(process,
                                     receiveTask,
                                     incomingFlow,
-                                    (processInstance) -> deleteMessageToProcessInstanceWithPosition(ruleBuilder,
-                                                                                                    processInstance,
-                                                                                                    messageFlow.getName()));
+                                    processInstance -> deleteMessageToProcessInstanceWithPosition(ruleBuilder,
+                                                                                                  processInstance,
+                                                                                                  messageFlow.getName()));
 
             });
         }
@@ -128,7 +128,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
             ruleBuilder.buildRule();
         });
         // Create rules for the outgoing sequence flows.
-        createTaskRulesForProcess(process, receiveTask, (noop) -> {
+        createTaskRulesForProcess(process, receiveTask, noop -> {
         });
     }
 
@@ -140,7 +140,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         task.getIncomingFlows().forEach(incomingFlow -> createStartTaskRule(process,
                                                                             task,
                                                                             incomingFlow,
-                                                                            (grooveNode) -> {
+                                                                            grooveNode -> {
                                                                             }));
         // Rule for ending the task
         createEndTaskRule(process, task, endTaskRuleAdditions);
@@ -162,9 +162,9 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
                             process,
                             boundaryEvent,
                             task,
-                            (processInstance) -> deleteMessageToProcessInstanceWithPosition(ruleBuilder,
-                                                                                            processInstance,
-                                                                                            messageFlow.getName())));
+                            processInstance -> deleteMessageToProcessInstanceWithPosition(ruleBuilder,
+                                                                                          processInstance,
+                                                                                          messageFlow.getName())));
                     break;
                 case SIGNAL:
                     // Handled in the throw rule part.

@@ -1,9 +1,9 @@
 package groove.graph;
 
-public abstract class Value<TYPE> {
-    protected final TYPE value;
+public abstract class Value<T> {
+    protected final T value;
 
-    protected Value(TYPE value) {
+    protected Value(T value) {
         this.value = value;
     }
 
