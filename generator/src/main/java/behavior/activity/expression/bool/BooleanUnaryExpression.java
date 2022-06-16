@@ -9,7 +9,9 @@ public class BooleanUnaryExpression extends BooleanExpression {
 
     public BooleanUnaryExpression(BooleanVariable operand, BooleanVariable assignee, BooleanUnaryOperator operator) {
         super(assignee);
-        assert !assignee.getName().equals(operand.getName());
+        if (assignee.getName().equals(operand.getName())) {
+            throw new IllegalArgumentException("Assignee is not allowed to be equal to operand!");
+        }
         this.operator = operator;
         this.operand = operand;
     }

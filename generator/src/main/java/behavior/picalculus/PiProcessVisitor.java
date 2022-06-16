@@ -1,13 +1,13 @@
 package behavior.picalculus;
 
-public interface PiProcessVisitor<RETURN> {
-    RETURN handle(Parallelism parallelism);
+public interface PiProcessVisitor<R> {
+    R handle(Parallelism parallelism);
 
-    RETURN handle(NameRestriction restriction);
+    R handle(NameRestriction restriction);
 
-    RETURN handle(PrefixedProcess prefixedProcess);
+    R handle(PrefixedProcess prefixedProcess);
 
-    RETURN handle(EmptySum emptySum);
+    R handle(EmptySum emptySum);
 
-    RETURN handle(MultiarySum multiarySum);
+    R handle(MultiarySum multiarySum);
 }

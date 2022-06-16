@@ -6,7 +6,7 @@ import java.util.Set;
 /**
  * Singular sum is a prefixed process: a!(x).P/a?(y).P .
  */
-public class PrefixedProcess extends Sum {
+public class PrefixedProcess implements Sum {
     private final Prefix prefix;
     private final PiProcess process;
 

@@ -8,7 +8,7 @@ import behavior.activity.expression.integer.IntegerComparisonExpression;
 import behavior.activity.values.Value;
 
 public interface ExpressionVisitor {
-    <VALUE extends Value> void handle(SetVariableExpression<VALUE> setVariableExpression);
+    <V extends Value> void handle(SetVariableExpression<V> setVariableExpression);
 
     void handle(IntegerCalculationExpression integerCalculationExpression);
 

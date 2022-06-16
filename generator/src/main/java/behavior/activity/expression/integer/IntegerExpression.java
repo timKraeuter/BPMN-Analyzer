@@ -14,15 +14,7 @@ public abstract class IntegerExpression implements BinaryExpression {
         this.operand2 = operand2;
     }
 
-    public IntegerVariable getOperand1() {
-        return this.operand1;
-    }
-
-    public IntegerVariable getOperand2() {
-        return this.operand2;
-    }
-
-    public abstract <VALUE extends Value> Variable<VALUE> getAssignee();
+    public abstract <V extends Value> Variable<V> getAssignee();
 
     @Override
     public String getNameOfOperand1() {

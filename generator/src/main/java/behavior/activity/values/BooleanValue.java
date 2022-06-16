@@ -12,7 +12,7 @@ public class BooleanValue implements Value {
     }
 
     @Override
-    public <RETURN> RETURN accept(ValueVisitor<RETURN> visitor) {
+    public <R> R accept(ValueVisitor<R> visitor) {
         return visitor.handle(this);
     }
 }

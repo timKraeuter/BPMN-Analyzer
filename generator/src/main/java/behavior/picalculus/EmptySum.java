@@ -1,6 +1,6 @@
 package behavior.picalculus;
 
-public class EmptySum extends Sum {
+public class EmptySum implements Sum {
     @Override
     public <T> T accept(PiProcessVisitor<T> visitor) {
         return visitor.handle(this);

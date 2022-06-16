@@ -2,7 +2,7 @@ package behavior.picalculus;
 
 import java.util.*;
 
-public class MultiarySum extends Sum {
+public class MultiarySum implements Sum {
     private final Set<Sum> sums;
 
     public MultiarySum(List<Sum> sums) {

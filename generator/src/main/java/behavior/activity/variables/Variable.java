@@ -2,11 +2,11 @@ package behavior.activity.variables;
 
 import behavior.activity.values.Value;
 
-public abstract class Variable<VALUE extends Value> {
+public abstract class Variable<V extends Value> {
     private final String name;
-    private final VALUE initialValue;
+    private final V initialValue;
 
-    protected Variable(String name, VALUE initialValue) {
+    protected Variable(String name, V initialValue) {
         this.name = name;
         this.initialValue = initialValue;
     }
@@ -15,7 +15,7 @@ public abstract class Variable<VALUE extends Value> {
         return this.name;
     }
 
-    public VALUE getInitialValue() {
+    public V getInitialValue() {
         return this.initialValue;
     }
 }
