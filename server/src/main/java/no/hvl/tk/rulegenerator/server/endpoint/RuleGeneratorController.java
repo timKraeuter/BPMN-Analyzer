@@ -28,7 +28,8 @@ public class RuleGeneratorController {
 
     /**
      * Generate a graph grammar for a given BPMN file.
-     * @param file BPMN file defining a collaboration.
+     *
+     * @param file     BPMN file defining a collaboration.
      * @param response will be a ZIP of the graph grammar for the BPMN file.
      */
     @PostMapping(value = "/generateGGAndZip", produces = "application/zip")
@@ -66,11 +67,12 @@ public class RuleGeneratorController {
 
     /**
      * Run model-checking of certain BPMN-specific properties for a BPMN collaboration.
+     *
      * @param request contains the BPMN file and properties to be checked.
      * @return model-checking results for the requested properties.
      */
     @PostMapping(value = "/checkBPMNSpecificProperties")
-    public ModelCheckingResponse checkBPMNSpecificProperties(@ModelAttribute ModelCheckingRequest request) throws IOException {
+    public ModelCheckingResponse checkBPMNSpecificProperties(@ModelAttribute ModelCheckingRequest request) throws IOException, InterruptedException {
         deleteOldGGsAndCreateNewDir();
 
         Pair<File, BPMNCollaboration> result = generateGGForBPMNFile(request.getFile());

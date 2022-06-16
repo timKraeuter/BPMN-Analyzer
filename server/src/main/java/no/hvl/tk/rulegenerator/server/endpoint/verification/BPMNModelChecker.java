@@ -30,17 +30,17 @@ public class BPMNModelChecker {
         this.bpmnModel = bpmnModel;
     }
 
-    public ModelCheckingResponse runModelChecking(ModelCheckingRequest modelCheckingRequest) {
+    public ModelCheckingResponse runModelChecking(ModelCheckingRequest modelCheckingRequest) throws InterruptedException, IOException {
         ModelCheckingResponse response = new ModelCheckingResponse();
 
-        modelCheckingRequest.getPropertiesToBeChecked().forEach(modelCheckingProperty -> this.checkPropertyAndRecordResult(
-                modelCheckingProperty,
-                response));
+        for (ModelCheckingProperty modelCheckingProperty : modelCheckingRequest.getPropertiesToBeChecked()) {
+            this.checkPropertyAndRecordResult(modelCheckingProperty, response);
+        }
         return response;
     }
 
     private void checkPropertyAndRecordResult(ModelCheckingProperty modelCheckingProperty,
-                                              ModelCheckingResponse response) {
+                                              ModelCheckingResponse response) throws InterruptedException, IOException {
         switch (modelCheckingProperty) {
             case NO_DEAD_ACTIVITIES:
                 this.checkNoDeadActivities(response);
@@ -55,23 +55,19 @@ public class BPMNModelChecker {
         }
     }
 
-    private void checkNoDeadActivities(ModelCheckingResponse response) {
-        try {
-            // Generate state space for graph grammar.
-            final GrooveRunner grooveRunner = new GrooveRunner();
-            final String stateSpaceTempFile = String.format("%s%s.txt",
-                                                            RuleGeneratorControllerHelper.STATE_SPACE_TEMP_DIR,
-                                                            bpmnModel.getName());
-            grooveRunner.generateStateSpace(graphGrammarDir.getPath(), stateSpaceTempFile, true);
+    private void checkNoDeadActivities(ModelCheckingResponse response) throws InterruptedException, IOException {
+        // Generate state space for graph grammar.
+        final GrooveRunner grooveRunner = new GrooveRunner();
+        final String stateSpaceTempFile = String.format("%s%s.txt",
+                                                        RuleGeneratorControllerHelper.STATE_SPACE_TEMP_DIR,
+                                                        bpmnModel.getName());
+        grooveRunner.generateStateSpace(graphGrammarDir.getPath(), stateSpaceTempFile, true);
 
-            readStateSpaceAndCheckActivities(response, stateSpaceTempFile);
-        }
-        catch (InterruptedException | IOException e) {
-            throw new RuntimeException(e);
-        }
+        readStateSpaceAndCheckActivities(response, stateSpaceTempFile);
     }
 
-    private void readStateSpaceAndCheckActivities(ModelCheckingResponse response, String stateSpaceTempFile) throws IOException {
+    private void readStateSpaceAndCheckActivities(ModelCheckingResponse response,
+                                                  String stateSpaceTempFile) throws IOException {
         try {
             // Read the state space file and find the executed activities
             final Set<String> executedActivities = findExecutedActivitiesInStateSpace(stateSpaceTempFile);
@@ -84,7 +80,8 @@ public class BPMNModelChecker {
             recordNoDeadActivitiesResult(response, allActivityNames);
         }
         catch (NoSuchFileException exception) {
-            throw new ModelCheckingException("The state space could not be generated or generation timed out after 60 seconds.");
+            throw new ModelCheckingException(
+                    "The state space could not be generated or generation timed out after 60 seconds.");
         }
     }
 
@@ -102,21 +99,17 @@ public class BPMNModelChecker {
     }
 
     private Set<String> getAllActivityNames() {
-        return this.bpmnModel.getParticipants().stream()
-                             .flatMap(process -> getAllActivityNames(process).stream())
-                             .collect(Collectors.toSet());
+        return this.bpmnModel.getParticipants().stream().flatMap(process -> getAllActivityNames(process).stream()).collect(
+                Collectors.toSet());
     }
 
     private Set<String> getAllActivityNames(Process process) {
         // Get all activities from subprocesses
-        final Set<String> allActivityNames =
-                process.getSubProcesses()
-                       .flatMap(subprocess -> getAllActivityNames(subprocess).stream())
-                       .collect(Collectors.toSet());
+        final Set<String> allActivityNames = process.getSubProcesses().flatMap(subprocess -> getAllActivityNames(
+                subprocess).stream()).collect(Collectors.toSet());
         // Get all activities from event subprocesses
-        process.getEventSubprocesses()
-               .flatMap(eventSubprocess -> getAllActivityNames(eventSubprocess).stream())
-               .forEach(allActivityNames::add);
+        process.getEventSubprocesses().flatMap(eventSubprocess -> getAllActivityNames(eventSubprocess).stream()).forEach(
+                allActivityNames::add);
 
         addActivityNamesForProcess(process, allActivityNames);
         return allActivityNames;
@@ -124,18 +117,15 @@ public class BPMNModelChecker {
 
     private Set<String> getAllActivityNames(EventSubprocess process) {
         // Get all activities from subprocesses
-        Set<String> allActivityNames = process.getEventSubprocesses()
-                                              .flatMap(eventSubprocess -> getAllActivityNames(eventSubprocess).stream())
-                                              .collect(Collectors.toSet());
+        Set<String> allActivityNames = process.getEventSubprocesses().flatMap(eventSubprocess -> getAllActivityNames(
+                eventSubprocess).stream()).collect(Collectors.toSet());
 
         addActivityNamesForProcess(process, allActivityNames);
         return allActivityNames;
     }
 
     private void addActivityNamesForProcess(AbstractProcess process, Set<String> allActivityNames) {
-        process.getControlFlowNodes().filter(FlowNode::isTask)
-               .map(FlowNode::getName)
-               .forEach(allActivityNames::add);
+        process.getControlFlowNodes().filter(FlowNode::isTask).map(FlowNode::getName).forEach(allActivityNames::add);
     }
 
     private Set<String> findExecutedActivitiesInStateSpace(String stateSpaceTempFile) throws IOException {

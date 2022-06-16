@@ -154,7 +154,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
             switch (boundaryEvent.getType()) {
                 case NONE:
                 case TIMER:
-                    createBoundaryEventRule(process, boundaryEvent, task, (x) -> {
+                    createBoundaryEventRule(process, boundaryEvent, task, x -> {
                     });
                     break;
                 case MESSAGE:

@@ -342,9 +342,9 @@ public class BehaviorToGrooveTransformer {
                                                  dtf.format(now),
                                                  subFolder.getPath(),
                                                  startGraph);
-        File properties_file = new File(subFolder + "/" + "system.properties");
+        File propertiesFile = new File(subFolder + "/" + "system.properties");
         try {
-            FileUtils.writeStringToFile(properties_file, propertiesContent, StandardCharsets.UTF_8, false);
+            FileUtils.writeStringToFile(propertiesFile, propertiesContent, StandardCharsets.UTF_8, false);
         }
         catch (IOException e) {
             throw new RuntimeException(e);

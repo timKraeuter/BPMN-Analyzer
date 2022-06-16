@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import static groove.behaviortransformer.BehaviorToGrooveTransformer.START_GST;
 
-public interface GrooveTransformer<SOURCE extends Behavior> {
+public interface GrooveTransformer<S extends Behavior> {
     // Special groove labels
     String AT = "@";
     String FORALL = "forall:";
@@ -50,22 +50,22 @@ public interface GrooveTransformer<SOURCE extends Behavior> {
         GxlToXMLConverter.toXml(gxl, startGraphFile);
     }
 
-    GrooveGraph generateStartGraph(SOURCE source, boolean addPrefix);
+    GrooveGraph generateStartGraph(S source, boolean addPrefix);
 
-    default void generateAndWriteStartGraph(SOURCE source, boolean addPrefix, File targetFolder) {
+    default void generateAndWriteStartGraph(S source, boolean addPrefix, File targetFolder) {
         GrooveGraph startGraph = this.generateStartGraph(source, addPrefix);
         writeStartGraph(targetFolder, startGraph, this.isLayoutActivated());
     }
 
-    Stream<GrooveGraphRule> generateRules(SOURCE source, boolean addPrefix);
+    Stream<GrooveGraphRule> generateRules(S source, boolean addPrefix);
 
-    default void generateAndWriteRules(SOURCE source, boolean addPrefix, File targetFolder) {
+    default void generateAndWriteRules(S source, boolean addPrefix, File targetFolder) {
         Stream<GrooveGraphRule> rules = this.generateRules(source, addPrefix);
         GrooveRuleWriter.writeRules(rules, targetFolder);
         this.generateAndWriteRulesFurther(source, addPrefix, targetFolder);
     }
 
-    default void generateAndWriteRulesFurther(SOURCE source, boolean addPrefix, File targetFolder) {
+    default void generateAndWriteRulesFurther(S source, boolean addPrefix, File targetFolder) {
         // to be overridden if needed
     }
 

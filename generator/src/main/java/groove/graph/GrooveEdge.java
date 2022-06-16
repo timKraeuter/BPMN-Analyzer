@@ -5,7 +5,7 @@ import api.Edge;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class GrooveEdge implements Edge {
-    private final static AtomicLong idCounter = new AtomicLong(-1);
+    private static final AtomicLong idCounter = new AtomicLong(-1);
     private final String id = Long.toString(idCounter.incrementAndGet());
 
     private final String name;

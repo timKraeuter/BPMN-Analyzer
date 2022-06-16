@@ -73,10 +73,8 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
             ActivityDiagram activityDiagram,
             GrooveGraphBuilder builder) {
         activityDiagram.localVariables().forEach(localVar -> this.createAndInitVariable(builder, localVar));
-        activityDiagram.inputVariables().forEach(inputVariable -> {
-            // TODO: This should be done according to given parameters of the input variables NOT the initial values.
-            this.createAndInitVariable(builder, inputVariable);
-        });
+        // TODO: This should be done according to given parameters of the input variables NOT the initial values.
+        activityDiagram.inputVariables().forEach(inputVariable -> this.createAndInitVariable(builder, inputVariable));
     }
 
     private void createAndInitVariable(
@@ -90,7 +88,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
         builder.addEdge(VALUE, variableNode, initialValueNode);
     }
 
-    private <VALUE extends Value> GrooveNode createValueNode(VALUE value) {
+    private <V extends Value> GrooveNode createValueNode(V value) {
         return value.accept(new ValueVisitor<>() {
             @Override
             public GrooveNode handle(IntegerValue integerValue) {
@@ -283,7 +281,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     private void convertExpressionsToGroove(Expression expression, GrooveRuleBuilder ruleBuilder) {
         expression.accept(new ExpressionVisitor() {
             @Override
-            public <VALUE extends Value> void handle(SetVariableExpression<VALUE> setVariableExpression) {
+            public <V extends Value> void handle(SetVariableExpression<V> setVariableExpression) {
                 // Create variable in context
                 GrooveNode var = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
                         setVariableExpression.getVariableToBeSet().getName(),

@@ -3,7 +3,6 @@ package no.hvl.tk.rulegenerator.server.endpoint;
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.reader.BPMNFileReader;
 import groove.behaviortransformer.BehaviorToGrooveTransformer;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,7 +51,7 @@ public class RuleGeneratorControllerHelper {
         String transformedName = name.replaceAll("[\\\\/:*?\"<>|]",
                                                  "") // Remove unallowed characters for windows filenames.
                                      //
-                                     .replaceAll("\u00a0", "_") // Replace non-breaking whitespaces with _
+                                     .replace("\u00a0", "_") // Replace non-breaking whitespaces with _
                                      .replaceAll("\\s+", "_"); // Replace whitespaces with _
         if (!transformedName.isEmpty() && Character.isDigit(transformedName.charAt(0))) {
             // Prefix the name with a number to make it a qualified name in Groove.
