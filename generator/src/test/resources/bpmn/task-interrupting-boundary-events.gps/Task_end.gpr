@@ -1,112 +1,112 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="Task_end" role="rule" edgeids="false" edgemode="directed">
-        <node id="n34">
+        <node id="n29">
             <attr name="layout">
                 <string>575 332 0 0</string>
             </attr>
         </node>
-        <edge from="n34" to="n34">
+        <edge from="n29" to="n29">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n34" to="n34">
+        <edge from="n29" to="n29">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n32">
+        <node id="n27">
             <attr name="layout">
                 <string>575 242 0 0</string>
             </attr>
         </node>
-        <edge from="n32" to="n32">
+        <edge from="n27" to="n27">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n32" to="n32">
+        <edge from="n27" to="n27">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n29">
+        <node id="n24">
             <attr name="layout">
                 <string>62 87 0 0</string>
             </attr>
         </node>
-        <edge from="n29" to="n29">
+        <edge from="n24" to="n24">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n30">
+        <node id="n25">
             <attr name="layout">
                 <string>402 152 0 0</string>
             </attr>
         </node>
-        <edge from="n30" to="n30">
+        <edge from="n25" to="n25">
             <attr name="label">
                 <string>string:"Activity boundary events"</string>
             </attr>
         </edge>
-        <node id="n31">
+        <node id="n26">
             <attr name="layout">
                 <string>402 72 0 0</string>
             </attr>
         </node>
-        <edge from="n31" to="n31">
+        <edge from="n26" to="n26">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n33">
+        <node id="n28">
             <attr name="layout">
                 <string>917 242 0 0</string>
             </attr>
         </node>
-        <edge from="n33" to="n33">
+        <edge from="n28" to="n28">
             <attr name="label">
                 <string>string:"Task"</string>
             </attr>
         </edge>
-        <node id="n35">
+        <node id="n30">
             <attr name="layout">
                 <string>917 332 0 0</string>
             </attr>
         </node>
-        <edge from="n35" to="n35">
+        <edge from="n30" to="n30">
             <attr name="label">
                 <string>string:"Task_end"</string>
             </attr>
         </edge>
-        <edge from="n29" to="n34">
+        <edge from="n24" to="n29">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n34" to="n35">
+        <edge from="n29" to="n30">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n29" to="n32">
+        <edge from="n24" to="n27">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n32" to="n33">
+        <edge from="n27" to="n28">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n29" to="n30">
+        <edge from="n24" to="n25">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n29" to="n31">
+        <edge from="n24" to="n26">
             <attr name="label">
                 <string>state</string>
             </attr>

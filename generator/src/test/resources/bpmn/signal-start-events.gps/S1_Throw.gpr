@@ -1,54 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="S1_Throw" role="rule" edgeids="false" edgemode="directed">
-        <node id="n16">
-            <attr name="layout">
-                <string>62 265 0 0</string>
-            </attr>
-        </node>
-        <edge from="n16" to="n16">
-            <attr name="label">
-                <string>type:ProcessSnapshot</string>
-            </attr>
-        </edge>
-        <edge from="n16" to="n16">
-            <attr name="label">
-                <string>new:</string>
-            </attr>
-        </edge>
-        <node id="n18">
-            <attr name="layout">
-                <string>392 252 0 0</string>
-            </attr>
-        </node>
-        <edge from="n18" to="n18">
-            <attr name="label">
-                <string>type:Running</string>
-            </attr>
-        </edge>
-        <edge from="n18" to="n18">
-            <attr name="label">
-                <string>new:</string>
-            </attr>
-        </edge>
-        <node id="n19">
-            <attr name="layout">
-                <string>407 422 0 0</string>
-            </attr>
-        </node>
-        <edge from="n19" to="n19">
-            <attr name="label">
-                <string>type:Token</string>
-            </attr>
-        </edge>
-        <edge from="n19" to="n19">
-            <attr name="label">
-                <string>new:</string>
-            </attr>
-        </edge>
         <node id="n21">
             <attr name="layout">
-                <string>62 515 0 0</string>
+                <string>62 265 0 0</string>
             </attr>
         </node>
         <edge from="n21" to="n21">
@@ -63,7 +18,7 @@
         </edge>
         <node id="n23">
             <attr name="layout">
-                <string>392 592 0 0</string>
+                <string>392 252 0 0</string>
             </attr>
         </node>
         <edge from="n23" to="n23">
@@ -78,7 +33,7 @@
         </edge>
         <node id="n24">
             <attr name="layout">
-                <string>407 682 0 0</string>
+                <string>407 422 0 0</string>
             </attr>
         </node>
         <edge from="n24" to="n24">
@@ -91,109 +46,134 @@
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n14">
+        <node id="n26">
             <attr name="layout">
-                <string>390 82 0 0</string>
+                <string>62 515 0 0</string>
             </attr>
         </node>
-        <edge from="n14" to="n14">
-            <attr name="label">
-                <string>type:Token</string>
-            </attr>
-        </edge>
-        <edge from="n14" to="n14">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
-        <node id="n12">
-            <attr name="layout">
-                <string>62 90 0 0</string>
-            </attr>
-        </node>
-        <edge from="n12" to="n12">
+        <edge from="n26" to="n26">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n13">
-            <attr name="layout">
-                <string>382 162 0 0</string>
-            </attr>
-        </node>
-        <edge from="n13" to="n13">
+        <edge from="n26" to="n26">
             <attr name="label">
-                <string>string:"p1"</string>
+                <string>new:</string>
             </attr>
         </edge>
-        <node id="n15">
+        <node id="n28">
             <attr name="layout">
-                <string>567 82 0 0</string>
+                <string>392 592 0 0</string>
             </attr>
         </node>
-        <edge from="n15" to="n15">
+        <edge from="n28" to="n28">
             <attr name="label">
-                <string>string:"start_S1_Throw"</string>
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <edge from="n28" to="n28">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n29">
+            <attr name="layout">
+                <string>407 682 0 0</string>
+            </attr>
+        </node>
+        <edge from="n29" to="n29">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n29" to="n29">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n19">
+            <attr name="layout">
+                <string>390 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n19" to="n19">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n19" to="n19">
+            <attr name="label">
+                <string>del:</string>
             </attr>
         </edge>
         <node id="n17">
             <attr name="layout">
-                <string>392 332 0 0</string>
+                <string>62 90 0 0</string>
             </attr>
         </node>
         <edge from="n17" to="n17">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n18">
+            <attr name="layout">
+                <string>382 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n18" to="n18">
             <attr name="label">
                 <string>string:"p1"</string>
             </attr>
         </edge>
         <node id="n20">
             <attr name="layout">
-                <string>592 422 0 0</string>
+                <string>567 82 0 0</string>
             </attr>
         </node>
         <edge from="n20" to="n20">
             <attr name="label">
-                <string>string:"p1_S1_Catch_end"</string>
+                <string>string:"start_S1_Throw"</string>
             </attr>
         </edge>
         <node id="n22">
             <attr name="layout">
-                <string>392 502 0 0</string>
+                <string>392 332 0 0</string>
             </attr>
         </node>
         <edge from="n22" to="n22">
             <attr name="label">
-                <string>string:"p2"</string>
+                <string>string:"p1"</string>
             </attr>
         </edge>
         <node id="n25">
             <attr name="layout">
-                <string>592 682 0 0</string>
+                <string>592 422 0 0</string>
             </attr>
         </node>
         <edge from="n25" to="n25">
             <attr name="label">
+                <string>string:"p1_S1_Catch_end"</string>
+            </attr>
+        </edge>
+        <node id="n27">
+            <attr name="layout">
+                <string>392 502 0 0</string>
+            </attr>
+        </node>
+        <edge from="n27" to="n27">
+            <attr name="label">
+                <string>string:"p2"</string>
+            </attr>
+        </edge>
+        <node id="n30">
+            <attr name="layout">
+                <string>592 682 0 0</string>
+            </attr>
+        </node>
+        <edge from="n30" to="n30">
+            <attr name="label">
                 <string>string:"p2_S1_Catch_end_p2"</string>
-            </attr>
-        </edge>
-        <edge from="n16" to="n17">
-            <attr name="label">
-                <string>new:name</string>
-            </attr>
-        </edge>
-        <edge from="n16" to="n18">
-            <attr name="label">
-                <string>new:state</string>
-            </attr>
-        </edge>
-        <edge from="n16" to="n19">
-            <attr name="label">
-                <string>new:tokens</string>
-            </attr>
-        </edge>
-        <edge from="n19" to="n20">
-            <attr name="label">
-                <string>new:position</string>
             </attr>
         </edge>
         <edge from="n21" to="n22">
@@ -216,17 +196,37 @@
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n14" to="n15">
+        <edge from="n26" to="n27">
+            <attr name="label">
+                <string>new:name</string>
+            </attr>
+        </edge>
+        <edge from="n26" to="n28">
+            <attr name="label">
+                <string>new:state</string>
+            </attr>
+        </edge>
+        <edge from="n26" to="n29">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n29" to="n30">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n19" to="n20">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n12" to="n14">
+        <edge from="n17" to="n19">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n12" to="n13">
+        <edge from="n17" to="n18">
             <attr name="label">
                 <string>name</string>
             </attr>

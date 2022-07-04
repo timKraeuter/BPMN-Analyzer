@@ -1,112 +1,112 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="SendTask_start" role="rule" edgeids="false" edgemode="directed">
-        <node id="n10">
+        <node id="n24">
             <attr name="layout">
                 <string>417 332 0 0</string>
             </attr>
         </node>
-        <edge from="n10" to="n10">
+        <edge from="n24" to="n24">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n10" to="n10">
+        <edge from="n24" to="n24">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n8">
+        <node id="n22">
             <attr name="layout">
                 <string>417 242 0 0</string>
             </attr>
         </node>
-        <edge from="n8" to="n8">
+        <edge from="n22" to="n22">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n8" to="n8">
+        <edge from="n22" to="n22">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n5">
+        <node id="n19">
             <attr name="layout">
                 <string>62 87 0 0</string>
             </attr>
         </node>
-        <edge from="n5" to="n5">
+        <edge from="n19" to="n19">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n6">
+        <node id="n20">
             <attr name="layout">
                 <string>402 152 0 0</string>
             </attr>
         </node>
-        <edge from="n6" to="n6">
+        <edge from="n20" to="n20">
             <attr name="label">
                 <string>string:"p1"</string>
             </attr>
         </edge>
-        <node id="n7">
+        <node id="n21">
             <attr name="layout">
                 <string>402 72 0 0</string>
             </attr>
         </node>
-        <edge from="n7" to="n7">
+        <edge from="n21" to="n21">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n9">
+        <node id="n23">
             <attr name="layout">
                 <string>602 242 0 0</string>
             </attr>
         </node>
-        <edge from="n9" to="n9">
+        <edge from="n23" to="n23">
             <attr name="label">
                 <string>string:"sendEvent_SendTask"</string>
             </attr>
         </edge>
-        <node id="n11">
+        <node id="n25">
             <attr name="layout">
                 <string>602 332 0 0</string>
             </attr>
         </node>
-        <edge from="n11" to="n11">
+        <edge from="n25" to="n25">
             <attr name="label">
                 <string>string:"SendTask"</string>
             </attr>
         </edge>
-        <edge from="n5" to="n10">
+        <edge from="n19" to="n24">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n10" to="n11">
+        <edge from="n24" to="n25">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n5" to="n8">
+        <edge from="n19" to="n22">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n8" to="n9">
+        <edge from="n22" to="n23">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n5" to="n6">
+        <edge from="n19" to="n20">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n5" to="n7">
+        <edge from="n19" to="n21">
             <attr name="label">
                 <string>state</string>
             </attr>
