@@ -4,6 +4,7 @@ import behavior.bpmn.AbstractProcess;
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.EventSubprocess;
 import behavior.bpmn.MessageFlow;
+import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import behavior.bpmn.events.StartEvent;
 import groove.behaviortransformer.bpmn.BPMNRuleGenerator;
 import groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
@@ -61,7 +62,7 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
         eventSubprocess.getStartEvents().forEach(startEvent -> {
             switch (startEvent.getType()) {
                 case NONE:
-                    throw new RuntimeException("None start events in event subprocesses are useless!");
+                    throw new BPMNRuntimeException("None start events in event subprocesses are useless!");
                 case MESSAGE:
                     createStartInterruptingEvenSubprocessFromMessageRules(process,
                                                                           eventSubprocess,
@@ -83,7 +84,7 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
                     // Implemented in the throw part.
                     break;
                 default:
-                    throw new RuntimeException("Unexpected start event type encountered: " + startEvent.getType());
+                    throw new BPMNRuntimeException("Unexpected start event type encountered: " + startEvent.getType());
             }
         });
     }

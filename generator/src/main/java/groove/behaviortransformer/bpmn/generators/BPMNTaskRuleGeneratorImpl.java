@@ -5,6 +5,7 @@ import behavior.bpmn.activities.tasks.AbstractTask;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
+import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import behavior.bpmn.events.BoundaryEvent;
 import groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import groove.graph.GrooveNode;
@@ -37,8 +38,8 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
     public void createSendTaskRulesForProcess(AbstractProcess process, SendTask sendTask) {
         createTaskRulesForProcess(process,
                                   sendTask,
-                                  ruleBuilder -> addMessageFlowBehaviorForFlowNode(collaboration,
-                                                                                   ruleBuilder,
+                                  builder -> addMessageFlowBehaviorForFlowNode(collaboration,
+                                                                                   builder,
                                                                                    sendTask));
 
     }
@@ -50,7 +51,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
 
         if (receiveTask.isInstantiate()) {
             if (receiveTask.getIncomingFlows().findAny().isPresent()) {
-                throw new RuntimeException("Instantiate receive tasks should not have incoming sequence " + "flows!");
+                throw new BPMNRuntimeException("Instantiate receive tasks should not have incoming sequence " + "flows!");
             }
             this.createInstantiateReceiveTaskRule(process, receiveTask);
             return;

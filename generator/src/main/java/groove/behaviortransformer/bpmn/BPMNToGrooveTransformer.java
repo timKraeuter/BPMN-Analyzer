@@ -2,6 +2,7 @@ package groove.behaviortransformer.bpmn;
 
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.Process;
+import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import behavior.bpmn.events.StartEventType;
 import groove.behaviortransformer.GrooveTransformer;
 import groove.graph.GrooveGraph;
@@ -88,7 +89,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
             FileUtils.copyInputStreamToFile(allterminatedGraph, new File(targetFolder, ALL_TERMINATED_FILE_NAME));
         }
         catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ShouldNotHappenRuntimeException(e);
         }
     }
 
