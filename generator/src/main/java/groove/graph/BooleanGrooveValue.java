@@ -1,16 +1,13 @@
 package groove.graph;
 
-/**
- * Represent an integer value for a groove graph.
- */
-class IntValue extends Value<Integer> {
-    public IntValue(Integer value) {
+class BooleanGrooveValue extends GrooveValue<Boolean> {
+    public BooleanGrooveValue(Boolean value) {
         super(value);
     }
 
     @Override
     public String getTypeName() {
-        return "int";
+        return "bool";
     }
 
     @Override

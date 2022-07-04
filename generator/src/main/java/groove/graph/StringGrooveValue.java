@@ -1,7 +1,7 @@
 package groove.graph;
 
-class StringValue extends Value<String> {
-    public StringValue(String value) {
+class StringGrooveValue extends GrooveValue<String> {
+    public StringGrooveValue(String value) {
         super(value);
     }
 

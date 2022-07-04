@@ -13,7 +13,7 @@ import groove.GrooveGxlHelper;
 import groove.behaviortransformer.bpmn.BPMNToGrooveTransformer;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
-import groove.graph.Value;
+import groove.graph.GrooveValue;
 import groove.graph.rule.GrooveGraphRule;
 import groove.graph.rule.GrooveRuleBuilder;
 import groove.graph.rule.GrooveRuleWriter;
@@ -77,7 +77,7 @@ public class BehaviorToGrooveTransformer {
             Map<String, String> idToNodeLabel,
             Node attributeHolder,
             String attributeName,
-            Value<?> attributeValue) {
+            GrooveValue<?> attributeValue) {
         String attributeNodeName = String.format("%s:%s", attributeValue.getTypeName(), attributeValue.getValue());
         Node dataNode = GrooveGxlHelper.createNodeWithName(
                 GrooveNode.getNextNodeId(),
