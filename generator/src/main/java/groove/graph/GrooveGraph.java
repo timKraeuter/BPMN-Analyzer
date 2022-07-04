@@ -43,8 +43,6 @@ public class GrooveGraph implements Graph<GrooveNode, GrooveEdge> {
      * Does not check if nodes have distinct names (we assume the graphs are prefixed using the name)!
      */
     public GrooveGraph union(GrooveGraph graph, BinaryOperator<String> nameResolver) {
-        assert !this.name.equals(graph.name);
-
         Set<GrooveNode> unionNodes = new LinkedHashSet<>();
         Set<GrooveEdge> unionEdges = new LinkedHashSet<>();
 

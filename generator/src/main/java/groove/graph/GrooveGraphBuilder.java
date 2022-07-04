@@ -1,5 +1,7 @@
 package groove.graph;
 
+import behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -20,7 +22,9 @@ public class GrooveGraphBuilder {
     }
 
     public GrooveGraphBuilder addNode(GrooveNode node) {
-        assert node != null;
+        if (node == null) {
+            throw new GrooveGenerationRuntimeException("Node must not be null!");
+        }
         this.nodes.add(node);
         return this;
     }

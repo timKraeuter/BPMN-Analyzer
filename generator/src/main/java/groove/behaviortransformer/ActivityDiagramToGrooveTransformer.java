@@ -15,6 +15,7 @@ import behavior.activity.values.Value;
 import behavior.activity.values.ValueVisitor;
 import behavior.activity.variables.BooleanVariable;
 import behavior.activity.variables.Variable;
+import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveGraphBuilder;
 import groove.graph.GrooveNode;
@@ -585,7 +586,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
             FileUtils.copyDirectory(sourceDirectory, targetFolder);
         }
         catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ShouldNotHappenRuntimeException(e);
         }
     }
 }

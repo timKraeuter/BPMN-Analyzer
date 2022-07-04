@@ -1,5 +1,6 @@
 package groove.behaviortransformer;
 
+import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import behavior.picalculus.*;
 import groove.graph.GrooveEdge;
 import groove.graph.GrooveGraph;
@@ -65,7 +66,7 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
         try {
             FileUtils.copyDirectory(sourceDirectory, targetFolder);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ShouldNotHappenRuntimeException(e);
         }
     }
 
@@ -214,7 +215,7 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
                     case IN:
                         return TYPE_IN;
                 }
-                throw new RuntimeException("Unknown PrefixType: " + prefixType);
+                throw new ShouldNotHappenRuntimeException("Unknown PrefixType: " + prefixType);
             }
 
             @Override
