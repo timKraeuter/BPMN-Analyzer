@@ -5,9 +5,9 @@ import java.util.stream.Stream;
 /**
  * Represents graphs. Graphs should be immutable. That is why we return streams of nodes and edges.
  */
-public interface Graph {
+public interface Graph<N, E> {
 
-    Stream<? extends Node> nodes();
+    Stream<N> nodes();
 
-    Stream<? extends Edge> edges();
+    Stream<E> edges();
 }

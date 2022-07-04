@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 /**
  * Represents a graph which is used to generate a graph grammar for the tool groove.
  */
-public class GrooveGraph implements Graph {
+public class GrooveGraph implements Graph<GrooveNode, GrooveEdge> {
 
     private final String name;
     private final Set<GrooveNode> nodes;
