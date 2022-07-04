@@ -2,7 +2,6 @@ package behavior.bpmn.activities.tasks;
 
 import behavior.bpmn.auxiliary.ActivityVisitor;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
-import com.google.common.base.Objects;
 
 /**
  * Represents a Task in BPMN where the task type is not specified.

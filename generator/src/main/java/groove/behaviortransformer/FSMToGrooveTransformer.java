@@ -1,5 +1,6 @@
 package groove.behaviortransformer;
 
+import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import behavior.fsm.FiniteStateMachine;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveGraphBuilder;
@@ -38,7 +39,7 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
             FileUtils.copyDirectory(sourceDirectory, targetFolder);
         }
         catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ShouldNotHappenRuntimeException(e);
         }
     }
 

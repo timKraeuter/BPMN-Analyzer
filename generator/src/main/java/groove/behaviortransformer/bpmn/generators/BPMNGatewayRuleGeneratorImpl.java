@@ -3,6 +3,7 @@ package groove.behaviortransformer.bpmn.generators;
 import behavior.bpmn.AbstractProcess;
 import behavior.bpmn.FlowNode;
 import behavior.bpmn.SequenceFlow;
+import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import behavior.bpmn.gateways.*;
 import com.google.common.collect.Sets;
 import groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
@@ -95,10 +96,10 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
             return;
         }
         if (outgoingFlowCount == 0) {
-            throw new RuntimeException(String.format("The inclusive gateway \"%s\" has no outgoing flows!",
-                                                     inclusiveGateway.getName()));
+            throw new BPMNRuntimeException(String.format("The inclusive gateway \"%s\" has no outgoing flows!",
+                                                         inclusiveGateway.getName()));
         }
-        throw new RuntimeException("Inclusive gateway should not have multiple incoming and outgoing flows.");
+        throw new BPMNRuntimeException("Inclusive gateway should not have multiple incoming and outgoing flows.");
     }
 
     private void createMergingInclusiveGatewayRules(AbstractProcess process,
@@ -170,7 +171,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
         if (iGateways.size() == 1) {
             return iGateways.iterator().next();
         } else {
-            throw new RuntimeException("No matching branching inclusive Gateway found!");
+            throw new BPMNRuntimeException("No matching branching inclusive Gateway found!");
         }
     }
 

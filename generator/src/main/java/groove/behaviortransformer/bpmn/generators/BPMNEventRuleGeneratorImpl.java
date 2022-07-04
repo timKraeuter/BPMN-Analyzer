@@ -11,6 +11,8 @@ import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.auxiliary.AbstractProcessVisitor;
 import behavior.bpmn.auxiliary.ActivityVisitor;
 import behavior.bpmn.auxiliary.EventVisitor;
+import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
+import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import behavior.bpmn.events.*;
 import groove.behaviortransformer.bpmn.BPMNRuleGenerator;
 import groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
@@ -28,7 +30,6 @@ import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.*;
 
 public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
-    public static final String SHOULD_NOT_HAPPEN = "Should not happen!";
     private final BPMNCollaboration collaboration;
     private final GrooveRuleBuilder ruleBuilder;
 
@@ -55,7 +56,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     @Override
     public void createEndEventRule(AbstractProcess process, EndEvent endEvent) {
         if (endEvent.getIncomingFlows().count() != 1) {
-            throw new RuntimeException("End events should have exactly one incoming flow!");
+            throw new BPMNRuntimeException("End events should have exactly one incoming flow!");
         }
         //noinspection OptionalGetWithoutIsPresent size of the stream is 1
         final String incomingFlowId = endEvent.getIncomingFlows().findFirst().get().getDescriptiveID();
@@ -113,7 +114,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         String ruleName = THROW + intermediateThrowEvent.getName();
         // We currently limit to one incoming token, but we could implement an implicit exclusive gateway.
         if (intermediateThrowEvent.getIncomingFlows().count() != 1) {
-            throw new RuntimeException("Intermediate throw events should have exactly one incoming sequence flow!");
+            throw new BPMNRuntimeException("Intermediate throw events should have exactly one incoming sequence flow!");
         }
         switch (intermediateThrowEvent.getType()) {
             case NONE:
@@ -129,7 +130,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                 createIntermediateThrowSignalEventRule(intermediateThrowEvent, ruleName, process);
                 break;
             default:
-                throw new RuntimeException("Unexpected throw event type: " + intermediateThrowEvent.getType());
+                throw new BPMNRuntimeException("Unexpected throw event type: " + intermediateThrowEvent.getType());
         }
     }
 
@@ -162,8 +163,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
         if (intermediateCatchEvent.getIncomingFlows().count() != 1) {
             // current restriction, again we would need implicit exclusive gateway.
-            throw new RuntimeException("Intermediate message catch events are only allowed to have one incoming " +
-                                       "sequence flow!");
+            throw new BPMNRuntimeException("Intermediate message catch events are only allowed to have one incoming " +
+                                           "sequence flow!");
         }
         intermediateCatchEvent.getIncomingFlows().forEach(inFlow -> deleteTokenWithPosition(ruleBuilder,
                                                                                             processInstance,
@@ -194,8 +195,9 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                                                                                     ruleBuilder);
             if (intermediateCatchEvent.getIncomingFlows().count() != 1) {
                 // current restriction, again we would need implicit exclusive gateway.
-                throw new RuntimeException("Intermediate message catch events are only allowed to have one incoming " +
-                                           "sequence flow!");
+                throw new BPMNRuntimeException(
+                        "Intermediate message catch events are only allowed to have one incoming " +
+                        "sequence flow!");
             }
             //noinspection OptionalGetWithoutIsPresent Size of the stream must be 1.
             SequenceFlow incFlow = intermediateCatchEvent.getIncomingFlows().findFirst().get();
@@ -242,8 +244,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                                                                                 process,
                                                                                 ruleBuilder);
         if (intermediateCatchEvent.getIncomingFlows().findAny().isPresent()) {
-            throw new RuntimeException("Link intermediate catch events are not allowed to have incoming sequence " +
-                                       "flows!");
+            throw new BPMNRuntimeException("Link intermediate catch events are not allowed to have incoming sequence " +
+                                           "flows!");
         }
         deleteTokenWithPosition(ruleBuilder, processInstance, intermediateCatchEvent.getName());
 
@@ -427,7 +429,9 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
             GrooveNode newToken = ruleBuilder.addNode(TYPE_TOKEN);
             ruleBuilder.contextEdge(AT, newToken, existsOptional);
             ruleBuilder.addEdge(TOKENS, processInstance, newToken);
-            ruleBuilder.addEdge(POSITION, newToken, ruleBuilder.contextNode(createStringNodeLabel(outFlow.getDescriptiveID())));
+            ruleBuilder.addEdge(POSITION,
+                                newToken,
+                                ruleBuilder.contextNode(createStringNodeLabel(outFlow.getDescriptiveID())));
         });
     }
 
@@ -472,19 +476,19 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
             @Override
             public void handle(IntermediateThrowEvent intermediateThrowEvent) {
                 // Must be a start event if instantiate is true.
-                throw new RuntimeException(SHOULD_NOT_HAPPEN);
+                throw new ShouldNotHappenRuntimeException();
             }
 
             @Override
             public void handle(IntermediateCatchEvent intermediateCatchEvent) {
                 // Must be a start event if instantiate is true.
-                throw new RuntimeException(SHOULD_NOT_HAPPEN);
+                throw new ShouldNotHappenRuntimeException();
             }
 
             @Override
             public void handle(EndEvent endEvent) {
                 // Must be a start event if instantiate is true.
-                throw new RuntimeException(SHOULD_NOT_HAPPEN);
+                throw new ShouldNotHappenRuntimeException();
             }
         });
     }
