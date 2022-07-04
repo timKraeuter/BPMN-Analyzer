@@ -1,5 +1,6 @@
 package groove;
 
+import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import groove.gxl.Gxl;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -24,7 +25,7 @@ public class GxlToXMLConverter {
             outputFile.createNewFile();
             jaxbMarshaller.marshal(gxl, outputFile);
         } catch (final JAXBException | IOException e) {
-            throw new RuntimeException(e);
+            throw new ShouldNotHappenRuntimeException(e);
         }
     }
 
@@ -38,7 +39,7 @@ public class GxlToXMLConverter {
         try {
             jaxbMarshaller.marshal(graph, sw);
         } catch (final JAXBException e) {
-            throw new RuntimeException(e);
+            throw new ShouldNotHappenRuntimeException(e);
         }
         return sw.toString();
     }
@@ -50,7 +51,7 @@ public class GxlToXMLConverter {
                 jaxbMarshaller = jaxbContext.createMarshaller();
                 jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             } catch (final JAXBException e) {
-                throw new RuntimeException(e);
+                throw new ShouldNotHappenRuntimeException(e);
             }
         }
     }

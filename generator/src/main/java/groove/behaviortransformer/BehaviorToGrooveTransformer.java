@@ -4,6 +4,7 @@ import behavior.Behavior;
 import behavior.BehaviorVisitor;
 import behavior.activity.ActivityDiagram;
 import behavior.bpmn.BPMNCollaboration;
+import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import behavior.fsm.FiniteStateMachine;
 import behavior.petrinet.PetriNet;
 import behavior.picalculus.NamedPiProcess;
@@ -347,7 +348,7 @@ public class BehaviorToGrooveTransformer {
             FileUtils.writeStringToFile(propertiesFile, propertiesContent, StandardCharsets.UTF_8, false);
         }
         catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ShouldNotHappenRuntimeException(e);
         }
     }
 

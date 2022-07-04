@@ -79,12 +79,12 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
     private void createAndInitVariable(
             GrooveGraphBuilder builder,
-            Variable<? extends Value> var) {
+            Variable<? extends Value> variable) {
         GrooveNode variableNode = new GrooveNode(TYPE_VARIABLE);
-        variableNode.addAttribute(NAME, var.getName());
+        variableNode.addAttribute(NAME, variable.getName());
 
         GrooveNode initialValueNode = ActivityDiagramToGrooveTransformer.this.createValueNode(
-                var.getInitialValue());
+                variable.getInitialValue());
         builder.addEdge(VALUE, variableNode, initialValueNode);
     }
 
@@ -283,7 +283,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
             @Override
             public <V extends Value> void handle(SetVariableExpression<V> setVariableExpression) {
                 // Create variable in context
-                GrooveNode var = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
+                GrooveNode variable = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
                         setVariableExpression.getVariableToBeSet().getName(),
                         ruleBuilder);
 
@@ -292,7 +292,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                     @Override
                     public Void handle(IntegerValue integerValue) {
                         GrooveNode valueNode = ruleBuilder.contextNode(TYPE_INTEGER_VALUE);
-                        ruleBuilder.contextEdge(VALUE, var, valueNode);
+                        ruleBuilder.contextEdge(VALUE, variable, valueNode);
                         ruleBuilder.deleteEdge(VALUE, valueNode, ruleBuilder.contextNode(INT));
                         GrooveNode newValue = ruleBuilder.contextNode(INT + integerValue.getValue());
                         ruleBuilder.addEdge(VALUE, valueNode, newValue);
@@ -302,7 +302,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                     @Override
                     public Void handle(BooleanValue booleanValue) {
                         GrooveNode valueNode = ruleBuilder.contextNode(TYPE_BOOLEAN_VALUE);
-                        ruleBuilder.contextEdge(VALUE, var, valueNode);
+                        ruleBuilder.contextEdge(VALUE, variable, valueNode);
                         GrooveNode newValue;
                         if (booleanValue.getValue()) {
                             newValue = ruleBuilder.contextNode(TRUE);
@@ -536,11 +536,11 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
             String nodeType,
             String attributeValue,
             String attributeName) {
-        GrooveNode var = ruleBuilder.contextNode(nodeType);
+        GrooveNode variable = ruleBuilder.contextNode(nodeType);
         GrooveNode varName = ruleBuilder.contextNode(
                 GrooveTransformerHelper.createStringNodeLabel(attributeValue));
-        ruleBuilder.contextEdge(attributeName, var, varName);
-        return var;
+        ruleBuilder.contextEdge(attributeName, variable, varName);
+        return variable;
     }
 
     private GrooveNode createDiagramNodeWithName(GrooveRuleBuilder ruleBuilder, ActivityDiagram activityDiagram) {
