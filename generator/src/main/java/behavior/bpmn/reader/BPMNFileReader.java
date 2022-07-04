@@ -9,6 +9,7 @@ import behavior.bpmn.auxiliary.BPMNCollaborationBuilder;
 import behavior.bpmn.auxiliary.BPMNEventSubprocessBuilder;
 import behavior.bpmn.auxiliary.BPMNModelBuilder;
 import behavior.bpmn.auxiliary.BPMNProcessBuilder;
+import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.IntermediateCatchEvent;
 import behavior.bpmn.events.IntermediateThrowEvent;
@@ -114,13 +115,13 @@ public class BPMNFileReader {
         InteractionNode sourceInteractionNode = messageFlow.getSource();
         InteractionNode targetInteractionNode = messageFlow.getTarget();
         if (!(sourceInteractionNode instanceof FlowNode)) {
-            throw new RuntimeException(String.format("Message flow with id \"%s\" has an invalid source with id " +
+            throw new BPMNRuntimeException(String.format("Message flow with id \"%s\" has an invalid source with id " +
                                                      "\"%s\", which is not a flow node (event, activity, ...)!",
                                                      messageFlow.getId(),
                                                      sourceInteractionNode.getId()));
         }
         if (!(targetInteractionNode instanceof FlowNode)) {
-            throw new RuntimeException(String.format("Message flow with id \"%s\" has an invalid target with id " +
+            throw new BPMNRuntimeException(String.format("Message flow with id \"%s\" has an invalid target with id " +
                                                      "\"%s\", which is not a flow node (event, activity, ...)!",
                                                      messageFlow.getId(),
                                                      targetInteractionNode.getId()));
@@ -271,7 +272,7 @@ public class BPMNFileReader {
                 break;
             case "callActivity":
                 // Call Activity = Reusable sub-processes (external).
-                throw new RuntimeException("External subprocesses currently not supported!");
+                throw new BPMNRuntimeException("External subprocesses currently not supported!");
                 // Gateways
             case "parallelGateway":
                 resultingFlowNode = new ParallelGateway(flowNode.getId(), getFlowElementName(flowNode));
@@ -295,7 +296,7 @@ public class BPMNFileReader {
                                                         bpmnModelBuilder);
                 break;
             default:
-                throw new RuntimeException(String.format("Unknown task type \"%s\" found!", taskTypeName));
+                throw new BPMNRuntimeException(String.format("Unknown task type \"%s\" found!", taskTypeName));
         }
         if (resultingFlowNode != null) {
             bpmnModelBuilder.flowNode(resultingFlowNode);
@@ -355,7 +356,7 @@ public class BPMNFileReader {
 
             @Override
             public behavior.bpmn.events.BoundaryEvent handle(LinkEventDefinition evDefinition) {
-                throw new RuntimeException("A boundary event cannot be a linked event!");
+                throw new BPMNRuntimeException("A boundary event cannot be a linked event!");
             }
 
             @Override
@@ -368,7 +369,7 @@ public class BPMNFileReader {
 
             @Override
             public behavior.bpmn.events.BoundaryEvent handle(TerminateEventDefinition evDefinition) {
-                throw new RuntimeException("A boundary event cannot be a terminate event!");
+                throw new BPMNRuntimeException("A boundary event cannot be a terminate event!");
             }
 
             @Override
@@ -440,7 +441,7 @@ public class BPMNFileReader {
 
                 @Override
                 public EndEvent handle(LinkEventDefinition evDefinition) {
-                    throw new RuntimeException("End event definitions should not be of type link!");
+                    throw new BPMNRuntimeException("End event definitions should not be of type link!");
                 }
 
                 @Override
@@ -458,12 +459,12 @@ public class BPMNFileReader {
 
                 @Override
                 public EndEvent handle(TimerEventDefinition evDefinition) {
-                    throw new RuntimeException("End event definitions should not be of type timer!");
+                    throw new BPMNRuntimeException("End event definitions should not be of type timer!");
                 }
             };
             return this.visitDefinition(eventDefinition, visitor);
         }
-        throw new RuntimeException("Start event has more than one event definition!");
+        throw new BPMNRuntimeException("Start event has more than one event definition!");
     }
 
     private StartEvent mapStartEvent(FlowNode flowNode) {
@@ -489,7 +490,7 @@ public class BPMNFileReader {
 
                 @Override
                 public StartEvent handle(LinkEventDefinition evDefinition) {
-                    throw new RuntimeException("Start event definitions should not be of type link!");
+                    throw new BPMNRuntimeException("Start event definitions should not be of type link!");
                 }
 
                 @Override
@@ -509,17 +510,17 @@ public class BPMNFileReader {
 
                 @Override
                 public StartEvent handle(TerminateEventDefinition evDefinition) {
-                    throw new RuntimeException("Start event definitions should not be of type terminate!");
+                    throw new BPMNRuntimeException("Start event definitions should not be of type terminate!");
                 }
 
                 @Override
                 public StartEvent handle(TimerEventDefinition evDefinition) {
-                    throw new RuntimeException("Timer start events currently not supported!");
+                    throw new BPMNRuntimeException("Timer start events currently not supported!");
                 }
             };
             return this.visitDefinition(eventDefinition, visitor);
         }
-        throw new RuntimeException("Start event has more than one event definition!");
+        throw new BPMNRuntimeException("Start event has more than one event definition!");
     }
 
     private behavior.bpmn.events.EventDefinition mapSignalEventDefinition(SignalEventDefinition evDefinition,
@@ -537,7 +538,7 @@ public class BPMNFileReader {
                 (org.camunda.bpm.model.bpmn.instance.IntermediateCatchEvent) flowNode;
         Collection<EventDefinition> eventDefinitions = intermediateCatchEvent.getEventDefinitions();
         if (eventDefinitions.isEmpty()) {
-            throw new RuntimeException("Intermediate catch events need an event definition!");
+            throw new BPMNRuntimeException("Intermediate catch events need an event definition!");
         }
         if (eventDefinitions.size() == 1) {
             EventDefinition evDefinition = eventDefinitions.iterator().next();
@@ -566,7 +567,7 @@ public class BPMNFileReader {
 
                 @Override
                 public IntermediateCatchEvent handle(TerminateEventDefinition evDefinition) {
-                    throw new RuntimeException("Intermediate catch event definitions should not be of type terminate!");
+                    throw new BPMNRuntimeException("Intermediate catch event definitions should not be of type terminate!");
                 }
 
                 @Override
@@ -578,7 +579,7 @@ public class BPMNFileReader {
             };
             return this.visitDefinition(evDefinition, eventVisitor);
         }
-        throw new RuntimeException("Intermediate catch event has more than one event definition!");
+        throw new BPMNRuntimeException("Intermediate catch event has more than one event definition!");
     }
 
     private behavior.bpmn.FlowNode mapIntermediateThrowEvent(FlowNode flowNode) {
@@ -617,17 +618,17 @@ public class BPMNFileReader {
 
                 @Override
                 public IntermediateThrowEvent handle(TerminateEventDefinition evDefinition) {
-                    throw new RuntimeException("Intermediate throw event definitions should not be of type terminate!");
+                    throw new BPMNRuntimeException("Intermediate throw event definitions should not be of type terminate!");
                 }
 
                 @Override
                 public IntermediateThrowEvent handle(TimerEventDefinition evDefinition) {
-                    throw new RuntimeException("Intermediate throw event definitions should not be of type timer!");
+                    throw new BPMNRuntimeException("Intermediate throw event definitions should not be of type timer!");
                 }
             };
             return this.visitDefinition(evDefinition, eventVisitor);
         }
-        throw new RuntimeException("Intermediate throw event has more than one event definition!");
+        throw new BPMNRuntimeException("Intermediate throw event has more than one event definition!");
     }
 
     private <T> T visitDefinition(org.camunda.bpm.model.bpmn.instance.EventDefinition evDefinition,
@@ -647,6 +648,6 @@ public class BPMNFileReader {
         if (evDefinition instanceof TimerEventDefinition) {
             return eventVisitor.handle((TimerEventDefinition) evDefinition);
         }
-        throw new RuntimeException("Unknown event definition found!" + evDefinition);
+        throw new BPMNRuntimeException("Unknown event definition found!" + evDefinition);
     }
 }

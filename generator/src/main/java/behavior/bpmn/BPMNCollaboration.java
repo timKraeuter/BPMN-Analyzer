@@ -2,6 +2,7 @@ package behavior.bpmn;
 
 import behavior.Behavior;
 import behavior.BehaviorVisitor;
+import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 
 import java.util.LinkedHashSet;
 import java.util.Optional;
@@ -78,7 +79,7 @@ public class BPMNCollaboration implements Behavior {
         if (foundParentProcess.isPresent()) {
             return foundParentProcess.get();
         }
-        throw new RuntimeException("Parent process could not be found for event subprocess!" + eventSubprocess);
+        throw new ShouldNotHappenRuntimeException("Parent process could not be found for event subprocess!" + eventSubprocess);
     }
 
 
@@ -104,6 +105,6 @@ public class BPMNCollaboration implements Behavior {
             }
         }
         // Should not happen.
-        throw new RuntimeException(String.format("No process for the flow node %s found!", flowNode));
+        throw new ShouldNotHappenRuntimeException(String.format("No process for the flow node %s found!", flowNode));
     }
 }
