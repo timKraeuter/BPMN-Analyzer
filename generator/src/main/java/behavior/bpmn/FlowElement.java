@@ -1,13 +1,12 @@
 package behavior.bpmn;
 
-import behavior.bpmn.activities.tasks.Task;
 import com.google.common.base.Objects;
 
 public abstract class FlowElement {
     private final String id;
     private final String name;
 
-    public FlowElement(String id, String name) {
+    protected FlowElement(String id, String name) {
         this.id = id;
         this.name = name;
     }

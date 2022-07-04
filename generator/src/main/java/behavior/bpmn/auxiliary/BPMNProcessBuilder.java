@@ -5,12 +5,9 @@ import behavior.bpmn.FlowNode;
 import behavior.bpmn.Process;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.events.StartEvent;
-import com.google.common.base.Joiner;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 public class BPMNProcessBuilder implements BPMNModelBuilder {
     private final Set<SequenceFlow> sequenceFlows;
