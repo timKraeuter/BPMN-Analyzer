@@ -72,7 +72,6 @@ public class BPMNModelChecker {
             // Read the state space file and find the executed activities
             final Set<String> executedActivities = findExecutedActivitiesInStateSpace(stateSpaceTempFile);
 
-            // TODO: Not connected activities are not found due to the nature of my BPMN model.
             // Compare to all activities
             final Set<String> allActivityNames = getAllActivityNames();
             allActivityNames.removeAll(executedActivities);
