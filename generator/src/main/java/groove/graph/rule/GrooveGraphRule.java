@@ -1,6 +1,7 @@
 package groove.graph.rule;
 
 import api.GraphRule;
+import behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import groove.graph.GrooveEdge;
 import groove.graph.GrooveNode;
 
@@ -12,7 +13,6 @@ public class GrooveGraphRule implements GraphRule {
     private final Map<String, GrooveNode> nodesToBeAdded;
     private final Map<String, GrooveNode> contextNodes;
     private final Map<String, GrooveNode> nodesToBeDeleted;
-
     private final Map<String, GrooveEdge> edgesToBeAdded;
     private final Map<String, GrooveEdge> contextEdges;
     private final Map<String, GrooveEdge> edgesToBeDeleted;
@@ -35,19 +35,19 @@ public class GrooveGraphRule implements GraphRule {
 
     private void checkIfNotAlreadyDeleted(GrooveNode node) {
         if (this.nodesToBeDeleted.get(node.getId()) != null) {
-            throw new RuntimeException(String.format("Node %s already contained as a to-be-deleted node!", node));
+            throw new GrooveGenerationRuntimeException(String.format("Node %s already contained as a to-be-deleted node!", node));
         }
     }
 
     private void checkIfNotAlreadyInContext(GrooveNode node) {
         if (this.contextNodes.get(node.getId()) != null) {
-            throw new RuntimeException(String.format("Node %s already contained as a context node!", node));
+            throw new GrooveGenerationRuntimeException(String.format("Node %s already contained as a context node!", node));
         }
     }
 
     private void checkIfNotAlreadyAdded(GrooveNode contextNode) {
         if (this.nodesToBeAdded.get(contextNode.getId()) != null) {
-            throw new RuntimeException(String.format("Node %s already contained as a to-be-added node!", contextNode));
+            throw new GrooveGenerationRuntimeException(String.format("Node %s already contained as a to-be-added node!", contextNode));
         }
     }
 
