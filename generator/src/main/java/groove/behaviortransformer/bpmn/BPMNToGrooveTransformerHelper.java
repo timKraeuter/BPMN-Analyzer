@@ -3,6 +3,7 @@ package groove.behaviortransformer.bpmn;
 import behavior.bpmn.Process;
 import behavior.bpmn.*;
 import behavior.bpmn.activities.CallActivity;
+import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import behavior.bpmn.events.StartEvent;
 import groove.behaviortransformer.GrooveTransformer;
 import groove.graph.GrooveNode;
@@ -224,7 +225,7 @@ public class BPMNToGrooveTransformerHelper {
                 target.getIncomingFlows().anyMatch(sequenceFlow -> sequenceFlow.getSource().isExclusiveEventBasedGateway() &&
                                                                                                  sequenceFlow.getSource().isInstantiateFlowNode());
         if (isAfterInstantiateEVGateway && target.getIncomingFlows().count() > 1) {
-            throw new RuntimeException(
+            throw new BPMNRuntimeException(
                     "Multiple incoming sequence flows into a message event after an instantiate event based gateway! " +
                     "Only the sequence flow from the event based gateway is allowed.");
         }
