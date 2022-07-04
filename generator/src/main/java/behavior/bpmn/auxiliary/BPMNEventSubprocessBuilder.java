@@ -11,11 +11,13 @@ import java.util.Set;
 
 public class BPMNEventSubprocessBuilder implements BPMNModelBuilder {
     private final Set<SequenceFlow> sequenceFlows;
+    private final Set<FlowNode> flowNodes;
     private final Set<EventSubprocess> eventSubprocesses;
     private String name;
 
     public BPMNEventSubprocessBuilder() {
         this.sequenceFlows = new LinkedHashSet<>();
+        flowNodes = new LinkedHashSet<>();
         eventSubprocesses = new LinkedHashSet<>();
     }
 
@@ -24,16 +26,22 @@ public class BPMNEventSubprocessBuilder implements BPMNModelBuilder {
         return this;
     }
 
-    public BPMNEventSubprocessBuilder sequenceFlow(String name, FlowNode from, FlowNode to) {
-        final SequenceFlow sequenceFlow = new SequenceFlow(name, from, to);
+    public BPMNEventSubprocessBuilder sequenceFlow(String id, String name, FlowNode from, FlowNode to) {
+        final SequenceFlow sequenceFlow = new SequenceFlow(id, name, from, to);
         this.sequenceFlows.add(sequenceFlow);
         from.addOutgoingSequenceFlow(sequenceFlow);
         to.addIncomingSequenceFlow(sequenceFlow);
         return this;
     }
 
-    public BPMNEventSubprocessBuilder sequenceFlow(FlowNode from, FlowNode to) {
-        return sequenceFlow("", from, to);
+    public BPMNEventSubprocessBuilder sequenceFlow(String id, FlowNode from, FlowNode to) {
+        return sequenceFlow(id, "", from, to);
+    }
+
+    @Override
+    public BPMNModelBuilder flowNode(FlowNode flowNode) {
+        flowNodes.add(flowNode);
+        return this;
     }
 
     @Override
@@ -54,6 +62,6 @@ public class BPMNEventSubprocessBuilder implements BPMNModelBuilder {
     }
 
     public EventSubprocess build() {
-        return new EventSubprocess(name, sequenceFlows, eventSubprocesses);
+        return new EventSubprocess(name, sequenceFlows, flowNodes, eventSubprocesses);
     }
 }

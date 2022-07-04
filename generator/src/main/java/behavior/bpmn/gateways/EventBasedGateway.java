@@ -10,12 +10,12 @@ public class EventBasedGateway extends Gateway {
 
     private final boolean instantiate;
 
-    public EventBasedGateway(String name) {
-        this(name, false);
+    public EventBasedGateway(String id, String name) {
+        this(id, name, false);
     }
 
-    public EventBasedGateway(String name, boolean instantiate) {
-        super(name);
+    public EventBasedGateway(String id, String name, boolean instantiate) {
+        super(id, name);
         this.instantiate = instantiate;
     }
 
@@ -47,12 +47,15 @@ public class EventBasedGateway extends Gateway {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+        if (!super.equals(o)) {
+            return false;
+        }
         EventBasedGateway that = (EventBasedGateway) o;
-        return getName().equals(that.getName()) && instantiate == that.instantiate;
+        return instantiate == that.instantiate;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getName(), instantiate);
+        return Objects.hashCode(super.hashCode(), instantiate);
     }
 }

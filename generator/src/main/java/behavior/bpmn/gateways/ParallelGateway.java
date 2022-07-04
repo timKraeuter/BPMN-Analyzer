@@ -3,8 +3,8 @@ package behavior.bpmn.gateways;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
 public class ParallelGateway extends Gateway {
-    public ParallelGateway(String name) {
-        super(name);
+    public ParallelGateway(String id, String name) {
+        super(id, name);
     }
 
     @Override

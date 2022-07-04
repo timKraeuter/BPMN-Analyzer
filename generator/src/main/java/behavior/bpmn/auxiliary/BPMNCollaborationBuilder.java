@@ -62,8 +62,8 @@ public class BPMNCollaborationBuilder implements BPMNModelBuilder {
     }
 
     @Override
-    public BPMNCollaborationBuilder sequenceFlow(String name, FlowNode from, FlowNode to) {
-        currentProcessBuilder.sequenceFlow(name, from, to);
+    public BPMNCollaborationBuilder sequenceFlow(String id, String name, FlowNode from, FlowNode to) {
+        currentProcessBuilder.sequenceFlow(id, name, from, to);
 
         this.findAndAddSubProcessIfPresent(from);
         this.findAndAddSubProcessIfPresent(to);
@@ -92,7 +92,7 @@ public class BPMNCollaborationBuilder implements BPMNModelBuilder {
                 Process subProcessModel = callActivity.getSubProcessModel();
                 if (!subprocesses.contains(subProcessModel) || !participants.contains(subProcessModel)) {
                     subprocesses.add(subProcessModel);
-                    subProcessModel.getControlFlowNodes().forEach(BPMNCollaborationBuilder.this::findAndAddSubProcessIfPresent);
+                    subProcessModel.getFlowNodes().forEach(BPMNCollaborationBuilder.this::findAndAddSubProcessIfPresent);
                 }
             }
 
@@ -139,8 +139,15 @@ public class BPMNCollaborationBuilder implements BPMNModelBuilder {
     }
 
     @Override
-    public BPMNCollaborationBuilder sequenceFlow(FlowNode from, FlowNode to) {
-        return sequenceFlow("", from, to);
+    public BPMNCollaborationBuilder sequenceFlow(String id, FlowNode from, FlowNode to) {
+        return sequenceFlow(id, "", from, to);
+    }
+
+    @Override
+    public BPMNModelBuilder flowNode(FlowNode flowNode) {
+        currentProcessBuilder.flowNode(flowNode);
+        this.findAndAddSubProcessIfPresent(flowNode);
+        return this;
     }
 
     public BPMNCollaborationBuilder buildProcess() {
@@ -155,7 +162,9 @@ public class BPMNCollaborationBuilder implements BPMNModelBuilder {
     }
 
     public BPMNCollaboration build() {
-        if (!currentProcessBuilder.getStartEvents().isEmpty() || currentProcessBuilder.getSequenceFlows().size() >= 1) {
+        if (!currentProcessBuilder.getStartEvents().isEmpty() ||
+            currentProcessBuilder.getFlowNodes().size() >= 1 ||
+            currentProcessBuilder.getSequenceFlows().size() >= 1) {
             this.buildProcess();
         }
         return new BPMNCollaboration(name, participants, subprocesses, messageFlows);

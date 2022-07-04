@@ -22,8 +22,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class EventSubprocess extends AbstractProcess {
-    public EventSubprocess(String name, Set<SequenceFlow> sequenceFlows, Set<EventSubprocess> eventSubprocesses) {
-        super(name, sequenceFlows, eventSubprocesses);
+    public EventSubprocess(String name,
+                           Set<SequenceFlow> sequenceFlows,
+                           Set<FlowNode> flowNodes,
+                           Set<EventSubprocess> eventSubprocesses) {
+        super(name, sequenceFlows, flowNodes, eventSubprocesses);
     }
 
     @Override
@@ -32,72 +35,70 @@ public class EventSubprocess extends AbstractProcess {
     }
 
     public Set<StartEvent> getStartEvents() {
-        return this.getControlFlowNodes().map(flowNode -> {
-                       ValueWrapper<StartEvent> valueWrapper = new ValueWrapper<>();
-                       flowNode.accept(new FlowNodeVisitor() {
-                           @Override
-                           public void handle(Task task) {
-                               // Not a start event
-                           }
+        return this.getFlowNodes().map(flowNode -> {
+            ValueWrapper<StartEvent> valueWrapper = new ValueWrapper<>();
+            flowNode.accept(new FlowNodeVisitor() {
+                @Override
+                public void handle(Task task) {
+                    // Not a start event
+                }
 
-                           @Override
-                           public void handle(SendTask task) {
-                               // Not a start event
-                           }
+                @Override
+                public void handle(SendTask task) {
+                    // Not a start event
+                }
 
-                           @Override
-                           public void handle(ReceiveTask task) {
-                               // Not a start event
-                           }
+                @Override
+                public void handle(ReceiveTask task) {
+                    // Not a start event
+                }
 
-                           @Override
-                           public void handle(CallActivity callActivity) {
-                               // Not a start event
-                           }
+                @Override
+                public void handle(CallActivity callActivity) {
+                    // Not a start event
+                }
 
-                           @Override
-                           public void handle(ExclusiveGateway exclusiveGateway) {
-                               // Not a start event
-                           }
+                @Override
+                public void handle(ExclusiveGateway exclusiveGateway) {
+                    // Not a start event
+                }
 
-                           @Override
-                           public void handle(ParallelGateway parallelGateway) {
-                               // Not a start event
-                           }
+                @Override
+                public void handle(ParallelGateway parallelGateway) {
+                    // Not a start event
+                }
 
-                           @Override
-                           public void handle(InclusiveGateway inclusiveGateway) {
-                               // Not a start event
-                           }
+                @Override
+                public void handle(InclusiveGateway inclusiveGateway) {
+                    // Not a start event
+                }
 
-                           @Override
-                           public void handle(StartEvent startEvent) {
-                               valueWrapper.setValue(startEvent);
-                           }
+                @Override
+                public void handle(StartEvent startEvent) {
+                    valueWrapper.setValue(startEvent);
+                }
 
-                           @Override
-                           public void handle(IntermediateThrowEvent intermediateThrowEvent) {
-                               // Not a start event
-                           }
+                @Override
+                public void handle(IntermediateThrowEvent intermediateThrowEvent) {
+                    // Not a start event
+                }
 
-                           @Override
-                           public void handle(IntermediateCatchEvent intermediateCatchEvent) {
-                               // Not a start event
-                           }
+                @Override
+                public void handle(IntermediateCatchEvent intermediateCatchEvent) {
+                    // Not a start event
+                }
 
-                           @Override
-                           public void handle(EndEvent endEvent) {
-                               // Not a start event
-                           }
+                @Override
+                public void handle(EndEvent endEvent) {
+                    // Not a start event
+                }
 
-                           @Override
-                           public void handle(EventBasedGateway eventBasedGateway) {
-                               // Not a start event
-                           }
-                       });
-                       return valueWrapper.getValueIfExists();
-                   })
-                   .filter(Objects::nonNull)
-                   .collect(Collectors.toCollection(LinkedHashSet::new));
+                @Override
+                public void handle(EventBasedGateway eventBasedGateway) {
+                    // Not a start event
+                }
+            });
+            return valueWrapper.getValueIfExists();
+        }).filter(Objects::nonNull).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }

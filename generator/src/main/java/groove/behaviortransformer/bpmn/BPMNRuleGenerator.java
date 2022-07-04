@@ -84,7 +84,7 @@ public class BPMNRuleGenerator {
     }
 
     public void generateRulesForProcess(AbstractProcess process) {
-        process.getControlFlowNodes().forEach(node -> node.accept(new RuleGenerationFlowNodeVisitor(this, process)));
+        process.getFlowNodes().forEach(node -> node.accept(new RuleGenerationFlowNodeVisitor(this, process)));
 
         getEventSubprocessRuleGenerator().generateRulesForEventSubprocesses(process);
     }

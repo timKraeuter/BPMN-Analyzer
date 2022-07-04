@@ -3,8 +3,8 @@ package behavior.bpmn.gateways;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
 public class InclusiveGateway extends Gateway {
-    public InclusiveGateway(String name) {
-        super(name);
+    public InclusiveGateway(String id, String name) {
+        super(id, name);
     }
 
     @Override

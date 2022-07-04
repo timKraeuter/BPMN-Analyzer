@@ -2,6 +2,7 @@ package behavior.bpmn.reader;
 
 import behavior.bpmn.Process;
 import behavior.bpmn.*;
+import behavior.bpmn.activities.Activity;
 import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.Task;
@@ -22,7 +23,9 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
 
@@ -42,29 +45,42 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(participant.getName(), is(name));
 
         assertThat(participant.getSequenceFlows().count(), is(10L));
-        assertThat(participant.getControlFlowNodes().count(), is(11L));
+        assertThat(participant.getFlowNodes().count(), is(11L));
         // Sequence flows between the right flow nodes.
         Set<String> sequenceFlowIds = getSequenceFlowIdsForProcess(participant);
-        assertThat(
-                sequenceFlowIds,
-                is(Sets.newHashSet(
-                        "start_task",
-                        "task_sendTask",
-                        "sendTask_receiveTask",
-                        "receiveTask_userTask",
-                        "userTask_manualTask",
-                        "manualTask_businessRTask",
-                        "businessRTask_serviceTask",
-                        "serviceTask_scriptTask",
-                        "scriptTask_subprocess",
-                        "subprocess_end")));
+        assertThat(sequenceFlowIds,
+                   is(Sets.newHashSet("start_task",
+                                      "task_sendTask",
+                                      "sendTask_receiveTask",
+                                      "receiveTask_userTask",
+                                      "userTask_manualTask",
+                                      "manualTask_businessRTask",
+                                      "businessRTask_serviceTask",
+                                      "serviceTask_scriptTask",
+                                      "scriptTask_subprocess",
+                                      "subprocess_end")));
 
         // Check instantiate receive task
         Map<String, FlowNode> flowNodes = createFlowNodeNameToFlowNodeMap(participant);
         String receiveTaskName = "receiveTask";
         FlowNode instantiateReceiveTask = flowNodes.get(receiveTaskName);
         // Instantiate must be true!
-        assertThat(instantiateReceiveTask, is(new ReceiveTask(receiveTaskName, true)));
+        assertThat(instantiateReceiveTask, is(new ReceiveTask("Activity_0xr3zq4", receiveTaskName, true)));
+    }
+
+    @Test
+    void readUnconnectedElements() {
+        BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "unconnected.bpmn");
+
+        // Expect the model shown here: https://cawemo.com/share/11f6314a-43f9-475d-94ae-149ad85119c1
+        assertNotNull(result);
+        assertThat(result.getParticipants().size(), is(1));
+        Process participant = result.getParticipants().iterator().next();
+        assertThat(participant.getSequenceFlows().count(), is(0L));
+        assertThat(participant.getFlowNodes().count(), is(3L));
+        // Check flow nodes
+        Map<String, FlowNode> flowNodes = createFlowNodeNameToFlowNodeMap(participant);
+        assertThat(flowNodes.keySet(), is(Sets.newHashSet("start", "Task", "end")));
     }
 
     @Test
@@ -81,22 +97,22 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(participant.getName(), is(name));
 
         assertThat(participant.getSequenceFlows().count(), is(4L));
-        assertThat(participant.getControlFlowNodes().count(), is(5L));
+        assertThat(participant.getFlowNodes().count(), is(5L));
 
         // Sequence flows between the right flow nodes.
         Set<String> sequenceFlowIds = getSequenceFlowIdsForProcess(participant);
-        assertThat(
-                sequenceFlowIds,
-                is(Sets.newHashSet("inclusive gateway_parallel gateway",
-                                   "parallel gateway_exclusive gateway",
-                                   "exclusive gateway_event gateway",
-                                   "exclusive gateway_instantiate event gateway")));
+        assertThat(sequenceFlowIds,
+                   is(Sets.newHashSet("inclusive gateway_parallel gateway",
+                                      "parallel gateway_exclusive gateway",
+                                      "exclusive gateway_event gateway",
+                                      "exclusive gateway_instantiate event gateway")));
 
         // Check if instantiate was read correctly for the event gateway.
         Map<String, FlowNode> flowNodes = createFlowNodeNameToFlowNodeMap(participant);
         String evGatewayName = "instantiate event gateway";
         FlowNode instantiate_event_gateway = flowNodes.get(evGatewayName);
-        assertThat(instantiate_event_gateway, is(new EventBasedGateway(evGatewayName, true)));
+        assertThat(instantiate_event_gateway,
+                   is(new EventBasedGateway(instantiate_event_gateway.getId(), evGatewayName, true)));
     }
 
     @Test
@@ -113,91 +129,116 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(participant.getName(), is(name));
 
         assertThat(participant.getSequenceFlows().count(), is(15L));
-        assertThat(participant.getControlFlowNodes().count(), is(18L));
+        assertThat(participant.getFlowNodes().count(), is(18L));
         // Sequence flows between the right flow nodes.
         Set<String> sequenceFlowIds = getSequenceFlowIdsForProcess(participant);
-        assertThat(
-                sequenceFlowIds,
-                is(Sets.newHashSet(
-                        "start_e1",
-                        "messageStart_e1",
-                        "signalStart_e1",
-                        "e3_messageEnd",
-                        "e3_signalEnd",
-                        "e3_terminateEnd",
-                        "e3_end",
-                        "linkCEvent_e2",
-                        "timerCEvent_e2",
-                        "intermediateEvent_e2",
-                        "messageCEvent_e2",
-                        "messageTEvent_e2",
-                        "e2_linkTEvent",
-                        "signalCEvent_e2",
-                        "signalTEvent_e2")));
+        assertThat(sequenceFlowIds,
+                   is(Sets.newHashSet("start_e1",
+                                      "messageStart_e1",
+                                      "signalStart_e1",
+                                      "e3_messageEnd",
+                                      "e3_signalEnd",
+                                      "e3_terminateEnd",
+                                      "e3_end",
+                                      "linkCEvent_e2",
+                                      "timerCEvent_e2",
+                                      "intermediateEvent_e2",
+                                      "messageCEvent_e2",
+                                      "messageTEvent_e2",
+                                      "e2_linkTEvent",
+                                      "signalCEvent_e2",
+                                      "signalTEvent_e2")));
 
         Map<String, FlowNode> flowNodes = createFlowNodeNameToFlowNodeMap(participant);
         // Check start events
         String startEventName = "start";
-        assertThat(flowNodes.get(startEventName), is(new StartEvent(startEventName)));
+        FlowNode startEvent = flowNodes.get(startEventName);
+        assertThat(startEvent, is(new StartEvent(startEvent.getId(), startEventName)));
         String messageStartEventName = "messageStart";
-        assertThat(flowNodes.get(messageStartEventName),
-                   is(new StartEvent(messageStartEventName, StartEventType.MESSAGE)));
+        FlowNode messageStartEvent = flowNodes.get(messageStartEventName);
+        assertThat(messageStartEvent,
+                   is(new StartEvent(messageStartEvent.getId(), messageStartEventName, StartEventType.MESSAGE)));
         String signalStartEventName = "signalStart";
         String startEndSignalEventDefinition = "Signal_113rm6n";
-        assertThat(flowNodes.get(signalStartEventName),
-                   is(new StartEvent(
-                           signalStartEventName,
-                           StartEventType.SIGNAL,
-                           new EventDefinition(startEndSignalEventDefinition))));
+        FlowNode signalStartEvent = flowNodes.get(signalStartEventName);
+        assertThat(signalStartEvent,
+                   is(new StartEvent(signalStartEvent.getId(),
+                                     signalStartEventName,
+                                     StartEventType.SIGNAL,
+                                     new EventDefinition(startEndSignalEventDefinition))));
 
         // Check intermediate events
         String intermediateEventName = "intermediateEvent";
-        assertThat(flowNodes.get(intermediateEventName), is(new IntermediateThrowEvent(
-                intermediateEventName,
-                IntermediateThrowEventType.NONE)));
+        FlowNode intermediateEvent = flowNodes.get(intermediateEventName);
+        assertThat(intermediateEvent,
+                   is(new IntermediateThrowEvent(intermediateEvent.getId(),
+                                                 intermediateEventName,
+                                                 IntermediateThrowEventType.NONE)));
         String messageCEventName = "messageCEvent";
-        assertThat(flowNodes.get(messageCEventName),
-                   is(new IntermediateCatchEvent(messageCEventName, IntermediateCatchEventType.MESSAGE)));
+        FlowNode messageCatchEvent = flowNodes.get(messageCEventName);
+        assertThat(messageCatchEvent,
+                   is(new IntermediateCatchEvent(messageCatchEvent.getId(),
+                                                 messageCEventName,
+                                                 IntermediateCatchEventType.MESSAGE)));
         String messageTEventName = "messageTEvent";
-        assertThat(flowNodes.get(messageTEventName),
-                   is(new IntermediateThrowEvent(messageTEventName, IntermediateThrowEventType.MESSAGE)));
+        FlowNode messageTEvent = flowNodes.get(messageTEventName);
+        assertThat(messageTEvent,
+                   is(new IntermediateThrowEvent(messageTEvent.getId(),
+                                                 messageTEventName,
+                                                 IntermediateThrowEventType.MESSAGE)));
         String linkCEventName = "linkCEvent";
-        assertThat(flowNodes.get(linkCEventName),
-                   is(new IntermediateCatchEvent(linkCEventName, IntermediateCatchEventType.LINK)));
+        FlowNode linkCEvent = flowNodes.get(linkCEventName);
+        assertThat(linkCEvent,
+                   is(new IntermediateCatchEvent(linkCEvent.getId(),
+                                                 linkCEventName,
+                                                 IntermediateCatchEventType.LINK)));
         String signalCEventName = "signalCEvent";
         String intermediateSignalEventDefinition = "Signal_1ni52ju";
-        assertThat(flowNodes.get(signalCEventName),
-                   is(new IntermediateCatchEvent(
-                           signalCEventName,
-                           IntermediateCatchEventType.SIGNAL,
-                           new EventDefinition(intermediateSignalEventDefinition))));
+        FlowNode signalCEvent = flowNodes.get(signalCEventName);
+        assertThat(signalCEvent,
+                   is(new IntermediateCatchEvent(signalCEvent.getId(),
+                                                 signalCEventName,
+                                                 IntermediateCatchEventType.SIGNAL,
+                                                 new EventDefinition(intermediateSignalEventDefinition))));
         String signalTEventName = "signalTEvent";
-        assertThat(flowNodes.get(signalTEventName),
-                   is(new IntermediateThrowEvent(
-                           signalTEventName,
-                           IntermediateThrowEventType.SIGNAL,
-                           new EventDefinition(intermediateSignalEventDefinition))));
+        FlowNode signalTEvent = flowNodes.get(signalTEventName);
+        assertThat(signalTEvent,
+                   is(new IntermediateThrowEvent(signalTEvent.getId(),
+                                                 signalTEventName,
+                                                 IntermediateThrowEventType.SIGNAL,
+                                                 new EventDefinition(intermediateSignalEventDefinition))));
         String linkTEventName = "linkTEvent";
-        assertThat(flowNodes.get(linkTEventName),
-                   is(new IntermediateThrowEvent(linkTEventName, IntermediateThrowEventType.LINK)));
+        FlowNode linkTEvent = flowNodes.get(linkTEventName);
+        assertThat(linkTEvent,
+                   is(new IntermediateThrowEvent(linkTEvent.getId(),
+                                                 linkTEventName,
+                                                 IntermediateThrowEventType.LINK)));
         String timerCEventName = "timerCEvent";
-        assertThat(flowNodes.get(timerCEventName),
-                   is(new IntermediateCatchEvent(timerCEventName, IntermediateCatchEventType.TIMER)));
+        FlowNode timerCEvent = flowNodes.get(timerCEventName);
+        assertThat(timerCEvent,
+                   is(new IntermediateCatchEvent(timerCEvent.getId(),
+                                                 timerCEventName,
+                                                 IntermediateCatchEventType.TIMER)));
 
         // Check end events
         String endEventName = "end";
-        assertThat(flowNodes.get(endEventName), is(new EndEvent(endEventName)));
+        FlowNode endEvent = flowNodes.get(endEventName);
+        assertThat(endEvent, is(new EndEvent(endEvent.getId(), endEventName)));
         String messageEndEventName = "messageEnd";
-        assertThat(flowNodes.get(messageEndEventName), is(new EndEvent(messageEndEventName, EndEventType.MESSAGE)));
+        FlowNode messageEndEvent = flowNodes.get(messageEndEventName);
+        assertThat(messageEndEvent,
+                   is(new EndEvent(messageEndEvent.getId(), messageEndEventName, EndEventType.MESSAGE)));
         String signalEndEventName = "signalEnd";
-        assertThat(flowNodes.get(signalEndEventName),
-                   is(new EndEvent(
-                           signalEndEventName,
-                           EndEventType.SIGNAL,
-                           new EventDefinition(startEndSignalEventDefinition))));
+        FlowNode signalEndEvent = flowNodes.get(signalEndEventName);
+        assertThat(signalEndEvent,
+                   is(new EndEvent(signalEndEvent.getId(),
+                                   signalEndEventName,
+                                   EndEventType.SIGNAL,
+                                   new EventDefinition(startEndSignalEventDefinition))));
         String terminateEndEventName = "terminateEnd";
-        assertThat(flowNodes.get(terminateEndEventName), is(new EndEvent(terminateEndEventName,
-                                                                         EndEventType.TERMINATION)));
+        FlowNode terminateEndEvent = flowNodes.get(terminateEndEventName);
+        assertThat(terminateEndEvent,
+                   is(new EndEvent(terminateEndEvent.getId(), terminateEndEventName, EndEventType.TERMINATION)));
     }
 
     @Test
@@ -215,28 +256,51 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         Process participant2 = it.next();
         assertThat(participant2.getName(), is("Activity boundary events"));
         assertThat(participant2.getSequenceFlows().count(), is(9L));
-        assertThat(participant2.getControlFlowNodes().count(), is(17L));
+        assertThat(participant2.getFlowNodes().count(), is(17L));
 
         // Check boundary events for activity 1 and 2.
         Map<String, FlowNode> p2flowNodes = createFlowNodeNameToFlowNodeMap(participant2);
         String activity1Name = "Activity1";
-        Task activity1Expected = new Task(activity1Name);
-        activity1Expected.attachBoundaryEvent(new BoundaryEvent("m1", BoundaryEventType.MESSAGE, true));
-        activity1Expected.attachBoundaryEvent(new BoundaryEvent("t1", BoundaryEventType.TIMER, true));
-        activity1Expected.attachBoundaryEvent(new BoundaryEvent("s1", BoundaryEventType.SIGNAL, true));
-        activity1Expected.attachBoundaryEvent(new BoundaryEvent("n1", BoundaryEventType.NONE, true));
-
         FlowNode activity1 = p2flowNodes.get(activity1Name);
-        assertThat(activity1, is(activity1));
+        Task activity1Expected = new Task(activity1.getId(), activity1Name);
+        activity1Expected.attachBoundaryEvent(new BoundaryEvent("Event_0f3lbm7",
+                                                                "n1",
+                                                                BoundaryEventType.NONE,
+                                                                true));
+        activity1Expected.attachBoundaryEvent(new BoundaryEvent("Event_0lmpr4f",
+                                                                "s1",
+                                                                BoundaryEventType.SIGNAL,
+                                                                true));
+        activity1Expected.attachBoundaryEvent(new BoundaryEvent("Event_0bz0xda",
+                                                                "m1",
+                                                                BoundaryEventType.MESSAGE,
+                                                                true));
+        activity1Expected.attachBoundaryEvent(new BoundaryEvent("Event_0h1b9o9",
+                                                                "t1",
+                                                                BoundaryEventType.TIMER,
+                                                                true));
+
+        assertThat(activity1Expected, is(activity1));
+        assertThat(((Activity) activity1).getBoundaryEvents(), is(activity1Expected.getBoundaryEvents()));
 
         String activity2Name = "Activity2";
-        Task activity2Expected = new Task(activity2Name);
-        activity2Expected.attachBoundaryEvent(new BoundaryEvent("m2", BoundaryEventType.MESSAGE, false));
-        activity2Expected.attachBoundaryEvent(new BoundaryEvent("t2", BoundaryEventType.TIMER, false));
-        activity2Expected.attachBoundaryEvent(new BoundaryEvent("s2", BoundaryEventType.SIGNAL, false));
-
         FlowNode activity2 = p2flowNodes.get(activity2Name);
+        Task activity2Expected = new Task(activity2.getId(), activity2Name);
+        activity2Expected.attachBoundaryEvent(new BoundaryEvent("Event_1knnzz6",
+                                                                "m2",
+                                                                BoundaryEventType.MESSAGE,
+                                                                false));
+        activity2Expected.attachBoundaryEvent(new BoundaryEvent("Event_1bl83g8",
+                                                                "t2",
+                                                                BoundaryEventType.TIMER,
+                                                                false));
+        activity2Expected.attachBoundaryEvent(new BoundaryEvent("Event_1mu3twa",
+                                                                "s2",
+                                                                BoundaryEventType.SIGNAL,
+                                                                false));
+
         assertThat(activity2, is(activity2Expected));
+        assertThat(((Activity) activity2).getBoundaryEvents(), is(activity2Expected.getBoundaryEvents()));
 
         Set<String> sequenceFlowIdsForProcess = getSequenceFlowIdsForProcess(participant2);
         assertThat(sequenceFlowIdsForProcess,
@@ -252,21 +316,28 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
 
         assertThat(participant1.getName(), is("Subprocess boundary events"));
         assertThat(participant1.getSequenceFlows().count(), is(10L));
-        assertThat(participant1.getControlFlowNodes().count(), is(15L));
+        assertThat(participant1.getFlowNodes().count(), is(18L));
 
         // Check boundary events for subprocess s1 and s2.
         Map<String, FlowNode> p1FlowNodes = createFlowNodeNameToFlowNodeMap(participant1);
         CallActivity subprocess1 = (CallActivity) p1FlowNodes.get("S1");
         CallActivity subprocess2 = (CallActivity) p1FlowNodes.get("S2");
         // S1 has the same boundary events as activity 1 same for s2 and activity 2.
-        assertThat(subprocess1.getBoundaryEvents(), is(Sets.newHashSet(activity1Expected.getBoundaryEvents())));
-        assertThat(subprocess2.getBoundaryEvents(), is(Sets.newHashSet(activity2Expected.getBoundaryEvents())));
+        assertThat(subprocess1.getBoundaryEvents().size(), is(4));
+        assertTrue(subprocess1.getBoundaryEvents().contains(new BoundaryEvent("Event_1wiourw",
+                                                                              "n1",
+                                                                              BoundaryEventType.NONE,
+                                                                              true)));
+        assertThat(subprocess2.getBoundaryEvents().size(), is(3));
+        assertTrue(subprocess2.getBoundaryEvents().contains(new BoundaryEvent("Event_1cwazog",
+                                                                              "m2",
+                                                                              BoundaryEventType.MESSAGE,
+                                                                              false)));
     }
 
     private Set<String> getSequenceFlowIdsForProcess(Process participant) {
-        return participant.getSequenceFlows()
-                          .map(SequenceFlow::getID)
-                          .collect(Collectors.toCollection(LinkedHashSet::new));
+        return participant.getSequenceFlows().map(SequenceFlow::getDescriptiveID).collect(Collectors.toCollection(
+                LinkedHashSet::new));
     }
 
     @Test
@@ -284,21 +355,20 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         Process participant1 = it.next();
         assertThat(participant1.getName(), is("p1"));
         assertThat(participant1.getSequenceFlows().count(), is(3L));
-        assertThat(participant1.getControlFlowNodes().count(), is(4L));
+        assertThat(participant1.getFlowNodes().count(), is(4L));
 
         // Check p2
         Process participant2 = it.next();
         assertThat(participant2.getName(), is("p2"));
         assertThat(participant2.getSequenceFlows().count(), is(3L));
-        assertThat(participant2.getControlFlowNodes().count(), is(4L));
+        assertThat(participant2.getFlowNodes().count(), is(4L));
 
         // Check message flows
         assertThat(result.getMessageFlows().size(), is(3));
-        Set<String> messageFlowNames = result.getMessageFlows().stream()
-                                             .map(MessageFlow::getName)
-                                             .collect(Collectors.toSet());
-        assertThat(messageFlowNames, is(Sets.newHashSet("sendEvent_startP2", "SendTask_receiveEvent",
-                                                        "endP1_ReceiveTask")));
+        Set<String> messageFlowNames =
+                result.getMessageFlows().stream().map(MessageFlow::getName).collect(Collectors.toSet());
+        assertThat(messageFlowNames,
+                   is(Sets.newHashSet("sendEvent_startP2", "SendTask_receiveEvent", "endP1_ReceiveTask")));
     }
 
     @Test
@@ -312,7 +382,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         Process participant = result.getParticipants().iterator().next();
         assertThat(participant.getName(), is("subprocesses"));
 
-        assertThat(participant.getControlFlowNodes().count(), is(3L));
+        assertThat(participant.getFlowNodes().count(), is(3L));
         // Check sequence flows
         Set<String> sequenceFlowIds = getSequenceFlowIdsForProcess(participant);
         assertThat(sequenceFlowIds, is(Sets.newHashSet("start_Sub1", "Sub1_end")));
@@ -350,13 +420,13 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         Process participant = result.getParticipants().iterator().next();
         assertThat(participant.getName(), is("process"));
 
-        assertThat(participant.getControlFlowNodes().count(), is(0L));
+        assertThat(participant.getFlowNodes().count(), is(0L));
         assertThat(participant.getEventSubprocesses().count(), is(1L));
 
         @SuppressWarnings("OptionalGetWithoutIsPresent") // Count is 1 means exactly one is present.
         EventSubprocess eventSubprocess1 = participant.getEventSubprocesses().findFirst().get();
         assertThat(eventSubprocess1.getName(), is("Event subprocess1"));
-        assertThat(eventSubprocess1.getControlFlowNodes().count(), is(8L));
+        assertThat(eventSubprocess1.getFlowNodes().count(), is(8L));
         assertThat(eventSubprocess1.getSequenceFlows().count(), is(4L));
 
         Set<StartEvent> startEvents = eventSubprocess1.getStartEvents();
@@ -364,27 +434,34 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
 
         String signalNonStartName = "signalNon";
         String signalStartName = "signal";
-        assertThat(startEvents, is(Sets.newHashSet(
-                new StartEvent("msgNon", StartEventType.MESSAGE_NON_INTERRUPTING),
-                new StartEvent("msg", StartEventType.MESSAGE),
-                new StartEvent(signalNonStartName, StartEventType.SIGNAL_NON_INTERRUPTING,
-                               new EventDefinition(signalNonStartName)),
-                new StartEvent(signalStartName, StartEventType.SIGNAL, new EventDefinition(signalStartName))
-        )));
+        assertThat(startEvents,
+                   is(Sets.newHashSet(new StartEvent("Event_0ylomzh",
+                                                     "msgNon",
+                                                     StartEventType.MESSAGE_NON_INTERRUPTING),
+                                      new StartEvent("Event_1jhx76i", "msg", StartEventType.MESSAGE),
+                                      new StartEvent("Event_0two4fk",
+                                                     signalNonStartName,
+                                                     StartEventType.SIGNAL_NON_INTERRUPTING,
+                                                     new EventDefinition(signalNonStartName)),
+                                      new StartEvent("Event_1dxg1zq",
+                                                     signalStartName,
+                                                     StartEventType.SIGNAL,
+                                                     new EventDefinition(signalStartName)))));
 
         // Check event subprocess inside event subprocess
         assertThat(eventSubprocess1.getEventSubprocesses().count(), is(1L));
         @SuppressWarnings("OptionalGetWithoutIsPresent") // Count is 1 means exactly one is present.
         EventSubprocess eventSubprocess2 = eventSubprocess1.getEventSubprocesses().findFirst().get();
         assertThat(eventSubprocess2.getName(), is("Event subprocess2"));
-        assertThat(eventSubprocess2.getControlFlowNodes().count(), is(2L));
+        assertThat(eventSubprocess2.getFlowNodes().count(), is(2L));
         assertThat(eventSubprocess2.getSequenceFlows().count(), is(1L));
     }
 
     @Test
     void readFromStream() throws FileNotFoundException {
         String resourcePath = BPMN_BPMN_MODELS_READER_TEST + "pools-message-flows.bpmn";
-        @SuppressWarnings("ConstantConditions") File model = new File(this.getClass().getResource(resourcePath).getFile());
+        @SuppressWarnings("ConstantConditions") File model =
+                new File(this.getClass().getResource(resourcePath).getFile());
         BPMNFileReader bpmnFileReader = new BPMNFileReader();
         BPMNCollaboration bpmnCollaboration = bpmnFileReader.readModelFromStream(new FileInputStream(model));
 
@@ -392,6 +469,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         assertThat(bpmnCollaboration.getParticipants().size(), is(2));
         // Rest is checked in the real testcase above.
     }
+
     @Test
     void readWithElementNameTransformer() {
         BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "tasks.bpmn", (name) -> {
@@ -405,19 +483,17 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         Process participant = result.getParticipants().iterator().next();
         // Sequence flows between the right flow nodes. Now with an updated name!
         Set<String> sequenceFlowIds = getSequenceFlowIdsForProcess(participant);
-        assertThat(
-                sequenceFlowIds,
-                is(Sets.newHashSet(
-                        "startNameChanged_task",
-                        "task_sendTask",
-                        "sendTask_receiveTask",
-                        "receiveTask_userTask",
-                        "userTask_manualTask",
-                        "manualTask_businessRTask",
-                        "businessRTask_serviceTask",
-                        "serviceTask_scriptTask",
-                        "scriptTask_subprocess",
-                        "subprocess_end")));
+        assertThat(sequenceFlowIds,
+                   is(Sets.newHashSet("startNameChanged_task",
+                                      "task_sendTask",
+                                      "sendTask_receiveTask",
+                                      "receiveTask_userTask",
+                                      "userTask_manualTask",
+                                      "manualTask_businessRTask",
+                                      "businessRTask_serviceTask",
+                                      "serviceTask_scriptTask",
+                                      "scriptTask_subprocess",
+                                      "subprocess_end")));
     }
 
     private CallActivity getCallActivityForName(Map<String, FlowNode> flowNodes, String name) {
@@ -425,16 +501,12 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         if (subprocess instanceof CallActivity) {
             return (CallActivity) subprocess;
         }
-        throw new RuntimeException(
-                String.format(
-                        "Expected a call activity with name \"%s\" but it was not a call activity or null!",
-                        name));
+        throw new RuntimeException(String.format(
+                "Expected a call activity with name \"%s\" but it was not a call activity or null!",
+                name));
     }
 
     private Map<String, FlowNode> createFlowNodeNameToFlowNodeMap(Process participant) {
-        return participant.getControlFlowNodes()
-                          .collect(Collectors.toMap(
-                                  FlowNode::getName,
-                                  Function.identity()));
+        return participant.getFlowNodes().collect(Collectors.toMap(FlowNode::getName, Function.identity()));
     }
 }

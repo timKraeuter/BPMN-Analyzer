@@ -125,7 +125,7 @@ public class BPMNModelChecker {
     }
 
     private void addActivityNamesForProcess(AbstractProcess process, Set<String> allActivityNames) {
-        process.getControlFlowNodes().filter(FlowNode::isTask).map(FlowNode::getName).forEach(allActivityNames::add);
+        process.getFlowNodes().filter(FlowNode::isTask).map(FlowNode::getName).forEach(allActivityNames::add);
     }
 
     private Set<String> findExecutedActivitiesInStateSpace(String stateSpaceTempFile) throws IOException {

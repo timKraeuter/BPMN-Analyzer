@@ -93,7 +93,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
                                                       ReceiveTask receiveTask,
                                                       SequenceFlow incomingFlow) {
         collaboration.getIncomingMessageFlows(receiveTask).forEach(messageFlow -> {
-            final String incomingFlowId = incomingFlow.getID();
+            final String incomingFlowId = incomingFlow.getDescriptiveID();
             // TODO: We need to make the rule name unique here, if there are multiple incoming messages!
             // TODO: Delete all other possible messages!
             ruleBuilder.startRule(this.getTaskOrCallActivityRuleName(receiveTask, incomingFlowId) + START);
@@ -198,7 +198,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
                              AbstractTask task,
                              SequenceFlow incomingFlow,
                              Consumer<GrooveNode> startTaskRuleAdditions) {
-        final String incomingFlowId = incomingFlow.getID();
+        final String incomingFlowId = incomingFlow.getDescriptiveID();
         ruleBuilder.startRule(this.getTaskOrCallActivityRuleName(task, incomingFlowId) + START);
         GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
         BPMNToGrooveTransformerHelper.deleteTokenWithPosition(ruleBuilder, processInstance, incomingFlowId);
@@ -215,7 +215,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         BPMNToGrooveTransformerHelper.deleteTokenWithPosition(ruleBuilder, processInstance, task.getName());
 
         task.getOutgoingFlows().forEach(outgoingFlow -> {
-            final String outgoingFlowID = outgoingFlow.getID();
+            final String outgoingFlowID = outgoingFlow.getDescriptiveID();
             BPMNToGrooveTransformerHelper.addTokenWithPosition(ruleBuilder, processInstance, outgoingFlowID);
         });
         endTaskRuleAdditions.accept(ruleBuilder);

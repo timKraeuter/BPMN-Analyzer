@@ -7,16 +7,16 @@ import com.google.common.base.Objects;
 public class StartEvent extends CatchEvent {
     private final StartEventType type;
 
-    public StartEvent(String name) {
-        this(name, StartEventType.NONE);
+    public StartEvent(String id, String name) {
+        this(id, name, StartEventType.NONE);
     }
 
-    public StartEvent(String name, StartEventType type) {
-        this(name, type, EventDefinition.empty());
+    public StartEvent(String id, String name, StartEventType type) {
+        this(id, name, type, EventDefinition.empty());
     }
 
-    public StartEvent(String name, StartEventType type, EventDefinition eventDefinition) {
-        super(name, eventDefinition);
+    public StartEvent(String id, String name, StartEventType type, EventDefinition eventDefinition) {
+        super(id, name, eventDefinition);
         this.type = type;
     }
 
@@ -33,9 +33,9 @@ public class StartEvent extends CatchEvent {
     @Override
     public boolean isInstantiateFlowNode() {
         return this.type == StartEventType.MESSAGE ||
-                this.type == StartEventType.SIGNAL ||
-                this.type == StartEventType.MESSAGE_NON_INTERRUPTING ||
-                this.type == StartEventType.SIGNAL_NON_INTERRUPTING;
+               this.type == StartEventType.SIGNAL ||
+               this.type == StartEventType.MESSAGE_NON_INTERRUPTING ||
+               this.type == StartEventType.SIGNAL_NON_INTERRUPTING;
     }
 
     public StartEventType getType() {
@@ -50,15 +50,15 @@ public class StartEvent extends CatchEvent {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+        if (!super.equals(o)) {
+            return false;
+        }
         StartEvent that = (StartEvent) o;
-        return getName().equals(that.getName())
-                && type == that.type
-                && getEventDefinition().equals(that.getEventDefinition());
+        return type == that.type;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getName(), type, getEventDefinition());
+        return Objects.hashCode(super.hashCode(), type);
     }
-
 }

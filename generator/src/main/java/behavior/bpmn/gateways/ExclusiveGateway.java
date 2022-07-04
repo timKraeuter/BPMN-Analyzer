@@ -3,8 +3,8 @@ package behavior.bpmn.gateways;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
 public class ExclusiveGateway extends Gateway {
-    public ExclusiveGateway(String name) {
-        super(name);
+    public ExclusiveGateway(String id, String name) {
+        super(id, name);
     }
 
     @Override

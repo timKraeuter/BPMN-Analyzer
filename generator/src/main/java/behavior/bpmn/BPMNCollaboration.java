@@ -43,7 +43,7 @@ public class BPMNCollaboration implements Behavior {
 
     public Process getMessageFlowReceiver(MessageFlow flow) {
         Optional<Process> optionalProcess = this.getParticipants().stream()
-                                                .filter(process -> process.getControlFlowNodes().anyMatch(flowNode ->
+                                                .filter(process -> process.getFlowNodes().anyMatch(flowNode ->
                                                                                                                   flowNode ==
                                                                                                                   flow.getTarget()))
                                                 .findFirst();
@@ -52,8 +52,8 @@ public class BPMNCollaboration implements Behavior {
         }
         // The message flow must go to a subprocess!.
         return subprocesses.stream()
-                           .filter(process -> process.getControlFlowNodes().anyMatch(flowNode -> flowNode ==
-                                                                                                 flow.getTarget()))
+                           .filter(process -> process.getFlowNodes().anyMatch(flowNode -> flowNode ==
+                                                                                          flow.getTarget()))
                            .findFirst().orElseThrow(() -> new RuntimeException("Message flow receiver not found!"));
     }
 
@@ -85,13 +85,13 @@ public class BPMNCollaboration implements Behavior {
     public AbstractProcess findProcessForFlowNode(FlowNode flowNode) {
         for (Process participant : this.getParticipants()) {
             final boolean processFound =
-                    participant.getControlFlowNodes().anyMatch(subProcessFlowNode -> subProcessFlowNode.equals(flowNode));
+                    participant.getFlowNodes().anyMatch(subProcessFlowNode -> subProcessFlowNode.equals(flowNode));
             if (processFound) {
                 return participant;
             }
             // TODO: Subprocesses of subprocesses?
             Optional<Process> optionalSubprocess =
-                    participant.getSubProcesses().filter(subprocess -> subprocess.getControlFlowNodes().anyMatch(
+                    participant.getSubProcesses().filter(subprocess -> subprocess.getFlowNodes().anyMatch(
                             subProcessFlowNode -> subProcessFlowNode.equals(flowNode))).findFirst();
             if (optionalSubprocess.isPresent()) {
                 return optionalSubprocess.get();

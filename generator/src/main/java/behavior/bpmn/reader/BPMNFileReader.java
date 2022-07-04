@@ -41,6 +41,7 @@ public class BPMNFileReader {
 
     public BPMNFileReader() {
     }
+
     public BPMNFileReader(UnaryOperator<String> elementNameTransformer) {
         this.elementNameTransformer = elementNameTransformer;
     }
@@ -147,11 +148,11 @@ public class BPMNFileReader {
             FlowNode flowNode = (FlowNode) flowNodeModelElement;
             mapFlowNode(flowNode, mappedFlowNodes, mappedSequenceFlows, bpmnCollaborationBuilder);
         });
-        ModelElementType sfType = bpmnModelInstance.getModel().getType(SequenceFlow.class);
+        ModelElementType sfType = bpmnModelInstance.getModel().getType(FlowElement.class);
         Collection<ModelElementInstance> sequenceFlowModelElements = bpmnModelInstance.getModelElementsByType(sfType);
         sequenceFlowModelElements.forEach(sequenceFlowModelElement -> {
-            SequenceFlow sequenceFlow = (SequenceFlow) sequenceFlowModelElement;
-            mapSequenceFlow(sequenceFlow, mappedFlowNodes, mappedSequenceFlows, bpmnCollaborationBuilder);
+            FlowElement flowElement = (FlowElement) sequenceFlowModelElement;
+            mapFlowElement(bpmnCollaborationBuilder, mappedFlowNodes, mappedSequenceFlows, flowElement);
         });
     }
 
@@ -192,7 +193,8 @@ public class BPMNFileReader {
             return;
         }
         if (sequenceFlow.getName() == null || sequenceFlow.getName().isEmpty()) {
-            bpmnModelBuilder.sequenceFlow(mapFlowNode(sequenceFlow.getSource(),
+            bpmnModelBuilder.sequenceFlow(sequenceFlow.getId(),
+                                          mapFlowNode(sequenceFlow.getSource(),
                                                       mappedFlowNodes,
                                                       mappedSequenceFlows,
                                                       bpmnModelBuilder),
@@ -201,7 +203,8 @@ public class BPMNFileReader {
                                                       mappedSequenceFlows,
                                                       bpmnModelBuilder));
         } else {
-            bpmnModelBuilder.sequenceFlow(getFlowElementName(sequenceFlow),
+            bpmnModelBuilder.sequenceFlow(sequenceFlow.getId(),
+                                          getFlowElementName(sequenceFlow),
                                           mapFlowNode(sequenceFlow.getSource(),
                                                       mappedFlowNodes,
                                                       mappedSequenceFlows,
@@ -247,21 +250,21 @@ public class BPMNFileReader {
             case "manualTask":
             case "userTask":
             case "task":
-                resultingFlowNode = new Task(getFlowElementName(flowNode));
+                resultingFlowNode = new Task(flowNode.getId(), getFlowElementName(flowNode));
                 break;
             case "sendTask":
-                resultingFlowNode = new SendTask(getFlowElementName(flowNode));
+                resultingFlowNode = new SendTask(flowNode.getId(), getFlowElementName(flowNode));
                 break;
             case "receiveTask":
                 boolean instantiate = hasInstantiateCamundaProperty(flowNode);
-                resultingFlowNode = new ReceiveTask(getFlowElementName(flowNode), instantiate);
+                resultingFlowNode = new ReceiveTask(flowNode.getId(), getFlowElementName(flowNode), instantiate);
                 break;
             case "subProcess":
                 SubProcess subprocess = (SubProcess) flowNode;
                 if (subprocess.triggeredByEvent()) {
                     handleEventSubProcess(subprocess, mappedFlowNodes, mappedSequenceFlows, bpmnModelBuilder);
-                    resultingFlowNode = null; // This is ok since no sequence flows can start or end in a event
-                    // subprocess.
+                    resultingFlowNode = null;
+                    // This is ok since no sequence flows can start or end in an event subprocess.
                 } else {
                     resultingFlowNode = mapSubProcess(subprocess, mappedFlowNodes, mappedSequenceFlows);
                 }
@@ -271,17 +274,19 @@ public class BPMNFileReader {
                 throw new RuntimeException("External subprocesses currently not supported!");
                 // Gateways
             case "parallelGateway":
-                resultingFlowNode = new ParallelGateway(getFlowElementName(flowNode));
+                resultingFlowNode = new ParallelGateway(flowNode.getId(), getFlowElementName(flowNode));
                 break;
             case "exclusiveGateway":
-                resultingFlowNode = new ExclusiveGateway(getFlowElementName(flowNode));
+                resultingFlowNode = new ExclusiveGateway(flowNode.getId(), getFlowElementName(flowNode));
                 break;
             case "eventBasedGateway":
                 boolean instantiateGateway = hasInstantiateCamundaProperty(flowNode);
-                resultingFlowNode = new EventBasedGateway(getFlowElementName(flowNode), instantiateGateway);
+                resultingFlowNode = new EventBasedGateway(flowNode.getId(),
+                                                          getFlowElementName(flowNode),
+                                                          instantiateGateway);
                 break;
             case "inclusiveGateway":
-                resultingFlowNode = new InclusiveGateway(getFlowElementName(flowNode));
+                resultingFlowNode = new InclusiveGateway(flowNode.getId(), getFlowElementName(flowNode));
                 break;
             case "boundaryEvent":
                 resultingFlowNode = handleBoundaryEvent(flowNode,
@@ -292,7 +297,10 @@ public class BPMNFileReader {
             default:
                 throw new RuntimeException(String.format("Unknown task type \"%s\" found!", taskTypeName));
         }
-        mappedFlowNodes.put(flowNode.getId(), resultingFlowNode);
+        if (resultingFlowNode != null) {
+            bpmnModelBuilder.flowNode(resultingFlowNode);
+            mappedFlowNodes.put(flowNode.getId(), resultingFlowNode);
+        }
         return resultingFlowNode;
     }
 
@@ -314,7 +322,8 @@ public class BPMNFileReader {
         Collection<EventDefinition> eventDefinitions = event.getEventDefinitions();
         behavior.bpmn.events.BoundaryEvent boundaryEvent;
         if (eventDefinitions.size() != 1) {
-            boundaryEvent = new behavior.bpmn.events.BoundaryEvent(getFlowElementName(event),
+            boundaryEvent = new behavior.bpmn.events.BoundaryEvent(flowNode.getId(),
+                                                                   getFlowElementName(event),
                                                                    BoundaryEventType.NONE,
                                                                    event.cancelActivity());
         } else {
@@ -338,7 +347,8 @@ public class BPMNFileReader {
         EventDefinitionVisitor<behavior.bpmn.events.BoundaryEvent> visitor = new EventDefinitionVisitor<>() {
             @Override
             public behavior.bpmn.events.BoundaryEvent handle(MessageEventDefinition evDefinition) {
-                return new behavior.bpmn.events.BoundaryEvent(getFlowElementName(event),
+                return new behavior.bpmn.events.BoundaryEvent(event.getId(),
+                                                              getFlowElementName(event),
                                                               BoundaryEventType.MESSAGE,
                                                               event.cancelActivity());
             }
@@ -350,7 +360,8 @@ public class BPMNFileReader {
 
             @Override
             public behavior.bpmn.events.BoundaryEvent handle(SignalEventDefinition evDefinition) {
-                return new behavior.bpmn.events.BoundaryEvent(getFlowElementName(event),
+                return new behavior.bpmn.events.BoundaryEvent(event.getId(),
+                                                              getFlowElementName(event),
                                                               BoundaryEventType.SIGNAL,
                                                               event.cancelActivity());
             }
@@ -362,7 +373,8 @@ public class BPMNFileReader {
 
             @Override
             public behavior.bpmn.events.BoundaryEvent handle(TimerEventDefinition evDefinition) {
-                return new behavior.bpmn.events.BoundaryEvent(getFlowElementName(event),
+                return new behavior.bpmn.events.BoundaryEvent(event.getId(),
+                                                              getFlowElementName(event),
                                                               BoundaryEventType.TIMER,
                                                               event.cancelActivity());
             }
@@ -375,7 +387,8 @@ public class BPMNFileReader {
                                        Map<String, behavior.bpmn.FlowNode> mappedFlowNodes,
                                        Map<String, Boolean> mappedSequenceFlows,
                                        BPMNModelBuilder bpmnModelBuilder) {
-        BPMNEventSubprocessBuilder subprocessBuilder = new BPMNEventSubprocessBuilder().name(getFlowElementName(subprocess));
+        BPMNEventSubprocessBuilder subprocessBuilder = new BPMNEventSubprocessBuilder().name(getFlowElementName(
+                subprocess));
         subprocess.getFlowElements().forEach(flowElement -> mapFlowElement(subprocessBuilder,
                                                                            mappedFlowNodes,
                                                                            mappedSequenceFlows,
@@ -393,10 +406,11 @@ public class BPMNFileReader {
                                                                            mappedSequenceFlows,
                                                                            flowElement));
 
-        CallActivity subProcessCallActivity = new CallActivity(subprocessBuilder.build());
+        CallActivity subProcessCallActivity = new CallActivity(subprocess.getId(), subprocessBuilder.build());
         mappedFlowNodes.put(subprocess.getId(), subProcessCallActivity);
         return subProcessCallActivity;
     }
+
     private boolean hasInstantiateCamundaProperty(FlowNode flowNode) {
         ExtensionElements extensionElements = flowNode.getExtensionElements();
         if (extensionElements == null) {
@@ -414,14 +428,14 @@ public class BPMNFileReader {
         org.camunda.bpm.model.bpmn.instance.EndEvent endEvent = (org.camunda.bpm.model.bpmn.instance.EndEvent) flowNode;
         Collection<EventDefinition> eventDefinitions = endEvent.getEventDefinitions();
         if (eventDefinitions.isEmpty()) {
-            return new EndEvent(getFlowElementName(flowNode));
+            return new EndEvent(flowNode.getId(), getFlowElementName(flowNode));
         }
         if (eventDefinitions.size() == 1) {
             EventDefinition eventDefinition = eventDefinitions.iterator().next();
             EventDefinitionVisitor<EndEvent> visitor = new EventDefinitionVisitor<>() {
                 @Override
                 public EndEvent handle(MessageEventDefinition evDefinition) {
-                    return new EndEvent(getFlowElementName(flowNode), EndEventType.MESSAGE);
+                    return new EndEvent(flowNode.getId(), getFlowElementName(flowNode), EndEventType.MESSAGE);
                 }
 
                 @Override
@@ -431,14 +445,15 @@ public class BPMNFileReader {
 
                 @Override
                 public EndEvent handle(SignalEventDefinition evDefinition) {
-                    return new EndEvent(getFlowElementName(flowNode),
+                    return new EndEvent(flowNode.getId(),
+                                        getFlowElementName(flowNode),
                                         EndEventType.SIGNAL,
                                         mapSignalEventDefinition(evDefinition, flowNode));
                 }
 
                 @Override
                 public EndEvent handle(TerminateEventDefinition evDefinition) {
-                    return new EndEvent(getFlowElementName(flowNode), EndEventType.TERMINATION);
+                    return new EndEvent(flowNode.getId(), getFlowElementName(flowNode), EndEventType.TERMINATION);
                 }
 
                 @Override
@@ -456,7 +471,7 @@ public class BPMNFileReader {
                 (org.camunda.bpm.model.bpmn.instance.StartEvent) flowNode;
         Collection<EventDefinition> eventDefinitions = startEvent.getEventDefinitions();
         if (eventDefinitions.isEmpty()) {
-            return new StartEvent(getFlowElementName(flowNode));
+            return new StartEvent(flowNode.getId(), getFlowElementName(flowNode));
         }
         if (eventDefinitions.size() == 1) {
             EventDefinition eventDefinition = eventDefinitions.iterator().next();
@@ -464,9 +479,11 @@ public class BPMNFileReader {
                 @Override
                 public StartEvent handle(MessageEventDefinition evDefinition) {
                     if (startEvent.isInterrupting()) {
-                        return new StartEvent(getFlowElementName(flowNode), StartEventType.MESSAGE);
+                        return new StartEvent(flowNode.getId(), getFlowElementName(flowNode), StartEventType.MESSAGE);
                     } else {
-                        return new StartEvent(getFlowElementName(flowNode), StartEventType.MESSAGE_NON_INTERRUPTING);
+                        return new StartEvent(flowNode.getId(),
+                                              getFlowElementName(flowNode),
+                                              StartEventType.MESSAGE_NON_INTERRUPTING);
                     }
                 }
 
@@ -478,11 +495,13 @@ public class BPMNFileReader {
                 @Override
                 public StartEvent handle(SignalEventDefinition evDefinition) {
                     if (startEvent.isInterrupting()) {
-                        return new StartEvent(getFlowElementName(flowNode),
+                        return new StartEvent(flowNode.getId(),
+                                              getFlowElementName(flowNode),
                                               StartEventType.SIGNAL,
                                               mapSignalEventDefinition(evDefinition, flowNode));
                     } else {
-                        return new StartEvent(getFlowElementName(flowNode),
+                        return new StartEvent(flowNode.getId(),
+                                              getFlowElementName(flowNode),
                                               StartEventType.SIGNAL_NON_INTERRUPTING,
                                               mapSignalEventDefinition(evDefinition, flowNode));
                     }
@@ -525,17 +544,22 @@ public class BPMNFileReader {
             EventDefinitionVisitor<IntermediateCatchEvent> eventVisitor = new EventDefinitionVisitor<>() {
                 @Override
                 public IntermediateCatchEvent handle(MessageEventDefinition evDefinition) {
-                    return new IntermediateCatchEvent(getFlowElementName(flowNode), IntermediateCatchEventType.MESSAGE);
+                    return new IntermediateCatchEvent(flowNode.getId(),
+                                                      getFlowElementName(flowNode),
+                                                      IntermediateCatchEventType.MESSAGE);
                 }
 
                 @Override
                 public IntermediateCatchEvent handle(LinkEventDefinition evDefinition) {
-                    return new IntermediateCatchEvent(getFlowElementName(flowNode), IntermediateCatchEventType.LINK);
+                    return new IntermediateCatchEvent(flowNode.getId(),
+                                                      getFlowElementName(flowNode),
+                                                      IntermediateCatchEventType.LINK);
                 }
 
                 @Override
                 public IntermediateCatchEvent handle(SignalEventDefinition evDefinition) {
-                    return new IntermediateCatchEvent(getFlowElementName(flowNode),
+                    return new IntermediateCatchEvent(flowNode.getId(),
+                                                      getFlowElementName(flowNode),
                                                       IntermediateCatchEventType.SIGNAL,
                                                       mapSignalEventDefinition(evDefinition, flowNode));
                 }
@@ -547,7 +571,9 @@ public class BPMNFileReader {
 
                 @Override
                 public IntermediateCatchEvent handle(TimerEventDefinition evDefinition) {
-                    return new IntermediateCatchEvent(getFlowElementName(flowNode), IntermediateCatchEventType.TIMER);
+                    return new IntermediateCatchEvent(flowNode.getId(),
+                                                      getFlowElementName(flowNode),
+                                                      IntermediateCatchEventType.TIMER);
                 }
             };
             return this.visitDefinition(evDefinition, eventVisitor);
@@ -560,24 +586,31 @@ public class BPMNFileReader {
                 (org.camunda.bpm.model.bpmn.instance.IntermediateThrowEvent) flowNode;
         Collection<EventDefinition> eventDefinitions = intermediateThrowEvent.getEventDefinitions();
         if (eventDefinitions.isEmpty()) {
-            return new IntermediateThrowEvent(getFlowElementName(flowNode), IntermediateThrowEventType.NONE);
+            return new IntermediateThrowEvent(flowNode.getId(),
+                                              getFlowElementName(flowNode),
+                                              IntermediateThrowEventType.NONE);
         }
         if (eventDefinitions.size() == 1) {
             EventDefinition evDefinition = eventDefinitions.iterator().next();
             EventDefinitionVisitor<IntermediateThrowEvent> eventVisitor = new EventDefinitionVisitor<>() {
                 @Override
                 public IntermediateThrowEvent handle(MessageEventDefinition evDefinition) {
-                    return new IntermediateThrowEvent(getFlowElementName(flowNode), IntermediateThrowEventType.MESSAGE);
+                    return new IntermediateThrowEvent(flowNode.getId(),
+                                                      getFlowElementName(flowNode),
+                                                      IntermediateThrowEventType.MESSAGE);
                 }
 
                 @Override
                 public IntermediateThrowEvent handle(LinkEventDefinition evDefinition) {
-                    return new IntermediateThrowEvent(getFlowElementName(flowNode), IntermediateThrowEventType.LINK);
+                    return new IntermediateThrowEvent(flowNode.getId(),
+                                                      getFlowElementName(flowNode),
+                                                      IntermediateThrowEventType.LINK);
                 }
 
                 @Override
                 public IntermediateThrowEvent handle(SignalEventDefinition evDefinition) {
-                    return new IntermediateThrowEvent(getFlowElementName(flowNode),
+                    return new IntermediateThrowEvent(flowNode.getId(),
+                                                      getFlowElementName(flowNode),
                                                       IntermediateThrowEventType.SIGNAL,
                                                       mapSignalEventDefinition(evDefinition, flowNode));
                 }

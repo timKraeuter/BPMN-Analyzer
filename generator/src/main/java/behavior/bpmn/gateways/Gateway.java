@@ -3,8 +3,8 @@ package behavior.bpmn.gateways;
 import behavior.bpmn.FlowNode;
 
 public abstract class Gateway extends FlowNode {
-    protected Gateway(String name) {
-        super(name);
+    protected Gateway(String id, String name) {
+        super(id, name);
     }
 
     @Override

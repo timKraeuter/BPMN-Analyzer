@@ -2,18 +2,22 @@ package behavior.bpmn;
 
 import behavior.bpmn.auxiliary.AbstractProcessVisitor;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
 public abstract class AbstractProcess {
     private final String name;
     private final Set<SequenceFlow> sequenceFlows;
+    private final Set<FlowNode> flowNodes;
     private final Set<EventSubprocess> eventSubprocesses;
 
-    protected AbstractProcess(String name, Set<SequenceFlow> sequenceFlows, Set<EventSubprocess> eventSubprocesses) {
+    protected AbstractProcess(String name,
+                              Set<SequenceFlow> sequenceFlows,
+                              Set<FlowNode> flowNodes,
+                              Set<EventSubprocess> eventSubprocesses) {
         this.name = name;
         this.sequenceFlows = sequenceFlows;
+        this.flowNodes = flowNodes;
         this.eventSubprocesses = eventSubprocesses;
     }
 
@@ -25,13 +29,8 @@ public abstract class AbstractProcess {
         return sequenceFlows.stream();
     }
 
-    public Stream<FlowNode> getControlFlowNodes() {
-        final LinkedHashSet<FlowNode> nodes = new LinkedHashSet<>();
-        sequenceFlows.forEach(sequenceFlow -> {
-            nodes.add(sequenceFlow.getSource());
-            nodes.add(sequenceFlow.getTarget());
-        });
-        return nodes.stream();
+    public Stream<FlowNode> getFlowNodes() {
+        return flowNodes.stream();
     }
 
     public String getName() {

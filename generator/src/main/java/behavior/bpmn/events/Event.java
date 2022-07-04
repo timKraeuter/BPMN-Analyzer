@@ -7,8 +7,8 @@ public abstract class Event extends FlowNode {
 
     private final EventDefinition eventDefinition;
 
-    protected Event(String name, EventDefinition eventDefinition) {
-        super(name);
+    protected Event(String id, String name, EventDefinition eventDefinition) {
+        super(id, name);
         this.eventDefinition = eventDefinition;
     }
 

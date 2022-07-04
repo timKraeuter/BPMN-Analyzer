@@ -11,22 +11,22 @@ public class EndEvent extends ThrowEvent {
     /**
      * Creates and end event of the default type "None".
      */
-    public EndEvent(String name) {
-        this(name, EndEventType.NONE);
+    public EndEvent(String id, String name) {
+        this(id, name, EndEventType.NONE);
     }
 
     /**
      * Creates and end event of the given type.
      */
-    public EndEvent(String name, EndEventType type) {
-        this(name, type, EventDefinition.empty());
+    public EndEvent(String id, String name, EndEventType type) {
+        this(id, name, type, EventDefinition.empty());
     }
 
     /**
      * Creates and end event of the given type with an event definition.
      */
-    public EndEvent(String name, EndEventType type, EventDefinition eventDefinition) {
-        super(name, eventDefinition);
+    public EndEvent(String id, String name, EndEventType type, EventDefinition eventDefinition) {
+        super(id, name, eventDefinition);
         this.type = type;
     }
 
@@ -51,16 +51,21 @@ public class EndEvent extends ThrowEvent {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         EndEvent endEvent = (EndEvent) o;
-        return getName().equals(endEvent.getName())
-                && type == endEvent.type
-                && this.getEventDefinition().equals(endEvent.getEventDefinition());
+        return type == endEvent.type;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getName(), type, this.getEventDefinition());
+        return Objects.hashCode(super.hashCode(), type);
     }
 }

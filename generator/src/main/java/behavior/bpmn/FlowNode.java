@@ -6,17 +6,12 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public abstract class FlowNode {
-    private final String name;
+public abstract class FlowNode extends FlowElement {
     private final Set<SequenceFlow> outgoingFlows = new LinkedHashSet<>();
     private final Set<SequenceFlow> incomingFlows = new LinkedHashSet<>();
 
-    protected FlowNode(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return this.name;
+    protected FlowNode(String id, String name) {
+        super(id, name);
     }
 
     public void addOutgoingSequenceFlow(SequenceFlow outgoingFlow) {

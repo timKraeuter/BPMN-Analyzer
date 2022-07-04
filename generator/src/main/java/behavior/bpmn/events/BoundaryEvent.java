@@ -13,14 +13,18 @@ public class BoundaryEvent extends CatchEvent {
     private final boolean interrupt;
     private Activity attachedTo;
 
-    public BoundaryEvent(String name, BoundaryEventType type, boolean interrupt, EventDefinition eventDefinition) {
-        super(name, eventDefinition);
+    public BoundaryEvent(String id,
+                         String name,
+                         BoundaryEventType type,
+                         boolean interrupt,
+                         EventDefinition eventDefinition) {
+        super(id, name, eventDefinition);
         this.type = type;
         this.interrupt = interrupt;
     }
 
-    public BoundaryEvent(String name, BoundaryEventType type, boolean interrupt) {
-        this(name, type, interrupt, EventDefinition.empty());
+    public BoundaryEvent(String id, String name, BoundaryEventType type, boolean interrupt) {
+        this(id, name, type, interrupt, EventDefinition.empty());
     }
 
     public BoundaryEventType getType() {
@@ -46,6 +50,14 @@ public class BoundaryEvent extends CatchEvent {
         return false;
     }
 
+    public Activity getAttachedTo() {
+        return attachedTo;
+    }
+
+    public void setAttachedTo(Activity attachedTo) {
+        this.attachedTo = attachedTo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -54,20 +66,16 @@ public class BoundaryEvent extends CatchEvent {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+        if (!super.equals(o)) {
+            return false;
+        }
         BoundaryEvent that = (BoundaryEvent) o;
-        return getName().equals(that.getName()) && interrupt == that.interrupt && type == that.type;
+        return interrupt == that.interrupt &&
+               type == that.type;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getName(), type, interrupt);
-    }
-
-    public Activity getAttachedTo() {
-        return attachedTo;
-    }
-
-    public void setAttachedTo(Activity attachedTo) {
-        this.attachedTo = attachedTo;
+        return Objects.hashCode(super.hashCode(), type, interrupt);
     }
 }

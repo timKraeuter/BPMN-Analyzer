@@ -11,8 +11,8 @@ import com.google.common.base.Objects;
 public class ReceiveTask extends AbstractTask {
     private final boolean instantiate;
 
-    public ReceiveTask(String name) {
-        this(name, false);
+    public ReceiveTask(String id, String name) {
+        this(id, name, false);
     }
 
     @Override
@@ -20,8 +20,8 @@ public class ReceiveTask extends AbstractTask {
         visitor.handle(this);
     }
 
-    public ReceiveTask(String name, boolean instantiate) {
-        super(name);
+    public ReceiveTask(String id, String name, boolean instantiate) {
+        super(id, name);
         this.instantiate = instantiate;
     }
 
@@ -41,14 +41,21 @@ public class ReceiveTask extends AbstractTask {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         ReceiveTask that = (ReceiveTask) o;
-        return getName().equals(that.getName()) && instantiate == that.instantiate;
+        return instantiate == that.instantiate;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getName(), instantiate);
+        return Objects.hashCode(super.hashCode(), instantiate);
     }
 }

@@ -5,12 +5,16 @@ import behavior.bpmn.FlowNode;
 import behavior.bpmn.Process;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.events.StartEvent;
+import com.google.common.base.Joiner;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 public class BPMNProcessBuilder implements BPMNModelBuilder {
     private final Set<SequenceFlow> sequenceFlows;
+    private final Set<FlowNode> flowNodes;
     private final Set<EventSubprocess> eventSubprocesses;
     private String name;
     private final Set<StartEvent> startEvents;
@@ -18,6 +22,7 @@ public class BPMNProcessBuilder implements BPMNModelBuilder {
     public BPMNProcessBuilder() {
         this.sequenceFlows = new LinkedHashSet<>();
         eventSubprocesses = new LinkedHashSet<>();
+        flowNodes = new LinkedHashSet<>();
         startEvents = new LinkedHashSet<>();
     }
 
@@ -28,6 +33,10 @@ public class BPMNProcessBuilder implements BPMNModelBuilder {
 
     public Set<SequenceFlow> getSequenceFlows() {
         return sequenceFlows;
+    }
+
+    public Set<FlowNode> getFlowNodes() {
+        return flowNodes;
     }
 
     public BPMNProcessBuilder name(String name) {
@@ -48,20 +57,29 @@ public class BPMNProcessBuilder implements BPMNModelBuilder {
     }
 
     @Override
-    public BPMNProcessBuilder sequenceFlow(String name, FlowNode from, FlowNode to) {
-        final SequenceFlow sequenceFlow = new SequenceFlow(name, from, to);
+    public BPMNProcessBuilder sequenceFlow(String id, String name, FlowNode from, FlowNode to) {
+        final SequenceFlow sequenceFlow = new SequenceFlow(id, name, from, to);
         this.sequenceFlows.add(sequenceFlow);
         from.addOutgoingSequenceFlow(sequenceFlow);
         to.addIncomingSequenceFlow(sequenceFlow);
+
+        flowNodes.add(from);
+        flowNodes.add(to);
         return this;
     }
 
     @Override
-    public BPMNProcessBuilder sequenceFlow(FlowNode from, FlowNode to) {
-        return sequenceFlow("", from, to);
+    public BPMNProcessBuilder sequenceFlow(String id, FlowNode from, FlowNode to) {
+        return sequenceFlow(id, "", from, to);
+    }
+
+    @Override
+    public BPMNModelBuilder flowNode(FlowNode flowNode) {
+        flowNodes.add(flowNode);
+        return this;
     }
 
     public Process build() {
-        return new Process(name, startEvents, sequenceFlows, eventSubprocesses);
+        return new Process(name, startEvents, sequenceFlows, flowNodes, eventSubprocesses);
     }
 }

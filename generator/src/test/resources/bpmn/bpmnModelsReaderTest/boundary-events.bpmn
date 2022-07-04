@@ -56,13 +56,13 @@
     <bpmn:endEvent id="Event_0q049i3" name="s1_end">
       <bpmn:incoming>Flow_1un1vjy</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:endEvent id="Event_0ts6qzu" name="m1_end">
+    <bpmn:endEvent id="Event_0ts6qzu" name="m2_end">
       <bpmn:incoming>Flow_1r50dvs</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:endEvent id="Event_1td0xe2" name="t1_end">
+    <bpmn:endEvent id="Event_1td0xe2" name="t2_end">
       <bpmn:incoming>Flow_1g83aqv</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:endEvent id="Event_1hss3l9" name="s1_end">
+    <bpmn:endEvent id="Event_1hss3l9" name="s2_end">
       <bpmn:incoming>Flow_0ts2x6e</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:endEvent id="Event_1ub2i35" name="n1_end">

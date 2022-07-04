@@ -26,12 +26,12 @@ import java.util.stream.Stream;
 public class Process extends AbstractProcess {
     private final Set<StartEvent> startEvents;
 
-    public Process(
-            String name,
-            Set<StartEvent> startEvents,
-            Set<SequenceFlow> sequenceFlows,
-            Set<EventSubprocess> eventSubprocesses) {
-        super(name, sequenceFlows, eventSubprocesses);
+    public Process(String name,
+                   Set<StartEvent> startEvents,
+                   Set<SequenceFlow> sequenceFlows,
+                   Set<FlowNode> flowNodes,
+                   Set<EventSubprocess> eventSubprocesses) {
+        super(name, sequenceFlows, flowNodes, eventSubprocesses);
         this.startEvents = startEvents;
     }
 
@@ -41,7 +41,7 @@ public class Process extends AbstractProcess {
 
     public Stream<Process> getSubProcesses() {
         final LinkedHashSet<Process> subProcesses = new LinkedHashSet<>();
-        getControlFlowNodes().forEach(flowNode -> flowNode.accept(new FlowNodeVisitor() {
+        getFlowNodes().forEach(flowNode -> flowNode.accept(new FlowNodeVisitor() {
             @Override
             public void handle(Task task) {
                 // Not a subprocess

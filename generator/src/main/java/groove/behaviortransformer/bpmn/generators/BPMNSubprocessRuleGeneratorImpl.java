@@ -44,7 +44,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
     void createSubProcessInstantiationRule(AbstractProcess process,
                                            CallActivity callActivity,
                                            SequenceFlow incomingFlow) {
-        final String incomingFlowId = incomingFlow.getID();
+        final String incomingFlowId = incomingFlow.getDescriptiveID();
         ruleBuilder.startRule(bpmnRuleGenerator.getTaskOrCallActivityRuleName(callActivity, incomingFlowId));
         GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
         BPMNToGrooveTransformerHelper.deleteTokenWithPosition(ruleBuilder, processInstance, incomingFlowId);
@@ -65,8 +65,8 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
                     getStartEventTokenName(callActivity.getSubProcessModel(), startEvent)));
         } else {
             // All activites and gateways without incoming sequence flows get a token.
-            callActivity.getSubProcessModel().getControlFlowNodes().filter(controlFlowNode -> controlFlowNode.isTask() ||
-                                                                                              controlFlowNode.isGateway()).forEach(
+            callActivity.getSubProcessModel().getFlowNodes().filter(controlFlowNode -> controlFlowNode.isTask() ||
+                                                                                       controlFlowNode.isGateway()).forEach(
                     controlFlowNode -> BPMNToGrooveTransformerHelper.addTokenWithPosition(ruleBuilder,
                                                                                           subProcessInstance,
                                                                                           controlFlowNode.getName()));
@@ -91,7 +91,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
 
         // Add outgoing tokens
         callActivity.getOutgoingFlows().forEach(outgoingFlow -> {
-            final String outgoingFlowID = outgoingFlow.getID();
+            final String outgoingFlowID = outgoingFlow.getDescriptiveID();
             BPMNToGrooveTransformerHelper.addTokenWithPosition(ruleBuilder, parentProcess, outgoingFlowID);
         });
 

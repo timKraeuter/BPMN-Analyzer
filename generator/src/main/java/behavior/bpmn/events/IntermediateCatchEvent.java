@@ -7,12 +7,15 @@ import com.google.common.base.Objects;
 public class IntermediateCatchEvent extends CatchEvent {
     private final IntermediateCatchEventType type;
 
-    public IntermediateCatchEvent(String name, IntermediateCatchEventType type) {
-        this(name, type, EventDefinition.empty());
+    public IntermediateCatchEvent(String id, String name, IntermediateCatchEventType type) {
+        this(id, name, type, EventDefinition.empty());
     }
 
-    public IntermediateCatchEvent(String name, IntermediateCatchEventType type, EventDefinition eventDefinition) {
-        super(name, eventDefinition);
+    public IntermediateCatchEvent(String id,
+                                  String name,
+                                  IntermediateCatchEventType type,
+                                  EventDefinition eventDefinition) {
+        super(id, name, eventDefinition);
         this.type = type;
     }
 
@@ -38,16 +41,21 @@ public class IntermediateCatchEvent extends CatchEvent {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         IntermediateCatchEvent that = (IntermediateCatchEvent) o;
-        return getName().equals(that.getName())
-                && type == that.type
-                && getEventDefinition().equals(that.getEventDefinition());
+        return type == that.type;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getName(), type, getEventDefinition());
+        return Objects.hashCode(super.hashCode(), type);
     }
 }

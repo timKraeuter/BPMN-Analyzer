@@ -97,7 +97,7 @@ public class BPMNToGrooveTransformerHelper {
                                                                      GrooveNode processInstance) {
         flowNode.getOutgoingFlows().forEach(sequenceFlow -> addTokenWithPosition(ruleBuilder,
                                                                                  processInstance,
-                                                                                 sequenceFlow.getID()));
+                                                                                 sequenceFlow.getDescriptiveID()));
     }
 
     public static void addOutgoingTokensForFlowNodeToProcessInstanceWithQuantifier(FlowNode flowNode,
@@ -105,7 +105,7 @@ public class BPMNToGrooveTransformerHelper {
                                                                                    GrooveNode processInstance,
                                                                                    GrooveNode quantifier) {
         flowNode.getOutgoingFlows().forEach(sequenceFlow -> {
-            GrooveNode addedToken = addTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getID());
+            GrooveNode addedToken = addTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getDescriptiveID());
             ruleBuilder.contextEdge(AT, addedToken, quantifier);
         });
     }
@@ -190,7 +190,7 @@ public class BPMNToGrooveTransformerHelper {
             if (sequenceFlow.getSource().isExclusiveEventBasedGateway()) {
                 tokenPosition = sequenceFlow.getSource().getName();
             } else {
-                tokenPosition = sequenceFlow.getID();
+                tokenPosition = sequenceFlow.getDescriptiveID();
             }
             ruleBuilder.contextEdge(POSITION, token, ruleBuilder.contextNode(createStringNodeLabel(tokenPosition)));
             ruleBuilder.contextEdge(AT, token, existsOptional);

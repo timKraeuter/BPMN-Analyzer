@@ -8,8 +8,8 @@ import com.google.common.base.Objects;
  * Represents a Task in BPMN where the task type is not specified.
  */
 public class Task extends AbstractTask {
-    public Task(String name) {
-        super(name);
+    public Task(String id, String name) {
+        super(id, name);
     }
 
     @Override
@@ -27,20 +27,5 @@ public class Task extends AbstractTask {
         return false;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Task that = (Task) o;
-        return getName().equals(that.getName()) && getBoundaryEvents().equals(that.getBoundaryEvents());
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getName(), getBoundaryEvents());
-    }
 }

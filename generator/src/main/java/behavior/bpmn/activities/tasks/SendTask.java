@@ -4,8 +4,8 @@ import behavior.bpmn.auxiliary.ActivityVisitor;
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
 public class SendTask extends AbstractTask {
-    public SendTask(String name) {
-        super(name);
+    public SendTask(String id, String name) {
+        super(id, name);
     }
 
     @Override

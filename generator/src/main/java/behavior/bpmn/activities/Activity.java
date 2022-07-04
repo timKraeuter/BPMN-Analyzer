@@ -10,8 +10,8 @@ import java.util.Set;
 public abstract class Activity extends FlowNode {
     private final Set<BoundaryEvent> boundaryEvents;
 
-    protected Activity(String name) {
-        super(name);
+    protected Activity(String id, String name) {
+        super(id, name);
         boundaryEvents = new LinkedHashSet<>();
     }
     public abstract void accept(ActivityVisitor visitor);
