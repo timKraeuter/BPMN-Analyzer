@@ -3,6 +3,7 @@ package groove.graph.rule;
 import api.GraphRuleGenerator;
 import api.Node;
 import behavior.Behavior;
+import behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import groove.graph.GrooveEdge;
 import groove.graph.GrooveNode;
 
@@ -74,7 +75,8 @@ public class GrooveRuleBuilder implements GraphRuleGenerator {
     @Override
     public void startRule(String ruleName) {
         if (rulenameToRule.get(ruleName) != null) {
-            throw new RuntimeException(String.format("A rule with the name \"%s\" already exists!", ruleName));
+            throw new GrooveGenerationRuntimeException(String.format("A rule with the name \"%s\" already exists!",
+                                                                     ruleName));
         }
         this.currentRule = new GrooveGraphRule(this.addPrefix(ruleName));
     }
@@ -158,10 +160,12 @@ public class GrooveRuleBuilder implements GraphRuleGenerator {
 
     private void checkNodeContainment(Node source, Node target, GrooveNode sourceNode, GrooveNode targetNode) {
         if (sourceNode == null) {
-            throw new RuntimeException(String.format("Source node %s not contained in the rule!", source));
+            throw new GrooveGenerationRuntimeException(String.format("Source node %s not contained in the rule!",
+                                                                     source));
         }
         if (targetNode == null) {
-            throw new RuntimeException(String.format("Target node %s not contained in the rule!", target));
+            throw new GrooveGenerationRuntimeException(String.format("Target node %s not contained in the rule!",
+                                                                     target));
         }
     }
 
