@@ -12,25 +12,9 @@ import java.util.stream.Stream;
 
 public class GrooveRuleBuilder implements GraphRuleGenerator {
     private final Map<String, GrooveGraphRule> rulenameToRule = new LinkedHashMap<>();
-    private final String prefix;
     private GrooveGraphRule currentRule = null;
 
     public GrooveRuleBuilder() {
-        this.prefix = "";
-    }
-
-    public GrooveRuleBuilder(Behavior behavior, boolean addPrefix) {
-        this.prefix = getPotentialPrefix(behavior, addPrefix);
-    }
-
-    public static String getPotentialPrefix(Behavior behavior, boolean addPrefix) {
-        final String prefix;
-        if (addPrefix) {
-            prefix = behavior.getName() + "_";
-        } else {
-            prefix = "";
-        }
-        return prefix;
     }
 
     public static Stream<GrooveGraphRule> createSynchedRules(Map<String, Set<GrooveGraphRule>> nameToToBeSynchedRules) {
@@ -78,30 +62,22 @@ public class GrooveRuleBuilder implements GraphRuleGenerator {
             throw new GrooveGenerationRuntimeException(String.format("A rule with the name \"%s\" already exists!",
                                                                      ruleName));
         }
-        this.currentRule = new GrooveGraphRule(this.addPrefix(ruleName));
+        this.currentRule = new GrooveGraphRule(ruleName);
     }
 
     @Override
     public GrooveNode contextNode(String nodeName) {
-        String prefixedNodeName = this.addPrefix(nodeName);
-
         assert this.currentRule != null;
-        GrooveNode contextNode = new GrooveNode(prefixedNodeName);
+        GrooveNode contextNode = new GrooveNode(nodeName);
         this.currentRule.addContextNode(contextNode);
         return contextNode;
-    }
-
-    private String addPrefix(String name) {
-        return this.prefix + name;
     }
 
     @Override
     public GrooveNode addNode(String nodeName) {
         assert this.currentRule != null;
 
-        String prefixedNodeName = this.addPrefix(nodeName);
-
-        GrooveNode newNode = new GrooveNode(prefixedNodeName);
+        GrooveNode newNode = new GrooveNode(nodeName);
         this.currentRule.addNewNode(newNode);
         return newNode;
     }
@@ -116,16 +92,14 @@ public class GrooveRuleBuilder implements GraphRuleGenerator {
 
         this.checkNodeContainment(source, target, sourceNode, targetNode);
 
-        String prefixedEdgeName = this.addPrefix(edgeName);
-        this.currentRule.addNewEdge(new GrooveEdge(prefixedEdgeName, sourceNode, targetNode));
+        this.currentRule.addNewEdge(new GrooveEdge(edgeName, sourceNode, targetNode));
     }
 
     @Override
     public GrooveNode deleteNode(String nodeName) {
         assert this.currentRule != null;
 
-        String prefixedNodeName = this.addPrefix(nodeName);
-        GrooveNode deleteNode = new GrooveNode(prefixedNodeName);
+        GrooveNode deleteNode = new GrooveNode(nodeName);
         this.currentRule.addDelNode(deleteNode);
         return deleteNode;
     }
@@ -140,8 +114,7 @@ public class GrooveRuleBuilder implements GraphRuleGenerator {
 
         this.checkNodeContainment(source, target, sourceNode, targetNode);
 
-        String prefixedEdgeName = this.addPrefix(edgeName);
-        this.currentRule.addDelEdge(new GrooveEdge(prefixedEdgeName, sourceNode, targetNode));
+        this.currentRule.addDelEdge(new GrooveEdge(edgeName, sourceNode, targetNode));
     }
 
     @Override
@@ -154,8 +127,7 @@ public class GrooveRuleBuilder implements GraphRuleGenerator {
 
         this.checkNodeContainment(source, target, sourceNode, targetNode);
 
-        String prefixedEdgeName = this.addPrefix(name);
-        this.currentRule.addContextEdge(new GrooveEdge(prefixedEdgeName, sourceNode, targetNode));
+        this.currentRule.addContextEdge(new GrooveEdge(name, sourceNode, targetNode));
     }
 
     private void checkNodeContainment(Node source, Node target, GrooveNode sourceNode, GrooveNode targetNode) {

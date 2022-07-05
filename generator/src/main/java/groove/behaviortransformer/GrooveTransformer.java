@@ -50,22 +50,22 @@ public interface GrooveTransformer<S extends Behavior> {
         GxlToXMLConverter.toXml(gxl, startGraphFile);
     }
 
-    GrooveGraph generateStartGraph(S source, boolean addPrefix);
+    GrooveGraph generateStartGraph(S source);
 
-    default void generateAndWriteStartGraph(S source, boolean addPrefix, File targetFolder) {
-        GrooveGraph startGraph = this.generateStartGraph(source, addPrefix);
+    default void generateAndWriteStartGraph(S source, File targetFolder) {
+        GrooveGraph startGraph = this.generateStartGraph(source);
         writeStartGraph(targetFolder, startGraph, this.isLayoutActivated());
     }
 
-    Stream<GrooveGraphRule> generateRules(S source, boolean addPrefix);
+    Stream<GrooveGraphRule> generateRules(S source);
 
-    default void generateAndWriteRules(S source, boolean addPrefix, File targetFolder) {
-        Stream<GrooveGraphRule> rules = this.generateRules(source, addPrefix);
+    default void generateAndWriteRules(S source, File targetFolder) {
+        Stream<GrooveGraphRule> rules = this.generateRules(source);
         GrooveRuleWriter.writeRules(rules, targetFolder);
-        this.generateAndWriteRulesFurther(source, addPrefix, targetFolder);
+        this.generateAndWriteRulesFurther(source, targetFolder);
     }
 
-    default void generateAndWriteRulesFurther(S source, boolean addPrefix, File targetFolder) {
+    default void generateAndWriteRulesFurther(S source, File targetFolder) {
         // to be overridden if needed
     }
 

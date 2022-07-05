@@ -30,8 +30,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
     public static final String UNSAFE_FILE_NAME = "Unsafe.gpr";
 
     @Override
-    public GrooveGraph generateStartGraph(BPMNCollaboration collaboration, boolean addPrefix) {
-        // TODO: Add prefix if needed!
+    public GrooveGraph generateStartGraph(BPMNCollaboration collaboration) {
         GrooveGraphBuilder startGraphBuilder = new GrooveGraphBuilder().setName(collaboration.getName());
 
         collaboration.getParticipants().stream().filter(process -> process.getStartEvents().stream()
@@ -61,15 +60,15 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
     }
 
     @Override
-    public Stream<GrooveGraphRule> generateRules(BPMNCollaboration collaboration, boolean addPrefix) {
-        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(collaboration, addPrefix);
+    public Stream<GrooveGraphRule> generateRules(BPMNCollaboration collaboration) {
+        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder();
         BPMNRuleGenerator bpmnRuleGenerator = new BPMNRuleGenerator(ruleBuilder, collaboration);
 
         return bpmnRuleGenerator.getRules();
     }
 
     @Override
-    public void generateAndWriteRulesFurther(BPMNCollaboration collaboration, boolean addPrefix, File targetFolder) {
+    public void generateAndWriteRulesFurther(BPMNCollaboration collaboration, File targetFolder) {
         this.copyTypeGraphAndFixedRules(targetFolder);
     }
 

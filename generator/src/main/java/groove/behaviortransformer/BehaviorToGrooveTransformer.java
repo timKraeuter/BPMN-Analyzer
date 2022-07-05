@@ -105,11 +105,11 @@ public class BehaviorToGrooveTransformer {
             public void handle(FiniteStateMachine finiteStateMachine) {
                 FSMToGrooveTransformer transformer = new FSMToGrooveTransformer();
 
-                startGraphs.add(transformer.generateStartGraph(finiteStateMachine, true));
-                transformer.generateRules(finiteStateMachine, false).forEach(rule -> allRules.put(rule.getRuleName(),
+                startGraphs.add(transformer.generateStartGraph(finiteStateMachine));
+                transformer.generateRules(finiteStateMachine).forEach(rule -> allRules.put(rule.getRuleName(),
                                                                                                   rule));
                 // Copy type graph
-                transformer.generateAndWriteRulesFurther(finiteStateMachine, true, graphGrammarSubFolder);
+                transformer.generateAndWriteRulesFurther(finiteStateMachine, graphGrammarSubFolder);
                 typeGraphs.add(FSM_TYPE_GRAPH_FILE_NAME);
             }
 
@@ -117,8 +117,8 @@ public class BehaviorToGrooveTransformer {
             public void handle(PetriNet petriNet) {
                 PNToGrooveTransformer transformer = new PNToGrooveTransformer();
 
-                startGraphs.add(transformer.generateStartGraph(petriNet, true));
-                transformer.generateRules(petriNet, true).forEach(rule -> allRules.put(rule.getRuleName(), rule));
+                startGraphs.add(transformer.generateStartGraph(petriNet));
+                transformer.generateRules(petriNet).forEach(rule -> allRules.put(rule.getRuleName(), rule));
                 // Copy type graph if needed in the future!
             }
 
@@ -126,10 +126,10 @@ public class BehaviorToGrooveTransformer {
             public void handle(BPMNCollaboration collaboration) {
                 BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer();
 
-                startGraphs.add(transformer.generateStartGraph(collaboration, true));
-                transformer.generateRules(collaboration, true).forEach(rule -> allRules.put(rule.getRuleName(), rule));
+                startGraphs.add(transformer.generateStartGraph(collaboration));
+                transformer.generateRules(collaboration).forEach(rule -> allRules.put(rule.getRuleName(), rule));
                 // Copy type graph
-                transformer.generateAndWriteRulesFurther(collaboration, true, graphGrammarSubFolder);
+                transformer.generateAndWriteRulesFurther(collaboration, graphGrammarSubFolder);
                 typeGraphs.add(BPMN_DIAGRAM_TYPE_GRAPH_FILE_NAME);
             }
 
@@ -139,10 +139,10 @@ public class BehaviorToGrooveTransformer {
 
                 PiCalcToGrooveTransformer transformer = new PiCalcToGrooveTransformer();
 
-                startGraphs.add(transformer.generateStartGraph(piProcess, true));
-                transformer.generateRules(piProcess, true).forEach(rule -> allRules.put(rule.getRuleName(), rule));
+                startGraphs.add(transformer.generateStartGraph(piProcess));
+                transformer.generateRules(piProcess).forEach(rule -> allRules.put(rule.getRuleName(), rule));
                 // Copy type graph
-                transformer.generateAndWriteRulesFurther(piProcess, true, graphGrammarSubFolder);
+                transformer.generateAndWriteRulesFurther(piProcess, graphGrammarSubFolder);
                 typeGraphs.add(PI_TYPE_GRAPH_FILE_NAME);
             }
 
@@ -199,52 +199,50 @@ public class BehaviorToGrooveTransformer {
         startGraph.ifPresent(graph -> GrooveTransformer.writeStartGraph(graphGrammarSubFolder, graph, true));
     }
 
-    public File generateGrooveGrammar(Behavior behavior, File targetFolder, boolean addPrefix) {
+    public File generateGrooveGrammar(Behavior behavior, File targetFolder) {
         ValueWrapper<File> result = new ValueWrapper<>();
         behavior.accept(new BehaviorVisitor() {
             @Override
             public void handle(FiniteStateMachine finiteStateMachine) {
                 result.setValue(BehaviorToGrooveTransformer.this.generateGrooveGrammarForFSM(finiteStateMachine,
-                                                                                             targetFolder,
-                                                                                             addPrefix));
+                                                                                             targetFolder));
             }
 
             @Override
             public void handle(PetriNet petriNet) {
-                result.setValue(BehaviorToGrooveTransformer.this.generateGrooveGrammarForPN(petriNet, targetFolder, addPrefix));
+                result.setValue(BehaviorToGrooveTransformer.this.generateGrooveGrammarForPN(petriNet, targetFolder));
             }
 
             @Override
             public void handle(BPMNCollaboration collaboration) {
                 result.setValue(BehaviorToGrooveTransformer.this.generateGrooveGrammarForBPMNProcessModel(collaboration,
-                                                                                          targetFolder,
-                                                                                          addPrefix));
+                                                                                                          targetFolder
+                ));
             }
 
             @Override
             public void handle(NamedPiProcess piProcess) {
-                result.setValue(BehaviorToGrooveTransformer.this.generateGrooveGrammarForPiProcess(piProcess, targetFolder, addPrefix));
+                result.setValue(BehaviorToGrooveTransformer.this.generateGrooveGrammarForPiProcess(piProcess,
+                                                                                                   targetFolder));
             }
 
             @Override
             public void handle(ActivityDiagram activityDiagram) {
                 result.setValue(BehaviorToGrooveTransformer.this.generateGrooveGrammarForActivityDiagram(activityDiagram,
-                                                                                         targetFolder,
-                                                                                         addPrefix));
+                                                                                                         targetFolder));
             }
         });
         return result.getValueIfExists();
     }
 
     private File generateGrooveGrammarForActivityDiagram(ActivityDiagram activityDiagram,
-                                                         File targetFolder,
-                                                         boolean addPrefix) {
+                                                         File targetFolder) {
         File graphGrammarSubFolder = this.makeSubFolder(activityDiagram, targetFolder);
         ActivityDiagramToGrooveTransformer transformer = new ActivityDiagramToGrooveTransformer(true);
 
-        transformer.generateAndWriteStartGraph(activityDiagram, false, graphGrammarSubFolder);
+        transformer.generateAndWriteStartGraph(activityDiagram, graphGrammarSubFolder);
 
-        transformer.generateAndWriteRules(activityDiagram, false, graphGrammarSubFolder);
+        transformer.generateAndWriteRules(activityDiagram, graphGrammarSubFolder);
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
         additionalProperties.put(TYPE_GRAPH, ACTIVITY_DIAGRAM_TYPE_GRAPH_FILE_NAME);
@@ -253,13 +251,13 @@ public class BehaviorToGrooveTransformer {
         return graphGrammarSubFolder;
     }
 
-    private File generateGrooveGrammarForPiProcess(NamedPiProcess piProcess, File grooveDir, boolean addPrefix) {
+    private File generateGrooveGrammarForPiProcess(NamedPiProcess piProcess, File grooveDir) {
         File graphGrammarSubFolder = this.makeSubFolder(piProcess, grooveDir);
         PiCalcToGrooveTransformer transformer = new PiCalcToGrooveTransformer();
 
-        transformer.generateAndWriteStartGraph(piProcess, false, graphGrammarSubFolder);
+        transformer.generateAndWriteStartGraph(piProcess, graphGrammarSubFolder);
 
-        transformer.generateAndWriteRules(piProcess, false, graphGrammarSubFolder);
+        transformer.generateAndWriteRules(piProcess, graphGrammarSubFolder);
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
         additionalProperties.put(TYPE_GRAPH, PI_TYPE_GRAPH_FILE_NAME);
@@ -271,15 +269,14 @@ public class BehaviorToGrooveTransformer {
 
     private File generateGrooveGrammarForBPMNProcessModel(
             BPMNCollaboration collaboration,
-            File grooveDir,
-            boolean addPrefix) {
+            File grooveDir) {
         File graphGrammarSubFolder = this.makeSubFolder(collaboration, grooveDir);
         BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer();
 
         // Generate start graph
-        transformer.generateAndWriteStartGraph(collaboration, addPrefix, graphGrammarSubFolder);
+        transformer.generateAndWriteStartGraph(collaboration, graphGrammarSubFolder);
         // Generate rules
-        transformer.generateAndWriteRules(collaboration, addPrefix, graphGrammarSubFolder);
+        transformer.generateAndWriteRules(collaboration, graphGrammarSubFolder);
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
         additionalProperties.put(TYPE_GRAPH, BPMN_DIAGRAM_TYPE_GRAPH_FILE_NAME);
@@ -288,29 +285,29 @@ public class BehaviorToGrooveTransformer {
         return graphGrammarSubFolder;
     }
 
-    private File generateGrooveGrammarForPN(PetriNet petriNet, File grooveDir, boolean addPrefix) {
+    private File generateGrooveGrammarForPN(PetriNet petriNet, File grooveDir) {
         File graphGrammarSubFolder = this.makeSubFolder(petriNet, grooveDir);
         PNToGrooveTransformer transformer = new PNToGrooveTransformer();
 
         // Generate start graph
-        transformer.generateAndWriteStartGraph(petriNet, addPrefix, graphGrammarSubFolder);
+        transformer.generateAndWriteStartGraph(petriNet, graphGrammarSubFolder);
 
         // Generate rules
-        transformer.generateAndWriteRules(petriNet, addPrefix, graphGrammarSubFolder);
+        transformer.generateAndWriteRules(petriNet, graphGrammarSubFolder);
 
         this.generatePropertiesFile(graphGrammarSubFolder, START, Maps.newHashMap());
 
         return graphGrammarSubFolder;
     }
 
-    private File generateGrooveGrammarForFSM(FiniteStateMachine finiteStateMachine, File grooveDir, boolean addPrefix) {
+    private File generateGrooveGrammarForFSM(FiniteStateMachine finiteStateMachine, File grooveDir) {
         File graphGrammarSubFolder = this.makeSubFolder(finiteStateMachine, grooveDir);
         FSMToGrooveTransformer transformer = new FSMToGrooveTransformer();
 
         // Generate start graph
-        transformer.generateAndWriteStartGraph(finiteStateMachine, addPrefix, graphGrammarSubFolder);
+        transformer.generateAndWriteStartGraph(finiteStateMachine, graphGrammarSubFolder);
         // Generate rules
-        transformer.generateAndWriteRules(finiteStateMachine, addPrefix, graphGrammarSubFolder);
+        transformer.generateAndWriteRules(finiteStateMachine, graphGrammarSubFolder);
 
         final Map<String, String> additionalProperties = Maps.newHashMap();
         additionalProperties.put(TYPE_GRAPH, FSM_TYPE_GRAPH_FILE_NAME);
@@ -335,11 +332,11 @@ public class BehaviorToGrooveTransformer {
         LocalDateTime now = LocalDateTime.now();
 
         String propertiesContent = String.format("# %s (Groove rule generator)\n" +
-                                                         "location=%s\n" +
-                                                         "startGraph=%s\n" +
-                                                         this.getAdditionalProperties(additionalProperties) +
-                                                         "grooveVersion=5.8.1\n" +
-                                                         "grammarVersion=3.7",
+                                                 "location=%s\n" +
+                                                 "startGraph=%s\n" +
+                                                 this.getAdditionalProperties(additionalProperties) +
+                                                 "grooveVersion=5.8.1\n" +
+                                                 "grammarVersion=3.7",
                                                  dtf.format(now),
                                                  subFolder.getPath(),
                                                  startGraph);

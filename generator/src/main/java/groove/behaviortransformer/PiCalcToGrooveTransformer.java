@@ -46,13 +46,13 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
     private Map<String, GrooveNode> nameToNode;
 
     @Override
-    public Stream<GrooveGraphRule> generateRules(NamedPiProcess namedPiProcess, boolean addPrefix) {
+    public Stream<GrooveGraphRule> generateRules(NamedPiProcess namedPiProcess) {
         // Fixed set of rules for Pi. We do not think about synchronisation yet.
         return new GrooveRuleBuilder().getRules();
     }
 
     @Override
-    public void generateAndWriteRules(NamedPiProcess namedPiProcess, boolean addPrefix, File targetFolder) {
+    public void generateAndWriteRules(NamedPiProcess namedPiProcess, File targetFolder) {
         this.copyPiRulesAndTypeGraph(targetFolder);
     }
 
@@ -71,7 +71,7 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
     }
 
     @Override
-    public GrooveGraph generateStartGraph(NamedPiProcess piProcess, boolean addPrefix) {
+    public GrooveGraph generateStartGraph(NamedPiProcess piProcess) {
         // Prefixing is not needed for the pi-calculus since a shared set of rules is used for everything.
 
         this.nodes = new LinkedHashSet<>();

@@ -18,22 +18,20 @@ public class PNToGrooveTransformer implements GrooveTransformer<PetriNet> {
     private static final String TOKEN_EDGE_NAME = "token";
 
     @Override
-    public GrooveGraph generateStartGraph(PetriNet petriNet, boolean addPrefix) {
-        String potentialPrefix = GrooveRuleBuilder.getPotentialPrefix(petriNet, addPrefix);
-
+    public GrooveGraph generateStartGraph(PetriNet petriNet) {
         Set<GrooveNode> nodes = new LinkedHashSet<>();
         Set<GrooveEdge> edges = new LinkedHashSet<>();
 
         // Create a node for each place of the petri net.
         petriNet.getPlaces().forEach(place -> {
-            GrooveNode placeNode = new GrooveNode(potentialPrefix + place.getName());
+            GrooveNode placeNode = new GrooveNode(place.getName());
             nodes.add(placeNode);
             // Create and link start tokens for each place.
             for (int i = 0; i < place.getStartTokenAmount(); i++) {
-                GrooveNode tokenNode = new GrooveNode(potentialPrefix + TOKEN_NODE_NAME);
+                GrooveNode tokenNode = new GrooveNode(TOKEN_NODE_NAME);
                 nodes.add(tokenNode);
 
-                GrooveEdge tokenEdge = new GrooveEdge(potentialPrefix + TOKEN_EDGE_NAME, placeNode, tokenNode);
+                GrooveEdge tokenEdge = new GrooveEdge(TOKEN_EDGE_NAME, placeNode, tokenNode);
                 edges.add(tokenEdge);
             }
         });
@@ -41,8 +39,8 @@ public class PNToGrooveTransformer implements GrooveTransformer<PetriNet> {
     }
 
     @Override
-    public Stream<GrooveGraphRule> generateRules(PetriNet petriNet, boolean addPrefix) {
-        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(petriNet, addPrefix);
+    public Stream<GrooveGraphRule> generateRules(PetriNet petriNet) {
+        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder();
         petriNet.getTransitions().forEach(transition -> {
             ruleBuilder.startRule(transition.getName());
 

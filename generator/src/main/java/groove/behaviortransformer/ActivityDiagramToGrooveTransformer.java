@@ -56,7 +56,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     }
 
     @Override
-    public GrooveGraph generateStartGraph(ActivityDiagram activityDiagram, boolean addPrefix) {
+    public GrooveGraph generateStartGraph(ActivityDiagram activityDiagram) {
         // TODO: Add prefix if needed!
         GrooveGraphBuilder builder = new GrooveGraphBuilder().setName(activityDiagram.getName());
 
@@ -108,8 +108,8 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     }
 
     @Override
-    public Stream<GrooveGraphRule> generateRules(ActivityDiagram activityDiagram, boolean addPrefix) {
-        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(activityDiagram, addPrefix);
+    public Stream<GrooveGraphRule> generateRules(ActivityDiagram activityDiagram) {
+        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder();
 
         this.addStartRule(activityDiagram, ruleBuilder);
 
@@ -571,7 +571,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     }
 
     @Override
-    public void generateAndWriteRulesFurther(ActivityDiagram activityDiagram, boolean addPrefix, File targetFolder) {
+    public void generateAndWriteRulesFurther(ActivityDiagram activityDiagram, File targetFolder) {
         this.copyTypeGraph(targetFolder);
     }
 

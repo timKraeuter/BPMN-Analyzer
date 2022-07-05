@@ -13,16 +13,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
 public abstract class BehaviorToGrooveTransformerTestHelper {
-//    private final String outputPath = "B:/Source/groove/bin";
+    //    private final String outputPath = "B:/Source/groove/bin";
     String outputPath = FileUtils.getTempDirectoryPath();
 
-    private boolean addPrefix = false;
     private Function<String, Boolean> fileNameFilter = x -> false;
 
     @BeforeEach
     void setUp() {
         GrooveNode.idCounter.set(-1);
-        this.addPrefix = false;
         this.fileNameFilter = x -> false;
         this.setUpFurther();
     }
@@ -35,26 +33,21 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
         return this.outputPath + "/" + this.getOutputPathSubFolderName();
     }
 
-    public void setAddPrefix(boolean addPrefix) {
-        this.addPrefix = addPrefix;
-    }
-
     public void setFileNameFilter(Function<String, Boolean> fileNameFilter) {
         this.fileNameFilter = fileNameFilter;
     }
 
     public void checkGrooveGeneration(Behavior behavior) throws IOException {
-        this.checkGrooveGeneration(behavior, this.addPrefix, this.fileNameFilter);
+        this.checkGrooveGeneration(behavior, this.fileNameFilter);
     }
 
     @SuppressWarnings("ConstantConditions")
     private void checkGrooveGeneration(Behavior behavior,
-                                       boolean addPrefix,
                                        Function<String, Boolean> fileNameFilter) throws IOException {
         String modelName = behavior.getName();
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
         File outputDir = new File(this.getOutputPathIncludingSubFolder());
-        transformer.generateGrooveGrammar(behavior, outputDir, addPrefix);
+        transformer.generateGrooveGrammar(behavior, outputDir);
 
         // assert
         File expectedDir = new File(this.getClass().getResource("/" +
@@ -74,7 +67,8 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
 
     void checkPropertiesFile(File propertiesFile) throws IOException {
         Assertions.assertTrue(FileUtils.readFileToString(propertiesFile, StandardCharsets.UTF_8).replaceAll("\r?\n",
-                                                                                                            "\r\n") // force identical line separators
+                                                                                                            "\r\n")
+                                       // force identical line separators
                                        .endsWith("grooveVersion=5.8.1\r\n" + "grammarVersion=3.7"));
     }
 }

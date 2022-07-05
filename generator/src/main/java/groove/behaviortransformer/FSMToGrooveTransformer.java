@@ -28,7 +28,7 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
     private static final String CURRENT_STATE = "currentState";
 
     @Override
-    public void generateAndWriteRulesFurther(FiniteStateMachine fsm, boolean addPrefix, File targetFolder) {
+    public void generateAndWriteRulesFurther(FiniteStateMachine fsm, File targetFolder) {
         this.copyTypeGraph(targetFolder);
     }
 
@@ -44,25 +44,23 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
     }
 
     @Override
-    public GrooveGraph generateStartGraph(FiniteStateMachine finiteStateMachine, boolean addPrefix) {
-        String potentialPrefix = this.getPrefixOrEmpty(finiteStateMachine, addPrefix);
-
-        final String stateMachineName = potentialPrefix + finiteStateMachine.getName();
+    public GrooveGraph generateStartGraph(FiniteStateMachine finiteStateMachine) {
+        final String stateMachineName = finiteStateMachine.getName();
         final GrooveGraphBuilder builder = new GrooveGraphBuilder().setName(stateMachineName);
         GrooveNode startStateNode = new GrooveNode(TYPE_STATE);
         GrooveNode stateMachineNode = new GrooveNode(TYPE_STATE_MACHINE_SNAPSHOT);
         builder.addEdge(CURRENT_STATE, stateMachineNode, startStateNode);
 
         builder.addEdge(NAME, stateMachineNode, new GrooveNode(createStringNodeLabel(stateMachineName)));
-        final String startStateName = potentialPrefix + finiteStateMachine.getStartState().getName();
+        final String startStateName = finiteStateMachine.getStartState().getName();
         builder.addEdge(NAME, startStateNode, new GrooveNode(createStringNodeLabel(startStateName)));
 
         return builder.build();
     }
 
     @Override
-    public Stream<GrooveGraphRule> generateRules(FiniteStateMachine finiteStateMachine, boolean addPrefix) {
-        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder(finiteStateMachine, addPrefix);
+    public Stream<GrooveGraphRule> generateRules(FiniteStateMachine finiteStateMachine) {
+        GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder();
         finiteStateMachine.getTransitions().forEach(transition -> {
             ruleBuilder.startRule(transition.getName());
 
