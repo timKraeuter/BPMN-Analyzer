@@ -2,7 +2,6 @@ package groove.graph.rule;
 
 import api.GraphRuleGenerator;
 import api.Node;
-import behavior.Behavior;
 import behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import groove.graph.GrooveEdge;
 import groove.graph.GrooveNode;
@@ -13,9 +12,6 @@ import java.util.stream.Stream;
 public class GrooveRuleBuilder implements GraphRuleGenerator {
     private final Map<String, GrooveGraphRule> rulenameToRule = new LinkedHashMap<>();
     private GrooveGraphRule currentRule = null;
-
-    public GrooveRuleBuilder() {
-    }
 
     public static Stream<GrooveGraphRule> createSynchedRules(Map<String, Set<GrooveGraphRule>> nameToToBeSynchedRules) {
         GrooveRuleBuilder ruleGenerator = new GrooveRuleBuilder();

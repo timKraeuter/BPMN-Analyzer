@@ -92,8 +92,4 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
     public boolean isLayoutActivated() {
         return true; // TODO: implement layout as parameter!
     }
-
-    private String getPrefixOrEmpty(FiniteStateMachine finiteStateMachine, boolean addPrefix) {
-        return addPrefix ? finiteStateMachine.getName() + "_" : "";
-    }
 }
