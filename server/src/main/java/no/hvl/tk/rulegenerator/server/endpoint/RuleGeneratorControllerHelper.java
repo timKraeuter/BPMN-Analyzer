@@ -41,8 +41,7 @@ public class RuleGeneratorControllerHelper {
 
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
         final File grooveGrammarFolder = transformer.generateGrooveGrammar(bpmnCollaboration,
-                                                                           new File(GRAPH_GRAMMAR_TEMP_DIR),
-                                                                           false);
+                                                                           new File(GRAPH_GRAMMAR_TEMP_DIR));
 
         return Pair.of(grooveGrammarFolder, bpmnCollaboration);
     }
