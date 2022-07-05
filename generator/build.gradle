@@ -48,7 +48,6 @@ test {
     testLogging {
         showStandardStreams = true
     }
-    finalizedBy jacocoTestReport
 }
 
 jacocoTestReport {
@@ -65,4 +64,8 @@ sonarqube {
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.exclusions", "src/main/java/groove/gxl/**"
     }
+}
+
+tasks.named('sonarqube').configure {
+    dependsOn jacocoTestReport
 }

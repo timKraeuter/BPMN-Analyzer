@@ -49,7 +49,6 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
-	finalizedBy jacocoTestReport
 }
 
 jacocoTestReport {
@@ -65,4 +64,8 @@ sonarqube {
 		property "sonar.organization", "timkraeuter"
 		property "sonar.host.url", "https://sonarcloud.io"
 	}
+}
+
+tasks.named('sonarqube').configure {
+	dependsOn jacocoTestReport
 }
