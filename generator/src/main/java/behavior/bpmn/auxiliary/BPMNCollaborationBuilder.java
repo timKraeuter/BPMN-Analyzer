@@ -163,8 +163,8 @@ public class BPMNCollaborationBuilder implements BPMNModelBuilder {
 
     public BPMNCollaboration build() {
         if (!currentProcessBuilder.getStartEvents().isEmpty() ||
-            currentProcessBuilder.getFlowNodes().size() >= 1 ||
-            currentProcessBuilder.getSequenceFlows().size() >= 1) {
+            !currentProcessBuilder.getFlowNodes().isEmpty() ||
+            !currentProcessBuilder.getSequenceFlows().isEmpty()) {
             this.buildProcess();
         }
         return new BPMNCollaboration(name, participants, subprocesses, messageFlows);

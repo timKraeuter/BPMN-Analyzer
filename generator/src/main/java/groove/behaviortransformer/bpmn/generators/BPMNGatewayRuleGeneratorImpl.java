@@ -114,7 +114,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
         for (Set<SequenceFlow> branchGatewayOutFlows :
                 Sets.powerSet(branchGateway.getOutgoingFlows().collect(Collectors.toCollection(
                         LinkedHashSet::new)))) {
-            if (branchGatewayOutFlows.size() >= 1) { // Empty set is also part of the power set.
+            if (!branchGatewayOutFlows.isEmpty()) { // Empty set is also part of the power set.
                 ruleBuilder.startRule(inclusiveGateway.getName() + "_" + i);
                 GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process,
                                                                                                   ruleBuilder);
@@ -183,7 +183,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
         for (Set<SequenceFlow> outFlows :
                 Sets.powerSet(inclusiveGateway.getOutgoingFlows().collect(Collectors.toCollection(
                         LinkedHashSet::new)))) {
-            if (outFlows.size() >= 1) { // Empty set is also part of the power set.
+            if (!outFlows.isEmpty()) { // Empty set is also part of the power set.
                 ruleBuilder.startRule(inclusiveGateway.getName() + "_" + i);
                 GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process,
                                                                                                   ruleBuilder);
