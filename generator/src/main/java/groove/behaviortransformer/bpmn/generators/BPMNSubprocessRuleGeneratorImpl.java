@@ -19,10 +19,14 @@ import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.*;
 public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenerator {
     private final BPMNRuleGenerator bpmnRuleGenerator;
     private final GrooveRuleBuilder ruleBuilder;
+    private boolean useSFId;
 
-    public BPMNSubprocessRuleGeneratorImpl(BPMNRuleGenerator bpmnRuleGenerator, GrooveRuleBuilder ruleBuilder) {
+    public BPMNSubprocessRuleGeneratorImpl(BPMNRuleGenerator bpmnRuleGenerator,
+                                           GrooveRuleBuilder ruleBuilder,
+                                           boolean useSFId) {
         this.bpmnRuleGenerator = bpmnRuleGenerator;
         this.ruleBuilder = ruleBuilder;
+        this.useSFId = useSFId;
     }
 
     @Override
@@ -44,7 +48,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
     void createSubProcessInstantiationRule(AbstractProcess process,
                                            CallActivity callActivity,
                                            SequenceFlow incomingFlow) {
-        final String incomingFlowId = incomingFlow.getDescriptiveID();
+        final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow, this.useSFId);
         ruleBuilder.startRule(bpmnRuleGenerator.getTaskOrCallActivityRuleName(callActivity, incomingFlowId));
         GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
         BPMNToGrooveTransformerHelper.deleteTokenWithPosition(ruleBuilder, processInstance, incomingFlowId);
@@ -91,7 +95,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
 
         // Add outgoing tokens
         callActivity.getOutgoingFlows().forEach(outgoingFlow -> {
-            final String outgoingFlowID = outgoingFlow.getDescriptiveID();
+            final String outgoingFlowID = getSequenceFlowIdOrDescriptiveName(outgoingFlow, this.useSFId);
             BPMNToGrooveTransformerHelper.addTokenWithPosition(ruleBuilder, parentProcess, outgoingFlowID);
         });
 
@@ -141,7 +145,8 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
         GrooveNode processInstance = BPMNToGrooveTransformerHelper.addTokensForOutgoingFlowsToRunningInstance(
                 boundaryEvent,
                 process,
-                ruleBuilder);
+                ruleBuilder,
+                useSFId);
         additionalActions.accept(processInstance);
 
         if (boundaryEvent.isInterrupt()) {
@@ -150,7 +155,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
             // Subprocess must be running
             GrooveNode subprocessInstance =
                     BPMNToGrooveTransformerHelper.contextProcessInstance(callActivity.getSubProcessModel(),
-                                                                         ruleBuilder);
+                                                                                                 ruleBuilder);
             ruleBuilder.contextEdge(SUBPROCESS, processInstance, subprocessInstance);
         }
 

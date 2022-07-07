@@ -1,6 +1,7 @@
 package no.hvl.tk.rulegenerator.server.endpoint;
 
 import behavior.bpmn.BPMNCollaboration;
+import behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import behavior.bpmn.reader.BPMNFileReader;
 import groove.behaviortransformer.BehaviorToGrooveTransformer;
 import org.apache.commons.lang3.tuple.Pair;
@@ -12,8 +13,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 public class RuleGeneratorControllerHelper {
-    public static final String GRAPH_GRAMMAR_TEMP_DIR = getTempDir() +
-                                                        "bpmnAnalyzerGraphGrammars/";
+    public static final String GRAPH_GRAMMAR_TEMP_DIR = getTempDir() + "bpmnAnalyzerGraphGrammars/";
     public static final String STATE_SPACE_TEMP_DIR = getTempDir() + "bpmnAnalyzerStateSpaces/";
 
     private static String getTempDir() {
@@ -39,11 +39,27 @@ public class RuleGeneratorControllerHelper {
                 new BPMNFileReader(RuleGeneratorControllerHelper::transformToQualifiedGrooveNameIfNeeded);
         BPMNCollaboration bpmnCollaboration = bpmnFileReader.readModelFromStream(file.getInputStream());
 
-        BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
-        final File grooveGrammarFolder = transformer.generateGrooveGrammar(bpmnCollaboration,
-                                                                           new File(GRAPH_GRAMMAR_TEMP_DIR));
+        final File grooveGrammarFolder = generateGG(bpmnCollaboration);
 
         return Pair.of(grooveGrammarFolder, bpmnCollaboration);
+    }
+
+    private static File generateGG(BPMNCollaboration bpmnCollaboration) {
+        BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
+        File grooveGrammarFolder;
+        try {
+
+            grooveGrammarFolder = transformer.generateGrooveGrammarForBPMNProcessModel(bpmnCollaboration,
+                                                                                       new File(GRAPH_GRAMMAR_TEMP_DIR),
+                                                                                       false);
+        }
+        catch (GrooveGenerationRuntimeException e) {
+            // Retry but using sequence flow ids not descriptive names.
+            grooveGrammarFolder = transformer.generateGrooveGrammarForBPMNProcessModel(bpmnCollaboration,
+                                                                                       new File(GRAPH_GRAMMAR_TEMP_DIR),
+                                                                                       true);
+        }
+        return grooveGrammarFolder;
     }
 
     private static String transformToQualifiedGrooveNameIfNeeded(String name) {

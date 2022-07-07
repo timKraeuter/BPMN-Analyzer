@@ -54,17 +54,19 @@ public class BehaviorToGrooveTransformer {
             // Add flags
             node.getFlags().forEach(flag -> GrooveGxlHelper.addFlagToNode(gxlGraph, gxlNode, flag));
             // Add data nodes/attributes
-            node.getAttributes().forEach(
-                    (name, value) -> addNodeAttribute(gxlGraph, idToNodeLabel, gxlNode, name, value));
+            node.getAttributes().forEach((name, value) -> addNodeAttribute(gxlGraph,
+                                                                           idToNodeLabel,
+                                                                           gxlNode,
+                                                                           name,
+                                                                           value));
 
             idToNodeLabel.put(node.getId(), node.getName());
             grooveNodeIdToGxlNode.put(node.getId(), gxlNode);
         });
-        graph.edges().forEach(edge -> GrooveGxlHelper.createEdgeWithName(
-                gxlGraph,
-                grooveNodeIdToGxlNode.get(edge.getSourceNode().getId()),
-                grooveNodeIdToGxlNode.get(edge.getTargetNode().getId()),
-                edge.getName()));
+        graph.edges().forEach(edge -> GrooveGxlHelper.createEdgeWithName(gxlGraph,
+                                                                         grooveNodeIdToGxlNode.get(edge.getSourceNode().getId()),
+                                                                         grooveNodeIdToGxlNode.get(edge.getTargetNode().getId()),
+                                                                         edge.getName()));
 
         if (doLayout) {
             GrooveGxlHelper.layoutGraph(gxlGraph, idToNodeLabel);
@@ -72,27 +74,22 @@ public class BehaviorToGrooveTransformer {
         return gxl;
     }
 
-    private static void addNodeAttribute(
-            Graph graph,
-            Map<String, String> idToNodeLabel,
-            Node attributeHolder,
-            String attributeName,
-            GrooveValue<?> attributeValue) {
+    private static void addNodeAttribute(Graph graph,
+                                         Map<String, String> idToNodeLabel,
+                                         Node attributeHolder,
+                                         String attributeName,
+                                         GrooveValue<?> attributeValue) {
         String attributeNodeName = String.format("%s:%s", attributeValue.getTypeName(), attributeValue.getValue());
-        Node dataNode = GrooveGxlHelper.createNodeWithName(
-                GrooveNode.getNextNodeId(),
-                attributeNodeName,
-                graph);
+        Node dataNode = GrooveGxlHelper.createNodeWithName(GrooveNode.getNextNodeId(), attributeNodeName, graph);
         GrooveGxlHelper.createEdgeWithName(graph, attributeHolder, dataNode, attributeName);
 
         idToNodeLabel.put(dataNode.getId(), attributeNodeName);
     }
 
-    void generateGrooveGrammar(
-            File grooveFolder,
-            String graphGrammarName,
-            Map<String, Set<String>> nameToToBeSynchedRuleNames,
-            Behavior... behaviors) {
+    void generateGrooveGrammar(File grooveFolder,
+                               String graphGrammarName,
+                               Map<String, Set<String>> nameToToBeSynchedRuleNames,
+                               Behavior... behaviors) {
         File graphGrammarSubFolder = this.makeSubFolder(graphGrammarName, grooveFolder);
 
         final boolean[] piProcessIncluded = {false};
@@ -106,8 +103,7 @@ public class BehaviorToGrooveTransformer {
                 FSMToGrooveTransformer transformer = new FSMToGrooveTransformer();
 
                 startGraphs.add(transformer.generateStartGraph(finiteStateMachine));
-                transformer.generateRules(finiteStateMachine).forEach(rule -> allRules.put(rule.getRuleName(),
-                                                                                                  rule));
+                transformer.generateRules(finiteStateMachine).forEach(rule -> allRules.put(rule.getRuleName(), rule));
                 // Copy type graph
                 transformer.generateAndWriteRulesFurther(finiteStateMachine, graphGrammarSubFolder);
                 typeGraphs.add(FSM_TYPE_GRAPH_FILE_NAME);
@@ -169,33 +165,28 @@ public class BehaviorToGrooveTransformer {
         this.writeAndSynchRules(nameToToBeSynchedRuleNames, allRules, graphGrammarSubFolder);
     }
 
-    private void writeAndSynchRules(
-            Map<String, Set<String>> nameToToBeSynchedRuleNames,
-            Map<String, GrooveGraphRule> indexedRules,
-            File targetFolder) {
+    private void writeAndSynchRules(Map<String, Set<String>> nameToToBeSynchedRuleNames,
+                                    Map<String, GrooveGraphRule> indexedRules,
+                                    File targetFolder) {
         Map<String, Set<GrooveGraphRule>> nameToToBeSynchedRules = new LinkedHashMap<>();
         Set<GrooveGraphRule> unsynchedRules = new LinkedHashSet<>(indexedRules.values());
 
         nameToToBeSynchedRuleNames.forEach((newRuleName, ruleNames) -> {
-            Set<GrooveGraphRule> rules = ruleNames.stream().map(indexedRules::get)
-                                                  .collect(Collectors.toSet());
+            Set<GrooveGraphRule> rules = ruleNames.stream().map(indexedRules::get).collect(Collectors.toSet());
             rules.forEach(unsynchedRules::remove);
             nameToToBeSynchedRules.put(newRuleName, rules);
         });
 
 
-        Stream<GrooveGraphRule> synchedRules = GrooveRuleBuilder.createSynchedRules(
-                nameToToBeSynchedRules
-        );
+        Stream<GrooveGraphRule> synchedRules = GrooveRuleBuilder.createSynchedRules(nameToToBeSynchedRules);
 
         GrooveRuleWriter.writeRules(synchedRules, targetFolder);
         GrooveRuleWriter.writeRules(unsynchedRules.stream(), targetFolder);
     }
 
     private void mergeAndWriteStartGraphs(File graphGrammarSubFolder, Set<GrooveGraph> startGraphs) {
-        Optional<GrooveGraph> startGraph = startGraphs.stream()
-                                                      .reduce((graph, graph2) -> graph.union(graph2,
-                                                                                             (name1, name2) -> name1));
+        Optional<GrooveGraph> startGraph = startGraphs.stream().reduce((graph, graph2) -> graph.union(graph2,
+                                                                                                      (name1, name2) -> name1));
         startGraph.ifPresent(graph -> GrooveTransformer.writeStartGraph(graphGrammarSubFolder, graph, true));
     }
 
@@ -216,8 +207,8 @@ public class BehaviorToGrooveTransformer {
             @Override
             public void handle(BPMNCollaboration collaboration) {
                 result.setValue(BehaviorToGrooveTransformer.this.generateGrooveGrammarForBPMNProcessModel(collaboration,
-                                                                                                          targetFolder
-                ));
+                                                                                                          targetFolder,
+                                                                                                          false));
             }
 
             @Override
@@ -235,8 +226,7 @@ public class BehaviorToGrooveTransformer {
         return result.getValueIfExists();
     }
 
-    private File generateGrooveGrammarForActivityDiagram(ActivityDiagram activityDiagram,
-                                                         File targetFolder) {
+    private File generateGrooveGrammarForActivityDiagram(ActivityDiagram activityDiagram, File targetFolder) {
         File graphGrammarSubFolder = this.makeSubFolder(activityDiagram, targetFolder);
         ActivityDiagramToGrooveTransformer transformer = new ActivityDiagramToGrooveTransformer(true);
 
@@ -267,11 +257,11 @@ public class BehaviorToGrooveTransformer {
         return graphGrammarSubFolder;
     }
 
-    private File generateGrooveGrammarForBPMNProcessModel(
-            BPMNCollaboration collaboration,
-            File grooveDir) {
+    public File generateGrooveGrammarForBPMNProcessModel(BPMNCollaboration collaboration,
+                                                         File grooveDir,
+                                                         boolean useSFId) {
         File graphGrammarSubFolder = this.makeSubFolder(collaboration, grooveDir);
-        BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer();
+        BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer(useSFId);
 
         // Generate start graph
         transformer.generateAndWriteStartGraph(collaboration, graphGrammarSubFolder);
@@ -350,9 +340,8 @@ public class BehaviorToGrooveTransformer {
     }
 
     private String getAdditionalProperties(Map<String, String> additionalProperties) {
-        return additionalProperties.entrySet().stream()
-                                   .reduce("",
-                                           (prop1, prop2) -> prop1 + prop2 + "\n",
-                                           (key, value) -> key + "=" + value);
+        return additionalProperties.entrySet().stream().reduce("",
+                                                               (prop1, prop2) -> prop1 + prop2 + "\n",
+                                                               (key, value) -> key + "=" + value);
     }
 }

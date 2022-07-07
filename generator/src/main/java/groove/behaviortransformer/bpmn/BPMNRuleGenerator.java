@@ -28,16 +28,16 @@ public class BPMNRuleGenerator {
     private final BPMNEventSubprocessRuleGenerator eventSubprocessRuleGenerator;
     private final BPMNSubprocessRuleGenerator subprocessRuleGenerator;
 
-    BPMNRuleGenerator(GrooveRuleBuilder ruleBuilder, BPMNCollaboration collaboration) {
+    BPMNRuleGenerator(GrooveRuleBuilder ruleBuilder, BPMNCollaboration collaboration, boolean useSFId) {
         this.ruleBuilder = ruleBuilder;
         this.collaboration = collaboration;
         visitedProcessModels = Sets.newHashSet();
 
-        taskRuleGenerator = new BPMNTaskRuleGeneratorImpl(collaboration, ruleBuilder);
-        eventRuleGenerator = new BPMNEventRuleGeneratorImpl(this, ruleBuilder);
-        gatewayRuleGenerator = new BPMNGatewayRuleGeneratorImpl(ruleBuilder);
-        eventSubprocessRuleGenerator = new BPMNEventSubprocessRuleGeneratorImpl(this, ruleBuilder);
-        subprocessRuleGenerator = new BPMNSubprocessRuleGeneratorImpl(this, ruleBuilder);
+        taskRuleGenerator = new BPMNTaskRuleGeneratorImpl(collaboration, ruleBuilder, useSFId);
+        eventRuleGenerator = new BPMNEventRuleGeneratorImpl(this, ruleBuilder, useSFId);
+        gatewayRuleGenerator = new BPMNGatewayRuleGeneratorImpl(ruleBuilder, useSFId);
+        eventSubprocessRuleGenerator = new BPMNEventSubprocessRuleGeneratorImpl(this, ruleBuilder, useSFId);
+        subprocessRuleGenerator = new BPMNSubprocessRuleGeneratorImpl(this, ruleBuilder, useSFId);
 
         generateRules();
     }

@@ -22,10 +22,12 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
 
     private final BPMNCollaboration collaboration;
     private final GrooveRuleBuilder ruleBuilder;
+    private boolean useSFId;
 
-    public BPMNTaskRuleGeneratorImpl(BPMNCollaboration collaboration, GrooveRuleBuilder ruleBuilder) {
+    public BPMNTaskRuleGeneratorImpl(BPMNCollaboration collaboration, GrooveRuleBuilder ruleBuilder, boolean useSFIds) {
         this.collaboration = collaboration;
         this.ruleBuilder = ruleBuilder;
+        this.useSFId = useSFIds;
     }
 
     @Override
@@ -39,8 +41,9 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         createTaskRulesForProcess(process,
                                   sendTask,
                                   builder -> addMessageFlowBehaviorForFlowNode(collaboration,
-                                                                                   builder,
-                                                                                   sendTask));
+                                                                               builder,
+                                                                               sendTask,
+                                                                               this.useSFId));
 
     }
 
@@ -94,7 +97,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
                                                       ReceiveTask receiveTask,
                                                       SequenceFlow incomingFlow) {
         collaboration.getIncomingMessageFlows(receiveTask).forEach(messageFlow -> {
-            final String incomingFlowId = incomingFlow.getDescriptiveID();
+            final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow, this.useSFId);
             // TODO: We need to make the rule name unique here, if there are multiple incoming messages!
             // TODO: Delete all other possible messages!
             ruleBuilder.startRule(this.getTaskOrCallActivityRuleName(receiveTask, incomingFlowId) + START);
@@ -182,7 +185,8 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
                                          Consumer<GrooveNode> additionalActions) {
         ruleBuilder.startRule(boundaryEvent.getName());
         // Add outgoing tokens
-        GrooveNode processInstance = addTokensForOutgoingFlowsToRunningInstance(boundaryEvent, process, ruleBuilder);
+        GrooveNode processInstance = addTokensForOutgoingFlowsToRunningInstance(boundaryEvent, process, ruleBuilder,
+                                                                                useSFId);
         additionalActions.accept(processInstance);
 
         // Delete token in task if interrupt.
@@ -199,7 +203,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
                              AbstractTask task,
                              SequenceFlow incomingFlow,
                              Consumer<GrooveNode> startTaskRuleAdditions) {
-        final String incomingFlowId = incomingFlow.getDescriptiveID();
+        final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow, this.useSFId);
         ruleBuilder.startRule(this.getTaskOrCallActivityRuleName(task, incomingFlowId) + START);
         GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
         BPMNToGrooveTransformerHelper.deleteTokenWithPosition(ruleBuilder, processInstance, incomingFlowId);
@@ -216,7 +220,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         BPMNToGrooveTransformerHelper.deleteTokenWithPosition(ruleBuilder, processInstance, task.getName());
 
         task.getOutgoingFlows().forEach(outgoingFlow -> {
-            final String outgoingFlowID = outgoingFlow.getDescriptiveID();
+            final String outgoingFlowID = getSequenceFlowIdOrDescriptiveName(outgoingFlow, this.useSFId);
             BPMNToGrooveTransformerHelper.addTokenWithPosition(ruleBuilder, processInstance, outgoingFlowID);
         });
         endTaskRuleAdditions.accept(ruleBuilder);

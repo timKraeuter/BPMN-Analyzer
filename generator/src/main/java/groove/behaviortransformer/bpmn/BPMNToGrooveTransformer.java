@@ -28,6 +28,15 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
     // Graph conditions for model-checking
     public static final String ALL_TERMINATED_FILE_NAME = "AllTerminated.gpr";
     public static final String UNSAFE_FILE_NAME = "Unsafe.gpr";
+    private boolean useSFIds;
+
+    public BPMNToGrooveTransformer() {
+        this(false);
+    }
+
+    public BPMNToGrooveTransformer(boolean useSFId) {
+        this.useSFIds = useSFId;
+    }
 
     @Override
     public GrooveGraph generateStartGraph(BPMNCollaboration collaboration) {
@@ -62,7 +71,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
     @Override
     public Stream<GrooveGraphRule> generateRules(BPMNCollaboration collaboration) {
         GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder();
-        BPMNRuleGenerator bpmnRuleGenerator = new BPMNRuleGenerator(ruleBuilder, collaboration);
+        BPMNRuleGenerator bpmnRuleGenerator = new BPMNRuleGenerator(ruleBuilder, collaboration, useSFIds);
 
         return bpmnRuleGenerator.getRules();
     }

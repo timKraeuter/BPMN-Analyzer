@@ -20,11 +20,15 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
     private final BPMNRuleGenerator bpmnRuleGenerator;
     private final BPMNCollaboration collaboration;
     private final GrooveRuleBuilder ruleBuilder;
+    private boolean useSFId;
 
-    public BPMNEventSubprocessRuleGeneratorImpl(BPMNRuleGenerator bpmnRuleGenerator, GrooveRuleBuilder ruleBuilder) {
+    public BPMNEventSubprocessRuleGeneratorImpl(BPMNRuleGenerator bpmnRuleGenerator,
+                                                GrooveRuleBuilder ruleBuilder,
+                                                boolean useSFId) {
         this.bpmnRuleGenerator = bpmnRuleGenerator;
         this.collaboration = bpmnRuleGenerator.getCollaboration();
         this.ruleBuilder = ruleBuilder;
+        this.useSFId = useSFId;
     }
 
     @Override
@@ -132,7 +136,8 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
         // Spawns a new token at each outgoing flow.
         BPMNToGrooveTransformerHelper.addOutgoingTokensForFlowNodeToProcessInstance(startEvent,
                                                                                     ruleBuilder,
-                                                                                    eventSubProcessInstance);
+                                                                                    eventSubProcessInstance,
+                                                                                    useSFId);
         return parentProcessInstance;
     }
 

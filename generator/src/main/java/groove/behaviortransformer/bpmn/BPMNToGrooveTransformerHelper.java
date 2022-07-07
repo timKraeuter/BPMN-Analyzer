@@ -85,7 +85,8 @@ public class BPMNToGrooveTransformerHelper {
         return processInstance;
     }
 
-    public static GrooveNode contextProcessInstanceWithOnlyName(AbstractProcess process, GrooveRuleBuilder ruleBuilder) {
+    public static GrooveNode contextProcessInstanceWithOnlyName(AbstractProcess process,
+                                                                GrooveRuleBuilder ruleBuilder) {
         GrooveNode processInstance = ruleBuilder.contextNode(TYPE_PROCESS_SNAPSHOT);
         ruleBuilder.contextEdge(NAME,
                                 processInstance,
@@ -95,18 +96,24 @@ public class BPMNToGrooveTransformerHelper {
 
     public static void addOutgoingTokensForFlowNodeToProcessInstance(FlowNode flowNode,
                                                                      GrooveRuleBuilder ruleBuilder,
-                                                                     GrooveNode processInstance) {
+                                                                     GrooveNode processInstance,
+                                                                     boolean useSFId) {
         flowNode.getOutgoingFlows().forEach(sequenceFlow -> addTokenWithPosition(ruleBuilder,
                                                                                  processInstance,
-                                                                                 sequenceFlow.getDescriptiveID()));
+                                                                                 getSequenceFlowIdOrDescriptiveName(
+                                                                                         sequenceFlow,
+                                                                                         useSFId)));
     }
 
     public static void addOutgoingTokensForFlowNodeToProcessInstanceWithQuantifier(FlowNode flowNode,
                                                                                    GrooveRuleBuilder ruleBuilder,
                                                                                    GrooveNode processInstance,
-                                                                                   GrooveNode quantifier) {
+                                                                                   GrooveNode quantifier,
+                                                                                   boolean useSFId) {
         flowNode.getOutgoingFlows().forEach(sequenceFlow -> {
-            GrooveNode addedToken = addTokenWithPosition(ruleBuilder, processInstance, sequenceFlow.getDescriptiveID());
+            GrooveNode addedToken = addTokenWithPosition(ruleBuilder,
+                                                         processInstance,
+                                                         getSequenceFlowIdOrDescriptiveName(sequenceFlow, useSFId));
             ruleBuilder.contextEdge(AT, addedToken, quantifier);
         });
     }
@@ -160,22 +167,24 @@ public class BPMNToGrooveTransformerHelper {
 
     public static void addMessageFlowBehaviorForFlowNode(BPMNCollaboration collaboration,
                                                          GrooveRuleBuilder ruleBuilder,
-                                                         FlowNode producingMessageFlowNode) {
+                                                         FlowNode producingMessageFlowNode,
+                                                         boolean useSFId) {
         collaboration.getMessageFlows().stream().filter(messageFlow -> messageFlow.getSource() ==
                                                                        producingMessageFlowNode).forEach(messageFlow -> {
             if (messageFlow.getTarget().isInstantiateFlowNode()) {
                 addMessageFlowInstantiateFlowNodeBehavior(ruleBuilder, messageFlow);
             } else if (isAfterInstantiateEventBasedGateway(messageFlow.getTarget())) {
-                addMessageFlowInstantiateAfterEVGatewayBehavior(collaboration, ruleBuilder, messageFlow);
+                addMessageFlowInstantiateAfterEVGatewayBehavior(collaboration, ruleBuilder, messageFlow, useSFId);
             } else {
-                addMessageSendBehaviorIfProcessExists(collaboration, ruleBuilder, messageFlow);
+                addMessageSendBehaviorIfProcessExists(collaboration, ruleBuilder, messageFlow, useSFId);
             }
         });
     }
 
     private static void addMessageSendBehaviorIfProcessExists(BPMNCollaboration collaboration,
                                                               GrooveRuleBuilder ruleBuilder,
-                                                              MessageFlow messageFlow) {
+                                                              MessageFlow messageFlow,
+                                                              boolean useSFId) {
         Process messageFlowReceiver = collaboration.getMessageFlowReceiver(messageFlow);
         // If a process instance exists, send a message.
         GrooveNode existsOptional = ruleBuilder.contextNode(EXISTS_OPTIONAL);
@@ -191,7 +200,7 @@ public class BPMNToGrooveTransformerHelper {
             if (sequenceFlow.getSource().isExclusiveEventBasedGateway()) {
                 tokenPosition = sequenceFlow.getSource().getName();
             } else {
-                tokenPosition = sequenceFlow.getDescriptiveID();
+                tokenPosition = getSequenceFlowIdOrDescriptiveName(sequenceFlow, useSFId);
             }
             ruleBuilder.contextEdge(POSITION, token, ruleBuilder.contextNode(createStringNodeLabel(tokenPosition)));
             ruleBuilder.contextEdge(AT, token, existsOptional);
@@ -211,13 +220,14 @@ public class BPMNToGrooveTransformerHelper {
 
     private static void addMessageFlowInstantiateAfterEVGatewayBehavior(BPMNCollaboration collaboration,
                                                                         GrooveRuleBuilder ruleBuilder,
-                                                                        MessageFlow messageFlow) {
+                                                                        MessageFlow messageFlow,
+                                                                        boolean useSFId) {
         // TODO: Maybe implement addMessageFlowInstantiateFlowNodeBehavior similarly without sending a message into
         //  nirvana? But then we get the event subprocess interrupt/non-interrupt logic here.
         // Catch rules are not created in this case.
         AbstractProcess newProcess = collaboration.findProcessForFlowNode(messageFlow.getTarget());
         GrooveNode newProcessInstance = addProcessInstance(ruleBuilder, newProcess.getName());
-        addOutgoingTokensForFlowNodeToProcessInstance(messageFlow.getTarget(), ruleBuilder, newProcessInstance);
+        addOutgoingTokensForFlowNodeToProcessInstance(messageFlow.getTarget(), ruleBuilder, newProcessInstance, useSFId);
     }
 
     public static boolean isAfterInstantiateEventBasedGateway(FlowNode target) {
@@ -246,18 +256,24 @@ public class BPMNToGrooveTransformerHelper {
 
     public static GrooveNode addTokensForOutgoingFlowsToRunningInstance(FlowNode flowNode,
                                                                         AbstractProcess process,
-                                                                        GrooveRuleBuilder ruleBuilder) {
+                                                                        GrooveRuleBuilder ruleBuilder,
+                                                                        boolean useSFId) {
         GrooveNode processInstance = contextProcessInstance(process, ruleBuilder);
-        addOutgoingTokensForFlowNodeToProcessInstance(flowNode, ruleBuilder, processInstance);
+        addOutgoingTokensForFlowNodeToProcessInstance(flowNode, ruleBuilder, processInstance, useSFId);
         return processInstance;
     }
 
     public static GrooveNode addTokensForOutgoingFlowsToRunningInstanceWithQuantifier(FlowNode flowNode,
                                                                                       AbstractProcess process,
                                                                                       GrooveRuleBuilder ruleBuilder,
-                                                                                      GrooveNode quantifier) {
+                                                                                      GrooveNode quantifier,
+                                                                                      boolean useSFId) {
         GrooveNode processInstance = contextProcessInstanceWithQuantifier(process, ruleBuilder, quantifier);
-        addOutgoingTokensForFlowNodeToProcessInstanceWithQuantifier(flowNode, ruleBuilder, processInstance, quantifier);
+        addOutgoingTokensForFlowNodeToProcessInstanceWithQuantifier(flowNode,
+                                                                    ruleBuilder,
+                                                                    processInstance,
+                                                                    quantifier,
+                                                                    useSFId);
         return processInstance;
     }
 
@@ -310,5 +326,9 @@ public class BPMNToGrooveTransformerHelper {
 
     public static String getStartEventTokenName(Process process, StartEvent event) {
         return process.getName() + "_" + event.getName();
+    }
+
+    public static String getSequenceFlowIdOrDescriptiveName(SequenceFlow flow, boolean useID) {
+        return useID ? flow.getId() : flow.getDescriptiveName();
     }
 }

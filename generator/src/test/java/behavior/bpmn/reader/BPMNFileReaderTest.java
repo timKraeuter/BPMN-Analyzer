@@ -335,7 +335,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     }
 
     private Set<String> getSequenceFlowIdsForProcess(Process participant) {
-        return participant.getSequenceFlows().map(SequenceFlow::getDescriptiveID).collect(Collectors.toCollection(
+        return participant.getSequenceFlows().map(SequenceFlow::getDescriptiveName).collect(Collectors.toCollection(
                 LinkedHashSet::new));
     }
 
