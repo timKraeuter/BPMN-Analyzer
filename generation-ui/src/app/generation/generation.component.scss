@@ -1,16 +1,20 @@
 .diagram-parent {
-    height: 400px;
-    border: solid 3px #eee;
-    position: relative;
+  height: 400px;
+  border: solid 3px #eee;
+  position: relative;
+  resize: both;
+  overflow: auto;
+  max-height: fit-content;
+  max-width: fit-content;
 }
 
 .import-error {
-    color: red;
-    padding: 20px;
+  color: red;
+  padding: 20px;
 
-    position: absolute;
-    top: 0;
-    left: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .card {
