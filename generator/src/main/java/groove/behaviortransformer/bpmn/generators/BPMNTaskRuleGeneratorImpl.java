@@ -54,7 +54,8 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
 
         if (receiveTask.isInstantiate()) {
             if (receiveTask.getIncomingFlows().findAny().isPresent()) {
-                throw new BPMNRuntimeException("Instantiate receive tasks should not have incoming sequence " + "flows!");
+                throw new BPMNRuntimeException("Instantiate receive tasks should not have incoming sequence " +
+                                               "flows!");
             }
             this.createInstantiateReceiveTaskRule(process, receiveTask);
             return;
@@ -79,17 +80,14 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
             createEventBasedGatewayStartTaskRule(process, receiveTask, incomingFlow);
         } else {
             // Should only be able to start when one message is present.
-            collaboration.getIncomingMessageFlows(receiveTask).forEach(messageFlow -> {
-                // TODO: We need to make the rule name unique here, if there are multiple incoming messages!
-                // TODO: Delete all other possible messages!
-                createStartTaskRule(process,
-                                    receiveTask,
-                                    incomingFlow,
-                                    processInstance -> deleteMessageToProcessInstanceWithPosition(ruleBuilder,
-                                                                                                  processInstance,
-                                                                                                  messageFlow.getName()));
-
-            });
+            collaboration.getIncomingMessageFlows(receiveTask).forEach(messageFlow -> createStartTaskRule(process,
+                                                                                                          receiveTask,
+                                                                                                          incomingFlow,
+                                                                                                          // TODO: Delete all other possible messages!
+                                                                                                          processInstance -> deleteMessageToProcessInstanceWithPosition(
+                                                                                                                  ruleBuilder,
+                                                                                                                  processInstance,
+                                                                                                                  messageFlow.getName())));
         }
     }
 
@@ -98,7 +96,6 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
                                                       SequenceFlow incomingFlow) {
         collaboration.getIncomingMessageFlows(receiveTask).forEach(messageFlow -> {
             final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow, this.useSFId);
-            // TODO: We need to make the rule name unique here, if there are multiple incoming messages!
             // TODO: Delete all other possible messages!
             ruleBuilder.startRule(this.getTaskOrCallActivityRuleName(receiveTask, incomingFlowId) + START);
             GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
@@ -141,11 +138,8 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
                                    AbstractTask task,
                                    Consumer<GrooveRuleBuilder> endTaskRuleAdditions) {
         // Rules for starting the task
-        task.getIncomingFlows().forEach(incomingFlow -> createStartTaskRule(process,
-                                                                            task,
-                                                                            incomingFlow,
-                                                                            grooveNode -> {
-                                                                            }));
+        task.getIncomingFlows().forEach(incomingFlow -> createStartTaskRule(process, task, incomingFlow, grooveNode -> {
+        }));
         // Rule for ending the task
         createEndTaskRule(process, task, endTaskRuleAdditions);
 
@@ -185,7 +179,9 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
                                          Consumer<GrooveNode> additionalActions) {
         ruleBuilder.startRule(boundaryEvent.getName());
         // Add outgoing tokens
-        GrooveNode processInstance = addTokensForOutgoingFlowsToRunningInstance(boundaryEvent, process, ruleBuilder,
+        GrooveNode processInstance = addTokensForOutgoingFlowsToRunningInstance(boundaryEvent,
+                                                                                process,
+                                                                                ruleBuilder,
                                                                                 useSFId);
         additionalActions.accept(processInstance);
 
