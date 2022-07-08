@@ -139,14 +139,11 @@ public class GrooveGxlHelper {
                                               ElkNode layoutGraph,
                                               String id,
                                               Map<String, String> nodeLabels) {
-        final ElkNode elkNode = layoutNodes.get(id);
-        if (elkNode == null) {
+        return layoutNodes.computeIfAbsent(id, key -> {
             ElkNode node = ElkGraphUtil.createNode(layoutGraph);
             node.setHeight(50d);
-            node.setWidth(nodeLabels.get(id).length() * 15d);
-            layoutNodes.put(id, node);
+            node.setWidth(nodeLabels.get(key).length() * 15d);
             return node;
-        }
-        return elkNode;
+        });
     }
 }

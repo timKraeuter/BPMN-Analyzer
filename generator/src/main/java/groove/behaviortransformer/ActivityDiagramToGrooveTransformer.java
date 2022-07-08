@@ -15,6 +15,7 @@ import behavior.activity.values.Value;
 import behavior.activity.values.ValueVisitor;
 import behavior.activity.variables.BooleanVariable;
 import behavior.activity.variables.Variable;
+import behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import groove.graph.GrooveGraph;
 import groove.graph.GrooveGraphBuilder;
@@ -165,7 +166,9 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
             @Override
             public void handle(InitialNode initialNode) {
-                assert initialNode.getOutgoingFlows().count() == 1L;
+                if (initialNode.getOutgoingFlows().count() != 1L) {
+                    throw new GrooveGenerationRuntimeException("The initial node must have exactly one outgoing flow!");
+                }
 
                 String initialNodeName = initialNode.getName();
                 initialNode.getOutgoingFlows().forEach(controlFlow -> {
@@ -183,7 +186,9 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
             @Override
             public void handle(JoinNode joinNode) {
-                assert joinNode.getOutgoingFlows().count() == 1L;
+                if (joinNode.getOutgoingFlows().count() != 1L) {
+                    throw new GrooveGenerationRuntimeException("A join node must have exactly one outgoing flow!");
+                }
                 joinNode.getOutgoingFlows().forEach(outFlow -> {
                     String joinNodeName = joinNode.getName();
                     ruleBuilder.startRule(joinNodeName);
@@ -213,7 +218,9 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
             @Override
             public void handle(MergeNode mergeNode) {
-                assert mergeNode.getOutgoingFlows().count() == 1L;
+                if (mergeNode.getOutgoingFlows().count() != 1L) {
+                    throw new GrooveGenerationRuntimeException("A merge node must have exactly one outgoing flow!");
+                }
                 mergeNode.getOutgoingFlows().forEach(controlFlow -> {
                     String mergeNodeName = mergeNode.getName();
                     ruleBuilder.startRule(mergeNodeName);
@@ -227,7 +234,9 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
             @Override
             public void handle(OpaqueAction opaqueAction) {
-                assert opaqueAction.getOutgoingFlows().count() == 1L;
+                if (opaqueAction.getOutgoingFlows().count() != 1L) {
+                    throw new GrooveGenerationRuntimeException("An opaque action must have exactly one outgoing flow!");
+                }
 
                 opaqueAction.getOutgoingFlows().forEach(controlFlow -> {
                     ruleBuilder.startRule(opaqueAction.getName());

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-class UseCase extends BPMNToGrooveTestBase {
+class UseCaseTest extends BPMNToGrooveTestBase {
     private final AtomicInteger counter = new AtomicInteger(0);
 
     /**
