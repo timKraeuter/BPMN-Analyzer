@@ -58,7 +58,6 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
 
     @Override
     public GrooveGraph generateStartGraph(ActivityDiagram activityDiagram) {
-        // TODO: Add prefix if needed!
         GrooveGraphBuilder builder = new GrooveGraphBuilder().setName(activityDiagram.getName());
 
         GrooveNode activityDiagramNode = new GrooveNode(TYPE_ACTIVITY_DIAGRAM);
@@ -117,164 +116,192 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
         activityDiagram.getNodes().forEach(activityNode -> activityNode.accept(new ActivityNodeVisitor() {
             @Override
             public void handle(DecisionNode decisionNode) {
-                decisionNode.getOutgoingFlows().forEach(controlFlow -> {
-                    String targetName = controlFlow.getTarget().getName();
-                    ruleBuilder.startRule(decisionNode.getName() + "_to_" + targetName);
-
-                    ActivityDiagramToGrooveTransformer.this.updateTokenPosition(decisionNode.getName(),
-                                                                                targetName,
-                                                                                ruleBuilder);
-
-                    // Guard
-                    BooleanVariable guardIfExists = controlFlow.getGuardIfExists();
-                    if (guardIfExists != null) {
-                        GrooveNode guardVar = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
-                                guardIfExists.getName(),
-                                ruleBuilder);
-
-                        GrooveNode boolValue = ruleBuilder.contextNode(TYPE_BOOLEAN_VALUE);
-                        ruleBuilder.contextEdge(VALUE, guardVar, boolValue);
-                        GrooveNode trueValue = ruleBuilder.contextNode(TRUE);
-                        ruleBuilder.contextEdge(VALUE, boolValue, trueValue);
-                    }
-
-                    ruleBuilder.buildRule();
-                });
+                createDecisionNodeRules(decisionNode, ruleBuilder);
             }
 
             @Override
             public void handle(ForkNode forkNode) {
-                String forkNodeName = forkNode.getName();
-
-                ruleBuilder.startRule(forkNodeName);
-
-                GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
-                GrooveNode oldTokenPosition = ruleBuilder.contextNode(
-                        GrooveTransformerHelper.createStringNodeLabel(forkNodeName));
-                ruleBuilder.deleteEdge(POSITION, token, oldTokenPosition);
-
-                forkNode.getOutgoingFlows().forEach(controlFlow -> {
-                    GrooveNode forkedToken = ruleBuilder.addNode(TYPE_FORKED_TOKEN);
-                    ruleBuilder.addEdge(BASE_TOKEN, forkedToken, token);
-                    GrooveNode forkedTokenPosition = ruleBuilder.contextNode(
-                            GrooveTransformerHelper.createStringNodeLabel(controlFlow.getTarget().getName()));
-                    ruleBuilder.addEdge(POSITION, forkedToken, forkedTokenPosition);
-                });
-
-                ruleBuilder.buildRule();
+                createForkNodeRule(forkNode, ruleBuilder);
             }
 
             @Override
             public void handle(InitialNode initialNode) {
-                if (initialNode.getOutgoingFlows().count() != 1L) {
-                    throw new GrooveGenerationRuntimeException("The initial node must have exactly one outgoing flow!");
-                }
-
-                String initialNodeName = initialNode.getName();
-                initialNode.getOutgoingFlows().forEach(controlFlow -> {
-                    ruleBuilder.startRule(initialNodeName);
-
-                    ActivityDiagramToGrooveTransformer.this.updateTokenPosition(
-                            initialNodeName,
-                            controlFlow.getTarget().getName(),
-                            ruleBuilder);
-
-                    ruleBuilder.buildRule();
-                });
-
+                createInitialNodeRule(initialNode, ruleBuilder);
             }
 
             @Override
             public void handle(JoinNode joinNode) {
-                if (joinNode.getOutgoingFlows().count() != 1L) {
-                    throw new GrooveGenerationRuntimeException("A join node must have exactly one outgoing flow!");
-                }
-                joinNode.getOutgoingFlows().forEach(outFlow -> {
-                    String joinNodeName = joinNode.getName();
-                    ruleBuilder.startRule(joinNodeName);
-
-                    GrooveNode baseToken = ruleBuilder.contextNode(TYPE_TOKEN);
-                    GrooveNode newTokenPosition = ruleBuilder.contextNode(
-                            GrooveTransformerHelper.createStringNodeLabel(outFlow.getTarget().getName()));
-                    ruleBuilder.addEdge(POSITION, baseToken, newTokenPosition);
-
-                    AtomicReference<GrooveNode> previousToken = new AtomicReference<>();
-                    joinNode.getIncomingFlows().forEach(controlFlow -> {
-                        GrooveNode forkedToken = ruleBuilder.deleteNode(TYPE_FORKED_TOKEN);
-                        if (previousToken.get() != null) {
-                            ruleBuilder.contextEdge(UNEQUALS, previousToken.get(), forkedToken);
-                        }
-                        previousToken.set(forkedToken);
-
-                        GrooveNode forkedTokenPosition = ruleBuilder.contextNode(
-                                GrooveTransformerHelper.createStringNodeLabel(joinNodeName));
-                        ruleBuilder.contextEdge(POSITION, forkedToken, forkedTokenPosition);
-                        ruleBuilder.deleteEdge(BASE_TOKEN, forkedToken, baseToken);
-                    });
-
-                    ruleBuilder.buildRule();
-                });
+                createJointNodeRule(joinNode, ruleBuilder);
             }
 
             @Override
             public void handle(MergeNode mergeNode) {
-                if (mergeNode.getOutgoingFlows().count() != 1L) {
-                    throw new GrooveGenerationRuntimeException("A merge node must have exactly one outgoing flow!");
-                }
-                mergeNode.getOutgoingFlows().forEach(controlFlow -> {
-                    String mergeNodeName = mergeNode.getName();
-                    ruleBuilder.startRule(mergeNodeName);
-                    ActivityDiagramToGrooveTransformer.this.updateTokenPosition(
-                            mergeNodeName,
-                            controlFlow.getTarget().getName(),
-                            ruleBuilder);
-                    ruleBuilder.buildRule();
-                });
+                createMergeNodeRules(mergeNode, ruleBuilder);
             }
 
             @Override
             public void handle(OpaqueAction opaqueAction) {
-                if (opaqueAction.getOutgoingFlows().count() != 1L) {
-                    throw new GrooveGenerationRuntimeException("An opaque action must have exactly one outgoing flow!");
-                }
-
-                opaqueAction.getOutgoingFlows().forEach(controlFlow -> {
-                    ruleBuilder.startRule(opaqueAction.getName());
-
-                    ActivityDiagramToGrooveTransformer.this.updateTokenPosition(
-                            opaqueAction.getName(),
-                            controlFlow.getTarget().getName(),
-                            ruleBuilder);
-                    opaqueAction.expressions().forEach(
-                            expression -> ActivityDiagramToGrooveTransformer.this.convertExpressionsToGroove(
-                                    expression,
-                                    ruleBuilder));
-
-                    ruleBuilder.buildRule();
-                });
-
+                createOpaqueActionRules(opaqueAction, ruleBuilder);
             }
 
             @Override
             public void handle(ActivityFinalNode activityFinalNode) {
-                String finalNodeName = activityFinalNode.getName();
-                ruleBuilder.startRule(finalNodeName);
-                GrooveNode activityDiagramNode = ActivityDiagramToGrooveTransformer.this.createDiagramNodeWithName(
-                        ruleBuilder,
-                        activityDiagram);
-                ruleBuilder.addEdge(RUNNING, activityDiagramNode, ruleBuilder.contextNode(FALSE));
-                ruleBuilder.deleteEdge(RUNNING, activityDiagramNode, ruleBuilder.contextNode(TRUE));
-
-                GrooveNode token = ruleBuilder.deleteNode(TYPE_CONTROL_TOKEN);
-                GrooveNode initStringAttribute = ruleBuilder.contextNode(
-                        GrooveTransformerHelper.createStringNodeLabel(finalNodeName));
-                ruleBuilder.deleteEdge(POSITION, token, initStringAttribute);
-
-                ruleBuilder.buildRule();
+                createActivityFinalNodeRule(activityFinalNode, ruleBuilder, activityDiagram);
             }
         }));
 
         return ruleBuilder.getRules();
+    }
+
+    private void createDecisionNodeRules(DecisionNode decisionNode, GrooveRuleBuilder ruleBuilder) {
+        decisionNode.getOutgoingFlows().forEach(controlFlow -> {
+            String targetName = controlFlow.getTarget().getName();
+            ruleBuilder.startRule(decisionNode.getName() + "_to_" + targetName);
+
+            ActivityDiagramToGrooveTransformer.this.updateTokenPosition(decisionNode.getName(),
+                                                                        targetName,
+                                                                        ruleBuilder);
+
+            // Guard
+            BooleanVariable guardIfExists = controlFlow.getGuardIfExists();
+            if (guardIfExists != null) {
+                GrooveNode guardVar = ActivityDiagramToGrooveTransformer.this.createContextVariableWithName(
+                        guardIfExists.getName(),
+                        ruleBuilder);
+
+                GrooveNode boolValue = ruleBuilder.contextNode(TYPE_BOOLEAN_VALUE);
+                ruleBuilder.contextEdge(VALUE, guardVar, boolValue);
+                GrooveNode trueValue = ruleBuilder.contextNode(TRUE);
+                ruleBuilder.contextEdge(VALUE, boolValue, trueValue);
+            }
+
+            ruleBuilder.buildRule();
+        });
+    }
+
+    private void createForkNodeRule(ForkNode forkNode, GrooveRuleBuilder ruleBuilder) {
+        String forkNodeName = forkNode.getName();
+
+        ruleBuilder.startRule(forkNodeName);
+
+        GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
+        GrooveNode oldTokenPosition = ruleBuilder.contextNode(
+                GrooveTransformerHelper.createStringNodeLabel(forkNodeName));
+        ruleBuilder.deleteEdge(POSITION, token, oldTokenPosition);
+
+        forkNode.getOutgoingFlows().forEach(controlFlow -> {
+            GrooveNode forkedToken = ruleBuilder.addNode(TYPE_FORKED_TOKEN);
+            ruleBuilder.addEdge(BASE_TOKEN, forkedToken, token);
+            GrooveNode forkedTokenPosition = ruleBuilder.contextNode(
+                    GrooveTransformerHelper.createStringNodeLabel(controlFlow.getTarget().getName()));
+            ruleBuilder.addEdge(POSITION, forkedToken, forkedTokenPosition);
+        });
+
+        ruleBuilder.buildRule();
+    }
+
+    private void createInitialNodeRule(InitialNode initialNode, GrooveRuleBuilder ruleBuilder) {
+        if (initialNode.getOutgoingFlows().count() != 1L) {
+            throw new GrooveGenerationRuntimeException("The initial node must have exactly one outgoing flow!");
+        }
+
+        String initialNodeName = initialNode.getName();
+        initialNode.getOutgoingFlows().forEach(controlFlow -> {
+            ruleBuilder.startRule(initialNodeName);
+
+            ActivityDiagramToGrooveTransformer.this.updateTokenPosition(
+                    initialNodeName,
+                    controlFlow.getTarget().getName(),
+                    ruleBuilder);
+
+            ruleBuilder.buildRule();
+        });
+    }
+
+    private void createJointNodeRule(JoinNode joinNode, GrooveRuleBuilder ruleBuilder) {
+        if (joinNode.getOutgoingFlows().count() != 1L) {
+            throw new GrooveGenerationRuntimeException("A join node must have exactly one outgoing flow!");
+        }
+        joinNode.getOutgoingFlows().forEach(outFlow -> {
+            String joinNodeName = joinNode.getName();
+            ruleBuilder.startRule(joinNodeName);
+
+            GrooveNode baseToken = ruleBuilder.contextNode(TYPE_TOKEN);
+            GrooveNode newTokenPosition = ruleBuilder.contextNode(
+                    GrooveTransformerHelper.createStringNodeLabel(outFlow.getTarget().getName()));
+            ruleBuilder.addEdge(POSITION, baseToken, newTokenPosition);
+
+            AtomicReference<GrooveNode> previousToken = new AtomicReference<>();
+            joinNode.getIncomingFlows().forEach(controlFlow -> {
+                GrooveNode forkedToken = ruleBuilder.deleteNode(TYPE_FORKED_TOKEN);
+                if (previousToken.get() != null) {
+                    ruleBuilder.contextEdge(UNEQUALS, previousToken.get(), forkedToken);
+                }
+                previousToken.set(forkedToken);
+
+                GrooveNode forkedTokenPosition = ruleBuilder.contextNode(
+                        GrooveTransformerHelper.createStringNodeLabel(joinNodeName));
+                ruleBuilder.contextEdge(POSITION, forkedToken, forkedTokenPosition);
+                ruleBuilder.deleteEdge(BASE_TOKEN, forkedToken, baseToken);
+            });
+
+            ruleBuilder.buildRule();
+        });
+    }
+
+    private void createMergeNodeRules(MergeNode mergeNode, GrooveRuleBuilder ruleBuilder) {
+        if (mergeNode.getOutgoingFlows().count() != 1L) {
+            throw new GrooveGenerationRuntimeException("A merge node must have exactly one outgoing flow!");
+        }
+        mergeNode.getOutgoingFlows().forEach(controlFlow -> {
+            String mergeNodeName = mergeNode.getName();
+            ruleBuilder.startRule(mergeNodeName);
+            ActivityDiagramToGrooveTransformer.this.updateTokenPosition(
+                    mergeNodeName,
+                    controlFlow.getTarget().getName(),
+                    ruleBuilder);
+            ruleBuilder.buildRule();
+        });
+    }
+
+    private void createOpaqueActionRules(OpaqueAction opaqueAction, GrooveRuleBuilder ruleBuilder) {
+        if (opaqueAction.getOutgoingFlows().count() != 1L) {
+            throw new GrooveGenerationRuntimeException("An opaque action must have exactly one outgoing flow!");
+        }
+
+        opaqueAction.getOutgoingFlows().forEach(controlFlow -> {
+            ruleBuilder.startRule(opaqueAction.getName());
+
+            ActivityDiagramToGrooveTransformer.this.updateTokenPosition(
+                    opaqueAction.getName(),
+                    controlFlow.getTarget().getName(),
+                    ruleBuilder);
+            opaqueAction.expressions().forEach(
+                    expression -> ActivityDiagramToGrooveTransformer.this.convertExpressionsToGroove(
+                            expression,
+                            ruleBuilder));
+
+            ruleBuilder.buildRule();
+        });
+    }
+
+    private void createActivityFinalNodeRule(ActivityFinalNode activityFinalNode,
+                           GrooveRuleBuilder ruleBuilder,
+                           ActivityDiagram activityDiagram) {
+        String finalNodeName = activityFinalNode.getName();
+        ruleBuilder.startRule(finalNodeName);
+        GrooveNode activityDiagramNode = ActivityDiagramToGrooveTransformer.this.createDiagramNodeWithName(
+                ruleBuilder,
+                activityDiagram);
+        ruleBuilder.addEdge(RUNNING, activityDiagramNode, ruleBuilder.contextNode(FALSE));
+        ruleBuilder.deleteEdge(RUNNING, activityDiagramNode, ruleBuilder.contextNode(TRUE));
+
+        GrooveNode token = ruleBuilder.deleteNode(TYPE_CONTROL_TOKEN);
+        GrooveNode initStringAttribute = ruleBuilder.contextNode(
+                GrooveTransformerHelper.createStringNodeLabel(finalNodeName));
+        ruleBuilder.deleteEdge(POSITION, token, initStringAttribute);
+
+        ruleBuilder.buildRule();
     }
 
     private void updateTokenPosition(String oldPosition, String newPosition, GrooveRuleBuilder ruleBuilder) {
