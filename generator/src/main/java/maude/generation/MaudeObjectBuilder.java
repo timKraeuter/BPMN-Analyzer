@@ -7,7 +7,7 @@ public class MaudeObjectBuilder {
 
     private String oid;
     private String oidType;
-    private Map<String, String> attributeValues;
+    private final Map<String, String> attributeValues;
 
     public MaudeObjectBuilder() {
         this.attributeValues = new LinkedHashMap<>();
