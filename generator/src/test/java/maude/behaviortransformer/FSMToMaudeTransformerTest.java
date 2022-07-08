@@ -81,7 +81,6 @@ class FSMToMaudeTransformerTest {
 
         FSMToMaudeTransformer transformer = new FSMToMaudeTransformer(fsm);
 
-        System.out.println(transformer.generate());
         // Transform FSM
         assertThat(transformer.generate(), is(EXPECTED_FOUR_STATE_FSM_MODULE));
         // Maude output
