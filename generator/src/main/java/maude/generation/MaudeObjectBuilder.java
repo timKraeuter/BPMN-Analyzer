@@ -34,11 +34,4 @@ public class MaudeObjectBuilder {
         }
         return new MaudeObject(oid, oidType, attributeValues);
     }
-
-    public MaudeObjectBuilder reset() {
-        this.oid = null;
-        this.oidType = null;
-        this.attributeValues = new LinkedHashMap<>();
-        return this;
-    }
 }
