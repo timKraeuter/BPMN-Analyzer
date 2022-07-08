@@ -1,4 +1,4 @@
-package util;
+package groove.runner;
 
 import com.google.common.collect.Lists;
 
@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class GrooveRunner {
+public class GrooveJarRunner {
     private static final String GROOVE_BIN_DIR = findGrooveBinDir();
 
     private static String findGrooveBinDir() {
@@ -18,17 +18,17 @@ public class GrooveRunner {
             }
         }
         String currentPath = Path.of("").toAbsolutePath().toString();
-        throw new GrooveRunnerException(String.format("Groove binaries not found in this directory(%s) or above!",
-                                                 currentPath));
+        throw new GrooveJarRunnerException(String.format("Groove binaries not found in this directory(%s) or above!",
+                                                         currentPath));
     }
 
     private final String grooveBinDir;
 
-    public GrooveRunner() {
+    public GrooveJarRunner() {
         this(GROOVE_BIN_DIR);
     }
 
-    private GrooveRunner(String grooveBinDir) {
+    private GrooveJarRunner(String grooveBinDir) {
         this.grooveBinDir = grooveBinDir;
     }
 
