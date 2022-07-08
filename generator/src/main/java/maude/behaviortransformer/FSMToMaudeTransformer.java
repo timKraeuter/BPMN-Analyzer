@@ -39,21 +39,35 @@ public class FSMToMaudeTransformer {
                                                   "the FSM.\n" +
                                                   "    op initial : -> Configuration .\n" +
                                                   "    eq initial = < \"${name}\" : FSM | state : \"${startState}\" >" +
-                                                  " " +
-                                                  ".\n" +
+                                                  " .\n" +
                                                   "endm\n" +
                                                   "\n" +
-                                                  "rew [10] in FSM-BEHAVIOR-${name} : initial .\n";
+                                                  "mod FSM-BEHAVIOR-${name}-PREDS is\n" +
+                                                  "    pr FSM-BEHAVIOR-${name} .\n" +
+                                                  "    pr SATISFACTION .\n" +
+                                                  "    subsort Configuration < State .\n" +
+                                                  "\n" +
+                                                  "    --- TODO: Add generated stuff\n" +
+                                                  "endm\n" +
+                                                  "\n" +
+                                                  "mod FSM-CHECK is\n" +
+                                                  "    pr FSM-BEHAVIOR-${name}-PREDS .\n" +
+                                                  "    pr MODEL-CHECKER .\n" +
+                                                  "    pr LTL-SIMPLIFIER .\n" +
+                                                  "endm\n" +
+                                                  "\n" +
+                                                  "red modelCheck(initial, ${ltlQuery}) .";
 
     public FSMToMaudeTransformer(FiniteStateMachine finiteStateMachine) {
         this.finiteStateMachine = finiteStateMachine;
     }
 
-    public String generate() {
+    public String generate(String ltlQuery) {
         Map<String, String> substitutionValues = new HashMap<>();
         substitutionValues.put("name", finiteStateMachine.getName());
         substitutionValues.put("startState", finiteStateMachine.getStartState().getName());
         substitutionValues.put("rules", this.makeRules());
+        substitutionValues.put("ltlQuery", ltlQuery);
         return new StringSubstitutor(substitutionValues).replace(MODULE_TEMPLATE);
     }
 

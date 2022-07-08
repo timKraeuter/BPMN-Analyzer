@@ -22,11 +22,11 @@ class FSMToMaudeTransformerTest {
         FSMToMaudeTransformer transformer = new FSMToMaudeTransformer(fsm);
 
         // Transform FSM
-        assertThat(transformer.generate(), is(EXPECTED_TWO_STATE_FSM_MODULE));
+        assertThat(transformer.generate("<>([](~ False))"), is(EXPECTED_TWO_STATE_FSM_MODULE));
         // Result runs in maude with the following output:
-        // rewrite [10] in FSM-BEHAVIOR-X : initial .
-        // rewrites: 11 in 0ms cpu (0ms real) (~ rewrites/second)
-        // result Object: < "X" : FSM | state : "red" >
+        // reduce in FSM-CHECK : modelCheck(initial, <> []~ False) .
+        // rewrites: 8 in 0ms cpu (0ms real) (~ rewrites/second)
+        // result Bool: true
     }
 
     private static final String EXPECTED_TWO_STATE_FSM_MODULE = "load model-checker.maude .\n" +
@@ -48,21 +48,32 @@ class FSMToMaudeTransformerTest {
                                                                 "\n" +
                                                                 "    --- Generated rules\n" +
                                                                 "    rl [turnGreen] :  < X : FSM | state : \"red\" > " +
-                                                                "=> < X : " +
-                                                                "FSM | state : \"green\" > .\n" +
+                                                                "=> < X : FSM | state : \"green\" > .\n" +
                                                                 "    rl [turnRed] :  < X : FSM | state : \"green\" > " +
-                                                                "=> < X : " +
-                                                                "FSM | state : \"red\" > .\n" +
+                                                                "=> < X : FSM | state : \"red\" > .\n" +
                                                                 "\n" +
                                                                 "    --- Generated initial config representing the " +
-                                                                "start state " +
-                                                                "of the FSM.\n" +
+                                                                "start state of the FSM.\n" +
                                                                 "    op initial : -> Configuration .\n" +
                                                                 "    eq initial = < \"X\" : FSM | state : \"red\" > " +
                                                                 ".\n" +
                                                                 "endm\n" +
                                                                 "\n" +
-                                                                "rew [10] in FSM-BEHAVIOR-X : initial .\n";
+                                                                "mod FSM-BEHAVIOR-X-PREDS is\n" +
+                                                                "    pr FSM-BEHAVIOR-X .\n" +
+                                                                "    pr SATISFACTION .\n" +
+                                                                "    subsort Configuration < State .\n" +
+                                                                "\n" +
+                                                                "    --- TODO: Add generated stuff\n" +
+                                                                "endm\n" +
+                                                                "\n" +
+                                                                "mod FSM-CHECK is\n" +
+                                                                "    pr FSM-BEHAVIOR-X-PREDS .\n" +
+                                                                "    pr MODEL-CHECKER .\n" +
+                                                                "    pr LTL-SIMPLIFIER .\n" +
+                                                                "endm\n" +
+                                                                "\n" +
+                                                                "red modelCheck(initial, <>([](~ False))) .";
 
 
     @Test
@@ -82,11 +93,11 @@ class FSMToMaudeTransformerTest {
         FSMToMaudeTransformer transformer = new FSMToMaudeTransformer(fsm);
 
         // Transform FSM
-        assertThat(transformer.generate(), is(EXPECTED_FOUR_STATE_FSM_MODULE));
+        assertThat(transformer.generate("<>([](~ False))"), is(EXPECTED_FOUR_STATE_FSM_MODULE));
         // Maude output
-        // rewrite [10] in FSM-BEHAVIOR-trafficLight : initial .
-        // rewrites: 11 in 0ms cpu (0ms real) (~ rewrites/second)
-        // result Object: < "trafficLight" : FSM | state : "green" >
+        // reduce in FSM-CHECK : modelCheck(initial, <> []~ False) .
+        // rewrites: 8 in 0ms cpu (0ms real) (~ rewrites/second)
+        // result Bool: true
     }
 
     private static final String EXPECTED_FOUR_STATE_FSM_MODULE = "load model-checker.maude .\n" +
@@ -125,5 +136,19 @@ class FSMToMaudeTransformerTest {
                                                                  " \"red\" > .\n" +
                                                                  "endm\n" +
                                                                  "\n" +
-                                                                 "rew [10] in FSM-BEHAVIOR-trafficLight : initial .\n";
+                                                                 "mod FSM-BEHAVIOR-trafficLight-PREDS is\n" +
+                                                                 "    pr FSM-BEHAVIOR-trafficLight .\n" +
+                                                                 "    pr SATISFACTION .\n" +
+                                                                 "    subsort Configuration < State .\n" +
+                                                                 "\n" +
+                                                                 "    --- TODO: Add generated stuff\n" +
+                                                                 "endm\n" +
+                                                                 "\n" +
+                                                                 "mod FSM-CHECK is\n" +
+                                                                 "    pr FSM-BEHAVIOR-trafficLight-PREDS .\n" +
+                                                                 "    pr MODEL-CHECKER .\n" +
+                                                                 "    pr LTL-SIMPLIFIER .\n" +
+                                                                 "endm\n" +
+                                                                 "\n" +
+                                                                 "red modelCheck(initial, <>([](~ False))) .";
 }
