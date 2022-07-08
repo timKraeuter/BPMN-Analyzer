@@ -1,6 +1,7 @@
 package maude.behaviortransformer;
 
 import behavior.fsm.FiniteStateMachine;
+import behavior.fsm.StateAtomicProposition;
 import behavior.fsm.Transition;
 import maude.generation.MaudeObject;
 import maude.generation.MaudeRule;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 public class FSMToMaudeTransformer {
     private final FiniteStateMachine finiteStateMachine;
+    private final Set<StateAtomicProposition> atomicPropositions;
     private static final String MODULE_TEMPLATE = "load model-checker.maude .\n" +
                                                   "\n" +
                                                   "mod FSM-BEHAVIOR is\n" +
@@ -47,7 +49,14 @@ public class FSMToMaudeTransformer {
                                                   "    pr SATISFACTION .\n" +
                                                   "    subsort Configuration < State .\n" +
                                                   "\n" +
-                                                  "    --- TODO: Add generated stuff\n" +
+                                                  "    var X : Oid .\n" +
+                                                  "    var C : Configuration .\n" +
+                                                  "    var P : Prop .\n" +
+                                                  "\n" +
+                                                  "    --- Generated atomic propositions\n" +
+                                                  "    ${atomicPropositions}\n" +
+                                                  "\n" +
+                                                  "    eq C |= P = false [owise] .\n" +
                                                   "endm\n" +
                                                   "\n" +
                                                   "mod FSM-CHECK is\n" +
@@ -56,10 +65,12 @@ public class FSMToMaudeTransformer {
                                                   "    pr LTL-SIMPLIFIER .\n" +
                                                   "endm\n" +
                                                   "\n" +
-                                                  "red modelCheck(initial, ${ltlQuery}) .";
+                                                  "red modelCheck(initial, ${ltlQuery}) .\n";
 
-    public FSMToMaudeTransformer(FiniteStateMachine finiteStateMachine) {
+    public FSMToMaudeTransformer(FiniteStateMachine finiteStateMachine,
+                                 Set<StateAtomicProposition> atomicPropositions) {
         this.finiteStateMachine = finiteStateMachine;
+        this.atomicPropositions = atomicPropositions;
     }
 
     public String generate(String ltlQuery) {
@@ -67,8 +78,18 @@ public class FSMToMaudeTransformer {
         substitutionValues.put("name", finiteStateMachine.getName());
         substitutionValues.put("startState", finiteStateMachine.getStartState().getName());
         substitutionValues.put("rules", this.makeRules());
+        substitutionValues.put("atomicPropositions", this.makeAtomicPropositions());
         substitutionValues.put("ltlQuery", ltlQuery);
         return new StringSubstitutor(substitutionValues).replace(MODULE_TEMPLATE);
+    }
+
+    private String makeAtomicPropositions() {
+        return this.atomicPropositions.stream().map(stateAtomicProposition -> String.format(
+                "op %s : Oid -> Prop .\n    eq < X : FSM | state : \"%s\" > C |= %s" + "(X) = true .",
+                stateAtomicProposition.getName(),
+                stateAtomicProposition.getState().getName(),
+                stateAtomicProposition.getName()))
+                                               .collect(Collectors.joining("\n    "));
     }
 
     private String makeRules() {
@@ -80,13 +101,10 @@ public class FSMToMaudeTransformer {
             ruleBuilder.reset();
         });
 
-        return createdRules.stream()
-                           .map(MaudeRule::generateRule)
-                           .collect(Collectors.joining("\n    "));
+        return createdRules.stream().map(MaudeRule::generateRule).collect(Collectors.joining("\n    "));
     }
 
-    private MaudeRule generateRuleForTransition(Transition transition,
-                                                MaudeRuleBuilder ruleBuilder) {
+    private MaudeRule generateRuleForTransition(Transition transition, MaudeRuleBuilder ruleBuilder) {
         ruleBuilder.ruleName(transition.getName());
         ruleBuilder.addPreObject(createFSMinStateObject(transition.getSource().getName()));
         ruleBuilder.addPostObject(createFSMinStateObject(transition.getTarget().getName()));

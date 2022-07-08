@@ -2,7 +2,10 @@ package maude.behaviortransformer;
 
 import behavior.fsm.FiniteStateMachine;
 import behavior.fsm.State;
+import behavior.fsm.StateAtomicProposition;
 import behavior.fsm.Transition;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -19,13 +22,14 @@ class FSMToMaudeTransformerTest {
         fsm.addTransition(new Transition("turnGreen", red, green));
         fsm.addTransition(new Transition("turnRed", green, red));
 
-        FSMToMaudeTransformer transformer = new FSMToMaudeTransformer(fsm);
-
+        FSMToMaudeTransformer transformer = new FSMToMaudeTransformer(fsm,
+                                                                      ImmutableSet.of(new StateAtomicProposition(red),
+                                                                                      new StateAtomicProposition(green)));
         // Transform FSM
-        assertThat(transformer.generate("<>([](~ False))"), is(EXPECTED_TWO_STATE_FSM_MODULE));
+        assertThat(transformer.generate("<> green(\"X\")"), is(EXPECTED_TWO_STATE_FSM_MODULE));
         // Result runs in maude with the following output:
-        // reduce in FSM-CHECK : modelCheck(initial, <> []~ False) .
-        // rewrites: 8 in 0ms cpu (0ms real) (~ rewrites/second)
+        // reduce in FSM-CHECK : modelCheck(initial, <> green("X")) .
+        // rewrites: 10 in 0ms cpu (0ms real) (~ rewrites/second)
         // result Bool: true
     }
 
@@ -64,7 +68,19 @@ class FSMToMaudeTransformerTest {
                                                                 "    pr SATISFACTION .\n" +
                                                                 "    subsort Configuration < State .\n" +
                                                                 "\n" +
-                                                                "    --- TODO: Add generated stuff\n" +
+                                                                "    var X : Oid .\n" +
+                                                                "    var C : Configuration .\n" +
+                                                                "    var P : Prop .\n" +
+                                                                "\n" +
+                                                                "    --- Generated atomic propositions\n" +
+                                                                "    op red : Oid -> Prop .\n" +
+                                                                "    eq < X : FSM | state : \"red\" > C |= red(X) = " +
+                                                                "true .\n" +
+                                                                "    op green : Oid -> Prop .\n" +
+                                                                "    eq < X : FSM | state : \"green\" > C |= green(X)" +
+                                                                " = true .\n" +
+                                                                "\n" +
+                                                                "    eq C |= P = false [owise] .\n" +
                                                                 "endm\n" +
                                                                 "\n" +
                                                                 "mod FSM-CHECK is\n" +
@@ -73,7 +89,7 @@ class FSMToMaudeTransformerTest {
                                                                 "    pr LTL-SIMPLIFIER .\n" +
                                                                 "endm\n" +
                                                                 "\n" +
-                                                                "red modelCheck(initial, <>([](~ False))) .";
+                                                                "red modelCheck(initial, <> green(\"X\")) .\n";
 
 
     @Test
@@ -90,12 +106,13 @@ class FSMToMaudeTransformerTest {
         fsm.addTransition(new Transition("turn_amber", green, amber));
         fsm.addTransition(new Transition("turn_red", amber, red));
 
-        FSMToMaudeTransformer transformer = new FSMToMaudeTransformer(fsm);
-
+        FSMToMaudeTransformer transformer = new FSMToMaudeTransformer(fsm,
+                                                                      ImmutableSet.of(new StateAtomicProposition("redish", red),
+                                                                                      new StateAtomicProposition(green)));
         // Transform FSM
-        assertThat(transformer.generate("<>([](~ False))"), is(EXPECTED_FOUR_STATE_FSM_MODULE));
+        assertThat(transformer.generate("<> redish(\"trafficLight\")"), is(EXPECTED_FOUR_STATE_FSM_MODULE));
         // Maude output
-        // reduce in FSM-CHECK : modelCheck(initial, <> []~ False) .
+        // reduce in FSM-CHECK : modelCheck(initial, <> redish("trafficLight")) .
         // rewrites: 8 in 0ms cpu (0ms real) (~ rewrites/second)
         // result Bool: true
     }
@@ -141,7 +158,19 @@ class FSMToMaudeTransformerTest {
                                                                  "    pr SATISFACTION .\n" +
                                                                  "    subsort Configuration < State .\n" +
                                                                  "\n" +
-                                                                 "    --- TODO: Add generated stuff\n" +
+                                                                 "    var X : Oid .\n" +
+                                                                 "    var C : Configuration .\n" +
+                                                                 "    var P : Prop .\n" +
+                                                                 "\n" +
+                                                                 "    --- Generated atomic propositions\n" +
+                                                                 "    op redish : Oid -> Prop .\n" +
+                                                                 "    eq < X : FSM | state : \"red\" > C |= redish(X)" +
+                                                                 " = true .\n" +
+                                                                 "    op green : Oid -> Prop .\n" +
+                                                                 "    eq < X : FSM | state : \"green\" > C |= green" +
+                                                                 "(X) = true .\n" +
+                                                                 "\n" +
+                                                                 "    eq C |= P = false [owise] .\n" +
                                                                  "endm\n" +
                                                                  "\n" +
                                                                  "mod FSM-CHECK is\n" +
@@ -150,5 +179,6 @@ class FSMToMaudeTransformerTest {
                                                                  "    pr LTL-SIMPLIFIER .\n" +
                                                                  "endm\n" +
                                                                  "\n" +
-                                                                 "red modelCheck(initial, <>([](~ False))) .";
+                                                                 "red modelCheck(initial, <> redish(\"trafficLight\")" +
+                                                                 ") .\n";
 }
