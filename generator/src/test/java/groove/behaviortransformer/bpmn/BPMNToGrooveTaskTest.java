@@ -11,7 +11,6 @@ class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testSequentialTasks() throws IOException {
-        // TODO: test prefix
         this.setFileNameFilter(x -> false); // Expect type graph here.
         testGrooveGenerationForBPMNResourceFile("sequential-activities.bpmn");
     }

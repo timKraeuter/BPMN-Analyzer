@@ -7,7 +7,7 @@ public class MaudeObjectBuilder {
 
     private String oid;
     private String oidType;
-    private final Map<String, String> attributeValues;
+    private Map<String, String> attributeValues;
 
     public MaudeObjectBuilder() {
         this.attributeValues = new LinkedHashMap<>();
@@ -33,5 +33,11 @@ public class MaudeObjectBuilder {
             throw new MaudeGenerationException("Oid or oidType must not be null!");
         }
         return new MaudeObject(oid, oidType, attributeValues);
+    }
+
+    public void reset() {
+        this.oid = null;
+        this.oidType = null;
+        this.attributeValues = new LinkedHashMap<>();
     }
 }
