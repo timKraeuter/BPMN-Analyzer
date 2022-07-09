@@ -19,7 +19,7 @@ public class MaudeObject {
         this.attributeValues = attributeValues;
     }
 
-    public String generateObject() {
+    public String generateObjectString() {
         Map<String, String> substitutionValues = new HashMap<>();
         substitutionValues.put("oid", oid);
         substitutionValues.put("oidType", oidType);

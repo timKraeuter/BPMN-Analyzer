@@ -1,10 +1,9 @@
 package maude.generation;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -17,7 +16,7 @@ class MaudeObjectTest {
                                                           .addAttributeValue("state", "\"red\"")
                                                           .build();
 
-        assertThat(maudeObject.generateObject(), is("< X : FSM | state : \"red\" >"));
+        assertThat(maudeObject.generateObjectString(), is("< X : FSM | state : \"red\" >"));
     }
 
     @Test
@@ -30,9 +29,9 @@ class MaudeObjectTest {
                                                           .addAttributeValue("state", "Running")
                                                           .build();
 
-        assertThat(maudeObject.generateObject(), is("< \"sequential-activities\" : ProcessSnapshot | tokens : " +
-                                                    "(\"sequential-activities_start\"), subprocesses : none, state : " +
-                                                    "Running >"));
+        assertThat(maudeObject.generateObjectString(), is("< \"sequential-activities\" : ProcessSnapshot | tokens : " +
+                                                          "(\"sequential-activities_start\"), subprocesses : none, state : " +
+                                                          "Running >"));
     }
 
     @Test

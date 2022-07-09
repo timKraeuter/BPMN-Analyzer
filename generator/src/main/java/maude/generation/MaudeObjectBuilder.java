@@ -32,10 +32,12 @@ public class MaudeObjectBuilder {
         if (oid == null || oidType == null) {
             throw new MaudeGenerationException("Oid or oidType must not be null!");
         }
-        return new MaudeObject(oid, oidType, attributeValues);
+        MaudeObject maudeObject = new MaudeObject(oid, oidType, attributeValues);
+        this.reset();
+        return maudeObject;
     }
 
-    public void reset() {
+    private void reset() {
         this.oid = null;
         this.oidType = null;
         this.attributeValues = new LinkedHashMap<>();

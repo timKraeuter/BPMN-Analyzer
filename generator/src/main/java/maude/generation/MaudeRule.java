@@ -20,7 +20,7 @@ public class MaudeRule {
         this.postObjects = postObjects;
     }
 
-    public String generateRule() {
+    public String generateRuleString() {
         Map<String, String> substitutionValues = new HashMap<>();
         substitutionValues.put("name", name);
         substitutionValues.put("preObjects", this.makePreObjects());
@@ -37,6 +37,6 @@ public class MaudeRule {
     }
 
     private String makeObjects(Set<MaudeObject> postObjects) {
-        return postObjects.stream().map(MaudeObject::generateObject).collect(Collectors.joining(" "));
+        return postObjects.stream().map(MaudeObject::generateObjectString).collect(Collectors.joining(" "));
     }
 }

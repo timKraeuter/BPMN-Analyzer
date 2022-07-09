@@ -9,7 +9,6 @@ import maude.generation.MaudeRuleBuilder;
 import org.apache.commons.text.StringSubstitutor;
 
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -93,22 +92,20 @@ public class FSMToMaudeTransformer {
     }
 
     private String makeRules() {
-        Set<MaudeRule> createdRules = new LinkedHashSet<>();
-        // Create rules
         MaudeRuleBuilder ruleBuilder = new MaudeRuleBuilder();
-        finiteStateMachine.getTransitions().forEach(transition -> {
-            createdRules.add(this.generateRuleForTransition(transition, ruleBuilder));
-            ruleBuilder.reset();
-        });
+        // Create a rule for each transition
+        finiteStateMachine.getTransitions().forEach(transition -> this.generateRuleForTransition(transition, ruleBuilder));
 
-        return createdRules.stream().map(MaudeRule::generateRule).collect(Collectors.joining("\n    "));
+        return ruleBuilder.createdRules()
+                          .map(MaudeRule::generateRuleString)
+                          .collect(Collectors.joining("\n    "));
     }
 
-    private MaudeRule generateRuleForTransition(Transition transition, MaudeRuleBuilder ruleBuilder) {
+    private void generateRuleForTransition(Transition transition, MaudeRuleBuilder ruleBuilder) {
         ruleBuilder.ruleName(transition.getName());
         ruleBuilder.addPreObject(createFSMinStateObject(transition.getSource().getName()));
         ruleBuilder.addPostObject(createFSMinStateObject(transition.getTarget().getName()));
-        return ruleBuilder.build();
+        ruleBuilder.build();
     }
 
     private MaudeObject createFSMinStateObject(String stateName) {

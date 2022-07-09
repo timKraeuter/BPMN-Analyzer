@@ -20,8 +20,8 @@ class MaudeRuleTest {
                 .addPostObject(postObject)
                 .build();
 
-        assertThat(fsmRule.generateRule(), is("rl [turnGreen] :  < X : FSM | state : \"red\" > => " +
-                                              "< X : FSM | state : \"green\" > ."));
+        assertThat(fsmRule.generateRuleString(), is("rl [turnGreen] :  < X : FSM | state : \"red\" > => " +
+                                                    "< X : FSM | state : \"green\" > ."));
 
     }
 
@@ -41,9 +41,9 @@ class MaudeRuleTest {
                 .addPostObject(postObject2)
                 .build();
 
-        assertThat(fsmRule.generateRule(), is("rl [turnGreen2x] :  < X : FSM | state : \"red\" > < Y : FSM | state : " +
-                                              "\"red\" > => < X : FSM | state : \"green\" > < Y : FSM | state : " +
-                                              "\"green\" > ."));
+        assertThat(fsmRule.generateRuleString(), is("rl [turnGreen2x] :  < X : FSM | state : \"red\" > < Y : FSM | state : " +
+                                                    "\"red\" > => < X : FSM | state : \"green\" > < Y : FSM | state : " +
+                                                    "\"green\" > ."));
     }
 
     private MaudeObject createFSMObject(String oid, String stateAttrValue) {

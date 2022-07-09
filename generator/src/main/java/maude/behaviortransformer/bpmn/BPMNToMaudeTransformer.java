@@ -2,17 +2,15 @@ package maude.behaviortransformer.bpmn;
 
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.Process;
-import behavior.bpmn.events.StartEvent;
 import behavior.bpmn.events.StartEventType;
 import maude.generation.MaudeObject;
 import maude.generation.MaudeObjectBuilder;
 import maude.generation.MaudeRule;
+import maude.generation.MaudeRuleBuilder;
 import org.apache.commons.text.StringSubstitutor;
 
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BPMNToMaudeTransformer {
@@ -91,36 +89,29 @@ public class BPMNToMaudeTransformer {
                                                                                                   startEvent.getType() ==
                                                                                                   StartEventType.NONE))
                             .map(process -> {
-                                MaudeObject maudeObject = maudeObjectBuilder
-                                        .oid(String.format("\"%s\"", process.getName()))
-                                        .oidType("ProcessSnapshot")
-                                        .addAttributeValue("tokens", this.createStartTokens(process))
-                                        .addAttributeValue("subprocesses","none")
-                                        .addAttributeValue("state", "Running")
-                                        .build();
-                                maudeObjectBuilder.reset();
-                                return maudeObject.generateObject();
+                                MaudeObject maudeObject = BPMNToMaudeTransformerHelper.createProcessSnapshotObjectNoSubProcess(maudeObjectBuilder,
+                                                                                                                               process,
+                                                                                                                               this.createStartTokens(process));
+                                return maudeObject.generateObjectString();
                             })
                             .collect(Collectors.joining("\n    "));
     }
 
     private String createStartTokens(Process process) {
         // Add a token for each none start event
-        return String.format("(%s)",
-                             process.getStartEvents().stream()
-                                    .filter(startEvent -> startEvent.getType() == StartEventType.NONE)
-                                    .map(startEvent -> getStartEventTokenName(process, startEvent))
-                                    .collect(Collectors.joining(" ")));
-    }
-
-    public static String getStartEventTokenName(Process process, StartEvent event) {
-        return String.format("\"%s_%s (%s)\"", process.getName(), event.getName(), event.getId());
+        return process.getStartEvents().stream()
+                      .filter(startEvent -> startEvent.getType() == StartEventType.NONE)
+                      .map(BPMNToMaudeTransformerHelper::getStartEventTokenName)
+                      .collect(Collectors.joining(" "));
     }
 
     private String makeRules() {
-        Set<MaudeRule> createdRules = new LinkedHashSet<>();
+        MaudeRuleBuilder ruleBuilder = new MaudeRuleBuilder();
 
-//        return createdRules.stream().map(MaudeRule::generateRule).collect(Collectors.joining("\n    "));
-        return "rules";
+        new BPMNMaudeRuleGenerator(ruleBuilder, collaboration).generateRules();
+
+        return ruleBuilder.createdRules()
+                          .map(MaudeRule::generateRuleString)
+                          .collect(Collectors.joining("\n    "));
     }
 }
