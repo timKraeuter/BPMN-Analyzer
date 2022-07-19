@@ -40,7 +40,7 @@ public class BPMNMaudeEventRuleGenerator {
     }
 
     private void createNoneStartEventRule(StartEvent startEvent, AbstractProcess process) {
-        ruleBuilder.ruleName(String.format(RULE_NAME_FORMAT, startEvent.getName(), startEvent.getId()));
+        ruleBuilder.ruleName(String.format(RULE_NAME_NAME_ID_FORMAT, startEvent.getName(), startEvent.getId()));
         String preToken = getStartEventTokenName(startEvent) + ANY_OTHER_TOKENS;
         String postToken = getOutgoingTokensForFlowNode(startEvent) + ANY_OTHER_TOKENS;
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(objectBuilder, process, preToken));
@@ -60,7 +60,8 @@ public class BPMNMaudeEventRuleGenerator {
         SequenceFlow incomingFlow = endEvent.getIncomingFlows().findFirst().orElseThrow();
         String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
 
-        ruleBuilder.ruleName(String.format(RULE_NAME_FORMAT, endEvent.getName(), endEvent.getId()));
+        // TODO: Use the new method here.
+        ruleBuilder.ruleName(String.format(RULE_NAME_NAME_ID_FORMAT, endEvent.getName(), endEvent.getId()));
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(objectBuilder, process, preTokens));
 
         switch (endEvent.getType()) {

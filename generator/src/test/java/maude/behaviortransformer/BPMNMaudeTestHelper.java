@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public interface MaudeTestHelper extends BPMNFileReaderTestHelper {
+public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper {
 
     String MAUDE_MODULE_FOLDER = "/bpmn/maude/";
 
@@ -19,6 +19,7 @@ public interface MaudeTestHelper extends BPMNFileReaderTestHelper {
         BPMNToMaudeTransformer transformer = new BPMNToMaudeTransformer(readModelFromResourceFolder(resourceFileName +
                                                                                                     ".bpmn"));
         String maudeModule = transformer.generate("<> True");
+        System.out.println(maudeModule);
 
         assertThat(maudeModule, is(readExpectedMaudeModule(resourceFileName)));
     }

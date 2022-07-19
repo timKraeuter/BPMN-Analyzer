@@ -5,6 +5,7 @@ import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.Process;
 import com.google.common.collect.Sets;
 import maude.behaviortransformer.bpmn.generators.BPMNMaudeEventRuleGenerator;
+import maude.behaviortransformer.bpmn.generators.BPMNMaudeGatewayRuleGenerator;
 import maude.behaviortransformer.bpmn.generators.BPMNMaudeTaskRuleGenerator;
 import maude.generation.MaudeRuleBuilder;
 
@@ -17,6 +18,7 @@ public class BPMNMaudeRuleGenerator {
     // Subgenerators
     private final BPMNMaudeTaskRuleGenerator taskRuleGenerator;
     private final BPMNMaudeEventRuleGenerator eventRuleGenerator;
+    private BPMNMaudeGatewayRuleGenerator gatewayRuleGenerator;
 
     BPMNMaudeRuleGenerator(MaudeRuleBuilder ruleBuilder, BPMNCollaboration collaboration) {
         this.collaboration = collaboration;
@@ -24,6 +26,7 @@ public class BPMNMaudeRuleGenerator {
 
         taskRuleGenerator = new BPMNMaudeTaskRuleGenerator(ruleBuilder);
         eventRuleGenerator = new BPMNMaudeEventRuleGenerator(ruleBuilder);
+        gatewayRuleGenerator = new BPMNMaudeGatewayRuleGenerator(ruleBuilder);
     }
     public void generateRules() {
         collaboration.getParticipants().forEach(process -> {
@@ -44,5 +47,9 @@ public class BPMNMaudeRuleGenerator {
 
     public BPMNMaudeEventRuleGenerator getEventRuleGenerator() {
         return eventRuleGenerator;
+    }
+
+    public BPMNMaudeGatewayRuleGenerator getGatewayRuleGenerator() {
+        return gatewayRuleGenerator;
     }
 }

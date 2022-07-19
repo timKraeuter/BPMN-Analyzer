@@ -53,4 +53,4 @@ mod BPMN-EXECUTION-sequential-activities is
     eq init = < "sequential-activities" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), subprocesses : none, state : Running > .
 endm
 
-rew [10] init .
+rew [50] init .

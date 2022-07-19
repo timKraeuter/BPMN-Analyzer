@@ -14,11 +14,18 @@ public class BPMNToMaudeTransformerHelper {
     public static final String ANY_TOKEN = "T";
     public static final String ANY_OTHER_TOKENS = " " + ANY_TOKEN;
 
-    public static final String RULE_NAME_FORMAT = "%s_%s";
+    public static final String RULE_NAME_NAME_ID_FORMAT = "%s_%s";
+    public static final String RULE_NAME_ID_FORMAT = "%s";
     private static final String TOKEN_FORMAT = "\"%s (%s)\""; // Name of the FlowElement followed by id.
     private static final String ENQUOTE_FORMAT = "\"%s\""; // Id of the FlowElement.
 
     private BPMNToMaudeTransformerHelper() {
+    }
+    public static String getRuleNameForFlowNode(FlowNode flowNode) {
+        if (flowNode.getName() == null || flowNode.getName().isBlank()) {
+            return String.format(RULE_NAME_ID_FORMAT, flowNode.getId());
+        }
+        return String.format(RULE_NAME_NAME_ID_FORMAT, flowNode.getName(), flowNode.getId());
     }
 
     public static String getStartEventTokenName(StartEvent event) {

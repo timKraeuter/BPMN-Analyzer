@@ -67,7 +67,7 @@ public class BPMNToMaudeTransformer {
                                                   "    eq init = ${init} .\r\n" +
                                                   "endm\r\n" +
                                                   "\r\n" +
-                                                  "rew [10] init .\r\n";
+                                                  "rew [50] init .\r\n";
 
     public BPMNToMaudeTransformer(BPMNCollaboration collaboration) {
         this.collaboration = collaboration;
