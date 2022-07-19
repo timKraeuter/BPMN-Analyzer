@@ -67,7 +67,41 @@ public class BPMNToMaudeTransformer {
                                                   "    eq init = ${init} .\r\n" +
                                                   "endm\r\n" +
                                                   "\r\n" +
-                                                  "rew [50] init .\r\n";
+                                                  "mod BPMN-PREDS is\r\n" +
+                                                  "    pr BPMN-EXECUTION-${name} .\r\n" +
+                                                  "    pr SATISFACTION .\r\n" +
+                                                  "    subsort Configuration < State .\r\n" +
+                                                  "\r\n" +
+                                                  "    var C : Configuration .\r\n" +
+                                                  "    var P : Prop .\r\n" +
+                                                  "    var X : Oid .\r\n" +
+                                                  "    var T : MSet .\r\n" +
+                                                  "    var T1 : NeMSet .\r\n" +
+                                                  "    var S : Configuration .\r\n" +
+                                                  "    var State : ProcessState .\r\n" +
+                                                  "\r\n" +
+                                                  "\r\n" +
+                                                  "    op allTerminated : -> Prop .\r\n" +
+                                                  "    eq < X : ProcessSnapshot | tokens : T, subprocesses : S, state" +
+                                                  " : Running > C |= allTerminated = false .\r\n" +
+                                                  "    eq C |= allTerminated = true [owise] .\r\n" +
+                                                  "\r\n" +
+                                                  "    op unsafe : -> Prop .\r\n" +
+                                                  "    eq < X : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : " +
+                                                  "S, state : State > C |= unsafe = true .\r\n" +
+                                                  "    eq C |= unsafe = false [owise] .\r\n" +
+                                                  "\r\n" +
+                                                  "    --- Generated atomic propositions\r\n" +
+                                                  "    ${atomicPropositions}\r\n" +
+                                                  "endm\r\n" +
+                                                  "\r\n" +
+                                                  "mod BPMN-CHECK is\r\n" +
+                                                  "    pr BPMN-PREDS .\r\n" +
+                                                  "    pr MODEL-CHECKER .\r\n" +
+                                                  "    pr LTL-SIMPLIFIER .\r\n" +
+                                                  "endm\r\n" +
+                                                  "\r\n" +
+                                                  "red modelCheck(init, ${ltlQuery}) .\r\n";
 
     public BPMNToMaudeTransformer(BPMNCollaboration collaboration) {
         this.collaboration = collaboration;
@@ -78,6 +112,7 @@ public class BPMNToMaudeTransformer {
         substitutionValues.put("name", collaboration.getName());
         substitutionValues.put("init", this.makeInit());
         substitutionValues.put("rules", this.makeRules());
+        substitutionValues.put("atomicPropositions", "--- no propositions"); // Add at some point
         substitutionValues.put("ltlQuery", ltlQuery);
         return new StringSubstitutor(substitutionValues).replace(MODULE_TEMPLATE);
     }

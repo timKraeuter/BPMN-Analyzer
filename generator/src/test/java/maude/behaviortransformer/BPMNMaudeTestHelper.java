@@ -18,7 +18,7 @@ public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper {
     default void testBPMNMaudeGeneration(String resourceFileName) throws IOException {
         BPMNToMaudeTransformer transformer = new BPMNToMaudeTransformer(readModelFromResourceFolder(resourceFileName +
                                                                                                     ".bpmn"));
-        String maudeModule = transformer.generate("<> True");
+        String maudeModule = transformer.generate(" <> [] allTerminated");
         System.out.println(maudeModule);
 
         assertThat(maudeModule, is(readExpectedMaudeModule(resourceFileName)));
