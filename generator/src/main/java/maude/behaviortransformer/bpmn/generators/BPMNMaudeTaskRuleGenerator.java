@@ -53,11 +53,6 @@ public class BPMNMaudeTaskRuleGenerator {
         ruleBuilder.build();
     }
 
-    private String getRuleNameForFlowNode(FlowNode flowNode) {
-        // TODO: Use the new method in the helper!
-        return String.format(RULE_NAME_NAME_ID_FORMAT, flowNode.getName(), flowNode.getId());
-    }
-
     String getTaskOrCallActivityRuleName(FlowNode taskOrCallActivity, String incomingFlowId) {
         if (taskOrCallActivity.getIncomingFlows().count() > 1) {
             return String.format("%s_%s", getRuleNameForFlowNode(taskOrCallActivity), incomingFlowId);

@@ -60,8 +60,7 @@ public class BPMNMaudeEventRuleGenerator {
         SequenceFlow incomingFlow = endEvent.getIncomingFlows().findFirst().orElseThrow();
         String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
 
-        // TODO: Use the new method here.
-        ruleBuilder.ruleName(String.format(RULE_NAME_NAME_ID_FORMAT, endEvent.getName(), endEvent.getId()));
+        ruleBuilder.ruleName(getRuleNameForFlowNode(endEvent));
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(objectBuilder, process, preTokens));
 
         switch (endEvent.getType()) {

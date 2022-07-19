@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-class BPMNToGrooveGatewayTest implements BPMNMaudeTestHelper {
+class BPMNToMaudeGatewayTest implements BPMNMaudeTestHelper {
 
     /**
      * See test case <a href="https://cawemo.com/share/9f739e59-c250-4f84-96cd-191914b07296">"Exclusive Gateway"</a>
