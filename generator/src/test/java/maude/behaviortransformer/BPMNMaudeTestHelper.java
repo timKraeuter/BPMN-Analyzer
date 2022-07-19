@@ -29,6 +29,8 @@ public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper {
 
         @SuppressWarnings("ConstantConditions") File maudeModel =
                 new File(this.getClass().getResource(resourcePath).getFile());
-        return FileUtils.readFileToString(maudeModel, StandardCharsets.UTF_8);
+        return FileUtils.readFileToString(maudeModel, StandardCharsets.UTF_8).replaceAll("\r?\n",
+                                                                                         "\r\n");
+        // force identical line separators;
     }
 }
