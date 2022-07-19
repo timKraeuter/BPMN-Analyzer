@@ -20,7 +20,7 @@ import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.upda
 
 public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
     private final GrooveRuleBuilder ruleBuilder;
-    private boolean useSFId;
+    private final boolean useSFId;
 
     public BPMNGatewayRuleGeneratorImpl(GrooveRuleBuilder ruleBuilder, boolean useSFId) {
         this.ruleBuilder = ruleBuilder;
@@ -33,18 +33,18 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
             final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow, this.useSFId);
             exclusiveGateway.getOutgoingFlows().forEach(outFlow -> {
                 String outFlowID = getSequenceFlowIdOrDescriptiveName(outFlow, this.useSFId);
-                createRuleExclusiveGatewayRule(process, ruleBuilder, exclusiveGateway, incomingFlowId, outFlowID);
+                createExclusiveGatewayRule(process, ruleBuilder, exclusiveGateway, incomingFlowId, outFlowID);
             });
         });
         // No incoming flows means we expect a token sitting at the gateway.
         if (exclusiveGateway.getIncomingFlows().findAny().isEmpty()) {
             exclusiveGateway.getOutgoingFlows().forEach(outFlow -> {
                 String outFlowID = getSequenceFlowIdOrDescriptiveName(outFlow, this.useSFId);
-                createRuleExclusiveGatewayRule(process,
-                                               ruleBuilder,
-                                               exclusiveGateway,
-                                               exclusiveGateway.getName(),
-                                               outFlowID);
+                createExclusiveGatewayRule(process,
+                                           ruleBuilder,
+                                           exclusiveGateway,
+                                           exclusiveGateway.getName(),
+                                           outFlowID);
             });
         }
     }
@@ -227,11 +227,11 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
     }
 
 
-    private void createRuleExclusiveGatewayRule(AbstractProcess process,
-                                                GrooveRuleBuilder ruleBuilder,
-                                                ExclusiveGateway exclusiveGateway,
-                                                String oldTokenPosition,
-                                                String newTokenPosition) {
+    private void createExclusiveGatewayRule(AbstractProcess process,
+                                            GrooveRuleBuilder ruleBuilder,
+                                            ExclusiveGateway exclusiveGateway,
+                                            String oldTokenPosition,
+                                            String newTokenPosition) {
         ruleBuilder.startRule(this.getExclusiveGatewayName(exclusiveGateway, oldTokenPosition, newTokenPosition));
         updateTokenPositionWhenRunning(process, oldTokenPosition, newTokenPosition, ruleBuilder);
         ruleBuilder.buildRule();

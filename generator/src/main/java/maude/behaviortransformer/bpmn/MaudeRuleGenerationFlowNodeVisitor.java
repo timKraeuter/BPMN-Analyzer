@@ -51,7 +51,7 @@ public class MaudeRuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
 
     @Override
     public void handle(ExclusiveGateway exclusiveGateway) {
-        throw new UnsupportedOperationException();
+        generator.getGatewayRuleGenerator().createExclusiveGatewayRule(process, exclusiveGateway);
     }
 
     @Override

@@ -13,6 +13,7 @@ class BPMNToMaudeGatewayTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testExclusiveGateway() throws IOException {
+        testBPMNMaudeGeneration("exclusive-gateway");
     }
 
     /**

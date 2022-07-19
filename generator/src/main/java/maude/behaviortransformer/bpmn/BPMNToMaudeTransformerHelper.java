@@ -21,7 +21,7 @@ public class BPMNToMaudeTransformerHelper {
 
     private BPMNToMaudeTransformerHelper() {
     }
-    public static String getRuleNameForFlowNode(FlowNode flowNode) {
+    public static String getFlowNodeNameAndID(FlowNode flowNode) {
         if (flowNode.getName() == null || flowNode.getName().isBlank()) {
             return String.format(RULE_NAME_ID_FORMAT, flowNode.getId());
         }

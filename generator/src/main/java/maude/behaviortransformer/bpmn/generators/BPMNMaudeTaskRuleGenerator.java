@@ -42,7 +42,7 @@ public class BPMNMaudeTaskRuleGenerator {
     }
 
     private void createEndTaskRule(AbstractProcess process, Task task) {
-        ruleBuilder.ruleName(getRuleNameForFlowNode(task) + END);
+        ruleBuilder.ruleName(getFlowNodeNameAndID(task) + END);
 
         String preTokens = getTokenForActivity(task) + ANY_OTHER_TOKENS;
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(objectBuilder, process, preTokens));
@@ -55,9 +55,9 @@ public class BPMNMaudeTaskRuleGenerator {
 
     String getTaskOrCallActivityRuleName(FlowNode taskOrCallActivity, String incomingFlowId) {
         if (taskOrCallActivity.getIncomingFlows().count() > 1) {
-            return String.format("%s_%s", getRuleNameForFlowNode(taskOrCallActivity), incomingFlowId);
+            return String.format("%s_%s", getFlowNodeNameAndID(taskOrCallActivity), incomingFlowId);
         }
-        return getRuleNameForFlowNode(taskOrCallActivity);
+        return getFlowNodeNameAndID(taskOrCallActivity);
     }
 
     // SendTask
