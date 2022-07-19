@@ -15,59 +15,59 @@ import java.util.stream.Collectors;
 
 public class BPMNToMaudeTransformer {
     private final BPMNCollaboration collaboration;
-    private static final String MODULE_TEMPLATE = "load model-checker.maude .\n" +
-                                                  "\n" +
-                                                  "--- Multiset implementation could be extracted as well.\n" +
-                                                  "fmod MSET is pr\n" +
-                                                  "    STRING .\n" +
-                                                  "    sorts NeMSet MSet .\n" +
-                                                  "    subsort String < NeMSet < MSet .\n" +
-                                                  "\n" +
-                                                  "    op none : -> MSet [ctor] .\n" +
-                                                  "    op __ : MSet MSet -> MSet [ctor assoc comm id: none] .\n" +
-                                                  "    op __ : NeMSet MSet -> NeMSet [ctor ditto] .\n" +
-                                                  "    op __ : MSet NeMSet -> NeMSet [ctor ditto] .\n" +
-                                                  "endfm\n" +
-                                                  "\n" +
-                                                  "mod BPMN-EXECUTION is\n" +
-                                                  "    pr MSET .\n" +
-                                                  "    pr STRING .\n" +
-                                                  "    pr CONFIGURATION .\n" +
-                                                  "\n" +
-                                                  "    sort ProcessState .\n" +
-                                                  "\n" +
-                                                  "    ops Running, Terminated : -> ProcessState [ctor] .\n" +
-                                                  "    op tokens :_ : MSet -> Attribute [ctor].\n" +
-                                                  "    op subprocesses :_ : Configuration -> Attribute [ctor].\n" +
-                                                  "    op state :_ : ProcessState -> Attribute [ctor].\n" +
-                                                  "    op ProcessSnapshot : -> Cid [ctor] .\n" +
-                                                  "    subsort String < Oid .\n" +
-                                                  "\n" +
-                                                  "    var P : String .\n" +
-                                                  "\n" +
-                                                  "    rl [terminateProcess] :\n" +
+    private static final String MODULE_TEMPLATE = "load model-checker.maude .\r\n" +
+                                                  "\r\n" +
+                                                  "--- Multiset implementation could be extracted as well.\r\n" +
+                                                  "fmod MSET is pr\r\n" +
+                                                  "    STRING .\r\n" +
+                                                  "    sorts NeMSet MSet .\r\n" +
+                                                  "    subsort String < NeMSet < MSet .\r\n" +
+                                                  "\r\n" +
+                                                  "    op none : -> MSet [ctor] .\r\n" +
+                                                  "    op __ : MSet MSet -> MSet [ctor assoc comm id: none] .\r\n" +
+                                                  "    op __ : NeMSet MSet -> NeMSet [ctor ditto] .\r\n" +
+                                                  "    op __ : MSet NeMSet -> NeMSet [ctor ditto] .\r\n" +
+                                                  "endfm\r\n" +
+                                                  "\r\n" +
+                                                  "mod BPMN-EXECUTION is\r\n" +
+                                                  "    pr MSET .\r\n" +
+                                                  "    pr STRING .\r\n" +
+                                                  "    pr CONFIGURATION .\r\n" +
+                                                  "\r\n" +
+                                                  "    sort ProcessState .\r\n" +
+                                                  "\r\n" +
+                                                  "    ops Running, Terminated : -> ProcessState [ctor] .\r\n" +
+                                                  "    op tokens :_ : MSet -> Attribute [ctor].\r\n" +
+                                                  "    op subprocesses :_ : Configuration -> Attribute [ctor].\r\n" +
+                                                  "    op state :_ : ProcessState -> Attribute [ctor].\r\n" +
+                                                  "    op ProcessSnapshot : -> Cid [ctor] .\r\n" +
+                                                  "    subsort String < Oid .\r\n" +
+                                                  "\r\n" +
+                                                  "    var P : String .\r\n" +
+                                                  "\r\n" +
+                                                  "    rl [terminateProcess] :\r\n" +
                                                   "    < P : ProcessSnapshot | tokens : none, subprocesses : none, " +
-                                                  "state : Running >\n" +
-                                                  "                            =>\n" +
+                                                  "state : Running >\r\n" +
+                                                  "                            =>\r\n" +
                                                   "    < P : ProcessSnapshot | tokens : none, subprocesses : none, " +
-                                                  "state : Terminated > .\n" +
-                                                  "endm\n" +
-                                                  "\n" +
-                                                  "mod BPMN-EXECUTION-${name} is\n" +
-                                                  "    pr BPMN-EXECUTION .\n" +
-                                                  "\n" +
-                                                  "    var T : MSet .\n" +
-                                                  "    var S : Configuration .\n" +
-                                                  "\n" +
-                                                  "    --- Generated rules\n" +
-                                                  "    ${rules}\n" +
-                                                  "\n" +
-                                                  "    --- Start configuration which would be generated\n" +
-                                                  "    op init : -> Configuration .\n" +
-                                                  "    eq init = ${init} .\n" +
-                                                  "endm\n" +
-                                                  "\n" +
-                                                  "rew [10] init .\n";
+                                                  "state : Terminated > .\r\n" +
+                                                  "endm\r\n" +
+                                                  "\r\n" +
+                                                  "mod BPMN-EXECUTION-${name} is\r\n" +
+                                                  "    pr BPMN-EXECUTION .\r\n" +
+                                                  "\r\n" +
+                                                  "    var T : MSet .\r\n" +
+                                                  "    var S : Configuration .\r\n" +
+                                                  "\r\n" +
+                                                  "    --- Generated rules\r\n" +
+                                                  "    ${rules}\r\n" +
+                                                  "\r\n" +
+                                                  "    --- Start configuration which would be generated\r\n" +
+                                                  "    op init : -> Configuration .\r\n" +
+                                                  "    eq init = ${init} .\r\n" +
+                                                  "endm\r\n" +
+                                                  "\r\n" +
+                                                  "rew [10] init .\r\n";
 
     public BPMNToMaudeTransformer(BPMNCollaboration collaboration) {
         this.collaboration = collaboration;
@@ -94,7 +94,7 @@ public class BPMNToMaudeTransformer {
                                                                                                                                this.createStartTokens(process));
                                 return maudeObject.generateObjectString();
                             })
-                            .collect(Collectors.joining("\n    "));
+                            .collect(Collectors.joining("\r\n    "));
     }
 
     private String createStartTokens(Process process) {
@@ -112,6 +112,6 @@ public class BPMNToMaudeTransformer {
 
         return ruleBuilder.createdRules()
                           .map(MaudeRule::generateRuleString)
-                          .collect(Collectors.joining("\n    "));
+                          .collect(Collectors.joining("\r\n    "));
     }
 }

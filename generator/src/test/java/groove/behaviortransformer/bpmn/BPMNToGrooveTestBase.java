@@ -28,9 +28,7 @@ public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTe
     }
 
     protected void testGrooveGenerationForBPMNResourceFile(String resourceFileName) throws IOException {
-        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + resourceFileName;
-        BPMNCollaboration collaboration = readModelFromResource(resourcePath);
-
+        BPMNCollaboration collaboration = readModelFromResourceFolder(resourceFileName);
         this.checkGrooveGeneration(collaboration);
     }
 }

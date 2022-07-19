@@ -1,4 +1,4 @@
-package ecmfa;
+package usecases;
 
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.Process;
