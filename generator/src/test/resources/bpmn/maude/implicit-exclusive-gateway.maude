@@ -1,0 +1,91 @@
+load model-checker.maude .
+
+--- Multiset implementation could be extracted as well.
+fmod MSET is pr
+    STRING .
+    sorts NeMSet MSet .
+    subsort String < NeMSet < MSet .
+
+    op none : -> MSet [ctor] .
+    op __ : MSet MSet -> MSet [ctor assoc comm id: none] .
+    op __ : NeMSet MSet -> NeMSet [ctor ditto] .
+    op __ : MSet NeMSet -> NeMSet [ctor ditto] .
+endfm
+
+mod BPMN-EXECUTION is
+    pr MSET .
+    pr STRING .
+    pr CONFIGURATION .
+
+    sort ProcessState .
+
+    ops Running, Terminated : -> ProcessState [ctor] .
+    op tokens :_ : MSet -> Attribute [ctor].
+    op subprocesses :_ : Configuration -> Attribute [ctor].
+    op state :_ : ProcessState -> Attribute [ctor].
+    op ProcessSnapshot : -> Cid [ctor] .
+    subsort String < Oid .
+
+    var P : String .
+
+    rl [terminateProcess] :
+    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Running >
+                            =>
+    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Terminated > .
+endm
+
+mod BPMN-EXECUTION-implicit-exclusive-gateway is
+    pr BPMN-EXECUTION .
+
+    var T : MSet .
+    var S : Configuration .
+
+    --- Generated rules
+    rl [start_StartEvent_1] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : S, state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start_e1 (Flow_10t9zap)" T), subprocesses : S, state : Running > .
+    rl [e1_Gateway_0j19iup] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start_e1 (Flow_10t9zap)" T), subprocesses : S, state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("e1_B (Flow_0pdgsgi)" T), subprocesses : S, state : Running > .
+    rl [e1_Gateway_0j19iup] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start_e1 (Flow_10t9zap)" T), subprocesses : S, state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("e1_A (Flow_0nggee2)" T), subprocesses : S, state : Running > .
+    rl [B_Activity_10w538h_Flow_0pdgsgi_start] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("e1_B (Flow_0pdgsgi)" T), subprocesses : S, state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B (Activity_10w538h)" T), subprocesses : S, state : Running > .
+    rl [B_Activity_10w538h_Flow_1nj1snh_start] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("A_B (Flow_1nj1snh)" T), subprocesses : S, state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B (Activity_10w538h)" T), subprocesses : S, state : Running > .
+    rl [B_Activity_10w538h_end] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B (Activity_10w538h)" T), subprocesses : S, state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B_end (Flow_1invg8j)" T), subprocesses : S, state : Running > .
+    rl [A_Activity_15jc1ty_start] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("e1_A (Flow_0nggee2)" T), subprocesses : S, state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("A (Activity_15jc1ty)" T), subprocesses : S, state : Running > .
+    rl [A_Activity_15jc1ty_end] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("A (Activity_15jc1ty)" T), subprocesses : S, state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("A_B (Flow_1nj1snh)" T), subprocesses : S, state : Running > .
+    rl [end_Event_11g4lyk] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B_end (Flow_1invg8j)" T), subprocesses : S, state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : (T), subprocesses : S, state : Running > .
+
+    --- Start configuration which would be generated
+    op init : -> Configuration .
+    eq init = < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), subprocesses : none, state : Running > .
+endm
+
+mod BPMN-PREDS is
+    pr BPMN-EXECUTION-implicit-exclusive-gateway .
+    pr SATISFACTION .
+    subsort Configuration < State .
+
+    var C : Configuration .
+    var P : Prop .
+    var X : Oid .
+    var T : MSet .
+    var T1 : NeMSet .
+    var S : Configuration .
+    var State : ProcessState .
+
+
+    op allTerminated : -> Prop .
+    eq < X : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > C |= allTerminated = false .
+    eq C |= allTerminated = true [owise] .
+
+    op unsafe : -> Prop .
+    eq < X : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : S, state : State > C |= unsafe = true .
+    eq C |= unsafe = false [owise] .
+
+    --- Generated atomic propositions
+    --- no propositions
+endm
+
+mod BPMN-CHECK is
+    pr BPMN-PREDS .
+    pr MODEL-CHECKER .
+    pr LTL-SIMPLIFIER .
+endm
+
+red modelCheck(init,  <> [] allTerminated) .
