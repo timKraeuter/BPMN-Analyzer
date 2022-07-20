@@ -33,7 +33,7 @@ public class BPMNMaudeGatewayRuleGenerator {
         if (exclusiveGateway.getIncomingFlows().findAny().isEmpty()) {
             exclusiveGateway.getOutgoingFlows().forEach(outgoingFlow -> createExclusiveGatewayRule(process,
                                                                                                    exclusiveGateway,
-                                                                                                   getFlowNodeNameAndID(
+                                                                                                   getTokenForFlowNode(
                                                                                                            exclusiveGateway),
                                                                                                    outgoingFlow));
         }
@@ -59,7 +59,7 @@ public class BPMNMaudeGatewayRuleGenerator {
     public void createParallelGatewayRule(AbstractProcess process, ParallelGateway parallelGateway) {
         ruleBuilder.ruleName(getFlowNodeNameAndID(parallelGateway));
 
-        String preTokens = getIncomingTokensForParallelGateway(parallelGateway) + ANY_OTHER_TOKENS;
+        String preTokens = getPreTokensForParallelGateway(parallelGateway) + ANY_OTHER_TOKENS;
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(objectBuilder, process, preTokens));
 
         String postTokens = getOutgoingTokensForFlowNode(parallelGateway) + ANY_OTHER_TOKENS;
@@ -68,8 +68,12 @@ public class BPMNMaudeGatewayRuleGenerator {
         ruleBuilder.build();
     }
 
-    private String getIncomingTokensForParallelGateway(ParallelGateway parallelGateway) {
-        return parallelGateway.getIncomingFlows().map(BPMNToMaudeTransformerHelper::getTokenForSequenceFlow).collect(
-                Collectors.joining(" "));
+    private String getPreTokensForParallelGateway(ParallelGateway parallelGateway) {
+        if (parallelGateway.getIncomingFlows().findAny().isEmpty()) {
+            return getTokenForFlowNode(parallelGateway);
+        }
+        return parallelGateway.getIncomingFlows()
+                              .map(BPMNToMaudeTransformerHelper::getTokenForSequenceFlow)
+                              .collect(Collectors.joining(" "));
     }
 }

@@ -56,7 +56,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
             // Subprocess has start events which get tokens!
             subProcessTokens = callActivity.getSubProcessModel().getStartEvents().stream()
                                            .filter(startEvent -> startEvent.getType() == StartEventType.NONE)
-                                           .map(BPMNToMaudeTransformerHelper::getFlowNodeToken)
+                                           .map(BPMNToMaudeTransformerHelper::getTokenForFlowNode)
                                            .collect(Collectors.joining(" "));
         } else {
             // All activites and gateways without incoming sequence flows get a token.
@@ -64,7 +64,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
                                            .filter(flowNode -> flowNode.isTask() ||
                                                                flowNode.isGateway())
                                            .filter(flowNode -> flowNode.getIncomingFlows().findAny().isEmpty())
-                                           .map(BPMNToMaudeTransformerHelper::getFlowNodeToken)
+                                           .map(BPMNToMaudeTransformerHelper::getTokenForFlowNode)
                                            .collect(Collectors.joining(" "));
         }
         MaudeObject subProcess = createProcessSnapshotObjectNoSubProcess(objectBuilder,

@@ -15,4 +15,28 @@ class BPMNToMaudeCallActivityTest implements BPMNMaudeTestHelper {
     void testCallActivity() throws IOException {
         testBPMNMaudeGeneration("call-activity-simple");
     }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/321db543-e301-4bfd-ac04-e6618346433a">"Call activity - Implicit exclusive and parallel gateway"</a> in cawemo.
+     */
+    @Test
+    void testCallActivityImplicitGateways() throws IOException {
+        testBPMNMaudeGeneration("call-activity-implicit-exclusive-and-parallel-gateway");
+    }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/37764ed1-03e7-43c7-8218-34467a12d104">"Call activity - No start event"</a> in cawemo.
+     */
+    @Test
+    void testCallActivityNoStartEvent() throws IOException {
+        testBPMNMaudeGeneration("call-activity-no-start-event");
+    }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/3b573dc4-3592-421d-9b13-dbb4e45ff410">"Call activity - Complex"</a> in cawemo.
+     */
+    @Test
+    void testCallActivityComplex() throws IOException {
+        testBPMNMaudeGeneration("call-activity-complex");
+    }
 }

@@ -42,7 +42,7 @@ public class BPMNToMaudeTransformerHelper {
         return String.format(RULE_NAME_NAME_ID_FORMAT, flowNode.getName(), flowNode.getId());
     }
 
-    public static String getFlowNodeToken(FlowNode flowNode) {
+    public static String getTokenForFlowNode(FlowNode flowNode) {
         if (flowNode.getName() == null || flowNode.getName().isBlank()) {
             return String.format(TOKEN_FORMAT_ONLY_ID, flowNode.getId());
         }
