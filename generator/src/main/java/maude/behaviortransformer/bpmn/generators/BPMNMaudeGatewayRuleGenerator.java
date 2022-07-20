@@ -47,10 +47,10 @@ public class BPMNMaudeGatewayRuleGenerator {
         ruleBuilder.ruleName(getFlowNodeNameAndID(exclusiveGateway));
 
         String preTokens = preToken + ANY_OTHER_TOKENS;
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(objectBuilder, process, preTokens));
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, preTokens));
 
         String postTokens = getTokenForSequenceFlow(outgoingFlow) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcess(objectBuilder, process, postTokens));
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, postTokens));
 
         ruleBuilder.build();
 
@@ -60,10 +60,10 @@ public class BPMNMaudeGatewayRuleGenerator {
         ruleBuilder.ruleName(getFlowNodeNameAndID(parallelGateway));
 
         String preTokens = getPreTokensForParallelGateway(parallelGateway) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(objectBuilder, process, preTokens));
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, preTokens));
 
         String postTokens = getOutgoingTokensForFlowNode(parallelGateway) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcess(objectBuilder, process, postTokens));
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, postTokens));
 
         ruleBuilder.build();
     }

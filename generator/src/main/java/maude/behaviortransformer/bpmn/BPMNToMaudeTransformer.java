@@ -37,26 +37,28 @@ public class BPMNToMaudeTransformer {
                                                   "    sort ProcessState .\r\n" +
                                                   "\r\n" +
                                                   "    ops Running, Terminated : -> ProcessState [ctor] .\r\n" +
-                                                  "    op tokens :_ : MSet -> Attribute [ctor].\r\n" +
-                                                  "    op subprocesses :_ : Configuration -> Attribute [ctor].\r\n" +
-                                                  "    op state :_ : ProcessState -> Attribute [ctor].\r\n" +
+                                                  "    op tokens :_ : MSet -> Attribute [ctor] .\r\n" +
+                                                  "    op messages :_ : MSet -> Attribute [ctor] .\r\n" +
+                                                  "    op subprocesses :_ : Configuration -> Attribute [ctor] .\r\n" +
+                                                  "    op state :_ : ProcessState -> Attribute [ctor] .\r\n" +
                                                   "    op ProcessSnapshot : -> Cid [ctor] .\r\n" +
                                                   "    subsort String < Oid .\r\n" +
                                                   "\r\n" +
                                                   "    var P : String .\r\n" +
                                                   "\r\n" +
                                                   "    rl [terminateProcess] :\r\n" +
-                                                  "    < P : ProcessSnapshot | tokens : none, subprocesses : none, " +
-                                                  "state : Running >\r\n" +
+                                                  "    < P : ProcessSnapshot | tokens : none, messages : none, " +
+                                                  "subprocesses : none, state : Running >\r\n" +
                                                   "                            =>\r\n" +
-                                                  "    < P : ProcessSnapshot | tokens : none, subprocesses : none, " +
-                                                  "state : Terminated > .\r\n" +
+                                                  "    < P : ProcessSnapshot | tokens : none, messages : none, " +
+                                                  "subprocesses : none, state : Terminated > .\r\n" +
                                                   "endm\r\n" +
                                                   "\r\n" +
                                                   "mod BPMN-EXECUTION-${name} is\r\n" +
                                                   "    pr BPMN-EXECUTION .\r\n" +
                                                   "\r\n" +
-                                                  "    var T : MSet .\r\n" +
+                                                  "    var T : MSet . --- Tokens\r\n" +
+                                                  "    var M : MSet . --- Messages\r\n" +
                                                   "    var S : Configuration .\r\n" +
                                                   "\r\n" +
                                                   "    --- Generated rules\r\n" +
@@ -76,19 +78,20 @@ public class BPMNToMaudeTransformer {
                                                   "    var P : Prop .\r\n" +
                                                   "    var X : Oid .\r\n" +
                                                   "    var T : MSet .\r\n" +
+                                                  "    var M : MSet .\r\n" +
                                                   "    var T1 : NeMSet .\r\n" +
                                                   "    var S : Configuration .\r\n" +
                                                   "    var State : ProcessState .\r\n" +
                                                   "\r\n" +
                                                   "\r\n" +
                                                   "    op allTerminated : -> Prop .\r\n" +
-                                                  "    eq < X : ProcessSnapshot | tokens : T, subprocesses : S, state" +
-                                                  " : Running > C |= allTerminated = false .\r\n" +
+                                                  "    eq < X : ProcessSnapshot | tokens : T, messages : M, " +
+                                                  "subprocesses : S, state : Running > C |= allTerminated = false .\r\n" +
                                                   "    eq C |= allTerminated = true [owise] .\r\n" +
                                                   "\r\n" +
                                                   "    op unsafe : -> Prop .\r\n" +
-                                                  "    eq < X : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : " +
-                                                  "S, state : State > C |= unsafe = true .\r\n" +
+                                                  "    eq < X : ProcessSnapshot | tokens : (T1 T1 T), messages : M, " +
+                                                  "subprocesses : S, state : State > C |= unsafe = true .\r\n" +
                                                   "    eq C |= unsafe = false [owise] .\r\n" +
                                                   "\r\n" +
                                                   "    --- Generated atomic propositions\r\n" +

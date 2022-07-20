@@ -21,7 +21,8 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
     private final MaudeRuleBuilder ruleBuilder;
     private final MaudeObjectBuilder objectBuilder;
 
-    public BPMNMaudeSubprocessRuleGenerator(BPMNMaudeRuleGenerator bpmnMaudeRuleGenerator, MaudeRuleBuilder ruleBuilder) {
+    public BPMNMaudeSubprocessRuleGenerator(BPMNMaudeRuleGenerator bpmnMaudeRuleGenerator,
+                                            MaudeRuleBuilder ruleBuilder) {
         this.bpmnMaudeRuleGenerator = bpmnMaudeRuleGenerator;
         this.ruleBuilder = ruleBuilder;
         objectBuilder = new MaudeObjectBuilder();
@@ -49,7 +50,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
         ruleBuilder.ruleName(getTaskOrCallActivityRuleName(callActivity, incomingFlow.getId()));
 
         String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(objectBuilder, process, preTokens));
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, preTokens));
 
         String subProcessTokens;
         if (subprocessHasStartEvents(callActivity)) {
@@ -70,11 +71,11 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
         MaudeObject subProcess = createProcessSnapshotObjectNoSubProcess(objectBuilder,
                                                                          callActivity.getSubProcessModel(),
                                                                          subProcessTokens);
-        ruleBuilder.addPostObject(createProcessSnapshotObject(objectBuilder,
-                                                              process,
-                                                              subProcess.generateObjectString() +
-                                                              ANY_OTHER_SUBPROCESSES,
-                                                              ANY_TOKEN, "Running"));
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnyMessages(objectBuilder,
+                                                                         process,
+                                                                        subProcess.generateObjectString() +
+                                                                        ANY_OTHER_SUBPROCESSES,
+                                                                         ANY_TOKENS, "Running"));
 
         ruleBuilder.build();
     }
@@ -84,18 +85,19 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
 
         MaudeObject subProcess = createTerminatedProcessSnapshot(objectBuilder,
                                                                  callActivity.getSubProcessModel());
-        ruleBuilder.addPreObject(createProcessSnapshotObject(objectBuilder,
-                                                             process,
-                                                             subProcess.generateObjectString() + ANY_OTHER_SUBPROCESSES,
-                                                             ANY_TOKEN, "Running"));
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnyMessages(objectBuilder,
+                                                                        process,
+                                                                       subProcess.generateObjectString() +
+                                                                       ANY_OTHER_SUBPROCESSES,
+                                                                        ANY_TOKENS, "Running"));
 
         // Add outgoing tokens
         String postTokens = getOutgoingTokensForFlowNode(callActivity) + ANY_OTHER_TOKENS;
 
         // Subprocess is deleted (since it is not in the post object).
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcess(objectBuilder,
-                                                                           process,
-                                                                           postTokens));
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder,
+                                                                                      process,
+                                                                                      postTokens));
 
 
         ruleBuilder.build();

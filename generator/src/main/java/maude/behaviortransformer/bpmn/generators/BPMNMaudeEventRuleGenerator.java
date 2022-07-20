@@ -43,8 +43,8 @@ public class BPMNMaudeEventRuleGenerator {
         ruleBuilder.ruleName(getFlowNodeNameAndID(startEvent));
         String preToken = getStartEventTokenName(startEvent) + ANY_OTHER_TOKENS;
         String postToken = getOutgoingTokensForFlowNode(startEvent) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(objectBuilder, process, preToken));
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcess(objectBuilder, process, postToken));
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, preToken));
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, postToken));
         ruleBuilder.build();
     }
 
@@ -61,11 +61,12 @@ public class BPMNMaudeEventRuleGenerator {
         String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
 
         ruleBuilder.ruleName(getFlowNodeNameAndID(endEvent));
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(objectBuilder, process, preTokens));
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, preTokens));
 
         switch (endEvent.getType()) {
             case NONE:
-                ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcess(objectBuilder, process, ANY_TOKEN));
+                ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process,
+                                                                                              ANY_TOKENS));
                 break;
             case TERMINATION:
                 // TODO: Implement termination end event.

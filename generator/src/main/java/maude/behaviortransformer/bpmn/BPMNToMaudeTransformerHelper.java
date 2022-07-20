@@ -11,11 +11,12 @@ import maude.generation.MaudeObjectBuilder;
 import java.util.stream.Collectors;
 
 public class BPMNToMaudeTransformerHelper {
-    public static final String ANY_TOKEN = "T";
-    public static final String ANY_SUBPROCESS = "S";
-    public static final String ANY_OTHER_TOKENS = " " + ANY_TOKEN;
-    public static final String ANY_OTHER_SUBPROCESSES = " " + ANY_SUBPROCESS;
-    public static final String NO_TOKEN_OR_SUBPROCESS = "none";
+    public static final String ANY_TOKENS = "T";
+    public static final String ANY_SUBPROCESSES = "S";
+    public static final String ANY_MESSAGES = "M";
+    public static final String ANY_OTHER_TOKENS = " " + ANY_TOKENS;
+    public static final String ANY_OTHER_SUBPROCESSES = " " + ANY_SUBPROCESSES;
+    public static final String NONE = "none";
 
     public static final String RULE_NAME_NAME_ID_FORMAT = "%s_%s";
     public static final String RULE_NAME_ID_FORMAT = "%s";
@@ -80,8 +81,9 @@ public class BPMNToMaudeTransformerHelper {
                                                               AbstractProcess process) {
         return createProcessSnapshotObject(maudeObjectBuilder,
                                            process,
-                                           NO_TOKEN_OR_SUBPROCESS,
-                                           NO_TOKEN_OR_SUBPROCESS,
+                                           NONE,
+                                           NONE,
+                                           NONE,
                                            TERMINATED);
     }
 
@@ -89,24 +91,39 @@ public class BPMNToMaudeTransformerHelper {
     public static MaudeObject createProcessSnapshotObjectNoSubProcess(MaudeObjectBuilder maudeObjectBuilder,
                                                                       AbstractProcess process,
                                                                       String tokens) {
-        return createProcessSnapshotObject(maudeObjectBuilder, process, NO_TOKEN_OR_SUBPROCESS, tokens, RUNNING);
+        return createProcessSnapshotObject(maudeObjectBuilder, process, NONE, tokens, ANY_MESSAGES, RUNNING);
     }
 
-    public static MaudeObject createProcessSnapshotObjectAnySubProcess(MaudeObjectBuilder maudeObjectBuilder,
-                                                                       AbstractProcess process,
-                                                                       String tokens) {
-        return createProcessSnapshotObject(maudeObjectBuilder, process, ANY_SUBPROCESS, tokens, RUNNING);
+    public static MaudeObject createProcessSnapshotObjectAnySubProcessAndMessages(MaudeObjectBuilder maudeObjectBuilder,
+                                                                                  AbstractProcess process,
+                                                                                  String tokens) {
+        return createProcessSnapshotObject(maudeObjectBuilder,
+                                           process,
+                                           ANY_SUBPROCESSES,
+                                           tokens,
+                                           ANY_MESSAGES,
+                                           RUNNING);
+    }
+
+    public static MaudeObject createProcessSnapshotObjectAnyMessages(MaudeObjectBuilder maudeObjectBuilder,
+                                                                     AbstractProcess process,
+                                                                     String subprocesses,
+                                                                     String tokens,
+                                                                     String state) {
+        return createProcessSnapshotObject(maudeObjectBuilder, process, subprocesses, tokens, ANY_MESSAGES, state);
     }
 
     public static MaudeObject createProcessSnapshotObject(MaudeObjectBuilder maudeObjectBuilder,
                                                           AbstractProcess process,
                                                           String subprocesses,
                                                           String tokens,
+                                                          String messages,
                                                           String state) {
         return maudeObjectBuilder
                 .oid(String.format(ENQUOTE_FORMAT, process.getName()))
                 .oidType("ProcessSnapshot")
                 .addAttributeValue("tokens", String.format("(%s)", tokens))
+                .addAttributeValue("messages", String.format("(%s)", messages))
                 .addAttributeValue("subprocesses", String.format("(%s)", subprocesses))
                 .addAttributeValue("state", state)
                 .build();
