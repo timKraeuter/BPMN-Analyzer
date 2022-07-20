@@ -124,9 +124,11 @@ public class BPMNToMaudeTransformer {
                                                                                                   startEvent.getType() ==
                                                                                                   StartEventType.NONE))
                             .map(process -> {
-                                MaudeObject maudeObject = BPMNToMaudeTransformerHelper.createProcessSnapshotObjectNoSubProcess(maudeObjectBuilder,
-                                                                                                                               process,
-                                                                                                                               this.createStartTokens(process));
+                                MaudeObject maudeObject =
+                                        BPMNToMaudeTransformerHelper.createProcessSnapshotObjectNoSubProcess(
+                                        maudeObjectBuilder,
+                                        process,
+                                        this.createStartTokens(process));
                                 return maudeObject.generateObjectString();
                             })
                             .collect(Collectors.joining("\r\n    "));

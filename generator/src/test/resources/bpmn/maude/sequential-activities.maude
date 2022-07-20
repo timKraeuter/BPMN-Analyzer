@@ -41,16 +41,16 @@ mod BPMN-EXECUTION-sequential-activities is
     var S : Configuration .
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < "sequential-activities" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : S, state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : ("start_A (Flow_1u1u0cf)" T), subprocesses : S, state : Running > .
-    rl [A_Activity_1hogwa8_start] :  < "sequential-activities" : ProcessSnapshot | tokens : ("start_A (Flow_1u1u0cf)" T), subprocesses : S, state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : ("A (Activity_1hogwa8)" T), subprocesses : S, state : Running > .
-    rl [A_Activity_1hogwa8_end] :  < "sequential-activities" : ProcessSnapshot | tokens : ("A (Activity_1hogwa8)" T), subprocesses : S, state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : ("A_B (Flow_1b2a4a3)" T), subprocesses : S, state : Running > .
-    rl [B_Activity_02rpmxb_start] :  < "sequential-activities" : ProcessSnapshot | tokens : ("A_B (Flow_1b2a4a3)" T), subprocesses : S, state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : ("B (Activity_02rpmxb)" T), subprocesses : S, state : Running > .
-    rl [B_Activity_02rpmxb_end] :  < "sequential-activities" : ProcessSnapshot | tokens : ("B (Activity_02rpmxb)" T), subprocesses : S, state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : ("B_end (Flow_1tj96s9)" T), subprocesses : S, state : Running > .
-    rl [end_Event_1xnuloc] :  < "sequential-activities" : ProcessSnapshot | tokens : ("B_end (Flow_1tj96s9)" T), subprocesses : S, state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : (T), subprocesses : S, state : Running > .
+    rl [start_StartEvent_1] :  < "sequential-activities" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : ("start_A (Flow_1u1u0cf)" T), subprocesses : (S), state : Running > .
+    rl [A_Activity_1hogwa8_start] :  < "sequential-activities" : ProcessSnapshot | tokens : ("start_A (Flow_1u1u0cf)" T), subprocesses : (S), state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : ("A (Activity_1hogwa8)" T), subprocesses : (S), state : Running > .
+    rl [A_Activity_1hogwa8_end] :  < "sequential-activities" : ProcessSnapshot | tokens : ("A (Activity_1hogwa8)" T), subprocesses : (S), state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : ("A_B (Flow_1b2a4a3)" T), subprocesses : (S), state : Running > .
+    rl [B_Activity_02rpmxb_start] :  < "sequential-activities" : ProcessSnapshot | tokens : ("A_B (Flow_1b2a4a3)" T), subprocesses : (S), state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : ("B (Activity_02rpmxb)" T), subprocesses : (S), state : Running > .
+    rl [B_Activity_02rpmxb_end] :  < "sequential-activities" : ProcessSnapshot | tokens : ("B (Activity_02rpmxb)" T), subprocesses : (S), state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : ("B_end (Flow_1tj96s9)" T), subprocesses : (S), state : Running > .
+    rl [end_Event_1xnuloc] :  < "sequential-activities" : ProcessSnapshot | tokens : ("B_end (Flow_1tj96s9)" T), subprocesses : (S), state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "sequential-activities" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), subprocesses : none, state : Running > .
+    eq init = < "sequential-activities" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), subprocesses : (none), state : Running > .
 endm
 
 mod BPMN-PREDS is

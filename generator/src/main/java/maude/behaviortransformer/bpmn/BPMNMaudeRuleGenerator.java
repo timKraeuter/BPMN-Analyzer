@@ -6,6 +6,7 @@ import behavior.bpmn.Process;
 import com.google.common.collect.Sets;
 import maude.behaviortransformer.bpmn.generators.BPMNMaudeEventRuleGenerator;
 import maude.behaviortransformer.bpmn.generators.BPMNMaudeGatewayRuleGenerator;
+import maude.behaviortransformer.bpmn.generators.BPMNMaudeSubprocessRuleGenerator;
 import maude.behaviortransformer.bpmn.generators.BPMNMaudeTaskRuleGenerator;
 import maude.generation.MaudeRuleBuilder;
 
@@ -18,7 +19,8 @@ public class BPMNMaudeRuleGenerator {
     // Subgenerators
     private final BPMNMaudeTaskRuleGenerator taskRuleGenerator;
     private final BPMNMaudeEventRuleGenerator eventRuleGenerator;
-    private BPMNMaudeGatewayRuleGenerator gatewayRuleGenerator;
+    private final BPMNMaudeGatewayRuleGenerator gatewayRuleGenerator;
+    private final BPMNMaudeSubprocessRuleGenerator subprocessRuleGenerator;
 
     BPMNMaudeRuleGenerator(MaudeRuleBuilder ruleBuilder, BPMNCollaboration collaboration) {
         this.collaboration = collaboration;
@@ -27,6 +29,7 @@ public class BPMNMaudeRuleGenerator {
         taskRuleGenerator = new BPMNMaudeTaskRuleGenerator(ruleBuilder);
         eventRuleGenerator = new BPMNMaudeEventRuleGenerator(ruleBuilder);
         gatewayRuleGenerator = new BPMNMaudeGatewayRuleGenerator(ruleBuilder);
+        subprocessRuleGenerator = new BPMNMaudeSubprocessRuleGenerator(this, ruleBuilder);
     }
     public void generateRules() {
         collaboration.getParticipants().forEach(process -> {
@@ -51,5 +54,12 @@ public class BPMNMaudeRuleGenerator {
 
     public BPMNMaudeGatewayRuleGenerator getGatewayRuleGenerator() {
         return gatewayRuleGenerator;
+    }
+
+    public BPMNMaudeSubprocessRuleGenerator getSubprocessRuleGenerator() {
+        return subprocessRuleGenerator;
+    }
+    public Set<Process> getVisitedProcessModels() {
+        return visitedProcessModels;
     }
 }

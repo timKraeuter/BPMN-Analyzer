@@ -46,7 +46,7 @@ public class MaudeRuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
 
     @Override
     public void handle(CallActivity callActivity) {
-        throw new UnsupportedOperationException();
+        generator.getSubprocessRuleGenerator().createCallActivityRulesForProcess(process, callActivity);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package maude.behaviortransformer.bpmn.generators;
 
 import behavior.bpmn.AbstractProcess;
-import behavior.bpmn.FlowNode;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.activities.tasks.Task;
 import maude.generation.MaudeObjectBuilder;
@@ -53,12 +52,6 @@ public class BPMNMaudeTaskRuleGenerator {
         ruleBuilder.build();
     }
 
-    String getTaskOrCallActivityRuleName(FlowNode taskOrCallActivity, String incomingFlowId) {
-        if (taskOrCallActivity.getIncomingFlows().count() > 1) {
-            return String.format("%s_%s", getFlowNodeNameAndID(taskOrCallActivity), incomingFlowId);
-        }
-        return getFlowNodeNameAndID(taskOrCallActivity);
-    }
 
     // SendTask
 
