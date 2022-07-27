@@ -31,4 +31,12 @@ class BPMNToMaudeTaskTest implements BPMNMaudeTestHelper {
     void testImplicitParallelGateway() throws IOException {
         testBPMNMaudeGeneration("implicit-parallel-gateway");
     }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/121dafdb-2ce5-4146-8f4e-315ab9bb0c38">"Send/Receive Message Tasks"</a> in cawemo.
+     */
+    @Test
+    void testSendReceiveTask() throws IOException {
+        testBPMNMaudeGeneration("send-receive-message-tasks");
+    }
 }

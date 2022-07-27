@@ -36,12 +36,12 @@ public class MaudeRuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
 
     @Override
     public void handle(SendTask sendTask) {
-        throw new UnsupportedOperationException();
+        generator.getTaskRuleGenerator().createSendTaskRulesForProcess(process, sendTask);
     }
 
     @Override
     public void handle(ReceiveTask receiveTask) {
-        throw new UnsupportedOperationException();
+        generator.getTaskRuleGenerator().createReceiveTaskRulesForProcess(process, receiveTask);
     }
 
     @Override
@@ -81,6 +81,6 @@ public class MaudeRuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
 
     @Override
     public void handle(IntermediateCatchEvent intermediateCatchEvent) {
-        throw new UnsupportedOperationException();
+        generator.getEventRuleGenerator().createIntermediateCatchEventRule(process, intermediateCatchEvent);
     }
 }

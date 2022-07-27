@@ -47,7 +47,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
                                                    CallActivity callActivity,
                                                    SequenceFlow incomingFlow) {
 
-        ruleBuilder.ruleName(getTaskOrCallActivityRuleName(callActivity, incomingFlow.getId()));
+        ruleBuilder.ruleName(getFlowNodeRuleNameWithIncFlow(callActivity, incomingFlow.getId()));
 
         String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, preTokens));

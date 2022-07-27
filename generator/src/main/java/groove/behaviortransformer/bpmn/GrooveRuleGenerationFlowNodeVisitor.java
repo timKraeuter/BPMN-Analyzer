@@ -15,11 +15,11 @@ import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.InclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
 
-public class RuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
+public class GrooveRuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
     private final BPMNRuleGenerator generator;
     private final AbstractProcess process;
 
-    public RuleGenerationFlowNodeVisitor(BPMNRuleGenerator generator, AbstractProcess process) {
+    public GrooveRuleGenerationFlowNodeVisitor(BPMNRuleGenerator generator, AbstractProcess process) {
         this.generator = generator;
         this.process = process;
     }

@@ -26,8 +26,8 @@ public class BPMNMaudeRuleGenerator {
         this.collaboration = collaboration;
         visitedProcessModels = Sets.newHashSet();
 
-        taskRuleGenerator = new BPMNMaudeTaskRuleGenerator(ruleBuilder);
-        eventRuleGenerator = new BPMNMaudeEventRuleGenerator(ruleBuilder);
+        taskRuleGenerator = new BPMNMaudeTaskRuleGenerator(collaboration, ruleBuilder);
+        eventRuleGenerator = new BPMNMaudeEventRuleGenerator(collaboration, ruleBuilder);
         gatewayRuleGenerator = new BPMNMaudeGatewayRuleGenerator(ruleBuilder);
         subprocessRuleGenerator = new BPMNMaudeSubprocessRuleGenerator(this, ruleBuilder);
     }

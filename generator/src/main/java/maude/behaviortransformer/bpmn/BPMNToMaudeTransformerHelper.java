@@ -1,13 +1,12 @@
 package maude.behaviortransformer.bpmn;
 
-import behavior.bpmn.AbstractProcess;
-import behavior.bpmn.FlowNode;
-import behavior.bpmn.SequenceFlow;
+import behavior.bpmn.*;
 import behavior.bpmn.activities.Activity;
 import behavior.bpmn.events.StartEvent;
 import maude.generation.MaudeObject;
 import maude.generation.MaudeObjectBuilder;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BPMNToMaudeTransformerHelper {
@@ -22,14 +21,15 @@ public class BPMNToMaudeTransformerHelper {
     public static final String RULE_NAME_ID_FORMAT = "%s";
     private static final String TOKEN_FORMAT = "\"%s (%s)\""; // Name of the FlowElement followed by id.
     private static final String TOKEN_FORMAT_ONLY_ID = "\"%s\""; // Name of the FlowElement followed by id.
-    private static final String ENQUOTE_FORMAT = "\"%s\""; // Id of the FlowElement.
+    public static final String ENQUOTE_FORMAT = "\"%s\""; // Id of the FlowElement.
+    public static final String BRACKET_FORMAT = "(%s)";
     public static final String RUNNING = "Running";
     public static final String TERMINATED = "Terminated";
 
     private BPMNToMaudeTransformerHelper() {
     }
 
-    public static String getTaskOrCallActivityRuleName(FlowNode taskOrCallActivity, String incomingFlowId) {
+    public static String getFlowNodeRuleNameWithIncFlow(FlowNode taskOrCallActivity, String incomingFlowId) {
         if (taskOrCallActivity.getIncomingFlows().count() > 1) {
             return String.format(RULE_NAME_NAME_ID_FORMAT, getFlowNodeNameAndID(taskOrCallActivity), incomingFlowId);
         }
@@ -105,6 +105,18 @@ public class BPMNToMaudeTransformerHelper {
                                            RUNNING);
     }
 
+    public static MaudeObject createProcessSnapshotObjectAnySubProcess(MaudeObjectBuilder maudeObjectBuilder,
+                                                                                  AbstractProcess process,
+                                                                                  String tokens,
+                                                                                  String messages) {
+        return createProcessSnapshotObject(maudeObjectBuilder,
+                                           process,
+                                           ANY_SUBPROCESSES,
+                                           tokens,
+                                           messages,
+                                           RUNNING);
+    }
+
     public static MaudeObject createProcessSnapshotObjectAnyMessages(MaudeObjectBuilder maudeObjectBuilder,
                                                                      AbstractProcess process,
                                                                      String subprocesses,
@@ -122,10 +134,22 @@ public class BPMNToMaudeTransformerHelper {
         return maudeObjectBuilder
                 .oid(String.format(ENQUOTE_FORMAT, process.getName()))
                 .oidType("ProcessSnapshot")
-                .addAttributeValue("tokens", String.format("(%s)", tokens))
-                .addAttributeValue("messages", String.format("(%s)", messages))
-                .addAttributeValue("subprocesses", String.format("(%s)", subprocesses))
+                .addAttributeValue("tokens", String.format(BRACKET_FORMAT, tokens))
+                .addAttributeValue("messages", String.format(BRACKET_FORMAT, messages))
+                .addAttributeValue("subprocesses", String.format(BRACKET_FORMAT, subprocesses))
                 .addAttributeValue("state", state)
                 .build();
+    }
+
+    public static String getIncomingMessagesForFlowNode(FlowNode flowNode,
+                                                        BPMNCollaboration collaboration) {
+        Set<MessageFlow> incomingMessageFlows = collaboration.getIncomingMessageFlows(flowNode);
+        if (incomingMessageFlows.isEmpty()) {
+            return NONE;
+        }
+        // TODO: Check reading message flows. They should have ids too!
+        return incomingMessageFlows.stream()
+                                   .map(messageFlow -> String.format(ENQUOTE_FORMAT, messageFlow.getName()))
+                                   .collect(Collectors.joining(" "));
     }
 }
