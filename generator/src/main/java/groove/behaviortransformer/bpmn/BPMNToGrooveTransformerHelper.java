@@ -165,12 +165,11 @@ public class BPMNToGrooveTransformerHelper {
         ruleBuilder.addEdge(POSITION, newMessage, ruleBuilder.contextNode(createStringNodeLabel(position)));
     }
 
-    public static void addMessageFlowBehaviorForFlowNode(BPMNCollaboration collaboration,
+    public static void addSendMessageBehaviorForFlowNode(BPMNCollaboration collaboration,
                                                          GrooveRuleBuilder ruleBuilder,
                                                          FlowNode producingMessageFlowNode,
                                                          boolean useSFId) {
-        collaboration.getMessageFlows().stream().filter(messageFlow -> messageFlow.getSource() ==
-                                                                       producingMessageFlowNode).forEach(messageFlow -> {
+        collaboration.outgoingMessageFlows(producingMessageFlowNode).forEach(messageFlow -> {
             if (messageFlow.getTarget().isInstantiateFlowNode()) {
                 addMessageFlowInstantiateFlowNodeBehavior(ruleBuilder, messageFlow);
             } else if (isAfterInstantiateEventBasedGateway(messageFlow.getTarget())) {

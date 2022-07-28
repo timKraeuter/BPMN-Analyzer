@@ -9,6 +9,8 @@ import behavior.bpmn.activities.tasks.SendTask;
 import maude.generation.MaudeObjectBuilder;
 import maude.generation.MaudeRuleBuilder;
 
+import java.util.function.Consumer;
+
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.END;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.START;
 import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper.*;
@@ -25,27 +27,31 @@ public class BPMNMaudeTaskRuleGenerator {
     }
 
     public void createTaskRulesForProcess(AbstractProcess process,
-                                          AbstractTask task) {
+                                          AbstractTask task,
+                                          Consumer<MaudeRuleBuilder> endTaskRuleAdditions) {
         // Rules for starting the task
-        task.getIncomingFlows().forEach(incomingFlow -> createStartTaskRule(process,
-                                                                            task,
-                                                                            incomingFlow));
+        task.getIncomingFlows().forEach(incomingFlow -> createStartTaskRule(process, task, incomingFlow));
         // Rule for ending the task
-        createEndTaskRule(process, task);
+        createEndTaskRule(process, task, endTaskRuleAdditions);
 
         // TODO: Boundary events
     }
 
-    private void createStartTaskRule(AbstractProcess process,
-                                     AbstractTask task,
-                                     SequenceFlow incomingFlow) {
+    public void createTaskRulesForProcess(AbstractProcess process, AbstractTask task) {
+        createTaskRulesForProcess(process, task, x -> {
+            // NOOP
+        });
+    }
+
+    private void createStartTaskRule(AbstractProcess process, AbstractTask task, SequenceFlow incomingFlow) {
         ruleBuilder.ruleName(getFlowNodeRuleNameWithIncFlow(task, incomingFlow.getId()) + START);
 
         String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(objectBuilder,
                                                                           process,
                                                                           preTokens,
-                                                                          getIncomingMessagesForFlowNode(task, collaboration)));
+                                                                          getIncomingMessagesForFlowNode(task,
+                                                                                                         collaboration)));
 
         String postTokens = getTokenForActivity(task) + ANY_OTHER_TOKENS;
         ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder,
@@ -55,9 +61,10 @@ public class BPMNMaudeTaskRuleGenerator {
         ruleBuilder.build();
     }
 
-    private void createEndTaskRule(AbstractProcess process, AbstractTask task) {
-        // TODO: add post messages
-        ruleBuilder.ruleName(getFlowNodeNameAndID(task) + END);
+    private void createEndTaskRule(AbstractProcess process,
+                                   AbstractTask task,
+                                   Consumer<MaudeRuleBuilder> ruleAdditions) {
+        ruleBuilder.ruleName(getFlowNodeRuleName(task) + END);
 
         String preTokens = getTokenForActivity(task) + ANY_OTHER_TOKENS;
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder,
@@ -68,15 +75,24 @@ public class BPMNMaudeTaskRuleGenerator {
         ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder,
                                                                                       process,
                                                                                       postTokens));
+        ruleAdditions.accept(ruleBuilder);
 
         ruleBuilder.build();
     }
 
     public void createSendTaskRulesForProcess(AbstractProcess process, SendTask sendTask) {
-        // TODO: Implement. Optional message send to a different object/process if exists.
+        createTaskRulesForProcess(process,
+                                  sendTask,
+                                  maudeRuleBuilder -> addSendMessageBehaviorForFlowNode(collaboration,
+                                                                                        maudeRuleBuilder,
+                                                                                        objectBuilder,
+                                                                                        sendTask));
     }
 
     public void createReceiveTaskRulesForProcess(AbstractProcess process, ReceiveTask receiveTask) {
-        // TODO: Implement receive tasks.
+        // TODO: Receive task instantiation rules (and evtl. boundary rules).
+        // TODO: Receive task after instantiate event based gateways.
+        // TODO: Receive task after event based gateways.
+        createTaskRulesForProcess(process, receiveTask);
     }
 }

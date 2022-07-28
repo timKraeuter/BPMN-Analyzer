@@ -44,7 +44,7 @@ public class BPMNMaudeEventRuleGenerator {
     }
 
     private void createNoneStartEventRule(StartEvent startEvent, AbstractProcess process) {
-        ruleBuilder.ruleName(getFlowNodeNameAndID(startEvent));
+        ruleBuilder.ruleName(getFlowNodeRuleName(startEvent));
         String preToken = getStartEventTokenName(startEvent) + ANY_OTHER_TOKENS;
         String postToken = getOutgoingTokensForFlowNode(startEvent) + ANY_OTHER_TOKENS;
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, preToken));
@@ -66,7 +66,7 @@ public class BPMNMaudeEventRuleGenerator {
         SequenceFlow incomingFlow = endEvent.getIncomingFlows().findFirst().orElseThrow();
         String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
 
-        ruleBuilder.ruleName(getFlowNodeNameAndID(endEvent));
+        ruleBuilder.ruleName(getFlowNodeRuleName(endEvent));
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder,
                                                                                      process,
                                                                                      preTokens));
@@ -80,7 +80,9 @@ public class BPMNMaudeEventRuleGenerator {
                 // TODO: Implement termination end event.
                 break;
             case MESSAGE:
-                // TODO: Implement message end event.
+                ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process,
+                                                                                              ANY_TOKENS));
+                addSendMessageBehaviorForFlowNode(collaboration, ruleBuilder, objectBuilder, endEvent);
                 break;
             case SIGNAL:
                 // TODO: Implement signal end event.

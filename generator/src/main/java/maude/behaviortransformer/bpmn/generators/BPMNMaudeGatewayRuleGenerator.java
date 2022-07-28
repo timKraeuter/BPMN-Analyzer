@@ -44,7 +44,7 @@ public class BPMNMaudeGatewayRuleGenerator {
                                             ExclusiveGateway exclusiveGateway,
                                             String preToken,
                                             SequenceFlow outgoingFlow) {
-        ruleBuilder.ruleName(getFlowNodeNameAndID(exclusiveGateway));
+        ruleBuilder.ruleName(getFlowNodeRuleName(exclusiveGateway));
 
         String preTokens = preToken + ANY_OTHER_TOKENS;
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, preTokens));
@@ -57,7 +57,7 @@ public class BPMNMaudeGatewayRuleGenerator {
     }
 
     public void createParallelGatewayRule(AbstractProcess process, ParallelGateway parallelGateway) {
-        ruleBuilder.ruleName(getFlowNodeNameAndID(parallelGateway));
+        ruleBuilder.ruleName(getFlowNodeRuleName(parallelGateway));
 
         String preTokens = getPreTokensForParallelGateway(parallelGateway) + ANY_OTHER_TOKENS;
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, preTokens));

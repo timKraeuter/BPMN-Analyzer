@@ -8,6 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BPMNCollaboration implements Behavior {
     private final String name;
@@ -36,17 +37,22 @@ public class BPMNCollaboration implements Behavior {
         return messageFlows;
     }
 
-    public Set<MessageFlow> getIncomingMessageFlows(FlowNode node) {
+
+    public Stream<MessageFlow> outgoingMessageFlows(FlowNode producingMessageFlowNode) {
+        return this.getMessageFlows().stream().filter(messageFlow -> messageFlow.getSource() == producingMessageFlowNode);
+    }
+
+    public Set<MessageFlow> getIncomingMessageFlows(FlowNode messageTarget) {
         return this.getMessageFlows().stream()
-                   .filter(flow -> flow.getTarget().equals(node))
+                   .filter(flow -> flow.getTarget().equals(messageTarget))
                    .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public Process getMessageFlowReceiver(MessageFlow flow) {
         Optional<Process> optionalProcess = this.getParticipants().stream()
                                                 .filter(process -> process.getFlowNodes().anyMatch(flowNode ->
-                                                                                                                  flowNode ==
-                                                                                                                  flow.getTarget()))
+                                                                                                           flowNode ==
+                                                                                                           flow.getTarget()))
                                                 .findFirst();
         if (optionalProcess.isPresent()) {
             return optionalProcess.get();
@@ -79,7 +85,8 @@ public class BPMNCollaboration implements Behavior {
         if (foundParentProcess.isPresent()) {
             return foundParentProcess.get();
         }
-        throw new ShouldNotHappenRuntimeException("Parent process could not be found for event subprocess!" + eventSubprocess);
+        throw new ShouldNotHappenRuntimeException("Parent process could not be found for event subprocess!" +
+                                                  eventSubprocess);
     }
 
 

@@ -1,13 +1,17 @@
 package maude.behaviortransformer.bpmn;
 
+import behavior.bpmn.Process;
 import behavior.bpmn.*;
 import behavior.bpmn.activities.Activity;
 import behavior.bpmn.events.StartEvent;
 import maude.generation.MaudeObject;
 import maude.generation.MaudeObjectBuilder;
+import maude.generation.MaudeRuleBuilder;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.isAfterInstantiateEventBasedGateway;
 
 public class BPMNToMaudeTransformerHelper {
     public static final String ANY_TOKENS = "T";
@@ -15,6 +19,7 @@ public class BPMNToMaudeTransformerHelper {
     public static final String ANY_MESSAGES = "M";
     public static final String ANY_OTHER_TOKENS = " " + ANY_TOKENS;
     public static final String ANY_OTHER_SUBPROCESSES = " " + ANY_SUBPROCESSES;
+    public static final String ANY_OTHER_MESSAGES = " " + ANY_MESSAGES;
     public static final String NONE = "none";
 
     public static final String RULE_NAME_NAME_ID_FORMAT = "%s_%s";
@@ -31,12 +36,12 @@ public class BPMNToMaudeTransformerHelper {
 
     public static String getFlowNodeRuleNameWithIncFlow(FlowNode taskOrCallActivity, String incomingFlowId) {
         if (taskOrCallActivity.getIncomingFlows().count() > 1) {
-            return String.format(RULE_NAME_NAME_ID_FORMAT, getFlowNodeNameAndID(taskOrCallActivity), incomingFlowId);
+            return String.format(RULE_NAME_NAME_ID_FORMAT, getFlowNodeRuleName(taskOrCallActivity), incomingFlowId);
         }
-        return getFlowNodeNameAndID(taskOrCallActivity);
+        return getFlowNodeRuleName(taskOrCallActivity);
     }
 
-    public static String getFlowNodeNameAndID(FlowNode flowNode) {
+    public static String getFlowNodeRuleName(FlowNode flowNode) {
         if (flowNode.getName() == null || flowNode.getName().isBlank()) {
             return String.format(RULE_NAME_ID_FORMAT, flowNode.getId());
         }
@@ -88,10 +93,10 @@ public class BPMNToMaudeTransformerHelper {
     }
 
 
-    public static MaudeObject createProcessSnapshotObjectNoSubProcess(MaudeObjectBuilder maudeObjectBuilder,
-                                                                      AbstractProcess process,
-                                                                      String tokens) {
-        return createProcessSnapshotObject(maudeObjectBuilder, process, NONE, tokens, ANY_MESSAGES, RUNNING);
+    public static MaudeObject createProcessSnapshotObjectNoSubProcessAndMessages(MaudeObjectBuilder maudeObjectBuilder,
+                                                                                 AbstractProcess process,
+                                                                                 String tokens) {
+        return createProcessSnapshotObject(maudeObjectBuilder, process, NONE, tokens, NONE, RUNNING);
     }
 
     public static MaudeObject createProcessSnapshotObjectAnySubProcessAndMessages(MaudeObjectBuilder maudeObjectBuilder,
@@ -145,11 +150,62 @@ public class BPMNToMaudeTransformerHelper {
                                                         BPMNCollaboration collaboration) {
         Set<MessageFlow> incomingMessageFlows = collaboration.getIncomingMessageFlows(flowNode);
         if (incomingMessageFlows.isEmpty()) {
-            return NONE;
+            return ANY_MESSAGES;
         }
         // TODO: Check reading message flows. They should have ids too!
-        return incomingMessageFlows.stream()
-                                   .map(messageFlow -> String.format(ENQUOTE_FORMAT, messageFlow.getName()))
-                                   .collect(Collectors.joining(" "));
+        String consumedMessages = incomingMessageFlows.stream()
+                                             .map(BPMNToMaudeTransformerHelper::getMessageForFlow)
+                                             .collect(Collectors.joining(" "));
+        return consumedMessages + ANY_OTHER_MESSAGES;
+    }
+
+    public static String getMessageForFlow(MessageFlow messageFlow) {
+        return String.format(ENQUOTE_FORMAT, messageFlow.getName());
+    }
+
+
+
+    public static void addSendMessageBehaviorForFlowNode(BPMNCollaboration collaboration,
+                                                         MaudeRuleBuilder ruleBuilder,
+                                                         MaudeObjectBuilder objectBuilder,
+                                                         FlowNode messageSource) {
+        collaboration.outgoingMessageFlows(messageSource).forEach(messageFlow -> {
+            if (messageFlow.getTarget().isInstantiateFlowNode()) {
+                // TODO: Implement message to instantiate flow node behavior.
+            } else if (isAfterInstantiateEventBasedGateway(messageFlow.getTarget())) {
+                // TODO: Implement message to instantiate EV gateway behavior.
+            } else {
+                addMessageSendBehaviorIfProcessExists(collaboration, ruleBuilder, objectBuilder, messageFlow);
+            }
+        });
+    }
+
+    public static void addMessageSendBehaviorIfProcessExists(BPMNCollaboration collaboration,
+                                                             MaudeRuleBuilder ruleBuilder,
+                                                             MaudeObjectBuilder objectBuilder,
+                                                             MessageFlow messageFlow) {
+        Process messageFlowReceiver = collaboration.getMessageFlowReceiver(messageFlow);
+
+        // We assume a message receiver can only have one incoming sequence flow if any.
+        messageFlow.getTarget().getIncomingFlows().forEach(sequenceFlow -> {
+            String token;
+            if (sequenceFlow.getSource().isExclusiveEventBasedGateway()) {
+                token = getTokenForFlowNode(sequenceFlow.getSource());
+            } else {
+                token = getTokenForSequenceFlow(sequenceFlow);
+            }
+            // TODO: Implement optional message send/if exists.
+            // Add message
+            ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder,
+                                                                                         messageFlowReceiver,
+                                                                                         token + ANY_OTHER_TOKENS));
+            ruleBuilder.addPostObject(
+                    createProcessSnapshotObjectAnySubProcess(objectBuilder,
+                                                             messageFlowReceiver,
+                                                             token + ANY_OTHER_TOKENS,
+                                                             getMessageForFlow(messageFlow) + ANY_OTHER_MESSAGES));
+
+        });
+
     }
 }

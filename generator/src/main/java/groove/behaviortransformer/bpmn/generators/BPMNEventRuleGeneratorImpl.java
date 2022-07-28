@@ -32,7 +32,7 @@ import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.*;
 public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     private final BPMNCollaboration collaboration;
     private final GrooveRuleBuilder ruleBuilder;
-    private boolean useSFId;
+    private final boolean useSFId;
 
     public BPMNEventRuleGeneratorImpl(BPMNRuleGenerator bpmnRuleGenerator,
                                       GrooveRuleBuilder ruleBuilder,
@@ -102,7 +102,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
                 break;
             case MESSAGE:
-                BPMNToGrooveTransformerHelper.addMessageFlowBehaviorForFlowNode(collaboration,
+                // TODO: Should also be running similar to the NONE event.
+                BPMNToGrooveTransformerHelper.addSendMessageBehaviorForFlowNode(collaboration,
                                                                                 ruleBuilder,
                                                                                 endEvent,
                                                                                 this.useSFId);
@@ -318,7 +319,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                                                                                     ruleBuilder,
                                                                                     processInstance,
                                                                                     useSFId);
-        BPMNToGrooveTransformerHelper.addMessageFlowBehaviorForFlowNode(collaboration,
+        BPMNToGrooveTransformerHelper.addSendMessageBehaviorForFlowNode(collaboration,
                                                                         ruleBuilder,
                                                                         intermediateThrowEvent,
                                                                         useSFId);

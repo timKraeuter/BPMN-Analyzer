@@ -68,9 +68,9 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
                                            .map(BPMNToMaudeTransformerHelper::getTokenForFlowNode)
                                            .collect(Collectors.joining(" "));
         }
-        MaudeObject subProcess = createProcessSnapshotObjectNoSubProcess(objectBuilder,
-                                                                         callActivity.getSubProcessModel(),
-                                                                         subProcessTokens);
+        MaudeObject subProcess = createProcessSnapshotObjectNoSubProcessAndMessages(objectBuilder,
+                                                                                    callActivity.getSubProcessModel(),
+                                                                                    subProcessTokens);
         ruleBuilder.addPostObject(createProcessSnapshotObjectAnyMessages(objectBuilder,
                                                                          process,
                                                                         subProcess.generateObjectString() +
@@ -81,7 +81,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
     }
 
     private void createTerminateSubProcessRule(AbstractProcess process, CallActivity callActivity) {
-        ruleBuilder.ruleName(getFlowNodeNameAndID(callActivity) + END);
+        ruleBuilder.ruleName(getFlowNodeRuleName(callActivity) + END);
 
         MaudeObject subProcess = createTerminatedProcessSnapshot(objectBuilder,
                                                                  callActivity.getSubProcessModel());

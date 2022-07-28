@@ -20,46 +20,48 @@ mod BPMN-EXECUTION is
     sort ProcessState .
 
     ops Running, Terminated : -> ProcessState [ctor] .
-    op tokens :_ : MSet -> Attribute [ctor].
-    op subprocesses :_ : Configuration -> Attribute [ctor].
-    op state :_ : ProcessState -> Attribute [ctor].
+    op tokens :_ : MSet -> Attribute [ctor] .
+    op messages :_ : MSet -> Attribute [ctor] .
+    op subprocesses :_ : Configuration -> Attribute [ctor] .
+    op state :_ : ProcessState -> Attribute [ctor] .
     op ProcessSnapshot : -> Cid [ctor] .
     subsort String < Oid .
 
     var P : String .
 
     rl [terminateProcess] :
-    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Running >
+    < P : ProcessSnapshot | tokens : none, messages : none, subprocesses : none, state : Running >
                             =>
-    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Terminated > .
+    < P : ProcessSnapshot | tokens : none, messages : none, subprocesses : none, state : Terminated > .
 endm
 
 mod BPMN-EXECUTION-parallel-gateway-complex is
     pr BPMN-EXECUTION .
 
-    var T : MSet .
+    var T : MSet . --- Tokens
+    var M : MSet . --- Messages
     var S : Configuration .
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("start_a0 (Flow_1qxu4uv)" T), subprocesses : (S), state : Running > .
-    rl [a0_Activity_029uqdv_start] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("start_a0 (Flow_1qxu4uv)" T), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a0 (Activity_029uqdv)" T), subprocesses : (S), state : Running > .
-    rl [a0_Activity_029uqdv_end] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a0 (Activity_029uqdv)" T), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a0_a1 (Flow_0cg7cqo)" T), subprocesses : (S), state : Running > .
-    rl [a1_Activity_194ixr2_start] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a0_a1 (Flow_0cg7cqo)" T), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a1 (Activity_194ixr2)" T), subprocesses : (S), state : Running > .
-    rl [a1_Activity_194ixr2_end] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a1 (Activity_194ixr2)" T), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a1_p1 (Flow_1pf5izs)" T), subprocesses : (S), state : Running > .
-    rl [p1_Gateway_0a08dmu] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a1_p1 (Flow_1pf5izs)" T), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("p1_a2_1 (Flow_06uejek)" "p1_a2_2 (Flow_1id82hx)" T), subprocesses : (S), state : Running > .
-    rl [a2_1_Activity_1hsp815_start] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("p1_a2_1 (Flow_06uejek)" T), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a2_1 (Activity_1hsp815)" T), subprocesses : (S), state : Running > .
-    rl [a2_1_Activity_1hsp815_end] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a2_1 (Activity_1hsp815)" T), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a2_1_p3 (Flow_1wn50cm)" T), subprocesses : (S), state : Running > .
-    rl [a2_2_Activity_0v43tih_start] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("p1_a2_2 (Flow_1id82hx)" T), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a2_2 (Activity_0v43tih)" T), subprocesses : (S), state : Running > .
-    rl [a2_2_Activity_0v43tih_end] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a2_2 (Activity_0v43tih)" T), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a2_2_p2 (Flow_09pzjng)" T), subprocesses : (S), state : Running > .
-    rl [p2_Gateway_1y5zsz9] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a2_2_p2 (Flow_09pzjng)" T), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("p2_a3 (Flow_1vn0x4x)" "p2_p3 (Flow_1u69p9j)" T), subprocesses : (S), state : Running > .
-    rl [a3_Activity_1739zph_start] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("p2_a3 (Flow_1vn0x4x)" T), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a3 (Activity_1739zph)" T), subprocesses : (S), state : Running > .
-    rl [a3_Activity_1739zph_end] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a3 (Activity_1739zph)" T), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a3_p3 (Flow_0bcwlse)" T), subprocesses : (S), state : Running > .
-    rl [p3_Gateway_1poxur5] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a2_1_p3 (Flow_1wn50cm)" "a3_p3 (Flow_0bcwlse)" "p2_p3 (Flow_1u69p9j)" T), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("p3_end (Flow_0qpajeq)" T), subprocesses : (S), state : Running > .
-    rl [end_Event_0vybl5s] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("p3_end (Flow_0qpajeq)" T), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
+    rl [start_StartEvent_1] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), messages : (M), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("start_a0 (Flow_1qxu4uv)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [a0_Activity_029uqdv_start] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("start_a0 (Flow_1qxu4uv)" T), messages : (M), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a0 (Activity_029uqdv)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [a0_Activity_029uqdv_end] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a0 (Activity_029uqdv)" T), messages : (M), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a0_a1 (Flow_0cg7cqo)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [a1_Activity_194ixr2_start] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a0_a1 (Flow_0cg7cqo)" T), messages : (M), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a1 (Activity_194ixr2)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [a1_Activity_194ixr2_end] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a1 (Activity_194ixr2)" T), messages : (M), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a1_p1 (Flow_1pf5izs)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [p1_Gateway_0a08dmu] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a1_p1 (Flow_1pf5izs)" T), messages : (M), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("p1_a2_1 (Flow_06uejek)" "p1_a2_2 (Flow_1id82hx)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [a2_1_Activity_1hsp815_start] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("p1_a2_1 (Flow_06uejek)" T), messages : (M), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a2_1 (Activity_1hsp815)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [a2_1_Activity_1hsp815_end] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a2_1 (Activity_1hsp815)" T), messages : (M), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a2_1_p3 (Flow_1wn50cm)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [a2_2_Activity_0v43tih_start] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("p1_a2_2 (Flow_1id82hx)" T), messages : (M), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a2_2 (Activity_0v43tih)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [a2_2_Activity_0v43tih_end] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a2_2 (Activity_0v43tih)" T), messages : (M), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a2_2_p2 (Flow_09pzjng)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [p2_Gateway_1y5zsz9] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a2_2_p2 (Flow_09pzjng)" T), messages : (M), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("p2_a3 (Flow_1vn0x4x)" "p2_p3 (Flow_1u69p9j)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [a3_Activity_1739zph_start] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("p2_a3 (Flow_1vn0x4x)" T), messages : (M), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a3 (Activity_1739zph)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [a3_Activity_1739zph_end] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a3 (Activity_1739zph)" T), messages : (M), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a3_p3 (Flow_0bcwlse)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [p3_Gateway_1poxur5] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("a2_1_p3 (Flow_1wn50cm)" "a3_p3 (Flow_0bcwlse)" "p2_p3 (Flow_1u69p9j)" T), messages : (M), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("p3_end (Flow_0qpajeq)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [end_Event_0vybl5s] :  < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("p3_end (Flow_0qpajeq)" T), messages : (M), subprocesses : (S), state : Running > => < "parallel-gateway-complex" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), subprocesses : (none), state : Running > .
+    eq init = < "parallel-gateway-complex" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), messages : (none), subprocesses : (none), state : Running > .
 endm
 
 mod BPMN-PREDS is
@@ -71,17 +73,18 @@ mod BPMN-PREDS is
     var P : Prop .
     var X : Oid .
     var T : MSet .
+    var M : MSet .
     var T1 : NeMSet .
     var S : Configuration .
     var State : ProcessState .
 
 
     op allTerminated : -> Prop .
-    eq < X : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > C |= allTerminated = false .
+    eq < X : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : Running > C |= allTerminated = false .
     eq C |= allTerminated = true [owise] .
 
     op unsafe : -> Prop .
-    eq < X : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : S, state : State > C |= unsafe = true .
+    eq < X : ProcessSnapshot | tokens : (T1 T1 T), messages : M, subprocesses : S, state : State > C |= unsafe = true .
     eq C |= unsafe = false [owise] .
 
     --- Generated atomic propositions
