@@ -1,44 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="startSignal" role="rule" edgeids="false" edgemode="directed">
-        <node id="n99">
+        <node id="n100">
             <attr name="layout">
                 <string>412 635 0 0</string>
             </attr>
         </node>
-        <edge from="n99" to="n99">
+        <edge from="n100" to="n100">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <edge from="n99" to="n99">
-            <attr name="label">
-                <string>new:</string>
-            </attr>
-        </edge>
-        <node id="n101">
-            <attr name="layout">
-                <string>842 480 0 0</string>
-            </attr>
-        </node>
-        <edge from="n101" to="n101">
-            <attr name="label">
-                <string>type:Running</string>
-            </attr>
-        </edge>
-        <edge from="n101" to="n101">
+        <edge from="n100" to="n100">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
         <node id="n102">
             <attr name="layout">
-                <string>892 650 0 0</string>
+                <string>842 480 0 0</string>
             </attr>
         </node>
         <edge from="n102" to="n102">
             <attr name="label">
-                <string>type:Token</string>
+                <string>type:Running</string>
             </attr>
         </edge>
         <edge from="n102" to="n102">
@@ -46,222 +31,237 @@
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n93">
-            <attr name="layout">
-                <string>540 162 0 0</string>
-            </attr>
-        </node>
-        <edge from="n93" to="n93">
-            <attr name="label">
-                <string>type:Token</string>
-            </attr>
-        </edge>
-        <edge from="n93" to="n93">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
-        <node id="n105">
-            <attr name="layout">
-                <string>487 252 0 0</string>
-            </attr>
-        </node>
-        <edge from="n105" to="n105">
-            <attr name="label">
-                <string>type:Token</string>
-            </attr>
-        </edge>
-        <edge from="n105" to="n105">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
-        <node id="n91">
-            <attr name="layout">
-                <string>62 80 0 0</string>
-            </attr>
-        </node>
-        <edge from="n91" to="n91">
-            <attr name="label">
-                <string>type:ProcessSnapshot</string>
-            </attr>
-        </edge>
-        <node id="n92">
-            <attr name="layout">
-                <string>382 72 0 0</string>
-            </attr>
-        </node>
-        <edge from="n92" to="n92">
-            <attr name="label">
-                <string>string:"eventSubprocessTrigger"</string>
-            </attr>
-        </edge>
-        <node id="n94">
-            <attr name="layout">
-                <string>867 162 0 0</string>
-            </attr>
-        </node>
-        <edge from="n94" to="n94">
-            <attr name="label">
-                <string>string:"signalOrMessage_startSignal"</string>
-            </attr>
-        </edge>
-        <node id="n95">
-            <attr name="layout">
-                <string>1152 420 0 0</string>
-            </attr>
-        </node>
-        <edge from="n95" to="n95">
-            <attr name="label">
-                <string>existsx:</string>
-            </attr>
-        </edge>
-        <node id="n96">
-            <attr name="layout">
-                <string>62 618 0 0</string>
-            </attr>
-        </node>
-        <edge from="n96" to="n96">
-            <attr name="label">
-                <string>type:ProcessSnapshot</string>
-            </attr>
-        </edge>
-        <node id="n97">
-            <attr name="layout">
-                <string>412 333 0 0</string>
-            </attr>
-        </node>
-        <edge from="n97" to="n97">
-            <attr name="label">
-                <string>string:"p1"</string>
-            </attr>
-        </edge>
-        <node id="n98">
-            <attr name="layout">
-                <string>472 413 0 0</string>
-            </attr>
-        </node>
-        <edge from="n98" to="n98">
-            <attr name="label">
-                <string>type:Running</string>
-            </attr>
-        </edge>
-        <node id="n100">
-            <attr name="layout">
-                <string>752 560 0 0</string>
-            </attr>
-        </node>
-        <edge from="n100" to="n100">
-            <attr name="label">
-                <string>string:"EventSubprocess"</string>
-            </attr>
-        </edge>
         <node id="n103">
             <attr name="layout">
-                <string>1152 658 0 0</string>
+                <string>892 650 0 0</string>
             </attr>
         </node>
         <edge from="n103" to="n103">
             <attr name="label">
-                <string>string:"signalStartSub_Subactivity"</string>
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n103" to="n103">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n94">
+            <attr name="layout">
+                <string>540 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n94" to="n94">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n94" to="n94">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n106">
+            <attr name="layout">
+                <string>487 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n106" to="n106">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n106" to="n106">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n92">
+            <attr name="layout">
+                <string>62 80 0 0</string>
+            </attr>
+        </node>
+        <edge from="n92" to="n92">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n93">
+            <attr name="layout">
+                <string>382 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n93" to="n93">
+            <attr name="label">
+                <string>string:"eventSubprocessTrigger"</string>
+            </attr>
+        </edge>
+        <node id="n95">
+            <attr name="layout">
+                <string>867 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n95" to="n95">
+            <attr name="label">
+                <string>string:"signalOrMessage_startSignal"</string>
+            </attr>
+        </edge>
+        <node id="n96">
+            <attr name="layout">
+                <string>1152 420 0 0</string>
+            </attr>
+        </node>
+        <edge from="n96" to="n96">
+            <attr name="label">
+                <string>existsx:</string>
+            </attr>
+        </edge>
+        <node id="n97">
+            <attr name="layout">
+                <string>62 618 0 0</string>
+            </attr>
+        </node>
+        <edge from="n97" to="n97">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n98">
+            <attr name="layout">
+                <string>412 333 0 0</string>
+            </attr>
+        </node>
+        <edge from="n98" to="n98">
+            <attr name="label">
+                <string>string:"p1"</string>
+            </attr>
+        </edge>
+        <node id="n99">
+            <attr name="layout">
+                <string>472 413 0 0</string>
+            </attr>
+        </node>
+        <edge from="n99" to="n99">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n101">
+            <attr name="layout">
+                <string>752 560 0 0</string>
+            </attr>
+        </node>
+        <edge from="n101" to="n101">
+            <attr name="label">
+                <string>string:"EventSubprocess"</string>
             </attr>
         </edge>
         <node id="n104">
             <attr name="layout">
-                <string>880 252 0 0</string>
+                <string>1152 658 0 0</string>
             </attr>
         </node>
         <edge from="n104" to="n104">
             <attr name="label">
+                <string>string:"signalStartSub_Subactivity"</string>
+            </attr>
+        </edge>
+        <node id="n105">
+            <attr name="layout">
+                <string>880 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n105" to="n105">
+            <attr name="label">
                 <string>forall:</string>
             </attr>
         </edge>
-        <edge from="n99" to="n100">
+        <edge from="n100" to="n101">
             <attr name="label">
                 <string>new:name</string>
             </attr>
         </edge>
-        <edge from="n99" to="n101">
+        <edge from="n100" to="n102">
             <attr name="label">
                 <string>new:state</string>
             </attr>
         </edge>
-        <edge from="n96" to="n99">
+        <edge from="n97" to="n100">
             <attr name="label">
                 <string>new:subprocess</string>
             </attr>
         </edge>
-        <edge from="n99" to="n102">
+        <edge from="n100" to="n103">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n102" to="n103">
+        <edge from="n103" to="n104">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n93" to="n94">
+        <edge from="n94" to="n95">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n91" to="n93">
+        <edge from="n92" to="n94">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n96" to="n105">
+        <edge from="n97" to="n106">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n91" to="n92">
+        <edge from="n92" to="n93">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n96" to="n97">
+        <edge from="n97" to="n98">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n96" to="n98">
+        <edge from="n97" to="n99">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n96" to="n95">
+        <edge from="n97" to="n96">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n98" to="n95">
+        <edge from="n99" to="n96">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n99" to="n95">
+        <edge from="n100" to="n96">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n101" to="n95">
+        <edge from="n102" to="n96">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n102" to="n95">
+        <edge from="n103" to="n96">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n105" to="n104">
+        <edge from="n106" to="n105">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n104" to="n95">
+        <edge from="n105" to="n96">
             <attr name="label">
                 <string>in</string>
             </attr>

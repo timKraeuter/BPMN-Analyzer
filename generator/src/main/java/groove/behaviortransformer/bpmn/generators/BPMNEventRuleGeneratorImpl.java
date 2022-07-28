@@ -76,8 +76,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
         switch (endEvent.getType()) {
             case NONE:
-                GrooveNode running = ruleBuilder.contextNode(TYPE_RUNNING);
-                ruleBuilder.contextEdge(STATE, processInstance, running);
+                GrooveNode noneRunning = ruleBuilder.contextNode(TYPE_RUNNING);
+                ruleBuilder.contextEdge(STATE, processInstance, noneRunning);
                 break;
             case TERMINATION:
                 GrooveNode deletedRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
@@ -102,7 +102,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
                 break;
             case MESSAGE:
-                // TODO: Should also be running similar to the NONE event.
+                GrooveNode running = ruleBuilder.contextNode(TYPE_RUNNING);
+                ruleBuilder.contextEdge(STATE, processInstance, running);
                 BPMNToGrooveTransformerHelper.addSendMessageBehaviorForFlowNode(collaboration,
                                                                                 ruleBuilder,
                                                                                 endEvent,
