@@ -59,8 +59,7 @@ class BPMNToMaudeEventsTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testTerminateEndEvent() throws IOException {
-        // TODO: Implement test and code.
-//        testBPMNMaudeGeneration("terminate-end-event");
+        testBPMNMaudeGeneration("terminate-end-event");
     }
 
     /**
