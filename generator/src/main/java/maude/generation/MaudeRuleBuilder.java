@@ -61,7 +61,7 @@ public class MaudeRuleBuilder {
         this.postObjects = new LinkedHashSet<>();
     }
 
-    public void addVar(String varGroupName, String type, String varname) {
+    public MaudeRuleBuilder addVar(String varGroupName, String type, String varname) {
         Pair<String, Set<String>> varGroup = this.vargroupToTypeAndVars.get(varGroupName);
         if (varGroup == null) {
             vargroupToTypeAndVars.put(varGroupName, Pair.of(type, Sets.newHashSet(varname)));
@@ -71,6 +71,7 @@ public class MaudeRuleBuilder {
             }
             varGroup.getRight().add(varname);
         }
+        return this;
     }
 
     public String getVarsForGroup(String varGroupName) {

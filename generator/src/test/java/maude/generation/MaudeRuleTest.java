@@ -66,4 +66,18 @@ class MaudeRuleTest {
         // No exception when name and one pre object are present.
         assertNotNull(builder.buildRule());
     }
+
+    @Test
+    void generateRuleVarsTest() {
+        final String fsms = "fsms";
+        final String otherVarGroup = "otherVarGroup";
+        final MaudeRuleBuilder ruleBuilder = new MaudeRuleBuilder()
+                .startRule("turnGreen2x")
+                .addVar(fsms, "FSM", "X")
+                .addVar(fsms, "FSM", "Y")
+                .addVar(otherVarGroup, "Type", "Z");
+
+        assertThat(ruleBuilder.getVarsForGroup(fsms), is("vars X Y : FSM . --- fsms"));
+        assertThat(ruleBuilder.getVarsForGroup(otherVarGroup), is("vars Z : Type . --- otherVarGroup"));
+    }
 }
