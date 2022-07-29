@@ -25,6 +25,14 @@ class BPMNToMaudeCallActivityTest implements BPMNMaudeTestHelper {
     }
 
     /**
+     * See test case <a href="https://cawemo.com/share/63333b2a-8298-4e9c-8e1e-14453ed1f063">"Call activity - Terminate end event"</a> in cawemo.
+     */
+    @Test
+    void testCallActivityTerminateEvent() throws IOException {
+        testBPMNMaudeGeneration("call-activity-terminate-end-event");
+    }
+
+    /**
      * See test case <a href="https://cawemo.com/share/37764ed1-03e7-43c7-8218-34467a12d104">"Call activity - No start event"</a> in cawemo.
      */
     @Test

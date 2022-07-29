@@ -40,6 +40,7 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    pr CONFIGURATION .\r\n" +
                                                   "\r\n" +
                                                   "    sort ProcessState .\r\n" +
+                                                  "    subsort String < Oid .\r\n" +
                                                   "\r\n" +
                                                   "    ops Running, Terminated : -> ProcessState [ctor] .\r\n" +
                                                   "    op tokens :_ : MSet -> Attribute [ctor] .\r\n" +
@@ -47,11 +48,30 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    op subprocesses :_ : Configuration -> Attribute [ctor] .\r\n" +
                                                   "    op state :_ : ProcessState -> Attribute [ctor] .\r\n" +
                                                   "    op ProcessSnapshot : -> Cid [ctor] .\r\n" +
-                                                  "    subsort String < Oid .\r\n" +
+                                                  "\r\n" +
+                                                  "    op terminate : Configuration -> Configuration .\r\n" +
                                                   "\r\n" +
                                                   "    var P : String .\r\n" +
+                                                  "    vars T : MSet . --- tokens\r\n" +
+                                                  "    vars M : MSet . --- messages\r\n" +
+                                                  "    vars S : Configuration . --- subprocesses\r\n" +
+                                                  "    vars STATE : ProcessState . --- state\r\n" +
+                                                  "    var PS : Configuration .\r\n" +
                                                   "\r\n" +
-                                                  "    rl [terminateProcess] :\r\n" +
+                                                  "    --- NOOP if none\r\n" +
+                                                  "    eq terminate(none) = none .\r\n" +
+                                                  "    --- NOOP if already terminated\r\n" +
+                                                  "    eq terminate(< P : ProcessSnapshot | tokens : T, messages : M," +
+                                                  " subprocesses : S, state : Terminated >) = < P : ProcessSnapshot |" +
+                                                  " tokens : T, messages : M, subprocesses : S, state : Terminated > " +
+                                                  ".\r\n" +
+                                                  "    --- Terminate all subprocesses recursively\r\n" +
+                                                  "    eq terminate(< P : ProcessSnapshot | tokens : T, messages : M," +
+                                                  " subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | " +
+                                                  "tokens : T, messages : M, subprocesses : terminate(S), state : " +
+                                                  "Terminated > terminate(PS) .\r\n" +
+                                                  "\r\n" +
+                                                  "    rl [naturalTerminate] :\r\n" +
                                                   "    < P : ProcessSnapshot | tokens : none, messages : none, " +
                                                   "subprocesses : none, state : Running >\r\n" +
                                                   "                            =>\r\n" +

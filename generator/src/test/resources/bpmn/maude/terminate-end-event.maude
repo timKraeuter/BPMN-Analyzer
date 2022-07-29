@@ -18,6 +18,7 @@ mod BPMN-EXECUTION is
     pr CONFIGURATION .
 
     sort ProcessState .
+    subsort String < Oid .
 
     ops Running, Terminated : -> ProcessState [ctor] .
     op tokens :_ : MSet -> Attribute [ctor] .
@@ -25,11 +26,24 @@ mod BPMN-EXECUTION is
     op subprocesses :_ : Configuration -> Attribute [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
     op ProcessSnapshot : -> Cid [ctor] .
-    subsort String < Oid .
+
+    op terminate : Configuration -> Configuration .
 
     var P : String .
+    vars T : MSet . --- tokens
+    vars M : MSet . --- messages
+    vars S : Configuration . --- subprocesses
+    vars STATE : ProcessState . --- state
+    var PS : Configuration .
 
-    rl [terminateProcess] :
+    --- NOOP if none
+    eq terminate(none) = none .
+    --- NOOP if already terminated
+    eq terminate(< P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : Terminated > .
+    --- Terminate all subprocesses recursively
+    eq terminate(< P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, messages : M, subprocesses : terminate(S), state : Terminated > terminate(PS) .
+
+    rl [naturalTerminate] :
     < P : ProcessSnapshot | tokens : none, messages : none, subprocesses : none, state : Running >
                             =>
     < P : ProcessSnapshot | tokens : none, messages : none, subprocesses : none, state : Terminated > .
@@ -50,7 +64,7 @@ mod BPMN-EXECUTION-terminate-end-event is
     rl [A_Activity_19fz4g9_end] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("A (Activity_19fz4g9)" T), messages : (M), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : ("A_end (Flow_0zgj5gw)" T), messages : (M), subprocesses : (S), state : Running > .
     rl [B_Activity_1ol0d86_start] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("p1_B (Flow_0p8b824)" T), messages : (M), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : ("B (Activity_1ol0d86)" T), messages : (M), subprocesses : (S), state : Running > .
     rl [B_Activity_1ol0d86_end] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("B (Activity_1ol0d86)" T), messages : (M), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : ("B_terminate_end (Flow_178sut1)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [terminate_end_Event_0i6p82s] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("B_terminate_end (Flow_178sut1)" T), messages : (M), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Terminated > .
+    rl [terminate_end_Event_0i6p82s] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("B_terminate_end (Flow_178sut1)" T), messages : (M), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (terminate(S)), state : Terminated > .
     rl [end_Event_1bkqcvd] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("A_end (Flow_0zgj5gw)" T), messages : (M), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated

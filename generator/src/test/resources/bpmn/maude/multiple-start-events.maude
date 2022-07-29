@@ -18,6 +18,7 @@ mod BPMN-EXECUTION is
     pr CONFIGURATION .
 
     sort ProcessState .
+    subsort String < Oid .
 
     ops Running, Terminated : -> ProcessState [ctor] .
     op tokens :_ : MSet -> Attribute [ctor] .
@@ -25,11 +26,24 @@ mod BPMN-EXECUTION is
     op subprocesses :_ : Configuration -> Attribute [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
     op ProcessSnapshot : -> Cid [ctor] .
-    subsort String < Oid .
+
+    op terminate : Configuration -> Configuration .
 
     var P : String .
+    vars T : MSet . --- tokens
+    vars M : MSet . --- messages
+    vars S : Configuration . --- subprocesses
+    vars STATE : ProcessState . --- state
+    var PS : Configuration .
 
-    rl [terminateProcess] :
+    --- NOOP if none
+    eq terminate(none) = none .
+    --- NOOP if already terminated
+    eq terminate(< P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : Terminated > .
+    --- Terminate all subprocesses recursively
+    eq terminate(< P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, messages : M, subprocesses : terminate(S), state : Terminated > terminate(PS) .
+
+    rl [naturalTerminate] :
     < P : ProcessSnapshot | tokens : none, messages : none, subprocesses : none, state : Running >
                             =>
     < P : ProcessSnapshot | tokens : none, messages : none, subprocesses : none, state : Terminated > .

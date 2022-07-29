@@ -73,11 +73,10 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                 break;
             case TERMINATION:
                 ruleBuilder.addPostObject(createProcessSnapshotObject(process,
-                                                                      ANY_SUBPROCESSES,
+                                                                      String.format("terminate(%s)", ANY_SUBPROCESSES),
                                                                       ANY_TOKENS,
                                                                       ANY_MESSAGES,
                                                                       TERMINATED));
-                // TODO: Terminate all subprocesses with an equation. Should this be recursive?
                 break;
             case MESSAGE:
                 ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
