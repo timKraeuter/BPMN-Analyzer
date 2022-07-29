@@ -90,8 +90,8 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                                                  IntermediateCatchEvent intermediateCatchEvent) {
         switch (intermediateCatchEvent.getType()) {
             case LINK:
-                // TODO: Link events
-                throw new UnsupportedOperationException();
+                createIntermediateCatchLinkEventRule(intermediateCatchEvent, process);
+                break;
             case MESSAGE:
                 createIntermediateCatchMessageEventRule(intermediateCatchEvent, process, collaboration);
                 break;
@@ -103,6 +103,21 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                 // TODO: Timer events
                 throw new UnsupportedOperationException();
         }
+    }
+
+    private void createIntermediateCatchLinkEventRule(IntermediateCatchEvent linkCatchEvent,
+                                                      AbstractProcess process) {
+        ruleBuilder.startRule(getFlowNodeRuleName(linkCatchEvent));
+
+        // Consume an incoming token from an incoming flow.
+        String preTokens = String.format(ENQUOTE_FORMAT, linkCatchEvent.getName()) + ANY_OTHER_TOKENS;
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
+                                                                                     preTokens));
+        // Produce a token for each outgoing flow.
+        String postTokens = getOutgoingTokensForFlowNode(linkCatchEvent) + ANY_OTHER_TOKENS;
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
+                                                                                      postTokens));
+        ruleBuilder.buildRule();
     }
 
     private void createIntermediateCatchMessageEventRule(IntermediateCatchEvent intermediateCatchEvent,
@@ -126,7 +141,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                 createIntermediateThrowNoneEventRule(intermediateThrowEvent, process);
                 break;
             case LINK:
-                // TODO: Implement Link throw events.
+                createIntermediateThrowLinkEventRule(intermediateThrowEvent, process);
                 break;
             case MESSAGE:
                 createIntermediateThrowMessageEventRule(intermediateThrowEvent, process);
@@ -137,6 +152,23 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
             default:
                 throw new BPMNRuntimeException("Unexpected throw event type: " + intermediateThrowEvent.getType());
         }
+    }
+
+    private void createIntermediateThrowLinkEventRule(IntermediateThrowEvent intermediateThrowEvent,
+                                                      AbstractProcess process) {
+        intermediateThrowEvent.getIncomingFlows().forEach(incFlow -> {
+            ruleBuilder.startRule(getFlowNodeRuleNameWithIncFlow(intermediateThrowEvent, incFlow.getId()));
+
+            // Consume an incoming token from an incoming flow.
+            String preTokens = getTokenForSequenceFlow(incFlow) + ANY_OTHER_TOKENS;
+            ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
+                                                                                         preTokens));
+            // Produce a token for each outgoing flow.
+            String postTokens = String.format(ENQUOTE_FORMAT, intermediateThrowEvent.getName()) + ANY_OTHER_TOKENS;
+            ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
+                                                                                          postTokens));
+            ruleBuilder.buildRule();
+        });
     }
 
     private void createIntermediateThrowMessageEventRule(IntermediateThrowEvent intermediateThrowEvent,

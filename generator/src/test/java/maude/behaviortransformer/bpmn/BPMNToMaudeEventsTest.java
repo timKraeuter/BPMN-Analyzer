@@ -68,8 +68,7 @@ class BPMNToMaudeEventsTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testLinkEvent() throws IOException {
-        // TODO: Implement test and code.
-//        testBPMNMaudeGeneration("link-event");
+        testBPMNMaudeGeneration("link-event");
     }
 
     /**
