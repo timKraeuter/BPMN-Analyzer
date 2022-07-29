@@ -6,6 +6,8 @@ import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.activities.tasks.AbstractTask;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
+import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
+import maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
 import maude.generation.MaudeObjectBuilder;
 import maude.generation.MaudeRuleBuilder;
 
@@ -13,9 +15,8 @@ import java.util.function.Consumer;
 
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.END;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.START;
-import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper.*;
 
-public class BPMNMaudeTaskRuleGenerator {
+public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper {
     private final BPMNCollaboration collaboration;
     private final MaudeRuleBuilder ruleBuilder;
     private final MaudeObjectBuilder objectBuilder;
@@ -47,16 +48,10 @@ public class BPMNMaudeTaskRuleGenerator {
         ruleBuilder.ruleName(getFlowNodeRuleNameWithIncFlow(task, incomingFlow.getId()) + START);
 
         String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(objectBuilder,
-                                                                          process,
-                                                                          preTokens,
-                                                                          getIncomingMessagesForFlowNode(task,
-                                                                                                         collaboration)));
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, preTokens));
 
-        String postTokens = getTokenForActivity(task) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder,
-                                                                                      process,
-                                                                                      postTokens));
+        String postTokens = getTokenForFlowNode(task) + ANY_OTHER_TOKENS;
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, postTokens));
 
         ruleBuilder.build();
     }
@@ -66,15 +61,11 @@ public class BPMNMaudeTaskRuleGenerator {
                                    Consumer<MaudeRuleBuilder> ruleAdditions) {
         ruleBuilder.ruleName(getFlowNodeRuleName(task) + END);
 
-        String preTokens = getTokenForActivity(task) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder,
-                                                                                     process,
-                                                                                     preTokens));
+        String preTokens = getTokenForFlowNode(task) + ANY_OTHER_TOKENS;
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, preTokens));
 
         String postTokens = getOutgoingTokensForFlowNode(task) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder,
-                                                                                      process,
-                                                                                      postTokens));
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, postTokens));
         ruleAdditions.accept(ruleBuilder);
 
         ruleBuilder.build();
@@ -83,16 +74,33 @@ public class BPMNMaudeTaskRuleGenerator {
     public void createSendTaskRulesForProcess(AbstractProcess process, SendTask sendTask) {
         createTaskRulesForProcess(process,
                                   sendTask,
-                                  maudeRuleBuilder -> addSendMessageBehaviorForFlowNode(collaboration,
-                                                                                        maudeRuleBuilder,
-                                                                                        objectBuilder,
-                                                                                        sendTask));
+                                  maudeRuleBuilder -> addSendMessageBehaviorForFlowNode(collaboration, sendTask));
     }
 
     public void createReceiveTaskRulesForProcess(AbstractProcess process, ReceiveTask receiveTask) {
-        // TODO: Receive task instantiation rules (and evtl. boundary rules).
+        // TODO: Boundary events
+        if (receiveTask.isInstantiate()) {
+            if (receiveTask.getIncomingFlows().findAny().isPresent()) {
+                throw new BPMNRuntimeException("Instantiate receive tasks should not have incoming sequence " +
+                                               "flows!");
+            }
+            return;
+        }
         // TODO: Receive task after instantiate event based gateways.
         // TODO: Receive task after event based gateways.
-        createTaskRulesForProcess(process, receiveTask);
+        // Rules for starting the task
+        createStartInteractionNodeRule(receiveTask, process);
+        // Rule for ending the task (now consumes messages)
+        createEndInteractionNodeRule(receiveTask, process, collaboration);
+    }
+
+    @Override
+    public MaudeRuleBuilder getRuleBuilder() {
+        return ruleBuilder;
+    }
+
+    @Override
+    public MaudeObjectBuilder getObjectBuilder() {
+        return objectBuilder;
     }
 }

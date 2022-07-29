@@ -1,0 +1,94 @@
+load model-checker.maude .
+
+--- Multiset implementation could be extracted as well.
+fmod MSET is pr
+    STRING .
+    sorts NeMSet MSet .
+    subsort String < NeMSet < MSet .
+
+    op none : -> MSet [ctor] .
+    op __ : MSet MSet -> MSet [ctor assoc comm id: none] .
+    op __ : NeMSet MSet -> NeMSet [ctor ditto] .
+    op __ : MSet NeMSet -> NeMSet [ctor ditto] .
+endfm
+
+mod BPMN-EXECUTION is
+    pr MSET .
+    pr STRING .
+    pr CONFIGURATION .
+
+    sort ProcessState .
+
+    ops Running, Terminated : -> ProcessState [ctor] .
+    op tokens :_ : MSet -> Attribute [ctor] .
+    op messages :_ : MSet -> Attribute [ctor] .
+    op subprocesses :_ : Configuration -> Attribute [ctor] .
+    op state :_ : ProcessState -> Attribute [ctor] .
+    op ProcessSnapshot : -> Cid [ctor] .
+    subsort String < Oid .
+
+    var P : String .
+
+    rl [terminateProcess] :
+    < P : ProcessSnapshot | tokens : none, messages : none, subprocesses : none, state : Running >
+                            =>
+    < P : ProcessSnapshot | tokens : none, messages : none, subprocesses : none, state : Terminated > .
+endm
+
+mod BPMN-EXECUTION-two-end-events is
+    pr BPMN-EXECUTION .
+
+    --- Generated variables
+    vars T : MSet . --- tokens
+    vars M : MSet . --- messages
+    vars S : Configuration . --- subprocesses
+
+    --- Generated rules
+    rl [start_StartEvent_1] :  < "two-end-events" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), messages : (M), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("start_p1 (Flow_13k6w21)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [p1_Gateway_1yacsp8] :  < "two-end-events" : ProcessSnapshot | tokens : ("start_p1 (Flow_13k6w21)" T), messages : (M), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("p1_a1 (Flow_1rs2mzm)" "p1_a2 (Flow_0pjzntx)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [a1_Activity_05y4j8k_start] :  < "two-end-events" : ProcessSnapshot | tokens : ("p1_a1 (Flow_1rs2mzm)" T), messages : (M), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("a1 (Activity_05y4j8k)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [a1_Activity_05y4j8k_end] :  < "two-end-events" : ProcessSnapshot | tokens : ("a1 (Activity_05y4j8k)" T), messages : (M), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("a1_end1 (Flow_0vhuqrp)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [a2_Activity_0basl5g_start] :  < "two-end-events" : ProcessSnapshot | tokens : ("p1_a2 (Flow_0pjzntx)" T), messages : (M), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("a2 (Activity_0basl5g)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [a2_Activity_0basl5g_end] :  < "two-end-events" : ProcessSnapshot | tokens : ("a2 (Activity_0basl5g)" T), messages : (M), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("a2_end2 (Flow_0ov1zvi)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [end1_Event_19b458a] :  < "two-end-events" : ProcessSnapshot | tokens : ("a1_end1 (Flow_0vhuqrp)" T), messages : (M), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > .
+    rl [end2_Event_1duj4oz] :  < "two-end-events" : ProcessSnapshot | tokens : ("a2_end2 (Flow_0ov1zvi)" T), messages : (M), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > .
+
+    --- Start configuration which would be generated
+    op init : -> Configuration .
+    eq init = < "two-end-events" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), messages : (none), subprocesses : (none), state : Running > .
+endm
+
+mod BPMN-PREDS is
+    pr BPMN-EXECUTION-two-end-events .
+    pr SATISFACTION .
+    subsort Configuration < State .
+
+    var C : Configuration .
+    var P : Prop .
+    var X : Oid .
+    var T : MSet .
+    var M : MSet .
+    var T1 : NeMSet .
+    var S : Configuration .
+    var State : ProcessState .
+
+
+    op allTerminated : -> Prop .
+    eq < X : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : Running > C |= allTerminated = false .
+    eq C |= allTerminated = true [owise] .
+
+    op unsafe : -> Prop .
+    eq < X : ProcessSnapshot | tokens : (T1 T1 T), messages : M, subprocesses : S, state : State > C |= unsafe = true .
+    eq C |= unsafe = false [owise] .
+
+    --- Generated atomic propositions
+    --- no propositions
+endm
+
+mod BPMN-CHECK is
+    pr BPMN-PREDS .
+    pr MODEL-CHECKER .
+    pr LTL-SIMPLIFIER .
+endm
+
+red modelCheck(init,  <> [] allTerminated) .

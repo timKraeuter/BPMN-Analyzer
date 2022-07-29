@@ -1,0 +1,98 @@
+load model-checker.maude .
+
+--- Multiset implementation could be extracted as well.
+fmod MSET is pr
+    STRING .
+    sorts NeMSet MSet .
+    subsort String < NeMSet < MSet .
+
+    op none : -> MSet [ctor] .
+    op __ : MSet MSet -> MSet [ctor assoc comm id: none] .
+    op __ : NeMSet MSet -> NeMSet [ctor ditto] .
+    op __ : MSet NeMSet -> NeMSet [ctor ditto] .
+endfm
+
+mod BPMN-EXECUTION is
+    pr MSET .
+    pr STRING .
+    pr CONFIGURATION .
+
+    sort ProcessState .
+
+    ops Running, Terminated : -> ProcessState [ctor] .
+    op tokens :_ : MSet -> Attribute [ctor] .
+    op messages :_ : MSet -> Attribute [ctor] .
+    op subprocesses :_ : Configuration -> Attribute [ctor] .
+    op state :_ : ProcessState -> Attribute [ctor] .
+    op ProcessSnapshot : -> Cid [ctor] .
+    subsort String < Oid .
+
+    var P : String .
+
+    rl [terminateProcess] :
+    < P : ProcessSnapshot | tokens : none, messages : none, subprocesses : none, state : Running >
+                            =>
+    < P : ProcessSnapshot | tokens : none, messages : none, subprocesses : none, state : Terminated > .
+endm
+
+mod BPMN-EXECUTION-two-incoming-message-flows is
+    pr BPMN-EXECUTION .
+
+    --- Generated variables
+    vars T T1 : MSet . --- tokens
+    vars M1 M : MSet . --- messages
+    vars S1 S : Configuration . --- subprocesses
+
+    --- Generated rules
+    rl [start_p2_Event_1g2ic8d] :  < "p2" : ProcessSnapshot | tokens : ("start_p2 (Event_1g2ic8d)" T), messages : (M), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("start_p2_Catch_2 (Flow_0x23a3h)" "start_p2_Catch_2 (Flow_0uuwgc1)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [Catch_2_Event_0rhfmo8_Flow_0x23a3h] :  < "p2" : ProcessSnapshot | tokens : ("start_p2_Catch_2 (Flow_0x23a3h)" T), messages : (M), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("Catch_2 (Event_0rhfmo8)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [Catch_2_Event_0rhfmo8_Flow_0uuwgc1] :  < "p2" : ProcessSnapshot | tokens : ("start_p2_Catch_2 (Flow_0uuwgc1)" T), messages : (M), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("Catch_2 (Event_0rhfmo8)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [Catch_2_Event_0rhfmo8_end_p3_Catch_2] :  < "p2" : ProcessSnapshot | tokens : ("Catch_2 (Event_0rhfmo8)" T), messages : ("end_p3_Catch_2" M), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("Catch_2_end_p2 (Flow_0r4dq5g)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [Catch_2_Event_0rhfmo8_end_p1_Catch_2] :  < "p2" : ProcessSnapshot | tokens : ("Catch_2 (Event_0rhfmo8)" T), messages : ("end_p1_Catch_2" M), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("Catch_2_end_p2 (Flow_0r4dq5g)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [end_p2_Event_1ks93e5] :  < "p2" : ProcessSnapshot | tokens : ("Catch_2_end_p2 (Flow_0r4dq5g)" T), messages : (M), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > .
+    rl [start_p3_Event_0bhy3w7] :  < "p3" : ProcessSnapshot | tokens : ("start_p3 (Event_0bhy3w7)" T), messages : (M), subprocesses : (S), state : Running > => < "p3" : ProcessSnapshot | tokens : ("start_p3_end_p3 (Flow_16u01g7)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [end_p3_Event_0n0galh] :  < "p3" : ProcessSnapshot | tokens : ("start_p3_end_p3 (Flow_16u01g7)" T), messages : (M), subprocesses : (S), state : Running > < "p2" : ProcessSnapshot | tokens : ("Catch_2 (Event_0rhfmo8)" T1), messages : (M1), subprocesses : (S1), state : Running > => < "p3" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > < "p2" : ProcessSnapshot | tokens : ("Catch_2 (Event_0rhfmo8)" T1), messages : ("end_p3_Catch_2" M1), subprocesses : (S1), state : Running > .
+    rl [end_p1_Event_1xbunmt] :  < "p1" : ProcessSnapshot | tokens : ("start_p1_end_p1 (Flow_1ttcsey)" T), messages : (M), subprocesses : (S), state : Running > < "p2" : ProcessSnapshot | tokens : ("Catch_2 (Event_0rhfmo8)" T1), messages : (M1), subprocesses : (S1), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > < "p2" : ProcessSnapshot | tokens : ("Catch_2 (Event_0rhfmo8)" T1), messages : ("end_p1_Catch_2" M1), subprocesses : (S1), state : Running > .
+    rl [start_p1_Event_1hsgsto] :  < "p1" : ProcessSnapshot | tokens : ("start_p1 (Event_1hsgsto)" T), messages : (M), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start_p1_end_p1 (Flow_1ttcsey)" T), messages : (M), subprocesses : (S), state : Running > .
+
+    --- Start configuration which would be generated
+    op init : -> Configuration .
+    eq init = < "p2" : ProcessSnapshot | tokens : ("start_p2 (Event_1g2ic8d)"), messages : (none), subprocesses : (none), state : Running >
+    < "p3" : ProcessSnapshot | tokens : ("start_p3 (Event_0bhy3w7)"), messages : (none), subprocesses : (none), state : Running >
+    < "p1" : ProcessSnapshot | tokens : ("start_p1 (Event_1hsgsto)"), messages : (none), subprocesses : (none), state : Running > .
+endm
+
+mod BPMN-PREDS is
+    pr BPMN-EXECUTION-two-incoming-message-flows .
+    pr SATISFACTION .
+    subsort Configuration < State .
+
+    var C : Configuration .
+    var P : Prop .
+    var X : Oid .
+    var T : MSet .
+    var M : MSet .
+    var T1 : NeMSet .
+    var S : Configuration .
+    var State : ProcessState .
+
+
+    op allTerminated : -> Prop .
+    eq < X : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : Running > C |= allTerminated = false .
+    eq C |= allTerminated = true [owise] .
+
+    op unsafe : -> Prop .
+    eq < X : ProcessSnapshot | tokens : (T1 T1 T), messages : M, subprocesses : S, state : State > C |= unsafe = true .
+    eq C |= unsafe = false [owise] .
+
+    --- Generated atomic propositions
+    --- no propositions
+endm
+
+mod BPMN-CHECK is
+    pr BPMN-PREDS .
+    pr MODEL-CHECKER .
+    pr LTL-SIMPLIFIER .
+endm
+
+red modelCheck(init,  <> [] allTerminated) .

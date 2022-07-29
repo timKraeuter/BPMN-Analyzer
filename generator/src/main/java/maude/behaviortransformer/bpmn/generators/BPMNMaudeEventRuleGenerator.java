@@ -6,13 +6,15 @@ import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.IntermediateCatchEvent;
+import behavior.bpmn.events.IntermediateThrowEvent;
 import behavior.bpmn.events.StartEvent;
+import maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
 import maude.generation.MaudeObjectBuilder;
 import maude.generation.MaudeRuleBuilder;
 
-import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper.*;
+import java.util.function.Consumer;
 
-public class BPMNMaudeEventRuleGenerator {
+public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper {
     private final MaudeRuleBuilder ruleBuilder;
     private final BPMNCollaboration collaboration;
     private final MaudeObjectBuilder objectBuilder;
@@ -29,14 +31,11 @@ public class BPMNMaudeEventRuleGenerator {
                 createNoneStartEventRule(startEvent, process);
                 break;
             case MESSAGE:
-                createMessageStartEventRule(startEvent);
-                break;
+                // Done in the corresponding throw rule.
             case MESSAGE_NON_INTERRUPTING:
                 // Implemented in the event subprocess rule generator.
-                break;
             case SIGNAL:
                 // Done in the corresponding throw rule.
-                break;
             case SIGNAL_NON_INTERRUPTING:
                 // Implemented in the throw part.
                 break;
@@ -47,15 +46,9 @@ public class BPMNMaudeEventRuleGenerator {
         ruleBuilder.ruleName(getFlowNodeRuleName(startEvent));
         String preToken = getStartEventTokenName(startEvent) + ANY_OTHER_TOKENS;
         String postToken = getOutgoingTokensForFlowNode(startEvent) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, preToken));
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder,
-                                                                                      process,
-                                                                                      postToken));
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, preToken));
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, postToken));
         ruleBuilder.build();
-    }
-
-    private void createMessageStartEventRule(StartEvent startEvent) {
-        throw new UnsupportedOperationException();
     }
 
     public void createEndEventRule(AbstractProcess process, EndEvent endEvent) {
@@ -67,22 +60,21 @@ public class BPMNMaudeEventRuleGenerator {
         String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
 
         ruleBuilder.ruleName(getFlowNodeRuleName(endEvent));
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder,
-                                                                                     process,
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
                                                                                      preTokens));
 
         switch (endEvent.getType()) {
             case NONE:
-                ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process,
+                ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
                                                                                               ANY_TOKENS));
                 break;
             case TERMINATION:
                 // TODO: Implement termination end event.
                 break;
             case MESSAGE:
-                ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process,
+                ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
                                                                                               ANY_TOKENS));
-                addSendMessageBehaviorForFlowNode(collaboration, ruleBuilder, objectBuilder, endEvent);
+                addSendMessageBehaviorForFlowNode(collaboration, endEvent);
                 break;
             case SIGNAL:
                 // TODO: Implement signal end event.
@@ -98,7 +90,7 @@ public class BPMNMaudeEventRuleGenerator {
                 // TODO: Link events
                 throw new UnsupportedOperationException();
             case MESSAGE:
-                createIntermediateCatchMessageEventRule(intermediateCatchEvent, process, ruleBuilder, collaboration);
+                createIntermediateCatchMessageEventRule(intermediateCatchEvent, process, collaboration);
                 break;
             case SIGNAL:
                 // TODO: Signal events
@@ -112,24 +104,79 @@ public class BPMNMaudeEventRuleGenerator {
 
     private void createIntermediateCatchMessageEventRule(IntermediateCatchEvent intermediateCatchEvent,
                                                          AbstractProcess process,
-                                                         MaudeRuleBuilder ruleBuilder,
                                                          BPMNCollaboration collaboration) {
-        intermediateCatchEvent.getIncomingFlows().forEach(incomingFlow -> {
-            ruleBuilder.ruleName(getFlowNodeRuleNameWithIncFlow(intermediateCatchEvent, incomingFlow.getId()));
+        // Start event rule
+        createStartInteractionNodeRule(intermediateCatchEvent, process);
 
-            String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
-            String messages = getIncomingMessagesForFlowNode(intermediateCatchEvent, collaboration);
-            ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(objectBuilder,
-                                                                              process,
-                                                                              preTokens,
-                                                                              messages));
+        // Rule to end the event when a message is received.
+        createEndInteractionNodeRule(intermediateCatchEvent, process, collaboration);
+    }
 
-            String postTokens = getOutgoingTokensForFlowNode(intermediateCatchEvent) + ANY_OTHER_TOKENS;
-            ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder,
-                                                                                          process,
+    public void createIntermediateThrowEventRule(AbstractProcess process,
+                                                 IntermediateThrowEvent intermediateThrowEvent) {
+        // We currently limit to one incoming token, but we could implement an implicit exclusive gateway.
+        if (intermediateThrowEvent.getIncomingFlows().count() != 1) {
+            throw new BPMNRuntimeException("Intermediate throw events should have exactly one incoming sequence flow!");
+        }
+        switch (intermediateThrowEvent.getType()) {
+            case NONE:
+                createIntermediateThrowNoneEventRule(intermediateThrowEvent, process);
+                break;
+            case LINK:
+                // TODO: Implement Link throw events.
+                break;
+            case MESSAGE:
+                createIntermediateThrowMessageEventRule(intermediateThrowEvent, process);
+                break;
+            case SIGNAL:
+                // TODO: Implement signal throw events.
+                break;
+            default:
+                throw new BPMNRuntimeException("Unexpected throw event type: " + intermediateThrowEvent.getType());
+        }
+    }
+
+    private void createIntermediateThrowMessageEventRule(IntermediateThrowEvent intermediateThrowEvent,
+                                                         AbstractProcess process) {
+        createConsumeAndProduceTokenRule(intermediateThrowEvent,
+                                         process,
+                                         rb -> addSendMessageBehaviorForFlowNode(collaboration,
+                                                                                 intermediateThrowEvent));
+    }
+
+    private void createIntermediateThrowNoneEventRule(IntermediateThrowEvent intermediateThrowEvent,
+                                                      AbstractProcess process) {
+        createConsumeAndProduceTokenRule(intermediateThrowEvent, process, x -> {
+            // NOOP
+        });
+    }
+
+    private void createConsumeAndProduceTokenRule(IntermediateThrowEvent intermediateThrowEvent,
+                                                  AbstractProcess process,
+                                                  Consumer<MaudeRuleBuilder> ruleExtender) {
+        intermediateThrowEvent.getIncomingFlows().forEach(incFlow -> {
+            ruleBuilder.ruleName(getFlowNodeRuleNameWithIncFlow(intermediateThrowEvent, incFlow.getId()));
+
+            // Consume an incoming token from an incoming flow.
+            String preTokens = getTokenForSequenceFlow(incFlow) + ANY_OTHER_TOKENS;
+            ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
+                                                                                         preTokens));
+            // Produce a token for each outgoing flow.
+            String postTokens = getOutgoingTokensForFlowNode(intermediateThrowEvent) + ANY_OTHER_TOKENS;
+            ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
                                                                                           postTokens));
+            ruleExtender.accept(ruleBuilder);
             ruleBuilder.build();
         });
+    }
 
+    @Override
+    public MaudeRuleBuilder getRuleBuilder() {
+        return ruleBuilder;
+    }
+
+    @Override
+    public MaudeObjectBuilder getObjectBuilder() {
+        return objectBuilder;
     }
 }

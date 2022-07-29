@@ -184,7 +184,7 @@ public class BPMNToGrooveTransformerHelper {
                                                               GrooveRuleBuilder ruleBuilder,
                                                               MessageFlow messageFlow,
                                                               boolean useSFId) {
-        Process messageFlowReceiver = collaboration.getMessageFlowReceiver(messageFlow);
+        Process messageFlowReceiver = collaboration.getMessageFlowReceiverProcess(messageFlow);
         // If a process instance exists, send a message.
         GrooveNode existsOptional = ruleBuilder.contextNode(EXISTS_OPTIONAL);
         GrooveNode receiverInstance = contextProcessInstanceWithQuantifier(messageFlowReceiver,
@@ -244,7 +244,7 @@ public class BPMNToGrooveTransformerHelper {
     public static GrooveNode deleteIncomingMessageAndCreateProcessInstance(MessageFlow incomingMessageFlow,
                                                                            BPMNCollaboration collaboration,
                                                                            GrooveRuleBuilder ruleBuilder) {
-        Process receiverProcess = collaboration.getMessageFlowReceiver(incomingMessageFlow);
+        Process receiverProcess = collaboration.getMessageFlowReceiverProcess(incomingMessageFlow);
         GrooveNode message = ruleBuilder.deleteNode(TYPE_MESSAGE);
         ruleBuilder.deleteEdge(POSITION,
                                message,

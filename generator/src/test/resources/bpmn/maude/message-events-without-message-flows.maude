@@ -35,7 +35,7 @@ mod BPMN-EXECUTION is
     < P : ProcessSnapshot | tokens : none, messages : none, subprocesses : none, state : Terminated > .
 endm
 
-mod BPMN-EXECUTION-sequential-activities is
+mod BPMN-EXECUTION-message-events-without-message-flows is
     pr BPMN-EXECUTION .
 
     --- Generated variables
@@ -44,20 +44,19 @@ mod BPMN-EXECUTION-sequential-activities is
     vars S : Configuration . --- subprocesses
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < "sequential-activities" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), messages : (M), subprocesses : (S), state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : ("start_A (Flow_1u1u0cf)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [A_Activity_1hogwa8_start] :  < "sequential-activities" : ProcessSnapshot | tokens : ("start_A (Flow_1u1u0cf)" T), messages : (M), subprocesses : (S), state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : ("A (Activity_1hogwa8)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [A_Activity_1hogwa8_end] :  < "sequential-activities" : ProcessSnapshot | tokens : ("A (Activity_1hogwa8)" T), messages : (M), subprocesses : (S), state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : ("A_B (Flow_1b2a4a3)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [B_Activity_02rpmxb_start] :  < "sequential-activities" : ProcessSnapshot | tokens : ("A_B (Flow_1b2a4a3)" T), messages : (M), subprocesses : (S), state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : ("B (Activity_02rpmxb)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [B_Activity_02rpmxb_end] :  < "sequential-activities" : ProcessSnapshot | tokens : ("B (Activity_02rpmxb)" T), messages : (M), subprocesses : (S), state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : ("B_end (Flow_1tj96s9)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [end_Event_1xnuloc] :  < "sequential-activities" : ProcessSnapshot | tokens : ("B_end (Flow_1tj96s9)" T), messages : (M), subprocesses : (S), state : Running > => < "sequential-activities" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > .
+    rl [start_StartEvent_1] :  < "p1" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), messages : (M), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start_sendEvent (Flow_1bq0iji)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [sendEvent_Event_0wsa4n0] :  < "p1" : ProcessSnapshot | tokens : ("start_sendEvent (Flow_1bq0iji)" T), messages : (M), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("sendEvent_SendTask (Flow_17n7skq)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [SendTask_Activity_0xxxw3w_start] :  < "p1" : ProcessSnapshot | tokens : ("sendEvent_SendTask (Flow_17n7skq)" T), messages : (M), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("SendTask (Activity_0xxxw3w)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [SendTask_Activity_0xxxw3w_end] :  < "p1" : ProcessSnapshot | tokens : ("SendTask (Activity_0xxxw3w)" T), messages : (M), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("SendTask_end (Flow_02ze5uh)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [end_Event_1cofdr6] :  < "p1" : ProcessSnapshot | tokens : ("SendTask_end (Flow_02ze5uh)" T), messages : (M), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "sequential-activities" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), messages : (none), subprocesses : (none), state : Running > .
+    eq init = < "p1" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), messages : (none), subprocesses : (none), state : Running > .
 endm
 
 mod BPMN-PREDS is
-    pr BPMN-EXECUTION-sequential-activities .
+    pr BPMN-EXECUTION-message-events-without-message-flows .
     pr SATISFACTION .
     subsort Configuration < State .
 

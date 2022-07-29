@@ -8,7 +8,6 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class BPMNCollaboration implements Behavior {
     private final String name;
@@ -38,8 +37,10 @@ public class BPMNCollaboration implements Behavior {
     }
 
 
-    public Stream<MessageFlow> outgoingMessageFlows(FlowNode producingMessageFlowNode) {
-        return this.getMessageFlows().stream().filter(messageFlow -> messageFlow.getSource() == producingMessageFlowNode);
+    public Set<MessageFlow> outgoingMessageFlows(FlowNode producingMessageFlowNode) {
+        return this.getMessageFlows().stream()
+                   .filter(messageFlow -> messageFlow.getSource() == producingMessageFlowNode)
+                   .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public Set<MessageFlow> getIncomingMessageFlows(FlowNode messageTarget) {
@@ -48,7 +49,7 @@ public class BPMNCollaboration implements Behavior {
                    .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    public Process getMessageFlowReceiver(MessageFlow flow) {
+    public Process getMessageFlowReceiverProcess(MessageFlow flow) {
         Optional<Process> optionalProcess = this.getParticipants().stream()
                                                 .filter(process -> process.getFlowNodes().anyMatch(flowNode ->
                                                                                                            flowNode ==

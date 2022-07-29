@@ -38,9 +38,10 @@ endm
 mod BPMN-EXECUTION-call-activity-no-start-event is
     pr BPMN-EXECUTION .
 
-    var T : MSet . --- Tokens
-    var M : MSet . --- Messages
-    var S : Configuration .
+    --- Generated variables
+    vars T : MSet . --- tokens
+    vars M : MSet . --- messages
+    vars S : Configuration . --- subprocesses
 
     --- Generated rules
     rl [start_Event_0ucjl4y] :  < "call-activity-no-start-event" : ProcessSnapshot | tokens : ("start (Event_0ucjl4y)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-no-start-event" : ProcessSnapshot | tokens : ("start_Subprocess (Flow_1qfreid)" T), messages : (M), subprocesses : (S), state : Running > .

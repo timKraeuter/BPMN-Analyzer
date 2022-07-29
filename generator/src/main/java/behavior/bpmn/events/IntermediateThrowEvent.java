@@ -29,10 +29,6 @@ public class IntermediateThrowEvent extends ThrowEvent {
         visitor.handle(this);
     }
 
-    @Override
-    public boolean isInstantiateFlowNode() {
-        return false;
-    }
 
     public IntermediateThrowEventType getType() {
         return type;

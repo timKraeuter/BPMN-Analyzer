@@ -13,8 +13,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class BPMNToMaudeTransformer {
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
+
+public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
     private final BPMNCollaboration collaboration;
+    private final MaudeRuleBuilder ruleBuilder;
+    private final MaudeObjectBuilder objectBuilder;
+
     private static final String MODULE_TEMPLATE = "load model-checker.maude .\r\n" +
                                                   "\r\n" +
                                                   "--- Multiset implementation could be extracted as well.\r\n" +
@@ -57,9 +62,10 @@ public class BPMNToMaudeTransformer {
                                                   "mod BPMN-EXECUTION-${name} is\r\n" +
                                                   "    pr BPMN-EXECUTION .\r\n" +
                                                   "\r\n" +
-                                                  "    var T : MSet . --- Tokens\r\n" +
-                                                  "    var M : MSet . --- Messages\r\n" +
-                                                  "    var S : Configuration .\r\n" +
+                                                  "    --- Generated variables\r\n" +
+                                                  "    ${tokens}\r\n" +
+                                                  "    ${messages}\r\n" +
+                                                  "    ${subprocesses}\r\n" +
                                                   "\r\n" +
                                                   "    --- Generated rules\r\n" +
                                                   "    ${rules}\r\n" +
@@ -108,6 +114,11 @@ public class BPMNToMaudeTransformer {
 
     public BPMNToMaudeTransformer(BPMNCollaboration collaboration) {
         this.collaboration = collaboration;
+        ruleBuilder = new MaudeRuleBuilder();
+        ruleBuilder.addVar(TOKENS, MSET, "T");
+        ruleBuilder.addVar(MESSAGES, MSET, "M");
+        ruleBuilder.addVar(SUBPROCESSES, CONFIGURATION, "S");
+        objectBuilder = new MaudeObjectBuilder();
     }
 
     public String generate(String ltlQuery) {
@@ -115,23 +126,24 @@ public class BPMNToMaudeTransformer {
         substitutionValues.put("name", collaboration.getName());
         substitutionValues.put("init", this.makeInit());
         substitutionValues.put("rules", this.makeRules());
+        substitutionValues.put(TOKENS, ruleBuilder.getVarsForGroup(TOKENS));
+        substitutionValues.put(MESSAGES, ruleBuilder.getVarsForGroup(MESSAGES));
+        substitutionValues.put(SUBPROCESSES, ruleBuilder.getVarsForGroup(SUBPROCESSES));
         substitutionValues.put("atomicPropositions", "--- no propositions"); // Add at some point
         substitutionValues.put("ltlQuery", ltlQuery);
         return new StringSubstitutor(substitutionValues).replace(MODULE_TEMPLATE);
     }
 
     private String makeInit() {
-        MaudeObjectBuilder maudeObjectBuilder = new MaudeObjectBuilder();
         return collaboration.getParticipants().stream()
                             .filter(process -> process.getStartEvents().stream().anyMatch(startEvent ->
                                                                                                   startEvent.getType() ==
                                                                                                   StartEventType.NONE))
                             .map(process -> {
                                 MaudeObject maudeObject =
-                                        BPMNToMaudeTransformerHelper.createProcessSnapshotObjectNoSubProcessAndMessages(
-                                        maudeObjectBuilder,
-                                        process,
-                                        this.createStartTokens(process));
+                                        createProcessSnapshotObjectNoSubProcessAndMessages(
+                                                process,
+                                                this.createStartTokens(process));
                                 return maudeObject.generateObjectString();
                             })
                             .collect(Collectors.joining("\r\n    "));
@@ -141,17 +153,25 @@ public class BPMNToMaudeTransformer {
         // Add a token for each none start event
         return process.getStartEvents().stream()
                       .filter(startEvent -> startEvent.getType() == StartEventType.NONE)
-                      .map(BPMNToMaudeTransformerHelper::getStartEventTokenName)
+                      .map(this::getStartEventTokenName)
                       .collect(Collectors.joining(" "));
     }
 
     private String makeRules() {
-        MaudeRuleBuilder ruleBuilder = new MaudeRuleBuilder();
-
         new BPMNMaudeRuleGenerator(ruleBuilder, collaboration).generateRules();
 
         return ruleBuilder.createdRules()
                           .map(MaudeRule::generateRuleString)
                           .collect(Collectors.joining("\r\n    "));
+    }
+
+    @Override
+    public MaudeRuleBuilder getRuleBuilder() {
+        return ruleBuilder;
+    }
+
+    @Override
+    public MaudeObjectBuilder getObjectBuilder() {
+        return objectBuilder;
     }
 }

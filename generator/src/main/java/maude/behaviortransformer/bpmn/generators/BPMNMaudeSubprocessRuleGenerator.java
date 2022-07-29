@@ -14,9 +14,8 @@ import maude.generation.MaudeRuleBuilder;
 import java.util.stream.Collectors;
 
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.END;
-import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper.*;
 
-public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGenerator {
+public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGenerator, BPMNToMaudeTransformerHelper {
     private final BPMNMaudeRuleGenerator bpmnMaudeRuleGenerator;
     private final MaudeRuleBuilder ruleBuilder;
     private final MaudeObjectBuilder objectBuilder;
@@ -50,14 +49,15 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
         ruleBuilder.ruleName(getFlowNodeRuleNameWithIncFlow(callActivity, incomingFlow.getId()));
 
         String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, preTokens));
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
+                                                                                     preTokens));
 
         String subProcessTokens;
         if (subprocessHasStartEvents(callActivity)) {
             // Subprocess has start events which get tokens!
             subProcessTokens = callActivity.getSubProcessModel().getStartEvents().stream()
                                            .filter(startEvent -> startEvent.getType() == StartEventType.NONE)
-                                           .map(BPMNToMaudeTransformerHelper::getTokenForFlowNode)
+                                           .map(this::getTokenForFlowNode)
                                            .collect(Collectors.joining(" "));
         } else {
             // All activites and gateways without incoming sequence flows get a token.
@@ -65,16 +65,14 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
                                            .filter(flowNode -> flowNode.isTask() ||
                                                                flowNode.isGateway())
                                            .filter(flowNode -> flowNode.getIncomingFlows().findAny().isEmpty())
-                                           .map(BPMNToMaudeTransformerHelper::getTokenForFlowNode)
+                                           .map(this::getTokenForFlowNode)
                                            .collect(Collectors.joining(" "));
         }
-        MaudeObject subProcess = createProcessSnapshotObjectNoSubProcessAndMessages(objectBuilder,
-                                                                                    callActivity.getSubProcessModel(),
+        MaudeObject subProcess = createProcessSnapshotObjectNoSubProcessAndMessages(callActivity.getSubProcessModel(),
                                                                                     subProcessTokens);
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnyMessages(objectBuilder,
-                                                                         process,
-                                                                        subProcess.generateObjectString() +
-                                                                        ANY_OTHER_SUBPROCESSES,
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnyMessages(process,
+                                                                         subProcess.generateObjectString() +
+                                                                         ANY_OTHER_SUBPROCESSES,
                                                                          ANY_TOKENS, "Running"));
 
         ruleBuilder.build();
@@ -83,20 +81,17 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
     private void createTerminateSubProcessRule(AbstractProcess process, CallActivity callActivity) {
         ruleBuilder.ruleName(getFlowNodeRuleName(callActivity) + END);
 
-        MaudeObject subProcess = createTerminatedProcessSnapshot(objectBuilder,
-                                                                 callActivity.getSubProcessModel());
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnyMessages(objectBuilder,
-                                                                        process,
-                                                                       subProcess.generateObjectString() +
-                                                                       ANY_OTHER_SUBPROCESSES,
+        MaudeObject subProcess = createTerminatedProcessSnapshot(callActivity.getSubProcessModel());
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnyMessages(process,
+                                                                        subProcess.generateObjectString() +
+                                                                        ANY_OTHER_SUBPROCESSES,
                                                                         ANY_TOKENS, "Running"));
 
         // Add outgoing tokens
         String postTokens = getOutgoingTokensForFlowNode(callActivity) + ANY_OTHER_TOKENS;
 
         // Subprocess is deleted (since it is not in the post object).
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder,
-                                                                                      process,
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
                                                                                       postTokens));
 
 
@@ -109,5 +104,15 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
         }
         bpmnMaudeRuleGenerator.getVisitedProcessModels().add(callActivity.getSubProcessModel());
         bpmnMaudeRuleGenerator.generateRulesForProcess(callActivity.getSubProcessModel());
+    }
+
+    @Override
+    public MaudeRuleBuilder getRuleBuilder() {
+        return ruleBuilder;
+    }
+
+    @Override
+    public MaudeObjectBuilder getObjectBuilder() {
+        return objectBuilder;
     }
 }

@@ -38,9 +38,10 @@ endm
 mod BPMN-EXECUTION-call-activity-complex is
     pr BPMN-EXECUTION .
 
-    var T : MSet . --- Tokens
-    var M : MSet . --- Messages
-    var S : Configuration .
+    --- Generated variables
+    vars T : MSet . --- tokens
+    vars M : MSet . --- messages
+    vars S : Configuration . --- subprocesses
 
     --- Generated rules
     rl [start_Event_0ge9b6d] :  < "call-activity-complex" : ProcessSnapshot | tokens : ("start (Event_0ge9b6d)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : ("start_A (Flow_1tl2d3e)" T), messages : (M), subprocesses : (S), state : Running > .

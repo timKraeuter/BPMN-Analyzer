@@ -39,4 +39,13 @@ class BPMNToMaudeTaskTest implements BPMNMaudeTestHelper {
     void testSendReceiveTask() throws IOException {
         testBPMNMaudeGeneration("send-receive-message-tasks");
     }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/e76c1763-4842-493c-bebb-cfa41e5abb09">"Instantiate Receive Task"</a> in cawemo.
+     */
+    @Test
+    void testInstantiateReceiveTask() throws IOException {
+        // TODO: Implement test and code.
+//        testGrooveGenerationForBPMNResourceFile("instantiate-receive-task");
+    }
 }

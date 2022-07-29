@@ -38,9 +38,10 @@ endm
 mod BPMN-EXECUTION-implicit-exclusive-gateway is
     pr BPMN-EXECUTION .
 
-    var T : MSet . --- Tokens
-    var M : MSet . --- Messages
-    var S : Configuration .
+    --- Generated variables
+    vars T : MSet . --- tokens
+    vars M : MSet . --- messages
+    vars S : Configuration . --- subprocesses
 
     --- Generated rules
     rl [start_StartEvent_1] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), messages : (M), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start_e1 (Flow_10t9zap)" T), messages : (M), subprocesses : (S), state : Running > .

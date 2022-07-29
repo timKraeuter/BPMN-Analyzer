@@ -10,9 +10,7 @@ import maude.generation.MaudeRuleBuilder;
 
 import java.util.stream.Collectors;
 
-import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper.*;
-
-public class BPMNMaudeGatewayRuleGenerator {
+public class BPMNMaudeGatewayRuleGenerator implements BPMNToMaudeTransformerHelper {
     private final MaudeRuleBuilder ruleBuilder;
     private final MaudeObjectBuilder objectBuilder;
 
@@ -47,10 +45,10 @@ public class BPMNMaudeGatewayRuleGenerator {
         ruleBuilder.ruleName(getFlowNodeRuleName(exclusiveGateway));
 
         String preTokens = preToken + ANY_OTHER_TOKENS;
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, preTokens));
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, preTokens));
 
         String postTokens = getTokenForSequenceFlow(outgoingFlow) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, postTokens));
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, postTokens));
 
         ruleBuilder.build();
 
@@ -60,10 +58,10 @@ public class BPMNMaudeGatewayRuleGenerator {
         ruleBuilder.ruleName(getFlowNodeRuleName(parallelGateway));
 
         String preTokens = getPreTokensForParallelGateway(parallelGateway) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, preTokens));
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, preTokens));
 
         String postTokens = getOutgoingTokensForFlowNode(parallelGateway) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(objectBuilder, process, postTokens));
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, postTokens));
 
         ruleBuilder.build();
     }
@@ -73,7 +71,17 @@ public class BPMNMaudeGatewayRuleGenerator {
             return getTokenForFlowNode(parallelGateway);
         }
         return parallelGateway.getIncomingFlows()
-                              .map(BPMNToMaudeTransformerHelper::getTokenForSequenceFlow)
+                              .map(this::getTokenForSequenceFlow)
                               .collect(Collectors.joining(" "));
+    }
+
+    @Override
+    public MaudeRuleBuilder getRuleBuilder() {
+        return ruleBuilder;
+    }
+
+    @Override
+    public MaudeObjectBuilder getObjectBuilder() {
+        return objectBuilder;
     }
 }

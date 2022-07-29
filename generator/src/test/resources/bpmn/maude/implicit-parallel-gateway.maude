@@ -38,9 +38,10 @@ endm
 mod BPMN-EXECUTION-implicit-parallel-gateway is
     pr BPMN-EXECUTION .
 
-    var T : MSet . --- Tokens
-    var M : MSet . --- Messages
-    var S : Configuration .
+    --- Generated variables
+    vars T : MSet . --- tokens
+    vars M : MSet . --- messages
+    vars S : Configuration . --- subprocesses
 
     --- Generated rules
     rl [start_StartEvent_1] :  < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), messages : (M), subprocesses : (S), state : Running > => < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("start_A (Flow_0ieyd6c)" T), messages : (M), subprocesses : (S), state : Running > .
