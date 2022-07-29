@@ -102,10 +102,10 @@ public class FSMToMaudeTransformer {
     }
 
     private void generateRuleForTransition(Transition transition, MaudeRuleBuilder ruleBuilder) {
-        ruleBuilder.ruleName(transition.getName());
+        ruleBuilder.startRule(transition.getName());
         ruleBuilder.addPreObject(createFSMinStateObject(transition.getSource().getName()));
         ruleBuilder.addPostObject(createFSMinStateObject(transition.getTarget().getName()));
-        ruleBuilder.build();
+        ruleBuilder.buildRule();
     }
 
     private MaudeObject createFSMinStateObject(String stateName) {

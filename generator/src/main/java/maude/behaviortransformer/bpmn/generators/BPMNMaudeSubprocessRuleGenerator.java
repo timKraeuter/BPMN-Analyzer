@@ -46,7 +46,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
                                                    CallActivity callActivity,
                                                    SequenceFlow incomingFlow) {
 
-        ruleBuilder.ruleName(getFlowNodeRuleNameWithIncFlow(callActivity, incomingFlow.getId()));
+        ruleBuilder.startRule(getFlowNodeRuleNameWithIncFlow(callActivity, incomingFlow.getId()));
 
         String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
@@ -75,11 +75,11 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
                                                                          ANY_OTHER_SUBPROCESSES,
                                                                          ANY_TOKENS, "Running"));
 
-        ruleBuilder.build();
+        ruleBuilder.buildRule();
     }
 
     private void createTerminateSubProcessRule(AbstractProcess process, CallActivity callActivity) {
-        ruleBuilder.ruleName(getFlowNodeRuleName(callActivity) + END);
+        ruleBuilder.startRule(getFlowNodeRuleName(callActivity) + END);
 
         MaudeObject subProcess = createTerminatedProcessSnapshot(callActivity.getSubProcessModel());
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnyMessages(process,
@@ -95,7 +95,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
                                                                                       postTokens));
 
 
-        ruleBuilder.build();
+        ruleBuilder.buildRule();
     }
 
     private void createRulesForExecutingTheSubProcess(CallActivity callActivity) {

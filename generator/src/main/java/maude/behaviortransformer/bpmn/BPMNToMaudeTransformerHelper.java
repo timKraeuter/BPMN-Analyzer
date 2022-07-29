@@ -84,6 +84,13 @@ public interface BPMNToMaudeTransformerHelper {
         return createProcessSnapshotObject(process, NONE, tokens, NONE, RUNNING);
     }
 
+
+    default MaudeObject createProcessSnapshotObjectNoSubProcess(AbstractProcess process,
+                                                                String tokens,
+                                                                String messages) {
+        return createProcessSnapshotObject(process, NONE, tokens, messages, RUNNING);
+    }
+
     default MaudeObject createProcessSnapshotObjectAnySubProcessAndMessages(AbstractProcess process,
                                                                             String tokens) {
         return createProcessSnapshotObject(process,
@@ -130,11 +137,10 @@ public interface BPMNToMaudeTransformerHelper {
                                                    FlowNode messageSource) {
         int mFlowCounter = 1;
         for (MessageFlow messageFlow : collaboration.outgoingMessageFlows(messageSource)) {
-            if (messageFlow.getTarget().isInstantiateFlowNode()) {
+            if (messageFlow.getTarget().isInstantiateFlowNode() ||
+                isAfterInstantiateEventBasedGateway(messageFlow.getTarget())) {
                 addMessageFlowInstantiateFlowNodeBehavior(collaboration,
                                                           messageFlow);
-            } else if (isAfterInstantiateEventBasedGateway(messageFlow.getTarget())) {
-                // TODO: Implement message to instantiate EV gateway behavior.
             } else {
                 addMessageSendBehaviorIfProcessExists(collaboration, messageFlow, mFlowCounter);
                 mFlowCounter++;
@@ -146,17 +152,10 @@ public interface BPMNToMaudeTransformerHelper {
                                                            MessageFlow messageFlow) {
         Process receiverProcess = collaboration.getMessageFlowReceiverProcess(messageFlow);
         FlowNode mFlowTarget = messageFlow.getTarget();
-        String tokens;
-        if (mFlowTarget.isTask()) {
-            // Must be an instantiate receive task.
-            tokens = getTokenForFlowNode(mFlowTarget) + ANY_OTHER_TOKENS;
-
-        } else {
-            // Must be message start event.
-            tokens = getOutgoingTokensForFlowNode(mFlowTarget) + ANY_OTHER_TOKENS;
-        }
-        getRuleBuilder().addPostObject(createProcessSnapshotObjectNoSubProcessAndMessages(receiverProcess,
-                                                                                          tokens));
+        String tokens = getTokenForFlowNode(mFlowTarget) + ANY_OTHER_TOKENS;
+        getRuleBuilder().addPostObject(createProcessSnapshotObjectNoSubProcess(receiverProcess,
+                                                                               tokens,
+                                                                               getMessageForFlow(messageFlow)));
     }
 
     default void addMessageSendBehaviorIfProcessExists(BPMNCollaboration collaboration,
@@ -166,8 +165,7 @@ public interface BPMNToMaudeTransformerHelper {
 
         // We assume a message receiver can only have one incoming sequence flow if any.
         FlowNode messageFlowTarget = messageFlow.getTarget();
-        boolean behindExclusiveEventBasedGateway = messageFlowTarget.getIncomingFlows()
-                                                                    .anyMatch(sequenceFlow -> sequenceFlow.getSource().isExclusiveEventBasedGateway());
+        boolean behindExclusiveEventBasedGateway = isAfterExclusiveEventBasedGateway(messageFlowTarget);
         String token;
         if (behindExclusiveEventBasedGateway) {
             if (messageFlowTarget.getIncomingFlows().count() != 1) {
@@ -202,6 +200,11 @@ public interface BPMNToMaudeTransformerHelper {
 
     }
 
+    private boolean isAfterExclusiveEventBasedGateway(FlowNode messageFlowTarget) {
+        return messageFlowTarget.getIncomingFlows()
+                                .anyMatch(sequenceFlow -> sequenceFlow.getSource().isExclusiveEventBasedGateway());
+    }
+
     private String anySubprocess(int mFlowCounter) {
         return ANY_SUBPROCESSES + mFlowCounter;
     }
@@ -221,16 +224,18 @@ public interface BPMNToMaudeTransformerHelper {
                                               Set<MessageFlow> incomingMessageFlows,
                                               MessageFlow messageFlow) {
         if (incomingMessageFlows.size() > 1) {
-            return getFlowNodeRuleNameWithIncFlow(flowNode, messageFlow.getName()) +
-                   (flowNode.isTask() ? START : "");
+            return getFlowNodeRuleNameWithIncFlow(flowNode, messageFlow.getName());
         }
-        return getFlowNodeRuleName(flowNode) + (flowNode.isTask() ? START : "");
+        return getFlowNodeRuleName(flowNode);
     }
 
     default void createStartInteractionNodeRule(FlowNode interactionNode,
                                                 AbstractProcess process) {
+        if (isAfterExclusiveEventBasedGateway(interactionNode) || interactionNode.isInstantiateFlowNode()) {
+            return; // No start rule needed.
+        }
         interactionNode.getIncomingFlows().forEach(incomingFlow -> {
-            getRuleBuilder().ruleName(getFlowNodeRuleNameWithIncFlow(interactionNode, incomingFlow.getId()));
+            getRuleBuilder().startRule(getFlowNodeRuleNameWithIncFlow(interactionNode, incomingFlow.getId()) + START);
 
             String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
             getRuleBuilder().addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, preTokens));
@@ -239,7 +244,7 @@ public interface BPMNToMaudeTransformerHelper {
             getRuleBuilder().addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
                                                                                                postTokens));
 
-            getRuleBuilder().build();
+            getRuleBuilder().buildRule();
         });
     }
 
@@ -248,11 +253,10 @@ public interface BPMNToMaudeTransformerHelper {
                                               BPMNCollaboration collaboration) {
         Set<MessageFlow> incomingMessageFlows = collaboration.getIncomingMessageFlows(interactionNode);
         incomingMessageFlows.forEach(messageFlow -> {
-            getRuleBuilder().ruleName(getInteractionNodeRuleName(interactionNode,
-                                                                 incomingMessageFlows,
-                                                                 messageFlow));
-
-            String preTokens = getTokenForFlowNode(interactionNode) + ANY_OTHER_TOKENS;
+            getRuleBuilder().startRule(getInteractionNodeRuleName(interactionNode,
+                                                                  incomingMessageFlows,
+                                                                  messageFlow));
+            String preTokens = getConsumedTokenForInteractionNode(interactionNode) + ANY_OTHER_TOKENS;
             getRuleBuilder().addPreObject(createProcessSnapshotObjectAnySubProcess(process,
                                                                                    preTokens,
                                                                                    getMessageForFlow(messageFlow) +
@@ -262,7 +266,16 @@ public interface BPMNToMaudeTransformerHelper {
             getRuleBuilder().addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
                                                                                                postTokens));
 
-            getRuleBuilder().build();
+            getRuleBuilder().buildRule();
         });
+    }
+
+    private String getConsumedTokenForInteractionNode(FlowNode interactionNode) {
+        if (isAfterExclusiveEventBasedGateway(interactionNode) && !isAfterInstantiateEventBasedGateway(interactionNode)) {
+            // Must exist if the method above returns true.
+            FlowNode eventBasedGateway = interactionNode.getIncomingFlows().findAny().get().getSource();
+            return getTokenForFlowNode(eventBasedGateway);
+        }
+        return getTokenForFlowNode(interactionNode);
     }
 }

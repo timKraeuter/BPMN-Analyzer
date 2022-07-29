@@ -34,4 +34,26 @@ class BPMNToMaudeGatewayTest implements BPMNMaudeTestHelper {
     void testParallelGatewayComplex() throws IOException {
         testBPMNMaudeGeneration("parallel-gateway-complex");
     }
+
+    /**
+     * See test case
+     * <a href="https://cawemo.com/share/c16c4923-dfa0-4a15-ade3-b47acb40ad66">"Exclusive Event Based Gateway"</a>
+     * in cawemo.
+     */
+    @Test
+    void testExclusiveEventBasedGateway() throws IOException {
+        // TODO: Extend testcase when signal events are implemented!
+        testBPMNMaudeGeneration("exclusive-event-based-gateway");
+    }
+
+    /**
+     * See test case
+     * <a href="https://cawemo.com/share/6db8059f-911b-4d2b-a8b3-83efb99ceed2">"Exclusive Event Based Gateway - Instantiate"</a>
+     * in cawemo.
+     */
+    @Test
+    void testExclusiveEventBasedGatewayInstantiate() throws IOException {
+        // TODO: Extend testcase when signal events are implemented!
+        testBPMNMaudeGeneration("exclusive-event-based-gateway-instantiate");
+    }
 }

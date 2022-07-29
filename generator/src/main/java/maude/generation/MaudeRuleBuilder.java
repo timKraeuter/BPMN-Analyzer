@@ -26,7 +26,7 @@ public class MaudeRuleBuilder {
         this.vargroupToTypeAndVars = new LinkedHashMap<>();
     }
 
-    public MaudeRuleBuilder ruleName(String ruleName) {
+    public MaudeRuleBuilder startRule(String ruleName) {
         this.ruleName = ruleName;
         return this;
     }
@@ -41,7 +41,7 @@ public class MaudeRuleBuilder {
         return this;
     }
 
-    public MaudeRule build() {
+    public MaudeRule buildRule() {
         if (ruleName == null || preObjects.isEmpty()) {
             throw new MaudeGenerationException("A rule should have a name and at least one pre object");
         }

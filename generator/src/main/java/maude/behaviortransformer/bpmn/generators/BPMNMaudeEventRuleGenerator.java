@@ -32,7 +32,10 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                 break;
             case MESSAGE:
                 // Done in the corresponding throw rule.
+                createEndInteractionNodeRule(startEvent, process, collaboration);
+                break;
             case MESSAGE_NON_INTERRUPTING:
+                // TODO: Think about this.
                 // Implemented in the event subprocess rule generator.
             case SIGNAL:
                 // Done in the corresponding throw rule.
@@ -43,12 +46,12 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
     }
 
     private void createNoneStartEventRule(StartEvent startEvent, AbstractProcess process) {
-        ruleBuilder.ruleName(getFlowNodeRuleName(startEvent));
+        ruleBuilder.startRule(getFlowNodeRuleName(startEvent));
         String preToken = getStartEventTokenName(startEvent) + ANY_OTHER_TOKENS;
         String postToken = getOutgoingTokensForFlowNode(startEvent) + ANY_OTHER_TOKENS;
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, preToken));
         ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, postToken));
-        ruleBuilder.build();
+        ruleBuilder.buildRule();
     }
 
     public void createEndEventRule(AbstractProcess process, EndEvent endEvent) {
@@ -59,7 +62,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
         SequenceFlow incomingFlow = endEvent.getIncomingFlows().findFirst().orElseThrow();
         String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
 
-        ruleBuilder.ruleName(getFlowNodeRuleName(endEvent));
+        ruleBuilder.startRule(getFlowNodeRuleName(endEvent));
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
                                                                                      preTokens));
 
@@ -80,7 +83,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                 // TODO: Implement signal end event.
                 break;
         }
-        ruleBuilder.build();
+        ruleBuilder.buildRule();
     }
 
     public void createIntermediateCatchEventRule(AbstractProcess process,
@@ -94,8 +97,8 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                 break;
             case SIGNAL:
                 // TODO: Signal events
-                throw new UnsupportedOperationException();
-                // Done in the corresponding throw rule.
+                break;
+            // Done in the corresponding throw rule.
             case TIMER:
                 // TODO: Timer events
                 throw new UnsupportedOperationException();
@@ -155,7 +158,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                                                   AbstractProcess process,
                                                   Consumer<MaudeRuleBuilder> ruleExtender) {
         intermediateThrowEvent.getIncomingFlows().forEach(incFlow -> {
-            ruleBuilder.ruleName(getFlowNodeRuleNameWithIncFlow(intermediateThrowEvent, incFlow.getId()));
+            ruleBuilder.startRule(getFlowNodeRuleNameWithIncFlow(intermediateThrowEvent, incFlow.getId()));
 
             // Consume an incoming token from an incoming flow.
             String preTokens = getTokenForSequenceFlow(incFlow) + ANY_OTHER_TOKENS;
@@ -166,7 +169,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
             ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process,
                                                                                           postTokens));
             ruleExtender.accept(ruleBuilder);
-            ruleBuilder.build();
+            ruleBuilder.buildRule();
         });
     }
 

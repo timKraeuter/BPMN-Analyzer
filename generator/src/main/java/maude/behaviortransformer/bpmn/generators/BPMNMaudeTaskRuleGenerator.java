@@ -45,7 +45,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
     }
 
     private void createStartTaskRule(AbstractProcess process, AbstractTask task, SequenceFlow incomingFlow) {
-        ruleBuilder.ruleName(getFlowNodeRuleNameWithIncFlow(task, incomingFlow.getId()) + START);
+        ruleBuilder.startRule(getFlowNodeRuleNameWithIncFlow(task, incomingFlow.getId()) + START);
 
         String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, preTokens));
@@ -53,13 +53,13 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
         String postTokens = getTokenForFlowNode(task) + ANY_OTHER_TOKENS;
         ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, postTokens));
 
-        ruleBuilder.build();
+        ruleBuilder.buildRule();
     }
 
     private void createEndTaskRule(AbstractProcess process,
                                    AbstractTask task,
                                    Consumer<MaudeRuleBuilder> ruleAdditions) {
-        ruleBuilder.ruleName(getFlowNodeRuleName(task) + END);
+        ruleBuilder.startRule(getFlowNodeRuleName(task) + END);
 
         String preTokens = getTokenForFlowNode(task) + ANY_OTHER_TOKENS;
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, preTokens));
@@ -68,7 +68,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
         ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndMessages(process, postTokens));
         ruleAdditions.accept(ruleBuilder);
 
-        ruleBuilder.build();
+        ruleBuilder.buildRule();
     }
 
     public void createSendTaskRulesForProcess(AbstractProcess process, SendTask sendTask) {
@@ -86,8 +86,6 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
             }
             return;
         }
-        // TODO: Receive task after instantiate event based gateways.
-        // TODO: Receive task after event based gateways.
         // Rules for starting the task
         createStartInteractionNodeRule(receiveTask, process);
         // Rule for ending the task (now consumes messages)

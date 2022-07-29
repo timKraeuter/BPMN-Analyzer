@@ -15,10 +15,10 @@ class MaudeRuleTest {
         MaudeObject postObject = createFSMObject("X", "\"green\"");
 
         MaudeRule fsmRule = new MaudeRuleBuilder()
-                .ruleName("turnGreen")
+                .startRule("turnGreen")
                 .addPreObject(preObject)
                 .addPostObject(postObject)
-                .build();
+                .buildRule();
 
         assertThat(fsmRule.generateRuleString(), is("rl [turnGreen] :  < X : FSM | state : \"red\" > => " +
                                                     "< X : FSM | state : \"green\" > ."));
@@ -34,12 +34,12 @@ class MaudeRuleTest {
         MaudeObject postObject2 = createFSMObject("Y", "\"green\"");
 
         MaudeRule fsmRule = new MaudeRuleBuilder()
-                .ruleName("turnGreen2x")
+                .startRule("turnGreen2x")
                 .addPreObject(preObject1)
                 .addPreObject(preObject2)
                 .addPostObject(postObject1)
                 .addPostObject(postObject2)
-                .build();
+                .buildRule();
 
         assertThat(fsmRule.generateRuleString(), is("rl [turnGreen2x] :  < X : FSM | state : \"red\" > < Y : FSM | state : " +
                                                     "\"red\" > => < X : FSM | state : \"green\" > < Y : FSM | state : " +
@@ -57,13 +57,13 @@ class MaudeRuleTest {
     @Test
     void generateRuleExceptionsTest() {
         MaudeRuleBuilder builder = new MaudeRuleBuilder();
-        assertThrows(MaudeGenerationException.class, builder::build);
-        builder.ruleName("ruleName");
-        assertThrows(MaudeGenerationException.class, builder::build);
+        assertThrows(MaudeGenerationException.class, builder::buildRule);
+        builder.startRule("ruleName");
+        assertThrows(MaudeGenerationException.class, builder::buildRule);
         MaudeObject preObject = createFSMObject("X", "\"red\"");
 
         builder.addPreObject(preObject);
         // No exception when name and one pre object are present.
-        assertNotNull(builder.build());
+        assertNotNull(builder.buildRule());
     }
 }

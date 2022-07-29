@@ -58,6 +58,7 @@ public class BPMNCollaboration implements Behavior {
         if (optionalProcess.isPresent()) {
             return optionalProcess.get();
         }
+        // TODO: Subprocesses of subprocesses?
         // The message flow must go to a subprocess!.
         return subprocesses.stream()
                            .filter(process -> process.getFlowNodes().anyMatch(flowNode -> flowNode ==
@@ -98,6 +99,7 @@ public class BPMNCollaboration implements Behavior {
             if (processFound) {
                 return participant;
             }
+            // TODO: Similar to getMessageFlowReceiverProcess. Refactor!
             // TODO: Subprocesses of subprocesses?
             Optional<Process> optionalSubprocess =
                     participant.getSubProcesses().filter(subprocess -> subprocess.getFlowNodes().anyMatch(

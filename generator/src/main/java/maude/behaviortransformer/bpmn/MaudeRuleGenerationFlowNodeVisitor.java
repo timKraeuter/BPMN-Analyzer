@@ -71,7 +71,7 @@ public class MaudeRuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
 
     @Override
     public void handle(EventBasedGateway eventBasedGateway) {
-        throw new UnsupportedOperationException();
+        generator.getGatewayRuleGenerator().createEventBasedGatewayRule(process, eventBasedGateway);
     }
 
     @Override
