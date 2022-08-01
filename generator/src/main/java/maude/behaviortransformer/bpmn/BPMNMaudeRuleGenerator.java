@@ -31,6 +31,11 @@ public class BPMNMaudeRuleGenerator {
         gatewayRuleGenerator = new BPMNMaudeGatewayRuleGenerator(ruleBuilder);
         subprocessRuleGenerator = new BPMNMaudeSubprocessRuleGenerator(this, ruleBuilder);
     }
+
+    public BPMNCollaboration getCollaboration() {
+        return collaboration;
+    }
+
     public void generateRules() {
         collaboration.getParticipants().forEach(process -> {
             if (!visitedProcessModels.contains(process)) {
@@ -59,6 +64,7 @@ public class BPMNMaudeRuleGenerator {
     public BPMNMaudeSubprocessRuleGenerator getSubprocessRuleGenerator() {
         return subprocessRuleGenerator;
     }
+
     public Set<Process> getVisitedProcessModels() {
         return visitedProcessModels;
     }

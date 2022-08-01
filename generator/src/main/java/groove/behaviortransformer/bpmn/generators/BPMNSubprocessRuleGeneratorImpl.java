@@ -42,6 +42,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
         // Generate rules for the sub process
         this.createRulesForExecutingTheSubProcess(callActivity);
 
+        // Generate rules for boundary events
         this.createBoundaryEventRules(process, callActivity, bpmnRuleGenerator.getCollaboration());
     }
 

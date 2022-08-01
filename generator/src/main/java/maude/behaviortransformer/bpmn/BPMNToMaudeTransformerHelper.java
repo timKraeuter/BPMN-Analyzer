@@ -108,9 +108,8 @@ public interface BPMNToMaudeTransformerHelper {
 
     default MaudeObject createProcessSnapshotObjectAnyMessages(AbstractProcess process,
                                                                String subprocesses,
-                                                               String tokens,
-                                                               String state) {
-        return createProcessSnapshotObject(process, subprocesses, tokens, ANY_MESSAGES, state);
+                                                               String tokens) {
+        return createProcessSnapshotObject(process, subprocesses, tokens, ANY_MESSAGES, RUNNING);
     }
 
     default MaudeObject createProcessSnapshotObject(AbstractProcess process,
