@@ -1,77 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="signal_end" role="rule" edgeids="false" edgemode="directed">
-        <node id="n182">
+    <graph id="end_sub3" role="rule" edgeids="false" edgemode="directed">
+        <node id="n172">
             <attr name="layout">
-                <string>407 242 0 0</string>
+                <string>467 242 0 0</string>
             </attr>
         </node>
-        <edge from="n182" to="n182">
+        <edge from="n172" to="n172">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n182" to="n182">
+        <edge from="n172" to="n172">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n180">
+        <node id="n170">
             <attr name="layout">
                 <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n180" to="n180">
+        <edge from="n170" to="n170">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n181">
+        <node id="n171">
             <attr name="layout">
                 <string>392 152 0 0</string>
             </attr>
         </node>
-        <edge from="n181" to="n181">
+        <edge from="n171" to="n171">
             <attr name="label">
-                <string>string:"p1"</string>
+                <string>string:"Subprocess3"</string>
             </attr>
         </edge>
-        <node id="n183">
+        <node id="n173">
             <attr name="layout">
-                <string>592 242 0 0</string>
+                <string>712 242 0 0</string>
             </attr>
         </node>
-        <edge from="n183" to="n183">
+        <edge from="n173" to="n173">
             <attr name="label">
-                <string>string:"signal_signal_end"</string>
+                <string>string:"start_sub3_end_sub3"</string>
             </attr>
         </edge>
-        <node id="n184">
+        <node id="n174">
             <attr name="layout">
                 <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n184" to="n184">
+        <edge from="n174" to="n174">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n182" to="n183">
+        <edge from="n172" to="n173">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n180" to="n182">
+        <edge from="n170" to="n172">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n180" to="n181">
+        <edge from="n170" to="n171">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n180" to="n184">
+        <edge from="n170" to="n174">
             <attr name="label">
                 <string>state</string>
             </attr>
