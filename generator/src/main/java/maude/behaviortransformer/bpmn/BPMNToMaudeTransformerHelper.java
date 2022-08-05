@@ -164,9 +164,8 @@ public interface BPMNToMaudeTransformerHelper {
 
         // We assume a message receiver can only have one incoming sequence flow if any.
         FlowNode messageFlowTarget = messageFlow.getTarget();
-        boolean behindExclusiveEventBasedGateway = isAfterExclusiveEventBasedGateway(messageFlowTarget);
         String token;
-        if (behindExclusiveEventBasedGateway) {
+        if (isAfterExclusiveEventBasedGateway(messageFlowTarget)) {
             if (messageFlowTarget.getIncomingFlows().count() != 1) {
                 throw new BPMNRuntimeException(
                         "Interaction nodes receiving a message with a preceding exclusive event based gateway must " +
@@ -222,10 +221,11 @@ public interface BPMNToMaudeTransformerHelper {
     default String getInteractionNodeRuleName(FlowNode flowNode,
                                               Set<MessageFlow> incomingMessageFlows,
                                               MessageFlow messageFlow) {
+        String potentialSuffix = flowNode.isTask() ? END : "";
         if (incomingMessageFlows.size() > 1) {
-            return getFlowNodeRuleNameWithIncFlow(flowNode, messageFlow.getName());
+            return getFlowNodeRuleNameWithIncFlow(flowNode, messageFlow.getName()) + potentialSuffix;
         }
-        return getFlowNodeRuleName(flowNode);
+        return getFlowNodeRuleName(flowNode) + potentialSuffix;
     }
 
     default void createStartInteractionNodeRule(FlowNode interactionNode,
