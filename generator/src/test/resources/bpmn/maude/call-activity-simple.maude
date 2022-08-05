@@ -41,10 +41,10 @@ mod BPMN-EXECUTION is
     --- NOOP if already terminated
     eq terminate(< P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : Terminated > .
     --- Terminate all subprocesses recursively
-    eq terminate(< P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, messages : M, subprocesses : terminate(S), state : Terminated > terminate(PS) .
+    eq terminate(< P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, messages : none, subprocesses : terminate(S), state : Terminated > terminate(PS) .
 
     rl [naturalTerminate] :
-    < P : ProcessSnapshot | tokens : none, messages : none, subprocesses : none, state : Running >
+    < P : ProcessSnapshot | tokens : none, messages : M, subprocesses : none, state : Running >
                             =>
     < P : ProcessSnapshot | tokens : none, messages : none, subprocesses : none, state : Terminated > .
 endm

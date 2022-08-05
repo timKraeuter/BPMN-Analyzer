@@ -68,11 +68,11 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    --- Terminate all subprocesses recursively\r\n" +
                                                   "    eq terminate(< P : ProcessSnapshot | tokens : T, messages : M," +
                                                   " subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | " +
-                                                  "tokens : T, messages : M, subprocesses : terminate(S), state : " +
+                                                  "tokens : T, messages : none, subprocesses : terminate(S), state : " +
                                                   "Terminated > terminate(PS) .\r\n" +
                                                   "\r\n" +
                                                   "    rl [naturalTerminate] :\r\n" +
-                                                  "    < P : ProcessSnapshot | tokens : none, messages : none, " +
+                                                  "    < P : ProcessSnapshot | tokens : none, messages : M, " +
                                                   "subprocesses : none, state : Running >\r\n" +
                                                   "                            =>\r\n" +
                                                   "    < P : ProcessSnapshot | tokens : none, messages : none, " +
