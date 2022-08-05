@@ -2,8 +2,6 @@ package maude.behaviortransformer.bpmn;
 
 import behavior.bpmn.Process;
 import behavior.bpmn.*;
-import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
-import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import behavior.bpmn.events.StartEvent;
 import maude.generation.MaudeObject;
 import maude.generation.MaudeObjectBuilder;
@@ -161,23 +159,6 @@ public interface BPMNToMaudeTransformerHelper {
                                                        MessageFlow messageFlow,
                                                        int mFlowCounter) {
         Process messageFlowReceiver = collaboration.getMessageFlowReceiverProcess(messageFlow);
-
-        // We assume a message receiver can only have one incoming sequence flow if any.
-        FlowNode messageFlowTarget = messageFlow.getTarget();
-        String token;
-        if (isAfterExclusiveEventBasedGateway(messageFlowTarget)) {
-            if (messageFlowTarget.getIncomingFlows().count() != 1) {
-                throw new BPMNRuntimeException(
-                        "Interaction nodes receiving a message with a preceding exclusive event based gateway must " +
-                        "have exactly one incoming sequence flow!");
-            }
-            SequenceFlow inFlow = messageFlowTarget.getIncomingFlows()
-                                                   .findAny()
-                                                   .orElseThrow(ShouldNotHappenRuntimeException::new);
-            token = getTokenForFlowNode(inFlow.getSource());
-        } else {
-            token = getTokenForFlowNode(messageFlowTarget);
-        }
         // TODO: Implement optional message send/if exists.
         // Add message
         // Needs a different set of tokens, messages and subprocess variables
@@ -186,12 +167,12 @@ public interface BPMNToMaudeTransformerHelper {
         getRuleBuilder().addVar(SUBPROCESSES, CONFIGURATION, anySubprocess(mFlowCounter));
         getRuleBuilder().addPreObject(createProcessSnapshotObject(messageFlowReceiver,
                                                                   anySubprocess(mFlowCounter),
-                                                                  token + ANY_OTHER_TOKENS + mFlowCounter,
+                                                                  ANY_TOKENS + mFlowCounter,
                                                                   anyMessage(mFlowCounter),
                                                                   RUNNING));
         getRuleBuilder().addPostObject(createProcessSnapshotObject(messageFlowReceiver,
                                                                    anySubprocess(mFlowCounter),
-                                                                   token + ANY_OTHER_TOKENS + mFlowCounter,
+                                                                   ANY_TOKENS + mFlowCounter,
                                                                    getMessageForFlow(messageFlow) +
                                                                    ANY_OTHER_MESSAGES + mFlowCounter,
                                                                    RUNNING));

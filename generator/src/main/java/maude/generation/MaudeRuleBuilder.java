@@ -42,8 +42,8 @@ public class MaudeRuleBuilder {
     }
 
     public MaudeRule buildRule() {
-        if (ruleName == null || preObjects.isEmpty()) {
-            throw new MaudeGenerationException("A rule should have a name and at least one pre object");
+        if (ruleName == null || preObjects.isEmpty() || postObjects.isEmpty()) {
+            throw new MaudeGenerationException("A rule should have a name and at least one pre/post object");
         }
         MaudeRule maudeRule = new MaudeRule(ruleName, preObjects, postObjects);
         createdRules.add(maudeRule);
