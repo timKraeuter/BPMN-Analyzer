@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
 
 public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
+    public static final String DELIMITER = "\r\n    ";
     private final BPMNCollaboration collaboration;
     private final MaudeRuleBuilder ruleBuilder;
     private final MaudeObjectBuilder objectBuilder;
@@ -42,53 +43,43 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    sort ProcessState .\r\n" +
                                                   "    subsort String < Oid .\r\n" +
                                                   "\r\n" +
+                                                  "    --- Processes\r\n" +
                                                   "    ops Running, Terminated : -> ProcessState [ctor] .\r\n" +
                                                   "    op tokens :_ : MSet -> Attribute [ctor] .\r\n" +
-                                                  "    op messages :_ : MSet -> Attribute [ctor] .\r\n" +
                                                   "    op subprocesses :_ : Configuration -> Attribute [ctor] .\r\n" +
                                                   "    op state :_ : ProcessState -> Attribute [ctor] .\r\n" +
                                                   "    op ProcessSnapshot : -> Cid [ctor] .\r\n" +
                                                   "\r\n" +
+                                                  "    --- Message holder\r\n" +
+                                                  "    op MessageHolder : -> Cid [ctor] .\r\n" +
+                                                  "    op messages :_ : MSet -> Attribute [ctor] .\r\n" +
+                                                  "\r\n" +
                                                   "    op terminate : Configuration -> Configuration .\r\n" +
-                                                  "    op noRunningProcessWithID : Configuration String -> Bool .\r\n" +
                                                   "\r\n" +
                                                   "    vars P, P1 : String .\r\n" +
                                                   "    vars T : MSet . --- tokens\r\n" +
-                                                  "    vars M : MSet . --- messages\r\n" +
                                                   "    vars S : Configuration . --- subprocesses\r\n" +
                                                   "    vars STATE : ProcessState . --- state\r\n" +
                                                   "    var PS : Configuration .\r\n" +
                                                   "\r\n" +
-                                                  "    --- Traversal step\r\n" +
-                                                  "    eq noRunningProcessWithID(< P : ProcessSnapshot | tokens : T, " +
-                                                  "messages : M, subprocesses : S, state : Running > PS, P1) = " +
-                                                  "noRunningProcessWithID(PS, P1) .\r\n" +
-                                                  "    --- Traversal negative end\r\n" +
-                                                  "    eq noRunningProcessWithID(< P : ProcessSnapshot | tokens : T, " +
-                                                  "messages : M, subprocesses : S, state : Running > PS, P) = false " +
-                                                  ".\r\n" +
-                                                  "    --- Traversal positive end\r\n" +
-                                                  "    eq noRunningProcessWithID(none, P) = true .\r\n" +
-                                                  "\r\n" +
                                                   "    --- NOOP if none\r\n" +
                                                   "    eq terminate(none) = none .\r\n" +
                                                   "    --- NOOP if already terminated\r\n" +
-                                                  "    eq terminate(< P : ProcessSnapshot | tokens : T, messages : M," +
-                                                  " subprocesses : S, state : Terminated >) = < P : ProcessSnapshot |" +
-                                                  " tokens : T, messages : M, subprocesses : S, state : Terminated > " +
-                                                  ".\r\n" +
+                                                  "    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses " +
+                                                  ": S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, " +
+                                                  "subprocesses : S, state : Terminated > .\r\n" +
                                                   "    --- Terminate all subprocesses recursively\r\n" +
-                                                  "    eq terminate(< P : ProcessSnapshot | tokens : T, messages : M," +
-                                                  " subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | " +
-                                                  "tokens : T, messages : none, subprocesses : terminate(S), state : " +
-                                                  "Terminated > terminate(PS) .\r\n" +
+                                                  "    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses " +
+                                                  ": S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, " +
+                                                  "subprocesses : terminate(S), state : Terminated > terminate(PS) " +
+                                                  ".\r\n" +
                                                   "\r\n" +
                                                   "    rl [naturalTerminate] :\r\n" +
-                                                  "    < P : ProcessSnapshot | tokens : none, messages : M, " +
-                                                  "subprocesses : none, state : Running >\r\n" +
+                                                  "    < P : ProcessSnapshot | tokens : none, subprocesses : none, " +
+                                                  "state : Running >\r\n" +
                                                   "                            =>\r\n" +
-                                                  "    < P : ProcessSnapshot | tokens : none, messages : none, " +
-                                                  "subprocesses : none, state : Terminated > .\r\n" +
+                                                  "    < P : ProcessSnapshot | tokens : none, subprocesses : none, " +
+                                                  "state : Terminated > .\r\n" +
                                                   "endm\r\n" +
                                                   "\r\n" +
                                                   "mod BPMN-EXECUTION-${name} is\r\n" +
@@ -116,20 +107,19 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    var P : Prop .\r\n" +
                                                   "    var X : Oid .\r\n" +
                                                   "    var T : MSet .\r\n" +
-                                                  "    var M : MSet .\r\n" +
                                                   "    var T1 : NeMSet .\r\n" +
                                                   "    var S : Configuration .\r\n" +
                                                   "    var State : ProcessState .\r\n" +
                                                   "\r\n" +
                                                   "\r\n" +
                                                   "    op allTerminated : -> Prop .\r\n" +
-                                                  "    eq < X : ProcessSnapshot | tokens : T, messages : M, " +
-                                                  "subprocesses : S, state : Running > C |= allTerminated = false .\r\n" +
+                                                  "    eq < X : ProcessSnapshot | tokens : T, subprocesses : S, state" +
+                                                  " : Running > C |= allTerminated = false .\r\n" +
                                                   "    eq C |= allTerminated = true [owise] .\r\n" +
                                                   "\r\n" +
                                                   "    op unsafe : -> Prop .\r\n" +
-                                                  "    eq < X : ProcessSnapshot | tokens : (T1 T1 T), messages : M, " +
-                                                  "subprocesses : S, state : State > C |= unsafe = true .\r\n" +
+                                                  "    eq < X : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : " +
+                                                  "S, state : State > C |= unsafe = true .\r\n" +
                                                   "    eq C |= unsafe = false [owise] .\r\n" +
                                                   "\r\n" +
                                                   "    --- Generated atomic propositions\r\n" +
@@ -167,18 +157,19 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
     }
 
     private String makeInit() {
-        return collaboration.getParticipants().stream()
-                            .filter(process -> process.getStartEvents().stream().anyMatch(startEvent ->
-                                                                                                  startEvent.getType() ==
-                                                                                                  StartEventType.NONE))
-                            .map(process -> {
-                                MaudeObject maudeObject =
-                                        createProcessSnapshotObjectNoSubProcessAndMessages(
-                                                process,
-                                                this.createStartTokens(process));
-                                return maudeObject.generateObjectString();
-                            })
-                            .collect(Collectors.joining("\r\n    "));
+        String processes = collaboration.getParticipants().stream()
+                                        .filter(process -> process.getStartEvents().stream().anyMatch(startEvent ->
+                                                                                                              startEvent.getType() ==
+                                                                                                              StartEventType.NONE))
+                                        .map(process -> {
+                                            MaudeObject maudeObject =
+                                                    createProcessSnapshotObjectNoSubProcess(
+                                                            process,
+                                                            this.createStartTokens(process));
+                                            return maudeObject.generateObjectString();
+                                        })
+                                        .collect(Collectors.joining(DELIMITER));
+        return createEmptyMessageHolder().generateObjectString() + DELIMITER + processes;
     }
 
     private String createStartTokens(Process process) {
@@ -194,7 +185,7 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
 
         return ruleBuilder.createdRules()
                           .map(MaudeRule::generateRuleString)
-                          .collect(Collectors.joining("\r\n    "));
+                          .collect(Collectors.joining(DELIMITER));
     }
 
     @Override

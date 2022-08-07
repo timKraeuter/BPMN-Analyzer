@@ -25,6 +25,7 @@ public class MaudeRuleBuilder {
         this.preObjects = new LinkedHashSet<>();
         this.postObjects = new LinkedHashSet<>();
         this.vargroupToTypeAndVars = new LinkedHashMap<>();
+        condition = "";
     }
 
     public MaudeRuleBuilder startRule(String ruleName) {

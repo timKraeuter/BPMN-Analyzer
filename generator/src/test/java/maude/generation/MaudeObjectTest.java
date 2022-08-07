@@ -16,12 +16,12 @@ class MaudeObjectTest {
                                                           .addAttributeValue("state", "\"red\"")
                                                           .build();
 
-        assertThat(maudeObject.generateObjectString(), is("< X : FSM | state : \"red\" >"));
+        assertThat(maudeObject.generateObjectString(), is("< \"X\" : FSM | state : \"red\" >"));
     }
 
     @Test
     void generateBPMNObjectTest() {
-        MaudeObject maudeObject = new MaudeObjectBuilder().oid("\"sequential-activities\"")
+        MaudeObject maudeObject = new MaudeObjectBuilder().oid("sequential-activities")
                                                           .oidType("ProcessSnapshot")
                                                           .addAttributeValue("tokens",
                                                                              "(\"sequential-activities_start\")")

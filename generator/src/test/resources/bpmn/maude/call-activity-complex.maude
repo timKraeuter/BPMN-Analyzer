@@ -20,18 +20,21 @@ mod BPMN-EXECUTION is
     sort ProcessState .
     subsort String < Oid .
 
+    --- Processes
     ops Running, Terminated : -> ProcessState [ctor] .
     op tokens :_ : MSet -> Attribute [ctor] .
-    op messages :_ : MSet -> Attribute [ctor] .
     op subprocesses :_ : Configuration -> Attribute [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
     op ProcessSnapshot : -> Cid [ctor] .
 
+    --- Message holder
+    op MessageHolder : -> Cid [ctor] .
+    op messages :_ : MSet -> Attribute [ctor] .
+
     op terminate : Configuration -> Configuration .
 
-    var P : String .
+    vars P, P1 : String .
     vars T : MSet . --- tokens
-    vars M : MSet . --- messages
     vars S : Configuration . --- subprocesses
     vars STATE : ProcessState . --- state
     var PS : Configuration .
@@ -39,14 +42,14 @@ mod BPMN-EXECUTION is
     --- NOOP if none
     eq terminate(none) = none .
     --- NOOP if already terminated
-    eq terminate(< P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : Terminated > .
+    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated > .
     --- Terminate all subprocesses recursively
-    eq terminate(< P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, messages : none, subprocesses : terminate(S), state : Terminated > terminate(PS) .
+    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, subprocesses : terminate(S), state : Terminated > terminate(PS) .
 
     rl [naturalTerminate] :
-    < P : ProcessSnapshot | tokens : none, messages : M, subprocesses : none, state : Running >
+    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Running >
                             =>
-    < P : ProcessSnapshot | tokens : none, messages : none, subprocesses : none, state : Terminated > .
+    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Terminated > .
 endm
 
 mod BPMN-EXECUTION-call-activity-complex is
@@ -58,34 +61,35 @@ mod BPMN-EXECUTION-call-activity-complex is
     vars S : Configuration . --- subprocesses
 
     --- Generated rules
-    rl [start_Event_0ge9b6d] :  < "call-activity-complex" : ProcessSnapshot | tokens : ("start (Event_0ge9b6d)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : ("start_A (Flow_1tl2d3e)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [A_Activity_09om2vm_start] :  < "call-activity-complex" : ProcessSnapshot | tokens : ("start_A (Flow_1tl2d3e)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : ("A (Activity_09om2vm)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [A_Activity_09om2vm_end] :  < "call-activity-complex" : ProcessSnapshot | tokens : ("A (Activity_09om2vm)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : ("A_ComplexSubprocess (Flow_0xs58is)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [B_Activity_1n8c0qo_start] :  < "call-activity-complex" : ProcessSnapshot | tokens : ("ComplexSubprocess_B (Flow_1lsia9d)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : ("B (Activity_1n8c0qo)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [B_Activity_1n8c0qo_end] :  < "call-activity-complex" : ProcessSnapshot | tokens : ("B (Activity_1n8c0qo)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : ("B_end (Flow_0a44wjc)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [end_Event_0ayqkfq] :  < "call-activity-complex" : ProcessSnapshot | tokens : ("B_end (Flow_0a44wjc)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > .
-    rl [ComplexSubprocess_Activity_0ryy3cp] :  < "call-activity-complex" : ProcessSnapshot | tokens : ("A_ComplexSubprocess (Flow_0xs58is)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (< "ComplexSubprocess" : ProcessSnapshot | tokens : ("start_sub (Event_1e18lzi)"), messages : (none), subprocesses : (none), state : Running > S), state : Running > .
-    rl [ComplexSubprocess_Activity_0ryy3cp_end] :  < "call-activity-complex" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (< "ComplexSubprocess" : ProcessSnapshot | tokens : (none), messages : (none), subprocesses : (none), state : Terminated > S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : ("ComplexSubprocess_B (Flow_1lsia9d)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [start_sub_Event_1e18lzi] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("start_sub (Event_1e18lzi)" T), messages : (M), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("start_sub_e1 (Flow_1bemas0)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [e1_Gateway_13zypwp] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("start_sub_e1 (Flow_1bemas0)" T), messages : (M), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("e1_D (Flow_0ap2eny)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [e1_Gateway_13zypwp] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("start_sub_e1 (Flow_1bemas0)" T), messages : (M), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("e1_C (Flow_1txsaj3)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [D_Activity_018lgrz_start] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("e1_D (Flow_0ap2eny)" T), messages : (M), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("D (Activity_018lgrz)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [D_Activity_018lgrz_end] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("D (Activity_018lgrz)" T), messages : (M), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("D_p1 (Flow_01vk83u)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [C_Activity_1ixslgl_start] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("e1_C (Flow_1txsaj3)" T), messages : (M), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("C (Activity_1ixslgl)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [C_Activity_1ixslgl_end] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("C (Activity_1ixslgl)" T), messages : (M), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("C_e2 (Flow_0y5q7fv)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [E_Activity_1l9lap1_start] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("p1_E (Flow_18e4r3p)" T), messages : (M), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("E (Activity_1l9lap1)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [E_Activity_1l9lap1_end] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("E (Activity_1l9lap1)" T), messages : (M), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("E_p2 (Flow_0fsupa2)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [F_Activity_1lhqnrp_start] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("p1_F (Flow_1q6nky4)" T), messages : (M), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("F (Activity_1lhqnrp)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [F_Activity_1lhqnrp_end] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("F (Activity_1lhqnrp)" T), messages : (M), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("F_p2 (Flow_1rz6uuz)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [p1_Gateway_1fcxlzt] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("D_p1 (Flow_01vk83u)" T), messages : (M), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("p1_E (Flow_18e4r3p)" "p1_F (Flow_1q6nky4)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [p2_Gateway_0cn0k65] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("E_p2 (Flow_0fsupa2)" "F_p2 (Flow_1rz6uuz)" T), messages : (M), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("p2_e2 (Flow_0o5rezg)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [e2_Gateway_08jg4ih] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("C_e2 (Flow_0y5q7fv)" T), messages : (M), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("e2_end_sub (Flow_1doq1dm)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [e2_Gateway_08jg4ih] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("p2_e2 (Flow_0o5rezg)" T), messages : (M), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("e2_end_sub (Flow_1doq1dm)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [end_sub_Event_1nc72rq] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("e2_end_sub (Flow_1doq1dm)" T), messages : (M), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > .
+    rl [start_Event_0ge9b6d] :  < "call-activity-complex" : ProcessSnapshot | tokens : ("start (Event_0ge9b6d)" T), subprocesses : (S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : ("start_A (Flow_1tl2d3e)" T), subprocesses : (S), state : Running > .
+    rl [A_Activity_09om2vm_start] :  < "call-activity-complex" : ProcessSnapshot | tokens : ("start_A (Flow_1tl2d3e)" T), subprocesses : (S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : ("A (Activity_09om2vm)" T), subprocesses : (S), state : Running > .
+    rl [A_Activity_09om2vm_end] :  < "call-activity-complex" : ProcessSnapshot | tokens : ("A (Activity_09om2vm)" T), subprocesses : (S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : ("A_ComplexSubprocess (Flow_0xs58is)" T), subprocesses : (S), state : Running > .
+    rl [B_Activity_1n8c0qo_start] :  < "call-activity-complex" : ProcessSnapshot | tokens : ("ComplexSubprocess_B (Flow_1lsia9d)" T), subprocesses : (S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : ("B (Activity_1n8c0qo)" T), subprocesses : (S), state : Running > .
+    rl [B_Activity_1n8c0qo_end] :  < "call-activity-complex" : ProcessSnapshot | tokens : ("B (Activity_1n8c0qo)" T), subprocesses : (S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : ("B_end (Flow_0a44wjc)" T), subprocesses : (S), state : Running > .
+    rl [end_Event_0ayqkfq] :  < "call-activity-complex" : ProcessSnapshot | tokens : ("B_end (Flow_0a44wjc)" T), subprocesses : (S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
+    rl [ComplexSubprocess_Activity_0ryy3cp] :  < "call-activity-complex" : ProcessSnapshot | tokens : ("A_ComplexSubprocess (Flow_0xs58is)" T), subprocesses : (S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : (T), subprocesses : (< "ComplexSubprocess" : ProcessSnapshot | tokens : ("start_sub (Event_1e18lzi)"), subprocesses : (none), state : Running > S), state : Running > .
+    rl [ComplexSubprocess_Activity_0ryy3cp_end] :  < "call-activity-complex" : ProcessSnapshot | tokens : (T), subprocesses : (< "ComplexSubprocess" : ProcessSnapshot | tokens : (none), subprocesses : (none), state : Terminated > S), state : Running > => < "call-activity-complex" : ProcessSnapshot | tokens : ("ComplexSubprocess_B (Flow_1lsia9d)" T), subprocesses : (S), state : Running > .
+    rl [start_sub_Event_1e18lzi] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("start_sub (Event_1e18lzi)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("start_sub_e1 (Flow_1bemas0)" T), subprocesses : (S), state : Running > .
+    rl [e1_Gateway_13zypwp] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("start_sub_e1 (Flow_1bemas0)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("e1_D (Flow_0ap2eny)" T), subprocesses : (S), state : Running > .
+    rl [e1_Gateway_13zypwp] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("start_sub_e1 (Flow_1bemas0)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("e1_C (Flow_1txsaj3)" T), subprocesses : (S), state : Running > .
+    rl [D_Activity_018lgrz_start] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("e1_D (Flow_0ap2eny)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("D (Activity_018lgrz)" T), subprocesses : (S), state : Running > .
+    rl [D_Activity_018lgrz_end] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("D (Activity_018lgrz)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("D_p1 (Flow_01vk83u)" T), subprocesses : (S), state : Running > .
+    rl [C_Activity_1ixslgl_start] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("e1_C (Flow_1txsaj3)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("C (Activity_1ixslgl)" T), subprocesses : (S), state : Running > .
+    rl [C_Activity_1ixslgl_end] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("C (Activity_1ixslgl)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("C_e2 (Flow_0y5q7fv)" T), subprocesses : (S), state : Running > .
+    rl [E_Activity_1l9lap1_start] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("p1_E (Flow_18e4r3p)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("E (Activity_1l9lap1)" T), subprocesses : (S), state : Running > .
+    rl [E_Activity_1l9lap1_end] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("E (Activity_1l9lap1)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("E_p2 (Flow_0fsupa2)" T), subprocesses : (S), state : Running > .
+    rl [F_Activity_1lhqnrp_start] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("p1_F (Flow_1q6nky4)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("F (Activity_1lhqnrp)" T), subprocesses : (S), state : Running > .
+    rl [F_Activity_1lhqnrp_end] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("F (Activity_1lhqnrp)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("F_p2 (Flow_1rz6uuz)" T), subprocesses : (S), state : Running > .
+    rl [p1_Gateway_1fcxlzt] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("D_p1 (Flow_01vk83u)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("p1_E (Flow_18e4r3p)" "p1_F (Flow_1q6nky4)" T), subprocesses : (S), state : Running > .
+    rl [p2_Gateway_0cn0k65] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("E_p2 (Flow_0fsupa2)" "F_p2 (Flow_1rz6uuz)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("p2_e2 (Flow_0o5rezg)" T), subprocesses : (S), state : Running > .
+    rl [e2_Gateway_08jg4ih] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("C_e2 (Flow_0y5q7fv)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("e2_end_sub (Flow_1doq1dm)" T), subprocesses : (S), state : Running > .
+    rl [e2_Gateway_08jg4ih] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("p2_e2 (Flow_0o5rezg)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("e2_end_sub (Flow_1doq1dm)" T), subprocesses : (S), state : Running > .
+    rl [end_sub_Event_1nc72rq] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("e2_end_sub (Flow_1doq1dm)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "call-activity-complex" : ProcessSnapshot | tokens : ("start (Event_0ge9b6d)"), messages : (none), subprocesses : (none), state : Running > .
+    eq init = < "messages" : MessageHolder | messages : (none) >
+    < "call-activity-complex" : ProcessSnapshot | tokens : ("start (Event_0ge9b6d)"), subprocesses : (none), state : Running > .
 endm
 
 mod BPMN-PREDS is
@@ -97,18 +101,17 @@ mod BPMN-PREDS is
     var P : Prop .
     var X : Oid .
     var T : MSet .
-    var M : MSet .
     var T1 : NeMSet .
     var S : Configuration .
     var State : ProcessState .
 
 
     op allTerminated : -> Prop .
-    eq < X : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : Running > C |= allTerminated = false .
+    eq < X : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > C |= allTerminated = false .
     eq C |= allTerminated = true [owise] .
 
     op unsafe : -> Prop .
-    eq < X : ProcessSnapshot | tokens : (T1 T1 T), messages : M, subprocesses : S, state : State > C |= unsafe = true .
+    eq < X : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : S, state : State > C |= unsafe = true .
     eq C |= unsafe = false [owise] .
 
     --- Generated atomic propositions
