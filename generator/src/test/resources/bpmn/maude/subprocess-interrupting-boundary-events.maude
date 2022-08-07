@@ -41,45 +41,41 @@ mod BPMN-EXECUTION is
     --- NOOP if already terminated
     eq terminate(< P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : Terminated > .
     --- Terminate all subprocesses recursively
-    eq terminate(< P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, messages : M, subprocesses : terminate(S), state : Terminated > terminate(PS) .
+    eq terminate(< P : ProcessSnapshot | tokens : T, messages : M, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, messages : none, subprocesses : terminate(S), state : Terminated > terminate(PS) .
 
     rl [naturalTerminate] :
-    < P : ProcessSnapshot | tokens : none, messages : none, subprocesses : none, state : Running >
+    < P : ProcessSnapshot | tokens : none, messages : M, subprocesses : none, state : Running >
                             =>
     < P : ProcessSnapshot | tokens : none, messages : none, subprocesses : none, state : Terminated > .
 endm
 
-mod BPMN-EXECUTION-call-activity-implicit-exclusive-and-parallel-gateway is
+mod BPMN-EXECUTION-subprocess-interrupting-boundary-events is
     pr BPMN-EXECUTION .
 
     --- Generated variables
-    vars T : MSet . --- tokens
-    vars M : MSet . --- messages
-    vars S : Configuration . --- subprocesses
+    vars T T1 : MSet . --- tokens
+    vars M1 M : MSet . --- messages
+    vars S1 S S2 : Configuration . --- subprocesses
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("start_A (Flow_1lwnvn2)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [A_Activity_1gofaru_start] :  < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("start_A (Flow_1lwnvn2)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("A (Activity_1gofaru)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [A_Activity_1gofaru_end] :  < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("A (Activity_1gofaru)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("a2 (Flow_0mnkkon)" "a1 (Flow_0g9v3mg)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [B_Activity_1cnewyu_Flow_08du15s_start] :  < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("a3 (Flow_08du15s)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("B (Activity_1cnewyu)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [B_Activity_1cnewyu_Flow_1tp5cpl_start] :  < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("a4 (Flow_1tp5cpl)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("B (Activity_1cnewyu)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [B_Activity_1cnewyu_end] :  < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("B (Activity_1cnewyu)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("B_end (Flow_19r98jz)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [end_Event_08ww8rq] :  < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("B_end (Flow_19r98jz)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > .
-    rl [Subprocess_Activity_08nz8l4_Flow_0mnkkon] :  < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("a2 (Flow_0mnkkon)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : ("start_sub (Event_0pov758)"), messages : (none), subprocesses : (none), state : Running > S), state : Running > .
-    rl [Subprocess_Activity_08nz8l4_Flow_0g9v3mg] :  < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("a1 (Flow_0g9v3mg)" T), messages : (M), subprocesses : (S), state : Running > => < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : ("start_sub (Event_0pov758)"), messages : (none), subprocesses : (none), state : Running > S), state : Running > .
-    rl [Subprocess_Activity_08nz8l4_end] :  < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : (none), messages : (none), subprocesses : (none), state : Terminated > S), state : Running > => < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("a3 (Flow_08du15s)" "a4 (Flow_1tp5cpl)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [start_sub_Event_0pov758] :  < "Subprocess" : ProcessSnapshot | tokens : ("start_sub (Event_0pov758)" T), messages : (M), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : ("start_sub_Subactivity (Flow_1963tcn)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [Subactivity_Activity_023wdnt_start] :  < "Subprocess" : ProcessSnapshot | tokens : ("start_sub_Subactivity (Flow_1963tcn)" T), messages : (M), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : ("Subactivity (Activity_023wdnt)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [Subactivity_Activity_023wdnt_end] :  < "Subprocess" : ProcessSnapshot | tokens : ("Subactivity (Activity_023wdnt)" T), messages : (M), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : ("Subactivity_end_sub (Flow_08jnebl)" T), messages : (M), subprocesses : (S), state : Running > .
-    rl [end_sub_Event_0qra2k2] :  < "Subprocess" : ProcessSnapshot | tokens : ("Subactivity_end_sub (Flow_08jnebl)" T), messages : (M), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > .
+    rl [start_StartEvent_1] :  < "p1" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), messages : (M), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start_Subprocess1 (Flow_114zxb5)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [Subprocess1_Activity_0zu4scn] :  < "p1" : ProcessSnapshot | tokens : ("start_Subprocess1 (Flow_114zxb5)" T), messages : (M), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (< "Subprocess1" : ProcessSnapshot | tokens : ("start_sub1 (Event_0mt4q3x)"), messages : (none), subprocesses : (none), state : Running > S), state : Running > .
+    rl [Subprocess1_Activity_0zu4scn_end] :  < "p1" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (< "Subprocess1" : ProcessSnapshot | tokens : (none), messages : (none), subprocesses : (none), state : Terminated > S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("Subprocess1_Event_0b32548 (Flow_0072owz)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [start_sub1_Event_0mt4q3x] :  < "Subprocess1" : ProcessSnapshot | tokens : ("start_sub1 (Event_0mt4q3x)" T), messages : (M), subprocesses : (S), state : Running > => < "Subprocess1" : ProcessSnapshot | tokens : ("start_sub1_end_sub1 (Flow_1uendr0)" T), messages : (M), subprocesses : (S), state : Running > .
+    rl [end_sub1_Event_1jup1bz] :  < "Subprocess1" : ProcessSnapshot | tokens : ("start_sub1_end_sub1 (Flow_1uendr0)" T), messages : (M), subprocesses : (S), state : Running > => < "Subprocess1" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > .
+    rl [none_Event_1pwtnqh] :  < "p1" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (< "Subprocess1" : ProcessSnapshot | tokens : (T1), messages : (M1), subprocesses : (S1), state : Running > S2), state : Running > => < "p1" : ProcessSnapshot | tokens : ("none_Event_1dxajfe (Flow_16xmi91)" T), messages : (M), subprocesses : (S2), state : Running > .
+    rl [timer_Event_0jlum9m] :  < "p1" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (< "Subprocess1" : ProcessSnapshot | tokens : (T1), messages : (M1), subprocesses : (S1), state : Running > S2), state : Running > => < "p1" : ProcessSnapshot | tokens : ("timer_Event_1gk0dgd (Flow_0qgl5la)" T), messages : (M), subprocesses : (S2), state : Running > .
+    rl [Event_0b32548_Event_0b32548] :  < "p1" : ProcessSnapshot | tokens : ("Subprocess1_Event_0b32548 (Flow_0072owz)" T), messages : (M), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > .
+    rl [Event_1gk0dgd_Event_1gk0dgd] :  < "p1" : ProcessSnapshot | tokens : ("timer_Event_1gk0dgd (Flow_0qgl5la)" T), messages : (M), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > .
+    rl [Event_1dxajfe_Event_1dxajfe] :  < "p1" : ProcessSnapshot | tokens : ("none_Event_1dxajfe (Flow_16xmi91)" T), messages : (M), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), messages : (M), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "call-activity-implicit-exclusive-and-parallel-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), messages : (none), subprocesses : (none), state : Running > .
+    eq init = < "p1" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), messages : (none), subprocesses : (none), state : Running > .
 endm
 
 mod BPMN-PREDS is
-    pr BPMN-EXECUTION-call-activity-implicit-exclusive-and-parallel-gateway .
+    pr BPMN-EXECUTION-subprocess-interrupting-boundary-events .
     pr SATISFACTION .
     subsort Configuration < State .
 

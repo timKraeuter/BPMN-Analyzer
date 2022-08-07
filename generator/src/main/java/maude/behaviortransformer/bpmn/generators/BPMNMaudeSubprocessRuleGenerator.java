@@ -7,14 +7,12 @@ import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.events.BoundaryEvent;
 import behavior.bpmn.events.StartEventType;
 import groove.behaviortransformer.bpmn.generators.BPMNSubprocessRuleGenerator;
-import groove.graph.GrooveNode;
 import maude.behaviortransformer.bpmn.BPMNMaudeRuleGenerator;
 import maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
 import maude.generation.MaudeObject;
 import maude.generation.MaudeObjectBuilder;
 import maude.generation.MaudeRuleBuilder;
 
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
@@ -54,11 +52,10 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
             switch (boundaryEvent.getType()) {
                 case NONE:
                 case TIMER:
-                    createSubProcessBoundaryEventRule(process, callActivity, boundaryEvent, x -> {
-                    });
+                    createSubProcessBoundaryEventRule(process, callActivity, boundaryEvent, "");
                     break;
                 case MESSAGE:
-                    // TODO: Message interrupt event. Maybe reuse part of the message catch event and combine with none and timer?
+                    createSubProcessMessageBoundaryEventRule(process, callActivity, boundaryEvent, collaboration);
                     break;
                 case SIGNAL:
                     // Handled in the throw rule part.
@@ -70,10 +67,21 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
 
     }
 
+    private void createSubProcessMessageBoundaryEventRule(AbstractProcess process,
+                                                          CallActivity callActivity,
+                                                          BoundaryEvent boundaryEvent,
+                                                          BPMNCollaboration collaboration) {
+        collaboration.getIncomingMessageFlows(boundaryEvent).forEach(messageFlow -> createSubProcessBoundaryEventRule(
+                process,
+                callActivity,
+                boundaryEvent,
+                getMessageForFlow(messageFlow) + " "));
+    }
+
     private void createSubProcessBoundaryEventRule(AbstractProcess process,
                                                    CallActivity callActivity,
                                                    BoundaryEvent boundaryEvent,
-                                                   Consumer<GrooveNode> additionalActions) {
+                                                   String potentialMessageToConsume) {
         ruleBuilder.startRule(getFlowNodeRuleName(boundaryEvent));
 
         // Setup vars
@@ -91,7 +99,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
         String subprocesses = createProcessSnapshotObject(callActivity.getSubProcessModel(),
                                                           anyOtherSubprocesses1,
                                                           anyOtherTokens1,
-                                                          anyOtherMessages1,
+                                                          potentialMessageToConsume + anyOtherMessages1,
                                                           RUNNING)
                                       .generateObjectString() + " " + anyOtherSubprocesses2;
         ruleBuilder.addPreObject(createProcessSnapshotObject(process,
@@ -100,7 +108,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
                                                              ANY_MESSAGES,
                                                              RUNNING));
         if (boundaryEvent.isInterrupt()) {
-            // Interrupt
+            // Interrupt removes subprocesses
             // Add outgoing tokens
             String postTokens = getOutgoingTokensForFlowNode(boundaryEvent) + ANY_OTHER_TOKENS;
             ruleBuilder.addPostObject(createProcessSnapshotObjectAnyMessages(process,

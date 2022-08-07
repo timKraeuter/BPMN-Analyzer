@@ -50,13 +50,25 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    op ProcessSnapshot : -> Cid [ctor] .\r\n" +
                                                   "\r\n" +
                                                   "    op terminate : Configuration -> Configuration .\r\n" +
+                                                  "    op noRunningProcessWithID : Configuration String -> Bool .\r\n" +
                                                   "\r\n" +
-                                                  "    var P : String .\r\n" +
+                                                  "    vars P, P1 : String .\r\n" +
                                                   "    vars T : MSet . --- tokens\r\n" +
                                                   "    vars M : MSet . --- messages\r\n" +
                                                   "    vars S : Configuration . --- subprocesses\r\n" +
                                                   "    vars STATE : ProcessState . --- state\r\n" +
                                                   "    var PS : Configuration .\r\n" +
+                                                  "\r\n" +
+                                                  "    --- Traversal step\r\n" +
+                                                  "    eq noRunningProcessWithID(< P : ProcessSnapshot | tokens : T, " +
+                                                  "messages : M, subprocesses : S, state : Running > PS, P1) = " +
+                                                  "noRunningProcessWithID(PS, P1) .\r\n" +
+                                                  "    --- Traversal negative end\r\n" +
+                                                  "    eq noRunningProcessWithID(< P : ProcessSnapshot | tokens : T, " +
+                                                  "messages : M, subprocesses : S, state : Running > PS, P) = false " +
+                                                  ".\r\n" +
+                                                  "    --- Traversal positive end\r\n" +
+                                                  "    eq noRunningProcessWithID(none, P) = true .\r\n" +
                                                   "\r\n" +
                                                   "    --- NOOP if none\r\n" +
                                                   "    eq terminate(none) = none .\r\n" +

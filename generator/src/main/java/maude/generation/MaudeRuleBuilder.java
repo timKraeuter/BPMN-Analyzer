@@ -18,6 +18,7 @@ public class MaudeRuleBuilder {
     private Set<MaudeObject> postObjects;
     // Variable group to variable type and variables.
     private final Map<String, Pair<String, Set<String>>> vargroupToTypeAndVars;
+    private String condition;
 
     public MaudeRuleBuilder() {
         this.createdRules = new LinkedHashSet<>();
@@ -41,11 +42,16 @@ public class MaudeRuleBuilder {
         return this;
     }
 
+    public MaudeRuleBuilder setCondition(String condition) {
+        this.condition = condition;
+        return this;
+    }
+
     public MaudeRule buildRule() {
         if (ruleName == null || preObjects.isEmpty() || postObjects.isEmpty()) {
             throw new MaudeGenerationException("A rule should have a name and at least one pre/post object");
         }
-        MaudeRule maudeRule = new MaudeRule(ruleName, preObjects, postObjects);
+        MaudeRule maudeRule = new MaudeRule(ruleName, preObjects, postObjects, condition);
         createdRules.add(maudeRule);
         this.reset();
         return maudeRule;
