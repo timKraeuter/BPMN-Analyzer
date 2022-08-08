@@ -71,34 +71,13 @@ class BPMNToMaudeEventsTest implements BPMNMaudeTestHelper {
     }
 
     /**
-     * See test case <a href="https://cawemo.com/share/b2db6ccf-1d3b-49c2-8739-0c53c069fd61">"Signal Start Events"</a>
-     * in cawemo.
-     */
-    @Test
-    void testSignalStartEvents() throws IOException {
-        // TODO: Implement test and code.
-//        testBPMNMaudeGeneration("signal-start-events");
-    }
-
-    /**
-     * See test case <a href="https://cawemo.com/share/13dda53f-c28d-446f-9330-2cf73814c657">"Signal Events"</a>
+     * See test case <a href="https://cawemo.com/share/e13f777e-dca2-45e9-8018-0b9d0c4b34cc">"Signal Events"</a>
      * in cawemo.
      */
     @Test
     void testSignalEvents() throws IOException {
         // TODO: Implement test and code.
 //        testBPMNMaudeGeneration("signal-events");
-    }
-
-    /**
-     * See test case
-     * <a href="https://cawemo.com/share/350bbe89-8c14-4ec2-a059-999a98ce92ea">"Signal events - Cross Process"</a>
-     * in cawemo.
-     */
-    @Test
-    void testSignalEventsCrossProcess() throws IOException {
-        // TODO: Implement test and code.
-//        testBPMNMaudeGeneration("signal-events-cross-process");
     }
 
     /**
