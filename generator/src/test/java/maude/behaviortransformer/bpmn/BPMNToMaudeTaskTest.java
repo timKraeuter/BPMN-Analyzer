@@ -41,6 +41,14 @@ class BPMNToMaudeTaskTest implements BPMNMaudeTestHelper {
     }
 
     /**
+     * See test case <a href="https://cawemo.com/share/27ac3d00-1a27-4b53-b2d0-2b9a18c2e5d7">"Two Incoming Message flows Receive Task"</a> in cawemo.
+     */
+    @Test
+    void testTwoIncomingFlowsReceiveTask() throws IOException {
+        testBPMNMaudeGeneration("two-incoming-message-flows-receive-task");
+    }
+
+    /**
      * See test case <a href="https://cawemo.com/share/e76c1763-4842-493c-bebb-cfa41e5abb09">"Instantiate Receive Task"</a> in cawemo.
      */
     @Test
