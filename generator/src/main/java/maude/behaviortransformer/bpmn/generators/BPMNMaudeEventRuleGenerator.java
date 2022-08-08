@@ -4,10 +4,7 @@ import behavior.bpmn.AbstractProcess;
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
-import behavior.bpmn.events.EndEvent;
-import behavior.bpmn.events.IntermediateCatchEvent;
-import behavior.bpmn.events.IntermediateThrowEvent;
-import behavior.bpmn.events.StartEvent;
+import behavior.bpmn.events.*;
 import maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
 import maude.generation.MaudeObjectBuilder;
 import maude.generation.MaudeRuleBuilder;
@@ -103,8 +100,9 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                 break;
             // Done in the corresponding throw rule.
             case TIMER:
-                // TODO: Timer events
-                throw new UnsupportedOperationException();
+                // Same behavior as a none event so far. No timings implemented.
+                createIntermediateThrowNoneEventRule(intermediateCatchEvent, process);
+                break;
         }
     }
 
@@ -182,14 +180,14 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                                                                                  intermediateThrowEvent));
     }
 
-    private void createIntermediateThrowNoneEventRule(IntermediateThrowEvent intermediateThrowEvent,
+    private void createIntermediateThrowNoneEventRule(Event intermediateThrowEvent,
                                                       AbstractProcess process) {
         createConsumeAndProduceTokenRule(intermediateThrowEvent, process, x -> {
             // NOOP
         });
     }
 
-    private void createConsumeAndProduceTokenRule(IntermediateThrowEvent intermediateThrowEvent,
+    private void createConsumeAndProduceTokenRule(Event intermediateThrowEvent,
                                                   AbstractProcess process,
                                                   Consumer<MaudeRuleBuilder> ruleExtender) {
         intermediateThrowEvent.getIncomingFlows().forEach(incFlow -> {

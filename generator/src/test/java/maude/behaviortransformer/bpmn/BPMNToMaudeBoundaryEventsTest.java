@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 class BPMNToMaudeBoundaryEventsTest implements BPMNMaudeTestHelper {
+    // TODO: Add signal events everywhere here!
 
     /**
      * See test case <a href="https://cawemo.com/share/3b55577a-e7ed-4729-a046-4d79fd11c941">"Subprocess - Interrupting Boundary Events"</a> in cawemo.

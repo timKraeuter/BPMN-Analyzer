@@ -107,8 +107,7 @@ class BPMNToMaudeEventsTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testTimerEvents() throws IOException {
-        // TODO: Implement test and code.
-//        testBPMNMaudeGeneration("timer-events");
+        testBPMNMaudeGeneration("timer-events");
     }
 
     /**
