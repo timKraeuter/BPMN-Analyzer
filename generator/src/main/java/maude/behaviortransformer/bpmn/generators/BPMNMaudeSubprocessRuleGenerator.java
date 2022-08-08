@@ -105,16 +105,15 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
                                                              subprocesses,
                                                              ANY_TOKENS,
                                                              RUNNING));
+        String postTokens = getOutgoingTokensForFlowNode(boundaryEvent) + ANY_OTHER_TOKENS;
         if (boundaryEvent.isInterrupt()) {
             // Interrupt removes subprocesses
             // Add outgoing tokens
-            String postTokens = getOutgoingTokensForFlowNode(boundaryEvent) + ANY_OTHER_TOKENS;
             ruleBuilder.addPostObject(createProcessSnapshotObject(process,
                                                                   anyOtherSubprocesses2,
                                                                   postTokens));
         } else {
             // Add outgoing tokens
-            String postTokens = getOutgoingTokensForFlowNode(boundaryEvent) + ANY_OTHER_TOKENS;
             ruleBuilder.addPostObject(createProcessSnapshotObject(process,
                                                                   subprocesses,
                                                                   postTokens));

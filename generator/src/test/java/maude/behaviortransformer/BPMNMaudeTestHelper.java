@@ -26,7 +26,7 @@ public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper {
         if (REPLACE_EXPECTED_FILE_WITH_ACTUAL) {
             replaceWithActualIfNeeded(resourceFileName, actualMaudeModule, expectedMaudeModule);
         }
-
+        System.out.println(actualMaudeModule);
         assertThat(actualMaudeModule, is(expectedMaudeModule));
     }
 
@@ -39,9 +39,7 @@ public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper {
             FileUtils.writeStringToFile(new File(expectedFileFilePath),
                                         actualMaudeModule,
                                         Charset.defaultCharset());
-
-            System.out.println("Replaced module with actual:");
-            System.out.println(actualMaudeModule);
+            System.out.println("Replaced module with actual!");
         }
     }
 

@@ -7,6 +7,7 @@ import behavior.bpmn.activities.tasks.AbstractTask;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
+import behavior.bpmn.events.BoundaryEvent;
 import maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
 import maude.generation.MaudeObjectBuilder;
 import maude.generation.MaudeRuleBuilder;
@@ -35,7 +36,65 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
         // Rule for ending the task
         createEndTaskRule(process, task, endTaskRuleAdditions);
 
-        // TODO: Boundary events
+        // Generate rules for boundary events
+        this.createBoundaryEventRules(process, task, collaboration);
+    }
+
+    private void createBoundaryEventRules(AbstractProcess process, AbstractTask task, BPMNCollaboration collaboration) {
+        task.getBoundaryEvents().forEach(boundaryEvent -> {
+            switch (boundaryEvent.getType()) {
+                case NONE:
+                case TIMER:
+                    createTaskBoundaryEventRule(process, task, boundaryEvent, rb -> {
+                    }); // NOOP
+                    break;
+                case MESSAGE:
+                    createTaskMessageBoundaryEventRule(process, task, boundaryEvent, collaboration);
+                    break;
+                case SIGNAL:
+                    // Handled in the throw rule part.
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + boundaryEvent.getType());
+            }
+        });
+    }
+
+    private void createTaskMessageBoundaryEventRule(AbstractProcess process,
+                                                    AbstractTask task,
+                                                    BoundaryEvent boundaryEvent,
+                                                    BPMNCollaboration collaboration) {
+        collaboration.getIncomingMessageFlows(boundaryEvent).forEach(messageFlow -> createTaskBoundaryEventRule(
+                process,
+                task,
+                boundaryEvent,
+                maudeRuleBuilder -> addMessageConsumption(messageFlow)));
+    }
+
+    private void createTaskBoundaryEventRule(AbstractProcess process,
+                                             AbstractTask task,
+                                             BoundaryEvent boundaryEvent,
+                                             Consumer<MaudeRuleBuilder> ruleAddditions) {
+        ruleBuilder.startRule(getFlowNodeRuleName(boundaryEvent));
+        ruleAddditions.accept(getRuleBuilder());
+
+        String taskToken = getTokenForFlowNode(task);
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(process,
+                                                                          taskToken +
+                                                                          ANY_OTHER_TOKENS));
+        String postTokens;
+        if (boundaryEvent.isInterrupt()) {
+            // Add outgoing tokens and not the task token.
+            postTokens = getOutgoingTokensForFlowNode(boundaryEvent) + ANY_OTHER_TOKENS;
+        } else {
+            // Add outgoing tokens alongside the task token.
+            postTokens = getOutgoingTokensForFlowNode(boundaryEvent) +
+                         WHITE_SPACE +
+                         taskToken +
+                         ANY_OTHER_TOKENS;
+        }
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcess(process, postTokens));
+        ruleBuilder.buildRule();
     }
 
     public void createTaskRulesForProcess(AbstractProcess process, AbstractTask task) {
@@ -78,7 +137,8 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
     }
 
     public void createReceiveTaskRulesForProcess(AbstractProcess process, ReceiveTask receiveTask) {
-        // TODO: Boundary events
+        this.createBoundaryEventRules(process, receiveTask, collaboration);
+
         if (receiveTask.isInstantiate()) {
             if (receiveTask.getIncomingFlows().findAny().isPresent()) {
                 throw new BPMNRuntimeException("Instantiate receive tasks should not have incoming sequence " +
