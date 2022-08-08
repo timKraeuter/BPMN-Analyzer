@@ -53,7 +53,6 @@ class BPMNToMaudeTaskTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testInstantiateReceiveTask() throws IOException {
-        // TODO: Implement test and code.
-//        testGrooveGenerationForBPMNResourceFile("instantiate-receive-task");
+        testBPMNMaudeGeneration("instantiate-receive-task");
     }
 }

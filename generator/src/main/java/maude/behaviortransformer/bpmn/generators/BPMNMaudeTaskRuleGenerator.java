@@ -139,15 +139,13 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
     public void createReceiveTaskRulesForProcess(AbstractProcess process, ReceiveTask receiveTask) {
         this.createBoundaryEventRules(process, receiveTask, collaboration);
 
-        if (receiveTask.isInstantiate()) {
-            if (receiveTask.getIncomingFlows().findAny().isPresent()) {
-                throw new BPMNRuntimeException("Instantiate receive tasks should not have incoming sequence " +
-                                               "flows!");
-            }
-            return;
+        if (receiveTask.isInstantiate() && receiveTask.getIncomingFlows().findAny().isPresent()) {
+            throw new BPMNRuntimeException("Instantiate receive tasks should not have incoming sequence " +
+                                           "flows!");
+        } else {
+            // Rules for starting the task
+            createStartInteractionNodeRule(receiveTask, process);
         }
-        // Rules for starting the task
-        createStartInteractionNodeRule(receiveTask, process);
         // Rule for ending the task (now consumes messages)
         createEndInteractionNodeRule(receiveTask, process, collaboration);
     }

@@ -1,0 +1,109 @@
+load model-checker.maude .
+
+--- Multiset implementation could be extracted as well.
+fmod MSET is pr
+    STRING .
+    sorts NeMSet MSet .
+    subsort String < NeMSet < MSet .
+
+    op none : -> MSet [ctor] .
+    op __ : MSet MSet -> MSet [ctor assoc comm id: none] .
+    op __ : NeMSet MSet -> NeMSet [ctor ditto] .
+    op __ : MSet NeMSet -> NeMSet [ctor ditto] .
+endfm
+
+mod BPMN-EXECUTION is
+    pr MSET .
+    pr STRING .
+    pr CONFIGURATION .
+
+    sort ProcessState .
+    subsort String < Oid .
+
+    --- Processes
+    ops Running, Terminated : -> ProcessState [ctor] .
+    op tokens :_ : MSet -> Attribute [ctor] .
+    op subprocesses :_ : Configuration -> Attribute [ctor] .
+    op state :_ : ProcessState -> Attribute [ctor] .
+    op ProcessSnapshot : -> Cid [ctor] .
+
+    --- Message holder
+    op MessageHolder : -> Cid [ctor] .
+    op messages :_ : MSet -> Attribute [ctor] .
+
+    op terminate : Configuration -> Configuration .
+
+    vars P, P1 : String .
+    vars T : MSet . --- tokens
+    vars S : Configuration . --- subprocesses
+    vars STATE : ProcessState . --- state
+    var PS : Configuration .
+
+    --- NOOP if none
+    eq terminate(none) = none .
+    --- NOOP if already terminated
+    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated > .
+    --- Terminate all subprocesses recursively
+    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, subprocesses : terminate(S), state : Terminated > terminate(PS) .
+
+    rl [naturalTerminate] :
+    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Running >
+                            =>
+    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Terminated > .
+endm
+
+mod BPMN-EXECUTION-instantiate-receive-task is
+    pr BPMN-EXECUTION .
+
+    --- Generated variables
+    vars T : MSet . --- tokens
+    vars M : MSet . --- messages
+    vars S : Configuration . --- subprocesses
+
+    --- Generated rules
+    rl [A_Activity_1vcu0jp_end] :  < "process1" : ProcessSnapshot | tokens : ("A (Activity_1vcu0jp)" T), subprocesses : (S), state : Running > < "messages" : MessageHolder | messages : ("end_2_A" M) > => < "messages" : MessageHolder | messages : (M) > < "process1" : ProcessSnapshot | tokens : ("A_B (Flow_10ze7r7)" T), subprocesses : (S), state : Running > .
+    rl [B_Activity_1ymioaq_start] :  < "process1" : ProcessSnapshot | tokens : ("A_B (Flow_10ze7r7)" T), subprocesses : (S), state : Running > => < "process1" : ProcessSnapshot | tokens : ("B (Activity_1ymioaq)" T), subprocesses : (S), state : Running > .
+    rl [B_Activity_1ymioaq_end] :  < "process1" : ProcessSnapshot | tokens : ("B (Activity_1ymioaq)" T), subprocesses : (S), state : Running > => < "process1" : ProcessSnapshot | tokens : ("B_end_1 (Flow_0jcij1i)" T), subprocesses : (S), state : Running > .
+    rl [end_1_Event_1qkko2l] :  < "process1" : ProcessSnapshot | tokens : ("B_end_1 (Flow_0jcij1i)" T), subprocesses : (S), state : Running > => < "process1" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
+    rl [start_2_Event_0awcs7b] :  < "process2" : ProcessSnapshot | tokens : ("start_2 (Event_0awcs7b)" T), subprocesses : (S), state : Running > => < "process2" : ProcessSnapshot | tokens : ("start_2_end_2 (Flow_15q2a0w)" T), subprocesses : (S), state : Running > .
+    rl [end_2_Event_06176jk] :  < "process2" : ProcessSnapshot | tokens : ("start_2_end_2 (Flow_15q2a0w)" T), subprocesses : (S), state : Running > < "messages" : MessageHolder | messages : (M) > => < "process2" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > < "process1" : ProcessSnapshot | tokens : ("A (Activity_1vcu0jp)" T), subprocesses : (none), state : Running > < "messages" : MessageHolder | messages : ("end_2_A" M) > .
+
+    --- Start configuration which would be generated
+    op init : -> Configuration .
+    eq init = < "messages" : MessageHolder | messages : (none) >
+    < "process2" : ProcessSnapshot | tokens : ("start_2 (Event_0awcs7b)"), subprocesses : (none), state : Running > .
+endm
+
+mod BPMN-PREDS is
+    pr BPMN-EXECUTION-instantiate-receive-task .
+    pr SATISFACTION .
+    subsort Configuration < State .
+
+    var C : Configuration .
+    var P : Prop .
+    var X : Oid .
+    var T : MSet .
+    var T1 : NeMSet .
+    var S : Configuration .
+    var State : ProcessState .
+
+
+    op allTerminated : -> Prop .
+    eq < X : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > C |= allTerminated = false .
+    eq C |= allTerminated = true [owise] .
+
+    op unsafe : -> Prop .
+    eq < X : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : S, state : State > C |= unsafe = true .
+    eq C |= unsafe = false [owise] .
+
+    --- Generated atomic propositions
+    --- no propositions
+endm
+
+mod BPMN-CHECK is
+    pr BPMN-PREDS .
+    pr MODEL-CHECKER .
+    pr LTL-SIMPLIFIER .
+endm
+
+red modelCheck(init,  <> [] allTerminated) .
