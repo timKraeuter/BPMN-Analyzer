@@ -15,7 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper {
 
     String MAUDE_MODULE_FOLDER = "/bpmn/maude/";
-    boolean REPLACE_EXPECTED_FILE_WITH_ACTUAL = false;
+    boolean REPLACE_EXPECTED_FILE_WITH_ACTUAL = true;
 
     default void testBPMNMaudeGeneration(String resourceFileName) throws IOException {
         BPMNToMaudeTransformer transformer = new BPMNToMaudeTransformer(readModelFromResourceFolder(resourceFileName +

@@ -80,6 +80,14 @@ class BPMNToMaudeEventsTest implements BPMNMaudeTestHelper {
     }
 
     /**
+     * See test case <a href="https://cawemo.com/share/6a29e7e5-bf10-4b3e-bb40-2ff8591f7e0c">"Signal Events - Multi Activation"</a> in cawemo.
+     */
+    @Test
+    void testSignalEventsMultiActivation() throws IOException {
+        testBPMNMaudeGeneration("signal-events-multi-activation");
+    }
+
+    /**
      * See test case <a href="https://cawemo.com/share/15e29a24-e35b-40b8-b09a-b63f3bc91268">"Timer events"</a>
      * in cawemo.
      */
