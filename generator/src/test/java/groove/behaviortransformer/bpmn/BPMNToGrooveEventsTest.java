@@ -72,6 +72,22 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
     }
 
     /**
+     * See test case <a href="https://cawemo.com/share/6a29e7e5-bf10-4b3e-bb40-2ff8591f7e0c">"Signal Events - Multi Activation"</a> in cawemo.
+     */
+    @Test
+    void testSignalEventsMultiActivation() throws IOException {
+        testGrooveGenerationForBPMNResourceFile("signal-events-multi-activation.bpmn");
+    }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/813dee70-ddc2-4a71-a965-1b6a2d28c7fa">"Signal events - Multi Activation - Same Process"</a> in cawemo.
+     */
+    @Test
+    void testSignalEventsMultiActivationSameProcess() throws IOException {
+        testGrooveGenerationForBPMNResourceFile("signal-events-multi-activation-same-process.bpmn");
+    }
+
+    /**
      * See test case <a href="https://cawemo.com/share/15e29a24-e35b-40b8-b09a-b63f3bc91268">"Timer events"</a> in cawemo.
      */
     @Test

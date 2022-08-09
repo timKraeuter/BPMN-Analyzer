@@ -1,87 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="EV_Gateway" role="rule" edgeids="false" edgemode="directed">
-        <node id="n55">
+    <graph id="signal-events-multi-activation_start" role="rule" edgeids="false" edgemode="directed">
+        <node id="n0">
             <attr name="layout">
                 <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n55" to="n55">
+        <edge from="n0" to="n0">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n56">
+        <node id="n1">
             <attr name="layout">
-                <string>392 232 0 0</string>
+                <string>392 152 0 0</string>
             </attr>
         </node>
-        <edge from="n56" to="n56">
+        <edge from="n1" to="n1">
             <attr name="label">
-                <string>string:"p3"</string>
+                <string>string:"p1"</string>
             </attr>
         </edge>
-        <node id="n57">
+        <node id="n2">
             <attr name="layout">
                 <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n57" to="n57">
+        <edge from="n2" to="n2">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n58">
+        <node id="n3">
             <attr name="layout">
-                <string>412 152 0 0</string>
+                <string>407 232 0 0</string>
             </attr>
         </node>
-        <edge from="n58" to="n58">
+        <edge from="n3" to="n3">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n59">
+        <node id="n4">
             <attr name="layout">
-                <string>592 224 0 0</string>
+                <string>592 232 0 0</string>
             </attr>
         </node>
-        <edge from="n59" to="n59">
+        <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"S1_Catch_EV_Gateway"</string>
+                <string>string:"p1_start_p1"</string>
             </attr>
         </edge>
-        <node id="n60">
-            <attr name="layout">
-                <string>592 144 0 0</string>
-            </attr>
-        </node>
-        <edge from="n60" to="n60">
-            <attr name="label">
-                <string>string:"EV_Gateway"</string>
-            </attr>
-        </edge>
-        <edge from="n58" to="n60">
-            <attr name="label">
-                <string>new:position</string>
-            </attr>
-        </edge>
-        <edge from="n58" to="n59">
-            <attr name="label">
-                <string>del:position</string>
-            </attr>
-        </edge>
-        <edge from="n55" to="n56">
+        <edge from="n0" to="n1">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n55" to="n57">
+        <edge from="n0" to="n2">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n55" to="n58">
+        <edge from="n3" to="n4">
+            <attr name="label">
+                <string>position</string>
+            </attr>
+        </edge>
+        <edge from="n0" to="n3">
             <attr name="label">
                 <string>tokens</string>
             </attr>

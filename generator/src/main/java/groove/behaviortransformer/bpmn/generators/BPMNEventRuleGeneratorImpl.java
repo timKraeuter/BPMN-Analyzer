@@ -102,14 +102,16 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
                 break;
             case MESSAGE:
-                GrooveNode running = ruleBuilder.contextNode(TYPE_RUNNING);
-                ruleBuilder.contextEdge(STATE, processInstance, running);
+                GrooveNode messageRunning = ruleBuilder.contextNode(TYPE_RUNNING);
+                ruleBuilder.contextEdge(STATE, processInstance, messageRunning);
                 BPMNToGrooveTransformerHelper.addSendMessageBehaviorForFlowNode(collaboration,
                                                                                 ruleBuilder,
                                                                                 endEvent,
                                                                                 this.useSFId);
                 break;
             case SIGNAL:
+                GrooveNode signalRunning = ruleBuilder.contextNode(TYPE_RUNNING);
+                ruleBuilder.contextEdge(STATE, processInstance, signalRunning);
                 createSignalThrowRulePart(endEvent.getEventDefinition());
                 break;
         }
@@ -377,7 +379,6 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                 // Multiple boundary events can be triggered
                 GrooveNode forAll = ruleBuilder.contextNode(FORALL);
                 AbstractProcess process = collaboration.findProcessForFlowNode(task);
-                // Must also be forAll
                 GrooveNode processInstance = addTokensForOutgoingFlowsToRunningInstanceWithQuantifier(
                         boundarySignalEvent,
                         process,
@@ -425,11 +426,11 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         if (catchSignalEvent.isInstantiateFlowNode() || isAfterInstantiateEventBasedGateway(catchSignalEvent)) {
             createSignalThrowInstantiateRulePart(catchSignalEvent, processForEvent);
         } else {
-            // Send a signal only if the process instance exists.
-            GrooveNode existsOptional = ruleBuilder.contextNode(EXISTS_OPTIONAL);
+            // Send a signal to all existing processes
+            GrooveNode forAll = ruleBuilder.contextNode(FORALL);
             GrooveNode processInstance = contextProcessInstanceWithQuantifier(processForEvent,
                                                                               ruleBuilder,
-                                                                              existsOptional);
+                                                                              forAll);
 
             catchSignalEvent.getIncomingFlows().forEach(inFlow -> {
                 String position;
@@ -439,21 +440,21 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                     position = getSequenceFlowIdOrDescriptiveName(inFlow, this.useSFId);
                 }
                 GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
-                ruleBuilder.contextEdge(AT, token, existsOptional);
+                ruleBuilder.contextEdge(AT, token, forAll);
                 ruleBuilder.deleteEdge(TOKENS, processInstance, token);
                 ruleBuilder.deleteEdge(POSITION, token, ruleBuilder.contextNode(createStringNodeLabel(position)));
 
-                addExistsOptionalOutgoingTokensForFlowNode(catchSignalEvent, existsOptional, processInstance);
+                addOutgoingTokensForFlowNodeWithNestedRuleQuantifier(catchSignalEvent, forAll, processInstance);
             });
         }
     }
 
-    private void addExistsOptionalOutgoingTokensForFlowNode(Event event,
-                                                            GrooveNode existsOptional,
-                                                            GrooveNode processInstance) {
+    private void addOutgoingTokensForFlowNodeWithNestedRuleQuantifier(Event event,
+                                                                      GrooveNode nestedRuleQuantifier,
+                                                                      GrooveNode processInstance) {
         event.getOutgoingFlows().forEach(outFlow -> {
             GrooveNode newToken = ruleBuilder.addNode(TYPE_TOKEN);
-            ruleBuilder.contextEdge(AT, newToken, existsOptional);
+            ruleBuilder.contextEdge(AT, newToken, nestedRuleQuantifier);
             ruleBuilder.addEdge(TOKENS, processInstance, newToken);
             ruleBuilder.addEdge(POSITION,
                                 newToken,
@@ -533,7 +534,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                                                                      parentProcessInstance,
                                                                      eventSubprocess);
         // Create start tokens
-        addExistsOptionalOutgoingTokensForFlowNode(event, existsOptional, eventSubProcessInstance);
+        addOutgoingTokensForFlowNodeWithNestedRuleQuantifier(event, existsOptional, eventSubProcessInstance);
 
         // Interrupt parent process means deleting all its tokens.
         GrooveNode forAll = deleteAllTokensForProcess(ruleBuilder, parentProcessInstance);
@@ -552,7 +553,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                                                                      parentProcessInstance,
                                                                      eventSubprocess);
         // Create start tokens
-        addExistsOptionalOutgoingTokensForFlowNode(event, existsOptional, eventSubProcessInstance);
+        addOutgoingTokensForFlowNodeWithNestedRuleQuantifier(event, existsOptional, eventSubProcessInstance);
     }
 
     private GrooveNode startNewEventSubprocess(GrooveNode existsOptional,
