@@ -205,6 +205,16 @@ class UseCaseTest extends BPMNToGrooveTestBase {
         this.checkGrooveGeneration(collaboration);
     }
 
+    // java -jar Generator.jar bpmn/ecmfa_usecase.gps
+    // Expected output after state space generation:
+    // Time (ms):          7449
+    // Space (kB):         4050
+    //
+    // States:       7731
+    // Transitions:  24020
+    //
+    // 9 result states found: Result [elements=[s1728, s4307, s4312, s5320, s5482, s6284, s6305, s6607, s7160]]
+
     private String getId() {
         return Integer.toString(counter.getAndIncrement());
     }
