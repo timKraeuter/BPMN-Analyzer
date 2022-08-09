@@ -76,8 +76,7 @@ class BPMNToMaudeEventsTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testSignalEvents() throws IOException {
-        // TODO: Implement test and code.
-//        testBPMNMaudeGeneration("signal-events");
+        testBPMNMaudeGeneration("signal-events");
     }
 
     /**

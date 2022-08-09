@@ -20,8 +20,6 @@ import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveRuleBuilder;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static groove.behaviortransformer.GrooveTransformer.*;
@@ -350,8 +348,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
     private void createSignalThrowRulePart(EventDefinition eventDefinition) {
         Pair<Set<Event>, Set<BoundaryEvent>> correspondingSignalCatchEvents =
-                this.findAllCorrespondingSignalCatchEvents(
-                eventDefinition);
+                collaboration.findAllCorrespondingSignalCatchEvents(eventDefinition);
 
         correspondingSignalCatchEvents.getLeft().forEach(this::createCatchSignalEventRulePart);
         correspondingSignalCatchEvents.getRight().forEach(this::createBoundarySignalCatchEventRulePart);
@@ -572,49 +569,6 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                                                                                   ruleBuilder,
                                                                                   existsOptional);
     }
-
-    private Pair<Set<Event>, Set<BoundaryEvent>> findAllCorrespondingSignalCatchEvents(EventDefinition eventDefinition) {
-        Set<Event> signalCatchEvents = new LinkedHashSet<>();
-        Set<BoundaryEvent> signalBoundaryCatchEvents = new LinkedHashSet<>();
-        Set<Process> seenProcesses = new HashSet<>();
-        collaboration.getParticipants().forEach(process -> {
-            Pair<Set<Event>, Set<BoundaryEvent>> signalAndSignalBoundaryCatchEvents =
-                    findAllCorrespondingSignalCatchEvents(
-                    process,
-                    eventDefinition,
-                    seenProcesses);
-            signalCatchEvents.addAll(signalAndSignalBoundaryCatchEvents.getLeft());
-            signalBoundaryCatchEvents.addAll(signalAndSignalBoundaryCatchEvents.getRight());
-        });
-        return Pair.of(signalCatchEvents, signalBoundaryCatchEvents);
-    }
-
-    Pair<Set<Event>, Set<BoundaryEvent>> findAllCorrespondingSignalCatchEvents(Process process,
-                                                                               EventDefinition eventDefinition,
-                                                                               Set<Process> seenProcesses) {
-        Set<Event> signalCatchEvents = new LinkedHashSet<>();
-        Set<BoundaryEvent> signalBoundaryCatchEvents = new LinkedHashSet<>();
-        if (seenProcesses.contains(process)) {
-            return Pair.of(signalCatchEvents, signalBoundaryCatchEvents);
-        }
-        seenProcesses.add(process);
-
-        process.getFlowNodes().forEach(flowNode -> flowNode.accept(new SignalCatchEventFlowNodeVisitor(this,
-                                                                                                       eventDefinition,
-                                                                                                       signalCatchEvents,
-                                                                                                       signalBoundaryCatchEvents,
-                                                                                                       seenProcesses)
-
-        ));
-        process.getEventSubprocesses().forEach(eventSubprocess -> eventSubprocess.getFlowNodes().forEach(flowNode -> flowNode.accept(
-                new SignalCatchEventFlowNodeVisitor(this,
-                                                    eventDefinition,
-                                                    signalCatchEvents,
-                                                    signalBoundaryCatchEvents,
-                                                    seenProcesses))));
-        return Pair.of(signalCatchEvents, signalBoundaryCatchEvents);
-    }
-
     void createStartEventRule(StartEvent startEvent, Process process) {
         switch (startEvent.getType()) {
             case NONE:
@@ -624,13 +578,13 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                 createMessageStartEventRule(startEvent);
                 break;
             case MESSAGE_NON_INTERRUPTING:
-                // Implemented in the event subprocess rule generator.
+                // Implemented only in the event subprocess rule generator.
                 break;
             case SIGNAL:
                 // Done in the corresponding throw rule.
                 break;
             case SIGNAL_NON_INTERRUPTING:
-                // Implemented in the throw part.
+                // Implemented only in the event subprocess rule generator.
                 break;
         }
     }

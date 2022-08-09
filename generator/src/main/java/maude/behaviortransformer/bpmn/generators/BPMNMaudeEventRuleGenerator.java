@@ -1,15 +1,19 @@
 package maude.behaviortransformer.bpmn.generators;
 
-import behavior.bpmn.AbstractProcess;
-import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.SequenceFlow;
+import behavior.bpmn.Process;
+import behavior.bpmn.*;
+import behavior.bpmn.auxiliary.AbstractProcessVisitor;
 import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import behavior.bpmn.events.*;
 import maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
 import maude.generation.MaudeObjectBuilder;
 import maude.generation.MaudeRuleBuilder;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Set;
 import java.util.function.Consumer;
+
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.isAfterInstantiateEventBasedGateway;
 
 public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper {
     private final MaudeRuleBuilder ruleBuilder;
@@ -32,12 +36,11 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                 createEndInteractionNodeRule(startEvent, process, collaboration);
                 break;
             case MESSAGE_NON_INTERRUPTING:
-                // TODO: Think about this.
-                // Implemented in the event subprocess rule generator.
+                // Implemented only in the event subprocess rule generator.
             case SIGNAL:
                 // Done in the corresponding throw rule.
             case SIGNAL_NON_INTERRUPTING:
-                // Implemented in the throw part.
+                // Implemented only in the event subprocess rule generator.
                 break;
         }
     }
@@ -80,10 +83,67 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                 addSendMessageBehaviorForFlowNode(collaboration, endEvent);
                 break;
             case SIGNAL:
-                // TODO: Implement signal end event.
+                ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcess(process,
+                                                                                   ANY_TOKENS));
+                createSignalThrowRulePart(endEvent.getEventDefinition());
                 break;
         }
         ruleBuilder.buildRule();
+    }
+
+    private void createSignalThrowRulePart(EventDefinition signalEventDefinition) {
+        Pair<Set<Event>, Set<BoundaryEvent>> correspondingSignalCatchEvents =
+                collaboration.findAllCorrespondingSignalCatchEvents(signalEventDefinition);
+
+        correspondingSignalCatchEvents.getLeft().forEach(this::createCatchSignalEventRulePart);
+        correspondingSignalCatchEvents.getRight().forEach(this::createBoundarySignalCatchEventRulePart);
+    }
+
+    private void createBoundarySignalCatchEventRulePart(BoundaryEvent signalBoundaryEvent) {
+        // TODO: Implement.
+    }
+
+    private void createCatchSignalEventRulePart(Event catchSignalEvent) {
+        final AbstractProcess processForEvent = collaboration.findProcessForFlowNode(catchSignalEvent);
+        if (catchSignalEvent.isInstantiateFlowNode() || isAfterInstantiateEventBasedGateway(catchSignalEvent)) {
+            createSignalThrowInstantiateRulePart(catchSignalEvent, processForEvent);
+        } else {
+            // Send a signal to all existing processes
+            // TODO: Must not be more than one inflow!
+            // TODO: Implement forAll vacious behavior.
+            catchSignalEvent.getIncomingFlows().forEach(inFlow -> {
+                String token;
+                if (inFlow.getSource().isExclusiveEventBasedGateway()) {
+                    token = getTokenForFlowNode(inFlow.getSource());
+                } else {
+                    token = getTokenForSequenceFlow(inFlow);
+                }
+                ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(processForEvent, token + ANY_OTHER_TOKENS));
+
+                String postTokens = getOutgoingTokensForFlowNode(catchSignalEvent);
+                ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcess(processForEvent, postTokens + ANY_OTHER_TOKENS));
+            });
+        }
+    }
+
+    private void createSignalThrowInstantiateRulePart(Event event, AbstractProcess processForEvent) {
+        processForEvent.accept(new AbstractProcessVisitor() {
+            @Override
+            public void handle(EventSubprocess eventSubprocess) {
+                createSignalThrowInstantiateRulePartForEventSubprocess(eventSubprocess, event);
+            }
+
+            @Override
+            public void handle(Process process) {
+                // Create a new process instance.
+                String startTokens = getOutgoingTokensForFlowNode(event);
+                ruleBuilder.addPostObject(createProcessSnapshotObjectNoSubProcess(processForEvent, startTokens));
+            }
+        });
+    }
+
+    private void createSignalThrowInstantiateRulePartForEventSubprocess(EventSubprocess eventSubprocess, Event event) {
+        // TODO: Implement event subprocesses!
     }
 
     public void createIntermediateCatchEventRule(AbstractProcess process,
@@ -96,9 +156,8 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                 createIntermediateCatchMessageEventRule(intermediateCatchEvent, process, collaboration);
                 break;
             case SIGNAL:
-                // TODO: Signal events
+                // Done in the corresponding throw rule.
                 break;
-            // Done in the corresponding throw rule.
             case TIMER:
                 // Same behavior as a none event so far. No timings implemented.
                 createIntermediateThrowNoneEventRule(intermediateCatchEvent, process);
@@ -148,11 +207,30 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                 createIntermediateThrowMessageEventRule(intermediateThrowEvent, process);
                 break;
             case SIGNAL:
-                // TODO: Implement signal throw events.
+                createIntermediateThrowSignalEventRule(intermediateThrowEvent, process);
                 break;
             default:
                 throw new BPMNRuntimeException("Unexpected throw event type: " + intermediateThrowEvent.getType());
         }
+    }
+
+    private void createIntermediateThrowSignalEventRule(IntermediateThrowEvent intermediateThrowEvent,
+                                                        AbstractProcess process) {
+        intermediateThrowEvent.getIncomingFlows().forEach(incFlow -> {
+            ruleBuilder.startRule(getFlowNodeRuleNameWithIncFlow(intermediateThrowEvent, incFlow.getId()));
+
+            // Consume an incoming token from an incoming flow.
+            String preTokens = getTokenForSequenceFlow(incFlow) + ANY_OTHER_TOKENS;
+            ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(process,
+                                                                              preTokens));
+            // Produce a token for each outgoing flow.
+            String postTokens = getOutgoingTokensForFlowNode(intermediateThrowEvent) + ANY_OTHER_TOKENS;
+            ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcess(process,
+                                                                               postTokens));
+            createSignalThrowRulePart(intermediateThrowEvent.getEventDefinition());
+            ruleBuilder.buildRule();
+        });
+
     }
 
     private void createIntermediateThrowLinkEventRule(IntermediateThrowEvent intermediateThrowEvent,

@@ -1,7 +1,6 @@
-package groove.behaviortransformer.bpmn.generators;
+package behavior.bpmn;
 
 
-import behavior.bpmn.Process;
 import behavior.bpmn.activities.Activity;
 import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
@@ -18,18 +17,18 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.Set;
 
 class SignalCatchEventFlowNodeVisitor implements FlowNodeVisitor {
-    private final BPMNEventRuleGeneratorImpl bpmnEventRuleGenerator;
+    private final BPMNCollaboration collaboration;
     private final EventDefinition eventDefinition;
     private final Set<Event> signalCatchEvents;
     private final Set<BoundaryEvent> signalBoundaryCatchEvents;
     private final Set<Process> seenProcesses;
 
-    public SignalCatchEventFlowNodeVisitor(BPMNEventRuleGeneratorImpl bpmnEventRuleGenerator,
+    public SignalCatchEventFlowNodeVisitor(BPMNCollaboration collaboration,
                                            EventDefinition eventDefinition,
                                            Set<Event> signalCatchEvents,
                                            Set<BoundaryEvent> signalBoundaryCatchEvents,
                                            Set<Process> seenProcesses) {
-        this.bpmnEventRuleGenerator = bpmnEventRuleGenerator;
+        this.collaboration = collaboration;
         this.eventDefinition = eventDefinition;
         this.signalCatchEvents = signalCatchEvents;
         this.signalBoundaryCatchEvents = signalBoundaryCatchEvents;
@@ -61,7 +60,7 @@ class SignalCatchEventFlowNodeVisitor implements FlowNodeVisitor {
     @Override
     public void handle(CallActivity callActivity) {
         Pair<Set<Event>, Set<BoundaryEvent>> signalAndBoundarySignalEvents =
-                bpmnEventRuleGenerator.findAllCorrespondingSignalCatchEvents(
+                collaboration.findAllCorrespondingSignalCatchEvents(
                 callActivity.getSubProcessModel(),
                 eventDefinition,
                 seenProcesses);

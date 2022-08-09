@@ -3,7 +3,12 @@ package behavior.bpmn;
 import behavior.Behavior;
 import behavior.BehaviorVisitor;
 import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
+import behavior.bpmn.events.BoundaryEvent;
+import behavior.bpmn.events.Event;
+import behavior.bpmn.events.EventDefinition;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -116,5 +121,48 @@ public class BPMNCollaboration implements Behavior {
         }
         // Should not happen.
         throw new ShouldNotHappenRuntimeException(String.format("No process for the flow node %s found!", flowNode));
+    }
+
+
+    public Pair<Set<Event>, Set<BoundaryEvent>> findAllCorrespondingSignalCatchEvents(EventDefinition eventDefinition) {
+        Set<Event> signalCatchEvents = new LinkedHashSet<>();
+        Set<BoundaryEvent> signalBoundaryCatchEvents = new LinkedHashSet<>();
+        Set<Process> seenProcesses = new HashSet<>();
+        this.getParticipants().forEach(process -> {
+            Pair<Set<Event>, Set<BoundaryEvent>> signalAndSignalBoundaryCatchEvents =
+                    findAllCorrespondingSignalCatchEvents(
+                            process,
+                            eventDefinition,
+                            seenProcesses);
+            signalCatchEvents.addAll(signalAndSignalBoundaryCatchEvents.getLeft());
+            signalBoundaryCatchEvents.addAll(signalAndSignalBoundaryCatchEvents.getRight());
+        });
+        return Pair.of(signalCatchEvents, signalBoundaryCatchEvents);
+    }
+
+    Pair<Set<Event>, Set<BoundaryEvent>> findAllCorrespondingSignalCatchEvents(Process process,
+                                                                               EventDefinition eventDefinition,
+                                                                               Set<Process> seenProcesses) {
+        Set<Event> signalCatchEvents = new LinkedHashSet<>();
+        Set<BoundaryEvent> signalBoundaryCatchEvents = new LinkedHashSet<>();
+        if (seenProcesses.contains(process)) {
+            return Pair.of(signalCatchEvents, signalBoundaryCatchEvents);
+        }
+        seenProcesses.add(process);
+
+        process.getFlowNodes().forEach(flowNode -> flowNode.accept(new SignalCatchEventFlowNodeVisitor(this,
+                                                                                                       eventDefinition,
+                                                                                                       signalCatchEvents,
+                                                                                                       signalBoundaryCatchEvents,
+                                                                                                       seenProcesses)
+
+        ));
+        process.getEventSubprocesses().forEach(eventSubprocess -> eventSubprocess.getFlowNodes().forEach(flowNode -> flowNode.accept(
+                new SignalCatchEventFlowNodeVisitor(this,
+                                                    eventDefinition,
+                                                    signalCatchEvents,
+                                                    signalBoundaryCatchEvents,
+                                                    seenProcesses))));
+        return Pair.of(signalCatchEvents, signalBoundaryCatchEvents);
     }
 }
