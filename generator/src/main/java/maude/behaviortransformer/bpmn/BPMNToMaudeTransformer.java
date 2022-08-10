@@ -3,10 +3,10 @@ package maude.behaviortransformer.bpmn;
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.Process;
 import behavior.bpmn.events.StartEventType;
+import maude.generation.BPMNMaudeRuleBuilder;
 import maude.generation.MaudeObject;
 import maude.generation.MaudeObjectBuilder;
 import maude.generation.MaudeRule;
-import maude.generation.MaudeRuleBuilder;
 import org.apache.commons.text.StringSubstitutor;
 
 import java.util.HashMap;
@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
 
 public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
-    public static final String DELIMITER = "\r\n    ";
+    public static final String NEW_LINE = "\r\n    ";
     private final BPMNCollaboration collaboration;
-    private final MaudeRuleBuilder ruleBuilder;
+    private final BPMNMaudeRuleBuilder ruleBuilder;
     private final MaudeObjectBuilder objectBuilder;
 
     private static final String MODULE_TEMPLATE = "load model-checker.maude .\r\n" +
@@ -43,26 +43,37 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    sort ProcessState .\r\n" +
                                                   "    subsort String < Oid .\r\n" +
                                                   "\r\n" +
+                                                  "    --- BPMNSystem\r\n" +
+                                                  "    op BPMNSystem : -> Cid [ctor] .\r\n" +
+                                                  "    op messages :_ : MSet -> Attribute [ctor] .\r\n" +
+                                                  "    op processes :_ : Configuration -> Attribute [ctor] .\r\n" +
+                                                  "\r\n" +
                                                   "    --- Processes\r\n" +
-                                                  "    ops Running, Terminated : -> ProcessState [ctor] .\r\n" +
+                                                  "    op ProcessSnapshot : -> Cid [ctor] .\r\n" +
                                                   "    op tokens :_ : MSet -> Attribute [ctor] .\r\n" +
                                                   "    op subprocesses :_ : Configuration -> Attribute [ctor] .\r\n" +
+                                                  "    ops Running, Terminated : -> ProcessState [ctor] .\r\n" +
                                                   "    op state :_ : ProcessState -> Attribute [ctor] .\r\n" +
-                                                  "    op ProcessSnapshot : -> Cid [ctor] .\r\n" +
-                                                  "\r\n" +
-                                                  "    --- Message holder\r\n" +
-                                                  "    op MessageHolder : -> Cid [ctor] .\r\n" +
-                                                  "    op messages :_ : MSet -> Attribute [ctor] .\r\n" +
                                                   "\r\n" +
                                                   "    op terminate : Configuration -> Configuration .\r\n" +
+                                                  "    --- Replace all occurrences of the first object with the " +
+                                                  "second object in the given configuration.\r\n" +
+                                                  "    op forAll : Configuration Object Object -> Configuration .\r\n" +
                                                   "\r\n" +
-                                                  "    vars P, P1 : String .\r\n" +
+                                                  "    vars P P1 : String .\r\n" +
                                                   "    vars T : MSet . --- tokens\r\n" +
                                                   "    vars S : Configuration . --- subprocesses\r\n" +
                                                   "    vars STATE : ProcessState . --- state\r\n" +
                                                   "    var PS : Configuration .\r\n" +
                                                   "\r\n" +
-                                                  "    --- NOOP if none\r\n" +
+                                                  "    vars o1 o2 o3 : Object .\r\n" +
+                                                  "    eq forAll(none, o2, o3) = none .\r\n" +
+                                                  "    --- Replace the occurrence of o2 by o3\r\n" +
+                                                  "    eq forAll(o2 PS, o2, o3) = forAll(o3 PS, o2, o3) .\r\n" +
+                                                  "    --- Ignore o1 since it is not the same as o2.\r\n" +
+                                                  "    ceq forAll(o1 PS, o2, o3) = o1 forAll(PS, o2, o3) if o1 =/= o2" +
+                                                  " .\r\n" +
+                                                  "\r\n" +
                                                   "    eq terminate(none) = none .\r\n" +
                                                   "    --- NOOP if already terminated\r\n" +
                                                   "    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses " +
@@ -86,9 +97,7 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    pr BPMN-EXECUTION .\r\n" +
                                                   "\r\n" +
                                                   "    --- Generated variables\r\n" +
-                                                  "    ${tokens}\r\n" +
-                                                  "    ${messages}\r\n" +
-                                                  "    ${subprocesses}\r\n" +
+                                                  "    ${vars}\r\n" +
                                                   "\r\n" +
                                                   "    --- Generated rules\r\n" +
                                                   "    ${rules}\r\n" +
@@ -105,22 +114,27 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "\r\n" +
                                                   "    var C : Configuration .\r\n" +
                                                   "    var P : Prop .\r\n" +
-                                                  "    var X : Oid .\r\n" +
+                                                  "    var X Y : Oid .\r\n" +
                                                   "    var T : MSet .\r\n" +
+                                                  "    var M : MSet . --- messages\r\n" +
                                                   "    var T1 : NeMSet .\r\n" +
                                                   "    var S : Configuration .\r\n" +
                                                   "    var State : ProcessState .\r\n" +
                                                   "\r\n" +
                                                   "\r\n" +
                                                   "    op allTerminated : -> Prop .\r\n" +
-                                                  "    eq < X : ProcessSnapshot | tokens : T, subprocesses : S, state" +
-                                                  " : Running > C |= allTerminated = false .\r\n" +
-                                                  "    eq C |= allTerminated = true [owise] .\r\n" +
+                                                  "    eq < X : BPMNSystem | messages : M, processes : (< Y : " +
+                                                  "ProcessSnapshot | tokens : T, subprocesses : S, state : Running > " +
+                                                  "C) > |= allTerminated = false .\r\n" +
+                                                  "    eq < X : BPMNSystem | messages : M, processes : (C) > |= " +
+                                                  "allTerminated = true [owise] .\r\n" +
                                                   "\r\n" +
                                                   "    op unsafe : -> Prop .\r\n" +
-                                                  "    eq < X : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : " +
-                                                  "S, state : State > C |= unsafe = true .\r\n" +
-                                                  "    eq C |= unsafe = false [owise] .\r\n" +
+                                                  "    eq < X : BPMNSystem | messages : M, processes : (< Y : " +
+                                                  "ProcessSnapshot | tokens : (T1 T1 T), subprocesses : S, state : " +
+                                                  "State > C) > |= unsafe = true .\r\n" +
+                                                  "    eq < X : BPMNSystem | messages : M, processes : (C) > |= " +
+                                                  "unsafe = false [owise] .\r\n" +
                                                   "\r\n" +
                                                   "    --- Generated atomic propositions\r\n" +
                                                   "    ${atomicPropositions}\r\n" +
@@ -136,10 +150,11 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
 
     public BPMNToMaudeTransformer(BPMNCollaboration collaboration) {
         this.collaboration = collaboration;
-        ruleBuilder = new MaudeRuleBuilder();
-        ruleBuilder.addVar(TOKENS, MSET, "T");
-        ruleBuilder.addVar(MESSAGES, MSET, "M");
-        ruleBuilder.addVar(SUBPROCESSES, CONFIGURATION, "S");
+        ruleBuilder = new BPMNMaudeRuleBuilder(collaboration);
+        ruleBuilder.addVar(TOKENS, MSET, ANY_TOKENS);
+        ruleBuilder.addVar(MESSAGES, MSET, ANY_MESSAGES);
+        ruleBuilder.addVar(SUBPROCESSES, CONFIGURATION, ANY_SUBPROCESSES);
+        ruleBuilder.addVar(PROCESSES, CONFIGURATION, ANY_PROCESS);
         objectBuilder = new MaudeObjectBuilder();
     }
 
@@ -148,9 +163,7 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
         substitutionValues.put("name", collaboration.getName());
         substitutionValues.put("init", this.makeInit());
         substitutionValues.put("rules", this.makeRules());
-        substitutionValues.put(TOKENS, ruleBuilder.getVarsForGroup(TOKENS));
-        substitutionValues.put(MESSAGES, ruleBuilder.getVarsForGroup(MESSAGES));
-        substitutionValues.put(SUBPROCESSES, ruleBuilder.getVarsForGroup(SUBPROCESSES));
+        substitutionValues.put("vars", ruleBuilder.getVars());
         substitutionValues.put("atomicPropositions", "--- no propositions"); // Add at some point
         substitutionValues.put("ltlQuery", ltlQuery);
         return new StringSubstitutor(substitutionValues).replace(MODULE_TEMPLATE);
@@ -168,8 +181,8 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                             this.createStartTokens(process));
                                             return maudeObject.generateObjectString();
                                         })
-                                        .collect(Collectors.joining(DELIMITER));
-        return createEmptyMessageHolder().generateObjectString() + DELIMITER + processes;
+                                        .collect(Collectors.joining(NEW_LINE));
+        return ruleBuilder.createBPMNSystem(processes, NONE).generateObjectString();
     }
 
     private String createStartTokens(Process process) {
@@ -185,11 +198,11 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
 
         return ruleBuilder.createdRules()
                           .map(MaudeRule::generateRuleString)
-                          .collect(Collectors.joining(DELIMITER));
+                          .collect(Collectors.joining(NEW_LINE));
     }
 
     @Override
-    public MaudeRuleBuilder getRuleBuilder() {
+    public BPMNMaudeRuleBuilder getRuleBuilder() {
         return ruleBuilder;
     }
 

@@ -6,8 +6,8 @@ import behavior.bpmn.auxiliary.AbstractProcessVisitor;
 import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import behavior.bpmn.events.*;
 import maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
+import maude.generation.BPMNMaudeRuleBuilder;
 import maude.generation.MaudeObjectBuilder;
-import maude.generation.MaudeRuleBuilder;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Set;
@@ -16,11 +16,11 @@ import java.util.function.Consumer;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.isAfterInstantiateEventBasedGateway;
 
 public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper {
-    private final MaudeRuleBuilder ruleBuilder;
+    private final BPMNMaudeRuleBuilder ruleBuilder;
     private final BPMNCollaboration collaboration;
     private final MaudeObjectBuilder objectBuilder;
 
-    public BPMNMaudeEventRuleGenerator(BPMNCollaboration collaboration, MaudeRuleBuilder ruleBuilder) {
+    public BPMNMaudeEventRuleGenerator(BPMNCollaboration collaboration, BPMNMaudeRuleBuilder ruleBuilder) {
         this.collaboration = collaboration;
         this.ruleBuilder = ruleBuilder;
         this.objectBuilder = new MaudeObjectBuilder();
@@ -267,7 +267,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
 
     private void createConsumeAndProduceTokenRule(Event intermediateThrowEvent,
                                                   AbstractProcess process,
-                                                  Consumer<MaudeRuleBuilder> ruleExtender) {
+                                                  Consumer<BPMNMaudeRuleBuilder> ruleExtender) {
         intermediateThrowEvent.getIncomingFlows().forEach(incFlow -> {
             ruleBuilder.startRule(getFlowNodeRuleNameWithIncFlow(intermediateThrowEvent, incFlow.getId()));
 
@@ -285,7 +285,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
     }
 
     @Override
-    public MaudeRuleBuilder getRuleBuilder() {
+    public BPMNMaudeRuleBuilder getRuleBuilder() {
         return ruleBuilder;
     }
 

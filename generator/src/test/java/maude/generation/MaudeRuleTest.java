@@ -80,7 +80,6 @@ class MaudeRuleTest {
                 .addVar(fsms, "FSM", "Y")
                 .addVar(otherVarGroup, "Type", "Z");
 
-        assertThat(ruleBuilder.getVarsForGroup(fsms), is("vars X Y : FSM . --- fsms"));
-        assertThat(ruleBuilder.getVarsForGroup(otherVarGroup), is("vars Z : Type . --- otherVarGroup"));
+        assertThat(ruleBuilder.getVars(), is("vars X Y : FSM . --- fsms\r\n    vars Z : Type . --- otherVarGroup"));
     }
 }

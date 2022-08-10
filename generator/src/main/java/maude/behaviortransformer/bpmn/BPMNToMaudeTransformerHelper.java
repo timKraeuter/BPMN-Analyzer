@@ -3,18 +3,21 @@ package maude.behaviortransformer.bpmn;
 import behavior.bpmn.Process;
 import behavior.bpmn.*;
 import behavior.bpmn.events.StartEvent;
+import maude.generation.BPMNMaudeRuleBuilder;
 import maude.generation.MaudeObject;
 import maude.generation.MaudeObjectBuilder;
-import maude.generation.MaudeRuleBuilder;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.END;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.START;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.isAfterInstantiateEventBasedGateway;
 
 public interface BPMNToMaudeTransformerHelper {
+    String PROCESSES = "processes";
+    String ANY_PROCESS = "P";
     String ANY_TOKENS = "T";
     String ANY_SUBPROCESSES = "S";
     String ANY_MESSAGES = "M";
@@ -22,6 +25,8 @@ public interface BPMNToMaudeTransformerHelper {
     String ANY_OTHER_TOKENS = WHITE_SPACE + ANY_TOKENS;
     String ANY_OTHER_SUBPROCESSES = WHITE_SPACE + ANY_SUBPROCESSES;
     String ANY_OTHER_MESSAGES = WHITE_SPACE + ANY_MESSAGES;
+    String ANY_OTHER_PROCESSES = WHITE_SPACE + ANY_PROCESS;
+
     String NONE = "none";
 
     String RULE_NAME_NAME_ID_FORMAT = "%s_%s";
@@ -32,9 +37,8 @@ public interface BPMNToMaudeTransformerHelper {
     String BRACKET_FORMAT = "(%s)";
     String RUNNING = "Running";
     String TERMINATED = "Terminated";
-    String MESSAGE_HOLDER = "MessageHolder";
 
-    MaudeRuleBuilder getRuleBuilder();
+    BPMNMaudeRuleBuilder getRuleBuilder();
 
     MaudeObjectBuilder getObjectBuilder();
 
@@ -141,29 +145,18 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
     default void addMessageConsumption(MessageFlow messageFlow) {
-        String messageForFlow = getMessageForFlow(messageFlow);
-        getRuleBuilder().addPreObject(createMessageHolderWithAdditionalMessages(messageForFlow));
-        getRuleBuilder().addPostObject(createMessageHolderAnyMessages());
+        getRuleBuilder().addMessageConsumption(getMessageForFlow(messageFlow));
     }
 
     default void addMessageCreation(MessageFlow messageFlow) {
-        String messageForFlow = getMessageForFlow(messageFlow);
-        addMessagesObjects(messageForFlow);
+        getRuleBuilder().addMessageCreation(getMessageForFlow(messageFlow));
     }
 
     default void addMessagesCreation(Set<MessageFlow> messageFlows) {
         if (messageFlows.isEmpty()) {
             return;
         }
-        String messages = messageFlows.stream()
-                                      .map(this::getMessageForFlow)
-                                      .collect(Collectors.joining(WHITE_SPACE));
-        addMessagesObjects(messages);
-    }
-
-    private void addMessagesObjects(String messages) {
-        getRuleBuilder().addPreObject(createMessageHolderAnyMessages());
-        getRuleBuilder().addPostObject(createMessageHolderWithAdditionalMessages(messages));
+        messageFlows.forEach(this::addMessageCreation);
     }
 
     private boolean isAfterExclusiveEventBasedGateway(FlowNode messageFlowTarget) {
@@ -231,24 +224,5 @@ public interface BPMNToMaudeTransformerHelper {
             return getTokenForFlowNode(eventBasedGateway);
         }
         return getTokenForFlowNode(interactionNode);
-    }
-
-    default MaudeObject createEmptyMessageHolder() {
-        return createMessageHolderWithMessages(NONE);
-    }
-
-    default MaudeObject createMessageHolderAnyMessages() {
-        return createMessageHolderWithMessages(ANY_MESSAGES);
-    }
-
-    default MaudeObject createMessageHolderWithAdditionalMessages(String messages) {
-        return createMessageHolderWithMessages(messages + ANY_OTHER_MESSAGES);
-    }
-
-    private MaudeObject createMessageHolderWithMessages(String messages) {
-        return getObjectBuilder().oid(MESSAGES)
-                                 .oidType(MESSAGE_HOLDER)
-                                 .addAttributeValue(MESSAGES, String.format(BRACKET_FORMAT, messages))
-                                 .build();
     }
 }

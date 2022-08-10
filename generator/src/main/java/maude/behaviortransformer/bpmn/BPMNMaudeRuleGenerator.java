@@ -8,7 +8,7 @@ import maude.behaviortransformer.bpmn.generators.BPMNMaudeEventRuleGenerator;
 import maude.behaviortransformer.bpmn.generators.BPMNMaudeGatewayRuleGenerator;
 import maude.behaviortransformer.bpmn.generators.BPMNMaudeSubprocessRuleGenerator;
 import maude.behaviortransformer.bpmn.generators.BPMNMaudeTaskRuleGenerator;
-import maude.generation.MaudeRuleBuilder;
+import maude.generation.BPMNMaudeRuleBuilder;
 
 import java.util.Set;
 
@@ -22,7 +22,7 @@ public class BPMNMaudeRuleGenerator {
     private final BPMNMaudeGatewayRuleGenerator gatewayRuleGenerator;
     private final BPMNMaudeSubprocessRuleGenerator subprocessRuleGenerator;
 
-    BPMNMaudeRuleGenerator(MaudeRuleBuilder ruleBuilder, BPMNCollaboration collaboration) {
+    BPMNMaudeRuleGenerator(BPMNMaudeRuleBuilder ruleBuilder, BPMNCollaboration collaboration) {
         this.collaboration = collaboration;
         visitedProcessModels = Sets.newHashSet();
 

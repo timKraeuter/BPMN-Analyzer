@@ -84,6 +84,7 @@ class BPMNToMaudeEventsTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testSignalEventsMultiActivation() throws IOException {
+        // TODO: not terminating yet.
         testBPMNMaudeGeneration("signal-events-multi-activation");
     }
 

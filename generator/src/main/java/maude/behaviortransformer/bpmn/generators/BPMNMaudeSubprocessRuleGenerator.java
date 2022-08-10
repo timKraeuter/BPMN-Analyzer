@@ -9,9 +9,9 @@ import behavior.bpmn.events.StartEventType;
 import groove.behaviortransformer.bpmn.generators.BPMNSubprocessRuleGenerator;
 import maude.behaviortransformer.bpmn.BPMNMaudeRuleGenerator;
 import maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
+import maude.generation.BPMNMaudeRuleBuilder;
 import maude.generation.MaudeObject;
 import maude.generation.MaudeObjectBuilder;
-import maude.generation.MaudeRuleBuilder;
 
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -20,11 +20,11 @@ import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*
 
 public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGenerator, BPMNToMaudeTransformerHelper {
     private final BPMNMaudeRuleGenerator bpmnMaudeRuleGenerator;
-    private final MaudeRuleBuilder ruleBuilder;
+    private final BPMNMaudeRuleBuilder ruleBuilder;
     private final MaudeObjectBuilder objectBuilder;
 
     public BPMNMaudeSubprocessRuleGenerator(BPMNMaudeRuleGenerator bpmnMaudeRuleGenerator,
-                                            MaudeRuleBuilder ruleBuilder) {
+                                            BPMNMaudeRuleBuilder ruleBuilder) {
         this.bpmnMaudeRuleGenerator = bpmnMaudeRuleGenerator;
         this.ruleBuilder = ruleBuilder;
         objectBuilder = new MaudeObjectBuilder();
@@ -82,7 +82,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
     private void createSubProcessBoundaryEventRule(AbstractProcess process,
                                                    CallActivity callActivity,
                                                    BoundaryEvent boundaryEvent,
-                                                   Consumer<MaudeRuleBuilder> ruleAddditions) {
+                                                   Consumer<BPMNMaudeRuleBuilder> ruleAddditions) {
         ruleBuilder.startRule(getFlowNodeRuleName(boundaryEvent));
         ruleAddditions.accept(getRuleBuilder());
 
@@ -186,7 +186,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
     }
 
     @Override
-    public MaudeRuleBuilder getRuleBuilder() {
+    public BPMNMaudeRuleBuilder getRuleBuilder() {
         return ruleBuilder;
     }
 

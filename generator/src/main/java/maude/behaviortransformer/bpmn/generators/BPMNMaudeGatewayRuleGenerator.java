@@ -6,22 +6,22 @@ import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
 import maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
+import maude.generation.BPMNMaudeRuleBuilder;
 import maude.generation.MaudeObjectBuilder;
-import maude.generation.MaudeRuleBuilder;
 
 import java.util.stream.Collectors;
 
 public class BPMNMaudeGatewayRuleGenerator implements BPMNToMaudeTransformerHelper {
-    private final MaudeRuleBuilder ruleBuilder;
+    private final BPMNMaudeRuleBuilder ruleBuilder;
     private final MaudeObjectBuilder objectBuilder;
 
-    public BPMNMaudeGatewayRuleGenerator(MaudeRuleBuilder ruleBuilder) {
+    public BPMNMaudeGatewayRuleGenerator(BPMNMaudeRuleBuilder ruleBuilder) {
         this.ruleBuilder = ruleBuilder;
         objectBuilder = new MaudeObjectBuilder();
     }
 
     @Override
-    public MaudeRuleBuilder getRuleBuilder() {
+    public BPMNMaudeRuleBuilder getRuleBuilder() {
         return ruleBuilder;
     }
 

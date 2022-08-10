@@ -9,8 +9,8 @@ import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import behavior.bpmn.events.BoundaryEvent;
 import maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
+import maude.generation.BPMNMaudeRuleBuilder;
 import maude.generation.MaudeObjectBuilder;
-import maude.generation.MaudeRuleBuilder;
 
 import java.util.function.Consumer;
 
@@ -19,10 +19,10 @@ import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.S
 
 public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper {
     private final BPMNCollaboration collaboration;
-    private final MaudeRuleBuilder ruleBuilder;
+    private final BPMNMaudeRuleBuilder ruleBuilder;
     private final MaudeObjectBuilder objectBuilder;
 
-    public BPMNMaudeTaskRuleGenerator(BPMNCollaboration collaboration, MaudeRuleBuilder ruleBuilder) {
+    public BPMNMaudeTaskRuleGenerator(BPMNCollaboration collaboration, BPMNMaudeRuleBuilder ruleBuilder) {
         this.collaboration = collaboration;
         this.ruleBuilder = ruleBuilder;
         this.objectBuilder = new MaudeObjectBuilder();
@@ -30,7 +30,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
 
     public void createTaskRulesForProcess(AbstractProcess process,
                                           AbstractTask task,
-                                          Consumer<MaudeRuleBuilder> endTaskRuleAdditions) {
+                                          Consumer<BPMNMaudeRuleBuilder> endTaskRuleAdditions) {
         // Rules for starting the task
         task.getIncomingFlows().forEach(incomingFlow -> createStartTaskRule(process, task, incomingFlow));
         // Rule for ending the task
@@ -74,7 +74,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
     private void createTaskBoundaryEventRule(AbstractProcess process,
                                              AbstractTask task,
                                              BoundaryEvent boundaryEvent,
-                                             Consumer<MaudeRuleBuilder> ruleAddditions) {
+                                             Consumer<BPMNMaudeRuleBuilder> ruleAddditions) {
         ruleBuilder.startRule(getFlowNodeRuleName(boundaryEvent));
         ruleAddditions.accept(getRuleBuilder());
 
@@ -117,7 +117,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
 
     private void createEndTaskRule(AbstractProcess process,
                                    AbstractTask task,
-                                   Consumer<MaudeRuleBuilder> ruleAdditions) {
+                                   Consumer<BPMNMaudeRuleBuilder> ruleAdditions) {
         ruleBuilder.startRule(getFlowNodeRuleName(task) + END);
 
         String preTokens = getTokenForFlowNode(task) + ANY_OTHER_TOKENS;
@@ -151,7 +151,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
     }
 
     @Override
-    public MaudeRuleBuilder getRuleBuilder() {
+    public BPMNMaudeRuleBuilder getRuleBuilder() {
         return ruleBuilder;
     }
 

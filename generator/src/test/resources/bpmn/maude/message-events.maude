@@ -20,26 +20,35 @@ mod BPMN-EXECUTION is
     sort ProcessState .
     subsort String < Oid .
 
+    --- BPMNSystem
+    op BPMNSystem : -> Cid [ctor] .
+    op messages :_ : MSet -> Attribute [ctor] .
+    op processes :_ : Configuration -> Attribute [ctor] .
+
     --- Processes
-    ops Running, Terminated : -> ProcessState [ctor] .
+    op ProcessSnapshot : -> Cid [ctor] .
     op tokens :_ : MSet -> Attribute [ctor] .
     op subprocesses :_ : Configuration -> Attribute [ctor] .
+    ops Running, Terminated : -> ProcessState [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
-    op ProcessSnapshot : -> Cid [ctor] .
-
-    --- Message holder
-    op MessageHolder : -> Cid [ctor] .
-    op messages :_ : MSet -> Attribute [ctor] .
 
     op terminate : Configuration -> Configuration .
+    --- Replace all occurrences of the first object with the second object in the given configuration.
+    op forAll : Configuration Object Object -> Configuration .
 
-    vars P, P1 : String .
+    vars P P1 : String .
     vars T : MSet . --- tokens
     vars S : Configuration . --- subprocesses
     vars STATE : ProcessState . --- state
     var PS : Configuration .
 
-    --- NOOP if none
+    vars o1 o2 o3 : Object .
+    eq forAll(none, o2, o3) = none .
+    --- Replace the occurrence of o2 by o3
+    eq forAll(o2 PS, o2, o3) = forAll(o3 PS, o2, o3) .
+    --- Ignore o1 since it is not the same as o2.
+    ceq forAll(o1 PS, o2, o3) = o1 forAll(PS, o2, o3) if o1 =/= o2 .
+
     eq terminate(none) = none .
     --- NOOP if already terminated
     eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated > .
@@ -59,25 +68,25 @@ mod BPMN-EXECUTION-message-events is
     vars T : MSet . --- tokens
     vars M : MSet . --- messages
     vars S : Configuration . --- subprocesses
+    vars P : Configuration . --- processes
 
     --- Generated rules
     rl [start_p1_Event_0p0uvwz] :  < "p1" : ProcessSnapshot | tokens : ("start_p1 (Event_0p0uvwz)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start_p1_catch_p1 (Flow_12mxyv6)" T), subprocesses : (S), state : Running > .
     rl [catch_p1_Event_0mrifvx_start] :  < "p1" : ProcessSnapshot | tokens : ("start_p1_catch_p1 (Flow_12mxyv6)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("catch_p1 (Event_0mrifvx)" T), subprocesses : (S), state : Running > .
-    rl [catch_p1_Event_0mrifvx] :  < "p1" : ProcessSnapshot | tokens : ("catch_p1 (Event_0mrifvx)" T), subprocesses : (S), state : Running > < "messages" : MessageHolder | messages : ("throw_p2_catch_p1" M) > => < "messages" : MessageHolder | messages : (M) > < "p1" : ProcessSnapshot | tokens : ("catch_p1_end_p1 (Flow_0ed0ztm)" T), subprocesses : (S), state : Running > .
-    rl [end_p1_Event_0gkal63] :  < "p1" : ProcessSnapshot | tokens : ("catch_p1_end_p1 (Flow_0ed0ztm)" T), subprocesses : (S), state : Running > < "messages" : MessageHolder | messages : (M) > => < "p1" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > < "messages" : MessageHolder | messages : ("end_p1_catch_p2" M) > .
+    rl [catch_p1_Event_0mrifvx] :  < "message-events" : BPMNSystem | messages : ("throw_p2_catch_p1" M), processes : (< "p1" : ProcessSnapshot | tokens : ("catch_p1 (Event_0mrifvx)" T), subprocesses : (S), state : Running > P) > => < "message-events" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("catch_p1_end_p1 (Flow_0ed0ztm)" T), subprocesses : (S), state : Running > P) > .
+    rl [end_p1_Event_0gkal63] :  < "message-events" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("catch_p1_end_p1 (Flow_0ed0ztm)" T), subprocesses : (S), state : Running > P) > => < "message-events" : BPMNSystem | messages : ("end_p1_catch_p2" M), processes : (< "p1" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > P) > .
     rl [start_p2_Event_1mnruxy] :  < "p2" : ProcessSnapshot | tokens : ("start_p2 (Event_1mnruxy)" T), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("start_p2_throw_p2 (Flow_1sb90yn)" T), subprocesses : (S), state : Running > .
-    rl [throw_p2_Event_1c7b7i9] :  < "p2" : ProcessSnapshot | tokens : ("start_p2_throw_p2 (Flow_1sb90yn)" T), subprocesses : (S), state : Running > < "messages" : MessageHolder | messages : (M) > => < "p2" : ProcessSnapshot | tokens : ("throw_p2_catch_p2 (Flow_1tf29d7)" T), subprocesses : (S), state : Running > < "messages" : MessageHolder | messages : ("throw_p2_catch_p1" M) > .
+    rl [throw_p2_Event_1c7b7i9] :  < "message-events" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("start_p2_throw_p2 (Flow_1sb90yn)" T), subprocesses : (S), state : Running > P) > => < "message-events" : BPMNSystem | messages : ("throw_p2_catch_p1" M), processes : (< "p2" : ProcessSnapshot | tokens : ("throw_p2_catch_p2 (Flow_1tf29d7)" T), subprocesses : (S), state : Running > P) > .
     rl [catch_p2_Event_0m12iqx_start] :  < "p2" : ProcessSnapshot | tokens : ("throw_p2_catch_p2 (Flow_1tf29d7)" T), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("catch_p2 (Event_0m12iqx)" T), subprocesses : (S), state : Running > .
-    rl [catch_p2_Event_0m12iqx] :  < "p2" : ProcessSnapshot | tokens : ("catch_p2 (Event_0m12iqx)" T), subprocesses : (S), state : Running > < "messages" : MessageHolder | messages : ("end_p1_catch_p2" M) > => < "messages" : MessageHolder | messages : (M) > < "p2" : ProcessSnapshot | tokens : ("catch_p2_end_p2 (Flow_021nwlu)" T), subprocesses : (S), state : Running > .
-    rl [end_p2_Event_03mvx21] :  < "p2" : ProcessSnapshot | tokens : ("catch_p2_end_p2 (Flow_021nwlu)" T), subprocesses : (S), state : Running > < "messages" : MessageHolder | messages : (M) > => < "p2" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > < "p3" : ProcessSnapshot | tokens : ("start_p3 (Event_0lognl6)" T), subprocesses : (none), state : Running > < "messages" : MessageHolder | messages : ("end_p2_start_p3" M) > .
-    rl [start_p3_Event_0lognl6] :  < "p3" : ProcessSnapshot | tokens : ("start_p3 (Event_0lognl6)" T), subprocesses : (S), state : Running > < "messages" : MessageHolder | messages : ("end_p2_start_p3" M) > => < "messages" : MessageHolder | messages : (M) > < "p3" : ProcessSnapshot | tokens : ("start_p3_end_p3 (Flow_18621tw)" T), subprocesses : (S), state : Running > .
+    rl [catch_p2_Event_0m12iqx] :  < "message-events" : BPMNSystem | messages : ("end_p1_catch_p2" M), processes : (< "p2" : ProcessSnapshot | tokens : ("catch_p2 (Event_0m12iqx)" T), subprocesses : (S), state : Running > P) > => < "message-events" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("catch_p2_end_p2 (Flow_021nwlu)" T), subprocesses : (S), state : Running > P) > .
+    rl [end_p2_Event_03mvx21] :  < "message-events" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("catch_p2_end_p2 (Flow_021nwlu)" T), subprocesses : (S), state : Running > P) > => < "message-events" : BPMNSystem | messages : ("end_p2_start_p3" M), processes : (< "p2" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > < "p3" : ProcessSnapshot | tokens : ("start_p3 (Event_0lognl6)" T), subprocesses : (none), state : Running > P) > .
+    rl [start_p3_Event_0lognl6] :  < "message-events" : BPMNSystem | messages : ("end_p2_start_p3" M), processes : (< "p3" : ProcessSnapshot | tokens : ("start_p3 (Event_0lognl6)" T), subprocesses : (S), state : Running > P) > => < "message-events" : BPMNSystem | messages : (M), processes : (< "p3" : ProcessSnapshot | tokens : ("start_p3_end_p3 (Flow_18621tw)" T), subprocesses : (S), state : Running > P) > .
     rl [end_p3_Event_1mjwxft] :  < "p3" : ProcessSnapshot | tokens : ("start_p3_end_p3 (Flow_18621tw)" T), subprocesses : (S), state : Running > => < "p3" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "messages" : MessageHolder | messages : (none) >
-    < "p1" : ProcessSnapshot | tokens : ("start_p1 (Event_0p0uvwz)"), subprocesses : (none), state : Running >
-    < "p2" : ProcessSnapshot | tokens : ("start_p2 (Event_1mnruxy)"), subprocesses : (none), state : Running > .
+    eq init = < "message-events" : BPMNSystem | messages : (none), processes : (< "p1" : ProcessSnapshot | tokens : ("start_p1 (Event_0p0uvwz)"), subprocesses : (none), state : Running >
+    < "p2" : ProcessSnapshot | tokens : ("start_p2 (Event_1mnruxy)"), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is
@@ -87,20 +96,21 @@ mod BPMN-PREDS is
 
     var C : Configuration .
     var P : Prop .
-    var X : Oid .
+    var X Y : Oid .
     var T : MSet .
+    var M : MSet . --- messages
     var T1 : NeMSet .
     var S : Configuration .
     var State : ProcessState .
 
 
     op allTerminated : -> Prop .
-    eq < X : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > C |= allTerminated = false .
-    eq C |= allTerminated = true [owise] .
+    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > C) > |= allTerminated = false .
+    eq < X : BPMNSystem | messages : M, processes : (C) > |= allTerminated = true [owise] .
 
     op unsafe : -> Prop .
-    eq < X : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : S, state : State > C |= unsafe = true .
-    eq C |= unsafe = false [owise] .
+    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : S, state : State > C) > |= unsafe = true .
+    eq < X : BPMNSystem | messages : M, processes : (C) > |= unsafe = false [owise] .
 
     --- Generated atomic propositions
     --- no propositions

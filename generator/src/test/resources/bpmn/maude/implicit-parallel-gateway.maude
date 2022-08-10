@@ -20,26 +20,35 @@ mod BPMN-EXECUTION is
     sort ProcessState .
     subsort String < Oid .
 
+    --- BPMNSystem
+    op BPMNSystem : -> Cid [ctor] .
+    op messages :_ : MSet -> Attribute [ctor] .
+    op processes :_ : Configuration -> Attribute [ctor] .
+
     --- Processes
-    ops Running, Terminated : -> ProcessState [ctor] .
+    op ProcessSnapshot : -> Cid [ctor] .
     op tokens :_ : MSet -> Attribute [ctor] .
     op subprocesses :_ : Configuration -> Attribute [ctor] .
+    ops Running, Terminated : -> ProcessState [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
-    op ProcessSnapshot : -> Cid [ctor] .
-
-    --- Message holder
-    op MessageHolder : -> Cid [ctor] .
-    op messages :_ : MSet -> Attribute [ctor] .
 
     op terminate : Configuration -> Configuration .
+    --- Replace all occurrences of the first object with the second object in the given configuration.
+    op forAll : Configuration Object Object -> Configuration .
 
-    vars P, P1 : String .
+    vars P P1 : String .
     vars T : MSet . --- tokens
     vars S : Configuration . --- subprocesses
     vars STATE : ProcessState . --- state
     var PS : Configuration .
 
-    --- NOOP if none
+    vars o1 o2 o3 : Object .
+    eq forAll(none, o2, o3) = none .
+    --- Replace the occurrence of o2 by o3
+    eq forAll(o2 PS, o2, o3) = forAll(o3 PS, o2, o3) .
+    --- Ignore o1 since it is not the same as o2.
+    ceq forAll(o1 PS, o2, o3) = o1 forAll(PS, o2, o3) if o1 =/= o2 .
+
     eq terminate(none) = none .
     --- NOOP if already terminated
     eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated > .
@@ -59,6 +68,7 @@ mod BPMN-EXECUTION-implicit-parallel-gateway is
     vars T : MSet . --- tokens
     vars M : MSet . --- messages
     vars S : Configuration . --- subprocesses
+    vars P : Configuration . --- processes
 
     --- Generated rules
     rl [start_StartEvent_1] :  < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > => < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("start_A (Flow_0ieyd6c)" T), subprocesses : (S), state : Running > .
@@ -73,8 +83,7 @@ mod BPMN-EXECUTION-implicit-parallel-gateway is
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "messages" : MessageHolder | messages : (none) >
-    < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), subprocesses : (none), state : Running > .
+    eq init = < "implicit-parallel-gateway" : BPMNSystem | messages : (none), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is
@@ -84,20 +93,21 @@ mod BPMN-PREDS is
 
     var C : Configuration .
     var P : Prop .
-    var X : Oid .
+    var X Y : Oid .
     var T : MSet .
+    var M : MSet . --- messages
     var T1 : NeMSet .
     var S : Configuration .
     var State : ProcessState .
 
 
     op allTerminated : -> Prop .
-    eq < X : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > C |= allTerminated = false .
-    eq C |= allTerminated = true [owise] .
+    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > C) > |= allTerminated = false .
+    eq < X : BPMNSystem | messages : M, processes : (C) > |= allTerminated = true [owise] .
 
     op unsafe : -> Prop .
-    eq < X : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : S, state : State > C |= unsafe = true .
-    eq C |= unsafe = false [owise] .
+    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : S, state : State > C) > |= unsafe = true .
+    eq < X : BPMNSystem | messages : M, processes : (C) > |= unsafe = false [owise] .
 
     --- Generated atomic propositions
     --- no propositions
