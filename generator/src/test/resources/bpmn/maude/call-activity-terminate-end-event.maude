@@ -10,6 +10,15 @@ fmod MSET is pr
     op __ : MSet MSet -> MSet [ctor assoc comm id: none] .
     op __ : NeMSet MSet -> NeMSet [ctor ditto] .
     op __ : MSet NeMSet -> NeMSet [ctor ditto] .
+
+    op contains : MSet String -> Bool .
+
+    vars X Y : String .
+    var S S1 : MSet .
+
+    eq contains(none, X) = false .
+    eq contains(X S, X) = true .
+    ceq contains(Y S, X) = contains(S, X) if X =/= Y .
 endfm
 
 mod BPMN-EXECUTION is
@@ -32,22 +41,22 @@ mod BPMN-EXECUTION is
     ops Running, Terminated : -> ProcessState [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
 
+    op signalAll : Configuration MSet -> Configuration .
+    op signal : MSet MSet -> MSet .
     op terminate : Configuration -> Configuration .
-    --- Replace all occurrences of the first object with the second object in the given configuration.
-    op forAll : Configuration Object Object -> Configuration .
 
     vars P P1 : String .
-    vars T : MSet . --- tokens
+    vars T T1 : MSet . --- tokens
     vars S : Configuration . --- subprocesses
     vars STATE : ProcessState . --- state
     var PS : Configuration .
 
-    vars o1 o2 o3 : Object .
-    eq forAll(none, o2, o3) = none .
-    --- Replace the occurrence of o2 by o3
-    eq forAll(o2 PS, o2, o3) = forAll(o3 PS, o2, o3) .
-    --- Ignore o1 since it is not the same as o2.
-    ceq forAll(o1 PS, o2, o3) = o1 forAll(PS, o2, o3) if o1 =/= o2 .
+    eq signalAll(none, T) = none .
+    eq signalAll(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > PS, T1) = < P : ProcessSnapshot | tokens : signal(T, T1), subprocesses : S, state : Running > signalAll(PS, T1) .
+
+    ceq signal(P T, T1) = P (P + "_signal") signal(T, T1) if contains(T1, P) .
+    eq signal(P T, T1) = P signal(T, T1) [owise] .
+    eq signal(none, T1) = none .
 
     eq terminate(none) = none .
     --- NOOP if already terminated
@@ -71,16 +80,16 @@ mod BPMN-EXECUTION-call-activity-terminate-end-event is
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < "call-activity-terminate-end-event" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > => < "call-activity-terminate-end-event" : ProcessSnapshot | tokens : ("start_p1 (Flow_1lwnvn2)" T), subprocesses : (S), state : Running > .
-    rl [p1_Gateway_1ia6az3] :  < "call-activity-terminate-end-event" : ProcessSnapshot | tokens : ("start_p1 (Flow_1lwnvn2)" T), subprocesses : (S), state : Running > => < "call-activity-terminate-end-event" : ProcessSnapshot | tokens : ("p1_Subprocess (Flow_05a75mt)" "p1_terminate_end (Flow_0osmb7q)" T), subprocesses : (S), state : Running > .
-    rl [end_Event_08ww8rq] :  < "call-activity-terminate-end-event" : ProcessSnapshot | tokens : ("Subprocess_end (Flow_08du15s)" T), subprocesses : (S), state : Running > => < "call-activity-terminate-end-event" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
-    rl [Subprocess_Activity_08nz8l4] :  < "call-activity-terminate-end-event" : ProcessSnapshot | tokens : ("p1_Subprocess (Flow_05a75mt)" T), subprocesses : (S), state : Running > => < "call-activity-terminate-end-event" : ProcessSnapshot | tokens : (T), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : ("start_sub (Event_0pov758)"), subprocesses : (none), state : Running > S), state : Running > .
-    rl [Subprocess_Activity_08nz8l4_end] :  < "call-activity-terminate-end-event" : ProcessSnapshot | tokens : (T), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : (none), subprocesses : (none), state : Terminated > S), state : Running > => < "call-activity-terminate-end-event" : ProcessSnapshot | tokens : ("Subprocess_end (Flow_08du15s)" T), subprocesses : (S), state : Running > .
-    rl [start_sub_Event_0pov758] :  < "Subprocess" : ProcessSnapshot | tokens : ("start_sub (Event_0pov758)" T), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : ("start_sub_Subactivity (Flow_1963tcn)" T), subprocesses : (S), state : Running > .
-    rl [Subactivity_Activity_023wdnt_start] :  < "Subprocess" : ProcessSnapshot | tokens : ("start_sub_Subactivity (Flow_1963tcn)" T), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : ("Subactivity (Activity_023wdnt)" T), subprocesses : (S), state : Running > .
-    rl [Subactivity_Activity_023wdnt_end] :  < "Subprocess" : ProcessSnapshot | tokens : ("Subactivity (Activity_023wdnt)" T), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : ("Subactivity_end_sub (Flow_08jnebl)" T), subprocesses : (S), state : Running > .
-    rl [end_sub_Event_0qra2k2] :  < "Subprocess" : ProcessSnapshot | tokens : ("Subactivity_end_sub (Flow_08jnebl)" T), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
-    rl [terminate_end_Event_1gwdcji] :  < "call-activity-terminate-end-event" : ProcessSnapshot | tokens : ("p1_terminate_end (Flow_0osmb7q)" T), subprocesses : (S), state : Running > => < "call-activity-terminate-end-event" : ProcessSnapshot | tokens : (T), subprocesses : (terminate(S)), state : Terminated > .
+    rl [start_StartEvent_1] :  < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "call-activity-terminate-end-event" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > P) > => < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "call-activity-terminate-end-event" : ProcessSnapshot | tokens : ("start_p1 (Flow_1lwnvn2)" T), subprocesses : (S), state : Running > P) > .
+    rl [p1_Gateway_1ia6az3] :  < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "call-activity-terminate-end-event" : ProcessSnapshot | tokens : ("start_p1 (Flow_1lwnvn2)" T), subprocesses : (S), state : Running > P) > => < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "call-activity-terminate-end-event" : ProcessSnapshot | tokens : ("p1_Subprocess (Flow_05a75mt)" "p1_terminate_end (Flow_0osmb7q)" T), subprocesses : (S), state : Running > P) > .
+    rl [end_Event_08ww8rq] :  < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "call-activity-terminate-end-event" : ProcessSnapshot | tokens : ("Subprocess_end (Flow_08du15s)" T), subprocesses : (S), state : Running > P) > => < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "call-activity-terminate-end-event" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > P) > .
+    rl [Subprocess_Activity_08nz8l4] :  < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "call-activity-terminate-end-event" : ProcessSnapshot | tokens : ("p1_Subprocess (Flow_05a75mt)" T), subprocesses : (S), state : Running > P) > => < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "call-activity-terminate-end-event" : ProcessSnapshot | tokens : (T), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : ("start_sub (Event_0pov758)"), subprocesses : (none), state : Running > S), state : Running > P) > .
+    rl [Subprocess_Activity_08nz8l4_end] :  < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "call-activity-terminate-end-event" : ProcessSnapshot | tokens : (T), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : (none), subprocesses : (none), state : Terminated > S), state : Running > P) > => < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "call-activity-terminate-end-event" : ProcessSnapshot | tokens : ("Subprocess_end (Flow_08du15s)" T), subprocesses : (S), state : Running > P) > .
+    rl [start_sub_Event_0pov758] :  < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "Subprocess" : ProcessSnapshot | tokens : ("start_sub (Event_0pov758)" T), subprocesses : (S), state : Running > P) > => < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "Subprocess" : ProcessSnapshot | tokens : ("start_sub_Subactivity (Flow_1963tcn)" T), subprocesses : (S), state : Running > P) > .
+    rl [Subactivity_Activity_023wdnt_start] :  < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "Subprocess" : ProcessSnapshot | tokens : ("start_sub_Subactivity (Flow_1963tcn)" T), subprocesses : (S), state : Running > P) > => < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "Subprocess" : ProcessSnapshot | tokens : ("Subactivity (Activity_023wdnt)" T), subprocesses : (S), state : Running > P) > .
+    rl [Subactivity_Activity_023wdnt_end] :  < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "Subprocess" : ProcessSnapshot | tokens : ("Subactivity (Activity_023wdnt)" T), subprocesses : (S), state : Running > P) > => < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "Subprocess" : ProcessSnapshot | tokens : ("Subactivity_end_sub (Flow_08jnebl)" T), subprocesses : (S), state : Running > P) > .
+    rl [end_sub_Event_0qra2k2] :  < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "Subprocess" : ProcessSnapshot | tokens : ("Subactivity_end_sub (Flow_08jnebl)" T), subprocesses : (S), state : Running > P) > => < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "Subprocess" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > P) > .
+    rl [terminate_end_Event_1gwdcji] :  < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "call-activity-terminate-end-event" : ProcessSnapshot | tokens : ("p1_terminate_end (Flow_0osmb7q)" T), subprocesses : (S), state : Running > P) > => < "call-activity-terminate-end-event" : BPMNSystem | messages : (M), processes : (< "call-activity-terminate-end-event" : ProcessSnapshot | tokens : (T), subprocesses : (terminate(S)), state : Terminated > P) > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
@@ -118,6 +127,8 @@ mod BPMN-CHECK is
     pr BPMN-PREDS .
     pr MODEL-CHECKER .
     pr LTL-SIMPLIFIER .
+
+    var X : Configuration .
 endm
 
 red modelCheck(init,  <> [] allTerminated) .

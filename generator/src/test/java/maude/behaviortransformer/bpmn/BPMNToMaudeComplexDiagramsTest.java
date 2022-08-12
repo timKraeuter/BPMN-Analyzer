@@ -12,8 +12,6 @@ class BPMNToMaudeComplexDiagramsTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testCyclic() throws IOException {
-        // frewrite [25] init .
-        // The command above leads to termination but there is an infinite cycle in the state space!
-        testBPMNMaudeGeneration("cyclic");
+        testBPMNMaudeGenerationWithCustomQuery("cyclic", CAN_TERMINATE_QUERY);
     }
 }

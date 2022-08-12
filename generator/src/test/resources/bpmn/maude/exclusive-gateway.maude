@@ -10,6 +10,15 @@ fmod MSET is pr
     op __ : MSet MSet -> MSet [ctor assoc comm id: none] .
     op __ : NeMSet MSet -> NeMSet [ctor ditto] .
     op __ : MSet NeMSet -> NeMSet [ctor ditto] .
+
+    op contains : MSet String -> Bool .
+
+    vars X Y : String .
+    var S S1 : MSet .
+
+    eq contains(none, X) = false .
+    eq contains(X S, X) = true .
+    ceq contains(Y S, X) = contains(S, X) if X =/= Y .
 endfm
 
 mod BPMN-EXECUTION is
@@ -32,22 +41,22 @@ mod BPMN-EXECUTION is
     ops Running, Terminated : -> ProcessState [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
 
+    op signalAll : Configuration MSet -> Configuration .
+    op signal : MSet MSet -> MSet .
     op terminate : Configuration -> Configuration .
-    --- Replace all occurrences of the first object with the second object in the given configuration.
-    op forAll : Configuration Object Object -> Configuration .
 
     vars P P1 : String .
-    vars T : MSet . --- tokens
+    vars T T1 : MSet . --- tokens
     vars S : Configuration . --- subprocesses
     vars STATE : ProcessState . --- state
     var PS : Configuration .
 
-    vars o1 o2 o3 : Object .
-    eq forAll(none, o2, o3) = none .
-    --- Replace the occurrence of o2 by o3
-    eq forAll(o2 PS, o2, o3) = forAll(o3 PS, o2, o3) .
-    --- Ignore o1 since it is not the same as o2.
-    ceq forAll(o1 PS, o2, o3) = o1 forAll(PS, o2, o3) if o1 =/= o2 .
+    eq signalAll(none, T) = none .
+    eq signalAll(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > PS, T1) = < P : ProcessSnapshot | tokens : signal(T, T1), subprocesses : S, state : Running > signalAll(PS, T1) .
+
+    ceq signal(P T, T1) = P (P + "_signal") signal(T, T1) if contains(T1, P) .
+    eq signal(P T, T1) = P signal(T, T1) [owise] .
+    eq signal(none, T1) = none .
 
     eq terminate(none) = none .
     --- NOOP if already terminated
@@ -71,22 +80,22 @@ mod BPMN-EXECUTION-exclusive-gateway is
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < "exclusive-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > => < "exclusive-gateway" : ProcessSnapshot | tokens : ("start_a0 (Flow_1qxu4uv)" T), subprocesses : (S), state : Running > .
-    rl [a0_Activity_029uqdv_start] :  < "exclusive-gateway" : ProcessSnapshot | tokens : ("start_a0 (Flow_1qxu4uv)" T), subprocesses : (S), state : Running > => < "exclusive-gateway" : ProcessSnapshot | tokens : ("a0 (Activity_029uqdv)" T), subprocesses : (S), state : Running > .
-    rl [a0_Activity_029uqdv_end] :  < "exclusive-gateway" : ProcessSnapshot | tokens : ("a0 (Activity_029uqdv)" T), subprocesses : (S), state : Running > => < "exclusive-gateway" : ProcessSnapshot | tokens : ("a0_a1 (Flow_0cg7cqo)" T), subprocesses : (S), state : Running > .
-    rl [a1_Activity_194ixr2_start] :  < "exclusive-gateway" : ProcessSnapshot | tokens : ("a0_a1 (Flow_0cg7cqo)" T), subprocesses : (S), state : Running > => < "exclusive-gateway" : ProcessSnapshot | tokens : ("a1 (Activity_194ixr2)" T), subprocesses : (S), state : Running > .
-    rl [a1_Activity_194ixr2_end] :  < "exclusive-gateway" : ProcessSnapshot | tokens : ("a1 (Activity_194ixr2)" T), subprocesses : (S), state : Running > => < "exclusive-gateway" : ProcessSnapshot | tokens : ("a1_e1 (Flow_1pf5izs)" T), subprocesses : (S), state : Running > .
-    rl [e1_Gateway_0a08dmu] :  < "exclusive-gateway" : ProcessSnapshot | tokens : ("a1_e1 (Flow_1pf5izs)" T), subprocesses : (S), state : Running > => < "exclusive-gateway" : ProcessSnapshot | tokens : ("e1_a2_1 (Flow_06uejek)" T), subprocesses : (S), state : Running > .
-    rl [e1_Gateway_0a08dmu] :  < "exclusive-gateway" : ProcessSnapshot | tokens : ("a1_e1 (Flow_1pf5izs)" T), subprocesses : (S), state : Running > => < "exclusive-gateway" : ProcessSnapshot | tokens : ("e1_a2_2 (Flow_1id82hx)" T), subprocesses : (S), state : Running > .
-    rl [a2_1_Activity_1hsp815_start] :  < "exclusive-gateway" : ProcessSnapshot | tokens : ("e1_a2_1 (Flow_06uejek)" T), subprocesses : (S), state : Running > => < "exclusive-gateway" : ProcessSnapshot | tokens : ("a2_1 (Activity_1hsp815)" T), subprocesses : (S), state : Running > .
-    rl [a2_1_Activity_1hsp815_end] :  < "exclusive-gateway" : ProcessSnapshot | tokens : ("a2_1 (Activity_1hsp815)" T), subprocesses : (S), state : Running > => < "exclusive-gateway" : ProcessSnapshot | tokens : ("a2_1_e2 (Flow_1qlsryz)" T), subprocesses : (S), state : Running > .
-    rl [e2_Gateway_1t9ovia] :  < "exclusive-gateway" : ProcessSnapshot | tokens : ("a2_1_e2 (Flow_1qlsryz)" T), subprocesses : (S), state : Running > => < "exclusive-gateway" : ProcessSnapshot | tokens : ("e2_a3 (Flow_0rj1gn8)" T), subprocesses : (S), state : Running > .
-    rl [e2_Gateway_1t9ovia] :  < "exclusive-gateway" : ProcessSnapshot | tokens : ("a2_2_e2 (Flow_1y8u2ok)" T), subprocesses : (S), state : Running > => < "exclusive-gateway" : ProcessSnapshot | tokens : ("e2_a3 (Flow_0rj1gn8)" T), subprocesses : (S), state : Running > .
-    rl [a3_Activity_0mczhuc_start] :  < "exclusive-gateway" : ProcessSnapshot | tokens : ("e2_a3 (Flow_0rj1gn8)" T), subprocesses : (S), state : Running > => < "exclusive-gateway" : ProcessSnapshot | tokens : ("a3 (Activity_0mczhuc)" T), subprocesses : (S), state : Running > .
-    rl [a3_Activity_0mczhuc_end] :  < "exclusive-gateway" : ProcessSnapshot | tokens : ("a3 (Activity_0mczhuc)" T), subprocesses : (S), state : Running > => < "exclusive-gateway" : ProcessSnapshot | tokens : ("a3_end (Flow_1rdqmbz)" T), subprocesses : (S), state : Running > .
-    rl [end_Event_0sx78s8] :  < "exclusive-gateway" : ProcessSnapshot | tokens : ("a3_end (Flow_1rdqmbz)" T), subprocesses : (S), state : Running > => < "exclusive-gateway" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
-    rl [a2_2_Activity_0v43tih_start] :  < "exclusive-gateway" : ProcessSnapshot | tokens : ("e1_a2_2 (Flow_1id82hx)" T), subprocesses : (S), state : Running > => < "exclusive-gateway" : ProcessSnapshot | tokens : ("a2_2 (Activity_0v43tih)" T), subprocesses : (S), state : Running > .
-    rl [a2_2_Activity_0v43tih_end] :  < "exclusive-gateway" : ProcessSnapshot | tokens : ("a2_2 (Activity_0v43tih)" T), subprocesses : (S), state : Running > => < "exclusive-gateway" : ProcessSnapshot | tokens : ("a2_2_e2 (Flow_1y8u2ok)" T), subprocesses : (S), state : Running > .
+    rl [start_StartEvent_1] :  < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > P) > => < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("start_a0 (Flow_1qxu4uv)" T), subprocesses : (S), state : Running > P) > .
+    rl [a0_Activity_029uqdv_start] :  < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("start_a0 (Flow_1qxu4uv)" T), subprocesses : (S), state : Running > P) > => < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a0 (Activity_029uqdv)" T), subprocesses : (S), state : Running > P) > .
+    rl [a0_Activity_029uqdv_end] :  < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a0 (Activity_029uqdv)" T), subprocesses : (S), state : Running > P) > => < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a0_a1 (Flow_0cg7cqo)" T), subprocesses : (S), state : Running > P) > .
+    rl [a1_Activity_194ixr2_start] :  < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a0_a1 (Flow_0cg7cqo)" T), subprocesses : (S), state : Running > P) > => < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a1 (Activity_194ixr2)" T), subprocesses : (S), state : Running > P) > .
+    rl [a1_Activity_194ixr2_end] :  < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a1 (Activity_194ixr2)" T), subprocesses : (S), state : Running > P) > => < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a1_e1 (Flow_1pf5izs)" T), subprocesses : (S), state : Running > P) > .
+    rl [e1_Gateway_0a08dmu] :  < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a1_e1 (Flow_1pf5izs)" T), subprocesses : (S), state : Running > P) > => < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("e1_a2_1 (Flow_06uejek)" T), subprocesses : (S), state : Running > P) > .
+    rl [e1_Gateway_0a08dmu] :  < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a1_e1 (Flow_1pf5izs)" T), subprocesses : (S), state : Running > P) > => < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("e1_a2_2 (Flow_1id82hx)" T), subprocesses : (S), state : Running > P) > .
+    rl [a2_1_Activity_1hsp815_start] :  < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("e1_a2_1 (Flow_06uejek)" T), subprocesses : (S), state : Running > P) > => < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a2_1 (Activity_1hsp815)" T), subprocesses : (S), state : Running > P) > .
+    rl [a2_1_Activity_1hsp815_end] :  < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a2_1 (Activity_1hsp815)" T), subprocesses : (S), state : Running > P) > => < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a2_1_e2 (Flow_1qlsryz)" T), subprocesses : (S), state : Running > P) > .
+    rl [e2_Gateway_1t9ovia] :  < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a2_1_e2 (Flow_1qlsryz)" T), subprocesses : (S), state : Running > P) > => < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("e2_a3 (Flow_0rj1gn8)" T), subprocesses : (S), state : Running > P) > .
+    rl [e2_Gateway_1t9ovia] :  < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a2_2_e2 (Flow_1y8u2ok)" T), subprocesses : (S), state : Running > P) > => < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("e2_a3 (Flow_0rj1gn8)" T), subprocesses : (S), state : Running > P) > .
+    rl [a3_Activity_0mczhuc_start] :  < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("e2_a3 (Flow_0rj1gn8)" T), subprocesses : (S), state : Running > P) > => < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a3 (Activity_0mczhuc)" T), subprocesses : (S), state : Running > P) > .
+    rl [a3_Activity_0mczhuc_end] :  < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a3 (Activity_0mczhuc)" T), subprocesses : (S), state : Running > P) > => < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a3_end (Flow_1rdqmbz)" T), subprocesses : (S), state : Running > P) > .
+    rl [end_Event_0sx78s8] :  < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a3_end (Flow_1rdqmbz)" T), subprocesses : (S), state : Running > P) > => < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > P) > .
+    rl [a2_2_Activity_0v43tih_start] :  < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("e1_a2_2 (Flow_1id82hx)" T), subprocesses : (S), state : Running > P) > => < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a2_2 (Activity_0v43tih)" T), subprocesses : (S), state : Running > P) > .
+    rl [a2_2_Activity_0v43tih_end] :  < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a2_2 (Activity_0v43tih)" T), subprocesses : (S), state : Running > P) > => < "exclusive-gateway" : BPMNSystem | messages : (M), processes : (< "exclusive-gateway" : ProcessSnapshot | tokens : ("a2_2_e2 (Flow_1y8u2ok)" T), subprocesses : (S), state : Running > P) > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
@@ -124,6 +133,8 @@ mod BPMN-CHECK is
     pr BPMN-PREDS .
     pr MODEL-CHECKER .
     pr LTL-SIMPLIFIER .
+
+    var X : Configuration .
 endm
 
 red modelCheck(init,  <> [] allTerminated) .

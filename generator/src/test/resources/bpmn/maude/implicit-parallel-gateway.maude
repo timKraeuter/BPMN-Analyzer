@@ -10,6 +10,15 @@ fmod MSET is pr
     op __ : MSet MSet -> MSet [ctor assoc comm id: none] .
     op __ : NeMSet MSet -> NeMSet [ctor ditto] .
     op __ : MSet NeMSet -> NeMSet [ctor ditto] .
+
+    op contains : MSet String -> Bool .
+
+    vars X Y : String .
+    var S S1 : MSet .
+
+    eq contains(none, X) = false .
+    eq contains(X S, X) = true .
+    ceq contains(Y S, X) = contains(S, X) if X =/= Y .
 endfm
 
 mod BPMN-EXECUTION is
@@ -32,22 +41,22 @@ mod BPMN-EXECUTION is
     ops Running, Terminated : -> ProcessState [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
 
+    op signalAll : Configuration MSet -> Configuration .
+    op signal : MSet MSet -> MSet .
     op terminate : Configuration -> Configuration .
-    --- Replace all occurrences of the first object with the second object in the given configuration.
-    op forAll : Configuration Object Object -> Configuration .
 
     vars P P1 : String .
-    vars T : MSet . --- tokens
+    vars T T1 : MSet . --- tokens
     vars S : Configuration . --- subprocesses
     vars STATE : ProcessState . --- state
     var PS : Configuration .
 
-    vars o1 o2 o3 : Object .
-    eq forAll(none, o2, o3) = none .
-    --- Replace the occurrence of o2 by o3
-    eq forAll(o2 PS, o2, o3) = forAll(o3 PS, o2, o3) .
-    --- Ignore o1 since it is not the same as o2.
-    ceq forAll(o1 PS, o2, o3) = o1 forAll(PS, o2, o3) if o1 =/= o2 .
+    eq signalAll(none, T) = none .
+    eq signalAll(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > PS, T1) = < P : ProcessSnapshot | tokens : signal(T, T1), subprocesses : S, state : Running > signalAll(PS, T1) .
+
+    ceq signal(P T, T1) = P (P + "_signal") signal(T, T1) if contains(T1, P) .
+    eq signal(P T, T1) = P signal(T, T1) [owise] .
+    eq signal(none, T1) = none .
 
     eq terminate(none) = none .
     --- NOOP if already terminated
@@ -71,15 +80,15 @@ mod BPMN-EXECUTION-implicit-parallel-gateway is
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > => < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("start_A (Flow_0ieyd6c)" T), subprocesses : (S), state : Running > .
-    rl [A_Activity_1l6v9dq_start] :  < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("start_A (Flow_0ieyd6c)" T), subprocesses : (S), state : Running > => < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("A (Activity_1l6v9dq)" T), subprocesses : (S), state : Running > .
-    rl [A_Activity_1l6v9dq_end] :  < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("A (Activity_1l6v9dq)" T), subprocesses : (S), state : Running > => < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("A_B (Flow_0ck3822)" "A_C (Flow_0e4dh5d)" T), subprocesses : (S), state : Running > .
-    rl [B_Activity_0b4qs7m_start] :  < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("A_B (Flow_0ck3822)" T), subprocesses : (S), state : Running > => < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("B (Activity_0b4qs7m)" T), subprocesses : (S), state : Running > .
-    rl [B_Activity_0b4qs7m_end] :  < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("B (Activity_0b4qs7m)" T), subprocesses : (S), state : Running > => < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("B_p1 (Flow_0brzjix)" T), subprocesses : (S), state : Running > .
-    rl [C_Activity_0q12g5f_start] :  < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("A_C (Flow_0e4dh5d)" T), subprocesses : (S), state : Running > => < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("C (Activity_0q12g5f)" T), subprocesses : (S), state : Running > .
-    rl [C_Activity_0q12g5f_end] :  < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("C (Activity_0q12g5f)" T), subprocesses : (S), state : Running > => < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("C_p1 (Flow_1izb8k4)" T), subprocesses : (S), state : Running > .
-    rl [p1_Gateway_0ol452b] :  < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("B_p1 (Flow_0brzjix)" "C_p1 (Flow_1izb8k4)" T), subprocesses : (S), state : Running > => < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("p1_end (Flow_13w8ztu)" T), subprocesses : (S), state : Running > .
-    rl [end_Event_1otjtiv] :  < "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("p1_end (Flow_13w8ztu)" T), subprocesses : (S), state : Running > => < "implicit-parallel-gateway" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
+    rl [start_StartEvent_1] :  < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > P) > => < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("start_A (Flow_0ieyd6c)" T), subprocesses : (S), state : Running > P) > .
+    rl [A_Activity_1l6v9dq_start] :  < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("start_A (Flow_0ieyd6c)" T), subprocesses : (S), state : Running > P) > => < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("A (Activity_1l6v9dq)" T), subprocesses : (S), state : Running > P) > .
+    rl [A_Activity_1l6v9dq_end] :  < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("A (Activity_1l6v9dq)" T), subprocesses : (S), state : Running > P) > => < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("A_B (Flow_0ck3822)" "A_C (Flow_0e4dh5d)" T), subprocesses : (S), state : Running > P) > .
+    rl [B_Activity_0b4qs7m_start] :  < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("A_B (Flow_0ck3822)" T), subprocesses : (S), state : Running > P) > => < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("B (Activity_0b4qs7m)" T), subprocesses : (S), state : Running > P) > .
+    rl [B_Activity_0b4qs7m_end] :  < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("B (Activity_0b4qs7m)" T), subprocesses : (S), state : Running > P) > => < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("B_p1 (Flow_0brzjix)" T), subprocesses : (S), state : Running > P) > .
+    rl [C_Activity_0q12g5f_start] :  < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("A_C (Flow_0e4dh5d)" T), subprocesses : (S), state : Running > P) > => < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("C (Activity_0q12g5f)" T), subprocesses : (S), state : Running > P) > .
+    rl [C_Activity_0q12g5f_end] :  < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("C (Activity_0q12g5f)" T), subprocesses : (S), state : Running > P) > => < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("C_p1 (Flow_1izb8k4)" T), subprocesses : (S), state : Running > P) > .
+    rl [p1_Gateway_0ol452b] :  < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("B_p1 (Flow_0brzjix)" "C_p1 (Flow_1izb8k4)" T), subprocesses : (S), state : Running > P) > => < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("p1_end (Flow_13w8ztu)" T), subprocesses : (S), state : Running > P) > .
+    rl [end_Event_1otjtiv] :  < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : ("p1_end (Flow_13w8ztu)" T), subprocesses : (S), state : Running > P) > => < "implicit-parallel-gateway" : BPMNSystem | messages : (M), processes : (< "implicit-parallel-gateway" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > P) > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
@@ -117,6 +126,8 @@ mod BPMN-CHECK is
     pr BPMN-PREDS .
     pr MODEL-CHECKER .
     pr LTL-SIMPLIFIER .
+
+    var X : Configuration .
 endm
 
 red modelCheck(init,  <> [] allTerminated) .

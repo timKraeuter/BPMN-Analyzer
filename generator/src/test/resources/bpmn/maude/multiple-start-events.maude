@@ -10,6 +10,15 @@ fmod MSET is pr
     op __ : MSet MSet -> MSet [ctor assoc comm id: none] .
     op __ : NeMSet MSet -> NeMSet [ctor ditto] .
     op __ : MSet NeMSet -> NeMSet [ctor ditto] .
+
+    op contains : MSet String -> Bool .
+
+    vars X Y : String .
+    var S S1 : MSet .
+
+    eq contains(none, X) = false .
+    eq contains(X S, X) = true .
+    ceq contains(Y S, X) = contains(S, X) if X =/= Y .
 endfm
 
 mod BPMN-EXECUTION is
@@ -32,22 +41,22 @@ mod BPMN-EXECUTION is
     ops Running, Terminated : -> ProcessState [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
 
+    op signalAll : Configuration MSet -> Configuration .
+    op signal : MSet MSet -> MSet .
     op terminate : Configuration -> Configuration .
-    --- Replace all occurrences of the first object with the second object in the given configuration.
-    op forAll : Configuration Object Object -> Configuration .
 
     vars P P1 : String .
-    vars T : MSet . --- tokens
+    vars T T1 : MSet . --- tokens
     vars S : Configuration . --- subprocesses
     vars STATE : ProcessState . --- state
     var PS : Configuration .
 
-    vars o1 o2 o3 : Object .
-    eq forAll(none, o2, o3) = none .
-    --- Replace the occurrence of o2 by o3
-    eq forAll(o2 PS, o2, o3) = forAll(o3 PS, o2, o3) .
-    --- Ignore o1 since it is not the same as o2.
-    ceq forAll(o1 PS, o2, o3) = o1 forAll(PS, o2, o3) if o1 =/= o2 .
+    eq signalAll(none, T) = none .
+    eq signalAll(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > PS, T1) = < P : ProcessSnapshot | tokens : signal(T, T1), subprocesses : S, state : Running > signalAll(PS, T1) .
+
+    ceq signal(P T, T1) = P (P + "_signal") signal(T, T1) if contains(T1, P) .
+    eq signal(P T, T1) = P signal(T, T1) [owise] .
+    eq signal(none, T1) = none .
 
     eq terminate(none) = none .
     --- NOOP if already terminated
@@ -71,14 +80,14 @@ mod BPMN-EXECUTION-multiple-start-events is
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start1_p1_StartEvent_1] :  < "p1" : ProcessSnapshot | tokens : ("start1_p1 (StartEvent_1)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start1_p1_p_p1 (Flow_1p3gdcm)" T), subprocesses : (S), state : Running > .
-    rl [start2_p1_Event_1avhncp] :  < "p1" : ProcessSnapshot | tokens : ("start2_p1 (Event_1avhncp)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start2_p1_p_p1 (Flow_1bwtd34)" T), subprocesses : (S), state : Running > .
-    rl [p_p1_Gateway_0djwvv3] :  < "p1" : ProcessSnapshot | tokens : ("start2_p1_p_p1 (Flow_1bwtd34)" "start1_p1_p_p1 (Flow_1p3gdcm)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("p_p1_end_p1 (Flow_1hji70l)" T), subprocesses : (S), state : Running > .
-    rl [end_p1_Event_0i28wix] :  < "p1" : ProcessSnapshot | tokens : ("p_p1_end_p1 (Flow_1hji70l)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
-    rl [start1_p2_Event_0rbdq43] :  < "p2" : ProcessSnapshot | tokens : ("start1_p2 (Event_0rbdq43)" T), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("start1_p2_p_p2 (Flow_120g9dm)" T), subprocesses : (S), state : Running > .
-    rl [start2_p2_Event_0rt8j9k] :  < "p2" : ProcessSnapshot | tokens : ("start2_p2 (Event_0rt8j9k)" T), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("start2_p2_p_p2 (Flow_1f9dgmw)" T), subprocesses : (S), state : Running > .
-    rl [p_p2_Gateway_09ghyqt] :  < "p2" : ProcessSnapshot | tokens : ("start2_p2_p_p2 (Flow_1f9dgmw)" "start1_p2_p_p2 (Flow_120g9dm)" T), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("p_p2_end_p2 (Flow_17dpz8t)" T), subprocesses : (S), state : Running > .
-    rl [end_p2_Event_1hg9h1w] :  < "p2" : ProcessSnapshot | tokens : ("p_p2_end_p2 (Flow_17dpz8t)" T), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
+    rl [start1_p1_StartEvent_1] :  < "multiple-start-events" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("start1_p1 (StartEvent_1)" T), subprocesses : (S), state : Running > P) > => < "multiple-start-events" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("start1_p1_p_p1 (Flow_1p3gdcm)" T), subprocesses : (S), state : Running > P) > .
+    rl [start2_p1_Event_1avhncp] :  < "multiple-start-events" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("start2_p1 (Event_1avhncp)" T), subprocesses : (S), state : Running > P) > => < "multiple-start-events" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("start2_p1_p_p1 (Flow_1bwtd34)" T), subprocesses : (S), state : Running > P) > .
+    rl [p_p1_Gateway_0djwvv3] :  < "multiple-start-events" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("start2_p1_p_p1 (Flow_1bwtd34)" "start1_p1_p_p1 (Flow_1p3gdcm)" T), subprocesses : (S), state : Running > P) > => < "multiple-start-events" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("p_p1_end_p1 (Flow_1hji70l)" T), subprocesses : (S), state : Running > P) > .
+    rl [end_p1_Event_0i28wix] :  < "multiple-start-events" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("p_p1_end_p1 (Flow_1hji70l)" T), subprocesses : (S), state : Running > P) > => < "multiple-start-events" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > P) > .
+    rl [start1_p2_Event_0rbdq43] :  < "multiple-start-events" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("start1_p2 (Event_0rbdq43)" T), subprocesses : (S), state : Running > P) > => < "multiple-start-events" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("start1_p2_p_p2 (Flow_120g9dm)" T), subprocesses : (S), state : Running > P) > .
+    rl [start2_p2_Event_0rt8j9k] :  < "multiple-start-events" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("start2_p2 (Event_0rt8j9k)" T), subprocesses : (S), state : Running > P) > => < "multiple-start-events" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("start2_p2_p_p2 (Flow_1f9dgmw)" T), subprocesses : (S), state : Running > P) > .
+    rl [p_p2_Gateway_09ghyqt] :  < "multiple-start-events" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("start2_p2_p_p2 (Flow_1f9dgmw)" "start1_p2_p_p2 (Flow_120g9dm)" T), subprocesses : (S), state : Running > P) > => < "multiple-start-events" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("p_p2_end_p2 (Flow_17dpz8t)" T), subprocesses : (S), state : Running > P) > .
+    rl [end_p2_Event_1hg9h1w] :  < "multiple-start-events" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("p_p2_end_p2 (Flow_17dpz8t)" T), subprocesses : (S), state : Running > P) > => < "multiple-start-events" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > P) > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
@@ -117,6 +126,8 @@ mod BPMN-CHECK is
     pr BPMN-PREDS .
     pr MODEL-CHECKER .
     pr LTL-SIMPLIFIER .
+
+    var X : Configuration .
 endm
 
 red modelCheck(init,  <> [] allTerminated) .
