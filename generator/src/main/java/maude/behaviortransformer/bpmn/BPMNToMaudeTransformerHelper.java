@@ -32,7 +32,9 @@ public interface BPMNToMaudeTransformerHelper {
     String RULE_NAME_NAME_ID_FORMAT = "%s_%s";
     String RULE_NAME_ID_FORMAT = "%s";
     String TOKEN_FORMAT = "\"%s (%s)\""; // Name of the FlowElement followed by id.
+    String SIGNAL_OCCURENCE_FORMAT = "\"%s (%s)_signal\"";
     String TOKEN_FORMAT_ONLY_ID = "\"%s\""; // Name of the FlowElement followed by id.
+    String SIGNAL_OCCURENCE_FORMAT_ONLY_ID = "\"%s_signal\""; // Name of the FlowElement followed by id.
     String ENQUOTE_FORMAT = "\"%s\""; // Id of the FlowElement.
     String BRACKET_FORMAT = "(%s)";
     String RUNNING = "Running";
@@ -42,11 +44,11 @@ public interface BPMNToMaudeTransformerHelper {
 
     MaudeObjectBuilder getObjectBuilder();
 
-    default String getFlowNodeRuleNameWithIncFlow(FlowNode taskOrCallActivity, String incomingFlowId) {
-        if (taskOrCallActivity.getIncomingFlows().count() > 1) {
-            return String.format(RULE_NAME_NAME_ID_FORMAT, getFlowNodeRuleName(taskOrCallActivity), incomingFlowId);
+    default String getFlowNodeRuleNameWithIncFlow(FlowNode flowNode, String incomingFlowId) {
+        if (flowNode.getIncomingFlows().count() > 1) {
+            return String.format(RULE_NAME_NAME_ID_FORMAT, getFlowNodeRuleName(flowNode), incomingFlowId);
         }
-        return getFlowNodeRuleName(taskOrCallActivity);
+        return getFlowNodeRuleName(flowNode);
     }
 
     default String getFlowNodeRuleName(FlowNode flowNode) {
@@ -57,10 +59,31 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
     default String getTokenForFlowNode(FlowNode flowNode) {
+        return getTokenOrSignalOccurrenceForFlowNode(flowNode, TOKEN_FORMAT_ONLY_ID, TOKEN_FORMAT);
+    }
+
+    default String getSignalOccurrenceForFlowNode(FlowNode flowNode) {
+        return getTokenOrSignalOccurrenceForFlowNode(flowNode, SIGNAL_OCCURENCE_FORMAT_ONLY_ID, SIGNAL_OCCURENCE_FORMAT);
+    }
+
+    private String getTokenOrSignalOccurrenceForFlowNode(FlowNode flowNode,
+                                                         String formatOnlyId,
+                                                         String format) {
         if (flowNode.getName() == null || flowNode.getName().isBlank()) {
-            return String.format(TOKEN_FORMAT_ONLY_ID, flowNode.getId());
+            return String.format(formatOnlyId, flowNode.getId());
         }
-        return String.format(TOKEN_FORMAT, flowNode.getName(), flowNode.getId());
+        return String.format(format, flowNode.getName(), flowNode.getId());
+    }
+
+    default String getSignalOccurenceForSequenceFlow(SequenceFlow sequenceFlow) {
+        return getTokenOrSignalOccurenceForSequenceFlow(sequenceFlow, SIGNAL_OCCURENCE_FORMAT);
+    }
+
+    private String getTokenOrSignalOccurenceForSequenceFlow(SequenceFlow sequenceFlow, String signalOccurenceFormat) {
+        String nameOrDescriptiveName = sequenceFlow.getName() == null ||
+                                       sequenceFlow.getName().isBlank() ? sequenceFlow.getDescriptiveName() :
+                sequenceFlow.getName();
+        return String.format(signalOccurenceFormat, nameOrDescriptiveName, sequenceFlow.getId());
     }
 
     default String getStartEventTokenName(StartEvent event) {
@@ -73,10 +96,7 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
     default String getTokenForSequenceFlow(SequenceFlow sequenceFlow) {
-        String nameOrDescriptiveName = sequenceFlow.getName() == null ||
-                                       sequenceFlow.getName().isBlank() ? sequenceFlow.getDescriptiveName() :
-                sequenceFlow.getName();
-        return String.format(TOKEN_FORMAT, nameOrDescriptiveName, sequenceFlow.getId());
+        return getTokenOrSignalOccurenceForSequenceFlow(sequenceFlow, TOKEN_FORMAT);
     }
 
     default MaudeObject createTerminatedProcessSnapshot(AbstractProcess process) {

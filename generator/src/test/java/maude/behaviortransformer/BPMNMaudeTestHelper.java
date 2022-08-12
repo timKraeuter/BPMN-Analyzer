@@ -16,11 +16,17 @@ public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper {
 
     String MAUDE_MODULE_FOLDER = "/bpmn/maude/";
     boolean REPLACE_EXPECTED_FILE_WITH_ACTUAL = false;
+    String WILL_ALWAYS_TERMINATE_QUERY = "red modelCheck(init,  <> [] allTerminated)";
+    String CAN_TERMINATE_QUERY = "search init =>! X such that X |= allTerminated = true";
 
     default void testBPMNMaudeGeneration(String resourceFileName) throws IOException {
+        testBPMNMaudeGenerationWithCustomQuery(resourceFileName, WILL_ALWAYS_TERMINATE_QUERY);
+    }
+
+    default void testBPMNMaudeGenerationWithCustomQuery(String resourceFileName, String finalQuery) throws IOException {
         BPMNToMaudeTransformer transformer = new BPMNToMaudeTransformer(readModelFromResourceFolder(resourceFileName +
                                                                                                     ".bpmn"));
-        String actualMaudeModule = transformer.generate(" <> [] allTerminated");
+        String actualMaudeModule = transformer.generate(finalQuery);
 
         String expectedMaudeModule = readExpectedMaudeModule(resourceFileName);
         if (REPLACE_EXPECTED_FILE_WITH_ACTUAL) {
@@ -29,9 +35,10 @@ public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper {
         assertThat(actualMaudeModule, actualMaudeModule, is(expectedMaudeModule));
     }
 
-    private void replaceWithActualIfNeeded(String resourceFileName,
-                           String actualMaudeModule,
-                           String expectedMaudeModule) throws IOException {
+    private void replaceWithActualIfNeeded(
+            String resourceFileName,
+            String actualMaudeModule,
+            String expectedMaudeModule) throws IOException {
         String expectedFileFilePath = "src/test/resources/" + MAUDE_MODULE_FOLDER + resourceFileName + ".maude";
         if (!actualMaudeModule.equals(expectedMaudeModule)) {
             // Only replace if reduced to true. Run model!

@@ -14,7 +14,6 @@ import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformer.NEW_LINE;
 
 public abstract class MaudeRuleBuilderBase<T extends MaudeRuleBuilderBase<T>> {
 
-    // Variables needed here?.
     protected final Set<MaudeRule> createdRules;
     protected String ruleName;
     protected Set<MaudeObject> preObjects;

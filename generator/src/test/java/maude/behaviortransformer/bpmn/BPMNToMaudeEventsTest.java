@@ -7,6 +7,7 @@ import java.io.IOException;
 
 class BPMNToMaudeEventsTest implements BPMNMaudeTestHelper {
 
+
     /**
      * See test case <a href="https://cawemo.com/share/b115e18b-0136-41a7-940a-8190c97da07e">"Multiple Start Events"</a>
      * in cawemo.
@@ -76,7 +77,7 @@ class BPMNToMaudeEventsTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testSignalEvents() throws IOException {
-        testBPMNMaudeGeneration("signal-events");
+        testBPMNMaudeGenerationWithCustomQuery("signal-events", CAN_TERMINATE_QUERY);
     }
 
     /**
@@ -84,8 +85,15 @@ class BPMNToMaudeEventsTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testSignalEventsMultiActivation() throws IOException {
-        // TODO: not terminating yet.
-        testBPMNMaudeGeneration("signal-events-multi-activation");
+        testBPMNMaudeGenerationWithCustomQuery("signal-events-multi-activation", CAN_TERMINATE_QUERY);
+    }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/813dee70-ddc2-4a71-a965-1b6a2d28c7fa">"Signal events - Multi Activation - Same Process"</a> in cawemo.
+     */
+    @Test
+    void testSignalEventsMultiActivationSameProcess() throws IOException {
+        testBPMNMaudeGenerationWithCustomQuery("signal-events-multi-activation-same-process", CAN_TERMINATE_QUERY);
     }
 
     /**

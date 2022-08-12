@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="S2_Throw" role="rule" edgeids="false" edgemode="directed">
+    <graph id="S3_Throw" role="rule" edgeids="false" edgemode="directed">
         <node id="n37">
             <attr name="layout">
                 <string>432 412 0 0</string>
@@ -73,7 +73,7 @@
         </node>
         <edge from="n29" to="n29">
             <attr name="label">
-                <string>string:"S1_Throw_S2_Throw"</string>
+                <string>string:"S2_Catch_2_S3_Throw"</string>
             </attr>
         </edge>
         <node id="n30">
@@ -133,7 +133,7 @@
         </node>
         <edge from="n36" to="n36">
             <attr name="label">
-                <string>string:"e1_S2_Catch"</string>
+                <string>string:"S2_Throw_S3_Catch"</string>
             </attr>
         </edge>
         <node id="n38">
@@ -143,7 +143,7 @@
         </node>
         <edge from="n38" to="n38">
             <attr name="label">
-                <string>string:"S2_Catch_end_p2"</string>
+                <string>string:"S3_Catch_end_p2"</string>
             </attr>
         </edge>
         <edge from="n32" to="n37">

@@ -33,6 +33,15 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    op __ : MSet MSet -> MSet [ctor assoc comm id: none] .\r\n" +
                                                   "    op __ : NeMSet MSet -> NeMSet [ctor ditto] .\r\n" +
                                                   "    op __ : MSet NeMSet -> NeMSet [ctor ditto] .\r\n" +
+                                                  "\r\n" +
+                                                  "    op contains : MSet String -> Bool .\r\n" +
+                                                  "\r\n" +
+                                                  "    vars X Y : String .\r\n" +
+                                                  "    var S S1 : MSet .\r\n" +
+                                                  "\r\n" +
+                                                  "    eq contains(none, X) = false .\r\n" +
+                                                  "    eq contains(X S, X) = true .\r\n" +
+                                                  "    ceq contains(Y S, X) = contains(S, X) if X =/= Y .\r\n" +
                                                   "endfm\r\n" +
                                                   "\r\n" +
                                                   "mod BPMN-EXECUTION is\r\n" +
@@ -55,24 +64,26 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    ops Running, Terminated : -> ProcessState [ctor] .\r\n" +
                                                   "    op state :_ : ProcessState -> Attribute [ctor] .\r\n" +
                                                   "\r\n" +
+                                                  "    op signalAll : Configuration MSet -> Configuration .\r\n" +
+                                                  "    op signal : MSet MSet -> MSet .\r\n" +
                                                   "    op terminate : Configuration -> Configuration .\r\n" +
-                                                  "    --- Replace all occurrences of the first object with the " +
-                                                  "second object in the given configuration.\r\n" +
-                                                  "    op forAll : Configuration Object Object -> Configuration .\r\n" +
                                                   "\r\n" +
                                                   "    vars P P1 : String .\r\n" +
-                                                  "    vars T : MSet . --- tokens\r\n" +
+                                                  "    vars T T1 : MSet . --- tokens\r\n" +
                                                   "    vars S : Configuration . --- subprocesses\r\n" +
                                                   "    vars STATE : ProcessState . --- state\r\n" +
                                                   "    var PS : Configuration .\r\n" +
                                                   "\r\n" +
-                                                  "    vars o1 o2 o3 : Object .\r\n" +
-                                                  "    eq forAll(none, o2, o3) = none .\r\n" +
-                                                  "    --- Replace the occurrence of o2 by o3\r\n" +
-                                                  "    eq forAll(o2 PS, o2, o3) = forAll(o3 PS, o2, o3) .\r\n" +
-                                                  "    --- Ignore o1 since it is not the same as o2.\r\n" +
-                                                  "    ceq forAll(o1 PS, o2, o3) = o1 forAll(PS, o2, o3) if o1 =/= o2" +
-                                                  " .\r\n" +
+                                                  "    eq signalAll(none, T) = none .\r\n" +
+                                                  "    eq signalAll(< P : ProcessSnapshot | tokens : T, subprocesses " +
+                                                  ": S, state : Running > PS, T1) = < P : ProcessSnapshot | tokens : " +
+                                                  "signal(T, T1), subprocesses : S, state : Running > signalAll(PS, " +
+                                                  "T1) .\r\n" +
+                                                  "\r\n" +
+                                                  "    ceq signal(P T, T1) = P (P + \"_signal\") signal(T, T1) if " +
+                                                  "contains(T1, P) .\r\n" +
+                                                  "    eq signal(P T, T1) = P signal(T, T1) [owise] .\r\n" +
+                                                  "    eq signal(none, T1) = none .\r\n" +
                                                   "\r\n" +
                                                   "    eq terminate(none) = none .\r\n" +
                                                   "    --- NOOP if already terminated\r\n" +
@@ -144,9 +155,11 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    pr BPMN-PREDS .\r\n" +
                                                   "    pr MODEL-CHECKER .\r\n" +
                                                   "    pr LTL-SIMPLIFIER .\r\n" +
+                                                  "\r\n" +
+                                                  "    var X : Configuration .\r\n" +
                                                   "endm\r\n" +
                                                   "\r\n" +
-                                                  "red modelCheck(init, ${ltlQuery}) .\r\n";
+                                                  "${finalQuery} .\r\n";
 
     public BPMNToMaudeTransformer(BPMNCollaboration collaboration) {
         this.collaboration = collaboration;
@@ -158,14 +171,14 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
         objectBuilder = new MaudeObjectBuilder();
     }
 
-    public String generate(String ltlQuery) {
+    public String generate(String finalQuery) {
         Map<String, String> substitutionValues = new HashMap<>();
         substitutionValues.put("name", collaboration.getName());
         substitutionValues.put("init", this.makeInit());
         substitutionValues.put("rules", this.makeRules());
         substitutionValues.put("vars", ruleBuilder.getVars());
         substitutionValues.put("atomicPropositions", "--- no propositions"); // Add at some point
-        substitutionValues.put("ltlQuery", ltlQuery);
+        substitutionValues.put("finalQuery", finalQuery);
         return new StringSubstitutor(substitutionValues).replace(MODULE_TEMPLATE);
     }
 

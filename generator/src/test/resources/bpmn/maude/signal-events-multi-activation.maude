@@ -10,6 +10,15 @@ fmod MSET is pr
     op __ : MSet MSet -> MSet [ctor assoc comm id: none] .
     op __ : NeMSet MSet -> NeMSet [ctor ditto] .
     op __ : MSet NeMSet -> NeMSet [ctor ditto] .
+
+    op contains : MSet String -> Bool .
+
+    vars X Y : String .
+    var S S1 : MSet .
+
+    eq contains(none, X) = false .
+    eq contains(X S, X) = true .
+    ceq contains(Y S, X) = contains(S, X) if X =/= Y .
 endfm
 
 mod BPMN-EXECUTION is
@@ -32,22 +41,22 @@ mod BPMN-EXECUTION is
     ops Running, Terminated : -> ProcessState [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
 
+    op signalAll : Configuration MSet -> Configuration .
+    op signal : MSet MSet -> MSet .
     op terminate : Configuration -> Configuration .
-    --- Replace all occurrences of the first object with the second object in the given configuration.
-    op forAll : Configuration Object Object -> Configuration .
 
     vars P P1 : String .
-    vars T : MSet . --- tokens
+    vars T T1 : MSet . --- tokens
     vars S : Configuration . --- subprocesses
     vars STATE : ProcessState . --- state
     var PS : Configuration .
 
-    vars o1 o2 o3 : Object .
-    eq forAll(none, o2, o3) = none .
-    --- Replace the occurrence of o2 by o3
-    eq forAll(o2 PS, o2, o3) = forAll(o3 PS, o2, o3) .
-    --- Ignore o1 since it is not the same as o2.
-    ceq forAll(o1 PS, o2, o3) = o1 forAll(PS, o2, o3) if o1 =/= o2 .
+    eq signalAll(none, T) = none .
+    eq signalAll(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > PS, T1) = < P : ProcessSnapshot | tokens : signal(T, T1), subprocesses : S, state : Running > signalAll(PS, T1) .
+
+    ceq signal(P T, T1) = P (P + "_signal") signal(T, T1) if contains(T1, P) .
+    eq signal(P T, T1) = P signal(T, T1) [owise] .
+    eq signal(none, T1) = none .
 
     eq terminate(none) = none .
     --- NOOP if already terminated
@@ -69,13 +78,15 @@ mod BPMN-EXECUTION-signal-events-multi-activation is
     vars M : MSet . --- messages
     vars S : Configuration . --- subprocesses
     vars P : Configuration . --- processes
+    vars PS : Configuration . --- other processes
 
     --- Generated rules
-    rl [start_p1_StartEvent_1] :  < "p1" : ProcessSnapshot | tokens : ("start_p1 (StartEvent_1)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start_p1_S1_Throw_1 (Flow_09vy9fu)" T), subprocesses : (S), state : Running > .
-    rl [S1_Throw_1_Event_17hujxw] :  < "p1" : ProcessSnapshot | tokens : ("start_p1_S1_Throw_1 (Flow_09vy9fu)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("S1_Throw_1_S1_Throw_2 (Flow_0leshl2)" T), subprocesses : (S), state : Running > < "p2" : ProcessSnapshot | tokens : ("S1_Catch_S2_Catch (Flow_17kxv86)"), subprocesses : (none), state : Running > .
-    rl [S1_Throw_2_Event_1apmx9f] :  < "p1" : ProcessSnapshot | tokens : ("S1_Throw_1_S1_Throw_2 (Flow_0leshl2)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("S1_Throw_2_S2_Throw (Flow_15c0t96)" T), subprocesses : (S), state : Running > < "p2" : ProcessSnapshot | tokens : ("S1_Catch_S2_Catch (Flow_17kxv86)"), subprocesses : (none), state : Running > .
-    rl [S2_Throw_Event_0mh8q9a] :  < "p1" : ProcessSnapshot | tokens : ("S1_Throw_2_S2_Throw (Flow_15c0t96)" T), subprocesses : (S), state : Running > < "p2" : ProcessSnapshot | tokens : ("S1_Catch_S2_Catch (Flow_17kxv86)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > < "p2" : ProcessSnapshot | tokens : ("S2_Catch_end_p2 (Flow_03j40c3)" T), subprocesses : (S), state : Running > .
-    rl [end_p2_Event_0xkx78c] :  < "p2" : ProcessSnapshot | tokens : ("S2_Catch_end_p2 (Flow_03j40c3)" T), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
+    rl [start_p1_StartEvent_1] :  < "signal-events-multi-activation" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("start_p1 (StartEvent_1)" T), subprocesses : (S), state : Running > P) > => < "signal-events-multi-activation" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("start_p1_S1_Throw_1 (Flow_09vy9fu)" T), subprocesses : (S), state : Running > P) > .
+    rl [S1_Throw_1_Event_17hujxw] :  < "signal-events-multi-activation" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("start_p1_S1_Throw_1 (Flow_09vy9fu)" T), subprocesses : (S), state : Running > P) > => < "signal-events-multi-activation" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("S1_Throw_1_S1_Throw_2 (Flow_0leshl2)" T), subprocesses : (S), state : Running > < "p2" : ProcessSnapshot | tokens : ("S1_Catch_S2_Catch (Flow_17kxv86)"), subprocesses : (none), state : Running > P) > .
+    rl [S1_Throw_2_Event_1apmx9f] :  < "signal-events-multi-activation" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("S1_Throw_1_S1_Throw_2 (Flow_0leshl2)" T), subprocesses : (S), state : Running > P) > => < "signal-events-multi-activation" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("S1_Throw_2_S2_Throw (Flow_15c0t96)" T), subprocesses : (S), state : Running > < "p2" : ProcessSnapshot | tokens : ("S1_Catch_S2_Catch (Flow_17kxv86)"), subprocesses : (none), state : Running > P) > .
+    rl [S2_Throw_Event_0mh8q9a] :  < "signal-events-multi-activation" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("S1_Throw_2_S2_Throw (Flow_15c0t96)" T), subprocesses : (S), state : Running > PS) > => < "signal-events-multi-activation" : BPMNSystem | messages : (M), processes : (signalAll(< "p1" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > PS, "S1_Catch_S2_Catch (Flow_17kxv86)")) > .
+    rl [S2_Catch_Event_1exk58v] :  < "signal-events-multi-activation" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("S1_Catch_S2_Catch (Flow_17kxv86)" "S1_Catch_S2_Catch (Flow_17kxv86)_signal" T), subprocesses : (S), state : Running > P) > => < "signal-events-multi-activation" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("S2_Catch_end_p2 (Flow_03j40c3)" T), subprocesses : (S), state : Running > P) > .
+    rl [end_p2_Event_0xkx78c] :  < "signal-events-multi-activation" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("S2_Catch_end_p2 (Flow_03j40c3)" T), subprocesses : (S), state : Running > P) > => < "signal-events-multi-activation" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > P) > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
@@ -113,6 +124,8 @@ mod BPMN-CHECK is
     pr BPMN-PREDS .
     pr MODEL-CHECKER .
     pr LTL-SIMPLIFIER .
+
+    var X : Configuration .
 endm
 
-red modelCheck(init,  <> [] allTerminated) .
+search init =>! X such that X |= allTerminated = true .

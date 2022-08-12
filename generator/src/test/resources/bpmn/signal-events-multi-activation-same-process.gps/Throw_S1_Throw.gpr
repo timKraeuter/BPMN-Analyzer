@@ -138,7 +138,7 @@
         </node>
         <edge from="n18" to="n18">
             <attr name="label">
-                <string>string:"S1_Throw_S2_Throw"</string>
+                <string>string:"S1_Throw_S2_Catch_1"</string>
             </attr>
         </edge>
         <node id="n20">
@@ -158,7 +158,7 @@
         </node>
         <edge from="n23" to="n23">
             <attr name="label">
-                <string>string:"sf1"</string>
+                <string>string:"sf2"</string>
             </attr>
         </edge>
         <node id="n25">
@@ -168,7 +168,7 @@
         </node>
         <edge from="n25" to="n25">
             <attr name="label">
-                <string>string:"sf2"</string>
+                <string>string:"sf1"</string>
             </attr>
         </edge>
         <edge from="n12" to="n17">
