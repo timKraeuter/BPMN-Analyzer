@@ -55,6 +55,9 @@ public class BPMNCollaboration implements Behavior {
     }
 
     public Process getMessageFlowReceiverProcess(MessageFlow flow) {
+        // TODO: refactor use/merge with findProcessForFlowNode below.
+        // subprocesses recursively contains all subprocesses but what about event subprocesses?
+        // Event subprocesses seems to be currently missing here.
         Optional<Process> optionalProcess = this.getParticipants().stream()
                                                 .filter(process -> process.getFlowNodes().anyMatch(flowNode ->
                                                                                                            flowNode ==
@@ -63,7 +66,6 @@ public class BPMNCollaboration implements Behavior {
         if (optionalProcess.isPresent()) {
             return optionalProcess.get();
         }
-        // TODO: Subprocesses of subprocesses?
         // The message flow must go to a subprocess!.
         return subprocesses.stream()
                            .filter(process -> process.getFlowNodes().anyMatch(flowNode -> flowNode ==

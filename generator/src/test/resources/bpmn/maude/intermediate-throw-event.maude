@@ -80,9 +80,9 @@ mod BPMN-EXECUTION-intermediate-throw-event is
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < "intermediate-throw-event" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > P) > => < "intermediate-throw-event" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("start_intermediate (Flow_0i4cd7b)" T), subprocesses : (S), state : Running > P) > .
-    rl [end_Event_0luomob] :  < "intermediate-throw-event" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("intermediate_end (Flow_04utr3x)" T), subprocesses : (S), state : Running > P) > => < "intermediate-throw-event" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > P) > .
-    rl [intermediate_Event_1mrcnu0] :  < "intermediate-throw-event" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("start_intermediate (Flow_0i4cd7b)" T), subprocesses : (S), state : Running > P) > => < "intermediate-throw-event" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("intermediate_end (Flow_04utr3x)" T), subprocesses : (S), state : Running > P) > .
+    rl [start_StartEvent_1] :  < "p1" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start_intermediate (Flow_0i4cd7b)" T), subprocesses : (S), state : Running > .
+    rl [end_Event_0luomob] :  < "p1" : ProcessSnapshot | tokens : ("intermediate_end (Flow_04utr3x)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
+    rl [intermediate_Event_1mrcnu0] :  < "p1" : ProcessSnapshot | tokens : ("start_intermediate (Flow_0i4cd7b)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("intermediate_end (Flow_04utr3x)" T), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .

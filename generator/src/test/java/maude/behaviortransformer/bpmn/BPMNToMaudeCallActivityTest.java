@@ -45,6 +45,7 @@ class BPMNToMaudeCallActivityTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testCallActivityComplex() throws IOException {
+        // TODO: Not terminating yet.
         testBPMNMaudeGeneration("call-activity-complex");
     }
 }

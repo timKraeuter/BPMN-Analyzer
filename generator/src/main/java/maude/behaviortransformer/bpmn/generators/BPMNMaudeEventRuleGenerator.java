@@ -101,13 +101,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                                       .flatMap(event -> {
                                           if (event.getIncomingFlows().findAny().isEmpty()) {
                                               // Start events.
-                                              String startTokens = getOutgoingTokensForFlowNode(event);
-                                              final AbstractProcess processForEvent =
-                                                      collaboration.findProcessForFlowNode(
-                                                      event);
-                                              ruleBuilder.addPostObject(createProcessSnapshotObjectNoSubProcess(
-                                                      processForEvent,
-                                                      startTokens));
+                                              createSignalStartEventRulePart(event);
                                           }
                                           return event.getIncomingFlows();
                                       })
@@ -126,6 +120,16 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                                       .map(boundaryEvent -> getTokenForFlowNode(boundaryEvent.getAttachedTo()))
                                       .forEach(signalAllTokens::add);
         ruleBuilder.addSignalAll(signalAllTokens);
+    }
+
+    private void createSignalStartEventRulePart(Event event) {
+        String startTokens = getOutgoingTokensForFlowNode(event);
+        final AbstractProcess processForEvent =
+                collaboration.findProcessForFlowNode(
+                        event);
+        ruleBuilder.addPostObject(createProcessSnapshotObjectNoSubProcess(
+                processForEvent,
+                startTokens));
     }
 
     public void createIntermediateCatchEventRule(AbstractProcess process,

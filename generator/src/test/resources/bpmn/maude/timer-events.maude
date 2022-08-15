@@ -80,9 +80,9 @@ mod BPMN-EXECUTION-timer-events is
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [timer_Event_18xqymg] :  < "timer-events" : BPMNSystem | messages : (M), processes : (< "timer-events" : ProcessSnapshot | tokens : ("start_timer (Flow_0f6lljq)" T), subprocesses : (S), state : Running > P) > => < "timer-events" : BPMNSystem | messages : (M), processes : (< "timer-events" : ProcessSnapshot | tokens : ("timer_end (Flow_0nw006b)" T), subprocesses : (S), state : Running > P) > .
-    rl [start_StartEvent_1] :  < "timer-events" : BPMNSystem | messages : (M), processes : (< "timer-events" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > P) > => < "timer-events" : BPMNSystem | messages : (M), processes : (< "timer-events" : ProcessSnapshot | tokens : ("start_timer (Flow_0f6lljq)" T), subprocesses : (S), state : Running > P) > .
-    rl [end_Event_0shqoph] :  < "timer-events" : BPMNSystem | messages : (M), processes : (< "timer-events" : ProcessSnapshot | tokens : ("timer_end (Flow_0nw006b)" T), subprocesses : (S), state : Running > P) > => < "timer-events" : BPMNSystem | messages : (M), processes : (< "timer-events" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > P) > .
+    rl [timer_Event_18xqymg] :  < "timer-events" : ProcessSnapshot | tokens : ("start_timer (Flow_0f6lljq)" T), subprocesses : (S), state : Running > => < "timer-events" : ProcessSnapshot | tokens : ("timer_end (Flow_0nw006b)" T), subprocesses : (S), state : Running > .
+    rl [start_StartEvent_1] :  < "timer-events" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > => < "timer-events" : ProcessSnapshot | tokens : ("start_timer (Flow_0f6lljq)" T), subprocesses : (S), state : Running > .
+    rl [end_Event_0shqoph] :  < "timer-events" : ProcessSnapshot | tokens : ("timer_end (Flow_0nw006b)" T), subprocesses : (S), state : Running > => < "timer-events" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
