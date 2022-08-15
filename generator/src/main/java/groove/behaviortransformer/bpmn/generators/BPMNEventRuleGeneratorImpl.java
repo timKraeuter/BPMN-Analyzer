@@ -564,7 +564,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     }
 
     private GrooveNode contextExistsOptionalParentProcess(EventSubprocess eventSubprocess, GrooveNode existsOptional) {
-        AbstractProcess parentProcess = collaboration.getParentProcessForEventSubprocess(eventSubprocess);
+        AbstractProcess parentProcess = collaboration.getParentProcess(eventSubprocess);
         return BPMNToGrooveTransformerHelper.contextProcessInstanceWithQuantifier(parentProcess,
                                                                                   ruleBuilder,
                                                                                   existsOptional);

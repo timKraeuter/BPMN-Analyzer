@@ -1,6 +1,5 @@
 package maude.behaviortransformer.bpmn;
 
-import behavior.bpmn.Process;
 import behavior.bpmn.*;
 import behavior.bpmn.events.StartEvent;
 import maude.generation.BPMNMaudeRuleBuilder;
@@ -156,7 +155,7 @@ public interface BPMNToMaudeTransformerHelper {
 
     default void addMessageFlowInstantiateFlowNodeBehavior(BPMNCollaboration collaboration,
                                                            MessageFlow messageFlow) {
-        Process receiverProcess = collaboration.getMessageFlowReceiverProcess(messageFlow);
+        AbstractProcess receiverProcess = collaboration.getMessageFlowReceiverProcess(messageFlow);
         FlowNode mFlowTarget = messageFlow.getTarget();
         String tokens = getTokenForFlowNode(mFlowTarget) + ANY_OTHER_TOKENS;
         getRuleBuilder().addPostObject(createProcessSnapshotObjectNoSubProcess(receiverProcess,
