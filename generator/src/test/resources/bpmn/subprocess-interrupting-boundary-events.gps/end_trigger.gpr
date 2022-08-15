@@ -1,77 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="end1" role="rule" edgeids="false" edgemode="directed">
-        <node id="n142">
+    <graph id="end_trigger" role="rule" edgeids="false" edgemode="directed">
+        <node id="n167">
             <attr name="layout">
-                <string>407 242 0 0</string>
+                <string>505 242 0 0</string>
             </attr>
         </node>
-        <edge from="n142" to="n142">
+        <edge from="n167" to="n167">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n142" to="n142">
+        <edge from="n167" to="n167">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n140">
+        <node id="n165">
             <attr name="layout">
                 <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n140" to="n140">
+        <edge from="n165" to="n165">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n141">
+        <node id="n166">
             <attr name="layout">
                 <string>392 152 0 0</string>
             </attr>
         </node>
-        <edge from="n141" to="n141">
+        <edge from="n166" to="n166">
             <attr name="label">
-                <string>string:"p1"</string>
+                <string>string:"interruptTrigger"</string>
             </attr>
         </edge>
-        <node id="n143">
+        <node id="n168">
             <attr name="layout">
-                <string>592 242 0 0</string>
+                <string>787 242 0 0</string>
             </attr>
         </node>
-        <edge from="n143" to="n143">
+        <edge from="n168" to="n168">
             <attr name="label">
-                <string>string:"Subprocess2_end1"</string>
+                <string>string:"interruptMessage_end_trigger"</string>
             </attr>
         </edge>
-        <node id="n144">
+        <node id="n169">
             <attr name="layout">
                 <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n144" to="n144">
+        <edge from="n169" to="n169">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n142" to="n143">
+        <edge from="n167" to="n168">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n140" to="n142">
+        <edge from="n165" to="n167">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n140" to="n141">
+        <edge from="n165" to="n166">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n140" to="n144">
+        <edge from="n165" to="n169">
             <attr name="label">
                 <string>state</string>
             </attr>

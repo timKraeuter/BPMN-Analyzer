@@ -1,77 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="end1" role="rule" edgeids="false" edgemode="directed">
-        <node id="n142">
+    <graph id="end2" role="rule" edgeids="false" edgemode="directed">
+        <node id="n137">
             <attr name="layout">
                 <string>407 242 0 0</string>
             </attr>
         </node>
-        <edge from="n142" to="n142">
+        <edge from="n137" to="n137">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n142" to="n142">
+        <edge from="n137" to="n137">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n140">
+        <node id="n135">
             <attr name="layout">
                 <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n140" to="n140">
+        <edge from="n135" to="n135">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n141">
+        <node id="n136">
             <attr name="layout">
                 <string>392 152 0 0</string>
             </attr>
         </node>
-        <edge from="n141" to="n141">
+        <edge from="n136" to="n136">
             <attr name="label">
                 <string>string:"p1"</string>
             </attr>
         </edge>
-        <node id="n143">
+        <node id="n138">
             <attr name="layout">
                 <string>592 242 0 0</string>
             </attr>
         </node>
-        <edge from="n143" to="n143">
+        <edge from="n138" to="n138">
             <attr name="label">
-                <string>string:"Subprocess2_end1"</string>
+                <string>string:"message_end2"</string>
             </attr>
         </edge>
-        <node id="n144">
+        <node id="n139">
             <attr name="layout">
                 <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n144" to="n144">
+        <edge from="n139" to="n139">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n142" to="n143">
+        <edge from="n137" to="n138">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n140" to="n142">
+        <edge from="n135" to="n137">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n140" to="n141">
+        <edge from="n135" to="n136">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n140" to="n144">
+        <edge from="n135" to="n139">
             <attr name="label">
                 <string>state</string>
             </attr>

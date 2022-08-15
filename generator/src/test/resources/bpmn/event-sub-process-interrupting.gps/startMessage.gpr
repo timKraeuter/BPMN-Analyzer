@@ -1,57 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph role="rule" edgeids="false" edgemode="directed" id="startMessage">
-        <attr name="$version">
-            <string>curly</string>
-        </attr>
+    <graph id="startMessage" role="rule" edgeids="false" edgemode="directed">
         <node id="n90">
             <attr name="layout">
-                <string>66 50 259 36</string>
+                <string>62 82 0 0</string>
             </attr>
         </node>
-        <node id="n87">
-            <attr name="layout">
-                <string>420 154 260 36</string>
-            </attr>
-        </node>
-        <node id="n85">
-            <attr name="layout">
-                <string>21 163 201 36</string>
-            </attr>
-        </node>
-        <node id="n86">
-            <attr name="layout">
-                <string>382 242 19 19</string>
-            </attr>
-        </node>
-        <node id="n88">
-            <attr name="layout">
-                <string>867 162 19 19</string>
-            </attr>
-        </node>
-        <node id="n89">
-            <attr name="layout">
-                <string>366 323 52 18</string>
-            </attr>
-        </node>
-        <node id="n91">
-            <attr name="layout">
-                <string>252 72 19 19</string>
-            </attr>
-        </node>
-        <edge from="n90" to="n90">
-            <attr name="label">
-                <string>new:</string>
-            </attr>
-        </edge>
         <edge from="n90" to="n90">
             <attr name="label">
                 <string>type:Message</string>
             </attr>
         </edge>
-        <edge from="n90" to="n91">
+        <edge from="n90" to="n90">
             <attr name="label">
-                <string>new:position</string>
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n87">
+            <attr name="layout">
+                <string>550 172 0 0</string>
+            </attr>
+        </node>
+        <edge from="n87" to="n87">
+            <attr name="label">
+                <string>type:Token</string>
             </attr>
         </edge>
         <edge from="n87" to="n87">
@@ -59,19 +31,64 @@
                 <string>del:</string>
             </attr>
         </edge>
-        <edge from="n87" to="n87">
+        <node id="n85">
+            <attr name="layout">
+                <string>62 185 0 0</string>
+            </attr>
+        </node>
+        <edge from="n85" to="n85">
             <attr name="label">
-                <string>type:Token</string>
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n86">
+            <attr name="layout">
+                <string>392 252 0 0</string>
+            </attr>
+        </node>
+        <edge from="n86" to="n86">
+            <attr name="label">
+                <string>string:"eventSubprocessTrigger"</string>
+            </attr>
+        </edge>
+        <node id="n88">
+            <attr name="layout">
+                <string>877 172 0 0</string>
+            </attr>
+        </node>
+        <edge from="n88" to="n88">
+            <attr name="label">
+                <string>string:"signalOrMessage_startMessage"</string>
+            </attr>
+        </edge>
+        <node id="n89">
+            <attr name="layout">
+                <string>392 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n89" to="n89">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n91">
+            <attr name="layout">
+                <string>262 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n91" to="n91">
+            <attr name="label">
+                <string>string:"startMessage_messageStartSub"</string>
+            </attr>
+        </edge>
+        <edge from="n90" to="n91">
+            <attr name="label">
+                <string>new:position</string>
             </attr>
         </edge>
         <edge from="n87" to="n88">
             <attr name="label">
                 <string>del:position</string>
-            </attr>
-        </edge>
-        <edge from="n85" to="n85">
-            <attr name="label">
-                <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
         <edge from="n85" to="n87">
@@ -87,26 +104,6 @@
         <edge from="n85" to="n89">
             <attr name="label">
                 <string>state</string>
-            </attr>
-        </edge>
-        <edge from="n86" to="n86">
-            <attr name="label">
-                <string>string:"eventSubprocessTrigger"</string>
-            </attr>
-        </edge>
-        <edge from="n88" to="n88">
-            <attr name="label">
-                <string>string:"signalOrMessage_startMessage"</string>
-            </attr>
-        </edge>
-        <edge from="n89" to="n89">
-            <attr name="label">
-                <string>type:Running</string>
-            </attr>
-        </edge>
-        <edge from="n91" to="n91">
-            <attr name="label">
-                <string>string:"startMessage_messageStartSub"</string>
             </attr>
         </edge>
     </graph>
