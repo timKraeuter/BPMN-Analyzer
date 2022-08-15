@@ -41,7 +41,7 @@ public class BPMNMaudeRuleBuilder extends MaudeRuleBuilderBase<BPMNMaudeRuleBuil
         if (ruleName == null || preObjects.isEmpty() || postObjects.isEmpty()) {
             throw new MaudeGenerationException("A rule should have a name and at least one pre/post object");
         }
-        if (consumedMessages.isEmpty() && createdMessages.isEmpty() && signalAll == null) {
+        if (consumedMessages.isEmpty() && createdMessages.isEmpty() && signalAll.isEmpty()) {
             return buildProcessesRule();
         }
         return buildSystemRule();

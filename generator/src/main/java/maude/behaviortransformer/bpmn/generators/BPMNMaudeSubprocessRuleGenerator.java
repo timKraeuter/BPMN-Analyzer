@@ -82,9 +82,9 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
     private void createSubProcessBoundaryEventRule(AbstractProcess process,
                                                    CallActivity callActivity,
                                                    BoundaryEvent boundaryEvent,
-                                                   Consumer<BPMNMaudeRuleBuilder> ruleAddditions) {
+                                                   Consumer<BPMNMaudeRuleBuilder> ruleAdditions) {
         ruleBuilder.startRule(getFlowNodeRuleName(boundaryEvent));
-        ruleAddditions.accept(getRuleBuilder());
+        ruleAdditions.accept(getRuleBuilder());
 
         // Setup vars
         String anyOtherTokens1 = ANY_TOKENS + "1";
@@ -125,7 +125,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
                                                    CallActivity callActivity,
                                                    SequenceFlow incomingFlow) {
 
-        ruleBuilder.startRule(getFlowNodeRuleNameWithIncFlow(callActivity, incomingFlow.getId()));
+        ruleBuilder.startRule(getFlowNodeRuleNameWithIncFlow(callActivity, incomingFlow.getId()) + START);
 
         String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(process,
