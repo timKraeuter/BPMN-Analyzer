@@ -311,7 +311,7 @@ public class BehaviorToGrooveTransformer {
     }
 
     private File makeSubFolder(String folderName, File grooveDir) {
-        File graphGrammarSubFolder = new File(grooveDir + "/" + folderName + ".gps");
+        File graphGrammarSubFolder = new File(grooveDir + File.separator + folderName + ".gps");
         //noinspection ResultOfMethodCallIgnored
         graphGrammarSubFolder.mkdirs();
         return graphGrammarSubFolder;
@@ -321,16 +321,13 @@ public class BehaviorToGrooveTransformer {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
 
-        String propertiesContent = String.format("# %s (Groove rule generator)\n" +
-                                                 "location=%s\n" +
-                                                 "startGraph=%s\n" +
-                                                 this.getAdditionalProperties(additionalProperties) +
-                                                 "grooveVersion=5.8.1\n" +
-                                                 "grammarVersion=3.7",
-                                                 dtf.format(now),
-                                                 subFolder.getPath(),
-                                                 startGraph);
-        File propertiesFile = new File(subFolder + "/" + "system.properties");
+        String propertiesContent = String.format(
+                "# %s (Groove rule generator)%nlocation=%s%nstartGraph=%s%n%sgrooveVersion=5.8.1%n grammarVersion=3.7",
+                dtf.format(now),
+                subFolder.getPath(),
+                startGraph,
+                this.getAdditionalProperties(additionalProperties));
+        File propertiesFile = new File(subFolder + File.separator + "system.properties");
         try {
             FileUtils.writeStringToFile(propertiesFile, propertiesContent, StandardCharsets.UTF_8, false);
         }
