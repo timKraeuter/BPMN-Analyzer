@@ -22,7 +22,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
 
     private final BPMNCollaboration collaboration;
     private final GrooveRuleBuilder ruleBuilder;
-    private boolean useSFId;
+    private final boolean useSFId;
 
     public BPMNTaskRuleGeneratorImpl(BPMNCollaboration collaboration, GrooveRuleBuilder ruleBuilder, boolean useSFIds) {
         this.collaboration = collaboration;
@@ -40,7 +40,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
     public void createSendTaskRulesForProcess(AbstractProcess process, SendTask sendTask) {
         createTaskRulesForProcess(process,
                                   sendTask,
-                                  builder -> addMessageFlowBehaviorForFlowNode(collaboration,
+                                  builder -> addSendMessageBehaviorForFlowNode(collaboration,
                                                                                builder,
                                                                                sendTask,
                                                                                this.useSFId));

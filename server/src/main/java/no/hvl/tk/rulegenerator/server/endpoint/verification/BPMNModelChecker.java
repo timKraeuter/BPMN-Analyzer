@@ -8,7 +8,7 @@ import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingProperty;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingRequest;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import no.hvl.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
-import util.GrooveRunner;
+import groove.runner.GrooveJarRunner;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,11 +57,11 @@ public class BPMNModelChecker {
 
     private void checkNoDeadActivities(ModelCheckingResponse response) throws InterruptedException, IOException {
         // Generate state space for graph grammar.
-        final GrooveRunner grooveRunner = new GrooveRunner();
+        final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
         final String stateSpaceTempFile = String.format("%s%s.txt",
                                                         RuleGeneratorControllerHelper.STATE_SPACE_TEMP_DIR,
                                                         bpmnModel.getName());
-        grooveRunner.generateStateSpace(graphGrammarDir.getPath(), stateSpaceTempFile, true);
+        grooveJarRunner.generateStateSpace(graphGrammarDir.getPath(), stateSpaceTempFile, true);
 
         readStateSpaceAndCheckActivities(response, stateSpaceTempFile);
     }

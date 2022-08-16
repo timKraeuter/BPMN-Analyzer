@@ -3,10 +3,16 @@ package behavior.bpmn.reader;
 import behavior.bpmn.BPMNCollaboration;
 
 import java.io.File;
-import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTestBase.BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER;
+
 public interface BPMNFileReaderTestHelper {
+
+    default BPMNCollaboration readModelFromResourceFolder(String resourceFileName) {
+        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + resourceFileName;
+        return readModelFromResource(resourcePath);
+    }
 
     default BPMNCollaboration readModelFromResource(String resourcePath) {
         @SuppressWarnings("ConstantConditions") File model =

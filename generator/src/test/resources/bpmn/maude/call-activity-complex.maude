@@ -1,0 +1,146 @@
+load model-checker.maude .
+
+--- Multiset implementation could be extracted as well.
+fmod MSET is pr
+    STRING .
+    sorts NeMSet MSet .
+    subsort String < NeMSet < MSet .
+
+    op none : -> MSet [ctor] .
+    op __ : MSet MSet -> MSet [ctor assoc comm id: none] .
+    op __ : NeMSet MSet -> NeMSet [ctor ditto] .
+    op __ : MSet NeMSet -> NeMSet [ctor ditto] .
+
+    op contains : MSet String -> Bool .
+
+    vars X Y : String .
+    var S S1 : MSet .
+
+    eq contains(none, X) = false .
+    eq contains(X S, X) = true .
+    ceq contains(Y S, X) = contains(S, X) if X =/= Y .
+endfm
+
+mod BPMN-EXECUTION is
+    pr MSET .
+    pr STRING .
+    pr CONFIGURATION .
+
+    sort ProcessState .
+    subsort String < Oid .
+
+    --- BPMNSystem
+    op BPMNSystem : -> Cid [ctor] .
+    op messages :_ : MSet -> Attribute [ctor] .
+    op processes :_ : Configuration -> Attribute [ctor] .
+
+    --- Processes
+    op ProcessSnapshot : -> Cid [ctor] .
+    op tokens :_ : MSet -> Attribute [ctor] .
+    op subprocesses :_ : Configuration -> Attribute [ctor] .
+    ops Running, Terminated : -> ProcessState [ctor] .
+    op state :_ : ProcessState -> Attribute [ctor] .
+
+    op signalAll : Configuration MSet -> Configuration .
+    op signal : MSet MSet -> MSet .
+    op terminate : Configuration -> Configuration .
+
+    vars P P1 : String .
+    vars T T1 : MSet . --- tokens
+    vars S : Configuration . --- subprocesses
+    vars STATE : ProcessState . --- state
+    var PS : Configuration .
+
+    eq signalAll(none, T) = none .
+    eq signalAll(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : STATE > PS, T1) = < P : ProcessSnapshot | tokens : signal(T, T1), subprocesses : S, state : STATE > signalAll(PS, T1) .
+
+    ceq signal(P T, T1) = P (P + "_signal") signal(T, T1) if contains(T1, P) .
+    eq signal(P T, T1) = P signal(T, T1) [owise] .
+    eq signal(none, T1) = none .
+
+    eq terminate(none) = none .
+    --- NOOP if already terminated
+    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated > .
+    --- Terminate all subprocesses recursively
+    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, subprocesses : terminate(S), state : Terminated > terminate(PS) .
+
+    rl [naturalTerminate] :
+    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Running >
+                            =>
+    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Terminated > .
+endm
+
+mod BPMN-EXECUTION-call-activity-complex is
+    pr BPMN-EXECUTION .
+
+    --- Generated variables
+    vars T T1 : MSet . --- tokens
+    vars M : MSet . --- messages
+    vars S1 S : Configuration . --- subprocesses
+    vars P : Configuration . --- processes
+    vars PS : Configuration . --- other processes
+
+    --- Generated rules
+    rl [A_Activity_09om2vm_start] :  < "p1" : ProcessSnapshot | tokens : ("start_p1_A (Flow_1tl2d3e)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("A (Activity_09om2vm)" T), subprocesses : (S), state : Running > .
+    rl [A_Activity_09om2vm_end] :  < "p1" : ProcessSnapshot | tokens : ("A (Activity_09om2vm)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("A_ComplexSubprocess (Flow_0xs58is)" T), subprocesses : (S), state : Running > .
+    rl [end_p1_Event_0ayqkfq] :  < "p1" : ProcessSnapshot | tokens : ("ComplexSubprocess_end_p1 (Flow_1lsia9d)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
+    rl [start_p1_Event_0ge9b6d] :  < "p1" : ProcessSnapshot | tokens : ("start_p1 (Event_0ge9b6d)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start_p1_A (Flow_1tl2d3e)" T), subprocesses : (S), state : Running > .
+    rl [ComplexSubprocess_Activity_0ryy3cp_start] :  < "p1" : ProcessSnapshot | tokens : ("A_ComplexSubprocess (Flow_0xs58is)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), subprocesses : (< "ComplexSubprocess" : ProcessSnapshot | tokens : ("start_sub (Event_1e18lzi)"), subprocesses : (none), state : Running > S), state : Running > .
+    rl [ComplexSubprocess_Activity_0ryy3cp_end] :  < "p1" : ProcessSnapshot | tokens : (T), subprocesses : (< "ComplexSubprocess" : ProcessSnapshot | tokens : (none), subprocesses : (none), state : Terminated > S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("ComplexSubprocess_end_p1 (Flow_1lsia9d)" T), subprocesses : (S), state : Running > .
+    rl [start_sub_Event_1e18lzi] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("start_sub (Event_1e18lzi)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("start_sub_p1 (Flow_1bemas0)" T), subprocesses : (S), state : Running > .
+    rl [p1_Gateway_13zypwp] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("start_sub_p1 (Flow_1bemas0)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("p1_C1 (Flow_1uk7xtk)" "p1_C2 (Flow_0nea78g)" T), subprocesses : (S), state : Running > .
+    rl [C1_Activity_07x6xib_start] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("p1_C1 (Flow_1uk7xtk)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("C1 (Activity_07x6xib)" T), subprocesses : (S), state : Running > .
+    rl [C1_Activity_07x6xib_end] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("C1 (Activity_07x6xib)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("C1_p2 (Flow_0k4ys4o)" T), subprocesses : (S), state : Running > .
+    rl [C2_Activity_1nugyf2_start] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("p1_C2 (Flow_0nea78g)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("C2 (Activity_1nugyf2)" T), subprocesses : (S), state : Running > .
+    rl [C2_Activity_1nugyf2_end] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("C2 (Activity_1nugyf2)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("C2_p2 (Flow_0f9ur9m)" T), subprocesses : (S), state : Running > .
+    rl [p2_Gateway_0ibpt86] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("C1_p2 (Flow_0k4ys4o)" "C2_p2 (Flow_0f9ur9m)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : ("p2_start_p2 (Flow_0zy9s8q)" T), subprocesses : (S), state : Running > .
+    rl [start_p2_Event_0rudo08] :  < "p1" : ProcessSnapshot | tokens : (T1), subprocesses : (< "ComplexSubprocess" : ProcessSnapshot | tokens : ("p2_start_p2 (Flow_0zy9s8q)" T), subprocesses : (S), state : Running > S1), state : Running > => < "p1" : ProcessSnapshot | tokens : (T1), subprocesses : (< "ComplexSubprocess" : ProcessSnapshot | tokens : ("start_p2_S1_throw (Flow_177pz9l)" T), subprocesses : (S), state : Running > S1), state : Running > < "p2" : ProcessSnapshot | tokens : ("start_p2_S1_catch (Flow_0kyb7r8)"), subprocesses : (none), state : Running > .
+    rl [S1_throw_Event_12opj9k] :  < "call-activity-complex" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : (T1), subprocesses : (< "ComplexSubprocess" : ProcessSnapshot | tokens : ("start_p2_S1_throw (Flow_177pz9l)" T), subprocesses : (S), state : Running > S1), state : Running > PS) > => < "call-activity-complex" : BPMNSystem | messages : (M), processes : (signalAll(< "p1" : ProcessSnapshot | tokens : (T1), subprocesses : (< "ComplexSubprocess" : ProcessSnapshot | tokens : ("S1_throw_message_throw (Flow_11aeugh)" T), subprocesses : (S), state : Running > S1), state : Running > PS, "start_p2_S1_catch (Flow_0kyb7r8)")) > .
+    rl [message_throw_Event_0kjlxnm] :  < "call-activity-complex" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : (T1), subprocesses : (< "ComplexSubprocess" : ProcessSnapshot | tokens : ("S1_throw_message_throw (Flow_11aeugh)" T), subprocesses : (S), state : Running > S1), state : Running > P) > => < "call-activity-complex" : BPMNSystem | messages : ("message_throw_message_catch" M), processes : (< "p1" : ProcessSnapshot | tokens : (T1), subprocesses : (< "ComplexSubprocess" : ProcessSnapshot | tokens : ("message_throw_end_sub (Flow_0l7i58t)" T), subprocesses : (S), state : Running > S1), state : Running > P) > .
+    rl [end_sub_Event_16mo5pa] :  < "ComplexSubprocess" : ProcessSnapshot | tokens : ("message_throw_end_sub (Flow_0l7i58t)" T), subprocesses : (S), state : Running > => < "ComplexSubprocess" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
+    rl [end_p2_Event_0q39e1x] :  < "p2" : ProcessSnapshot | tokens : ("message_catch_end_p2 (Flow_1irmzit)" T), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
+    rl [S1_catch_Event_0ad4evt] :  < "p2" : ProcessSnapshot | tokens : ("start_p2_S1_catch (Flow_0kyb7r8)" "start_p2_S1_catch (Flow_0kyb7r8)_signal" T), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("S1_catch_message_catch (Flow_1gtf2jw)" T), subprocesses : (S), state : Running > .
+    rl [message_catch_Event_0kjnu4e_start] :  < "p2" : ProcessSnapshot | tokens : ("S1_catch_message_catch (Flow_1gtf2jw)" T), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("message_catch (Event_0kjnu4e)" T), subprocesses : (S), state : Running > .
+    rl [message_catch_Event_0kjnu4e] :  < "call-activity-complex" : BPMNSystem | messages : ("message_throw_message_catch" M), processes : (< "p2" : ProcessSnapshot | tokens : ("message_catch (Event_0kjnu4e)" T), subprocesses : (S), state : Running > P) > => < "call-activity-complex" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("message_catch_end_p2 (Flow_1irmzit)" T), subprocesses : (S), state : Running > P) > .
+
+    --- Start configuration which would be generated
+    op init : -> Configuration .
+    eq init = < "call-activity-complex" : BPMNSystem | messages : (none), processes : (< "p1" : ProcessSnapshot | tokens : ("start_p1 (Event_0ge9b6d)"), subprocesses : (none), state : Running >) > .
+endm
+
+mod BPMN-PREDS is
+    pr BPMN-EXECUTION-call-activity-complex .
+    pr SATISFACTION .
+    subsort Configuration < State .
+
+    var C : Configuration .
+    var P : Prop .
+    var X Y : Oid .
+    var T : MSet .
+    var M : MSet . --- messages
+    var T1 : NeMSet .
+    var S : Configuration .
+    var State : ProcessState .
+
+
+    op allTerminated : -> Prop .
+    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > C) > |= allTerminated = false .
+    eq < X : BPMNSystem | messages : M, processes : (C) > |= allTerminated = true [owise] .
+
+    op unsafe : -> Prop .
+    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : S, state : State > C) > |= unsafe = true .
+    eq < X : BPMNSystem | messages : M, processes : (C) > |= unsafe = false [owise] .
+
+    --- Generated atomic propositions
+    --- no propositions
+endm
+
+mod BPMN-CHECK is
+    pr BPMN-PREDS .
+    pr MODEL-CHECKER .
+    pr LTL-SIMPLIFIER .
+
+    var X : Configuration .
+endm
+
+red modelCheck(init,  <> [] allTerminated) .

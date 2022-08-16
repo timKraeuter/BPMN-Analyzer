@@ -19,7 +19,7 @@ import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.*;
 public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenerator {
     private final BPMNRuleGenerator bpmnRuleGenerator;
     private final GrooveRuleBuilder ruleBuilder;
-    private boolean useSFId;
+    private final boolean useSFId;
 
     public BPMNSubprocessRuleGeneratorImpl(BPMNRuleGenerator bpmnRuleGenerator,
                                            GrooveRuleBuilder ruleBuilder,
@@ -42,6 +42,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
         // Generate rules for the sub process
         this.createRulesForExecutingTheSubProcess(callActivity);
 
+        // Generate rules for boundary events
         this.createBoundaryEventRules(process, callActivity, bpmnRuleGenerator.getCollaboration());
     }
 
@@ -69,18 +70,15 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
                     getStartEventTokenName(callActivity.getSubProcessModel(), startEvent)));
         } else {
             // All activites and gateways without incoming sequence flows get a token.
-            callActivity.getSubProcessModel().getFlowNodes().filter(controlFlowNode -> controlFlowNode.isTask() ||
-                                                                                       controlFlowNode.isGateway()).forEach(
-                    controlFlowNode -> BPMNToGrooveTransformerHelper.addTokenWithPosition(ruleBuilder,
-                                                                                          subProcessInstance,
-                                                                                          controlFlowNode.getName()));
+            callActivity.getSubProcessModel().getFlowNodes()
+                        .filter(controlFlowNode -> controlFlowNode.isTask() || controlFlowNode.isGateway())
+                        .filter(controlFlowNode -> controlFlowNode.getIncomingFlows().findAny().isEmpty())
+                        .forEach(controlFlowNode -> BPMNToGrooveTransformerHelper.addTokenWithPosition(ruleBuilder,
+                                                                                                       subProcessInstance,
+                                                                                                       controlFlowNode.getName()));
         }
 
         ruleBuilder.buildRule();
-    }
-
-    private boolean subprocessHasStartEvents(CallActivity callActivity) {
-        return !callActivity.getSubProcessModel().getStartEvents().isEmpty();
     }
 
     void createTerminateSubProcessRule(AbstractProcess process, CallActivity callActivity) {
@@ -155,7 +153,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
             // Subprocess must be running
             GrooveNode subprocessInstance =
                     BPMNToGrooveTransformerHelper.contextProcessInstance(callActivity.getSubProcessModel(),
-                                                                                                 ruleBuilder);
+                                                                         ruleBuilder);
             ruleBuilder.contextEdge(SUBPROCESS, processInstance, subprocessInstance);
         }
 

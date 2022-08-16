@@ -1,0 +1,130 @@
+load model-checker.maude .
+
+--- Multiset implementation could be extracted as well.
+fmod MSET is pr
+    STRING .
+    sorts NeMSet MSet .
+    subsort String < NeMSet < MSet .
+
+    op none : -> MSet [ctor] .
+    op __ : MSet MSet -> MSet [ctor assoc comm id: none] .
+    op __ : NeMSet MSet -> NeMSet [ctor ditto] .
+    op __ : MSet NeMSet -> NeMSet [ctor ditto] .
+
+    op contains : MSet String -> Bool .
+
+    vars X Y : String .
+    var S S1 : MSet .
+
+    eq contains(none, X) = false .
+    eq contains(X S, X) = true .
+    ceq contains(Y S, X) = contains(S, X) if X =/= Y .
+endfm
+
+mod BPMN-EXECUTION is
+    pr MSET .
+    pr STRING .
+    pr CONFIGURATION .
+
+    sort ProcessState .
+    subsort String < Oid .
+
+    --- BPMNSystem
+    op BPMNSystem : -> Cid [ctor] .
+    op messages :_ : MSet -> Attribute [ctor] .
+    op processes :_ : Configuration -> Attribute [ctor] .
+
+    --- Processes
+    op ProcessSnapshot : -> Cid [ctor] .
+    op tokens :_ : MSet -> Attribute [ctor] .
+    op subprocesses :_ : Configuration -> Attribute [ctor] .
+    ops Running, Terminated : -> ProcessState [ctor] .
+    op state :_ : ProcessState -> Attribute [ctor] .
+
+    op signalAll : Configuration MSet -> Configuration .
+    op signal : MSet MSet -> MSet .
+    op terminate : Configuration -> Configuration .
+
+    vars P P1 : String .
+    vars T T1 : MSet . --- tokens
+    vars S : Configuration . --- subprocesses
+    vars STATE : ProcessState . --- state
+    var PS : Configuration .
+
+    eq signalAll(none, T) = none .
+    eq signalAll(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : STATE > PS, T1) = < P : ProcessSnapshot | tokens : signal(T, T1), subprocesses : S, state : STATE > signalAll(PS, T1) .
+
+    ceq signal(P T, T1) = P (P + "_signal") signal(T, T1) if contains(T1, P) .
+    eq signal(P T, T1) = P signal(T, T1) [owise] .
+    eq signal(none, T1) = none .
+
+    eq terminate(none) = none .
+    --- NOOP if already terminated
+    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated > .
+    --- Terminate all subprocesses recursively
+    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, subprocesses : terminate(S), state : Terminated > terminate(PS) .
+
+    rl [naturalTerminate] :
+    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Running >
+                            =>
+    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Terminated > .
+endm
+
+mod BPMN-EXECUTION-instantiate-receive-task is
+    pr BPMN-EXECUTION .
+
+    --- Generated variables
+    vars T : MSet . --- tokens
+    vars M : MSet . --- messages
+    vars S : Configuration . --- subprocesses
+    vars P : Configuration . --- processes
+
+    --- Generated rules
+    rl [A_Activity_1vcu0jp_end] :  < "instantiate-receive-task" : BPMNSystem | messages : ("end_2_A" M), processes : (< "process1" : ProcessSnapshot | tokens : ("A (Activity_1vcu0jp)" T), subprocesses : (S), state : Running > P) > => < "instantiate-receive-task" : BPMNSystem | messages : (M), processes : (< "process1" : ProcessSnapshot | tokens : ("A_B (Flow_10ze7r7)" T), subprocesses : (S), state : Running > P) > .
+    rl [B_Activity_1ymioaq_start] :  < "process1" : ProcessSnapshot | tokens : ("A_B (Flow_10ze7r7)" T), subprocesses : (S), state : Running > => < "process1" : ProcessSnapshot | tokens : ("B (Activity_1ymioaq)" T), subprocesses : (S), state : Running > .
+    rl [B_Activity_1ymioaq_end] :  < "process1" : ProcessSnapshot | tokens : ("B (Activity_1ymioaq)" T), subprocesses : (S), state : Running > => < "process1" : ProcessSnapshot | tokens : ("B_end_1 (Flow_0jcij1i)" T), subprocesses : (S), state : Running > .
+    rl [end_1_Event_1qkko2l] :  < "process1" : ProcessSnapshot | tokens : ("B_end_1 (Flow_0jcij1i)" T), subprocesses : (S), state : Running > => < "process1" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
+    rl [start_2_Event_0awcs7b] :  < "process2" : ProcessSnapshot | tokens : ("start_2 (Event_0awcs7b)" T), subprocesses : (S), state : Running > => < "process2" : ProcessSnapshot | tokens : ("start_2_end_2 (Flow_15q2a0w)" T), subprocesses : (S), state : Running > .
+    rl [end_2_Event_06176jk] :  < "instantiate-receive-task" : BPMNSystem | messages : (M), processes : (< "process2" : ProcessSnapshot | tokens : ("start_2_end_2 (Flow_15q2a0w)" T), subprocesses : (S), state : Running > P) > => < "instantiate-receive-task" : BPMNSystem | messages : ("end_2_A" M), processes : (< "process2" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > < "process1" : ProcessSnapshot | tokens : ("A (Activity_1vcu0jp)" T), subprocesses : (none), state : Running > P) > .
+
+    --- Start configuration which would be generated
+    op init : -> Configuration .
+    eq init = < "instantiate-receive-task" : BPMNSystem | messages : (none), processes : (< "process2" : ProcessSnapshot | tokens : ("start_2 (Event_0awcs7b)"), subprocesses : (none), state : Running >) > .
+endm
+
+mod BPMN-PREDS is
+    pr BPMN-EXECUTION-instantiate-receive-task .
+    pr SATISFACTION .
+    subsort Configuration < State .
+
+    var C : Configuration .
+    var P : Prop .
+    var X Y : Oid .
+    var T : MSet .
+    var M : MSet . --- messages
+    var T1 : NeMSet .
+    var S : Configuration .
+    var State : ProcessState .
+
+
+    op allTerminated : -> Prop .
+    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > C) > |= allTerminated = false .
+    eq < X : BPMNSystem | messages : M, processes : (C) > |= allTerminated = true [owise] .
+
+    op unsafe : -> Prop .
+    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : S, state : State > C) > |= unsafe = true .
+    eq < X : BPMNSystem | messages : M, processes : (C) > |= unsafe = false [owise] .
+
+    --- Generated atomic propositions
+    --- no propositions
+endm
+
+mod BPMN-CHECK is
+    pr BPMN-PREDS .
+    pr MODEL-CHECKER .
+    pr LTL-SIMPLIFIER .
+
+    var X : Configuration .
+endm
+
+red modelCheck(init,  <> [] allTerminated) .

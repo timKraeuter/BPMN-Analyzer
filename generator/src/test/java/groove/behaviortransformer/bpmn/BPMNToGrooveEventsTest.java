@@ -35,7 +35,8 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
      */
     @Test
     void testTwoIncomingMessageFlows() throws IOException {
-        testGrooveGenerationForBPMNResourceFile("two-incoming-message-flows.bpmn");
+        // TODO: Implement the terminating example which supersedes this one.
+        testGrooveGenerationForBPMNResourceFile("two-incoming-message-flows-no-termination.bpmn");
     }
 
     /**
@@ -63,15 +64,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
     }
 
     /**
-     * See test case <a href="https://cawemo.com/share/b2db6ccf-1d3b-49c2-8739-0c53c069fd61">"Signal Start Events"</a> in cawemo.
-     */
-    @Test
-    void testSignalStartEvents() throws IOException {
-        testGrooveGenerationForBPMNResourceFile("signal-start-events.bpmn");
-    }
-
-    /**
-     * See test case <a href="https://cawemo.com/share/13dda53f-c28d-446f-9330-2cf73814c657">"Signal Events"</a> in cawemo.
+     * See test case <a href="https://cawemo.com/share/e13f777e-dca2-45e9-8018-0b9d0c4b34cc">"Signal Events"</a> in cawemo.
      */
     @Test
     void testSignalEvents() throws IOException {
@@ -79,11 +72,19 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
     }
 
     /**
-     * See test case <a href="https://cawemo.com/share/350bbe89-8c14-4ec2-a059-999a98ce92ea">"Signal events - Cross Process"</a> in cawemo.
+     * See test case <a href="https://cawemo.com/share/6a29e7e5-bf10-4b3e-bb40-2ff8591f7e0c">"Signal Events - Multi Activation"</a> in cawemo.
      */
     @Test
-    void testSignalEventsCrossProcess() throws IOException {
-        testGrooveGenerationForBPMNResourceFile("signal-events-cross-process.bpmn");
+    void testSignalEventsMultiActivation() throws IOException {
+        testGrooveGenerationForBPMNResourceFile("signal-events-multi-activation.bpmn");
+    }
+
+    /**
+     * See test case <a href="https://cawemo.com/share/813dee70-ddc2-4a71-a965-1b6a2d28c7fa">"Signal events - Multi Activation - Same Process"</a> in cawemo.
+     */
+    @Test
+    void testSignalEventsMultiActivationSameProcess() throws IOException {
+        testGrooveGenerationForBPMNResourceFile("signal-events-multi-activation-same-process.bpmn");
     }
 
     /**

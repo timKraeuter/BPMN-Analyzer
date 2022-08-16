@@ -21,6 +21,9 @@ public class BPMNToGrooveTransformerConstants {
     public static final String STATE = "state";
     public static final String TOKENS = "tokens";
     public static final String MESSAGES = "messages";
+    public static final String SUBPROCESSES = "subprocesses";
+    public static final String MSET = "MSet";
+    public static final String CONFIGURATION = "Configuration";
     public static final String DECISIONS = "decisions";
     public static final String DECISION = "decision";
     public static final String SUBPROCESS = "subprocess";

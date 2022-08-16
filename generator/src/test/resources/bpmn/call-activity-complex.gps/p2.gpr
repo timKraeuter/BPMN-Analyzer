@@ -1,147 +1,147 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="p2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n154">
+        <node id="n100">
             <attr name="layout">
                 <string>532 162 0 0</string>
             </attr>
         </node>
-        <edge from="n154" to="n154">
+        <edge from="n100" to="n100">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n154" to="n154">
+        <edge from="n100" to="n100">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n150">
+        <node id="n96">
             <attr name="layout">
                 <string>532 252 0 0</string>
             </attr>
         </node>
-        <edge from="n150" to="n150">
+        <edge from="n96" to="n96">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n150" to="n150">
+        <edge from="n96" to="n96">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n152">
+        <node id="n98">
             <attr name="layout">
                 <string>532 422 0 0</string>
             </attr>
         </node>
-        <edge from="n152" to="n152">
+        <edge from="n98" to="n98">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n152" to="n152">
+        <edge from="n98" to="n98">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n147">
+        <node id="n93">
             <attr name="layout">
                 <string>62 89 0 0</string>
             </attr>
         </node>
-        <edge from="n147" to="n147">
+        <edge from="n93" to="n93">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n148">
+        <node id="n94">
             <attr name="layout">
                 <string>412 72 0 0</string>
             </attr>
         </node>
-        <edge from="n148" to="n148">
+        <edge from="n94" to="n94">
             <attr name="label">
                 <string>string:"ComplexSubprocess"</string>
             </attr>
         </edge>
-        <node id="n149">
+        <node id="n95">
             <attr name="layout">
                 <string>412 332 0 0</string>
             </attr>
         </node>
-        <edge from="n149" to="n149">
+        <edge from="n95" to="n95">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n151">
+        <node id="n97">
             <attr name="layout">
                 <string>822 252 0 0</string>
             </attr>
         </node>
-        <edge from="n151" to="n151">
+        <edge from="n97" to="n97">
             <attr name="label">
-                <string>string:"E_p2"</string>
+                <string>string:"C1_p2"</string>
             </attr>
         </edge>
-        <node id="n153">
+        <node id="n99">
             <attr name="layout">
                 <string>822 422 0 0</string>
             </attr>
         </node>
-        <edge from="n153" to="n153">
+        <edge from="n99" to="n99">
             <attr name="label">
-                <string>string:"F_p2"</string>
+                <string>string:"C2_p2"</string>
             </attr>
         </edge>
-        <node id="n155">
+        <node id="n101">
             <attr name="layout">
                 <string>822 162 0 0</string>
             </attr>
         </node>
-        <edge from="n155" to="n155">
+        <edge from="n101" to="n101">
             <attr name="label">
-                <string>string:"p2_e2"</string>
+                <string>string:"p2_start_p2"</string>
             </attr>
         </edge>
-        <edge from="n147" to="n154">
+        <edge from="n93" to="n100">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n154" to="n155">
+        <edge from="n100" to="n101">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n147" to="n150">
+        <edge from="n93" to="n96">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n150" to="n151">
+        <edge from="n96" to="n97">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n147" to="n152">
+        <edge from="n93" to="n98">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n152" to="n153">
+        <edge from="n98" to="n99">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n147" to="n148">
+        <edge from="n93" to="n94">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n147" to="n149">
+        <edge from="n93" to="n95">
             <attr name="label">
                 <string>state</string>
             </attr>

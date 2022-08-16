@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="start_sub3" role="rule" edgeids="false" edgemode="directed">
+        <node id="n166">
+            <attr name="layout">
+                <string>477 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n166" to="n166">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n166" to="n166">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n168">
+            <attr name="layout">
+                <string>477 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n168" to="n168">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n168" to="n168">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n163">
+            <attr name="layout">
+                <string>62 87 0 0</string>
+            </attr>
+        </node>
+        <edge from="n163" to="n163">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n164">
+            <attr name="layout">
+                <string>402 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n164" to="n164">
+            <attr name="label">
+                <string>string:"Subprocess3"</string>
+            </attr>
+        </edge>
+        <node id="n165">
+            <attr name="layout">
+                <string>402 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n165" to="n165">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n167">
+            <attr name="layout">
+                <string>722 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n167" to="n167">
+            <attr name="label">
+                <string>string:"start_sub3_end_sub3"</string>
+            </attr>
+        </edge>
+        <node id="n169">
+            <attr name="layout">
+                <string>722 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n169" to="n169">
+            <attr name="label">
+                <string>string:"Subprocess3_start_sub3"</string>
+            </attr>
+        </edge>
+        <edge from="n163" to="n166">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n166" to="n167">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n163" to="n168">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n168" to="n169">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n163" to="n164">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n163" to="n165">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

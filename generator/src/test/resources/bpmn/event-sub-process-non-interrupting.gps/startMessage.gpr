@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="startMessage" role="rule" edgeids="false" edgemode="directed">
-        <node id="n87">
+        <node id="n88">
             <attr name="layout">
                 <string>62 82 0 0</string>
             </attr>
         </node>
-        <edge from="n87" to="n87">
+        <edge from="n88" to="n88">
             <attr name="label">
                 <string>type:Message</string>
             </attr>
         </edge>
-        <edge from="n87" to="n87">
+        <edge from="n88" to="n88">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
         <node id="n85">
             <attr name="layout">
-                <string>540 172 0 0</string>
+                <string>550 172 0 0</string>
             </attr>
         </node>
         <edge from="n85" to="n85">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n83">
             <attr name="layout">
-                <string>62 180 0 0</string>
+                <string>62 185 0 0</string>
             </attr>
         </node>
         <edge from="n83" to="n83">
@@ -43,7 +43,7 @@
         </edge>
         <node id="n84">
             <attr name="layout">
-                <string>382 252 0 0</string>
+                <string>392 252 0 0</string>
             </attr>
         </node>
         <edge from="n84" to="n84">
@@ -53,7 +53,7 @@
         </edge>
         <node id="n86">
             <attr name="layout">
-                <string>867 172 0 0</string>
+                <string>877 172 0 0</string>
             </attr>
         </node>
         <edge from="n86" to="n86">
@@ -61,17 +61,27 @@
                 <string>string:"signalOrMessage_startMessage"</string>
             </attr>
         </edge>
-        <node id="n88">
+        <node id="n87">
+            <attr name="layout">
+                <string>392 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n87" to="n87">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n89">
             <attr name="layout">
                 <string>262 82 0 0</string>
             </attr>
         </node>
-        <edge from="n88" to="n88">
+        <edge from="n89" to="n89">
             <attr name="label">
                 <string>string:"startMessage_messageStartSub"</string>
             </attr>
         </edge>
-        <edge from="n87" to="n88">
+        <edge from="n88" to="n89">
             <attr name="label">
                 <string>new:position</string>
             </attr>
@@ -89,6 +99,11 @@
         <edge from="n83" to="n84">
             <attr name="label">
                 <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n83" to="n87">
+            <attr name="label">
+                <string>state</string>
             </attr>
         </edge>
     </graph>

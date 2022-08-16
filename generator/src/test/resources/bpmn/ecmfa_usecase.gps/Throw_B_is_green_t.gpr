@@ -148,7 +148,7 @@
         </node>
         <edge from="n172" to="n172">
             <attr name="label">
-                <string>existsx:</string>
+                <string>forall:</string>
             </attr>
         </edge>
         <node id="n173">
@@ -208,7 +208,7 @@
         </node>
         <edge from="n180" to="n180">
             <attr name="label">
-                <string>existsx:</string>
+                <string>forall:</string>
             </attr>
         </edge>
         <node id="n181">

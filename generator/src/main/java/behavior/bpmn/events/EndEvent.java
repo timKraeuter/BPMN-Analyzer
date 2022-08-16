@@ -45,11 +45,6 @@ public class EndEvent extends ThrowEvent {
     }
 
     @Override
-    public boolean isInstantiateFlowNode() {
-        return false;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
