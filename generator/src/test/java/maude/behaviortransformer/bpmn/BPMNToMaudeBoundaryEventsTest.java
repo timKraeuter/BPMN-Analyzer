@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 class BPMNToMaudeBoundaryEventsTest implements BPMNMaudeTestHelper {
-    // TODO: Add signal events everywhere here!
 
     /**
      * See test case <a href="https://cawemo.com/share/3b55577a-e7ed-4729-a046-4d79fd11c941">"Subprocess - Interrupting Boundary Events"</a> in cawemo.
@@ -21,7 +20,7 @@ class BPMNToMaudeBoundaryEventsTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testSubProcessNonInterruptingBoundaryEvents() throws IOException {
-        // Careful infinite state space! // TODO: Double check the result of this!
+        // Careful infinite state space!
         testBPMNMaudeGenerationWithCustomQuery("subprocess-non-interrupting-boundary-events", CAN_TERMINATE_QUERY);
     }
 
@@ -30,7 +29,8 @@ class BPMNToMaudeBoundaryEventsTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testTaskInterruptingBoundaryEvents() throws IOException {
-        testBPMNMaudeGeneration("task-interrupting-boundary-events");
+        // TODO: What to do about unprocessed signals? Should be deleted on termination. Should be always terminate.
+        testBPMNMaudeGenerationWithCustomQuery("task-interrupting-boundary-events", CAN_TERMINATE_QUERY);
     }
 
     /**
