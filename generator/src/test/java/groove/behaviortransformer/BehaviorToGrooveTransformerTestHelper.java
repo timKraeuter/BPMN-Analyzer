@@ -30,7 +30,7 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
     public abstract String getOutputPathSubFolderName();
 
     public String getOutputPathIncludingSubFolder() {
-        return this.outputPath + "/" + this.getOutputPathSubFolderName();
+        return this.outputPath + File.separator + this.getOutputPathSubFolderName();
     }
 
     public void setFileNameFilter(Function<String, Boolean> fileNameFilter) {

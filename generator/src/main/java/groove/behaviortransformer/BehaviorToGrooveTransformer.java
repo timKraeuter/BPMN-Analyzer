@@ -322,7 +322,7 @@ public class BehaviorToGrooveTransformer {
         LocalDateTime now = LocalDateTime.now();
 
         String propertiesContent = String.format(
-                "# %s (Groove rule generator)%nlocation=%s%nstartGraph=%s%n%sgrooveVersion=5.8.1%n grammarVersion=3.7",
+                "# %s (Groove rule generator)%nlocation=%s%nstartGraph=%s%n%sgrooveVersion=5.8.1%ngrammarVersion=3.7",
                 dtf.format(now),
                 subFolder.getPath(),
                 startGraph,
