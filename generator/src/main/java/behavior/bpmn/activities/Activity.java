@@ -1,7 +1,7 @@
 package behavior.bpmn.activities;
 
 import behavior.bpmn.FlowNode;
-import behavior.bpmn.auxiliary.ActivityVisitor;
+import behavior.bpmn.auxiliary.visitors.ActivityVisitor;
 import behavior.bpmn.events.BoundaryEvent;
 
 import java.util.LinkedHashSet;

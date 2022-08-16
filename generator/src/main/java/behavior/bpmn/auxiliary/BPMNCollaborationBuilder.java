@@ -2,18 +2,8 @@ package behavior.bpmn.auxiliary;
 
 import behavior.bpmn.Process;
 import behavior.bpmn.*;
-import behavior.bpmn.activities.CallActivity;
-import behavior.bpmn.activities.tasks.ReceiveTask;
-import behavior.bpmn.activities.tasks.SendTask;
-import behavior.bpmn.activities.tasks.Task;
-import behavior.bpmn.events.EndEvent;
-import behavior.bpmn.events.IntermediateCatchEvent;
-import behavior.bpmn.events.IntermediateThrowEvent;
+import behavior.bpmn.auxiliary.visitors.CallActivityFlowNodeVisitor;
 import behavior.bpmn.events.StartEvent;
-import behavior.bpmn.gateways.EventBasedGateway;
-import behavior.bpmn.gateways.ExclusiveGateway;
-import behavior.bpmn.gateways.InclusiveGateway;
-import behavior.bpmn.gateways.ParallelGateway;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -70,72 +60,14 @@ public class BPMNCollaborationBuilder implements BPMNModelBuilder {
         return this;
     }
 
-    private void findAndAddSubProcessIfPresent(FlowNode node) {
-        node.accept(new FlowNodeVisitor() {
-            @Override
-            public void handle(Task task) {
-                // Not a subprocess
+    private void findAndAddSubProcessIfPresent(FlowNode flowNode) {
+        flowNode.accept(new CallActivityFlowNodeVisitor(callActivity -> {
+            Process subProcessModel = callActivity.getSubProcessModel();
+            if (!subprocesses.contains(subProcessModel) || !participants.contains(subProcessModel)) {
+                subprocesses.add(subProcessModel);
+                subProcessModel.getFlowNodes().forEach(BPMNCollaborationBuilder.this::findAndAddSubProcessIfPresent);
             }
-
-            @Override
-            public void handle(SendTask task) {
-                // Not a subprocess
-            }
-
-            @Override
-            public void handle(ReceiveTask task) {
-                // Not a subprocess
-            }
-
-            @Override
-            public void handle(CallActivity callActivity) {
-                Process subProcessModel = callActivity.getSubProcessModel();
-                if (!subprocesses.contains(subProcessModel) || !participants.contains(subProcessModel)) {
-                    subprocesses.add(subProcessModel);
-                    subProcessModel.getFlowNodes().forEach(BPMNCollaborationBuilder.this::findAndAddSubProcessIfPresent);
-                }
-            }
-
-            @Override
-            public void handle(ExclusiveGateway exclusiveGateway) {
-                // Not a subprocess
-            }
-
-            @Override
-            public void handle(ParallelGateway parallelGateway) {
-                // Not a subprocess
-            }
-
-            @Override
-            public void handle(InclusiveGateway inclusiveGateway) {
-                // Not a subprocess
-            }
-
-            @Override
-            public void handle(StartEvent startEvent) {
-                // Not a subprocess
-            }
-
-            @Override
-            public void handle(IntermediateThrowEvent intermediateThrowEvent) {
-                // Not a subprocess
-            }
-
-            @Override
-            public void handle(IntermediateCatchEvent intermediateCatchEvent) {
-                // Not a subprocess
-            }
-
-            @Override
-            public void handle(EndEvent endEvent) {
-                // Not a subprocess
-            }
-
-            @Override
-            public void handle(EventBasedGateway eventBasedGateway) {
-                // Not a subprocess
-            }
-        });
+        }));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package behavior.bpmn.activities.tasks;
 
-import behavior.bpmn.auxiliary.ActivityVisitor;
-import behavior.bpmn.auxiliary.FlowNodeVisitor;
+import behavior.bpmn.auxiliary.visitors.ActivityVisitor;
+import behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 
 public class SendTask extends AbstractTask {
     public SendTask(String id, String name) {

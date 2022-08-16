@@ -1,12 +1,13 @@
-package behavior.bpmn;
+package behavior.bpmn.auxiliary.visitors;
 
 
+import behavior.bpmn.BPMNCollaboration;
+import behavior.bpmn.Process;
 import behavior.bpmn.activities.Activity;
 import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
-import behavior.bpmn.auxiliary.FlowNodeVisitor;
 import behavior.bpmn.events.*;
 import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
@@ -16,18 +17,21 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Set;
 
-class SignalCatchEventFlowNodeVisitor implements FlowNodeVisitor {
+/**
+ * FlowNodeVisitor used to collect all signal catch events with a certain event definition.
+ */
+public class SignalCatchEventCollectorFlowNodeVisitor implements FlowNodeVisitor {
     private final BPMNCollaboration collaboration;
     private final EventDefinition eventDefinition;
     private final Set<Event> signalCatchEvents;
     private final Set<BoundaryEvent> signalBoundaryCatchEvents;
     private final Set<Process> seenProcesses;
 
-    public SignalCatchEventFlowNodeVisitor(BPMNCollaboration collaboration,
-                                           EventDefinition eventDefinition,
-                                           Set<Event> signalCatchEvents,
-                                           Set<BoundaryEvent> signalBoundaryCatchEvents,
-                                           Set<Process> seenProcesses) {
+    public SignalCatchEventCollectorFlowNodeVisitor(BPMNCollaboration collaboration,
+                                                    EventDefinition eventDefinition,
+                                                    Set<Event> signalCatchEvents,
+                                                    Set<BoundaryEvent> signalBoundaryCatchEvents,
+                                                    Set<Process> seenProcesses) {
         this.collaboration = collaboration;
         this.eventDefinition = eventDefinition;
         this.signalCatchEvents = signalCatchEvents;

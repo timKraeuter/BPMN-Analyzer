@@ -1,4 +1,4 @@
-package behavior.bpmn.auxiliary;
+package behavior.bpmn.auxiliary.visitors;
 
 import behavior.bpmn.EventSubprocess;
 import behavior.bpmn.Process;

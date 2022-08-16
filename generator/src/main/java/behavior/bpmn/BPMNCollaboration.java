@@ -3,6 +3,7 @@ package behavior.bpmn;
 import behavior.Behavior;
 import behavior.BehaviorVisitor;
 import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
+import behavior.bpmn.auxiliary.visitors.SignalCatchEventCollectorFlowNodeVisitor;
 import behavior.bpmn.events.BoundaryEvent;
 import behavior.bpmn.events.Event;
 import behavior.bpmn.events.EventDefinition;
@@ -143,7 +144,7 @@ public class BPMNCollaboration implements Behavior {
         return Pair.of(signalCatchEvents, signalBoundaryCatchEvents);
     }
 
-    Pair<Set<Event>, Set<BoundaryEvent>> findAllCorrespondingSignalCatchEvents(Process process,
+    public Pair<Set<Event>, Set<BoundaryEvent>> findAllCorrespondingSignalCatchEvents(Process process,
                                                                                EventDefinition eventDefinition,
                                                                                Set<Process> seenProcesses) {
         Set<Event> signalCatchEvents = new LinkedHashSet<>();
@@ -153,19 +154,19 @@ public class BPMNCollaboration implements Behavior {
         }
         seenProcesses.add(process);
 
-        process.getFlowNodes().forEach(flowNode -> flowNode.accept(new SignalCatchEventFlowNodeVisitor(this,
-                                                                                                       eventDefinition,
-                                                                                                       signalCatchEvents,
-                                                                                                       signalBoundaryCatchEvents,
-                                                                                                       seenProcesses)
+        process.getFlowNodes().forEach(flowNode -> flowNode.accept(new SignalCatchEventCollectorFlowNodeVisitor(this,
+                                                                                                                eventDefinition,
+                                                                                                                signalCatchEvents,
+                                                                                                                signalBoundaryCatchEvents,
+                                                                                                                seenProcesses)
 
         ));
         process.getEventSubprocesses().forEach(eventSubprocess -> eventSubprocess.getFlowNodes().forEach(flowNode -> flowNode.accept(
-                new SignalCatchEventFlowNodeVisitor(this,
-                                                    eventDefinition,
-                                                    signalCatchEvents,
-                                                    signalBoundaryCatchEvents,
-                                                    seenProcesses))));
+                new SignalCatchEventCollectorFlowNodeVisitor(this,
+                                                             eventDefinition,
+                                                             signalCatchEvents,
+                                                             signalBoundaryCatchEvents,
+                                                             seenProcesses))));
         return Pair.of(signalCatchEvents, signalBoundaryCatchEvents);
     }
 }

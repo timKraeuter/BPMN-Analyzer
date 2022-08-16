@@ -1,8 +1,8 @@
 package behavior.bpmn.events;
 
 import behavior.bpmn.activities.Activity;
-import behavior.bpmn.auxiliary.EventVisitor;
-import behavior.bpmn.auxiliary.FlowNodeVisitor;
+import behavior.bpmn.auxiliary.visitors.EventVisitor;
+import behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 import com.google.common.base.Objects;
 
 public class BoundaryEvent extends CatchEvent {

@@ -1,6 +1,6 @@
 package behavior.bpmn.gateways;
 
-import behavior.bpmn.auxiliary.FlowNodeVisitor;
+import behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 
 public class ParallelGateway extends SimpleGateway {
     public ParallelGateway(String id, String name) {

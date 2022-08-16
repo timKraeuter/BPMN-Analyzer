@@ -1,4 +1,4 @@
-package behavior.bpmn.auxiliary;
+package behavior.bpmn.auxiliary.visitors;
 
 import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;

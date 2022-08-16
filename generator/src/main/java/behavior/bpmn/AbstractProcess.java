@@ -1,6 +1,6 @@
 package behavior.bpmn;
 
-import behavior.bpmn.auxiliary.AbstractProcessVisitor;
+import behavior.bpmn.auxiliary.visitors.AbstractProcessVisitor;
 
 import java.util.Set;
 import java.util.stream.Stream;

@@ -1,8 +1,8 @@
 package behavior.bpmn.activities;
 
 import behavior.bpmn.Process;
-import behavior.bpmn.auxiliary.ActivityVisitor;
-import behavior.bpmn.auxiliary.FlowNodeVisitor;
+import behavior.bpmn.auxiliary.visitors.ActivityVisitor;
+import behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 import com.google.common.base.Objects;
 
 public class CallActivity extends Activity {

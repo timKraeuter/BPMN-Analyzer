@@ -1,6 +1,6 @@
 package behavior.bpmn;
 
-import behavior.bpmn.auxiliary.FlowNodeVisitor;
+import behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
