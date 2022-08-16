@@ -71,32 +71,12 @@ class SignalCatchEventFlowNodeVisitor implements FlowNodeVisitor {
     }
 
     @Override
-    public void handle(ExclusiveGateway exclusiveGateway) {
-        // not relevant
-    }
-
-    @Override
-    public void handle(ParallelGateway parallelGateway) {
-        // not relevant
-    }
-
-    @Override
-    public void handle(InclusiveGateway inclusiveGateway) {
-        // not relevant
-    }
-
-    @Override
     public void handle(StartEvent startEvent) {
         if ((startEvent.getType() == StartEventType.SIGNAL ||
              startEvent.getType() == StartEventType.SIGNAL_NON_INTERRUPTING) &&
             startEvent.getEventDefinition().getGlobalSignalName().equals(eventDefinition.getGlobalSignalName())) {
             signalCatchEvents.add(startEvent);
         }
-    }
-
-    @Override
-    public void handle(IntermediateThrowEvent intermediateThrowEvent) {
-        // not relevant
     }
 
     @Override
@@ -108,12 +88,32 @@ class SignalCatchEventFlowNodeVisitor implements FlowNodeVisitor {
     }
 
     @Override
+    public void handle(IntermediateThrowEvent intermediateThrowEvent) {
+        // not relevant, no signal catches
+    }
+
+    @Override
     public void handle(EndEvent endEvent) {
-        // not relevant
+        // not relevant, no signal catches
     }
 
     @Override
     public void handle(EventBasedGateway eventBasedGateway) {
-        // not relevant
+        // not relevant, no signal catches
+    }
+
+    @Override
+    public void handle(ExclusiveGateway exclusiveGateway) {
+        // not relevant, no signal catches
+    }
+
+    @Override
+    public void handle(ParallelGateway parallelGateway) {
+        // not relevant, no signal catches
+    }
+
+    @Override
+    public void handle(InclusiveGateway inclusiveGateway) {
+        // not relevant, no signal catches
     }
 }
