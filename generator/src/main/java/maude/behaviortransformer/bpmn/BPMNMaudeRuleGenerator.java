@@ -28,7 +28,7 @@ public class BPMNMaudeRuleGenerator {
 
         taskRuleGenerator = new BPMNMaudeTaskRuleGenerator(collaboration, ruleBuilder);
         eventRuleGenerator = new BPMNMaudeEventRuleGenerator(collaboration, ruleBuilder);
-        gatewayRuleGenerator = new BPMNMaudeGatewayRuleGenerator(ruleBuilder);
+        gatewayRuleGenerator = new BPMNMaudeGatewayRuleGenerator(collaboration, ruleBuilder);
         subprocessRuleGenerator = new BPMNMaudeSubprocessRuleGenerator(this, ruleBuilder);
     }
 

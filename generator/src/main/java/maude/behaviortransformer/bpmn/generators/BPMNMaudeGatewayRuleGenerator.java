@@ -1,6 +1,7 @@
 package maude.behaviortransformer.bpmn.generators;
 
 import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
@@ -13,9 +14,11 @@ import java.util.stream.Collectors;
 
 public class BPMNMaudeGatewayRuleGenerator implements BPMNToMaudeTransformerHelper {
     private final BPMNMaudeRuleBuilder ruleBuilder;
+    private final BPMNCollaboration collaboration;
     private final MaudeObjectBuilder objectBuilder;
 
-    public BPMNMaudeGatewayRuleGenerator(BPMNMaudeRuleBuilder ruleBuilder) {
+    public BPMNMaudeGatewayRuleGenerator(BPMNCollaboration collaboration, BPMNMaudeRuleBuilder ruleBuilder) {
+        this.collaboration = collaboration;
         this.ruleBuilder = ruleBuilder;
         objectBuilder = new MaudeObjectBuilder();
     }
@@ -28,6 +31,11 @@ public class BPMNMaudeGatewayRuleGenerator implements BPMNToMaudeTransformerHelp
     @Override
     public MaudeObjectBuilder getObjectBuilder() {
         return objectBuilder;
+    }
+
+    @Override
+    public BPMNCollaboration getCollaboration() {
+        return collaboration;
     }
 
     public void createExclusiveGatewayRule(AbstractProcess process, ExclusiveGateway exclusiveGateway) {

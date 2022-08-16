@@ -42,9 +42,9 @@ public class BPMNMaudeRuleBuilder extends MaudeRuleBuilderBase<BPMNMaudeRuleBuil
             throw new MaudeGenerationException("A rule should have a name and at least one pre/post object");
         }
         if (consumedMessages.isEmpty() && createdMessages.isEmpty() && signalAll.isEmpty()) {
-            return buildProcessesRule();
+            return buildLocalProcessRule();
         }
-        return buildSystemRule();
+        return buildGlobalSystemRule();
     }
 
     public void addMessageConsumption(String message) {
@@ -60,11 +60,10 @@ public class BPMNMaudeRuleBuilder extends MaudeRuleBuilderBase<BPMNMaudeRuleBuil
         this.signalAll = signalAll;
     }
 
-    private MaudeRule buildSystemRule() {
+    private MaudeRule buildGlobalSystemRule() {
         if (signalAll != null && !signalAll.isEmpty()) {
             return buildSystemRuleWithSignalAll();
         }
-
         // Pre object is a BPMN system
         MaudeObject preObject = createBPMNSystem(getObjectStringAndAddAnyOtherProcesses(preObjects),
                                                  getMessagesString(consumedMessages));
@@ -129,7 +128,7 @@ public class BPMNMaudeRuleBuilder extends MaudeRuleBuilderBase<BPMNMaudeRuleBuil
                             .build();
     }
 
-    private MaudeRule buildProcessesRule() {
+    private MaudeRule buildLocalProcessRule() {
         return createSaveRuleAndResetBuilder(preObjects, postObjects);
     }
 

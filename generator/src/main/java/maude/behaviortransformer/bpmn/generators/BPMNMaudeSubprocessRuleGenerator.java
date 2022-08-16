@@ -194,4 +194,9 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
     public MaudeObjectBuilder getObjectBuilder() {
         return objectBuilder;
     }
+
+    @Override
+    public BPMNCollaboration getCollaboration() {
+        return bpmnMaudeRuleGenerator.getCollaboration();
+    }
 }

@@ -10,8 +10,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.END;
-import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.START;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.isAfterInstantiateEventBasedGateway;
 
 public interface BPMNToMaudeTransformerHelper {
@@ -43,6 +42,9 @@ public interface BPMNToMaudeTransformerHelper {
 
     MaudeObjectBuilder getObjectBuilder();
 
+    BPMNCollaboration getCollaboration();
+
+
     default String getFlowNodeRuleNameWithIncFlow(FlowNode flowNode, String incomingFlowId) {
         if (flowNode.getIncomingFlows().count() > 1) {
             return String.format(RULE_NAME_NAME_ID_FORMAT, getFlowNodeRuleName(flowNode), incomingFlowId);
@@ -62,7 +64,9 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
     default String getSignalOccurrenceForFlowNode(FlowNode flowNode) {
-        return getTokenOrSignalOccurrenceForFlowNode(flowNode, SIGNAL_OCCURENCE_FORMAT_ONLY_ID, SIGNAL_OCCURENCE_FORMAT);
+        return getTokenOrSignalOccurrenceForFlowNode(flowNode,
+                                                     SIGNAL_OCCURENCE_FORMAT_ONLY_ID,
+                                                     SIGNAL_OCCURENCE_FORMAT);
     }
 
     private String getTokenOrSignalOccurrenceForFlowNode(FlowNode flowNode,
@@ -119,6 +123,31 @@ public interface BPMNToMaudeTransformerHelper {
                                                     String subprocesses,
                                                     String tokens) {
         return createProcessSnapshotObject(process, subprocesses, tokens, RUNNING);
+    }
+
+
+    default MaudeObject createProcessSnapshotObjectWithParents(AbstractProcess process,
+                                                               String subprocesses,
+                                                               String tokens) {
+        MaudeObject processObject = createProcessSnapshotObject(process, subprocesses, tokens, RUNNING);
+        return wrapInParentIfNeeded(process, processObject, 1);
+    }
+
+    default MaudeObject wrapInParentIfNeeded(AbstractProcess process, MaudeObject processObject, int counter) {
+        AbstractProcess parentProcess = getCollaboration().getParentProcess(process);
+        if (parentProcess.equals(process)) {
+            return processObject;
+        }
+        String anySubprocesses = ANY_SUBPROCESSES + counter;
+        String anyTokens = ANY_TOKENS + counter;
+        getRuleBuilder().addVar(TOKENS, MSET, anyTokens);
+        getRuleBuilder().addVar(SUBPROCESSES, CONFIGURATION, anySubprocesses);
+
+        MaudeObject parentProcessObject = createProcessSnapshotObject(parentProcess,
+                                                                      processObject.generateObjectString() + WHITE_SPACE + anySubprocesses,
+                                                                      anyTokens,
+                                                                      RUNNING);
+        return wrapInParentIfNeeded(parentProcess, parentProcessObject, counter + 1);
     }
 
     default MaudeObject createProcessSnapshotObject(AbstractProcess process,

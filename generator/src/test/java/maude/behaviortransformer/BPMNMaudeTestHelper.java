@@ -32,7 +32,7 @@ public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper {
         if (REPLACE_EXPECTED_FILE_WITH_ACTUAL) {
             replaceWithActualIfNeeded(resourceFileName, actualMaudeModule, expectedMaudeModule);
         }
-        assertThat(actualMaudeModule, actualMaudeModule, is(expectedMaudeModule));
+        assertThat(actualMaudeModule, is(expectedMaudeModule));
     }
 
     private void replaceWithActualIfNeeded(

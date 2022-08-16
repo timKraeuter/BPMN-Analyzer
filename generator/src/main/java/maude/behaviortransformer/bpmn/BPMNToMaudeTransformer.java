@@ -223,4 +223,9 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
     public MaudeObjectBuilder getObjectBuilder() {
         return objectBuilder;
     }
+
+    @Override
+    public BPMNCollaboration getCollaboration() {
+        return collaboration;
+    }
 }
