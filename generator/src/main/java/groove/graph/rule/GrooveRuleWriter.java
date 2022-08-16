@@ -106,7 +106,7 @@ public class GrooveRuleWriter {
     }
 
     private static void writeRuleToFile(File dir, GrooveGraphRule grooveGraphRule, Gxl gxl) {
-        File file = new File(dir.getPath() + "/" + grooveGraphRule.getRuleName() + ".gpr");
+        File file = new File(dir.getPath() + File.separator + grooveGraphRule.getRuleName() + ".gpr");
         GxlToXMLConverter.toXml(gxl, file);
     }
 }
