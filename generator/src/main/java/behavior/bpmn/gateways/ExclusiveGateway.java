@@ -2,7 +2,7 @@ package behavior.bpmn.gateways;
 
 import behavior.bpmn.auxiliary.FlowNodeVisitor;
 
-public class ExclusiveGateway extends Gateway {
+public class ExclusiveGateway extends SimpleGateway {
     public ExclusiveGateway(String id, String name) {
         super(id, name);
     }
@@ -10,21 +10,6 @@ public class ExclusiveGateway extends Gateway {
     @Override
     public void accept(FlowNodeVisitor visitor) {
         visitor.handle(this);
-    }
-
-    @Override
-    public boolean isInclusiveGateway() {
-        return false;
-    }
-
-    @Override
-    public boolean isInstantiateFlowNode() {
-        return false;
-    }
-
-    @Override
-    public boolean isExclusiveEventBasedGateway() {
-        return false;
     }
 
 }
