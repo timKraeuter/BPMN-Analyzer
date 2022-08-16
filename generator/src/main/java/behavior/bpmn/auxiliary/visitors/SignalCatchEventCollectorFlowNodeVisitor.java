@@ -9,10 +9,6 @@ import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.events.*;
-import behavior.bpmn.gateways.EventBasedGateway;
-import behavior.bpmn.gateways.ExclusiveGateway;
-import behavior.bpmn.gateways.InclusiveGateway;
-import behavior.bpmn.gateways.ParallelGateway;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Set;
@@ -20,7 +16,7 @@ import java.util.Set;
 /**
  * FlowNodeVisitor used to collect all signal catch events with a certain event definition.
  */
-public class SignalCatchEventCollectorFlowNodeVisitor implements FlowNodeVisitor {
+public class SignalCatchEventCollectorFlowNodeVisitor extends DoNothingFlowNodeVisitor {
     private final BPMNCollaboration collaboration;
     private final EventDefinition eventDefinition;
     private final Set<Event> signalCatchEvents;
@@ -89,35 +85,5 @@ public class SignalCatchEventCollectorFlowNodeVisitor implements FlowNodeVisitor
             intermediateCatchEvent.getEventDefinition().getGlobalSignalName().equals(eventDefinition.getGlobalSignalName())) {
             signalCatchEvents.add(intermediateCatchEvent);
         }
-    }
-
-    @Override
-    public void handle(IntermediateThrowEvent intermediateThrowEvent) {
-        // not relevant, no signal catches
-    }
-
-    @Override
-    public void handle(EndEvent endEvent) {
-        // not relevant, no signal catches
-    }
-
-    @Override
-    public void handle(EventBasedGateway eventBasedGateway) {
-        // not relevant, no signal catches
-    }
-
-    @Override
-    public void handle(ExclusiveGateway exclusiveGateway) {
-        // not relevant, no signal catches
-    }
-
-    @Override
-    public void handle(ParallelGateway parallelGateway) {
-        // not relevant, no signal catches
-    }
-
-    @Override
-    public void handle(InclusiveGateway inclusiveGateway) {
-        // not relevant, no signal catches
     }
 }
