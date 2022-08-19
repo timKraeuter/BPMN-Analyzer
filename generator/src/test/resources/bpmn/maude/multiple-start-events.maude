@@ -49,6 +49,7 @@ mod BPMN-EXECUTION is
 
     vars P P1 : String .
     vars T T1 : MSet . --- tokens
+    vars SIG : MSet . --- signals
     vars S : Configuration . --- subprocesses
     vars STATE : ProcessState . --- state
     var PS : Configuration .
@@ -62,14 +63,14 @@ mod BPMN-EXECUTION is
 
     eq terminate(none) = none .
     --- NOOP if already terminated
-    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated > .
+    eq terminate(< P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : Terminated > .
     --- Terminate all subprocesses recursively
-    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, subprocesses : terminate(S), state : Terminated > terminate(PS) .
+    eq terminate(< P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : terminate(S), state : Terminated > terminate(PS) .
 
     rl [naturalTerminate] :
-    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Running >
+    < P : ProcessSnapshot | tokens : none, signals : SIG, subprocesses : none, state : Running >
                             =>
-    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Terminated > .
+    < P : ProcessSnapshot | tokens : none, signals : SIG, subprocesses : none, state : Terminated > .
 endm
 
 mod BPMN-EXECUTION-multiple-start-events is
@@ -83,14 +84,14 @@ mod BPMN-EXECUTION-multiple-start-events is
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start1_p1_StartEvent_1] :  < "p1" : ProcessSnapshot | tokens : ("start1_p1 (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start1_p1_p_p1 (Flow_1p3gdcm)" T), signals : (SIG), subprocesses : (S), state : Running > .
-    rl [start2_p1_Event_1avhncp] :  < "p1" : ProcessSnapshot | tokens : ("start2_p1 (Event_1avhncp)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start2_p1_p_p1 (Flow_1bwtd34)" T), signals : (SIG), subprocesses : (S), state : Running > .
+    rl [start1_p1_StartEvent_1] :  < "p1" : ProcessSnapshot | tokens : ("start1_p1 (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start1_p1_p_p1 (Flow_1p3gdcm)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [start2_p1_Event_1avhncp] :  < "p1" : ProcessSnapshot | tokens : ("start2_p1 (Event_1avhncp)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start2_p1_p_p1 (Flow_1bwtd34)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [p_p1_Gateway_0djwvv3] :  < "p1" : ProcessSnapshot | tokens : ("start2_p1_p_p1 (Flow_1bwtd34)" "start1_p1_p_p1 (Flow_1p3gdcm)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("p_p1_end_p1 (Flow_1hji70l)" T), signals : (none), subprocesses : (S), state : Running > .
-    rl [end_p1_Event_0i28wix] :  < "p1" : ProcessSnapshot | tokens : ("p_p1_end_p1 (Flow_1hji70l)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (S), state : Running > .
-    rl [start1_p2_Event_0rbdq43] :  < "p2" : ProcessSnapshot | tokens : ("start1_p2 (Event_0rbdq43)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("start1_p2_p_p2 (Flow_120g9dm)" T), signals : (SIG), subprocesses : (S), state : Running > .
-    rl [start2_p2_Event_0rt8j9k] :  < "p2" : ProcessSnapshot | tokens : ("start2_p2 (Event_0rt8j9k)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("start2_p2_p_p2 (Flow_1f9dgmw)" T), signals : (SIG), subprocesses : (S), state : Running > .
+    rl [end_p1_Event_0i28wix] :  < "p1" : ProcessSnapshot | tokens : ("p_p1_end_p1 (Flow_1hji70l)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), signals : (none), subprocesses : (S), state : Running > .
+    rl [start1_p2_Event_0rbdq43] :  < "p2" : ProcessSnapshot | tokens : ("start1_p2 (Event_0rbdq43)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("start1_p2_p_p2 (Flow_120g9dm)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [start2_p2_Event_0rt8j9k] :  < "p2" : ProcessSnapshot | tokens : ("start2_p2 (Event_0rt8j9k)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("start2_p2_p_p2 (Flow_1f9dgmw)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [p_p2_Gateway_09ghyqt] :  < "p2" : ProcessSnapshot | tokens : ("start2_p2_p_p2 (Flow_1f9dgmw)" "start1_p2_p_p2 (Flow_120g9dm)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("p_p2_end_p2 (Flow_17dpz8t)" T), signals : (none), subprocesses : (S), state : Running > .
-    rl [end_p2_Event_1hg9h1w] :  < "p2" : ProcessSnapshot | tokens : ("p_p2_end_p2 (Flow_17dpz8t)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (S), state : Running > .
+    rl [end_p2_Event_1hg9h1w] :  < "p2" : ProcessSnapshot | tokens : ("p_p2_end_p2 (Flow_17dpz8t)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : (T), signals : (none), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
@@ -106,7 +107,8 @@ mod BPMN-PREDS is
     var C : Configuration .
     var P : Prop .
     var X Y : Oid .
-    var T : MSet .
+    var T : MSet . --- tokens
+    var SIG : MSet . --- signals
     var M : MSet . --- messages
     var T1 : NeMSet .
     var S : Configuration .
@@ -114,11 +116,11 @@ mod BPMN-PREDS is
 
 
     op allTerminated : -> Prop .
-    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > C) > |= allTerminated = false .
+    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : Running > C) > |= allTerminated = false .
     eq < X : BPMNSystem | messages : M, processes : (C) > |= allTerminated = true [owise] .
 
     op unsafe : -> Prop .
-    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : S, state : State > C) > |= unsafe = true .
+    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : (T1 T1 T), signals : SIG, subprocesses : S, state : State > C) > |= unsafe = true .
     eq < X : BPMNSystem | messages : M, processes : (C) > |= unsafe = false [owise] .
 
     --- Generated atomic propositions
