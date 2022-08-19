@@ -37,16 +37,19 @@ mod BPMN-EXECUTION is
     --- Processes
     op ProcessSnapshot : -> Cid [ctor] .
     op tokens :_ : MSet -> Attribute [ctor] .
+    op signals :_ : MSet -> Attribute [ctor] .
     op subprocesses :_ : Configuration -> Attribute [ctor] .
     ops Running, Terminated : -> ProcessState [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
 
+    --- Auxiliary
     op signalAll : Configuration MSet -> Configuration .
     op signal : MSet MSet -> MSet .
     op terminate : Configuration -> Configuration .
 
     vars P P1 : String .
     vars T T1 : MSet . --- tokens
+    vars SIG : MSet . --- signals
     vars S : Configuration . --- subprocesses
     vars STATE : ProcessState . --- state
     var PS : Configuration .
@@ -60,14 +63,14 @@ mod BPMN-EXECUTION is
 
     eq terminate(none) = none .
     --- NOOP if already terminated
-    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated > .
+    eq terminate(< P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : Terminated > .
     --- Terminate all subprocesses recursively
-    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, subprocesses : terminate(S), state : Terminated > terminate(PS) .
+    eq terminate(< P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : terminate(S), state : Terminated > terminate(PS) .
 
     rl [naturalTerminate] :
-    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Running >
+    < P : ProcessSnapshot | tokens : none, signals : SIG, subprocesses : none, state : Running >
                             =>
-    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Terminated > .
+    < P : ProcessSnapshot | tokens : none, signals : SIG, subprocesses : none, state : Terminated > .
 endm
 
 mod BPMN-EXECUTION-cyclic is
@@ -75,33 +78,34 @@ mod BPMN-EXECUTION-cyclic is
 
     --- Generated variables
     vars T : MSet . --- tokens
+    vars SIG : MSet . --- signals
     vars M : MSet . --- messages
     vars S : Configuration . --- subprocesses
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_StartEvent_14hrjpl] :  < "cyclic" : ProcessSnapshot | tokens : ("start (StartEvent_14hrjpl)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("start_a0 (Flow_0ywvf8n)" T), subprocesses : (S), state : Running > .
-    rl [a0_Activity_1ityifb_start] :  < "cyclic" : ProcessSnapshot | tokens : ("start_a0 (Flow_0ywvf8n)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("a0 (Activity_1ityifb)" T), subprocesses : (S), state : Running > .
-    rl [a0_Activity_1ityifb_end] :  < "cyclic" : ProcessSnapshot | tokens : ("a0 (Activity_1ityifb)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("a0_e1 (Flow_02mqqzm)" T), subprocesses : (S), state : Running > .
-    rl [e1_Gateway_0tiki6g] :  < "cyclic" : ProcessSnapshot | tokens : ("a0_e1 (Flow_02mqqzm)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("e1_a1 (Flow_1xxts21)" T), subprocesses : (S), state : Running > .
-    rl [e1_Gateway_0tiki6g] :  < "cyclic" : ProcessSnapshot | tokens : ("a0_e1 (Flow_02mqqzm)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("e1_a2 (Flow_0wg3yrb)" T), subprocesses : (S), state : Running > .
-    rl [a1_Activity_13ztqgp_start] :  < "cyclic" : ProcessSnapshot | tokens : ("e1_a1 (Flow_1xxts21)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("a1 (Activity_13ztqgp)" T), subprocesses : (S), state : Running > .
-    rl [a1_Activity_13ztqgp_end] :  < "cyclic" : ProcessSnapshot | tokens : ("a1 (Activity_13ztqgp)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("a1_e2 (Flow_0hvc18y)" T), subprocesses : (S), state : Running > .
-    rl [a2_Activity_14pa35m_start] :  < "cyclic" : ProcessSnapshot | tokens : ("e1_a2 (Flow_0wg3yrb)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("a2 (Activity_14pa35m)" T), subprocesses : (S), state : Running > .
-    rl [a2_Activity_14pa35m_end] :  < "cyclic" : ProcessSnapshot | tokens : ("a2 (Activity_14pa35m)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("a2_e3 (Flow_1rsvi08)" T), subprocesses : (S), state : Running > .
-    rl [e2_Gateway_0xg3suy] :  < "cyclic" : ProcessSnapshot | tokens : ("a1_e2 (Flow_0hvc18y)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("e2_a3 (Flow_0axuelo)" T), subprocesses : (S), state : Running > .
-    rl [e2_Gateway_0xg3suy] :  < "cyclic" : ProcessSnapshot | tokens : ("e4_e2 (Flow_07sx3br)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("e2_a3 (Flow_0axuelo)" T), subprocesses : (S), state : Running > .
-    rl [a3_Activity_1je1hvx_start] :  < "cyclic" : ProcessSnapshot | tokens : ("e2_a3 (Flow_0axuelo)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("a3 (Activity_1je1hvx)" T), subprocesses : (S), state : Running > .
-    rl [a3_Activity_1je1hvx_end] :  < "cyclic" : ProcessSnapshot | tokens : ("a3 (Activity_1je1hvx)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("a3_e3 (Flow_0imc7gz)" T), subprocesses : (S), state : Running > .
-    rl [e3_Gateway_1ci2jnj] :  < "cyclic" : ProcessSnapshot | tokens : ("a3_e3 (Flow_0imc7gz)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("e3_e4 (Flow_0zxo4fd)" T), subprocesses : (S), state : Running > .
-    rl [e3_Gateway_1ci2jnj] :  < "cyclic" : ProcessSnapshot | tokens : ("a2_e3 (Flow_1rsvi08)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("e3_e4 (Flow_0zxo4fd)" T), subprocesses : (S), state : Running > .
-    rl [e4_Gateway_07hgfwi] :  < "cyclic" : ProcessSnapshot | tokens : ("e3_e4 (Flow_0zxo4fd)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("e4_end (Flow_0sq6ly1)" T), subprocesses : (S), state : Running > .
-    rl [e4_Gateway_07hgfwi] :  < "cyclic" : ProcessSnapshot | tokens : ("e3_e4 (Flow_0zxo4fd)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("e4_e2 (Flow_07sx3br)" T), subprocesses : (S), state : Running > .
-    rl [end_Event_1b2tfgl] :  < "cyclic" : ProcessSnapshot | tokens : ("e4_end (Flow_0sq6ly1)" T), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
+    rl [start_StartEvent_14hrjpl] :  < "cyclic" : ProcessSnapshot | tokens : ("start (StartEvent_14hrjpl)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("start_a0 (Flow_0ywvf8n)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [a0_Activity_1ityifb_start] :  < "cyclic" : ProcessSnapshot | tokens : ("start_a0 (Flow_0ywvf8n)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("a0 (Activity_1ityifb)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [a0_Activity_1ityifb_end] :  < "cyclic" : ProcessSnapshot | tokens : ("a0 (Activity_1ityifb)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("a0_e1 (Flow_02mqqzm)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [e1_Gateway_0tiki6g] :  < "cyclic" : ProcessSnapshot | tokens : ("a0_e1 (Flow_02mqqzm)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("e1_a1 (Flow_1xxts21)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [e1_Gateway_0tiki6g] :  < "cyclic" : ProcessSnapshot | tokens : ("a0_e1 (Flow_02mqqzm)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("e1_a2 (Flow_0wg3yrb)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [a1_Activity_13ztqgp_start] :  < "cyclic" : ProcessSnapshot | tokens : ("e1_a1 (Flow_1xxts21)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("a1 (Activity_13ztqgp)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [a1_Activity_13ztqgp_end] :  < "cyclic" : ProcessSnapshot | tokens : ("a1 (Activity_13ztqgp)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("a1_e2 (Flow_0hvc18y)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [a2_Activity_14pa35m_start] :  < "cyclic" : ProcessSnapshot | tokens : ("e1_a2 (Flow_0wg3yrb)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("a2 (Activity_14pa35m)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [a2_Activity_14pa35m_end] :  < "cyclic" : ProcessSnapshot | tokens : ("a2 (Activity_14pa35m)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("a2_e3 (Flow_1rsvi08)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [e2_Gateway_0xg3suy] :  < "cyclic" : ProcessSnapshot | tokens : ("a1_e2 (Flow_0hvc18y)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("e2_a3 (Flow_0axuelo)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [e2_Gateway_0xg3suy] :  < "cyclic" : ProcessSnapshot | tokens : ("e4_e2 (Flow_07sx3br)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("e2_a3 (Flow_0axuelo)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [a3_Activity_1je1hvx_start] :  < "cyclic" : ProcessSnapshot | tokens : ("e2_a3 (Flow_0axuelo)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("a3 (Activity_1je1hvx)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [a3_Activity_1je1hvx_end] :  < "cyclic" : ProcessSnapshot | tokens : ("a3 (Activity_1je1hvx)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("a3_e3 (Flow_0imc7gz)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [e3_Gateway_1ci2jnj] :  < "cyclic" : ProcessSnapshot | tokens : ("a3_e3 (Flow_0imc7gz)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("e3_e4 (Flow_0zxo4fd)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [e3_Gateway_1ci2jnj] :  < "cyclic" : ProcessSnapshot | tokens : ("a2_e3 (Flow_1rsvi08)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("e3_e4 (Flow_0zxo4fd)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [e4_Gateway_07hgfwi] :  < "cyclic" : ProcessSnapshot | tokens : ("e3_e4 (Flow_0zxo4fd)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("e4_end (Flow_0sq6ly1)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [e4_Gateway_07hgfwi] :  < "cyclic" : ProcessSnapshot | tokens : ("e3_e4 (Flow_0zxo4fd)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : ("e4_e2 (Flow_07sx3br)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [end_Event_1b2tfgl] :  < "cyclic" : ProcessSnapshot | tokens : ("e4_end (Flow_0sq6ly1)" T), signals : (SIG), subprocesses : (S), state : Running > => < "cyclic" : ProcessSnapshot | tokens : (T), signals : (none), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "cyclic" : BPMNSystem | messages : (none), processes : (< "cyclic" : ProcessSnapshot | tokens : ("start (StartEvent_14hrjpl)"), subprocesses : (none), state : Running >) > .
+    eq init = < "cyclic" : BPMNSystem | messages : (none), processes : (< "cyclic" : ProcessSnapshot | tokens : ("start (StartEvent_14hrjpl)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is
@@ -112,7 +116,8 @@ mod BPMN-PREDS is
     var C : Configuration .
     var P : Prop .
     var X Y : Oid .
-    var T : MSet .
+    var T : MSet . --- tokens
+    var SIG : MSet . --- signals
     var M : MSet . --- messages
     var T1 : NeMSet .
     var S : Configuration .
@@ -120,11 +125,11 @@ mod BPMN-PREDS is
 
 
     op allTerminated : -> Prop .
-    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > C) > |= allTerminated = false .
+    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : Running > C) > |= allTerminated = false .
     eq < X : BPMNSystem | messages : M, processes : (C) > |= allTerminated = true [owise] .
 
     op unsafe : -> Prop .
-    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : S, state : State > C) > |= unsafe = true .
+    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : (T1 T1 T), signals : SIG, subprocesses : S, state : State > C) > |= unsafe = true .
     eq < X : BPMNSystem | messages : M, processes : (C) > |= unsafe = false [owise] .
 
     --- Generated atomic propositions

@@ -111,7 +111,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
 
     private void createPreAndPostObjectInRuleForProcess(AbstractProcess process, String preTokens, String postTokens) {
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndSignals(process, preTokens));
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndSignals(process, postTokens));
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndNoSignals(process, postTokens));
     }
 
     private void createSignalThrowRulePart(Event signalThrowEvent, EventDefinition signalEventDefinition) {
@@ -195,8 +195,8 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                                                                                         preTokens));
             // Produce a token for each outgoing flow.
             String postTokens = getOutgoingTokensForFlowNode(intermediateCatchEvent) + ANY_OTHER_TOKENS;
-            ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndSignals(process,
-                                                                                         postTokens));
+            ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndNoSignals(process,
+                                                                                           postTokens));
             ruleBuilder.buildRule();
         });
 
@@ -212,7 +212,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                                                                                     preTokens));
         // Produce a token for each outgoing flow.
         String postTokens = getOutgoingTokensForFlowNode(linkCatchEvent) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndSignals(process,
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndNoSignals(process,
                                                                                      postTokens));
         ruleBuilder.buildRule();
     }
@@ -283,7 +283,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                                                                                         preTokens));
             // Produce a token for each outgoing flow.
             String postTokens = String.format(ENQUOTE_FORMAT, intermediateThrowEvent.getName()) + ANY_OTHER_TOKENS;
-            ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndSignals(process,
+            ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndNoSignals(process,
                                                                                          postTokens));
             ruleBuilder.buildRule();
         });
@@ -320,8 +320,8 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                                                                                         preTokens));
             // Produce a token for each outgoing flow.
             String postTokens = getOutgoingTokensForFlowNode(intermediateThrowEvent) + ANY_OTHER_TOKENS;
-            ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndSignals(process,
-                                                                                         postTokens));
+            ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndNoSignals(process,
+                                                                                           postTokens));
             ruleBuilder.buildRule();
         });
     }

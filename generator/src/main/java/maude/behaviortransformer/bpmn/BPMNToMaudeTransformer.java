@@ -72,6 +72,7 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "\r\n" +
                                                   "    vars P P1 : String .\r\n" +
                                                   "    vars T T1 : MSet . --- tokens\r\n" +
+                                                  "    vars SIG : MSet . --- signals\r\n" +
                                                   "    vars S : Configuration . --- subprocesses\r\n" +
                                                   "    vars STATE : ProcessState . --- state\r\n" +
                                                   "    var PS : Configuration .\r\n" +
@@ -89,21 +90,22 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "\r\n" +
                                                   "    eq terminate(none) = none .\r\n" +
                                                   "    --- NOOP if already terminated\r\n" +
-                                                  "    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses " +
-                                                  ": S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, " +
-                                                  "subprocesses : S, state : Terminated > .\r\n" +
+                                                  "    eq terminate(< P : ProcessSnapshot | tokens : T, signals : " +
+                                                  "SIG, subprocesses : S, state : Terminated >) = < P : " +
+                                                  "ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, " +
+                                                  "state : Terminated > .\r\n" +
                                                   "    --- Terminate all subprocesses recursively\r\n" +
-                                                  "    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses " +
-                                                  ": S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, " +
-                                                  "subprocesses : terminate(S), state : Terminated > terminate(PS) " +
-                                                  ".\r\n" +
+                                                  "    eq terminate(< P : ProcessSnapshot | tokens : T, signals : " +
+                                                  "SIG, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot" +
+                                                  " | tokens : T, signals : SIG, subprocesses : terminate(S), state :" +
+                                                  " Terminated > terminate(PS) .\r\n" +
                                                   "\r\n" +
                                                   "    rl [naturalTerminate] :\r\n" +
-                                                  "    < P : ProcessSnapshot | tokens : none, subprocesses : none, " +
-                                                  "state : Running >\r\n" +
+                                                  "    < P : ProcessSnapshot | tokens : none, signals : SIG, " +
+                                                  "subprocesses : none, state : Running >\r\n" +
                                                   "                            =>\r\n" +
-                                                  "    < P : ProcessSnapshot | tokens : none, subprocesses : none, " +
-                                                  "state : Terminated > .\r\n" +
+                                                  "    < P : ProcessSnapshot | tokens : none, signals : SIG, " +
+                                                  "subprocesses : none, state : Terminated > .\r\n" +
                                                   "endm\r\n" +
                                                   "\r\n" +
                                                   "mod BPMN-EXECUTION-${name} is\r\n" +
@@ -128,7 +130,8 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    var C : Configuration .\r\n" +
                                                   "    var P : Prop .\r\n" +
                                                   "    var X Y : Oid .\r\n" +
-                                                  "    var T : MSet .\r\n" +
+                                                  "    var T : MSet . --- tokens\r\n" +
+                                                  "    var SIG : MSet . --- signals\r\n" +
                                                   "    var M : MSet . --- messages\r\n" +
                                                   "    var T1 : NeMSet .\r\n" +
                                                   "    var S : Configuration .\r\n" +
@@ -137,15 +140,15 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "\r\n" +
                                                   "    op allTerminated : -> Prop .\r\n" +
                                                   "    eq < X : BPMNSystem | messages : M, processes : (< Y : " +
-                                                  "ProcessSnapshot | tokens : T, subprocesses : S, state : Running > " +
-                                                  "C) > |= allTerminated = false .\r\n" +
+                                                  "ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, " +
+                                                  "state : Running > C) > |= allTerminated = false .\r\n" +
                                                   "    eq < X : BPMNSystem | messages : M, processes : (C) > |= " +
                                                   "allTerminated = true [owise] .\r\n" +
                                                   "\r\n" +
                                                   "    op unsafe : -> Prop .\r\n" +
                                                   "    eq < X : BPMNSystem | messages : M, processes : (< Y : " +
-                                                  "ProcessSnapshot | tokens : (T1 T1 T), subprocesses : S, state : " +
-                                                  "State > C) > |= unsafe = true .\r\n" +
+                                                  "ProcessSnapshot | tokens : (T1 T1 T), signals : SIG, subprocesses " +
+                                                  ": S, state : State > C) > |= unsafe = true .\r\n" +
                                                   "    eq < X : BPMNSystem | messages : M, processes : (C) > |= " +
                                                   "unsafe = false [owise] .\r\n" +
                                                   "\r\n" +

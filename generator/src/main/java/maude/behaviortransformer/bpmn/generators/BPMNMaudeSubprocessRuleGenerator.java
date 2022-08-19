@@ -89,9 +89,11 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
 
         // Setup vars
         String anyOtherTokens1 = ANY_TOKENS + "1";
+        String anyOtherSignals1 = ANY_SIGNALS + "1";
         String anyOtherSubprocesses1 = ANY_SUBPROCESSES + "1";
         String anyOtherSubprocesses2 = ANY_SUBPROCESSES + "2";
         ruleBuilder.addVar(TOKENS, MSET, anyOtherTokens1);
+        ruleBuilder.addVar(SIGNALS, MSET, anyOtherSignals1);
         ruleBuilder.addVar(SUBPROCESSES, CONFIGURATION, anyOtherSubprocesses1);
         ruleBuilder.addVar(SUBPROCESSES, CONFIGURATION, anyOtherSubprocesses2);
 
@@ -100,12 +102,12 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
         String subprocesses = createProcessSnapshotObjectRunning(callActivity.getSubProcessModel(),
                                                                  anyOtherSubprocesses1,
                                                                  anyOtherTokens1,
-                                                                 RUNNING)
+                                                                 anyOtherSignals1)
                                       .generateObjectString() + " " + anyOtherSubprocesses2;
         ruleBuilder.addPreObject(createProcessSnapshotObjectRunning(process,
                                                                     subprocesses,
                                                                     ANY_TOKENS,
-                                                                    RUNNING));
+                                                                    ANY_SIGNALS));
         String postTokens = getOutgoingTokensForFlowNode(boundaryEvent) + ANY_OTHER_TOKENS;
         if (boundaryEvent.isInterrupt()) {
             // Interrupt removes subprocesses
