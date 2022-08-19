@@ -79,7 +79,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
         ruleAddditions.accept(getRuleBuilder());
 
         String taskToken = getTokenForFlowNode(task);
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(process,
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndSignals(process,
                                                                           taskToken +
                                                                           ANY_OTHER_TOKENS));
         String postTokens;
@@ -93,7 +93,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
                          taskToken +
                          ANY_OTHER_TOKENS;
         }
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcess(process, postTokens));
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndNoSignals(process, postTokens));
         ruleBuilder.buildRule();
     }
 
@@ -107,10 +107,10 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
         ruleBuilder.startRule(getFlowNodeRuleNameWithIncFlow(task, incomingFlow.getId()) + START);
 
         String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(process, preTokens));
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndSignals(process, preTokens));
 
         String postTokens = getTokenForFlowNode(task) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcess(process, postTokens));
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndNoSignals(process, postTokens));
 
         ruleBuilder.buildRule();
     }
@@ -121,10 +121,10 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
         ruleBuilder.startRule(getFlowNodeRuleName(task) + END);
 
         String preTokens = getTokenForFlowNode(task) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(process, preTokens));
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndSignals(process, preTokens));
 
         String postTokens = getOutgoingTokensForFlowNode(task) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcess(process, postTokens));
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndNoSignals(process, postTokens));
         ruleAdditions.accept(ruleBuilder);
 
         ruleBuilder.buildRule();

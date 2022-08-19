@@ -64,10 +64,10 @@ public class BPMNMaudeGatewayRuleGenerator implements BPMNToMaudeTransformerHelp
         ruleBuilder.startRule(getFlowNodeRuleName(exclusiveGateway));
 
         String preTokens = preToken + ANY_OTHER_TOKENS;
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(process, preTokens));
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndSignals(process, preTokens));
 
         String postTokens = getTokenForSequenceFlow(outgoingFlow) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcess(process, postTokens));
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndNoSignals(process, postTokens));
 
         ruleBuilder.buildRule();
 
@@ -77,10 +77,10 @@ public class BPMNMaudeGatewayRuleGenerator implements BPMNToMaudeTransformerHelp
         ruleBuilder.startRule(getFlowNodeRuleName(parallelGateway));
 
         String preTokens = getPreTokensForParallelGateway(parallelGateway) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(process, preTokens));
+        ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndSignals(process, preTokens));
 
         String postTokens = getOutgoingTokensForFlowNode(parallelGateway) + ANY_OTHER_TOKENS;
-        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcess(process, postTokens));
+        ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndNoSignals(process, postTokens));
 
         ruleBuilder.buildRule();
     }
@@ -99,10 +99,10 @@ public class BPMNMaudeGatewayRuleGenerator implements BPMNToMaudeTransformerHelp
             ruleBuilder.startRule(getFlowNodeRuleNameWithIncFlow(eventBasedGateway, inFlow.getId()));
 
             String preTokens = getTokenForSequenceFlow(inFlow) + ANY_OTHER_TOKENS;
-            ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcess(process, preTokens));
+            ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndSignals(process, preTokens));
 
             String postTokens = getTokenForFlowNode(eventBasedGateway) + ANY_OTHER_TOKENS;
-            ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcess(process, postTokens));
+            ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndNoSignals(process, postTokens));
 
             ruleBuilder.buildRule();
         });

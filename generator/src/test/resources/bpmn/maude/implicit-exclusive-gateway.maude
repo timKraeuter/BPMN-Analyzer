@@ -37,10 +37,12 @@ mod BPMN-EXECUTION is
     --- Processes
     op ProcessSnapshot : -> Cid [ctor] .
     op tokens :_ : MSet -> Attribute [ctor] .
+    op signals :_ : MSet -> Attribute [ctor] .
     op subprocesses :_ : Configuration -> Attribute [ctor] .
     ops Running, Terminated : -> ProcessState [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
 
+    --- Auxiliary
     op signalAll : Configuration MSet -> Configuration .
     op signal : MSet MSet -> MSet .
     op terminate : Configuration -> Configuration .
@@ -75,24 +77,25 @@ mod BPMN-EXECUTION-implicit-exclusive-gateway is
 
     --- Generated variables
     vars T : MSet . --- tokens
+    vars SIG : MSet . --- signals
     vars M : MSet . --- messages
     vars S : Configuration . --- subprocesses
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start_e1 (Flow_10t9zap)" T), subprocesses : (S), state : Running > .
-    rl [e1_Gateway_0j19iup] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start_e1 (Flow_10t9zap)" T), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("e1_B (Flow_0pdgsgi)" T), subprocesses : (S), state : Running > .
-    rl [e1_Gateway_0j19iup] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start_e1 (Flow_10t9zap)" T), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("e1_A (Flow_0nggee2)" T), subprocesses : (S), state : Running > .
-    rl [B_Activity_10w538h_Flow_0pdgsgi_start] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("e1_B (Flow_0pdgsgi)" T), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B (Activity_10w538h)" T), subprocesses : (S), state : Running > .
-    rl [B_Activity_10w538h_Flow_1nj1snh_start] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("A_B (Flow_1nj1snh)" T), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B (Activity_10w538h)" T), subprocesses : (S), state : Running > .
-    rl [B_Activity_10w538h_end] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B (Activity_10w538h)" T), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B_end (Flow_1invg8j)" T), subprocesses : (S), state : Running > .
-    rl [A_Activity_15jc1ty_start] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("e1_A (Flow_0nggee2)" T), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("A (Activity_15jc1ty)" T), subprocesses : (S), state : Running > .
-    rl [A_Activity_15jc1ty_end] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("A (Activity_15jc1ty)" T), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("A_B (Flow_1nj1snh)" T), subprocesses : (S), state : Running > .
-    rl [end_Event_11g4lyk] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B_end (Flow_1invg8j)" T), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
+    rl [start_StartEvent_1] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start_e1 (Flow_10t9zap)" T), signals : (SIG), subprocesses : (S), state : Running > .
+    rl [e1_Gateway_0j19iup] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start_e1 (Flow_10t9zap)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("e1_B (Flow_0pdgsgi)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [e1_Gateway_0j19iup] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start_e1 (Flow_10t9zap)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("e1_A (Flow_0nggee2)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [B_Activity_10w538h_Flow_0pdgsgi_start] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("e1_B (Flow_0pdgsgi)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B (Activity_10w538h)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [B_Activity_10w538h_Flow_1nj1snh_start] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("A_B (Flow_1nj1snh)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B (Activity_10w538h)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [B_Activity_10w538h_end] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B (Activity_10w538h)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B_end (Flow_1invg8j)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [A_Activity_15jc1ty_start] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("e1_A (Flow_0nggee2)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("A (Activity_15jc1ty)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [A_Activity_15jc1ty_end] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("A (Activity_15jc1ty)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("A_B (Flow_1nj1snh)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [end_Event_11g4lyk] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B_end (Flow_1invg8j)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "implicit-exclusive-gateway" : BPMNSystem | messages : (none), processes : (< "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), subprocesses : (none), state : Running >) > .
+    eq init = < "implicit-exclusive-gateway" : BPMNSystem | messages : (none), processes : (< "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is

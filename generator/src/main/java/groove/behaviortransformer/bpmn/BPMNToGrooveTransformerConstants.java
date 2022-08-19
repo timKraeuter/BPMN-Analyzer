@@ -12,7 +12,6 @@ public class BPMNToGrooveTransformerConstants {
     public static final String TYPE_TOKEN = TYPE + "Token";
     public static final String TYPE_PROCESS_SNAPSHOT = TYPE + "ProcessSnapshot";
     public static final String TYPE_RUNNING = TYPE + "Running";
-    public static final String TYPE_INTERRUPTED = TYPE + "Interrupted";
     public static final String TYPE_TERMINATED = TYPE + "Terminated";
     public static final String TYPE_DECISION = TYPE + "Decision";
     public static final String TYPE_MESSAGE = TYPE + "Message";
@@ -20,6 +19,7 @@ public class BPMNToGrooveTransformerConstants {
     public static final String POSITION = "position";
     public static final String STATE = "state";
     public static final String TOKENS = "tokens";
+    public static final String SIGNALS = "signals";
     public static final String MESSAGES = "messages";
     public static final String SUBPROCESSES = "subprocesses";
     public static final String MSET = "MSet";

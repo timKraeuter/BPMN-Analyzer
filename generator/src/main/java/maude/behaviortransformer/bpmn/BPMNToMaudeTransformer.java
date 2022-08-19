@@ -60,10 +60,12 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    --- Processes\r\n" +
                                                   "    op ProcessSnapshot : -> Cid [ctor] .\r\n" +
                                                   "    op tokens :_ : MSet -> Attribute [ctor] .\r\n" +
+                                                  "    op signals :_ : MSet -> Attribute [ctor] .\r\n" +
                                                   "    op subprocesses :_ : Configuration -> Attribute [ctor] .\r\n" +
                                                   "    ops Running, Terminated : -> ProcessState [ctor] .\r\n" +
                                                   "    op state :_ : ProcessState -> Attribute [ctor] .\r\n" +
                                                   "\r\n" +
+                                                  "    --- Auxiliary\r\n" +
                                                   "    op signalAll : Configuration MSet -> Configuration .\r\n" +
                                                   "    op signal : MSet MSet -> MSet .\r\n" +
                                                   "    op terminate : Configuration -> Configuration .\r\n" +
@@ -165,6 +167,7 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
         this.collaboration = collaboration;
         ruleBuilder = new BPMNMaudeRuleBuilder(collaboration);
         ruleBuilder.addVar(TOKENS, MSET, ANY_TOKENS);
+        ruleBuilder.addVar(SIGNALS, MSET, ANY_SIGNALS);
         ruleBuilder.addVar(MESSAGES, MSET, ANY_MESSAGES);
         ruleBuilder.addVar(SUBPROCESSES, CONFIGURATION, ANY_SUBPROCESSES);
         ruleBuilder.addVar(PROCESSES, CONFIGURATION, ANY_PROCESS);
@@ -189,7 +192,7 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                                                                               StartEventType.NONE))
                                         .map(process -> {
                                             MaudeObject maudeObject =
-                                                    createProcessSnapshotObjectNoSubProcess(
+                                                    createProcessSnapshotObjectNoSubProcessAndSignals(
                                                             process,
                                                             this.createStartTokens(process));
                                             return maudeObject.generateObjectString();

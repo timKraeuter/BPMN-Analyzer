@@ -17,6 +17,7 @@ public interface BPMNToMaudeTransformerHelper {
     String PROCESSES = "processes";
     String ANY_PROCESS = "P";
     String ANY_TOKENS = "T";
+    String ANY_SIGNALS = "SIG";
     String ANY_SUBPROCESSES = "S";
     String ANY_MESSAGES = "M";
     String WHITE_SPACE = " ";
@@ -78,7 +79,7 @@ public interface BPMNToMaudeTransformerHelper {
         return String.format(format, flowNode.getName(), flowNode.getId());
     }
 
-    default String getSignalOccurenceForSequenceFlow(SequenceFlow sequenceFlow) {
+    default String getSignalOccurrenceForSequenceFlow(SequenceFlow sequenceFlow) {
         return getTokenOrSignalOccurenceForSequenceFlow(sequenceFlow, SIGNAL_OCCURENCE_FORMAT);
     }
 
@@ -103,33 +104,42 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
     default MaudeObject createTerminatedProcessSnapshot(AbstractProcess process) {
-        return createProcessSnapshotObject(process, NONE, NONE, TERMINATED);
+        return createProcessSnapshotObject(process, NONE, NONE, ANY_SIGNALS, TERMINATED);
     }
 
-    default MaudeObject createProcessSnapshotObjectNoSubProcess(AbstractProcess process,
-                                                                String tokens) {
-        return createProcessSnapshotObject(process, NONE, tokens, RUNNING);
+    default MaudeObject createProcessSnapshotObjectNoSubProcessAndSignals(AbstractProcess process,
+                                                                          String tokens) {
+        return createProcessSnapshotObjectRunning(process, NONE, tokens, NONE);
     }
 
-    default MaudeObject createProcessSnapshotObjectAnySubProcess(AbstractProcess process,
-                                                                 String tokens) {
-        return createProcessSnapshotObject(process,
+    default MaudeObject createProcessSnapshotObjectAnySubProcessAndSignals(AbstractProcess process,
+                                                                           String tokens) {
+        return createProcessSnapshotObjectRunning(process,
                                            ANY_SUBPROCESSES,
                                            tokens,
-                                           RUNNING);
+                                           ANY_SIGNALS);
     }
 
-    default MaudeObject createProcessSnapshotObject(AbstractProcess process,
-                                                    String subprocesses,
-                                                    String tokens) {
-        return createProcessSnapshotObject(process, subprocesses, tokens, RUNNING);
+    default MaudeObject createProcessSnapshotObjectAnySubProcessAndNoSignals(AbstractProcess process,
+                                                                             String tokens) {
+        return createProcessSnapshotObjectRunning(process,
+                                           ANY_SUBPROCESSES,
+                                           tokens,
+                                           NONE);
+    }
+
+    default MaudeObject createProcessSnapshotObjectRunning(AbstractProcess process,
+                                                           String subprocesses,
+                                                           String tokens,
+                                                           String signals) {
+        return createProcessSnapshotObject(process, subprocesses, tokens, signals, RUNNING);
     }
 
 
     default MaudeObject createProcessSnapshotObjectWithParents(AbstractProcess process,
                                                                String subprocesses,
                                                                String tokens) {
-        MaudeObject processObject = createProcessSnapshotObject(process, subprocesses, tokens, RUNNING);
+        MaudeObject processObject = createProcessSnapshotObjectRunning(process, subprocesses, tokens, ANY_SIGNALS);
         return wrapInParentIfNeeded(process, processObject, 1);
     }
 
@@ -140,23 +150,29 @@ public interface BPMNToMaudeTransformerHelper {
         }
         String anySubprocesses = ANY_SUBPROCESSES + counter;
         String anyTokens = ANY_TOKENS + counter;
+        String anySignals = ANY_SIGNALS + counter;
         getRuleBuilder().addVar(TOKENS, MSET, anyTokens);
+        getRuleBuilder().addVar(SIGNALS, MSET, anySignals);
         getRuleBuilder().addVar(SUBPROCESSES, CONFIGURATION, anySubprocesses);
 
-        MaudeObject parentProcessObject = createProcessSnapshotObject(parentProcess,
-                                                                      processObject.generateObjectString() + WHITE_SPACE + anySubprocesses,
-                                                                      anyTokens,
-                                                                      RUNNING);
+        MaudeObject parentProcessObject = createProcessSnapshotObjectRunning(parentProcess,
+                                                                      processObject.generateObjectString() +
+                                                                      WHITE_SPACE +
+                                                                      anySubprocesses,
+                                                                             anyTokens,
+                                                                             anySignals);
         return wrapInParentIfNeeded(parentProcess, parentProcessObject, counter + 1);
     }
 
     default MaudeObject createProcessSnapshotObject(AbstractProcess process,
                                                     String subprocesses,
                                                     String tokens,
+                                                    String signals,
                                                     String state) {
         return getObjectBuilder().oid(process.getName())
                                  .oidType("ProcessSnapshot")
                                  .addAttributeValue("tokens", String.format(BRACKET_FORMAT, tokens))
+                                 .addAttributeValue("signals", String.format(BRACKET_FORMAT, signals))
                                  .addAttributeValue("subprocesses", String.format(BRACKET_FORMAT, subprocesses))
                                  .addAttributeValue("state", state)
                                  .build();
@@ -187,8 +203,8 @@ public interface BPMNToMaudeTransformerHelper {
         AbstractProcess receiverProcess = collaboration.getMessageFlowReceiverProcess(messageFlow);
         FlowNode mFlowTarget = messageFlow.getTarget();
         String tokens = getTokenForFlowNode(mFlowTarget) + ANY_OTHER_TOKENS;
-        getRuleBuilder().addPostObject(createProcessSnapshotObjectNoSubProcess(receiverProcess,
-                                                                               tokens));
+        getRuleBuilder().addPostObject(createProcessSnapshotObjectNoSubProcessAndSignals(receiverProcess,
+                                                                                         tokens));
         addMessageCreation(messageFlow);
     }
 
@@ -234,11 +250,11 @@ public interface BPMNToMaudeTransformerHelper {
             getRuleBuilder().startRule(getFlowNodeRuleNameWithIncFlow(interactionNode, incomingFlow.getId()) + START);
 
             String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
-            getRuleBuilder().addPreObject(createProcessSnapshotObjectAnySubProcess(process, preTokens));
+            getRuleBuilder().addPreObject(createProcessSnapshotObjectAnySubProcessAndSignals(process, preTokens));
 
             String postTokens = getTokenForFlowNode(interactionNode) + ANY_OTHER_TOKENS;
-            getRuleBuilder().addPostObject(createProcessSnapshotObjectAnySubProcess(process,
-                                                                                    postTokens));
+            getRuleBuilder().addPostObject(createProcessSnapshotObjectAnySubProcessAndNoSignals(process,
+                                                                                                postTokens));
 
             getRuleBuilder().buildRule();
         });
@@ -253,12 +269,12 @@ public interface BPMNToMaudeTransformerHelper {
                                                                   incomingMessageFlows,
                                                                   messageFlow));
             String preTokens = getConsumedTokenForInteractionNode(interactionNode) + ANY_OTHER_TOKENS;
-            getRuleBuilder().addPreObject(createProcessSnapshotObjectAnySubProcess(process, preTokens));
+            getRuleBuilder().addPreObject(createProcessSnapshotObjectAnySubProcessAndSignals(process, preTokens));
             addMessageConsumption(messageFlow);
 
             String postTokens = getOutgoingTokensForFlowNode(interactionNode) + ANY_OTHER_TOKENS;
-            getRuleBuilder().addPostObject(createProcessSnapshotObjectAnySubProcess(process,
-                                                                                    postTokens));
+            getRuleBuilder().addPostObject(createProcessSnapshotObjectAnySubProcessAndNoSignals(process,
+                                                                                              postTokens));
 
             getRuleBuilder().buildRule();
         });
