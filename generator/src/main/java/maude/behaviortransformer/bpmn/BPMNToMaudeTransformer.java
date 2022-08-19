@@ -78,14 +78,14 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    var PS : Configuration .\r\n" +
                                                   "\r\n" +
                                                   "    eq signalAll(none, T) = none .\r\n" +
-                                                  "    eq signalAll(< P : ProcessSnapshot | tokens : T, subprocesses " +
-                                                  ": S, state : STATE > PS, T1) = < P : ProcessSnapshot | tokens : " +
-                                                  "signal(T, T1), subprocesses : S, state : STATE > signalAll(PS, T1)" +
-                                                  " .\r\n" +
+                                                  "    eq signalAll(< P : ProcessSnapshot | tokens : T, signals : " +
+                                                  "SIG, subprocesses : S, state : STATE > PS, T1) = < P : " +
+                                                  "ProcessSnapshot | tokens : T, signals : (SIG signal(T, T1)), " +
+                                                  "subprocesses : S, state : STATE > signalAll(PS, T1) .\r\n" +
                                                   "\r\n" +
-                                                  "    ceq signal(P T, T1) = P (P + \"_signal\") signal(T, T1) if " +
+                                                  "    ceq signal(P T, T1) = (P + \"_signal\") signal(T, T1) if " +
                                                   "contains(T1, P) .\r\n" +
-                                                  "    eq signal(P T, T1) = P signal(T, T1) [owise] .\r\n" +
+                                                  "    eq signal(P T, T1) = signal(T, T1) [owise] .\r\n" +
                                                   "    eq signal(none, T1) = none .\r\n" +
                                                   "\r\n" +
                                                   "    eq terminate(none) = none .\r\n" +

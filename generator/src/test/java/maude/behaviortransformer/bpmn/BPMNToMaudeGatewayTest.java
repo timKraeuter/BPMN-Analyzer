@@ -43,8 +43,7 @@ class BPMNToMaudeGatewayTest implements BPMNMaudeTestHelper {
     @Test
     void testExclusiveEventBasedGateway() throws IOException {
         // Does not terminate if the EV-Gateway is too late for the signal event.
-        // Starting p1 with a token in the EV-Gateway makes the formula come true.
-        testBPMNMaudeGeneration("exclusive-event-based-gateway");
+        testBPMNMaudeGenerationWithCustomQuery("exclusive-event-based-gateway", CAN_TERMINATE_QUERY);
     }
 
     /**

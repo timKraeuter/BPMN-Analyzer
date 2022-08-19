@@ -29,8 +29,7 @@ class BPMNToMaudeBoundaryEventsTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testTaskInterruptingBoundaryEvents() throws IOException {
-        // TODO: What to do about unprocessed signals? Should be deleted on termination. Should be always terminate.
-        testBPMNMaudeGenerationWithCustomQuery("task-interrupting-boundary-events", CAN_TERMINATE_QUERY);
+        testBPMNMaudeGeneration("task-interrupting-boundary-events");
     }
 
     /**
