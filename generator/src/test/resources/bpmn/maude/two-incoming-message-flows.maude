@@ -37,10 +37,12 @@ mod BPMN-EXECUTION is
     --- Processes
     op ProcessSnapshot : -> Cid [ctor] .
     op tokens :_ : MSet -> Attribute [ctor] .
+    op signals :_ : MSet -> Attribute [ctor] .
     op subprocesses :_ : Configuration -> Attribute [ctor] .
     ops Running, Terminated : -> ProcessState [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
 
+    --- Auxiliary
     op signalAll : Configuration MSet -> Configuration .
     op signal : MSet MSet -> MSet .
     op terminate : Configuration -> Configuration .
@@ -75,27 +77,28 @@ mod BPMN-EXECUTION-two-incoming-message-flows is
 
     --- Generated variables
     vars T : MSet . --- tokens
+    vars SIG : MSet . --- signals
     vars M : MSet . --- messages
     vars S : Configuration . --- subprocesses
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_p2_Event_1g2ic8d] :  < "p2" : ProcessSnapshot | tokens : ("start_p2 (Event_1g2ic8d)" T), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("start_p2_Catch_2 (Flow_0x23a3h)" "start_p2_Catch_2 (Flow_0uuwgc1)" T), subprocesses : (S), state : Running > .
-    rl [Catch_2_Event_0rhfmo8_Flow_0x23a3h_start] :  < "p2" : ProcessSnapshot | tokens : ("start_p2_Catch_2 (Flow_0x23a3h)" T), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("Catch_2 (Event_0rhfmo8)" T), subprocesses : (S), state : Running > .
-    rl [Catch_2_Event_0rhfmo8_Flow_0uuwgc1_start] :  < "p2" : ProcessSnapshot | tokens : ("start_p2_Catch_2 (Flow_0uuwgc1)" T), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("Catch_2 (Event_0rhfmo8)" T), subprocesses : (S), state : Running > .
-    rl [Catch_2_Event_0rhfmo8_end_p3_Catch_2] :  < "two-incoming-message-flows" : BPMNSystem | messages : ("end_p3_Catch_2" M), processes : (< "p2" : ProcessSnapshot | tokens : ("Catch_2 (Event_0rhfmo8)" T), subprocesses : (S), state : Running > P) > => < "two-incoming-message-flows" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("Catch_2_end_p2 (Flow_0r4dq5g)" T), subprocesses : (S), state : Running > P) > .
-    rl [Catch_2_Event_0rhfmo8_end_p1_Catch_2] :  < "two-incoming-message-flows" : BPMNSystem | messages : ("end_p1_Catch_2" M), processes : (< "p2" : ProcessSnapshot | tokens : ("Catch_2 (Event_0rhfmo8)" T), subprocesses : (S), state : Running > P) > => < "two-incoming-message-flows" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("Catch_2_end_p2 (Flow_0r4dq5g)" T), subprocesses : (S), state : Running > P) > .
-    rl [end_p2_Event_1ks93e5] :  < "p2" : ProcessSnapshot | tokens : ("Catch_2_end_p2 (Flow_0r4dq5g)" T), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
-    rl [start_p3_Event_0bhy3w7] :  < "p3" : ProcessSnapshot | tokens : ("start_p3 (Event_0bhy3w7)" T), subprocesses : (S), state : Running > => < "p3" : ProcessSnapshot | tokens : ("start_p3_end_p3 (Flow_16u01g7)" T), subprocesses : (S), state : Running > .
-    rl [end_p3_Event_0n0galh] :  < "two-incoming-message-flows" : BPMNSystem | messages : (M), processes : (< "p3" : ProcessSnapshot | tokens : ("start_p3_end_p3 (Flow_16u01g7)" T), subprocesses : (S), state : Running > P) > => < "two-incoming-message-flows" : BPMNSystem | messages : ("end_p3_Catch_2" M), processes : (< "p3" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > P) > .
-    rl [end_p1_Event_1xbunmt] :  < "two-incoming-message-flows" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("start_p1_end_p1 (Flow_1ttcsey)" T), subprocesses : (S), state : Running > P) > => < "two-incoming-message-flows" : BPMNSystem | messages : ("end_p1_Catch_2" M), processes : (< "p1" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > P) > .
-    rl [start_p1_Event_1hsgsto] :  < "p1" : ProcessSnapshot | tokens : ("start_p1 (Event_1hsgsto)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start_p1_end_p1 (Flow_1ttcsey)" T), subprocesses : (S), state : Running > .
+    rl [start_p2_Event_1g2ic8d] :  < "p2" : ProcessSnapshot | tokens : ("start_p2 (Event_1g2ic8d)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("start_p2_Catch_2 (Flow_0x23a3h)" "start_p2_Catch_2 (Flow_0uuwgc1)" T), signals : (SIG), subprocesses : (S), state : Running > .
+    rl [Catch_2_Event_0rhfmo8_Flow_0x23a3h_start] :  < "p2" : ProcessSnapshot | tokens : ("start_p2_Catch_2 (Flow_0x23a3h)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("Catch_2 (Event_0rhfmo8)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [Catch_2_Event_0rhfmo8_Flow_0uuwgc1_start] :  < "p2" : ProcessSnapshot | tokens : ("start_p2_Catch_2 (Flow_0uuwgc1)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : ("Catch_2 (Event_0rhfmo8)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [Catch_2_Event_0rhfmo8_end_p3_Catch_2] :  < "two-incoming-message-flows" : BPMNSystem | messages : ("end_p3_Catch_2" M), processes : (< "p2" : ProcessSnapshot | tokens : ("Catch_2 (Event_0rhfmo8)" T), signals : (SIG), subprocesses : (S), state : Running > P) > => < "two-incoming-message-flows" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("Catch_2_end_p2 (Flow_0r4dq5g)" T), signals : (none), subprocesses : (S), state : Running > P) > .
+    rl [Catch_2_Event_0rhfmo8_end_p1_Catch_2] :  < "two-incoming-message-flows" : BPMNSystem | messages : ("end_p1_Catch_2" M), processes : (< "p2" : ProcessSnapshot | tokens : ("Catch_2 (Event_0rhfmo8)" T), signals : (SIG), subprocesses : (S), state : Running > P) > => < "two-incoming-message-flows" : BPMNSystem | messages : (M), processes : (< "p2" : ProcessSnapshot | tokens : ("Catch_2_end_p2 (Flow_0r4dq5g)" T), signals : (none), subprocesses : (S), state : Running > P) > .
+    rl [end_p2_Event_1ks93e5] :  < "p2" : ProcessSnapshot | tokens : ("Catch_2_end_p2 (Flow_0r4dq5g)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p2" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (S), state : Running > .
+    rl [start_p3_Event_0bhy3w7] :  < "p3" : ProcessSnapshot | tokens : ("start_p3 (Event_0bhy3w7)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p3" : ProcessSnapshot | tokens : ("start_p3_end_p3 (Flow_16u01g7)" T), signals : (SIG), subprocesses : (S), state : Running > .
+    rl [end_p3_Event_0n0galh] :  < "two-incoming-message-flows" : BPMNSystem | messages : (M), processes : (< "p3" : ProcessSnapshot | tokens : ("start_p3_end_p3 (Flow_16u01g7)" T), signals : (SIG), subprocesses : (S), state : Running > P) > => < "two-incoming-message-flows" : BPMNSystem | messages : ("end_p3_Catch_2" M), processes : (< "p3" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (S), state : Running > P) > .
+    rl [end_p1_Event_1xbunmt] :  < "two-incoming-message-flows" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("start_p1_end_p1 (Flow_1ttcsey)" T), signals : (SIG), subprocesses : (S), state : Running > P) > => < "two-incoming-message-flows" : BPMNSystem | messages : ("end_p1_Catch_2" M), processes : (< "p1" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (S), state : Running > P) > .
+    rl [start_p1_Event_1hsgsto] :  < "p1" : ProcessSnapshot | tokens : ("start_p1 (Event_1hsgsto)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start_p1_end_p1 (Flow_1ttcsey)" T), signals : (SIG), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "two-incoming-message-flows" : BPMNSystem | messages : (none), processes : (< "p2" : ProcessSnapshot | tokens : ("start_p2 (Event_1g2ic8d)"), subprocesses : (none), state : Running >
-    < "p3" : ProcessSnapshot | tokens : ("start_p3 (Event_0bhy3w7)"), subprocesses : (none), state : Running >
-    < "p1" : ProcessSnapshot | tokens : ("start_p1 (Event_1hsgsto)"), subprocesses : (none), state : Running >) > .
+    eq init = < "two-incoming-message-flows" : BPMNSystem | messages : (none), processes : (< "p2" : ProcessSnapshot | tokens : ("start_p2 (Event_1g2ic8d)"), signals : (none), subprocesses : (none), state : Running >
+    < "p3" : ProcessSnapshot | tokens : ("start_p3 (Event_0bhy3w7)"), signals : (none), subprocesses : (none), state : Running >
+    < "p1" : ProcessSnapshot | tokens : ("start_p1 (Event_1hsgsto)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is

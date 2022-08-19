@@ -37,10 +37,12 @@ mod BPMN-EXECUTION is
     --- Processes
     op ProcessSnapshot : -> Cid [ctor] .
     op tokens :_ : MSet -> Attribute [ctor] .
+    op signals :_ : MSet -> Attribute [ctor] .
     op subprocesses :_ : Configuration -> Attribute [ctor] .
     ops Running, Terminated : -> ProcessState [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
 
+    --- Auxiliary
     op signalAll : Configuration MSet -> Configuration .
     op signal : MSet MSet -> MSet .
     op terminate : Configuration -> Configuration .
@@ -75,18 +77,19 @@ mod BPMN-EXECUTION-intermediate-throw-event is
 
     --- Generated variables
     vars T : MSet . --- tokens
+    vars SIG : MSet . --- signals
     vars M : MSet . --- messages
     vars S : Configuration . --- subprocesses
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < "p1" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start_intermediate (Flow_0i4cd7b)" T), subprocesses : (S), state : Running > .
-    rl [end_Event_0luomob] :  < "p1" : ProcessSnapshot | tokens : ("intermediate_end (Flow_04utr3x)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
-    rl [intermediate_Event_1mrcnu0] :  < "p1" : ProcessSnapshot | tokens : ("start_intermediate (Flow_0i4cd7b)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("intermediate_end (Flow_04utr3x)" T), subprocesses : (S), state : Running > .
+    rl [start_StartEvent_1] :  < "p1" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start_intermediate (Flow_0i4cd7b)" T), signals : (SIG), subprocesses : (S), state : Running > .
+    rl [end_Event_0luomob] :  < "p1" : ProcessSnapshot | tokens : ("intermediate_end (Flow_04utr3x)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (S), state : Running > .
+    rl [intermediate_Event_1mrcnu0] :  < "p1" : ProcessSnapshot | tokens : ("start_intermediate (Flow_0i4cd7b)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("intermediate_end (Flow_04utr3x)" T), signals : (SIG), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "intermediate-throw-event" : BPMNSystem | messages : (none), processes : (< "p1" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), subprocesses : (none), state : Running >) > .
+    eq init = < "intermediate-throw-event" : BPMNSystem | messages : (none), processes : (< "p1" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is

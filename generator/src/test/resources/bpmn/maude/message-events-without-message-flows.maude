@@ -37,10 +37,12 @@ mod BPMN-EXECUTION is
     --- Processes
     op ProcessSnapshot : -> Cid [ctor] .
     op tokens :_ : MSet -> Attribute [ctor] .
+    op signals :_ : MSet -> Attribute [ctor] .
     op subprocesses :_ : Configuration -> Attribute [ctor] .
     ops Running, Terminated : -> ProcessState [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
 
+    --- Auxiliary
     op signalAll : Configuration MSet -> Configuration .
     op signal : MSet MSet -> MSet .
     op terminate : Configuration -> Configuration .
@@ -75,20 +77,21 @@ mod BPMN-EXECUTION-message-events-without-message-flows is
 
     --- Generated variables
     vars T : MSet . --- tokens
+    vars SIG : MSet . --- signals
     vars M : MSet . --- messages
     vars S : Configuration . --- subprocesses
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < "p1" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start_sendEvent (Flow_1bq0iji)" T), subprocesses : (S), state : Running > .
-    rl [sendEvent_Event_0wsa4n0] :  < "p1" : ProcessSnapshot | tokens : ("start_sendEvent (Flow_1bq0iji)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("sendEvent_SendTask (Flow_17n7skq)" T), subprocesses : (S), state : Running > .
-    rl [SendTask_Activity_0xxxw3w_start] :  < "p1" : ProcessSnapshot | tokens : ("sendEvent_SendTask (Flow_17n7skq)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("SendTask (Activity_0xxxw3w)" T), subprocesses : (S), state : Running > .
-    rl [SendTask_Activity_0xxxw3w_end] :  < "p1" : ProcessSnapshot | tokens : ("SendTask (Activity_0xxxw3w)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("SendTask_end (Flow_02ze5uh)" T), subprocesses : (S), state : Running > .
-    rl [end_Event_1cofdr6] :  < "p1" : ProcessSnapshot | tokens : ("SendTask_end (Flow_02ze5uh)" T), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
+    rl [start_StartEvent_1] :  < "p1" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start_sendEvent (Flow_1bq0iji)" T), signals : (SIG), subprocesses : (S), state : Running > .
+    rl [sendEvent_Event_0wsa4n0] :  < "p1" : ProcessSnapshot | tokens : ("start_sendEvent (Flow_1bq0iji)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("sendEvent_SendTask (Flow_17n7skq)" T), signals : (SIG), subprocesses : (S), state : Running > .
+    rl [SendTask_Activity_0xxxw3w_start] :  < "p1" : ProcessSnapshot | tokens : ("sendEvent_SendTask (Flow_17n7skq)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("SendTask (Activity_0xxxw3w)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [SendTask_Activity_0xxxw3w_end] :  < "p1" : ProcessSnapshot | tokens : ("SendTask (Activity_0xxxw3w)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("SendTask_end (Flow_02ze5uh)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [end_Event_1cofdr6] :  < "p1" : ProcessSnapshot | tokens : ("SendTask_end (Flow_02ze5uh)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "message-events-without-message-flows" : BPMNSystem | messages : (none), processes : (< "p1" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), subprocesses : (none), state : Running >) > .
+    eq init = < "message-events-without-message-flows" : BPMNSystem | messages : (none), processes : (< "p1" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is

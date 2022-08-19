@@ -102,10 +102,11 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
     private void createTerminationEndEventRule(AbstractProcess process, String preTokens) {
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndSignals(process,
                                                                                     preTokens));
-        ruleBuilder.addPostObject(createProcessSnapshotObjectRunning(process,
-                                                                     String.format("terminate(%s)", ANY_SUBPROCESSES),
-                                                                     ANY_TOKENS,
-                                                                     TERMINATED));
+        ruleBuilder.addPostObject(createProcessSnapshotObject(process,
+                                                              String.format("terminate(%s)", ANY_SUBPROCESSES),
+                                                              ANY_TOKENS,
+                                                              NONE,
+                                                              TERMINATED));
     }
 
     private void createPreAndPostObjectInRuleForProcess(AbstractProcess process, String preTokens, String postTokens) {

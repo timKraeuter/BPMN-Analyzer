@@ -37,10 +37,12 @@ mod BPMN-EXECUTION is
     --- Processes
     op ProcessSnapshot : -> Cid [ctor] .
     op tokens :_ : MSet -> Attribute [ctor] .
+    op signals :_ : MSet -> Attribute [ctor] .
     op subprocesses :_ : Configuration -> Attribute [ctor] .
     ops Running, Terminated : -> ProcessState [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
 
+    --- Auxiliary
     op signalAll : Configuration MSet -> Configuration .
     op signal : MSet MSet -> MSet .
     op terminate : Configuration -> Configuration .
@@ -75,23 +77,24 @@ mod BPMN-EXECUTION-two-end-events is
 
     --- Generated variables
     vars T : MSet . --- tokens
+    vars SIG : MSet . --- signals
     vars M : MSet . --- messages
     vars S : Configuration . --- subprocesses
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < "two-end-events" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("start_p1 (Flow_13k6w21)" T), subprocesses : (S), state : Running > .
-    rl [p1_Gateway_1yacsp8] :  < "two-end-events" : ProcessSnapshot | tokens : ("start_p1 (Flow_13k6w21)" T), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("p1_a1 (Flow_1rs2mzm)" "p1_a2 (Flow_0pjzntx)" T), subprocesses : (S), state : Running > .
-    rl [a1_Activity_05y4j8k_start] :  < "two-end-events" : ProcessSnapshot | tokens : ("p1_a1 (Flow_1rs2mzm)" T), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("a1 (Activity_05y4j8k)" T), subprocesses : (S), state : Running > .
-    rl [a1_Activity_05y4j8k_end] :  < "two-end-events" : ProcessSnapshot | tokens : ("a1 (Activity_05y4j8k)" T), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("a1_end1 (Flow_0vhuqrp)" T), subprocesses : (S), state : Running > .
-    rl [a2_Activity_0basl5g_start] :  < "two-end-events" : ProcessSnapshot | tokens : ("p1_a2 (Flow_0pjzntx)" T), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("a2 (Activity_0basl5g)" T), subprocesses : (S), state : Running > .
-    rl [a2_Activity_0basl5g_end] :  < "two-end-events" : ProcessSnapshot | tokens : ("a2 (Activity_0basl5g)" T), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("a2_end2 (Flow_0ov1zvi)" T), subprocesses : (S), state : Running > .
-    rl [end1_Event_19b458a] :  < "two-end-events" : ProcessSnapshot | tokens : ("a1_end1 (Flow_0vhuqrp)" T), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
-    rl [end2_Event_1duj4oz] :  < "two-end-events" : ProcessSnapshot | tokens : ("a2_end2 (Flow_0ov1zvi)" T), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
+    rl [start_StartEvent_1] :  < "two-end-events" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("start_p1 (Flow_13k6w21)" T), signals : (SIG), subprocesses : (S), state : Running > .
+    rl [p1_Gateway_1yacsp8] :  < "two-end-events" : ProcessSnapshot | tokens : ("start_p1 (Flow_13k6w21)" T), signals : (SIG), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("p1_a1 (Flow_1rs2mzm)" "p1_a2 (Flow_0pjzntx)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [a1_Activity_05y4j8k_start] :  < "two-end-events" : ProcessSnapshot | tokens : ("p1_a1 (Flow_1rs2mzm)" T), signals : (SIG), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("a1 (Activity_05y4j8k)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [a1_Activity_05y4j8k_end] :  < "two-end-events" : ProcessSnapshot | tokens : ("a1 (Activity_05y4j8k)" T), signals : (SIG), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("a1_end1 (Flow_0vhuqrp)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [a2_Activity_0basl5g_start] :  < "two-end-events" : ProcessSnapshot | tokens : ("p1_a2 (Flow_0pjzntx)" T), signals : (SIG), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("a2 (Activity_0basl5g)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [a2_Activity_0basl5g_end] :  < "two-end-events" : ProcessSnapshot | tokens : ("a2 (Activity_0basl5g)" T), signals : (SIG), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : ("a2_end2 (Flow_0ov1zvi)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [end1_Event_19b458a] :  < "two-end-events" : ProcessSnapshot | tokens : ("a1_end1 (Flow_0vhuqrp)" T), signals : (SIG), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (S), state : Running > .
+    rl [end2_Event_1duj4oz] :  < "two-end-events" : ProcessSnapshot | tokens : ("a2_end2 (Flow_0ov1zvi)" T), signals : (SIG), subprocesses : (S), state : Running > => < "two-end-events" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "two-end-events" : BPMNSystem | messages : (none), processes : (< "two-end-events" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), subprocesses : (none), state : Running >) > .
+    eq init = < "two-end-events" : BPMNSystem | messages : (none), processes : (< "two-end-events" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is

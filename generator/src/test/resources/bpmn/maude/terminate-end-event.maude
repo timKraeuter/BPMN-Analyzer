@@ -37,10 +37,12 @@ mod BPMN-EXECUTION is
     --- Processes
     op ProcessSnapshot : -> Cid [ctor] .
     op tokens :_ : MSet -> Attribute [ctor] .
+    op signals :_ : MSet -> Attribute [ctor] .
     op subprocesses :_ : Configuration -> Attribute [ctor] .
     ops Running, Terminated : -> ProcessState [ctor] .
     op state :_ : ProcessState -> Attribute [ctor] .
 
+    --- Auxiliary
     op signalAll : Configuration MSet -> Configuration .
     op signal : MSet MSet -> MSet .
     op terminate : Configuration -> Configuration .
@@ -75,23 +77,24 @@ mod BPMN-EXECUTION-terminate-end-event is
 
     --- Generated variables
     vars T : MSet . --- tokens
+    vars SIG : MSet . --- signals
     vars M : MSet . --- messages
     vars S : Configuration . --- subprocesses
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : ("start_p1 (Flow_0smgvfd)" T), subprocesses : (S), state : Running > .
-    rl [p1_Gateway_03pfysn] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("start_p1 (Flow_0smgvfd)" T), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : ("p1_A (Flow_01ts0by)" "p1_B (Flow_0p8b824)" T), subprocesses : (S), state : Running > .
-    rl [A_Activity_19fz4g9_start] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("p1_A (Flow_01ts0by)" T), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : ("A (Activity_19fz4g9)" T), subprocesses : (S), state : Running > .
-    rl [A_Activity_19fz4g9_end] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("A (Activity_19fz4g9)" T), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : ("A_end (Flow_0zgj5gw)" T), subprocesses : (S), state : Running > .
-    rl [B_Activity_1ol0d86_start] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("p1_B (Flow_0p8b824)" T), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : ("B (Activity_1ol0d86)" T), subprocesses : (S), state : Running > .
-    rl [B_Activity_1ol0d86_end] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("B (Activity_1ol0d86)" T), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : ("B_terminate_end (Flow_178sut1)" T), subprocesses : (S), state : Running > .
-    rl [terminate_end_Event_0i6p82s] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("B_terminate_end (Flow_178sut1)" T), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : (T), subprocesses : (terminate(S)), state : Terminated > .
-    rl [end_Event_1bkqcvd] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("A_end (Flow_0zgj5gw)" T), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : (T), subprocesses : (S), state : Running > .
+    rl [start_StartEvent_1] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : ("start_p1 (Flow_0smgvfd)" T), signals : (SIG), subprocesses : (S), state : Running > .
+    rl [p1_Gateway_03pfysn] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("start_p1 (Flow_0smgvfd)" T), signals : (SIG), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : ("p1_A (Flow_01ts0by)" "p1_B (Flow_0p8b824)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [A_Activity_19fz4g9_start] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("p1_A (Flow_01ts0by)" T), signals : (SIG), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : ("A (Activity_19fz4g9)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [A_Activity_19fz4g9_end] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("A (Activity_19fz4g9)" T), signals : (SIG), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : ("A_end (Flow_0zgj5gw)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [B_Activity_1ol0d86_start] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("p1_B (Flow_0p8b824)" T), signals : (SIG), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : ("B (Activity_1ol0d86)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [B_Activity_1ol0d86_end] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("B (Activity_1ol0d86)" T), signals : (SIG), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : ("B_terminate_end (Flow_178sut1)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [terminate_end_Event_0i6p82s] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("B_terminate_end (Flow_178sut1)" T), signals : (SIG), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : (T), signals : (none), subprocesses : (terminate(S)), state : Terminated > .
+    rl [end_Event_1bkqcvd] :  < "terminate-end-event" : ProcessSnapshot | tokens : ("A_end (Flow_0zgj5gw)" T), signals : (SIG), subprocesses : (S), state : Running > => < "terminate-end-event" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "terminate-end-event" : BPMNSystem | messages : (none), processes : (< "terminate-end-event" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), subprocesses : (none), state : Running >) > .
+    eq init = < "terminate-end-event" : BPMNSystem | messages : (none), processes : (< "terminate-end-event" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is
