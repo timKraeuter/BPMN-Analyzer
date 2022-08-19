@@ -49,6 +49,7 @@ mod BPMN-EXECUTION is
 
     vars P P1 : String .
     vars T T1 : MSet . --- tokens
+    vars SIG : MSet . --- signals
     vars S : Configuration . --- subprocesses
     vars STATE : ProcessState . --- state
     var PS : Configuration .
@@ -62,14 +63,14 @@ mod BPMN-EXECUTION is
 
     eq terminate(none) = none .
     --- NOOP if already terminated
-    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, subprocesses : S, state : Terminated > .
+    eq terminate(< P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : Terminated > .
     --- Terminate all subprocesses recursively
-    eq terminate(< P : ProcessSnapshot | tokens : T, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, subprocesses : terminate(S), state : Terminated > terminate(PS) .
+    eq terminate(< P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : terminate(S), state : Terminated > terminate(PS) .
 
     rl [naturalTerminate] :
-    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Running >
+    < P : ProcessSnapshot | tokens : none, signals : SIG, subprocesses : none, state : Running >
                             =>
-    < P : ProcessSnapshot | tokens : none, subprocesses : none, state : Terminated > .
+    < P : ProcessSnapshot | tokens : none, signals : SIG, subprocesses : none, state : Terminated > .
 endm
 
 mod BPMN-EXECUTION-implicit-exclusive-gateway is
@@ -83,7 +84,7 @@ mod BPMN-EXECUTION-implicit-exclusive-gateway is
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start_e1 (Flow_10t9zap)" T), signals : (SIG), subprocesses : (S), state : Running > .
+    rl [start_StartEvent_1] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start_e1 (Flow_10t9zap)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [e1_Gateway_0j19iup] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start_e1 (Flow_10t9zap)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("e1_B (Flow_0pdgsgi)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [e1_Gateway_0j19iup] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("start_e1 (Flow_10t9zap)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("e1_A (Flow_0nggee2)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [B_Activity_10w538h_Flow_0pdgsgi_start] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("e1_B (Flow_0pdgsgi)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B (Activity_10w538h)" T), signals : (none), subprocesses : (S), state : Running > .
@@ -91,7 +92,7 @@ mod BPMN-EXECUTION-implicit-exclusive-gateway is
     rl [B_Activity_10w538h_end] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B (Activity_10w538h)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B_end (Flow_1invg8j)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [A_Activity_15jc1ty_start] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("e1_A (Flow_0nggee2)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("A (Activity_15jc1ty)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [A_Activity_15jc1ty_end] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("A (Activity_15jc1ty)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("A_B (Flow_1nj1snh)" T), signals : (none), subprocesses : (S), state : Running > .
-    rl [end_Event_11g4lyk] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B_end (Flow_1invg8j)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (S), state : Running > .
+    rl [end_Event_11g4lyk] :  < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : ("B_end (Flow_1invg8j)" T), signals : (SIG), subprocesses : (S), state : Running > => < "implicit-exclusive-gateway" : ProcessSnapshot | tokens : (T), signals : (none), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
@@ -106,7 +107,8 @@ mod BPMN-PREDS is
     var C : Configuration .
     var P : Prop .
     var X Y : Oid .
-    var T : MSet .
+    var T : MSet . --- tokens
+    var SIG : MSet . --- signals
     var M : MSet . --- messages
     var T1 : NeMSet .
     var S : Configuration .
@@ -114,11 +116,11 @@ mod BPMN-PREDS is
 
 
     op allTerminated : -> Prop .
-    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : T, subprocesses : S, state : Running > C) > |= allTerminated = false .
+    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : Running > C) > |= allTerminated = false .
     eq < X : BPMNSystem | messages : M, processes : (C) > |= allTerminated = true [owise] .
 
     op unsafe : -> Prop .
-    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : (T1 T1 T), subprocesses : S, state : State > C) > |= unsafe = true .
+    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : (T1 T1 T), signals : SIG, subprocesses : S, state : State > C) > |= unsafe = true .
     eq < X : BPMNSystem | messages : M, processes : (C) > |= unsafe = false [owise] .
 
     --- Generated atomic propositions
