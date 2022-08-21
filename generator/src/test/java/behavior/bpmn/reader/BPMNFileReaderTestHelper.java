@@ -14,11 +14,14 @@ public interface BPMNFileReaderTestHelper {
         return readModelFromResource(resourcePath);
     }
 
+    default BPMNCollaboration readModelFromResourceFolder(String resourceFileName,
+                                                          UnaryOperator<String> elementNameTransformer) {
+        String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + resourceFileName;
+        return readModelFromResource(resourcePath, elementNameTransformer);
+    }
+
     default BPMNCollaboration readModelFromResource(String resourcePath) {
-        @SuppressWarnings("ConstantConditions") File model =
-                new File(this.getClass().getResource(resourcePath).getFile());
-        BPMNFileReader bpmnFileReader = new BPMNFileReader();
-        return bpmnFileReader.readModelFromFile(model);
+        return readModelFromResource(resourcePath, elementName -> elementName);
     }
 
     default BPMNCollaboration readModelFromResource(String resourcePath,

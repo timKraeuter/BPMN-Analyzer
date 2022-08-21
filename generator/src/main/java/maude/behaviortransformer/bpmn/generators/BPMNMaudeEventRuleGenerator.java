@@ -70,7 +70,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                 createTerminationEndEventRule(process, preTokens);
                 break;
             case MESSAGE:
-                createMessageEndEvenetRule(process, endEvent, preTokens);
+                createMessageEndEventRule(process, endEvent, preTokens);
                 break;
             case SIGNAL:
                 createSignalEndEventRule(process, endEvent, preTokens);
@@ -89,7 +89,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
         createSignalThrowRulePart(endEvent, endEvent.getEventDefinition());
     }
 
-    private void createMessageEndEvenetRule(AbstractProcess process, EndEvent endEvent, String preTokens) {
+    private void createMessageEndEventRule(AbstractProcess process, EndEvent endEvent, String preTokens) {
         ruleBuilder.addPreObject(createProcessSnapshotObjectWithParents(process,
                                                                         ANY_SUBPROCESSES,
                                                                         preTokens));

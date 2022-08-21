@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="ComplexSubprocess_end" role="rule" edgeids="false" edgemode="directed">
+    <graph id="P1_Subprocess_end" role="rule" edgeids="false" edgemode="directed">
         <node id="n47">
             <attr name="layout">
                 <string>477 162 0 0</string>
@@ -83,7 +83,7 @@
         </node>
         <edge from="n45" to="n45">
             <attr name="label">
-                <string>string:"ComplexSubprocess"</string>
+                <string>string:"P1_Subprocess"</string>
             </attr>
         </edge>
         <node id="n48">
@@ -93,7 +93,7 @@
         </node>
         <edge from="n48" to="n48">
             <attr name="label">
-                <string>string:"ComplexSubprocess_end_p1"</string>
+                <string>string:"P1_Subprocess_end_p1"</string>
             </attr>
         </edge>
         <edge from="n41" to="n47">

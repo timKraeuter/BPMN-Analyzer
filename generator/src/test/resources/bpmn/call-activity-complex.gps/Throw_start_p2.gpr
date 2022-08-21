@@ -3,7 +3,7 @@
     <graph id="Throw_start_p2" role="rule" edgeids="false" edgemode="directed">
         <node id="n107">
             <attr name="layout">
-                <string>522 592 0 0</string>
+                <string>492 592 0 0</string>
             </attr>
         </node>
         <edge from="n107" to="n107">
@@ -63,7 +63,7 @@
         </edge>
         <node id="n105">
             <attr name="layout">
-                <string>522 502 0 0</string>
+                <string>492 502 0 0</string>
             </attr>
         </node>
         <edge from="n105" to="n105">
@@ -93,7 +93,7 @@
         </node>
         <edge from="n103" to="n103">
             <attr name="label">
-                <string>string:"ComplexSubprocess"</string>
+                <string>string:"P1_Subprocess"</string>
             </attr>
         </edge>
         <node id="n104">
@@ -108,7 +108,7 @@
         </edge>
         <node id="n106">
             <attr name="layout">
-                <string>812 502 0 0</string>
+                <string>752 502 0 0</string>
             </attr>
         </node>
         <edge from="n106" to="n106">
@@ -118,12 +118,12 @@
         </edge>
         <node id="n108">
             <attr name="layout">
-                <string>812 592 0 0</string>
+                <string>752 592 0 0</string>
             </attr>
         </node>
         <edge from="n108" to="n108">
             <attr name="label">
-                <string>string:"start_p2_S1_throw"</string>
+                <string>string:"start_p2_S1_catch"</string>
             </attr>
         </edge>
         <node id="n110">
@@ -143,7 +143,7 @@
         </node>
         <edge from="n113" to="n113">
             <attr name="label">
-                <string>string:"start_p2_S1_catch"</string>
+                <string>string:"start_p2_P2_Subprocess"</string>
             </attr>
         </edge>
         <edge from="n102" to="n107">

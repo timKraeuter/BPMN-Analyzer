@@ -77,7 +77,7 @@ class BPMNToMaudeEventsTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testSignalEvents() throws IOException {
-        testBPMNMaudeGenerationWithCustomQuery("signal-events", CAN_TERMINATE_QUERY);
+        testBPMNMaudeGeneration("signal-events", CAN_TERMINATE_QUERY);
     }
 
     /**
@@ -85,7 +85,7 @@ class BPMNToMaudeEventsTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testSignalEventsMultiActivation() throws IOException {
-        testBPMNMaudeGenerationWithCustomQuery("signal-events-multi-activation", CAN_TERMINATE_QUERY);
+        testBPMNMaudeGeneration("signal-events-multi-activation", CAN_TERMINATE_QUERY);
     }
 
     /**
@@ -93,7 +93,7 @@ class BPMNToMaudeEventsTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testSignalEventsMultiActivationSameProcess() throws IOException {
-        testBPMNMaudeGenerationWithCustomQuery("signal-events-multi-activation-same-process", CAN_TERMINATE_QUERY);
+        testBPMNMaudeGeneration("signal-events-multi-activation-same-process", CAN_TERMINATE_QUERY);
     }
 
     /**

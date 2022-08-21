@@ -45,6 +45,6 @@ class BPMNToMaudeCallActivityTest implements BPMNMaudeTestHelper {
      */
     @Test
     void testCallActivityComplex() throws IOException {
-        testBPMNMaudeGeneration("call-activity-complex");
+        testBPMNMaudeGeneration("call-activity-complex", WILL_ALWAYS_TERMINATE_QUERY);
     }
 }

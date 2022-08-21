@@ -21,7 +21,7 @@ class BPMNToMaudeBoundaryEventsTest implements BPMNMaudeTestHelper {
     @Test
     void testSubProcessNonInterruptingBoundaryEvents() throws IOException {
         // Careful infinite state space!
-        testBPMNMaudeGenerationWithCustomQuery("subprocess-non-interrupting-boundary-events", CAN_TERMINATE_QUERY);
+        testBPMNMaudeGeneration("subprocess-non-interrupting-boundary-events", CAN_TERMINATE_QUERY);
     }
 
     /**
@@ -38,6 +38,6 @@ class BPMNToMaudeBoundaryEventsTest implements BPMNMaudeTestHelper {
     @Test
     void testTaskNonInterruptingBoundaryEvents() throws IOException {
         // Careful infinite state space! But has solutions to the query.
-        testBPMNMaudeGenerationWithCustomQuery("task-non-interrupting-boundary-events", CAN_TERMINATE_QUERY);
+        testBPMNMaudeGeneration("task-non-interrupting-boundary-events", CAN_TERMINATE_QUERY);
     }
 }

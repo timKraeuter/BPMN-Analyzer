@@ -81,7 +81,8 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    eq signalAll(< P : ProcessSnapshot | tokens : T, signals : " +
                                                   "SIG, subprocesses : S, state : STATE > PS, T1) = < P : " +
                                                   "ProcessSnapshot | tokens : T, signals : (SIG signal(T, T1)), " +
-                                                  "subprocesses : S, state : STATE > signalAll(PS, T1) .\r\n" +
+                                                  "subprocesses : signalAll(S, T1), state : STATE > signalAll(PS, T1)" +
+                                                  " .\r\n" +
                                                   "\r\n" +
                                                   "    ceq signal(P T, T1) = (P + \"_signal\") signal(T, T1) if " +
                                                   "contains(T1, P) .\r\n" +

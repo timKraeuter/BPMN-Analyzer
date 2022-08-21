@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="start_sub" role="rule" edgeids="false" edgemode="directed">
+    <graph id="start_sub_p1" role="rule" edgeids="false" edgemode="directed">
         <node id="n52">
             <attr name="layout">
-                <string>522 332 0 0</string>
+                <string>492 332 0 0</string>
             </attr>
         </node>
         <edge from="n52" to="n52">
@@ -18,7 +18,7 @@
         </edge>
         <node id="n54">
             <attr name="layout">
-                <string>522 242 0 0</string>
+                <string>492 242 0 0</string>
             </attr>
         </node>
         <edge from="n54" to="n54">
@@ -48,7 +48,7 @@
         </node>
         <edge from="n50" to="n50">
             <attr name="label">
-                <string>string:"ComplexSubprocess"</string>
+                <string>string:"P1_Subprocess"</string>
             </attr>
         </edge>
         <node id="n51">
@@ -63,22 +63,22 @@
         </edge>
         <node id="n53">
             <attr name="layout">
-                <string>812 332 0 0</string>
+                <string>752 332 0 0</string>
             </attr>
         </node>
         <edge from="n53" to="n53">
             <attr name="label">
-                <string>string:"start_sub_p1"</string>
+                <string>string:"start_sub_p1_p1"</string>
             </attr>
         </edge>
         <node id="n55">
             <attr name="layout">
-                <string>812 242 0 0</string>
+                <string>752 242 0 0</string>
             </attr>
         </node>
         <edge from="n55" to="n55">
             <attr name="label">
-                <string>string:"ComplexSubprocess_start_sub"</string>
+                <string>string:"P1_Subprocess_start_sub_p1"</string>
             </attr>
         </edge>
         <edge from="n49" to="n52">

@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.function.UnaryOperator;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,17 +16,26 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper {
 
     String MAUDE_MODULE_FOLDER = "/bpmn/maude/";
-    boolean REPLACE_EXPECTED_FILE_WITH_ACTUAL = false;
+    boolean REPLACE_EXPECTED_FILE_WITH_ACTUAL = true;
     String WILL_ALWAYS_TERMINATE_QUERY = "red modelCheck(init,  <> [] allTerminated)";
     String CAN_TERMINATE_QUERY = "search init =>! X such that X |= allTerminated = true";
+    String DOT_BPMN = ".bpmn";
 
     default void testBPMNMaudeGeneration(String resourceFileName) throws IOException {
-        testBPMNMaudeGenerationWithCustomQuery(resourceFileName, WILL_ALWAYS_TERMINATE_QUERY);
+        testBPMNMaudeGeneration(resourceFileName, WILL_ALWAYS_TERMINATE_QUERY, name -> name);
     }
 
-    default void testBPMNMaudeGenerationWithCustomQuery(String resourceFileName, String finalQuery) throws IOException {
+    default void testBPMNMaudeGeneration(String resourceFileName,
+                                         String finalQuery) throws IOException {
+        testBPMNMaudeGeneration(resourceFileName, finalQuery, name -> name);
+    }
+
+    default void testBPMNMaudeGeneration(String resourceFileName,
+                                         String finalQuery,
+                                         UnaryOperator<String> elementNameTransformer) throws IOException {
         BPMNToMaudeTransformer transformer = new BPMNToMaudeTransformer(readModelFromResourceFolder(resourceFileName +
-                                                                                                    ".bpmn"));
+                                                                                                    DOT_BPMN,
+                                                                                                    elementNameTransformer));
         String actualMaudeModule = transformer.generate(finalQuery);
 
         String expectedMaudeModule = readExpectedMaudeModule(resourceFileName);
