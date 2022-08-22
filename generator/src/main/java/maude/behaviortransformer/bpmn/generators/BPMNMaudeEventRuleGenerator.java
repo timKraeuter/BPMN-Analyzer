@@ -5,7 +5,9 @@ import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import behavior.bpmn.events.*;
+import maude.behaviortransformer.bpmn.BPMNMaudeRuleGenerator;
 import maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
+import maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import maude.generation.BPMNMaudeRuleBuilder;
 import maude.generation.MaudeObjectBuilder;
 import org.apache.commons.lang3.tuple.Pair;
@@ -13,13 +15,15 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.*;
+
 public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper {
+    private final BPMNMaudeRuleGenerator ruleGenerator;
     private final BPMNMaudeRuleBuilder ruleBuilder;
-    private final BPMNCollaboration collaboration;
     private final MaudeObjectBuilder objectBuilder;
 
-    public BPMNMaudeEventRuleGenerator(BPMNCollaboration collaboration, BPMNMaudeRuleBuilder ruleBuilder) {
-        this.collaboration = collaboration;
+    public BPMNMaudeEventRuleGenerator(BPMNMaudeRuleGenerator ruleGenerator, BPMNMaudeRuleBuilder ruleBuilder) {
+        this.ruleGenerator = ruleGenerator;
         this.ruleBuilder = ruleBuilder;
         this.objectBuilder = new MaudeObjectBuilder();
     }
@@ -31,7 +35,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                 break;
             case MESSAGE:
                 // Done in the corresponding throw rule.
-                createEndInteractionNodeRule(startEvent, process, collaboration);
+                createEndInteractionNodeRule(startEvent, process);
                 break;
             case MESSAGE_NON_INTERRUPTING:
                 // Implemented only in the event subprocess rule generator.
@@ -96,7 +100,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
         ruleBuilder.addPostObject(createProcessSnapshotObjectWithParents(process,
                                                                          ANY_SUBPROCESSES,
                                                                          ANY_TOKENS));
-        addSendMessageBehaviorForFlowNode(collaboration, endEvent);
+        addSendMessageBehaviorForFlowNode(endEvent);
     }
 
     private void createTerminationEndEventRule(AbstractProcess process, String preTokens) {
@@ -116,7 +120,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
 
     private void createSignalThrowRulePart(Event signalThrowEvent, EventDefinition signalEventDefinition) {
         Pair<Set<Event>, Set<BoundaryEvent>> correspondingSignalCatchEvents =
-                collaboration.findAllCorrespondingSignalCatchEvents(signalEventDefinition);
+                getCollaboration().findAllCorrespondingSignalCatchEvents(signalEventDefinition);
 
         Set<String> signalAllTokens = new LinkedHashSet<>();
         correspondingSignalCatchEvents.getLeft().stream()
@@ -145,7 +149,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
     private void createSignalStartEventRulePart(Event event) {
         String startTokens = getOutgoingTokensForFlowNode(event);
         final AbstractProcess processForEvent =
-                collaboration.findProcessForFlowNode(
+                getCollaboration().findProcessForFlowNode(
                         event);
         ruleBuilder.addPostObject(createProcessSnapshotObjectNoSubProcessAndSignals(
                 processForEvent,
@@ -159,7 +163,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                 createIntermediateLinkCatchEventRule(intermediateCatchEvent, process);
                 break;
             case MESSAGE:
-                createIntermediateCatchMessageEventRule(intermediateCatchEvent, process, collaboration);
+                createIntermediateCatchMessageEventRule(intermediateCatchEvent, process);
                 break;
             case SIGNAL:
                 createIntermediateSignalCatchEventRule(intermediateCatchEvent, process);
@@ -216,13 +220,12 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
     }
 
     private void createIntermediateCatchMessageEventRule(IntermediateCatchEvent intermediateCatchEvent,
-                                                         AbstractProcess process,
-                                                         BPMNCollaboration collaboration) {
+                                                         AbstractProcess process) {
         // Start event rule
         createStartInteractionNodeRule(intermediateCatchEvent, process);
 
         // Rule to end the event when a message is received.
-        createEndInteractionNodeRule(intermediateCatchEvent, process, collaboration);
+        createEndInteractionNodeRule(intermediateCatchEvent, process);
     }
 
     public void createIntermediateThrowEventRule(AbstractProcess process,
@@ -302,7 +305,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
             ruleBuilder.addPostObject(createProcessSnapshotObjectWithParents(process,
                                                                              ANY_SUBPROCESSES,
                                                                              postTokens));
-            addSendMessageBehaviorForFlowNode(collaboration, intermediateThrowEvent);
+            addSendMessageBehaviorForFlowNode(intermediateThrowEvent);
             ruleBuilder.buildRule();
         });
     }
@@ -336,6 +339,11 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
 
     @Override
     public BPMNCollaboration getCollaboration() {
-        return collaboration;
+        return ruleGenerator.getCollaboration();
+    }
+
+    @Override
+    public MaudeBPMNGenerationSettings getSettings() {
+        return ruleGenerator.getSettings();
     }
 }

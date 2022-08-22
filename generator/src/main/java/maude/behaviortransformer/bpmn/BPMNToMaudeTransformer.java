@@ -3,6 +3,7 @@ package maude.behaviortransformer.bpmn;
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.Process;
 import behavior.bpmn.events.StartEventType;
+import maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import maude.generation.BPMNMaudeRuleBuilder;
 import maude.generation.MaudeObject;
 import maude.generation.MaudeObjectBuilder;
@@ -14,11 +15,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.*;
 
 public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
-    public static final String NEW_LINE = "\r\n    ";
     private final BPMNCollaboration collaboration;
     private final BPMNMaudeRuleBuilder ruleBuilder;
+    private final MaudeBPMNGenerationSettings settings;
     private final MaudeObjectBuilder objectBuilder;
 
     private static final String MODULE_TEMPLATE = "load model-checker.maude .\r\n" +
@@ -167,15 +169,16 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "\r\n" +
                                                   "${finalQuery} .\r\n";
 
-    public BPMNToMaudeTransformer(BPMNCollaboration collaboration) {
+    public BPMNToMaudeTransformer(BPMNCollaboration collaboration, MaudeBPMNGenerationSettings settings) {
         this.collaboration = collaboration;
+        this.settings = settings;
+        objectBuilder = new MaudeObjectBuilder();
         ruleBuilder = new BPMNMaudeRuleBuilder(collaboration);
         ruleBuilder.addVar(TOKENS, MSET, ANY_TOKENS);
         ruleBuilder.addVar(SIGNALS, MSET, ANY_SIGNALS);
         ruleBuilder.addVar(MESSAGES, MSET, ANY_MESSAGES);
         ruleBuilder.addVar(SUBPROCESSES, CONFIGURATION, ANY_SUBPROCESSES);
         ruleBuilder.addVar(PROCESSES, CONFIGURATION, ANY_PROCESS);
-        objectBuilder = new MaudeObjectBuilder();
     }
 
     public String generate(String finalQuery) {
@@ -210,11 +213,11 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
         return process.getStartEvents().stream()
                       .filter(startEvent -> startEvent.getType() == StartEventType.NONE)
                       .map(this::getStartEventTokenName)
-                      .collect(Collectors.joining(" "));
+                      .collect(Collectors.joining(WHITE_SPACE));
     }
 
     private String makeRules() {
-        new BPMNMaudeRuleGenerator(ruleBuilder, collaboration).generateRules();
+        new BPMNMaudeRuleGenerator(ruleBuilder, collaboration, settings).generateRules();
 
         return ruleBuilder.createdRules()
                           .map(MaudeRule::generateRuleString)
@@ -234,5 +237,10 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
     @Override
     public BPMNCollaboration getCollaboration() {
         return collaboration;
+    }
+
+    @Override
+    public MaudeBPMNGenerationSettings getSettings() {
+        return settings;
     }
 }

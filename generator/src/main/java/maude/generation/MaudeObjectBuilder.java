@@ -3,7 +3,7 @@ package maude.generation;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper.ENQUOTE_FORMAT;
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ENQUOTE_FORMAT;
 
 public class MaudeObjectBuilder {
 

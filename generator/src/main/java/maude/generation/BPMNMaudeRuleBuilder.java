@@ -9,16 +9,12 @@ import java.util.stream.Collectors;
 
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.CONFIGURATION;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.MESSAGES;
-import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper.*;
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.*;
 
 /**
  * A special smart Maude rule builder to build BPMN rules for a given collaboration.
  */
 public class BPMNMaudeRuleBuilder extends MaudeRuleBuilderBase<BPMNMaudeRuleBuilder> {
-    private static final String BPMN_SYSTEM = "BPMNSystem";
-    private static final String PROCESSES = "processes";
-    public static final String PS = "PS";
-
     private final MaudeObjectBuilder objectBuilder;
     private final BPMNCollaboration collaboration;
     private final Set<String> consumedMessages;

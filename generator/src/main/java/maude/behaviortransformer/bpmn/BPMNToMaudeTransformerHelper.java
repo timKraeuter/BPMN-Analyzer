@@ -2,6 +2,7 @@ package maude.behaviortransformer.bpmn;
 
 import behavior.bpmn.*;
 import behavior.bpmn.events.StartEvent;
+import maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import maude.generation.BPMNMaudeRuleBuilder;
 import maude.generation.MaudeObject;
 import maude.generation.MaudeObjectBuilder;
@@ -12,41 +13,13 @@ import java.util.stream.Collectors;
 
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.isAfterInstantiateEventBasedGateway;
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.*;
 
 public interface BPMNToMaudeTransformerHelper {
-    String PROCESSES = "processes";
-    String ANY_PROCESS = "P";
-    String ANY_TOKENS = "T";
-    String ANY_SIGNALS = "SIG";
-    String ANY_SUBPROCESSES = "S";
-    String ANY_MESSAGES = "M";
-    String WHITE_SPACE = " ";
-    String ANY_OTHER_TOKENS = WHITE_SPACE + ANY_TOKENS;
-    String ANY_OTHER_SIGNALS = WHITE_SPACE + ANY_SIGNALS;
-    String ANY_OTHER_SUBPROCESSES = WHITE_SPACE + ANY_SUBPROCESSES;
-    String ANY_OTHER_MESSAGES = WHITE_SPACE + ANY_MESSAGES;
-    String ANY_OTHER_PROCESSES = WHITE_SPACE + ANY_PROCESS;
-
-    String NONE = "none";
-
-    String RULE_NAME_NAME_ID_FORMAT = "%s_%s";
-    String RULE_NAME_ID_FORMAT = "%s";
-    String TOKEN_FORMAT = "\"%s (%s)\""; // Name of the FlowElement followed by id.
-    String SIGNAL_OCCURENCE_FORMAT = "\"%s (%s)_signal\"";
-    String TOKEN_FORMAT_ONLY_ID = "\"%s\""; // Name of the FlowElement followed by id.
-    String SIGNAL_OCCURENCE_FORMAT_ONLY_ID = "\"%s_signal\""; // Name of the FlowElement followed by id.
-    String ENQUOTE_FORMAT = "\"%s\""; // Id of the FlowElement.
-    String BRACKET_FORMAT = "(%s)";
-    String RUNNING = "Running";
-    String TERMINATED = "Terminated";
-
     BPMNMaudeRuleBuilder getRuleBuilder();
-
     MaudeObjectBuilder getObjectBuilder();
-
     BPMNCollaboration getCollaboration();
-
-
+    MaudeBPMNGenerationSettings getSettings();
     default String getFlowNodeRuleNameWithIncFlow(FlowNode flowNode, String incomingFlowId) {
         if (flowNode.getIncomingFlows().count() > 1) {
             return String.format(RULE_NAME_NAME_ID_FORMAT, getFlowNodeRuleName(flowNode), incomingFlowId);
@@ -115,18 +88,12 @@ public interface BPMNToMaudeTransformerHelper {
 
     default MaudeObject createProcessSnapshotObjectAnySubProcessAndSignals(AbstractProcess process,
                                                                            String tokens) {
-        return createProcessSnapshotObjectRunning(process,
-                                                  ANY_SUBPROCESSES,
-                                                  tokens,
-                                                  ANY_SIGNALS);
+        return createProcessSnapshotObjectRunning(process, ANY_SUBPROCESSES, tokens, ANY_SIGNALS);
     }
 
     default MaudeObject createProcessSnapshotObjectAnySubProcessAndNoSignals(AbstractProcess process,
                                                                              String tokens) {
-        return createProcessSnapshotObjectRunning(process,
-                                                  ANY_SUBPROCESSES,
-                                                  tokens,
-                                                  NONE);
+        return createProcessSnapshotObjectRunning(process, ANY_SUBPROCESSES, tokens, NONE);
     }
 
     default MaudeObject createProcessSnapshotObjectRunning(AbstractProcess process,
@@ -184,13 +151,12 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
 
-    default void addSendMessageBehaviorForFlowNode(BPMNCollaboration collaboration,
-                                                   FlowNode messageSource) {
+    default void addSendMessageBehaviorForFlowNode(FlowNode messageSource) {
         Set<MessageFlow> nonInstantiateMessageFlows = new LinkedHashSet<>();
-        for (MessageFlow messageFlow : collaboration.outgoingMessageFlows(messageSource)) {
+        for (MessageFlow messageFlow : getCollaboration().outgoingMessageFlows(messageSource)) {
             if (messageFlow.getTarget().isInstantiateFlowNode() ||
                 isAfterInstantiateEventBasedGateway(messageFlow.getTarget())) {
-                addMessageFlowInstantiateFlowNodeBehavior(collaboration,
+                addMessageFlowInstantiateFlowNodeBehavior(getCollaboration(),
                                                           messageFlow);
             } else {
                 nonInstantiateMessageFlows.add(messageFlow);
@@ -262,9 +228,8 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
     default void createEndInteractionNodeRule(FlowNode interactionNode,
-                                              AbstractProcess process,
-                                              BPMNCollaboration collaboration) {
-        Set<MessageFlow> incomingMessageFlows = collaboration.getIncomingMessageFlows(interactionNode);
+                                              AbstractProcess process) {
+        Set<MessageFlow> incomingMessageFlows = getCollaboration().getIncomingMessageFlows(interactionNode);
         incomingMessageFlows.forEach(messageFlow -> {
             getRuleBuilder().startRule(getInteractionNodeRuleName(interactionNode,
                                                                   incomingMessageFlows,

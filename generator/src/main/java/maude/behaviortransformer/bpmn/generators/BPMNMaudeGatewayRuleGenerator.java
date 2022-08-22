@@ -6,36 +6,25 @@ import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
+import maude.behaviortransformer.bpmn.BPMNMaudeRuleGenerator;
 import maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
+import maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import maude.generation.BPMNMaudeRuleBuilder;
 import maude.generation.MaudeObjectBuilder;
 
 import java.util.stream.Collectors;
 
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_OTHER_TOKENS;
+
 public class BPMNMaudeGatewayRuleGenerator implements BPMNToMaudeTransformerHelper {
+    private final BPMNMaudeRuleGenerator ruleGenerator;
     private final BPMNMaudeRuleBuilder ruleBuilder;
-    private final BPMNCollaboration collaboration;
     private final MaudeObjectBuilder objectBuilder;
 
-    public BPMNMaudeGatewayRuleGenerator(BPMNCollaboration collaboration, BPMNMaudeRuleBuilder ruleBuilder) {
-        this.collaboration = collaboration;
+    public BPMNMaudeGatewayRuleGenerator(BPMNMaudeRuleGenerator ruleGenerator, BPMNMaudeRuleBuilder ruleBuilder) {
+        this.ruleGenerator = ruleGenerator;
         this.ruleBuilder = ruleBuilder;
         objectBuilder = new MaudeObjectBuilder();
-    }
-
-    @Override
-    public BPMNMaudeRuleBuilder getRuleBuilder() {
-        return ruleBuilder;
-    }
-
-    @Override
-    public MaudeObjectBuilder getObjectBuilder() {
-        return objectBuilder;
-    }
-
-    @Override
-    public BPMNCollaboration getCollaboration() {
-        return collaboration;
     }
 
     public void createExclusiveGatewayRule(AbstractProcess process, ExclusiveGateway exclusiveGateway) {
@@ -108,6 +97,26 @@ public class BPMNMaudeGatewayRuleGenerator implements BPMNToMaudeTransformerHelp
         });
         // Effects the rules of the subsequent flow nodes!
         // Possible subsequent nodes: Message catch, Receive task, Signal catch, timer and condition.
-        // We currently only implemented the first two.
+        // We currently only implemented the first three.
+    }
+
+    @Override
+    public BPMNMaudeRuleBuilder getRuleBuilder() {
+        return ruleBuilder;
+    }
+
+    @Override
+    public MaudeObjectBuilder getObjectBuilder() {
+        return objectBuilder;
+    }
+
+    @Override
+    public BPMNCollaboration getCollaboration() {
+        return ruleGenerator.getCollaboration();
+    }
+
+    @Override
+    public MaudeBPMNGenerationSettings getSettings() {
+        return ruleGenerator.getSettings();
     }
 }

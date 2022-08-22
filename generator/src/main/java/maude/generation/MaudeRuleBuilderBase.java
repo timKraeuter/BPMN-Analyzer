@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformer.NEW_LINE;
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.NEW_LINE;
 
 public abstract class MaudeRuleBuilderBase<T extends MaudeRuleBuilderBase<T>> {
 

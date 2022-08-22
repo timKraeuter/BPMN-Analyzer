@@ -8,7 +8,9 @@ import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import behavior.bpmn.events.BoundaryEvent;
+import maude.behaviortransformer.bpmn.BPMNMaudeRuleGenerator;
 import maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
+import maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import maude.generation.BPMNMaudeRuleBuilder;
 import maude.generation.MaudeObjectBuilder;
 
@@ -16,14 +18,16 @@ import java.util.function.Consumer;
 
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.END;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.START;
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_OTHER_TOKENS;
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.WHITE_SPACE;
 
 public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper {
-    private final BPMNCollaboration collaboration;
+    private final BPMNMaudeRuleGenerator ruleGenerator;
     private final BPMNMaudeRuleBuilder ruleBuilder;
     private final MaudeObjectBuilder objectBuilder;
 
-    public BPMNMaudeTaskRuleGenerator(BPMNCollaboration collaboration, BPMNMaudeRuleBuilder ruleBuilder) {
-        this.collaboration = collaboration;
+    public BPMNMaudeTaskRuleGenerator(BPMNMaudeRuleGenerator ruleGenerator, BPMNMaudeRuleBuilder ruleBuilder) {
+        this.ruleGenerator = ruleGenerator;
         this.ruleBuilder = ruleBuilder;
         this.objectBuilder = new MaudeObjectBuilder();
     }
@@ -37,10 +41,10 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
         createEndTaskRule(process, task, endTaskRuleAdditions);
 
         // Generate rules for boundary events
-        this.createBoundaryEventRules(process, task, collaboration);
+        this.createBoundaryEventRules(process, task);
     }
 
-    private void createBoundaryEventRules(AbstractProcess process, AbstractTask task, BPMNCollaboration collaboration) {
+    private void createBoundaryEventRules(AbstractProcess process, AbstractTask task) {
         task.getBoundaryEvents().forEach(boundaryEvent -> {
             switch (boundaryEvent.getType()) {
                 case NONE:
@@ -49,7 +53,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
                     }); // NOOP
                     break;
                 case MESSAGE:
-                    createTaskMessageBoundaryEventRule(process, task, boundaryEvent, collaboration);
+                    createTaskMessageBoundaryEventRule(process, task, boundaryEvent);
                     break;
                 case SIGNAL:
                     // Handled in the throw rule part.
@@ -62,9 +66,8 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
 
     private void createTaskMessageBoundaryEventRule(AbstractProcess process,
                                                     AbstractTask task,
-                                                    BoundaryEvent boundaryEvent,
-                                                    BPMNCollaboration collaboration) {
-        collaboration.getIncomingMessageFlows(boundaryEvent).forEach(messageFlow -> createTaskBoundaryEventRule(
+                                                    BoundaryEvent boundaryEvent) {
+        getCollaboration().getIncomingMessageFlows(boundaryEvent).forEach(messageFlow -> createTaskBoundaryEventRule(
                 process,
                 task,
                 boundaryEvent,
@@ -133,11 +136,11 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
     public void createSendTaskRulesForProcess(AbstractProcess process, SendTask sendTask) {
         createTaskRulesForProcess(process,
                                   sendTask,
-                                  maudeRuleBuilder -> addSendMessageBehaviorForFlowNode(collaboration, sendTask));
+                                  maudeRuleBuilder -> addSendMessageBehaviorForFlowNode(sendTask));
     }
 
     public void createReceiveTaskRulesForProcess(AbstractProcess process, ReceiveTask receiveTask) {
-        this.createBoundaryEventRules(process, receiveTask, collaboration);
+        this.createBoundaryEventRules(process, receiveTask);
 
         if (receiveTask.isInstantiate() && receiveTask.getIncomingFlows().findAny().isPresent()) {
             throw new BPMNRuntimeException("Instantiate receive tasks should not have incoming sequence " +
@@ -147,7 +150,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
             createStartInteractionNodeRule(receiveTask, process);
         }
         // Rule for ending the task (now consumes messages)
-        createEndInteractionNodeRule(receiveTask, process, collaboration);
+        createEndInteractionNodeRule(receiveTask, process);
     }
 
     @Override
@@ -162,6 +165,11 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
 
     @Override
     public BPMNCollaboration getCollaboration() {
-        return collaboration;
+        return ruleGenerator.getCollaboration();
+    }
+
+    @Override
+    public MaudeBPMNGenerationSettings getSettings() {
+        return ruleGenerator.getSettings();
     }
 }

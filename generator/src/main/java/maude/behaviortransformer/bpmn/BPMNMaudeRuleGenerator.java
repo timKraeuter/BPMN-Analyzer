@@ -8,12 +8,14 @@ import maude.behaviortransformer.bpmn.generators.BPMNMaudeEventRuleGenerator;
 import maude.behaviortransformer.bpmn.generators.BPMNMaudeGatewayRuleGenerator;
 import maude.behaviortransformer.bpmn.generators.BPMNMaudeSubprocessRuleGenerator;
 import maude.behaviortransformer.bpmn.generators.BPMNMaudeTaskRuleGenerator;
+import maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import maude.generation.BPMNMaudeRuleBuilder;
 
 import java.util.Set;
 
 public class BPMNMaudeRuleGenerator {
     private final BPMNCollaboration collaboration;
+    private final MaudeBPMNGenerationSettings settings;
     private final Set<Process> visitedProcessModels;
 
     // Subgenerators
@@ -22,13 +24,16 @@ public class BPMNMaudeRuleGenerator {
     private final BPMNMaudeGatewayRuleGenerator gatewayRuleGenerator;
     private final BPMNMaudeSubprocessRuleGenerator subprocessRuleGenerator;
 
-    BPMNMaudeRuleGenerator(BPMNMaudeRuleBuilder ruleBuilder, BPMNCollaboration collaboration) {
+    BPMNMaudeRuleGenerator(BPMNMaudeRuleBuilder ruleBuilder,
+                           BPMNCollaboration collaboration,
+                           MaudeBPMNGenerationSettings settings) {
         this.collaboration = collaboration;
+        this.settings = settings;
         visitedProcessModels = Sets.newHashSet();
 
-        taskRuleGenerator = new BPMNMaudeTaskRuleGenerator(collaboration, ruleBuilder);
-        eventRuleGenerator = new BPMNMaudeEventRuleGenerator(collaboration, ruleBuilder);
-        gatewayRuleGenerator = new BPMNMaudeGatewayRuleGenerator(collaboration, ruleBuilder);
+        taskRuleGenerator = new BPMNMaudeTaskRuleGenerator(this, ruleBuilder);
+        eventRuleGenerator = new BPMNMaudeEventRuleGenerator(this, ruleBuilder);
+        gatewayRuleGenerator = new BPMNMaudeGatewayRuleGenerator(this, ruleBuilder);
         subprocessRuleGenerator = new BPMNMaudeSubprocessRuleGenerator(this, ruleBuilder);
     }
 
@@ -67,5 +72,9 @@ public class BPMNMaudeRuleGenerator {
 
     public Set<Process> getVisitedProcessModels() {
         return visitedProcessModels;
+    }
+
+    public MaudeBPMNGenerationSettings getSettings() {
+        return settings;
     }
 }

@@ -9,6 +9,7 @@ import behavior.bpmn.events.StartEventType;
 import groove.behaviortransformer.bpmn.generators.BPMNSubprocessRuleGenerator;
 import maude.behaviortransformer.bpmn.BPMNMaudeRuleGenerator;
 import maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
+import maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import maude.generation.BPMNMaudeRuleBuilder;
 import maude.generation.MaudeObject;
 import maude.generation.MaudeObjectBuilder;
@@ -17,15 +18,16 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.*;
 
 public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGenerator, BPMNToMaudeTransformerHelper {
-    private final BPMNMaudeRuleGenerator bpmnMaudeRuleGenerator;
+    private final BPMNMaudeRuleGenerator ruleGenerator;
     private final BPMNMaudeRuleBuilder ruleBuilder;
     private final MaudeObjectBuilder objectBuilder;
 
-    public BPMNMaudeSubprocessRuleGenerator(BPMNMaudeRuleGenerator bpmnMaudeRuleGenerator,
+    public BPMNMaudeSubprocessRuleGenerator(BPMNMaudeRuleGenerator ruleGenerator,
                                             BPMNMaudeRuleBuilder ruleBuilder) {
-        this.bpmnMaudeRuleGenerator = bpmnMaudeRuleGenerator;
+        this.ruleGenerator = ruleGenerator;
         this.ruleBuilder = ruleBuilder;
         objectBuilder = new MaudeObjectBuilder();
     }
@@ -43,7 +45,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
         this.createRulesForExecutingTheSubProcess(callActivity);
 
         // Generate rules for boundary events
-        this.createBoundaryEventRules(process, callActivity, bpmnMaudeRuleGenerator.getCollaboration());
+        this.createBoundaryEventRules(process, callActivity, ruleGenerator.getCollaboration());
     }
 
     private void createBoundaryEventRules(AbstractProcess process,
@@ -185,11 +187,11 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
     }
 
     private void createRulesForExecutingTheSubProcess(CallActivity callActivity) {
-        if (bpmnMaudeRuleGenerator.getVisitedProcessModels().contains(callActivity.getSubProcessModel())) {
+        if (ruleGenerator.getVisitedProcessModels().contains(callActivity.getSubProcessModel())) {
             return;
         }
-        bpmnMaudeRuleGenerator.getVisitedProcessModels().add(callActivity.getSubProcessModel());
-        bpmnMaudeRuleGenerator.generateRulesForProcess(callActivity.getSubProcessModel());
+        ruleGenerator.getVisitedProcessModels().add(callActivity.getSubProcessModel());
+        ruleGenerator.generateRulesForProcess(callActivity.getSubProcessModel());
     }
 
     @Override
@@ -204,6 +206,11 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
 
     @Override
     public BPMNCollaboration getCollaboration() {
-        return bpmnMaudeRuleGenerator.getCollaboration();
+        return ruleGenerator.getCollaboration();
+    }
+
+    @Override
+    public MaudeBPMNGenerationSettings getSettings() {
+        return ruleGenerator.getSettings();
     }
 }

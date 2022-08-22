@@ -2,6 +2,8 @@ package maude.behaviortransformer;
 
 import behavior.bpmn.reader.BPMNFileReaderTestHelper;
 import maude.behaviortransformer.bpmn.BPMNToMaudeTransformer;
+import maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
+import maude.behaviortransformer.bpmn.settings.MessagePersistence;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -22,20 +24,34 @@ public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper {
     String DOT_BPMN = ".bpmn";
 
     default void testBPMNMaudeGeneration(String resourceFileName) throws IOException {
-        testBPMNMaudeGeneration(resourceFileName, WILL_ALWAYS_TERMINATE_QUERY, name -> name);
+        testBPMNMaudeGeneration(resourceFileName,
+                                WILL_ALWAYS_TERMINATE_QUERY);
     }
 
     default void testBPMNMaudeGeneration(String resourceFileName,
                                          String finalQuery) throws IOException {
-        testBPMNMaudeGeneration(resourceFileName, finalQuery, name -> name);
+        testBPMNMaudeGeneration(resourceFileName,
+                                finalQuery,
+                                name -> name);
     }
 
     default void testBPMNMaudeGeneration(String resourceFileName,
                                          String finalQuery,
                                          UnaryOperator<String> elementNameTransformer) throws IOException {
+        testBPMNMaudeGeneration(resourceFileName,
+                                finalQuery,
+                                elementNameTransformer,
+                                new MaudeBPMNGenerationSettings(MessagePersistence.PERSISTENT));
+    }
+
+    default void testBPMNMaudeGeneration(String resourceFileName,
+                                         String finalQuery,
+                                         UnaryOperator<String> elementNameTransformer,
+                                         MaudeBPMNGenerationSettings settings) throws IOException {
         BPMNToMaudeTransformer transformer = new BPMNToMaudeTransformer(readModelFromResourceFolder(resourceFileName +
                                                                                                     DOT_BPMN,
-                                                                                                    elementNameTransformer));
+                                                                                                    elementNameTransformer),
+                                                                        settings);
         String actualMaudeModule = transformer.generate(finalQuery);
 
         String expectedMaudeModule = readExpectedMaudeModule(resourceFileName);

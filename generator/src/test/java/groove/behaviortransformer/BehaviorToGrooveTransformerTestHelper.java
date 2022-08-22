@@ -47,6 +47,7 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
         String modelName = behavior.getName();
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
         File outputDir = new File(this.getOutputPathIncludingSubFolder());
+        FileUtils.cleanDirectory(outputDir);
         transformer.generateGrooveGrammar(behavior, outputDir);
 
         // assert
