@@ -1,6 +1,7 @@
 package maude.generation;
 
 import behavior.bpmn.BPMNCollaboration;
+import maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -21,9 +22,11 @@ public class BPMNMaudeRuleBuilder extends MaudeRuleBuilderBase<BPMNMaudeRuleBuil
     private final Set<String> createdMessages;
 
     private Set<String> signalAll;
+    private MaudeBPMNGenerationSettings settings;
 
-    public BPMNMaudeRuleBuilder(BPMNCollaboration collaboration) {
+    public BPMNMaudeRuleBuilder(BPMNCollaboration collaboration, MaudeBPMNGenerationSettings settings) {
         super();
+        this.settings = settings;
         setSelfReference(this);
         this.collaboration = collaboration;
         consumedMessages = new LinkedHashSet<>();
@@ -37,7 +40,10 @@ public class BPMNMaudeRuleBuilder extends MaudeRuleBuilderBase<BPMNMaudeRuleBuil
         if (ruleName == null || preObjects.isEmpty() || postObjects.isEmpty()) {
             throw new MaudeGenerationException("A rule should have a name and at least one pre/post object");
         }
-        if (consumedMessages.isEmpty() && createdMessages.isEmpty() && signalAll.isEmpty()) {
+        if (consumedMessages.isEmpty()
+            && createdMessages.isEmpty()
+            && signalAll.isEmpty()
+            && settings.isPersistentMessages()) {
             return buildLocalProcessRule();
         }
         return buildGlobalSystemRule();
@@ -66,11 +72,11 @@ public class BPMNMaudeRuleBuilder extends MaudeRuleBuilderBase<BPMNMaudeRuleBuil
 
         // Post object is a BPMN system
         MaudeObject postObject = createBPMNSystem(getObjectStringAndAddAnyOtherProcesses(postObjects),
-                                                  getMessagesString(createdMessages));
-        return createSaveRuleAndResetBuilder(Collections.singleton(preObject), Collections.singleton(postObject));
+                                                  getCreatedMessagesString(createdMessages));
+        return createRuleAndResetBuilder(Collections.singleton(preObject), Collections.singleton(postObject));
     }
 
-    private MaudeRule createSaveRuleAndResetBuilder(Set<MaudeObject> preObject, Set<MaudeObject> postObject) {
+    private MaudeRule createRuleAndResetBuilder(Set<MaudeObject> preObject, Set<MaudeObject> postObject) {
         MaudeRule maudeRule = new MaudeRule(ruleName,
                                             preObject,
                                             postObject,
@@ -81,21 +87,32 @@ public class BPMNMaudeRuleBuilder extends MaudeRuleBuilderBase<BPMNMaudeRuleBuil
     }
 
     private MaudeRule buildSystemRuleWithSignalAll() {
+        if (preObjects.size() != 1) {
+            throw new MaudeGenerationException("There must be exactly one pre object in signal throw rules!");
+        }
         // Pre object is a BPMN system
         MaudeObject preObject = createBPMNSystem(getObjectString(preObjects) + WHITE_SPACE + PS,
                                                  getMessagesString(consumedMessages));
 
-        if (preObjects.size() != 1) {
-            throw new MaudeGenerationException("There must be exactly one pre object in signal throw rules!");
-        }
         String postProcesses = String.format("signalAll(%s %s, %s)",
                                              getObjectString(postObjects),
                                              PS,
                                              String.join(WHITE_SPACE, signalAll));
         // Post object is a BPMN system
-        MaudeObject postObject = createBPMNSystem(postProcesses, getMessagesString(createdMessages));
+        MaudeObject postObject = createBPMNSystem(postProcesses, getCreatedMessagesString(createdMessages));
 
-        return createSaveRuleAndResetBuilder(Collections.singleton(preObject), Collections.singleton(postObject));
+        return createRuleAndResetBuilder(Collections.singleton(preObject), Collections.singleton(postObject));
+    }
+
+    private String getCreatedMessagesString(Set<String> createdMessages) {
+        if (settings.isPersistentMessages()) {
+            return getMessagesString(createdMessages);
+        }
+        // Delete messages besides the created one since messages are set to non-persistent.
+        if (createdMessages.isEmpty()) {
+            return NONE;
+        }
+        return String.join(WHITE_SPACE, createdMessages);
     }
 
     private String getObjectStringAndAddAnyOtherProcesses(Set<MaudeObject> objects) {
@@ -125,7 +142,7 @@ public class BPMNMaudeRuleBuilder extends MaudeRuleBuilderBase<BPMNMaudeRuleBuil
     }
 
     private MaudeRule buildLocalProcessRule() {
-        return createSaveRuleAndResetBuilder(preObjects, postObjects);
+        return createRuleAndResetBuilder(preObjects, postObjects);
     }
 
     @Override

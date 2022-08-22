@@ -18,21 +18,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper {
 
     String MAUDE_MODULE_FOLDER = "/bpmn/maude/";
-    boolean REPLACE_EXPECTED_FILE_WITH_ACTUAL = true;
+    boolean REPLACE_EXPECTED_FILE_WITH_ACTUAL = false;
     String WILL_ALWAYS_TERMINATE_QUERY = "red modelCheck(init,  <> [] allTerminated)";
     String CAN_TERMINATE_QUERY = "search init =>! X such that X |= allTerminated = true";
     String DOT_BPMN = ".bpmn";
 
     default void testBPMNMaudeGeneration(String resourceFileName) throws IOException {
-        testBPMNMaudeGeneration(resourceFileName,
-                                WILL_ALWAYS_TERMINATE_QUERY);
+        testBPMNMaudeGeneration(resourceFileName, WILL_ALWAYS_TERMINATE_QUERY);
     }
 
     default void testBPMNMaudeGeneration(String resourceFileName,
                                          String finalQuery) throws IOException {
-        testBPMNMaudeGeneration(resourceFileName,
-                                finalQuery,
-                                name -> name);
+        testBPMNMaudeGeneration(resourceFileName, finalQuery, name -> name);
     }
 
     default void testBPMNMaudeGeneration(String resourceFileName,
@@ -42,6 +39,11 @@ public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper {
                                 finalQuery,
                                 elementNameTransformer,
                                 new MaudeBPMNGenerationSettings(MessagePersistence.PERSISTENT));
+    }
+
+    default void testBPMNMaudeGeneration(String resourceFileName,
+                                         MaudeBPMNGenerationSettings settings) throws IOException {
+        testBPMNMaudeGeneration(resourceFileName, WILL_ALWAYS_TERMINATE_QUERY, name -> name, settings);
     }
 
     default void testBPMNMaudeGeneration(String resourceFileName,

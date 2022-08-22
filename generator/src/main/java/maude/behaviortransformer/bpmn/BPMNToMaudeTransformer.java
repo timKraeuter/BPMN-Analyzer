@@ -173,7 +173,7 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
         this.collaboration = collaboration;
         this.settings = settings;
         objectBuilder = new MaudeObjectBuilder();
-        ruleBuilder = new BPMNMaudeRuleBuilder(collaboration);
+        ruleBuilder = new BPMNMaudeRuleBuilder(collaboration, settings);
         ruleBuilder.addVar(TOKENS, MSET, ANY_TOKENS);
         ruleBuilder.addVar(SIGNALS, MSET, ANY_SIGNALS);
         ruleBuilder.addVar(MESSAGES, MSET, ANY_MESSAGES);
