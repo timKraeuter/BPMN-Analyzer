@@ -190,7 +190,7 @@ public class BPMNToGrooveTransformerHelper {
         GrooveNode receiverInstance = contextProcessInstanceWithQuantifier(messageFlowReceiver,
                                                                            ruleBuilder,
                                                                            existsOptional);
-        addExistentialMessageWithPosition(ruleBuilder, receiverInstance, messageFlow.getName(), existsOptional);
+        addExistentialMessageWithPosition(ruleBuilder, receiverInstance, messageFlow.getNameOrDescriptiveName(), existsOptional);
         // We assume a message receiver can only have one incoming sequence flow if any.
         messageFlow.getTarget().getIncomingFlows().forEach(sequenceFlow -> {
             GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
@@ -214,7 +214,7 @@ public class BPMNToGrooveTransformerHelper {
         GrooveNode newMessage = ruleBuilder.addNode(TYPE_MESSAGE);
         ruleBuilder.addEdge(POSITION,
                             newMessage,
-                            ruleBuilder.contextNode(createStringNodeLabel(messageFlow.getName())));
+                            ruleBuilder.contextNode(createStringNodeLabel(messageFlow.getNameOrDescriptiveName())));
     }
 
     private static void addMessageFlowInstantiateAfterEVGatewayBehavior(BPMNCollaboration collaboration,
@@ -248,7 +248,7 @@ public class BPMNToGrooveTransformerHelper {
         GrooveNode message = ruleBuilder.deleteNode(TYPE_MESSAGE);
         ruleBuilder.deleteEdge(POSITION,
                                message,
-                               ruleBuilder.contextNode(createStringNodeLabel(incomingMessageFlow.getName())));
+                               ruleBuilder.contextNode(createStringNodeLabel(incomingMessageFlow.getNameOrDescriptiveName())));
 
         return addProcessInstance(ruleBuilder, receiverProcess.getName());
     }

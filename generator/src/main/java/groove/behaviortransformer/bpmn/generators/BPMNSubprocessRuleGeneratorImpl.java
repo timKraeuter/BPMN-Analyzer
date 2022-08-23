@@ -123,7 +123,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
                             boundaryEvent,
                             processInstance -> deleteMessageToProcessInstanceWithPosition(ruleBuilder,
                                                                                           processInstance,
-                                                                                          messageFlow.getName())));
+                                                                                          messageFlow.getNameOrDescriptiveName())));
 
                     break;
                 case SIGNAL:

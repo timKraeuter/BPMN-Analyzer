@@ -20,7 +20,7 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
     private final BPMNRuleGenerator bpmnRuleGenerator;
     private final BPMNCollaboration collaboration;
     private final GrooveRuleBuilder ruleBuilder;
-    private boolean useSFId;
+    private final boolean useSFId;
 
     public BPMNEventSubprocessRuleGeneratorImpl(BPMNRuleGenerator bpmnRuleGenerator,
                                                 GrooveRuleBuilder ruleBuilder,
@@ -131,7 +131,7 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
         GrooveNode message = ruleBuilder.deleteNode(TYPE_MESSAGE);
         ruleBuilder.deleteEdge(POSITION,
                                message,
-                               ruleBuilder.contextNode(createStringNodeLabel(incomingMessageFlow.getName())));
+                               ruleBuilder.contextNode(createStringNodeLabel(incomingMessageFlow.getNameOrDescriptiveName())));
 
         // Spawns a new token at each outgoing flow.
         BPMNToGrooveTransformerHelper.addOutgoingTokensForFlowNodeToProcessInstance(startEvent,
@@ -144,7 +144,7 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
     private String getMessageStartEventRuleName(Set<MessageFlow> incomingMessageFlows,
                                                 MessageFlow incomingMessageFlow,
                                                 StartEvent startEvent) {
-        return incomingMessageFlows.size() > 1 ? incomingMessageFlow.getName() : startEvent.getName();
+        return incomingMessageFlows.size() > 1 ? incomingMessageFlow.getNameOrDescriptiveName() : startEvent.getName();
     }
 
     private void createStartNonInterruptingEvenSubprocessFromMessageRules(AbstractProcess process,

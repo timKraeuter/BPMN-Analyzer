@@ -88,8 +88,12 @@ public class BPMNCollaborationBuilder implements BPMNModelBuilder {
         return this;
     }
 
-    public BPMNCollaborationBuilder messageFlow(FlowNode source, FlowNode target) {
-        this.messageFlows.add(new MessageFlow("", source, target));
+    public BPMNCollaborationBuilder messageFlow(String id, FlowNode source, FlowNode target) {
+        return messageFlow(id, "", source, target);
+    }
+
+    public BPMNCollaborationBuilder messageFlow(String id, String name, FlowNode source, FlowNode target) {
+        this.messageFlows.add(new MessageFlow(id, name, source, target));
         return this;
     }
 

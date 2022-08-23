@@ -116,19 +116,21 @@ public class BPMNFileReader {
         InteractionNode targetInteractionNode = messageFlow.getTarget();
         if (!(sourceInteractionNode instanceof FlowNode)) {
             throw new BPMNRuntimeException(String.format("Message flow with id \"%s\" has an invalid source with id " +
-                                                     "\"%s\", which is not a flow node (event, activity, ...)!",
-                                                     messageFlow.getId(),
-                                                     sourceInteractionNode.getId()));
+                                                         "\"%s\", which is not a flow node (event, activity, ...)!",
+                                                         messageFlow.getId(),
+                                                         sourceInteractionNode.getId()));
         }
         if (!(targetInteractionNode instanceof FlowNode)) {
             throw new BPMNRuntimeException(String.format("Message flow with id \"%s\" has an invalid target with id " +
-                                                     "\"%s\", which is not a flow node (event, activity, ...)!",
-                                                     messageFlow.getId(),
-                                                     targetInteractionNode.getId()));
+                                                         "\"%s\", which is not a flow node (event, activity, ...)!",
+                                                         messageFlow.getId(),
+                                                         targetInteractionNode.getId()));
         }
         FlowNode source = (FlowNode) sourceInteractionNode;
         FlowNode target = (FlowNode) targetInteractionNode;
-        bpmnCollaborationBuilder.messageFlow(mapFlowNode(source,
+        bpmnCollaborationBuilder.messageFlow(messageFlow.getId(),
+                                             messageFlow.getName() == null ? "" : messageFlow.getName(),
+                                             mapFlowNode(source,
                                                          mappedFlowNodes,
                                                          mappedSequenceFlows,
                                                          bpmnCollaborationBuilder),
@@ -567,7 +569,8 @@ public class BPMNFileReader {
 
                 @Override
                 public IntermediateCatchEvent handle(TerminateEventDefinition evDefinition) {
-                    throw new BPMNRuntimeException("Intermediate catch event definitions should not be of type terminate!");
+                    throw new BPMNRuntimeException(
+                            "Intermediate catch event definitions should not be of type terminate!");
                 }
 
                 @Override
@@ -618,7 +621,8 @@ public class BPMNFileReader {
 
                 @Override
                 public IntermediateThrowEvent handle(TerminateEventDefinition evDefinition) {
-                    throw new BPMNRuntimeException("Intermediate throw event definitions should not be of type terminate!");
+                    throw new BPMNRuntimeException(
+                            "Intermediate throw event definitions should not be of type terminate!");
                 }
 
                 @Override

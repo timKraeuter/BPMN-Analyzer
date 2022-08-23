@@ -225,7 +225,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
             final GrooveNode deletedMessage = BPMNToGrooveTransformerHelper.deleteMessageToProcessInstanceWithPosition(
                     ruleBuilder,
                     processInstance,
-                    messageFlow.getName());
+                    messageFlow.getNameOrDescriptiveName());
             // Delete all other incoming messages.
             final GrooveNode forAll = ruleBuilder.contextNode(FORALL);
             GrooveNode message = ruleBuilder.deleteNode(TYPE_MESSAGE);
@@ -245,7 +245,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         if (amountOfIncMessages <= 1) {
             return intermediateCatchEvent.getName();
         }
-        return intermediateCatchEvent.getName() + "_" + messageFlow.getName();
+        return intermediateCatchEvent.getName() + "_" + messageFlow.getNameOrDescriptiveName();
     }
 
     private void createIntermediateCatchLinkEventRule(IntermediateCatchEvent intermediateCatchEvent,
@@ -601,7 +601,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         Set<MessageFlow> incomingMessageFlows = collaboration.getIncomingMessageFlows(startEvent);
         incomingMessageFlows.forEach(incomingMessageFlow -> {
             ruleBuilder.startRule(incomingMessageFlows.size() >
-                                  1 ? incomingMessageFlow.getName() : startEvent.getName());
+                                  1 ? incomingMessageFlow.getNameOrDescriptiveName() : startEvent.getName());
             GrooveNode processInstance = BPMNToGrooveTransformerHelper.deleteIncomingMessageAndCreateProcessInstance(
                     incomingMessageFlow,
                     collaboration,

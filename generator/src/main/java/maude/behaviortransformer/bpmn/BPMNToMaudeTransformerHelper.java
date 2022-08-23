@@ -179,7 +179,7 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
     default String getMessageForFlow(MessageFlow messageFlow) {
-        return String.format(ENQUOTE_FORMAT, messageFlow.getName());
+        return String.format(TOKEN_FORMAT, messageFlow.getNameOrDescriptiveName(), messageFlow.getId());
     }
 
 
@@ -235,7 +235,7 @@ public interface BPMNToMaudeTransformerHelper {
                                               MessageFlow messageFlow) {
         String potentialSuffix = flowNode.isTask() ? END : "";
         if (incomingMessageFlows.size() > 1) {
-            return getFlowNodeRuleNameWithIncFlow(flowNode, messageFlow.getName()) + potentialSuffix;
+            return getFlowNodeRuleNameWithIncFlow(flowNode, messageFlow.getNameOrDescriptiveName()) + potentialSuffix;
         }
         return getFlowNodeRuleName(flowNode) + potentialSuffix;
     }

@@ -87,7 +87,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
                                                                                                           processInstance -> deleteMessageToProcessInstanceWithPosition(
                                                                                                                   ruleBuilder,
                                                                                                                   processInstance,
-                                                                                                                  messageFlow.getName())));
+                                                                                                                  messageFlow.getNameOrDescriptiveName())));
         }
     }
 
@@ -101,7 +101,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
             GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
             BPMNToGrooveTransformerHelper.deleteMessageToProcessInstanceWithPosition(ruleBuilder,
                                                                                      processInstance,
-                                                                                     messageFlow.getName());
+                                                                                     messageFlow.getNameOrDescriptiveName());
             BPMNToGrooveTransformerHelper.addTokenWithPosition(ruleBuilder, processInstance, receiveTask.getName());
             // Consume the token at the event-based gateway.
             BPMNToGrooveTransformerHelper.deleteTokenWithPosition(ruleBuilder,
@@ -116,7 +116,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         // Each incoming message flow will instantiate the process.
         incomingMessageFlows.forEach(incomingMessageFlow -> {
             ruleBuilder.startRule(incomingMessageFlows.size() >
-                                  1 ? incomingMessageFlow.getName() : receiveTask.getName() + START);
+                                  1 ? incomingMessageFlow.getNameOrDescriptiveName() : receiveTask.getName() + START);
             GrooveNode processInstance = deleteIncomingMessageAndCreateProcessInstance(incomingMessageFlow,
                                                                                        collaboration,
                                                                                        ruleBuilder);
@@ -162,7 +162,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
                             task,
                             processInstance -> deleteMessageToProcessInstanceWithPosition(ruleBuilder,
                                                                                           processInstance,
-                                                                                          messageFlow.getName())));
+                                                                                          messageFlow.getNameOrDescriptiveName())));
                     break;
                 case SIGNAL:
                     // Handled in the throw rule part.

@@ -365,7 +365,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         // Check message flows
         assertThat(result.getMessageFlows().size(), is(3));
         Set<String> messageFlowNames =
-                result.getMessageFlows().stream().map(MessageFlow::getName).collect(Collectors.toSet());
+                result.getMessageFlows().stream().map(MessageFlow::getNameOrDescriptiveName).collect(Collectors.toSet());
         assertThat(messageFlowNames,
                    is(Sets.newHashSet("sendEvent_startP2", "SendTask_receiveEvent", "endP1_ReceiveTask")));
     }
