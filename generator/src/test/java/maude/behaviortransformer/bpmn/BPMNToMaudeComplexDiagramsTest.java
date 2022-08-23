@@ -30,7 +30,8 @@ class BPMNToMaudeComplexDiagramsTest implements BPMNMaudeTestHelper {
         testBPMNMaudeGeneration(
                 "use-case-execution",
                 CAN_TERMINATE_QUERY,
-                createNameTransformer());
+                createNameTransformer(),
+                new MaudeBPMNGenerationSettings(MessagePersistence.NON_PERSISTENT));
     }
 
     /**
