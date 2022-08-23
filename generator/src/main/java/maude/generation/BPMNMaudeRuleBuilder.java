@@ -22,7 +22,7 @@ public class BPMNMaudeRuleBuilder extends MaudeRuleBuilderBase<BPMNMaudeRuleBuil
     private final Set<String> createdMessages;
 
     private Set<String> signalAll;
-    private MaudeBPMNGenerationSettings settings;
+    private final MaudeBPMNGenerationSettings settings;
 
     public BPMNMaudeRuleBuilder(BPMNCollaboration collaboration, MaudeBPMNGenerationSettings settings) {
         super();

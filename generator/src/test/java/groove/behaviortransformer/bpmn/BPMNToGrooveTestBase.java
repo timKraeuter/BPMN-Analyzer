@@ -14,7 +14,7 @@ public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTe
                                                           BPMNToGrooveTransformer.TERMINATE_RULE_FILE_NAME,
                                                           BPMNToGrooveTransformer.UNSAFE_FILE_NAME,
                                                           BPMNToGrooveTransformer.TYPE_GRAPH_FILE_NAME);
-    private static final String BPMN = "bpmn/groove";
+    private static final String BPMN = "bpmn/groove/";
 
     @Override
     protected void setUpFurther() {
