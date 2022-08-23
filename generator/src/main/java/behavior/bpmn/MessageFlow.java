@@ -1,6 +1,7 @@
 package behavior.bpmn;
 
 public class MessageFlow {
+    // TODO: Message flows need ids, similar to sequence flows!
     private final String name;
     private final FlowNode source;
     private final FlowNode target;

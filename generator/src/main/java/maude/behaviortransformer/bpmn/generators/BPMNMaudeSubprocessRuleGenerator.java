@@ -101,10 +101,11 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
 
         // Setup pre
         // Subprocess must be running
-        String subprocesses = createProcessSnapshotObjectRunning(callActivity.getSubProcessModel(),
-                                                                 anyOtherSubprocesses1,
-                                                                 anyOtherTokens1,
-                                                                 anyOtherSignals1)
+        String subprocesses = createProcessSnapshotObjectWithoutParents(callActivity.getSubProcessModel(),
+                                                                        anyOtherSubprocesses1,
+                                                                        anyOtherTokens1,
+                                                                        anyOtherSignals1,
+                                                                        RUNNING)
                                       .generateObjectString() + " " + anyOtherSubprocesses2;
         ruleBuilder.addPreObject(createProcessSnapshotObjectRunning(process,
                                                                     subprocesses,
@@ -154,11 +155,14 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
                                            .map(this::getTokenForFlowNode)
                                            .collect(Collectors.joining(" "));
         }
-        MaudeObject subProcess = createProcessSnapshotObjectNoSubProcessAndSignals(callActivity.getSubProcessModel(),
-                                                                                   subProcessTokens);
+        MaudeObject subProcess = createProcessSnapshotObjectWithoutParents(callActivity.getSubProcessModel(),
+                                                                           NONE,
+                                                                           subProcessTokens,
+                                                                           NONE,
+                                                                           RUNNING);
         ruleBuilder.addPostObject(createProcessSnapshotObjectRunning(process,
-                                                              subProcess.generateObjectString() +
-                                                              ANY_OTHER_SUBPROCESSES,
+                                                                     subProcess.generateObjectString() +
+                                                                     ANY_OTHER_SUBPROCESSES,
                                                                      ANY_TOKENS,
                                                                      NONE));
 
@@ -170,8 +174,8 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
 
         MaudeObject subProcess = createTerminatedProcessSnapshot(callActivity.getSubProcessModel());
         ruleBuilder.addPreObject(createProcessSnapshotObjectRunning(process,
-                                                             subProcess.generateObjectString() +
-                                                             ANY_OTHER_SUBPROCESSES,
+                                                                    subProcess.generateObjectString() +
+                                                                    ANY_OTHER_SUBPROCESSES,
                                                                     ANY_TOKENS,
                                                                     ANY_SIGNALS));
 

@@ -17,9 +17,13 @@ import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.*;
 
 public interface BPMNToMaudeTransformerHelper {
     BPMNMaudeRuleBuilder getRuleBuilder();
+
     MaudeObjectBuilder getObjectBuilder();
+
     BPMNCollaboration getCollaboration();
+
     MaudeBPMNGenerationSettings getSettings();
+
     default String getFlowNodeRuleNameWithIncFlow(FlowNode flowNode, String incomingFlowId) {
         if (flowNode.getIncomingFlows().count() > 1) {
             return String.format(RULE_NAME_NAME_ID_FORMAT, getFlowNodeRuleName(flowNode), incomingFlowId);
@@ -54,10 +58,10 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
     default String getSignalOccurrenceForSequenceFlow(SequenceFlow sequenceFlow) {
-        return getTokenOrSignalOccurenceForSequenceFlow(sequenceFlow, SIGNAL_OCCURENCE_FORMAT);
+        return getTokenOrSignalOccurrenceForSequenceFlow(sequenceFlow, SIGNAL_OCCURENCE_FORMAT);
     }
 
-    private String getTokenOrSignalOccurenceForSequenceFlow(SequenceFlow sequenceFlow, String signalOccurenceFormat) {
+    private String getTokenOrSignalOccurrenceForSequenceFlow(SequenceFlow sequenceFlow, String signalOccurenceFormat) {
         String nameOrDescriptiveName = sequenceFlow.getName() == null ||
                                        sequenceFlow.getName().isBlank() ? sequenceFlow.getDescriptiveName() :
                 sequenceFlow.getName();
@@ -69,16 +73,18 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
     default String getOutgoingTokensForFlowNode(FlowNode flowNode) {
-        return flowNode.getOutgoingFlows().map(this::getTokenForSequenceFlow).collect(Collectors.joining(
-                WHITE_SPACE));
+        return flowNode.getOutgoingFlows()
+                       .map(this::getTokenForSequenceFlow)
+                       .collect(Collectors.joining(WHITE_SPACE));
     }
 
     default String getTokenForSequenceFlow(SequenceFlow sequenceFlow) {
-        return getTokenOrSignalOccurenceForSequenceFlow(sequenceFlow, TOKEN_FORMAT);
+        return getTokenOrSignalOccurrenceForSequenceFlow(sequenceFlow, TOKEN_FORMAT);
     }
 
     default MaudeObject createTerminatedProcessSnapshot(AbstractProcess process) {
-        return createProcessSnapshotObject(process, NONE, NONE, ANY_SIGNALS, TERMINATED);
+        // Is a subprocess. Thus, should not have parents!
+        return createProcessSnapshotObjectWithoutParents(process, NONE, NONE, ANY_SIGNALS, TERMINATED);
     }
 
     default MaudeObject createProcessSnapshotObjectNoSubProcessAndSignals(AbstractProcess process,
@@ -107,7 +113,11 @@ public interface BPMNToMaudeTransformerHelper {
     default MaudeObject createProcessSnapshotObjectWithParents(AbstractProcess process,
                                                                String subprocesses,
                                                                String tokens) {
-        MaudeObject processObject = createProcessSnapshotObjectRunning(process, subprocesses, tokens, ANY_SIGNALS);
+        MaudeObject processObject = createProcessSnapshotObjectWithoutParents(process,
+                                                                              subprocesses,
+                                                                              tokens,
+                                                                              ANY_SIGNALS,
+                                                                              RUNNING);
         return wrapInParentIfNeeded(process, processObject, 1);
     }
 
@@ -123,12 +133,13 @@ public interface BPMNToMaudeTransformerHelper {
         getRuleBuilder().addVar(SIGNALS, MSET, anySignals);
         getRuleBuilder().addVar(SUBPROCESSES, CONFIGURATION, anySubprocesses);
 
-        MaudeObject parentProcessObject = createProcessSnapshotObjectRunning(parentProcess,
-                                                                             processObject.generateObjectString() +
-                                                                             WHITE_SPACE +
-                                                                             anySubprocesses,
-                                                                             anyTokens,
-                                                                             anySignals);
+        MaudeObject parentProcessObject = createProcessSnapshotObjectWithoutParents(parentProcess,
+                                                                                    processObject.generateObjectString() +
+                                                                                    WHITE_SPACE +
+                                                                                    anySubprocesses,
+                                                                                    anyTokens,
+                                                                                    anySignals,
+                                                                                    RUNNING);
         return wrapInParentIfNeeded(parentProcess, parentProcessObject, counter + 1);
     }
 
@@ -137,6 +148,27 @@ public interface BPMNToMaudeTransformerHelper {
                                                     String tokens,
                                                     String signals,
                                                     String state) {
+
+        MaudeObject processObject = getObjectBuilder().oid(process.getName())
+                                              .oidType("ProcessSnapshot")
+                                              .addAttributeValue("tokens", String.format(BRACKET_FORMAT, tokens))
+                                              .addAttributeValue("signals", String.format(BRACKET_FORMAT, signals))
+                                              .addAttributeValue("subprocesses",
+                                                                 String.format(BRACKET_FORMAT, subprocesses))
+                                              .addAttributeValue("state", state)
+                                              .build();
+        if (getSettings().isPersistentMessages()) {
+            return processObject;
+        }
+        // Non-persistent means messages are removed. Thus, we need parents for processes for the correct match.
+        return wrapInParentIfNeeded(process, processObject, 1);
+    }
+
+    default MaudeObject createProcessSnapshotObjectWithoutParents(AbstractProcess process,
+                                                                  String subprocesses,
+                                                                  String tokens,
+                                                                  String signals,
+                                                                  String state) {
         return getObjectBuilder().oid(process.getName())
                                  .oidType("ProcessSnapshot")
                                  .addAttributeValue("tokens", String.format(BRACKET_FORMAT, tokens))

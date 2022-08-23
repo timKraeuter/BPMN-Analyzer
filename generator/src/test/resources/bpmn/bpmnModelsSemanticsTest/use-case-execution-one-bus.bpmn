@@ -53,7 +53,7 @@
         <bpmn:outgoing>Flow_1eqsy0f</bpmn:outgoing>
         <bpmn:messageEventDefinition id="MessageEventDefinition_17mi15i" messageRef="Message_1pogjn0"/>
       </bpmn:intermediateCatchEvent>
-      <bpmn:eventBasedGateway id="Gateway_1kmngej">
+      <bpmn:eventBasedGateway id="Gateway_1kmngej" name="StatusOrGreen">
         <bpmn:incoming>Flow_1s1aaak</bpmn:incoming>
         <bpmn:incoming>Flow_02nehb8</bpmn:incoming>
         <bpmn:outgoing>Flow_03eteho</bpmn:outgoing>
@@ -78,7 +78,7 @@
     <bpmn:subProcess id="Activity_14ojnon" name="Phase 2">
       <bpmn:incoming>Flow_11hp3v6</bpmn:incoming>
       <bpmn:outgoing>Flow_04ws78i</bpmn:outgoing>
-      <bpmn:eventBasedGateway id="Gateway_0ue58r0">
+      <bpmn:eventBasedGateway id="Gateway_0ue58r0" name="StatusOrGreen">
         <bpmn:incoming>Flow_0jrj68j</bpmn:incoming>
         <bpmn:incoming>Flow_1ogjgsu</bpmn:incoming>
         <bpmn:outgoing>Flow_01mmept</bpmn:outgoing>
@@ -337,11 +337,14 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1towv8r_di" bpmnElement="Gateway_1kmngej">
         <dc:Bounds x="395" y="345" width="50" height="50"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="343" y="402" width="74" height="14"/>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_029k7yc_di" bpmnElement="Event_029k7yc">
         <dc:Bounds x="442" y="442" width="36" height="36"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="424" y="405" width="73" height="27"/>
+          <dc:Bounds x="424" y="486" width="73" height="27"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1wd4tix_di" bpmnElement="Event_1wd4tix">
@@ -385,6 +388,9 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Gateway_0ue58r0_di" bpmnElement="Gateway_0ue58r0">
         <dc:Bounds x="965" y="355" width="50" height="50"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="913" y="412" width="74" height="14"/>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_15urqhf_di" bpmnElement="Event_15urqhf">
         <dc:Bounds x="902" y="362" width="36" height="36"/>
@@ -392,7 +398,7 @@
       <bpmndi:BPMNShape id="Event_1aakyu0_di" bpmnElement="Event_1aakyu0">
         <dc:Bounds x="1042" y="362" width="36" height="36"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1038" y="336" width="50" height="27"/>
+          <dc:Bounds x="1038" y="406" width="50" height="27"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1bkpsx5_di" bpmnElement="Event_1bkpsx5">

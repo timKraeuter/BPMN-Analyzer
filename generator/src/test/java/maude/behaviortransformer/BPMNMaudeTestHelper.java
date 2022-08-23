@@ -42,11 +42,6 @@ public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper {
     }
 
     default void testBPMNMaudeGeneration(String resourceFileName,
-                                         MaudeBPMNGenerationSettings settings) throws IOException {
-        testBPMNMaudeGeneration(resourceFileName, WILL_ALWAYS_TERMINATE_QUERY, name -> name, settings);
-    }
-
-    default void testBPMNMaudeGeneration(String resourceFileName,
                                          String finalQuery,
                                          UnaryOperator<String> elementNameTransformer,
                                          MaudeBPMNGenerationSettings settings) throws IOException {
