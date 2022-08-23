@@ -26,8 +26,9 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
     private static final String MODULE_TEMPLATE = "load model-checker.maude .\r\n" +
                                                   "\r\n" +
                                                   "--- Multiset implementation could be extracted as well.\r\n" +
-                                                  "fmod MSET is pr\r\n" +
-                                                  "    STRING .\r\n" +
+                                                  "fmod MSET is\r\n" +
+                                                  "    pr STRING .\r\n" +
+                                                  "    pr NAT .\r\n" +
                                                   "    sorts NeMSet MSet .\r\n" +
                                                   "    subsort String < NeMSet < MSet .\r\n" +
                                                   "\r\n" +
@@ -38,12 +39,21 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "\r\n" +
                                                   "    op contains : MSet String -> Bool .\r\n" +
                                                   "\r\n" +
-                                                  "    vars X Y : String .\r\n" +
+                                                  "    var X : String .\r\n" +
+                                                  "    var Y : String .\r\n" +
                                                   "    var S S1 : MSet .\r\n" +
                                                   "\r\n" +
                                                   "    eq contains(none, X) = false .\r\n" +
                                                   "    eq contains(X S, X) = true .\r\n" +
                                                   "    ceq contains(Y S, X) = contains(S, X) if X =/= Y .\r\n" +
+                                                  "\r\n" +
+                                                  "    op size : MSet -> Nat .\r\n" +
+                                                  "    eq size(none) = 0 .\r\n" +
+                                                  "    eq size(X S) = size(S) + 1 .\r\n" +
+                                                  "\r\n" +
+                                                  "    op lessOrEqualSize : MSet MSet -> Bool .\r\n" +
+                                                  "    ceq lessOrEqualSize(S, S1) = true if size(S) <= size(S1) .\r\n" +
+                                                  "    eq lessOrEqualSize(S, S1) = false [owise] .\r\n" +
                                                   "endfm\r\n" +
                                                   "\r\n" +
                                                   "mod BPMN-EXECUTION is\r\n" +
@@ -80,11 +90,16 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    var PS : Configuration .\r\n" +
                                                   "\r\n" +
                                                   "    eq signalAll(none, T) = none .\r\n" +
-                                                  "    eq signalAll(< P : ProcessSnapshot | tokens : T, signals : " +
+                                                  "    ceq signalAll(< P : ProcessSnapshot | tokens : T, signals : " +
                                                   "SIG, subprocesses : S, state : STATE > PS, T1) = < P : " +
                                                   "ProcessSnapshot | tokens : T, signals : (SIG signal(T, T1)), " +
                                                   "subprocesses : signalAll(S, T1), state : STATE > signalAll(PS, T1)" +
-                                                  " .\r\n" +
+                                                  " if lessOrEqualSize(SIG, T1). --- maximum signal bound is the " +
+                                                  "number of tokens.\r\n" +
+                                                  "    eq signalAll(< P : ProcessSnapshot | tokens : T, signals : " +
+                                                  "SIG, subprocesses : S, state : STATE > PS, T1) = < P : " +
+                                                  "ProcessSnapshot | tokens : T, signals : (SIG), subprocesses : " +
+                                                  "signalAll(S, T1), state : STATE > signalAll(PS, T1) [owise] .\r\n" +
                                                   "\r\n" +
                                                   "    ceq signal(P T, T1) = (P + \"_signal\") signal(T, T1) if " +
                                                   "contains(T1, P) .\r\n" +
