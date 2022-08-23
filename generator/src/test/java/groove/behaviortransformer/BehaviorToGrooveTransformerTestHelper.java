@@ -47,7 +47,7 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
         String modelName = behavior.getName();
         BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
         File outputDir = new File(this.getOutputPathIncludingSubFolder());
-        if (!outputDir.mkdir()) {
+        if (!outputDir.mkdirs()) {
             // Clean dir if not fresh
             FileUtils.cleanDirectory(outputDir);
         }
