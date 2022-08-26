@@ -84,7 +84,7 @@ public interface BPMNToMaudeTransformerHelper {
 
     default MaudeObject createTerminatedProcessSnapshot(AbstractProcess process) {
         // Is a subprocess. Thus, should not have parents!
-        return createProcessSnapshotObjectWithoutParents(process, NONE, NONE, ANY_SIGNALS, TERMINATED);
+        return createProcessSnapshotObjectWithoutParents(process, NONE, NONE, NONE, TERMINATED);
     }
 
     default MaudeObject createProcessSnapshotObjectNoSubProcessAndSignals(AbstractProcess process,
