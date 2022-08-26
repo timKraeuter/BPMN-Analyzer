@@ -81,7 +81,7 @@ mod BPMN-EXECUTION is
     rl [naturalTerminate] :
     < P : ProcessSnapshot | tokens : none, signals : SIG, subprocesses : none, state : Running >
                             =>
-    < P : ProcessSnapshot | tokens : none, signals : SIG, subprocesses : none, state : Terminated > .
+    < P : ProcessSnapshot | tokens : none, signals : none, subprocesses : none, state : Terminated > .
 endm
 
 mod BPMN-EXECUTION-call-activity-simple is
@@ -102,7 +102,7 @@ mod BPMN-EXECUTION-call-activity-simple is
     rl [B_Activity_1cnewyu_end] :  < "call-activity-simple" : ProcessSnapshot | tokens : ("B (Activity_1cnewyu)" T), signals : (SIG), subprocesses : (S), state : Running > => < "call-activity-simple" : ProcessSnapshot | tokens : ("B_end (Flow_19r98jz)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [end_Event_08ww8rq] :  < "call-activity-simple" : ProcessSnapshot | tokens : ("B_end (Flow_19r98jz)" T), signals : (SIG), subprocesses : (S), state : Running > => < "call-activity-simple" : ProcessSnapshot | tokens : (T), signals : (none), subprocesses : (S), state : Running > .
     rl [Subprocess_Activity_08nz8l4_start] :  < "call-activity-simple" : ProcessSnapshot | tokens : ("A_Subprocess (Flow_0mnkkon)" T), signals : (SIG), subprocesses : (S), state : Running > => < "call-activity-simple" : ProcessSnapshot | tokens : (T), signals : (none), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : ("start_sub (Event_0pov758)"), signals : (none), subprocesses : (none), state : Running > S), state : Running > .
-    rl [Subprocess_Activity_08nz8l4_end] :  < "call-activity-simple" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : (none), signals : (SIG), subprocesses : (none), state : Terminated > S), state : Running > => < "call-activity-simple" : ProcessSnapshot | tokens : ("Subprocess_B (Flow_08du15s)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [Subprocess_Activity_08nz8l4_end] :  < "call-activity-simple" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : (none), signals : (none), subprocesses : (none), state : Terminated > S), state : Running > => < "call-activity-simple" : ProcessSnapshot | tokens : ("Subprocess_B (Flow_08du15s)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [start_sub_Event_0pov758] :  < "Subprocess" : ProcessSnapshot | tokens : ("start_sub (Event_0pov758)" T), signals : (SIG), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : ("start_sub_Subactivity (Flow_1963tcn)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [Subactivity_Activity_023wdnt_start] :  < "Subprocess" : ProcessSnapshot | tokens : ("start_sub_Subactivity (Flow_1963tcn)" T), signals : (SIG), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : ("Subactivity (Activity_023wdnt)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [Subactivity_Activity_023wdnt_end] :  < "Subprocess" : ProcessSnapshot | tokens : ("Subactivity (Activity_023wdnt)" T), signals : (SIG), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : ("Subactivity_end_sub (Flow_08jnebl)" T), signals : (none), subprocesses : (S), state : Running > .

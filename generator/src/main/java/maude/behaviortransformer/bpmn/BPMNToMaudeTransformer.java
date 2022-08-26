@@ -122,7 +122,7 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
                                                   "    < P : ProcessSnapshot | tokens : none, signals : SIG, " +
                                                   "subprocesses : none, state : Running >\r\n" +
                                                   "                            =>\r\n" +
-                                                  "    < P : ProcessSnapshot | tokens : none, signals : SIG, " +
+                                                  "    < P : ProcessSnapshot | tokens : none, signals : none, " +
                                                   "subprocesses : none, state : Terminated > .\r\n" +
                                                   "endm\r\n" +
                                                   "\r\n" +

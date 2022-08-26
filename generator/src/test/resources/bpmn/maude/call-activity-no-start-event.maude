@@ -81,7 +81,7 @@ mod BPMN-EXECUTION is
     rl [naturalTerminate] :
     < P : ProcessSnapshot | tokens : none, signals : SIG, subprocesses : none, state : Running >
                             =>
-    < P : ProcessSnapshot | tokens : none, signals : SIG, subprocesses : none, state : Terminated > .
+    < P : ProcessSnapshot | tokens : none, signals : none, subprocesses : none, state : Terminated > .
 endm
 
 mod BPMN-EXECUTION-call-activity-no-start-event is
@@ -97,7 +97,7 @@ mod BPMN-EXECUTION-call-activity-no-start-event is
     --- Generated rules
     rl [start_Event_0ucjl4y] :  < "call-activity-no-start-event" : ProcessSnapshot | tokens : ("start (Event_0ucjl4y)" T), signals : (SIG), subprocesses : (S), state : Running > => < "call-activity-no-start-event" : ProcessSnapshot | tokens : ("start_Subprocess (Flow_1qfreid)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [Subprocess_Activity_1xp155m_start] :  < "call-activity-no-start-event" : ProcessSnapshot | tokens : ("start_Subprocess (Flow_1qfreid)" T), signals : (SIG), subprocesses : (S), state : Running > => < "call-activity-no-start-event" : ProcessSnapshot | tokens : (T), signals : (none), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : ("A (Activity_0palugd)" "e1 (Gateway_1icv858)" "p1 (Gateway_1dk047s)"), signals : (none), subprocesses : (none), state : Running > S), state : Running > .
-    rl [Subprocess_Activity_1xp155m_end] :  < "call-activity-no-start-event" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : (none), signals : (SIG), subprocesses : (none), state : Terminated > S), state : Running > => < "call-activity-no-start-event" : ProcessSnapshot | tokens : ("Subprocess_end (Flow_1oeatxr)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [Subprocess_Activity_1xp155m_end] :  < "call-activity-no-start-event" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : (none), signals : (none), subprocesses : (none), state : Terminated > S), state : Running > => < "call-activity-no-start-event" : ProcessSnapshot | tokens : ("Subprocess_end (Flow_1oeatxr)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [A_Activity_0palugd_end] :  < "Subprocess" : ProcessSnapshot | tokens : ("A (Activity_0palugd)" T), signals : (SIG), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : ("A_endA (Flow_020erk8)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [e1_Gateway_1icv858] :  < "Subprocess" : ProcessSnapshot | tokens : ("e1 (Gateway_1icv858)" T), signals : (SIG), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : ("e1_e1_end (Flow_1h7se5m)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [endA_Event_17dw7l3] :  < "Subprocess" : ProcessSnapshot | tokens : ("A_endA (Flow_020erk8)" T), signals : (SIG), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : (T), signals : (none), subprocesses : (S), state : Running > .

@@ -81,7 +81,7 @@ mod BPMN-EXECUTION is
     rl [naturalTerminate] :
     < P : ProcessSnapshot | tokens : none, signals : SIG, subprocesses : none, state : Running >
                             =>
-    < P : ProcessSnapshot | tokens : none, signals : SIG, subprocesses : none, state : Terminated > .
+    < P : ProcessSnapshot | tokens : none, signals : none, subprocesses : none, state : Terminated > .
 endm
 
 mod BPMN-EXECUTION-two-end-events is
