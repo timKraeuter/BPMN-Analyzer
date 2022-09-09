@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -420,11 +421,16 @@ public class BPMNFileReader {
             return false;
         }
         // Instantiate is set as a camunda property using the camunda modeler.
-        CamundaProperties properties =
-                extensionElements.getElementsQuery().filterByType(CamundaProperties.class).singleResult();
+        List<CamundaProperties> propertiesList =
+                extensionElements.getElementsQuery().filterByType(CamundaProperties.class).list();
 
-        return properties.getCamundaProperties().stream().anyMatch(camundaProperty -> camundaProperty.getCamundaName().equals(
-                "instantiate") && camundaProperty.getCamundaValue().equals("true"));
+        return propertiesList.stream().anyMatch(
+                camundaProperties -> camundaProperties.getCamundaProperties().stream()
+                                                      .anyMatch(camundaProperty ->
+                                                                        camundaProperty.getCamundaName().equals(
+                                                                                "instantiate") &&
+                                                                        camundaProperty.getCamundaValue().equals(
+                                                                                "true")));
     }
 
     private EndEvent mapEndEvent(FlowNode flowNode) {
