@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class RuleGeneratorControllerTests {
     public static final String BPMN_FILE = "/ruleGeneratorController/name-with-numbers.bpmn";
     public static final String BPMN_FILE_ERROR = "/ruleGeneratorController/errorModel.bpmn";
+    public static final String BPMN_FILE_DEAD = "/ruleGeneratorController/dead.bpmn";
     public static final String LOCALHOST = "http://localhost:%s/%s";
     @LocalServerPort
     private int port;
@@ -99,10 +100,9 @@ class RuleGeneratorControllerTests {
     }
 
     @Test
-    void testCheckBPMNSpecificProperties() throws Exception {
+    void testCheckBPMNSpecificPropertiesNoDeadActivities() throws Exception {
         @SuppressWarnings("ConstantConditions") File bpmnModelFile =
                 new File(this.getClass().getResource(BPMN_FILE).getFile());
-        assertNotNull(bpmnModelFile);
 
         String response = makeMultipartRequest(bpmnModelFile);
         assertThat(response, is("{\"propertyCheckingResults\":[{\"name\":\"No dead activities\"," +
@@ -111,10 +111,20 @@ class RuleGeneratorControllerTests {
     }
 
     @Test
+    void testCheckBPMNSpecificPropertiesDeadActivities() throws Exception {
+        @SuppressWarnings("ConstantConditions") File bpmnModelFile =
+                new File(this.getClass().getResource(BPMN_FILE_DEAD).getFile());
+
+        String response = makeMultipartRequest(bpmnModelFile);
+        assertThat(response, is("{\"propertyCheckingResults\":[{\"name\":\"No dead activities\"," +
+                                "\"holds\":false,\"additionalInfo\":\"Dead activities: DEAD_1," +
+                                "DEAD_2\"}]}"));
+    }
+
+    @Test
     void testCheckBPMNSpecificPropertiesError() throws Exception {
         @SuppressWarnings("ConstantConditions") File bpmnModelFile =
                 new File(this.getClass().getResource(BPMN_FILE_ERROR).getFile());
-        assertNotNull(bpmnModelFile);
 
         String response = makeMultipartRequest(bpmnModelFile);
         assertThat(response, is("{\"message\":\"Intermediate throw events should have exactly one incoming sequence " +
