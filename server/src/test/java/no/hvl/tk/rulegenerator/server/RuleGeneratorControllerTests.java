@@ -24,7 +24,6 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -118,9 +117,8 @@ class RuleGeneratorControllerTests {
         assertNotNull(bpmnModelFile);
 
         String response = makeMultipartRequest(bpmnModelFile);
-        assertThat(response, containsString(
-                "\"status\":500,\"error\":\"Internal Server Error\"," +
-                "\"path\":\"/checkBPMNSpecificProperties\""));
+        assertThat(response, is("{\"message\":\"Intermediate throw events should have exactly one incoming sequence " +
+                                "flow!\"}"));
 
     }
 

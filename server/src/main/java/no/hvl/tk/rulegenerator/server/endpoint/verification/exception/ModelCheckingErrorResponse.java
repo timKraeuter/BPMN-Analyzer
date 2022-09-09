@@ -1,7 +1,6 @@
 package no.hvl.tk.rulegenerator.server.endpoint.verification.exception;
 
 public class ModelCheckingErrorResponse {
-
     private String message;
 
     public String getMessage() {
