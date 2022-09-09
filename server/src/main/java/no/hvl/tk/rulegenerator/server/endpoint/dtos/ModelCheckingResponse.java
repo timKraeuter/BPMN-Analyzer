@@ -1,9 +1,10 @@
 package no.hvl.tk.rulegenerator.server.endpoint.dtos;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModelCheckingResponse {
-    List<BPMNPropertyCheckingResult> propertyCheckingResults;
+    private final List<BPMNPropertyCheckingResult> propertyCheckingResults;
     public ModelCheckingResponse() {
         this.propertyCheckingResults = new ArrayList<>();
     }
@@ -14,9 +15,5 @@ public class ModelCheckingResponse {
 
     public List<BPMNPropertyCheckingResult> getPropertyCheckingResults() {
         return propertyCheckingResults;
-    }
-
-    public void setPropertyCheckingResults(List<BPMNPropertyCheckingResult> propertyCheckingResults) {
-        this.propertyCheckingResults = propertyCheckingResults;
     }
 }

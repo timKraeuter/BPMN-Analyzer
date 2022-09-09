@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+  <process id="Process_0e1esga">
+    <startEvent id="Event_0nn1jtg">
+      <outgoing>Flow_13c74b9</outgoing>
+    </startEvent>
+    <intermediateThrowEvent id="Event_0nc05x5">
+      <incoming>Flow_13c74b9</incoming>
+      <incoming>Flow_1umccl4</incoming>
+      <outgoing>Flow_1c3nl81</outgoing>
+    </intermediateThrowEvent>
+    <sequenceFlow id="Flow_13c74b9" sourceRef="Event_0nn1jtg" targetRef="Event_0nc05x5" />
+    <startEvent id="Event_0xp0spr">
+      <outgoing>Flow_1umccl4</outgoing>
+    </startEvent>
+    <sequenceFlow id="Flow_1umccl4" sourceRef="Event_0xp0spr" targetRef="Event_0nc05x5" />
+    <endEvent id="Event_1p94tyg">
+      <incoming>Flow_1c3nl81</incoming>
+    </endEvent>
+    <sequenceFlow id="Flow_1c3nl81" sourceRef="Event_0nc05x5" targetRef="Event_1p94tyg" />
+  </process>
+  <bpmndi:BPMNDiagram id="sid-74620812-92c4-44e5-949c-aa47393d3830">
+    <bpmndi:BPMNPlane id="sid-cdcae759-2af7-4a6d-bd02-53f3352a731d" bpmnElement="Process_0e1esga">
+      <bpmndi:BPMNEdge id="Flow_13c74b9_di" bpmnElement="Flow_13c74b9">
+        <omgdi:waypoint x="298" y="180" />
+        <omgdi:waypoint x="352" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1umccl4_di" bpmnElement="Flow_1umccl4">
+        <omgdi:waypoint x="298" y="240" />
+        <omgdi:waypoint x="325" y="240" />
+        <omgdi:waypoint x="325" y="180" />
+        <omgdi:waypoint x="352" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1c3nl81_di" bpmnElement="Flow_1c3nl81">
+        <omgdi:waypoint x="388" y="180" />
+        <omgdi:waypoint x="442" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0nn1jtg_di" bpmnElement="Event_0nn1jtg">
+        <omgdc:Bounds x="262" y="162" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0nc05x5_di" bpmnElement="Event_0nc05x5">
+        <omgdc:Bounds x="352" y="162" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0xp0spr_di" bpmnElement="Event_0xp0spr">
+        <omgdc:Bounds x="262" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1p94tyg_di" bpmnElement="Event_1p94tyg">
+        <omgdc:Bounds x="442" y="162" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+    <bpmndi:BPMNLabelStyle id="sid-e0502d32-f8d1-41cf-9c4a-cbb49fecf581">
+      <omgdc:Font name="Arial" size="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" />
+    </bpmndi:BPMNLabelStyle>
+    <bpmndi:BPMNLabelStyle id="sid-84cb49fd-2f7c-44fb-8950-83c3fa153d3b">
+      <omgdc:Font name="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" />
+    </bpmndi:BPMNLabelStyle>
+  </bpmndi:BPMNDiagram>
+</definitions>
