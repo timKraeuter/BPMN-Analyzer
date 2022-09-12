@@ -1,5 +1,5 @@
-# Groove_Rule_Generation
-Generates graph-transformation rules for the graph-transformation tool [Groove](https://groove.ewi.utwente.nl/about) from different behavioral languages (mostly BPMN).
+# Rewrite_Rule_Generation
+Generates graph-transformation rules for the graph-transformation tool [Groove](https://groove.ewi.utwente.nl/about) and rewrite rules for the [maude system](https://maude.cs.illinois.edu/w/index.php/The_Maude_System) from different behavioral languages (most importantly BPMN).
 
 ## Contained projects
 This repository contains multiple related projects.
