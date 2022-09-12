@@ -10,14 +10,14 @@ This repository contains multiple related projects.
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=timkraeuter_Groove_Rule_Generation_Generator&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=timkraeuter_Groove_Rule_Generation_Generator)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=timkraeuter_Groove_Rule_Generation_Generator&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=timkraeuter_Groove_Rule_Generation_Generator)
 
-The project **Generator** contains the source code to generate Groove rules from different behavioral languages, for example, BPMN.
+The project **Generator** contains the source code to generate Groove/Maude rules from different behavioral languages, for example, BPMN.
 ### Generation-ui
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=timkraeuter_Groove_Rule_Generation_Generation-UI&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=timkraeuter_Groove_Rule_Generation_Generation-UI)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=timkraeuter_Groove_Rule_Generation_Generation-UI&metric=bugs)](https://sonarcloud.io/summary/new_code?id=timkraeuter_Groove_Rule_Generation_Generation-UI)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=timkraeuter_Groove_Rule_Generation_Generation-UI&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=timkraeuter_Groove_Rule_Generation_Generation-UI)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=timkraeuter_Groove_Rule_Generation_Generation-UI&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=timkraeuter_Groove_Rule_Generation_Generation-UI)
 
-The project **Generation-ui** contains the ui code for the generation of Groove rules from BPMN files. Including model-checking of BPMN models.
+The project **Generation-ui** contains the ui code for the generation of Groove rules from BPMN files. Including model-checking of BPMN models. Maude generation is not yet accessible through the UI.
 ### Server
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=timkraeuter_Groove_Rule_Generation_Server&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=timkraeuter_Groove_Rule_Generation_Server)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=timkraeuter_Groove_Rule_Generation_Server&metric=coverage)](https://sonarcloud.io/summary/new_code?id=timkraeuter_Groove_Rule_Generation_Server)
@@ -28,7 +28,7 @@ The project **Generation-ui** contains the ui code for the generation of Groove 
 The project **server** contains the webservices used by the generation-ui for BPMN rule generation and model-checking.
 
 ## BPMN generation
-A demo version of the tool is also hosted [here](https://bpmn-analyzer.herokuapp.com/).
+A demo version of the tool is hosted [here](https://bpmn-analyzer.herokuapp.com/).
 
 [![Tool screenshot](./documentation/impl.png)](https://bpmn-analyzer.herokuapp.com/)
 
