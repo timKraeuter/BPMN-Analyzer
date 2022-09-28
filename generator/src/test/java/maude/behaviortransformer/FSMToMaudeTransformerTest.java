@@ -26,7 +26,7 @@ class FSMToMaudeTransformerTest implements MaudeTestHelper {
         fsm.addTransition(new Transition("turnGreen", red, green));
         fsm.addTransition(new Transition("turnRed", green, red));
 
-        ImmutableSet<StateAtomicProposition> props = ImmutableSet.of(new StateAtomicProposition(red),
+        Set<StateAtomicProposition> props = ImmutableSet.of(new StateAtomicProposition(red),
                                                                   new StateAtomicProposition(green));
         testFSMMaudeGeneration(fsm, props, "<> green(\"X\")");
         // Maude output:
@@ -61,7 +61,7 @@ class FSMToMaudeTransformerTest implements MaudeTestHelper {
         fsm.addTransition(new Transition("turn_amber", green, amber));
         fsm.addTransition(new Transition("turn_red", amber, red));
 
-        ImmutableSet<StateAtomicProposition> props = ImmutableSet.of(new StateAtomicProposition("redish", red),
+        Set<StateAtomicProposition> props = ImmutableSet.of(new StateAtomicProposition("redish", red),
                                                                      new StateAtomicProposition(green));
 
         testFSMMaudeGeneration(fsm, props, "<> redish(\"trafficLight\")");

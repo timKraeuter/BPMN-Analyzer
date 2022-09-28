@@ -13,8 +13,6 @@ endm
 mod FSM-BEHAVIOR-X is
     pr FSM-BEHAVIOR .
 
-    var X : String .
-
     --- Generated rules
     rl [turnGreen] :  < "X" : FSM | state : "red" > => < "X" : FSM | state : "green" > .
     rl [turnRed] :  < "X" : FSM | state : "green" > => < "X" : FSM | state : "red" > .

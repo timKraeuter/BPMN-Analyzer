@@ -13,8 +13,6 @@ endm
 mod FSM-BEHAVIOR-trafficLight is
     pr FSM-BEHAVIOR .
 
-    var X : String .
-
     --- Generated rules
     rl [turn_red_amber] :  < "trafficLight" : FSM | state : "red" > => < "trafficLight" : FSM | state : "red-amber" > .
     rl [turn_green] :  < "trafficLight" : FSM | state : "red-amber" > => < "trafficLight" : FSM | state : "green" > .

@@ -32,8 +32,6 @@ public class FSMToMaudeTransformer {
                                                   "mod FSM-BEHAVIOR-${name} is\r\n" +
                                                   "    pr FSM-BEHAVIOR .\r\n" +
                                                   "\r\n" +
-                                                  "    var X : String .\r\n" +
-                                                  "\r\n" +
                                                   "    --- Generated rules\r\n" +
                                                   "    ${rules}\r\n" +
                                                   "\r\n" +
