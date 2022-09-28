@@ -1,6 +1,5 @@
 package maude.behaviortransformer.bpmn;
 
-import maude.behaviortransformer.BPMNMaudeTestHelper;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

@@ -1,6 +1,5 @@
 package maude.behaviortransformer.bpmn;
 
-import maude.behaviortransformer.BPMNMaudeTestHelper;
 import maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import maude.behaviortransformer.bpmn.settings.MessagePersistence;
 import org.junit.jupiter.api.Test;

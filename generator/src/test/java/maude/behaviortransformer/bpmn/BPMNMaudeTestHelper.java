@@ -1,21 +1,17 @@
-package maude.behaviortransformer;
+package maude.behaviortransformer.bpmn;
 
 import behavior.bpmn.reader.BPMNFileReaderTestHelper;
-import maude.behaviortransformer.bpmn.BPMNToMaudeTransformer;
+import maude.behaviortransformer.MaudeTestHelper;
 import maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import maude.behaviortransformer.bpmn.settings.MessagePersistence;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.function.UnaryOperator;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper {
+public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper, MaudeTestHelper {
 
     String MAUDE_MODULE_FOLDER = "/bpmn/maude/";
     boolean REPLACE_EXPECTED_FILE_WITH_ACTUAL = false;
@@ -51,39 +47,10 @@ public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper {
                                                                         settings);
         String actualMaudeModule = transformer.generate(finalQuery);
 
-        String expectedMaudeModule = readExpectedMaudeModule(resourceFileName);
+        String expectedMaudeModule = readExpectedMaudeModule(MAUDE_MODULE_FOLDER, resourceFileName);
         if (REPLACE_EXPECTED_FILE_WITH_ACTUAL) {
-            replaceWithActualIfNeeded(resourceFileName, actualMaudeModule, expectedMaudeModule);
+            replaceWithActualIfNeeded(MAUDE_MODULE_FOLDER, resourceFileName, actualMaudeModule, expectedMaudeModule);
         }
         assertThat(actualMaudeModule, is(expectedMaudeModule));
-    }
-
-    private void replaceWithActualIfNeeded(
-            String resourceFileName,
-            String actualMaudeModule,
-            String expectedMaudeModule) throws IOException {
-        String expectedFileFilePath = "src/test/resources/" + MAUDE_MODULE_FOLDER + resourceFileName + ".maude";
-        if (!actualMaudeModule.equals(expectedMaudeModule)) {
-            // Only replace if reduced to true. Run model!
-            FileUtils.writeStringToFile(new File(expectedFileFilePath),
-                                        actualMaudeModule,
-                                        Charset.defaultCharset());
-            System.out.println("Replaced module with actual!");
-        }
-    }
-
-    default String readExpectedMaudeModule(String resourceFileName) throws IOException {
-        File maudeModel = getMaudeModuleFile(resourceFileName);
-        return FileUtils.readFileToString(maudeModel, StandardCharsets.UTF_8).replaceAll("\r?\n",
-                                                                                         "\r\n");
-        // force identical line separators;
-    }
-
-    private File getMaudeModuleFile(String resourceFileName) {
-        String resourcePath = MAUDE_MODULE_FOLDER + resourceFileName + ".maude";
-
-        @SuppressWarnings("ConstantConditions") File maudeModel =
-                new File(this.getClass().getResource(resourcePath).getFile());
-        return maudeModel;
     }
 }

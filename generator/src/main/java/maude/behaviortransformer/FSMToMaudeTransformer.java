@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class FSMToMaudeTransformer {
+    public static final String ENQUOTE = "\"%s\"";
     private final FiniteStateMachine finiteStateMachine;
     private final Set<StateAtomicProposition> atomicPropositions;
     private static final String MODULE_TEMPLATE = "load model-checker.maude .\r\n" +
@@ -110,7 +111,8 @@ public class FSMToMaudeTransformer {
 
     private MaudeObject createFSMinStateObject(String stateName) {
         Map<String, String> attributeValues = new HashMap<>();
-        attributeValues.put("state", String.format("\"%s\"", stateName));
-        return new MaudeObject("X", "FSM", attributeValues);
+        attributeValues.put("state", String.format(ENQUOTE, stateName));
+        String oiD = String.format(ENQUOTE, finiteStateMachine.getName());
+        return new MaudeObject(oiD, "FSM", attributeValues);
     }
 }

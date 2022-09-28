@@ -1,0 +1,51 @@
+load model-checker.maude .
+
+mod FSM-BEHAVIOR is
+    pr STRING .
+    pr CONFIGURATION .
+
+    op state :_ : String -> Attribute [ctor].
+    op FSM : -> Cid [ctor] .
+
+    subsort String < Oid .
+endm
+
+mod FSM-BEHAVIOR-X is
+    pr FSM-BEHAVIOR .
+
+    var X : String .
+
+    --- Generated rules
+    rl [turnGreen] :  < "X" : FSM | state : "red" > => < "X" : FSM | state : "green" > .
+    rl [turnRed] :  < "X" : FSM | state : "green" > => < "X" : FSM | state : "red" > .
+
+    --- Generated initial config representing the start state of the FSM.
+    op initial : -> Configuration .
+    eq initial = < "X" : FSM | state : "red" > .
+endm
+
+mod FSM-BEHAVIOR-X-PREDS is
+    pr FSM-BEHAVIOR-X .
+    pr SATISFACTION .
+    subsort Configuration < State .
+
+    var X : Oid .
+    var C : Configuration .
+    var P : Prop .
+
+    --- Generated atomic propositions
+    op red : Oid -> Prop .
+    eq < X : FSM | state : "red" > C |= red(X) = true .
+    op green : Oid -> Prop .
+    eq < X : FSM | state : "green" > C |= green(X) = true .
+
+    eq C |= P = false [owise] .
+endm
+
+mod FSM-CHECK is
+    pr FSM-BEHAVIOR-X-PREDS .
+    pr MODEL-CHECKER .
+    pr LTL-SIMPLIFIER .
+endm
+
+red modelCheck(initial, <> green("X")) .
