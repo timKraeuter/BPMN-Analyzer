@@ -46,6 +46,7 @@ mod BPMN-EXECUTION is
 
     --- Processes
     op ProcessSnapshot : -> Cid [ctor] .
+    op name :_ : String -> Attribute [ctor] .
     op tokens :_ : MSet -> Attribute [ctor] .
     op signals :_ : MSet -> Attribute [ctor] .
     op subprocesses :_ : Configuration -> Attribute [ctor] .
@@ -57,6 +58,7 @@ mod BPMN-EXECUTION is
     op signal : MSet MSet -> MSet .
     op terminate : Configuration -> Configuration .
 
+    var X : Oid .
     vars P P1 : String .
     vars T T1 : MSet . --- tokens
     vars SIG : MSet . --- signals
@@ -65,8 +67,8 @@ mod BPMN-EXECUTION is
     var PS : Configuration .
 
     eq signalAll(none, T) = none .
-    ceq signalAll(< P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : STATE > PS, T1) = < P : ProcessSnapshot | tokens : T, signals : (SIG signal(T, T1)), subprocesses : signalAll(S, T1), state : STATE > signalAll(PS, T1) if lessOrEqualSize(SIG, T1). --- maximum signal bound is the number of tokens.
-    eq signalAll(< P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : STATE > PS, T1) = < P : ProcessSnapshot | tokens : T, signals : (SIG), subprocesses : signalAll(S, T1), state : STATE > signalAll(PS, T1) [owise] .
+    ceq signalAll(< X : ProcessSnapshot | name : P, tokens : T, signals : SIG, subprocesses : S, state : STATE > PS, T1) = < X : ProcessSnapshot | name : P, tokens : T, signals : (SIG signal(T, T1)), subprocesses : signalAll(S, T1), state : STATE > signalAll(PS, T1) if lessOrEqualSize(SIG, T1). --- maximum signal bound is the number of tokens.
+    eq signalAll(< X : ProcessSnapshot | name : P, tokens : T, signals : SIG, subprocesses : S, state : STATE > PS, T1) = < X : ProcessSnapshot | name : P, tokens : T, signals : (SIG), subprocesses : signalAll(S, T1), state : STATE > signalAll(PS, T1) [owise] .
 
     ceq signal(P T, T1) = (P + "_signal") signal(T, T1) if contains(T1, P) .
     eq signal(P T, T1) = signal(T, T1) [owise] .
@@ -74,20 +76,21 @@ mod BPMN-EXECUTION is
 
     eq terminate(none) = none .
     --- NOOP if already terminated
-    eq terminate(< P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : Terminated >) = < P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : Terminated > .
+    eq terminate(< X : ProcessSnapshot | name : P, tokens : T, signals : SIG, subprocesses : S, state : Terminated >) = < X : ProcessSnapshot | name : P, tokens : T, signals : SIG, subprocesses : S, state : Terminated > .
     --- Terminate all subprocesses recursively
-    eq terminate(< P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : STATE > PS) = < P : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : terminate(S), state : Terminated > terminate(PS) .
+    eq terminate(< X : ProcessSnapshot | name : P, tokens : T, signals : SIG, subprocesses : S, state : STATE > PS) = < X : ProcessSnapshot | name : P, tokens : T, signals : SIG, subprocesses : terminate(S), state : Terminated > terminate(PS) .
 
     rl [naturalTerminate] :
-    < P : ProcessSnapshot | tokens : none, signals : SIG, subprocesses : none, state : Running >
+    < X : ProcessSnapshot | name : P, tokens : none, signals : SIG, subprocesses : none, state : Running >
                             =>
-    < P : ProcessSnapshot | tokens : none, signals : none, subprocesses : none, state : Terminated > .
+    < X : ProcessSnapshot | name : P, tokens : none, signals : none, subprocesses : none, state : Terminated > .
 endm
 
 mod BPMN-EXECUTION-subprocess-non-interrupting-boundary-events is
     pr BPMN-EXECUTION .
 
     --- Generated variables
+    vars o0 OT o1 : Oid . --- Oids
     vars T T1 : MSet . --- tokens
     vars SIG SIG1 : MSet . --- signals
     vars M : MSet . --- messages
@@ -96,29 +99,29 @@ mod BPMN-EXECUTION-subprocess-non-interrupting-boundary-events is
     vars PS : Configuration . --- other processes
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < "p1" : ProcessSnapshot | tokens : ("start (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("start_Subprocess (Flow_0rt92qb)" T), signals : (none), subprocesses : (S), state : Running > .
-    rl [end1_Event_1qc5h0s] :  < "p1" : ProcessSnapshot | tokens : ("Subprocess_end1 (Flow_0q4s0e5)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), signals : (none), subprocesses : (S), state : Running > .
-    rl [timer_end_Event_0t1g0d3] :  < "p1" : ProcessSnapshot | tokens : ("timer_timer_end (Flow_1rj4f8m)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), signals : (none), subprocesses : (S), state : Running > .
-    rl [signal_end_Event_07bjwow] :  < "p1" : ProcessSnapshot | tokens : ("signal_signal_end (Flow_0y8xnla)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), signals : (none), subprocesses : (S), state : Running > .
-    rl [message_end_Event_0dig3bl] :  < "p1" : ProcessSnapshot | tokens : ("message_message_end (Flow_0z1ut3g)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), signals : (none), subprocesses : (S), state : Running > .
-    rl [Subprocess_Activity_0zu4scn_start] :  < "p1" : ProcessSnapshot | tokens : ("start_Subprocess (Flow_0rt92qb)" T), signals : (SIG), subprocesses : (S), state : Running > => < "p1" : ProcessSnapshot | tokens : (T), signals : (none), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : ("start_sub (Event_0mt4q3x)"), signals : (none), subprocesses : (none), state : Running > S), state : Running > .
-    rl [Subprocess_Activity_0zu4scn_end] :  < "p1" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : (none), signals : (none), subprocesses : (none), state : Terminated > S), state : Running > => < "p1" : ProcessSnapshot | tokens : ("Subprocess_end1 (Flow_0q4s0e5)" T), signals : (none), subprocesses : (S), state : Running > .
-    rl [start_sub_Event_0mt4q3x] :  < "Subprocess" : ProcessSnapshot | tokens : ("start_sub (Event_0mt4q3x)" T), signals : (SIG), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : ("start_sub_Subactivity (Flow_1uendr0)" T), signals : (none), subprocesses : (S), state : Running > .
-    rl [Subactivity_Activity_0l8md1o_start] :  < "Subprocess" : ProcessSnapshot | tokens : ("start_sub_Subactivity (Flow_1uendr0)" T), signals : (SIG), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : ("Subactivity (Activity_0l8md1o)" T), signals : (none), subprocesses : (S), state : Running > .
-    rl [Subactivity_Activity_0l8md1o_end] :  < "Subprocess" : ProcessSnapshot | tokens : ("Subactivity (Activity_0l8md1o)" T), signals : (SIG), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : ("Subactivity_end_sub (Flow_14tryz7)" T), signals : (none), subprocesses : (S), state : Running > .
-    rl [end_sub_Event_1jup1bz] :  < "Subprocess" : ProcessSnapshot | tokens : ("Subactivity_end_sub (Flow_14tryz7)" T), signals : (SIG), subprocesses : (S), state : Running > => < "Subprocess" : ProcessSnapshot | tokens : (T), signals : (none), subprocesses : (S), state : Running > .
-    rl [timer_Event_0jlum9m] :  < "p1" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : (T1), signals : (SIG1), subprocesses : (S1), state : Running > S2), state : Running > => < "p1" : ProcessSnapshot | tokens : ("timer_timer_end (Flow_1rj4f8m)" T), signals : (none), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : (T1), signals : (SIG1), subprocesses : (S1), state : Running > S2), state : Running > .
-    rl [message_Event_0izwujm] :  < "subprocess-non-interrupting-boundary-events" : BPMNSystem | messages : ("interruptMessage_message (Flow_0x1ey4c)" M), processes : (< "p1" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : (T1), signals : (SIG1), subprocesses : (S1), state : Running > S2), state : Running > P) > => < "subprocess-non-interrupting-boundary-events" : BPMNSystem | messages : (M), processes : (< "p1" : ProcessSnapshot | tokens : ("message_message_end (Flow_0z1ut3g)" T), signals : (none), subprocesses : (< "Subprocess" : ProcessSnapshot | tokens : (T1), signals : (SIG1), subprocesses : (S1), state : Running > S2), state : Running > P) > .
-    rl [start_trigger_Event_0ud5o1c] :  < "interruptTrigger" : ProcessSnapshot | tokens : ("start_trigger (Event_0ud5o1c)" T), signals : (SIG), subprocesses : (S), state : Running > => < "interruptTrigger" : ProcessSnapshot | tokens : ("start_trigger_signalOrMessage (Flow_0eyi3rv)" T), signals : (none), subprocesses : (S), state : Running > .
-    rl [signalOrMessage_Gateway_0wsn3ff] :  < "interruptTrigger" : ProcessSnapshot | tokens : ("start_trigger_signalOrMessage (Flow_0eyi3rv)" T), signals : (SIG), subprocesses : (S), state : Running > => < "interruptTrigger" : ProcessSnapshot | tokens : ("signalOrMessage_interruptMessage (Flow_171ay5a)" T), signals : (none), subprocesses : (S), state : Running > .
-    rl [signalOrMessage_Gateway_0wsn3ff] :  < "interruptTrigger" : ProcessSnapshot | tokens : ("start_trigger_signalOrMessage (Flow_0eyi3rv)" T), signals : (SIG), subprocesses : (S), state : Running > => < "interruptTrigger" : ProcessSnapshot | tokens : ("signalOrMessage_interruptSignal (Flow_1wwo81f)" T), signals : (none), subprocesses : (S), state : Running > .
-    rl [interruptMessage_Event_0ajr2wq] :  < "subprocess-non-interrupting-boundary-events" : BPMNSystem | messages : (M), processes : (< "interruptTrigger" : ProcessSnapshot | tokens : ("signalOrMessage_interruptMessage (Flow_171ay5a)" T), signals : (SIG), subprocesses : (S), state : Running > P) > => < "subprocess-non-interrupting-boundary-events" : BPMNSystem | messages : ("interruptMessage_message (Flow_0x1ey4c)" M), processes : (< "interruptTrigger" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (S), state : Running > P) > .
-    rl [interruptSignal_Event_1p4o1ul] :  < "subprocess-non-interrupting-boundary-events" : BPMNSystem | messages : (M), processes : (< "interruptTrigger" : ProcessSnapshot | tokens : ("signalOrMessage_interruptSignal (Flow_1wwo81f)" T), signals : (SIG), subprocesses : (S), state : Running > PS) > => < "subprocess-non-interrupting-boundary-events" : BPMNSystem | messages : (M), processes : (signalAll(< "interruptTrigger" : ProcessSnapshot | tokens : (T), signals : (SIG), subprocesses : (S), state : Running > PS, "Subprocess (Activity_0zu4scn)")) > .
+    rl [start_StartEvent_1] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("start (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : ("start_Subprocess (Flow_0rt92qb)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [end1_Event_1qc5h0s] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("Subprocess_end1 (Flow_0q4s0e5)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : (T), signals : (none), subprocesses : (S), state : Running > .
+    rl [timer_end_Event_0t1g0d3] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("timer_timer_end (Flow_1rj4f8m)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : (T), signals : (none), subprocesses : (S), state : Running > .
+    rl [signal_end_Event_07bjwow] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("signal_signal_end (Flow_0y8xnla)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : (T), signals : (none), subprocesses : (S), state : Running > .
+    rl [message_end_Event_0dig3bl] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("message_message_end (Flow_0z1ut3g)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : (T), signals : (none), subprocesses : (S), state : Running > .
+    rl [Subprocess_Activity_0zu4scn_start] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("start_Subprocess (Flow_0rt92qb)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : (T), signals : (none), subprocesses : (< "Subprocess" : ProcessSnapshot | name : "Subprocess", tokens : ("start_sub (Event_0mt4q3x)"), signals : (none), subprocesses : (none), state : Running > S), state : Running > .
+    rl [Subprocess_Activity_0zu4scn_end] :  < o0 : ProcessSnapshot | name : "p1", tokens : (T), signals : (SIG), subprocesses : (< OT : ProcessSnapshot | name : "Subprocess", tokens : (none), signals : (none), subprocesses : (none), state : Terminated > S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : ("Subprocess_end1 (Flow_0q4s0e5)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [start_sub_Event_0mt4q3x] :  < o0 : ProcessSnapshot | name : "Subprocess", tokens : ("start_sub (Event_0mt4q3x)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "Subprocess", tokens : ("start_sub_Subactivity (Flow_1uendr0)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [Subactivity_Activity_0l8md1o_start] :  < o0 : ProcessSnapshot | name : "Subprocess", tokens : ("start_sub_Subactivity (Flow_1uendr0)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "Subprocess", tokens : ("Subactivity (Activity_0l8md1o)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [Subactivity_Activity_0l8md1o_end] :  < o0 : ProcessSnapshot | name : "Subprocess", tokens : ("Subactivity (Activity_0l8md1o)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "Subprocess", tokens : ("Subactivity_end_sub (Flow_14tryz7)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [end_sub_Event_1jup1bz] :  < o0 : ProcessSnapshot | name : "Subprocess", tokens : ("Subactivity_end_sub (Flow_14tryz7)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "Subprocess", tokens : (T), signals : (none), subprocesses : (S), state : Running > .
+    rl [timer_Event_0jlum9m] :  < o0 : ProcessSnapshot | name : "p1", tokens : (T), signals : (SIG), subprocesses : (< o1 : ProcessSnapshot | name : "Subprocess", tokens : (T1), signals : (SIG1), subprocesses : (S1), state : Running > S2), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : ("timer_timer_end (Flow_1rj4f8m)" T), signals : (none), subprocesses : (< o1 : ProcessSnapshot | name : "Subprocess", tokens : (T1), signals : (SIG1), subprocesses : (S1), state : Running > S2), state : Running > .
+    rl [message_Event_0izwujm] :  < "subprocess-non-interrupting-boundary-events" : BPMNSystem | messages : ("interruptMessage_message (Flow_0x1ey4c)" M), processes : (< o0 : ProcessSnapshot | name : "p1", tokens : (T), signals : (SIG), subprocesses : (< o1 : ProcessSnapshot | name : "Subprocess", tokens : (T1), signals : (SIG1), subprocesses : (S1), state : Running > S2), state : Running > P) > => < "subprocess-non-interrupting-boundary-events" : BPMNSystem | messages : (M), processes : (< o0 : ProcessSnapshot | name : "p1", tokens : ("message_message_end (Flow_0z1ut3g)" T), signals : (none), subprocesses : (< o1 : ProcessSnapshot | name : "Subprocess", tokens : (T1), signals : (SIG1), subprocesses : (S1), state : Running > S2), state : Running > P) > .
+    rl [start_trigger_Event_0ud5o1c] :  < o0 : ProcessSnapshot | name : "interruptTrigger", tokens : ("start_trigger (Event_0ud5o1c)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "interruptTrigger", tokens : ("start_trigger_signalOrMessage (Flow_0eyi3rv)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [signalOrMessage_Gateway_0wsn3ff] :  < o0 : ProcessSnapshot | name : "interruptTrigger", tokens : ("start_trigger_signalOrMessage (Flow_0eyi3rv)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "interruptTrigger", tokens : ("signalOrMessage_interruptMessage (Flow_171ay5a)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [signalOrMessage_Gateway_0wsn3ff] :  < o0 : ProcessSnapshot | name : "interruptTrigger", tokens : ("start_trigger_signalOrMessage (Flow_0eyi3rv)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "interruptTrigger", tokens : ("signalOrMessage_interruptSignal (Flow_1wwo81f)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [interruptMessage_Event_0ajr2wq] :  < "subprocess-non-interrupting-boundary-events" : BPMNSystem | messages : (M), processes : (< o0 : ProcessSnapshot | name : "interruptTrigger", tokens : ("signalOrMessage_interruptMessage (Flow_171ay5a)" T), signals : (SIG), subprocesses : (S), state : Running > P) > => < "subprocess-non-interrupting-boundary-events" : BPMNSystem | messages : ("interruptMessage_message (Flow_0x1ey4c)" M), processes : (< o0 : ProcessSnapshot | name : "interruptTrigger", tokens : (T), signals : (SIG), subprocesses : (S), state : Running > P) > .
+    rl [interruptSignal_Event_1p4o1ul] :  < "subprocess-non-interrupting-boundary-events" : BPMNSystem | messages : (M), processes : (< o0 : ProcessSnapshot | name : "interruptTrigger", tokens : ("signalOrMessage_interruptSignal (Flow_1wwo81f)" T), signals : (SIG), subprocesses : (S), state : Running > PS) > => < "subprocess-non-interrupting-boundary-events" : BPMNSystem | messages : (M), processes : (signalAll(< o0 : ProcessSnapshot | name : "interruptTrigger", tokens : (T), signals : (SIG), subprocesses : (S), state : Running > PS, "Subprocess (Activity_0zu4scn)")) > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "subprocess-non-interrupting-boundary-events" : BPMNSystem | messages : (none), processes : (< "p1" : ProcessSnapshot | tokens : ("start (StartEvent_1)"), signals : (none), subprocesses : (none), state : Running >
-    < "interruptTrigger" : ProcessSnapshot | tokens : ("start_trigger (Event_0ud5o1c)"), signals : (none), subprocesses : (none), state : Running >) > .
+    eq init = < "subprocess-non-interrupting-boundary-events" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "p1", tokens : ("start (StartEvent_1)"), signals : (none), subprocesses : (none), state : Running >
+    < "1" : ProcessSnapshot | name : "interruptTrigger", tokens : ("start_trigger (Event_0ud5o1c)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is
@@ -129,6 +132,7 @@ mod BPMN-PREDS is
     var C : Configuration .
     var P : Prop .
     var X Y : Oid .
+    var N : String . --- name
     var T : MSet . --- tokens
     var SIG : MSet . --- signals
     var M : MSet . --- messages
@@ -138,11 +142,11 @@ mod BPMN-PREDS is
 
 
     op allTerminated : -> Prop .
-    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : T, signals : SIG, subprocesses : S, state : Running > C) > |= allTerminated = false .
+    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | name : N, tokens : T, signals : SIG, subprocesses : S, state : Running > C) > |= allTerminated = false .
     eq < X : BPMNSystem | messages : M, processes : (C) > |= allTerminated = true [owise] .
 
     op unsafe : -> Prop .
-    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | tokens : (T1 T1 T), signals : SIG, subprocesses : S, state : State > C) > |= unsafe = true .
+    eq < X : BPMNSystem | messages : M, processes : (< Y : ProcessSnapshot | name : N, tokens : (T1 T1 T), signals : SIG, subprocesses : S, state : State > C) > |= unsafe = true .
     eq < X : BPMNSystem | messages : M, processes : (C) > |= unsafe = false [owise] .
 
     --- Generated atomic propositions
