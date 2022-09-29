@@ -5,6 +5,7 @@ mod FSM-BEHAVIOR is
     pr CONFIGURATION .
 
     op state :_ : String -> Attribute [ctor].
+    op name :_ : String -> Attribute [ctor].
     op FSM : -> Cid [ctor] .
 
     subsort String < Oid .
@@ -13,15 +14,17 @@ endm
 mod FSM-BEHAVIOR-trafficLight is
     pr FSM-BEHAVIOR .
 
+    var X : String .
+
     --- Generated rules
-    rl [turn_red_amber] :  < "trafficLight" : FSM | state : "red" > => < "trafficLight" : FSM | state : "red-amber" > .
-    rl [turn_green] :  < "trafficLight" : FSM | state : "red-amber" > => < "trafficLight" : FSM | state : "green" > .
-    rl [turn_amber] :  < "trafficLight" : FSM | state : "green" > => < "trafficLight" : FSM | state : "amber" > .
-    rl [turn_red] :  < "trafficLight" : FSM | state : "amber" > => < "trafficLight" : FSM | state : "red" > .
+    rl [turn_red_amber] :  < X : FSM | name : "trafficLight", state : "red" > => < X : FSM | name : "trafficLight", state : "red-amber" > .
+    rl [turn_green] :  < X : FSM | name : "trafficLight", state : "red-amber" > => < X : FSM | name : "trafficLight", state : "green" > .
+    rl [turn_amber] :  < X : FSM | name : "trafficLight", state : "green" > => < X : FSM | name : "trafficLight", state : "amber" > .
+    rl [turn_red] :  < X : FSM | name : "trafficLight", state : "amber" > => < X : FSM | name : "trafficLight", state : "red" > .
 
     --- Generated initial config representing the start state of the FSM.
     op initial : -> Configuration .
-    eq initial = < "trafficLight" : FSM | state : "red" > .
+    eq initial = < "1" : FSM | name : "trafficLight", state : "red" > .
 endm
 
 mod FSM-BEHAVIOR-trafficLight-PREDS is
@@ -35,9 +38,9 @@ mod FSM-BEHAVIOR-trafficLight-PREDS is
 
     --- Generated atomic propositions
     op redish : Oid -> Prop .
-    eq < X : FSM | state : "red" > C |= redish(X) = true .
+    eq < X : FSM | name : "trafficLight", state : "red" > C |= redish(X) = true .
     op green : Oid -> Prop .
-    eq < X : FSM | state : "green" > C |= green(X) = true .
+    eq < X : FSM | name : "trafficLight", state : "green" > C |= green(X) = true .
 
     eq C |= P = false [owise] .
 endm
@@ -48,4 +51,4 @@ mod FSM-CHECK is
     pr LTL-SIMPLIFIER .
 endm
 
-red modelCheck(initial, <> redish("trafficLight")) .
+red modelCheck(initial, <> redish("1")) .

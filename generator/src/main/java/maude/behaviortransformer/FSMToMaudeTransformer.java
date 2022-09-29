@@ -24,6 +24,7 @@ public class FSMToMaudeTransformer {
                                                   "    pr CONFIGURATION .\r\n" +
                                                   "\r\n" +
                                                   "    op state :_ : String -> Attribute [ctor].\r\n" +
+                                                  "    op name :_ : String -> Attribute [ctor].\r\n" +
                                                   "    op FSM : -> Cid [ctor] .\r\n" +
                                                   "\r\n" +
                                                   "    subsort String < Oid .\r\n" +
@@ -32,14 +33,16 @@ public class FSMToMaudeTransformer {
                                                   "mod FSM-BEHAVIOR-${name} is\r\n" +
                                                   "    pr FSM-BEHAVIOR .\r\n" +
                                                   "\r\n" +
+                                                  "    var X : String .\r\n" +
+                                                  "\r\n" +
                                                   "    --- Generated rules\r\n" +
                                                   "    ${rules}\r\n" +
                                                   "\r\n" +
                                                   "    --- Generated initial config representing the start state of " +
                                                   "the FSM.\r\n" +
                                                   "    op initial : -> Configuration .\r\n" +
-                                                  "    eq initial = < \"${name}\" : FSM | state : \"${startState}\" >" +
-                                                  " .\r\n" +
+                                                  "    eq initial = < \"1\" : FSM | name : \"${name}\", state : " +
+                                                  "\"${startState}\" > .\r\n" +
                                                   "endm\r\n" +
                                                   "\r\n" +
                                                   "mod FSM-BEHAVIOR-${name}-PREDS is\r\n" +
@@ -83,8 +86,9 @@ public class FSMToMaudeTransformer {
 
     private String makeAtomicPropositions() {
         return this.atomicPropositions.stream().map(stateAtomicProposition -> String.format(
-                "op %s : Oid -> Prop .\r\n    eq < X : FSM | state : \"%s\" > C |= %s" + "(X) = true .",
+                "op %s : Oid -> Prop .\r\n    eq < X : FSM | name : \"%s\", state : \"%s\" > C |= %s" + "(X) = true .",
                 stateAtomicProposition.getName(),
+                finiteStateMachine.getName(),
                 stateAtomicProposition.getState().getName(),
                 stateAtomicProposition.getName()))
                                                .collect(Collectors.joining("\r\n    "));
@@ -109,8 +113,8 @@ public class FSMToMaudeTransformer {
 
     private MaudeObject createFSMinStateObject(String stateName) {
         Map<String, String> attributeValues = new HashMap<>();
+        attributeValues.put("name", String.format(ENQUOTE, finiteStateMachine.getName()));
         attributeValues.put("state", String.format(ENQUOTE, stateName));
-        String oiD = String.format(ENQUOTE, finiteStateMachine.getName());
-        return new MaudeObject(oiD, "FSM", attributeValues);
+        return new MaudeObject("X", "FSM", attributeValues);
     }
 }
