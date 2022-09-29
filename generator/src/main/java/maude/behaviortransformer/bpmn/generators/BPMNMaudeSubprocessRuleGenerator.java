@@ -90,10 +90,12 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
         ruleAdditions.accept(getRuleBuilder());
 
         // Setup vars
+        String oid = O + 1;
         String anyOtherTokens1 = ANY_TOKENS + "1";
         String anyOtherSignals1 = ANY_SIGNALS + "1";
         String anyOtherSubprocesses1 = ANY_SUBPROCESSES + "1";
         String anyOtherSubprocesses2 = ANY_SUBPROCESSES + "2";
+        ruleBuilder.addVar(OIDS, OID, oid);
         ruleBuilder.addVar(TOKENS, MSET, anyOtherTokens1);
         ruleBuilder.addVar(SIGNALS, MSET, anyOtherSignals1);
         ruleBuilder.addVar(SUBPROCESSES, CONFIGURATION, anyOtherSubprocesses1);
@@ -102,6 +104,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
         // Setup pre
         // Subprocess must be running
         String subprocesses = createProcessSnapshotObjectWithoutParents(callActivity.getSubProcessModel(),
+                                                                        oid,
                                                                         anyOtherSubprocesses1,
                                                                         anyOtherTokens1,
                                                                         anyOtherSignals1,
@@ -156,6 +159,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
                                            .collect(Collectors.joining(" "));
         }
         MaudeObject subProcess = createProcessSnapshotObjectWithoutParents(callActivity.getSubProcessModel(),
+                                                                           String.format(ENQUOTE_FORMAT, callActivity.getSubProcessModel().getName()),
                                                                            NONE,
                                                                            subProcessTokens,
                                                                            NONE,

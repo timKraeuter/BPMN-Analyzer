@@ -134,7 +134,7 @@ public class BPMNMaudeRuleBuilder extends MaudeRuleBuilderBase<BPMNMaudeRuleBuil
 
     public MaudeObject createBPMNSystem(String processes, String messages) {
         String name = collaboration.getName().isBlank() ? "unnamedCollaboration" : collaboration.getName();
-        return objectBuilder.oid(name)
+        return objectBuilder.oid(String.format(ENQUOTE_FORMAT, name))
                             .oidType(BPMN_SYSTEM)
                             .addAttributeValue(MESSAGES, String.format(BRACKET_FORMAT, messages))
                             .addAttributeValue(PROCESSES, String.format(BRACKET_FORMAT, processes))

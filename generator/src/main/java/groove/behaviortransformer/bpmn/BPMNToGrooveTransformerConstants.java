@@ -2,7 +2,7 @@ package groove.behaviortransformer.bpmn;
 
 import static groove.behaviortransformer.GrooveTransformer.TYPE;
 
-public class BPMNToGrooveTransformerConstants {
+public final class BPMNToGrooveTransformerConstants {
     // Rule prefixes/suffixes
     public static final String END = "_end";
     public static final String THROW = "Throw_";
@@ -19,11 +19,14 @@ public class BPMNToGrooveTransformerConstants {
     public static final String POSITION = "position";
     public static final String STATE = "state";
     public static final String TOKENS = "tokens";
+    public static final String OIDS = "Oids";
     public static final String SIGNALS = "signals";
     public static final String MESSAGES = "messages";
     public static final String SUBPROCESSES = "subprocesses";
     public static final String MSET = "MSet";
     public static final String CONFIGURATION = "Configuration";
+    public static final String OID = "Oid";
+    public static final String O = "o";
     public static final String DECISIONS = "decisions";
     public static final String DECISION = "decision";
     public static final String SUBPROCESS = "subprocess";

@@ -83,8 +83,16 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
     default MaudeObject createTerminatedProcessSnapshot(AbstractProcess process) {
+        String oid = "OT";
+        getRuleBuilder().addVar(OIDS, OID, oid);
         // Is a subprocess. Thus, should not have parents!
-        return createProcessSnapshotObjectWithoutParents(process, NONE, NONE, NONE, TERMINATED);
+        return createProcessSnapshotObjectWithoutParents(process, oid, NONE, NONE, NONE, TERMINATED);
+    }
+
+    default MaudeObject createProcessSnapshotObjectNoSubProcessAndSignals(AbstractProcess process,
+                                                                          String oid,
+                                                                          String tokens) {
+        return createProcessSnapshotObject(process, oid, NONE, tokens, NONE, RUNNING);
     }
 
     default MaudeObject createProcessSnapshotObjectNoSubProcessAndSignals(AbstractProcess process,
@@ -114,6 +122,7 @@ public interface BPMNToMaudeTransformerHelper {
                                                                String subprocesses,
                                                                String tokens) {
         MaudeObject processObject = createProcessSnapshotObjectWithoutParents(process,
+                                                                              O + 0,
                                                                               subprocesses,
                                                                               tokens,
                                                                               ANY_SIGNALS,
@@ -126,14 +135,17 @@ public interface BPMNToMaudeTransformerHelper {
         if (parentProcess.equals(process)) {
             return processObject;
         }
+        String oid = O + counter;
         String anySubprocesses = ANY_SUBPROCESSES + counter;
         String anyTokens = ANY_TOKENS + counter;
         String anySignals = ANY_SIGNALS + counter;
+        getRuleBuilder().addVar(OIDS, OID, oid);
         getRuleBuilder().addVar(TOKENS, MSET, anyTokens);
         getRuleBuilder().addVar(SIGNALS, MSET, anySignals);
         getRuleBuilder().addVar(SUBPROCESSES, CONFIGURATION, anySubprocesses);
 
         MaudeObject parentProcessObject = createProcessSnapshotObjectWithoutParents(parentProcess,
+                                                                                    oid,
                                                                                     processObject.generateObjectString() +
                                                                                     WHITE_SPACE +
                                                                                     anySubprocesses,
@@ -148,9 +160,20 @@ public interface BPMNToMaudeTransformerHelper {
                                                     String tokens,
                                                     String signals,
                                                     String state) {
+        return createProcessSnapshotObject(process, O + 0, subprocesses, tokens, signals, state);
+    }
 
-        MaudeObject processObject = getObjectBuilder().oid(process.getName())
+    default MaudeObject createProcessSnapshotObject(AbstractProcess process,
+                                                    String oid,
+                                                    String subprocesses,
+                                                    String tokens,
+                                                    String signals,
+                                                    String state) {
+
+        MaudeObject processObject = getObjectBuilder()
+                                              .oid(oid)
                                               .oidType("ProcessSnapshot")
+                                              .addAttributeValue("name", String.format(ENQUOTE_FORMAT, process.getName()))
                                               .addAttributeValue("tokens", String.format(BRACKET_FORMAT, tokens))
                                               .addAttributeValue("signals", String.format(BRACKET_FORMAT, signals))
                                               .addAttributeValue("subprocesses",
@@ -165,12 +188,14 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
     default MaudeObject createProcessSnapshotObjectWithoutParents(AbstractProcess process,
+                                                                  String oid,
                                                                   String subprocesses,
                                                                   String tokens,
                                                                   String signals,
                                                                   String state) {
-        return getObjectBuilder().oid(process.getName())
+        return getObjectBuilder().oid(oid)
                                  .oidType("ProcessSnapshot")
+                                 .addAttributeValue("name", String.format(ENQUOTE_FORMAT, process.getName()))
                                  .addAttributeValue("tokens", String.format(BRACKET_FORMAT, tokens))
                                  .addAttributeValue("signals", String.format(BRACKET_FORMAT, signals))
                                  .addAttributeValue("subprocesses", String.format(BRACKET_FORMAT, subprocesses))

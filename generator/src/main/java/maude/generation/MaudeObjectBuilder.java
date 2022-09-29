@@ -3,8 +3,6 @@ package maude.generation;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ENQUOTE_FORMAT;
-
 public class MaudeObjectBuilder {
 
     private String oid;
@@ -16,7 +14,7 @@ public class MaudeObjectBuilder {
     }
 
     public MaudeObjectBuilder oid(String oid) {
-        this.oid = String.format(ENQUOTE_FORMAT, oid); // oids are always enquoted.
+        this.oid = oid;
         return this;
     }
 
