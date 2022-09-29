@@ -16,7 +16,7 @@ class MaudeObjectTest {
                                                           .addAttributeValue("state", "\"red\"")
                                                           .build();
 
-        assertThat(maudeObject.generateObjectString(), is("< \"X\" : FSM | state : \"red\" >"));
+        assertThat(maudeObject.generateObjectString(), is("< X : FSM | state : \"red\" >"));
     }
 
     @Test
@@ -29,7 +29,7 @@ class MaudeObjectTest {
                                                           .addAttributeValue("state", "Running")
                                                           .build();
 
-        assertThat(maudeObject.generateObjectString(), is("< \"sequential-activities\" : ProcessSnapshot | tokens : " +
+        assertThat(maudeObject.generateObjectString(), is("< sequential-activities : ProcessSnapshot | tokens : " +
                                                           "(\"sequential-activities_start\"), subprocesses : none, state : " +
                                                           "Running >"));
     }
