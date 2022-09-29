@@ -44,8 +44,8 @@ public interface BPMNToMaudeTransformerHelper {
 
     default String getSignalOccurrenceForFlowNode(FlowNode flowNode) {
         return getTokenOrSignalOccurrenceForFlowNode(flowNode,
-                                                     SIGNAL_OCCURENCE_FORMAT_ONLY_ID,
-                                                     SIGNAL_OCCURENCE_FORMAT);
+                                                     SIGNAL_OCCURRENCE_FORMAT_ONLY_ID,
+                                                     SIGNAL_OCCURRENCE_FORMAT);
     }
 
     private String getTokenOrSignalOccurrenceForFlowNode(FlowNode flowNode,
@@ -58,7 +58,7 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
     default String getSignalOccurrenceForSequenceFlow(SequenceFlow sequenceFlow) {
-        return getTokenOrSignalOccurrenceForSequenceFlow(sequenceFlow, SIGNAL_OCCURENCE_FORMAT);
+        return getTokenOrSignalOccurrenceForSequenceFlow(sequenceFlow, SIGNAL_OCCURRENCE_FORMAT);
     }
 
     private String getTokenOrSignalOccurrenceForSequenceFlow(SequenceFlow sequenceFlow, String signalOccurenceFormat) {

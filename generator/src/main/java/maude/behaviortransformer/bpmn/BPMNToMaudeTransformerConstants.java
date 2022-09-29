@@ -25,9 +25,9 @@ public final class BPMNToMaudeTransformerConstants {
     public static final String RULE_NAME_NAME_ID_FORMAT = "%s_%s";
     public static final String RULE_NAME_ID_FORMAT = "%s";
     public static final String TOKEN_FORMAT = "\"%s (%s)\""; // Name of the FlowElement followed by id.
-    public static final String SIGNAL_OCCURENCE_FORMAT = "\"%s (%s)_signal\"";
+    public static final String SIGNAL_OCCURRENCE_FORMAT = "\"%s (%s)_signal\"";
     public static final String TOKEN_FORMAT_ONLY_ID = "\"%s\""; // Name of the FlowElement followed by id.
-    public static final String SIGNAL_OCCURENCE_FORMAT_ONLY_ID = "\"%s_signal\""; // Name of the FlowElement followed by id.
+    public static final String SIGNAL_OCCURRENCE_FORMAT_ONLY_ID = "\"%s_signal\""; // Name of the FlowElement followed by id.
     public static final String ENQUOTE_FORMAT = "\"%s\""; // Id of the FlowElement.
     public static final String BRACKET_FORMAT = "(%s)";
     public static final String RUNNING = "Running";
