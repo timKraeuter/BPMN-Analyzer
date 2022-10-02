@@ -61,12 +61,12 @@ class FSMToMaudeTransformerTest implements MaudeTestHelper {
         fsm.addTransition(new Transition("turn_amber", green, amber));
         fsm.addTransition(new Transition("turn_red", amber, red));
 
-        Set<StateAtomicProposition> props = ImmutableSet.of(new StateAtomicProposition("redish", red),
+        Set<StateAtomicProposition> props = ImmutableSet.of(new StateAtomicProposition("red", red),
                                                                      new StateAtomicProposition(green));
 
-        testFSMMaudeGeneration(fsm, props, "<> redish(\"1\")");
+        testFSMMaudeGeneration(fsm, props, "<> red(\"1\")");
         // Maude output:
-        // reduce in FSM-CHECK : modelCheck(initial, <> redish("1")) .
+        // reduce in FSM-CHECK : modelCheck(initial, <> red("1")) .
         // rewrites: 8 in 0ms cpu (0ms real) (~ rewrites/second)
         // result Bool: true
     }
