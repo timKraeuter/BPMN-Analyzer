@@ -8,7 +8,6 @@ import behavior.bpmn.activities.tasks.AbstractTask;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
-import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import behavior.bpmn.events.BoundaryEvent;
 import groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import groove.graph.GrooveNode;
@@ -53,28 +52,15 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
     public void createReceiveTaskRulesForProcess(AbstractProcess process, ReceiveTask receiveTask) {
         // Create boundary event rules
         createBoundaryEventRules(process, receiveTask);
-
-        if (receiveTask.isInstantiate()) {
-            if (receiveTask.getIncomingFlows().findAny().isPresent()) {
-                throw new BPMNRuntimeException("Instantiate receive tasks should not have incoming sequence " +
-                                               "flows!");
-            }
-            this.createInstantiateReceiveTaskRule(process, receiveTask);
-            return;
+        if (!receiveTask.isInstantiate() && !isAfterInstantiateEventBasedGateway(receiveTask)) {
+            //  Start tasks rules not needed for instantiate receive tasks/ receive tasks after instantiate gateways.
+            receiveTask.getIncomingFlows().forEach(incomingFlow -> this.createReceiveTaskStartRule(process,
+                                                                                                   receiveTask,
+                                                                                                   incomingFlow));
         }
-        if (isAfterInstantiateEventBasedGateway(receiveTask)) {
-            // Process instantiation is handled in the throw rule in this case, analog to catch events.
-            // We could make a distinction here if wanted, such that the task end rules are executed.
-            return;
-        }
-        // Create start task rules.
-        receiveTask.getIncomingFlows().forEach(incomingFlow -> this.createReceiveTaskStartRule(process,
-                                                                                               receiveTask,
-                                                                                               incomingFlow));
         // End task rule is standard.
         this.createEndTaskRule(process, receiveTask, noop -> {
         });
-
     }
 
     void createReceiveTaskStartRule(AbstractProcess process, ReceiveTask receiveTask, SequenceFlow incomingFlow) {
@@ -85,7 +71,6 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
             collaboration.getIncomingMessageFlows(receiveTask).forEach(messageFlow -> createStartTaskRule(process,
                                                                                                           receiveTask,
                                                                                                           incomingFlow,
-                                                                                                          // TODO: Delete all other possible messages!
                                                                                                           processInstance -> deleteMessageToProcessInstanceWithPosition(
                                                                                                                   ruleBuilder,
                                                                                                                   processInstance,
@@ -98,7 +83,6 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
                                                       SequenceFlow incomingFlow) {
         collaboration.getIncomingMessageFlows(receiveTask).forEach(messageFlow -> {
             final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow, this.useSFId);
-            // TODO: Delete all other possible messages!
             ruleBuilder.startRule(this.getTaskOrCallActivityRuleName(receiveTask, incomingFlowId) + START);
             GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
             BPMNToGrooveTransformerHelper.deleteMessageToProcessInstanceWithPosition(ruleBuilder,
@@ -112,13 +96,6 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
             ruleBuilder.buildRule();
         });
     }
-
-    void createInstantiateReceiveTaskRule(AbstractProcess process, ReceiveTask receiveTask) {
-        // Only outgoing rules are needed.
-        createTaskRulesForProcess(process, receiveTask, noop -> {
-        });
-    }
-
 
     void createTaskRulesForProcess(AbstractProcess process,
                                    AbstractTask task,
