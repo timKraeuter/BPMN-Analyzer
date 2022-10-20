@@ -14,8 +14,6 @@ public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTe
                                                           BPMNToGrooveTransformer.TERMINATE_RULE_FILE_NAME,
                                                           BPMNToGrooveTransformer.UNSAFE_FILE_NAME,
                                                           BPMNToGrooveTransformer.TYPE_GRAPH_FILE_NAME);
-    private static final String BPMN = "bpmn/groove/";
-
     @Override
     protected void setUpFurther() {
         // Default is to ignore the type graph, the terminate rule and the interrupt rule.
@@ -23,8 +21,13 @@ public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTe
     }
 
     @Override
+    public String getTestResourcePathSubFolderName() {
+        return "bpmn/groove/";
+    }
+
+    @Override
     public String getOutputPathSubFolderName() {
-        return BPMN;
+        return "bpmn/";
     }
 
     protected void testGrooveGenerationForBPMNResourceFile(String resourceFileName) throws IOException {

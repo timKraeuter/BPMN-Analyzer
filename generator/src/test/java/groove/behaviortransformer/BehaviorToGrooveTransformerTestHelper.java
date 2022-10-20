@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
 public abstract class BehaviorToGrooveTransformerTestHelper {
-    //    private final String outputPath = "C:/Source/groove/bin";
+//    private final String outputPath = "C:/Source/groove/bin";
     String outputPath = FileUtils.getTempDirectoryPath();
 
     private Function<String, Boolean> fileNameFilter = x -> false;
@@ -26,6 +26,8 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
     }
 
     protected abstract void setUpFurther();
+
+    public abstract String getTestResourcePathSubFolderName();
 
     public abstract String getOutputPathSubFolderName();
 
@@ -55,7 +57,7 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
 
         // assert
         File expectedDir = new File(this.getClass().getResource("/" +
-                                                                this.getOutputPathSubFolderName() +
+                                                                this.getTestResourcePathSubFolderName() +
                                                                 "/" +
                                                                 modelName +
                                                                 ".gps").getFile());

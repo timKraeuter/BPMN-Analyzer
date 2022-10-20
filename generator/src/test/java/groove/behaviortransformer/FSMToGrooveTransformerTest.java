@@ -18,8 +18,13 @@ class FSMToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
     }
 
     @Override
-    public String getOutputPathSubFolderName() {
+    public String getTestResourcePathSubFolderName() {
         return "fsm";
+    }
+
+    @Override
+    public String getOutputPathSubFolderName() {
+        return getTestResourcePathSubFolderName();
     }
 
     @Test

@@ -1,4 +1,4 @@
-package usecases;
+package groove.behaviortransformer.bpmn;
 
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.Process;
@@ -9,7 +9,6 @@ import behavior.bpmn.auxiliary.BPMNCollaborationBuilder;
 import behavior.bpmn.events.*;
 import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
-import groove.behaviortransformer.bpmn.BPMNToGrooveTestBase;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

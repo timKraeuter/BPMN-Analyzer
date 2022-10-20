@@ -38,4 +38,6 @@ public abstract class AbstractProcess {
     }
 
     public abstract void accept(AbstractProcessVisitor visitor);
+
+    public abstract boolean isEventSubprocess();
 }

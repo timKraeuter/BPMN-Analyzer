@@ -13,8 +13,13 @@ class PNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
     }
 
     @Override
-    public String getOutputPathSubFolderName() {
+    public String getTestResourcePathSubFolderName() {
         return "pn";
+    }
+
+    @Override
+    public String getOutputPathSubFolderName() {
+        return getTestResourcePathSubFolderName();
     }
 
     @Test

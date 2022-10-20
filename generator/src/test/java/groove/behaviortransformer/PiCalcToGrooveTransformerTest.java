@@ -24,8 +24,13 @@ class PiCalcToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelpe
     }
 
     @Override
-    public String getOutputPathSubFolderName() {
+    public String getTestResourcePathSubFolderName() {
         return SUB_DIR;
+    }
+
+    @Override
+    public String getOutputPathSubFolderName() {
+        return getTestResourcePathSubFolderName();
     }
 
     @Test

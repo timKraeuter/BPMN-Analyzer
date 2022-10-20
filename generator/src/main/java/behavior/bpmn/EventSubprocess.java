@@ -23,6 +23,11 @@ public class EventSubprocess extends AbstractProcess {
         visitor.handle(this);
     }
 
+    @Override
+    public boolean isEventSubprocess() {
+        return true;
+    }
+
     public Set<StartEvent> getStartEvents() {
         return this.getFlowNodes().map(flowNode -> {
             ValueWrapper<StartEvent> valueWrapper = new ValueWrapper<>();

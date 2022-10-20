@@ -575,7 +575,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                 createNoneStartEventRule(startEvent, process);
                 break;
             case MESSAGE:
-                createMessageStartEventRule(startEvent);
+                // Done in the corresponding throw rule.
                 break;
             case MESSAGE_NON_INTERRUPTING:
                 // Implemented only in the event subprocess rule generator.
@@ -596,19 +596,4 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         deleteTokenWithPosition(ruleBuilder, processInstance, getStartEventTokenName(process, startEvent));
         ruleBuilder.buildRule();
     }
-
-    private void createMessageStartEventRule(StartEvent startEvent) {
-        Set<MessageFlow> incomingMessageFlows = collaboration.getIncomingMessageFlows(startEvent);
-        incomingMessageFlows.forEach(incomingMessageFlow -> {
-            ruleBuilder.startRule(incomingMessageFlows.size() >
-                                  1 ? incomingMessageFlow.getNameOrDescriptiveName() : startEvent.getName());
-            GrooveNode processInstance = BPMNToGrooveTransformerHelper.deleteIncomingMessageAndCreateProcessInstance(
-                    incomingMessageFlow,
-                    collaboration,
-                    ruleBuilder);
-            addOutgoingTokensForFlowNodeToProcessInstance(startEvent, ruleBuilder, processInstance, useSFId);
-            ruleBuilder.buildRule();
-        });
-    }
-
 }

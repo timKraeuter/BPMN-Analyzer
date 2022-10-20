@@ -419,7 +419,12 @@ class ActivityDiagramToGrooveTransformerTest extends BehaviorToGrooveTransformer
     }
 
     @Override
-    public String getOutputPathSubFolderName() {
+    public String getTestResourcePathSubFolderName() {
         return "activityDiagram";
+    }
+
+    @Override
+    public String getOutputPathSubFolderName() {
+        return getTestResourcePathSubFolderName();
     }
 }

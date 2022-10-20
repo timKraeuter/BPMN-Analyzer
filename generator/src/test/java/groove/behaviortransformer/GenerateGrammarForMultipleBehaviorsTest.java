@@ -25,11 +25,16 @@ class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTransforme
     }
 
     @Override
-    public String getOutputPathSubFolderName() {
+    public String getTestResourcePathSubFolderName() {
         return "synch";
     }
 
-//    @Test
+    @Override
+    public String getOutputPathSubFolderName() {
+        return getTestResourcePathSubFolderName();
+    }
+
+    //    @Test
     void tlSynchTest() {
         FiniteStateMachine tl_a = this.createTrafficLight("A", "green");
         FiniteStateMachine tl_b = this.createTrafficLight("B", "red");

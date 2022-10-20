@@ -171,9 +171,9 @@ public class BPMNToGrooveTransformerHelper {
                                                          boolean useSFId) {
         collaboration.outgoingMessageFlows(producingMessageFlowNode).forEach(messageFlow -> {
             if (messageFlow.getTarget().isInstantiateFlowNode()) {
-                addMessageFlowInstantiateFlowNodeBehavior(ruleBuilder, messageFlow);
+                addMessageFlowInstantiateFlowNodeBehavior(collaboration, ruleBuilder, messageFlow, useSFId);
             } else if (isAfterInstantiateEventBasedGateway(messageFlow.getTarget())) {
-                addMessageFlowInstantiateAfterEVGatewayBehavior(collaboration, ruleBuilder, messageFlow, useSFId);
+                instantiateMessageFlowReceiverProcess(collaboration, ruleBuilder, messageFlow, useSFId);
             } else {
                 addMessageSendBehaviorIfProcessExists(collaboration, ruleBuilder, messageFlow, useSFId);
             }
@@ -190,7 +190,10 @@ public class BPMNToGrooveTransformerHelper {
         GrooveNode receiverInstance = contextProcessInstanceWithQuantifier(messageFlowReceiver,
                                                                            ruleBuilder,
                                                                            existsOptional);
-        addExistentialMessageWithPosition(ruleBuilder, receiverInstance, messageFlow.getNameOrDescriptiveName(), existsOptional);
+        addExistentialMessageWithPosition(ruleBuilder,
+                                          receiverInstance,
+                                          messageFlow.getNameOrDescriptiveName(),
+                                          existsOptional);
         // We assume a message receiver can only have one incoming sequence flow if any.
         messageFlow.getTarget().getIncomingFlows().forEach(sequenceFlow -> {
             GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
@@ -207,32 +210,38 @@ public class BPMNToGrooveTransformerHelper {
         // TODO: Afterwards remove deleting messages from terminate rule.
     }
 
-    private static void addMessageFlowInstantiateFlowNodeBehavior(GrooveRuleBuilder ruleBuilder,
-                                                                  MessageFlow messageFlow) {
-        // In case of instantiate receive tasks or start events with trigger and active process
-        // instance does not exist!
-        GrooveNode newMessage = ruleBuilder.addNode(TYPE_MESSAGE);
-        ruleBuilder.addEdge(POSITION,
-                            newMessage,
-                            ruleBuilder.contextNode(createStringNodeLabel(messageFlow.getNameOrDescriptiveName())));
+    private static void addMessageFlowInstantiateFlowNodeBehavior(BPMNCollaboration collaboration,
+                                                                  GrooveRuleBuilder ruleBuilder,
+                                                                  MessageFlow messageFlow,
+                                                                  boolean useSFId) {
+        AbstractProcess messageFlowReceiverProcess = collaboration.getMessageFlowReceiverProcess(messageFlow);
+        if (messageFlowReceiverProcess.isEventSubprocess()) {
+            // Event subprocess consumes the message and starts a process accordingly maybe interrupting something.
+            GrooveNode newMessage = ruleBuilder.addNode(TYPE_MESSAGE);
+            ruleBuilder.addEdge(POSITION,
+                                newMessage,
+                                ruleBuilder.contextNode(createStringNodeLabel(messageFlow.getNameOrDescriptiveName())));
+        } else {
+            instantiateMessageFlowReceiverProcess(collaboration, ruleBuilder, messageFlow, useSFId);
+        }
     }
 
-    private static void addMessageFlowInstantiateAfterEVGatewayBehavior(BPMNCollaboration collaboration,
-                                                                        GrooveRuleBuilder ruleBuilder,
-                                                                        MessageFlow messageFlow,
-                                                                        boolean useSFId) {
-        // TODO: Maybe implement addMessageFlowInstantiateFlowNodeBehavior similarly without sending a message into
-        //  nirvana? But then we get the event subprocess interrupt/non-interrupt logic here.
-        // Catch rules are not created in this case.
+    private static void instantiateMessageFlowReceiverProcess(BPMNCollaboration collaboration,
+                                                              GrooveRuleBuilder ruleBuilder,
+                                                              MessageFlow messageFlow,
+                                                              boolean useSFId) {
         AbstractProcess newProcess = collaboration.findProcessForFlowNode(messageFlow.getTarget());
         GrooveNode newProcessInstance = addProcessInstance(ruleBuilder, newProcess.getName());
-        addOutgoingTokensForFlowNodeToProcessInstance(messageFlow.getTarget(), ruleBuilder, newProcessInstance, useSFId);
+        addOutgoingTokensForFlowNodeToProcessInstance(messageFlow.getTarget(),
+                                                      ruleBuilder,
+                                                      newProcessInstance,
+                                                      useSFId);
     }
 
     public static boolean isAfterInstantiateEventBasedGateway(FlowNode target) {
         boolean isAfterInstantiateEVGateway =
                 target.getIncomingFlows().anyMatch(sequenceFlow -> sequenceFlow.getSource().isExclusiveEventBasedGateway() &&
-                                                                                                 sequenceFlow.getSource().isInstantiateFlowNode());
+                                                                   sequenceFlow.getSource().isInstantiateFlowNode());
         if (isAfterInstantiateEVGateway && target.getIncomingFlows().count() > 1) {
             throw new BPMNRuntimeException(
                     "Multiple incoming sequence flows into a message event after an instantiate event based gateway! " +

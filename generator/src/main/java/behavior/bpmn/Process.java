@@ -42,6 +42,11 @@ public class Process extends AbstractProcess {
         visitor.handle(this);
     }
 
+    @Override
+    public boolean isEventSubprocess() {
+        return false;
+    }
+
     /*
     According to the BPMN spec the following consistency rules exist:
     - Gateways or Activities without incoming sequence flows are forbidden (p426)
