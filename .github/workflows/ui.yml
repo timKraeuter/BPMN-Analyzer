@@ -5,6 +5,7 @@ on:
       - "generation-ui/**"
   pull_request:
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
 jobs:
   sonarcloud:
     name: Build, test & analyze ui
