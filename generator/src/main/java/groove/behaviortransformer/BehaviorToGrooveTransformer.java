@@ -307,14 +307,26 @@ public class BehaviorToGrooveTransformer {
     }
 
     private File makeSubFolder(Behavior behavior, File grooveDir) {
-        return this.makeSubFolder(behavior.getName(), grooveDir);
+            return this.makeSubFolder(behavior.getName(), grooveDir);
     }
 
     private File makeSubFolder(String folderName, File grooveDir) {
         File graphGrammarSubFolder = new File(grooveDir + File.separator + folderName + ".gps");
-        //noinspection ResultOfMethodCallIgnored
-        graphGrammarSubFolder.mkdirs();
+        if (!graphGrammarSubFolder.mkdirs()) {
+            // Clean dir if not fresh
+            cleanSubDir(graphGrammarSubFolder);
+        }
         return graphGrammarSubFolder;
+    }
+
+    private static void cleanSubDir(File graphGrammarSubFolder) {
+        try {
+        FileUtils.cleanDirectory(graphGrammarSubFolder);}
+        catch (IOException e) {
+            throw new FolderCouldNotBeCleanedException(String.format(
+                    "The subfolder %s for the groove rule generation could not be cleaned.",
+                    graphGrammarSubFolder.getAbsolutePath()), e);
+        }
     }
 
     private void generatePropertiesFile(File subFolder, String startGraph, Map<String, String> additionalProperties) {

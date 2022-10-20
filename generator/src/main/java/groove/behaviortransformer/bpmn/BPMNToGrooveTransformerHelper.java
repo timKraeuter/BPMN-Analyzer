@@ -230,12 +230,18 @@ public class BPMNToGrooveTransformerHelper {
                                                               GrooveRuleBuilder ruleBuilder,
                                                               MessageFlow messageFlow,
                                                               boolean useSFId) {
-        AbstractProcess newProcess = collaboration.findProcessForFlowNode(messageFlow.getTarget());
-        GrooveNode newProcessInstance = addProcessInstance(ruleBuilder, newProcess.getName());
-        addOutgoingTokensForFlowNodeToProcessInstance(messageFlow.getTarget(),
-                                                      ruleBuilder,
-                                                      newProcessInstance,
-                                                      useSFId);
+        AbstractProcess receiverProcess = collaboration.findProcessForFlowNode(messageFlow.getTarget());
+        GrooveNode newReceiverProcessInstance = addProcessInstance(ruleBuilder, receiverProcess.getName());
+        if (messageFlow.getTarget().isTask()) {
+            // Instantiate tasks get a token on the task.
+            addTokenWithPosition(ruleBuilder, newReceiverProcessInstance, messageFlow.getTarget().getName());
+        } else {
+            // Message start events get outgoing tokens
+            addOutgoingTokensForFlowNodeToProcessInstance(messageFlow.getTarget(),
+                                                          ruleBuilder,
+                                                          newReceiverProcessInstance,
+                                                          useSFId);
+        }
     }
 
     public static boolean isAfterInstantiateEventBasedGateway(FlowNode target) {

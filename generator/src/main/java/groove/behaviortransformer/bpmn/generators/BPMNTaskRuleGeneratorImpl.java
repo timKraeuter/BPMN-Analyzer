@@ -1,6 +1,9 @@
 package groove.behaviortransformer.bpmn.generators;
 
-import behavior.bpmn.*;
+import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.BPMNCollaboration;
+import behavior.bpmn.FlowNode;
+import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.activities.tasks.AbstractTask;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
@@ -11,11 +14,10 @@ import groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveRuleBuilder;
 
-import java.util.Set;
 import java.util.function.Consumer;
 
-import static groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
-import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.END;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.START;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.*;
 
 public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
@@ -112,23 +114,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
     }
 
     void createInstantiateReceiveTaskRule(AbstractProcess process, ReceiveTask receiveTask) {
-        Set<MessageFlow> incomingMessageFlows = collaboration.getIncomingMessageFlows(receiveTask);
-        // Each incoming message flow will instantiate the process.
-        incomingMessageFlows.forEach(incomingMessageFlow -> {
-            ruleBuilder.startRule(incomingMessageFlows.size() >
-                                  1 ? incomingMessageFlow.getNameOrDescriptiveName() : receiveTask.getName() + START);
-            GrooveNode processInstance = deleteIncomingMessageAndCreateProcessInstance(incomingMessageFlow,
-                                                                                       collaboration,
-                                                                                       ruleBuilder);
-
-            GrooveNode activityToken = ruleBuilder.addNode(TYPE_TOKEN);
-            ruleBuilder.addEdge(POSITION,
-                                activityToken,
-                                ruleBuilder.contextNode(createStringNodeLabel(receiveTask.getName())));
-            ruleBuilder.addEdge(TOKENS, processInstance, activityToken);
-            ruleBuilder.buildRule();
-        });
-        // Create rules for the outgoing sequence flows.
+        // Only outgoing rules are needed.
         createTaskRulesForProcess(process, receiveTask, noop -> {
         });
     }
