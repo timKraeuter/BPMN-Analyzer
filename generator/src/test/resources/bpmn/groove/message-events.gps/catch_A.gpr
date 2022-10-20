@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="catch_p1" role="rule" edgeids="false" edgemode="directed">
+    <graph id="catch_A" role="rule" edgeids="false" edgemode="directed">
         <node id="n20">
             <attr name="layout">
                 <string>437 423 0 0</string>
@@ -33,7 +33,7 @@
         </edge>
         <node id="n24">
             <attr name="layout">
-                <string>692 279 0 0</string>
+                <string>687 279 0 0</string>
             </attr>
         </node>
         <edge from="n24" to="n24">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n21" to="n21">
             <attr name="label">
-                <string>string:"catch_p1_end_p1"</string>
+                <string>string:"catch_A_end_p1"</string>
             </attr>
         </edge>
         <node id="n23">
@@ -108,17 +108,17 @@
         </node>
         <edge from="n23" to="n23">
             <attr name="label">
-                <string>string:"start_p1_catch_p1"</string>
+                <string>string:"start_p1_catch_A"</string>
             </attr>
         </edge>
         <node id="n25">
             <attr name="layout">
-                <string>1032 279 0 0</string>
+                <string>1017 279 0 0</string>
             </attr>
         </node>
         <edge from="n25" to="n25">
             <attr name="label">
-                <string>string:"throw_p2_catch_p1"</string>
+                <string>string:"throw_A_catch_A"</string>
             </attr>
         </edge>
         <node id="n26">
