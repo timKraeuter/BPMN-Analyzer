@@ -1,8 +1,8 @@
 package groove.behaviortransformer.bpmn.generators;
 
-import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.EventSubprocess;
+import behavior.bpmn.BPMNEventSubprocess;
 import behavior.bpmn.MessageFlow;
 import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import behavior.bpmn.events.StartEvent;
@@ -32,13 +32,13 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
     }
 
     @Override
-    public void generateRulesForEventSubprocesses(AbstractProcess process) {
+    public void generateRulesForEventSubprocesses(AbstractBPMNProcess process) {
         process.getEventSubprocesses().forEach(eventSubprocess -> this.generateRulesForEventSubprocess(process,
                                                                                                        eventSubprocess));
     }
 
 
-    private void generateRulesForEventSubprocess(AbstractProcess process, EventSubprocess eventSubprocess) {
+    private void generateRulesForEventSubprocess(AbstractBPMNProcess process, BPMNEventSubprocess eventSubprocess) {
         // Start event rule generation is special
         generateRulesForStartEvents(process, eventSubprocess, collaboration, ruleBuilder);
         // Standard rule generation for other elements.
@@ -47,8 +47,8 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
         generateTerminateEventSubProcessRule(process, eventSubprocess, ruleBuilder);
     }
 
-    private void generateTerminateEventSubProcessRule(AbstractProcess parentProcess,
-                                                      EventSubprocess eventSubprocess,
+    private void generateTerminateEventSubProcessRule(AbstractBPMNProcess parentProcess,
+                                                      BPMNEventSubprocess eventSubprocess,
                                                       GrooveRuleBuilder ruleBuilder) {
         String eSubprocessName = eventSubprocess.getName();
         ruleBuilder.startRule(eSubprocessName + END);
@@ -59,8 +59,8 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
     }
 
 
-    private void generateRulesForStartEvents(AbstractProcess process,
-                                             EventSubprocess eventSubprocess,
+    private void generateRulesForStartEvents(AbstractBPMNProcess process,
+                                             BPMNEventSubprocess eventSubprocess,
                                              BPMNCollaboration collaboration,
                                              GrooveRuleBuilder ruleBuilder) {
         eventSubprocess.getStartEvents().forEach(startEvent -> {
@@ -93,8 +93,8 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
         });
     }
 
-    private void createStartInterruptingEvenSubprocessFromMessageRules(AbstractProcess parentProcess,
-                                                                       EventSubprocess eventSubprocess,
+    private void createStartInterruptingEvenSubprocessFromMessageRules(AbstractBPMNProcess parentProcess,
+                                                                       BPMNEventSubprocess eventSubprocess,
                                                                        BPMNCollaboration collaboration,
                                                                        GrooveRuleBuilder ruleBuilder,
                                                                        StartEvent startEvent) {
@@ -113,9 +113,9 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
 
     }
 
-    private GrooveNode createMessageStartEventRulePart(AbstractProcess parentProcess,
+    private GrooveNode createMessageStartEventRulePart(AbstractBPMNProcess parentProcess,
                                                        GrooveRuleBuilder ruleBuilder,
-                                                       EventSubprocess eventSubprocess,
+                                                       BPMNEventSubprocess eventSubprocess,
                                                        MessageFlow incomingMessageFlow,
                                                        StartEvent startEvent) {
         // Needs a running parent process
@@ -147,8 +147,8 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
         return incomingMessageFlows.size() > 1 ? incomingMessageFlow.getNameOrDescriptiveName() : startEvent.getName();
     }
 
-    private void createStartNonInterruptingEvenSubprocessFromMessageRules(AbstractProcess process,
-                                                                          EventSubprocess eventSubprocess,
+    private void createStartNonInterruptingEvenSubprocessFromMessageRules(AbstractBPMNProcess process,
+                                                                          BPMNEventSubprocess eventSubprocess,
                                                                           BPMNCollaboration collaboration,
                                                                           GrooveRuleBuilder ruleBuilder,
                                                                           StartEvent startEvent) {

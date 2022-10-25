@@ -23,7 +23,7 @@ public abstract class FlowElement {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof FlowElement)) {
             return false;
         }
         FlowElement that = (FlowElement) o;

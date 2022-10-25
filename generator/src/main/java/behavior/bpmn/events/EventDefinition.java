@@ -24,7 +24,7 @@ public class EventDefinition {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof EventDefinition)) return false;
         EventDefinition that = (EventDefinition) o;
         return Objects.equal(globalSignalName, that.globalSignalName);
     }

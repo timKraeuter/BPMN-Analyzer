@@ -1,7 +1,7 @@
 package groove.behaviortransformer.bpmn;
 
 import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.Process;
+import behavior.bpmn.BPMNProcess;
 import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import behavior.bpmn.events.StartEventType;
 import groove.behaviortransformer.GrooveTransformer;
@@ -28,7 +28,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
     // Graph conditions for model-checking
     public static final String ALL_TERMINATED_FILE_NAME = "AllTerminated.gpr";
     public static final String UNSAFE_FILE_NAME = "Unsafe.gpr";
-    private boolean useSFIds;
+    private final boolean useSFIds;
 
     public BPMNToGrooveTransformer() {
         this(false);
@@ -56,7 +56,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         return startGraphBuilder.build();
     }
 
-    private void addStartTokens(GrooveGraphBuilder startGraphBuilder, Process process, GrooveNode processInstance) {
+    private void addStartTokens(GrooveGraphBuilder startGraphBuilder, BPMNProcess process, GrooveNode processInstance) {
         process.getStartEvents().forEach(startEvent -> {
             if (startEvent.getType() == StartEventType.NONE) {
                 GrooveNode startToken = new GrooveNode(TYPE_TOKEN);

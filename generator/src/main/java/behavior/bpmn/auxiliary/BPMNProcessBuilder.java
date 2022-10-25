@@ -1,8 +1,8 @@
 package behavior.bpmn.auxiliary;
 
-import behavior.bpmn.EventSubprocess;
+import behavior.bpmn.BPMNEventSubprocess;
+import behavior.bpmn.BPMNProcess;
 import behavior.bpmn.FlowNode;
-import behavior.bpmn.Process;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.events.StartEvent;
 
@@ -12,7 +12,7 @@ import java.util.Set;
 public class BPMNProcessBuilder implements BPMNModelBuilder {
     private final Set<SequenceFlow> sequenceFlows;
     private final Set<FlowNode> flowNodes;
-    private final Set<EventSubprocess> eventSubprocesses;
+    private final Set<BPMNEventSubprocess> eventSubprocesses;
     private String name;
     private final Set<StartEvent> startEvents;
 
@@ -48,7 +48,7 @@ public class BPMNProcessBuilder implements BPMNModelBuilder {
     }
 
     @Override
-    public BPMNProcessBuilder eventSubprocess(EventSubprocess eventSubprocess) {
+    public BPMNProcessBuilder eventSubprocess(BPMNEventSubprocess eventSubprocess) {
         eventSubprocesses.add(eventSubprocess);
         return this;
     }
@@ -76,7 +76,7 @@ public class BPMNProcessBuilder implements BPMNModelBuilder {
         return this;
     }
 
-    public Process build() {
-        return new Process(name, startEvents, sequenceFlows, flowNodes, eventSubprocesses);
+    public BPMNProcess build() {
+        return new BPMNProcess(name, startEvents, sequenceFlows, flowNodes, eventSubprocesses);
     }
 }

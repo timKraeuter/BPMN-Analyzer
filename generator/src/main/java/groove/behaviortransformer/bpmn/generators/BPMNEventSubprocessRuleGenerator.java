@@ -1,7 +1,7 @@
 package groove.behaviortransformer.bpmn.generators;
 
-import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.AbstractBPMNProcess;
 
 public interface BPMNEventSubprocessRuleGenerator {
-    void generateRulesForEventSubprocesses(AbstractProcess process);
+    void generateRulesForEventSubprocesses(AbstractBPMNProcess process);
 }

@@ -1,6 +1,6 @@
 package maude.behaviortransformer.bpmn.generators;
 
-import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.activities.CallActivity;
@@ -32,7 +32,8 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
         objectBuilder = new MaudeObjectBuilder();
     }
 
-    public void createCallActivityRulesForProcess(AbstractProcess process, CallActivity callActivity) {
+    @Override
+    public void createCallActivityRulesForProcess(AbstractBPMNProcess process, CallActivity callActivity) {
         // Rules for instantiating a subprocess
         callActivity.getIncomingFlows().forEach(incomingFlow -> this.createSubProcessInstantiationRule(process,
                                                                                                        callActivity,
@@ -48,7 +49,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
         this.createBoundaryEventRules(process, callActivity, ruleGenerator.getCollaboration());
     }
 
-    private void createBoundaryEventRules(AbstractProcess process,
+    private void createBoundaryEventRules(AbstractBPMNProcess process,
                                           CallActivity callActivity,
                                           BPMNCollaboration collaboration) {
         callActivity.getBoundaryEvents().forEach(boundaryEvent -> {
@@ -71,7 +72,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
 
     }
 
-    private void createSubProcessMessageBoundaryEventRule(AbstractProcess process,
+    private void createSubProcessMessageBoundaryEventRule(AbstractBPMNProcess process,
                                                           CallActivity callActivity,
                                                           BoundaryEvent boundaryEvent,
                                                           BPMNCollaboration collaboration) {
@@ -82,7 +83,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
                 maudeRuleBuilder -> addMessageConsumption(messageFlow)));
     }
 
-    private void createSubProcessBoundaryEventRule(AbstractProcess process,
+    private void createSubProcessBoundaryEventRule(AbstractBPMNProcess process,
                                                    CallActivity callActivity,
                                                    BoundaryEvent boundaryEvent,
                                                    Consumer<BPMNMaudeRuleBuilder> ruleAdditions) {
@@ -132,7 +133,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
         ruleBuilder.buildRule();
     }
 
-    private void createSubProcessInstantiationRule(AbstractProcess process,
+    private void createSubProcessInstantiationRule(AbstractBPMNProcess process,
                                                    CallActivity callActivity,
                                                    SequenceFlow incomingFlow) {
 
@@ -173,7 +174,7 @@ public class BPMNMaudeSubprocessRuleGenerator implements BPMNSubprocessRuleGener
         ruleBuilder.buildRule();
     }
 
-    private void createTerminateSubProcessRule(AbstractProcess process, CallActivity callActivity) {
+    private void createTerminateSubProcessRule(AbstractBPMNProcess process, CallActivity callActivity) {
         ruleBuilder.startRule(getFlowNodeRuleName(callActivity) + END);
 
         MaudeObject subProcess = createTerminatedProcessSnapshot(callActivity.getSubProcessModel());

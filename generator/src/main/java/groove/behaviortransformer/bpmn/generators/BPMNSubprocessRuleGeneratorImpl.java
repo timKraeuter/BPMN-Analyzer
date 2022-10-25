@@ -1,6 +1,6 @@
 package groove.behaviortransformer.bpmn.generators;
 
-import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.activities.CallActivity;
@@ -30,7 +30,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
     }
 
     @Override
-    public void createCallActivityRulesForProcess(AbstractProcess process, CallActivity callActivity) {
+    public void createCallActivityRulesForProcess(AbstractBPMNProcess process, CallActivity callActivity) {
         // Rules for instantiating a subprocess
         callActivity.getIncomingFlows().forEach(incomingFlow -> this.createSubProcessInstantiationRule(process,
                                                                                                        callActivity,
@@ -46,7 +46,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
         this.createBoundaryEventRules(process, callActivity, bpmnRuleGenerator.getCollaboration());
     }
 
-    void createSubProcessInstantiationRule(AbstractProcess process,
+    void createSubProcessInstantiationRule(AbstractBPMNProcess process,
                                            CallActivity callActivity,
                                            SequenceFlow incomingFlow) {
         final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow, this.useSFId);
@@ -81,7 +81,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
         ruleBuilder.buildRule();
     }
 
-    void createTerminateSubProcessRule(AbstractProcess process, CallActivity callActivity) {
+    void createTerminateSubProcessRule(AbstractBPMNProcess process, CallActivity callActivity) {
         ruleBuilder.startRule(callActivity.getName() + END);
 
         // Parent process is running
@@ -108,7 +108,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
         bpmnRuleGenerator.generateRulesForProcess(callActivity.getSubProcessModel());
     }
 
-    void createBoundaryEventRules(AbstractProcess process, CallActivity callActivity, BPMNCollaboration collaboration) {
+    void createBoundaryEventRules(AbstractBPMNProcess process, CallActivity callActivity, BPMNCollaboration collaboration) {
         callActivity.getBoundaryEvents().forEach(boundaryEvent -> {
             switch (boundaryEvent.getType()) {
                 case NONE:
@@ -135,7 +135,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
         });
     }
 
-    private void createSubProcessBoundaryEventRule(AbstractProcess process,
+    private void createSubProcessBoundaryEventRule(AbstractBPMNProcess process,
                                                    CallActivity callActivity,
                                                    BoundaryEvent boundaryEvent,
                                                    Consumer<GrooveNode> additionalActions) {

@@ -1,6 +1,6 @@
 package behavior.bpmn.auxiliary;
 
-import behavior.bpmn.EventSubprocess;
+import behavior.bpmn.BPMNEventSubprocess;
 import behavior.bpmn.FlowNode;
 import behavior.bpmn.events.StartEvent;
 
@@ -17,5 +17,5 @@ public interface BPMNModelBuilder {
 
     BPMNModelBuilder startEvent(StartEvent startEvent);
 
-    BPMNModelBuilder eventSubprocess(EventSubprocess eventSubprocess);
+    BPMNModelBuilder eventSubprocess(BPMNEventSubprocess eventSubprocess);
 }

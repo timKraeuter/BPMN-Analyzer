@@ -1,7 +1,7 @@
 package groove.behaviortransformer.bpmn;
 
 import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.Process;
+import behavior.bpmn.BPMNProcess;
 import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
@@ -41,7 +41,7 @@ class UseCaseTest extends BPMNToGrooveTestBase {
         EndEvent phase1_end = new EndEvent(getId(), "Phase1_end");
 
         String phase_1 = "Phase_1";
-        Process phase1_process = new BPMNCollaborationBuilder()
+        BPMNProcess phase1_process = new BPMNCollaborationBuilder()
                 .name(phase_1)
                 .processName(phase_1)
                 .startEvent(phase1_start)
@@ -69,7 +69,7 @@ class UseCaseTest extends BPMNToGrooveTestBase {
         EndEvent phase2_end = new EndEvent(getId(), "Phase2_end");
 
         String phase_2 = "Phase_2";
-        Process phase2_Process = new BPMNCollaborationBuilder()
+        BPMNProcess phase2_Process = new BPMNCollaborationBuilder()
                 .name(phase_2)
                 .processName(phase_2)
                 .startEvent(phase2_start)

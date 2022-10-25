@@ -1,10 +1,10 @@
 package behavior.bpmn.auxiliary.visitors;
 
-import behavior.bpmn.EventSubprocess;
-import behavior.bpmn.Process;
+import behavior.bpmn.BPMNEventSubprocess;
+import behavior.bpmn.BPMNProcess;
 
 public interface AbstractProcessVisitor {
-    void handle(EventSubprocess eventSubprocess);
+    void handle(BPMNEventSubprocess eventSubprocess);
 
-    void handle(Process process);
+    void handle(BPMNProcess process);
 }

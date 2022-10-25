@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -331,7 +332,7 @@ public class BehaviorToGrooveTransformer {
 
     private void generatePropertiesFile(File subFolder, String startGraph, Map<String, String> additionalProperties) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
 
         String propertiesContent = String.format(
                 "# %s (Groove rule generator)%nlocation=%s%nstartGraph=%s%n%sgrooveVersion=5.8.1%ngrammarVersion=3.7",

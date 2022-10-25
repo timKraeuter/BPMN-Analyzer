@@ -1,22 +1,15 @@
 
 package groove.gxl;
 
-import java.util.ArrayList;
-import java.util.List;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlIDREF;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.*;
 import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import jakarta.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * 
- */
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "attr"
@@ -43,11 +36,11 @@ public class Relend {
 
     /**
      * Gets the value of the target property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Object }
-     *     
+     *
      */
     public Object getTarget() {
         return target;
@@ -55,11 +48,11 @@ public class Relend {
 
     /**
      * Sets the value of the target property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Object }
-     *     
+     *
      */
     public void setTarget(Object value) {
         this.target = value;
@@ -67,11 +60,11 @@ public class Relend {
 
     /**
      * Gets the value of the role property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public java.lang.String getRole() {
         return role;
@@ -79,11 +72,11 @@ public class Relend {
 
     /**
      * Sets the value of the role property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public void setRole(java.lang.String value) {
         this.role = value;
@@ -91,11 +84,11 @@ public class Relend {
 
     /**
      * Gets the value of the direction property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public java.lang.String getDirection() {
         return direction;
@@ -103,11 +96,11 @@ public class Relend {
 
     /**
      * Sets the value of the direction property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public void setDirection(java.lang.String value) {
         this.direction = value;
@@ -115,11 +108,11 @@ public class Relend {
 
     /**
      * Gets the value of the startorder property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public java.lang.String getStartorder() {
         return startorder;
@@ -127,11 +120,11 @@ public class Relend {
 
     /**
      * Sets the value of the startorder property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public void setStartorder(java.lang.String value) {
         this.startorder = value;
@@ -139,11 +132,11 @@ public class Relend {
 
     /**
      * Gets the value of the endorder property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public java.lang.String getEndorder() {
         return endorder;
@@ -151,11 +144,11 @@ public class Relend {
 
     /**
      * Sets the value of the endorder property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public void setEndorder(java.lang.String value) {
         this.endorder = value;
@@ -163,25 +156,25 @@ public class Relend {
 
     /**
      * Gets the value of the attr property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attr property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttr().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link Attr }
-     * 
-     * 
+     *
+     *
      */
     public List<Attr> getAttr() {
         if (attr == null) {

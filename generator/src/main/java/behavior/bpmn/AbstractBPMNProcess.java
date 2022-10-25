@@ -5,23 +5,23 @@ import behavior.bpmn.auxiliary.visitors.AbstractProcessVisitor;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public abstract class AbstractProcess {
+public abstract class AbstractBPMNProcess {
     private final String name;
     private final Set<SequenceFlow> sequenceFlows;
     private final Set<FlowNode> flowNodes;
-    private final Set<EventSubprocess> eventSubprocesses;
+    private final Set<BPMNEventSubprocess> eventSubprocesses;
 
-    protected AbstractProcess(String name,
-                              Set<SequenceFlow> sequenceFlows,
-                              Set<FlowNode> flowNodes,
-                              Set<EventSubprocess> eventSubprocesses) {
+    protected AbstractBPMNProcess(String name,
+                                  Set<SequenceFlow> sequenceFlows,
+                                  Set<FlowNode> flowNodes,
+                                  Set<BPMNEventSubprocess> eventSubprocesses) {
         this.name = name;
         this.sequenceFlows = sequenceFlows;
         this.flowNodes = flowNodes;
         this.eventSubprocesses = eventSubprocesses;
     }
 
-    public Stream<EventSubprocess> getEventSubprocesses() {
+    public Stream<BPMNEventSubprocess> getEventSubprocesses() {
         return eventSubprocesses.stream();
     }
 

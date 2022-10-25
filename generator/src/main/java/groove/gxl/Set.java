@@ -1,19 +1,12 @@
 
 package groove.gxl;
 
+import jakarta.xml.bind.annotation.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElements;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
 
 
-/**
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "locatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup"
@@ -37,20 +30,20 @@ public class Set {
 
     /**
      * Gets the value of the locatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the locatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getLocatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link Locator }
@@ -63,8 +56,8 @@ public class Set {
      * {@link Set }
      * {@link Bag }
      * {@link Tup }
-     * 
-     * 
+     *
+     *
      */
     public List<Object> getLocatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup() {
         if (locatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup == null) {

@@ -47,7 +47,7 @@ public class StartEvent extends CatchEvent {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof StartEvent)) {
             return false;
         }
         if (!super.equals(o)) {

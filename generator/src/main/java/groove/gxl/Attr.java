@@ -1,23 +1,14 @@
 
 package groove.gxl;
 
-import java.util.ArrayList;
-import java.util.List;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElements;
-import jakarta.xml.bind.annotation.XmlID;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.*;
 import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * 
- */
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "attr",
@@ -53,11 +44,11 @@ public class Attr {
 
     /**
      * Gets the value of the id property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public java.lang.String getId() {
         return id;
@@ -65,11 +56,11 @@ public class Attr {
 
     /**
      * Sets the value of the id property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public void setId(java.lang.String value) {
         this.id = value;
@@ -77,11 +68,11 @@ public class Attr {
 
     /**
      * Gets the value of the name property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public java.lang.String getName() {
         return name;
@@ -89,11 +80,11 @@ public class Attr {
 
     /**
      * Sets the value of the name property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public void setName(java.lang.String value) {
         this.name = value;
@@ -101,11 +92,11 @@ public class Attr {
 
     /**
      * Gets the value of the kind property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public java.lang.String getKind() {
         return kind;
@@ -113,11 +104,11 @@ public class Attr {
 
     /**
      * Sets the value of the kind property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public void setKind(java.lang.String value) {
         this.kind = value;
@@ -125,25 +116,25 @@ public class Attr {
 
     /**
      * Gets the value of the attr property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attr property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttr().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link Attr }
-     * 
-     * 
+     *
+     *
      */
     public List<Attr> getAttr() {
         if (attr == null) {
@@ -154,20 +145,20 @@ public class Attr {
 
     /**
      * Gets the value of the locatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the locatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getLocatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link Locator }
@@ -180,8 +171,8 @@ public class Attr {
      * {@link Set }
      * {@link Bag }
      * {@link Tup }
-     * 
-     * 
+     *
+     *
      */
     public List<Object> getLocatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup() {
         if (locatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup == null) {

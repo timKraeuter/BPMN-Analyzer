@@ -12,14 +12,14 @@ import java.util.stream.Stream;
 /**
  * Represents a process modeled in BPMN.
  */
-public class Process extends AbstractProcess {
+public class BPMNProcess extends AbstractBPMNProcess {
     private final Set<StartEvent> startEvents;
 
-    public Process(String name,
-                   Set<StartEvent> startEvents,
-                   Set<SequenceFlow> sequenceFlows,
-                   Set<FlowNode> flowNodes,
-                   Set<EventSubprocess> eventSubprocesses) {
+    public BPMNProcess(String name,
+                       Set<StartEvent> startEvents,
+                       Set<SequenceFlow> sequenceFlows,
+                       Set<FlowNode> flowNodes,
+                       Set<BPMNEventSubprocess> eventSubprocesses) {
         super(name, sequenceFlows, flowNodes, eventSubprocesses);
         this.startEvents = startEvents;
     }
@@ -28,8 +28,8 @@ public class Process extends AbstractProcess {
         return this.startEvents;
     }
 
-    public Stream<Process> getSubProcesses() {
-        final LinkedHashSet<Process> subProcesses = new LinkedHashSet<>();
+    public Stream<BPMNProcess> getSubProcesses() {
+        final LinkedHashSet<BPMNProcess> subProcesses = new LinkedHashSet<>();
         getFlowNodes().forEach(flowNode -> flowNode.accept(new CallActivityFlowNodeVisitor(callActivity -> {
             subProcesses.add(callActivity.getSubProcessModel());
             subProcesses.addAll(callActivity.getSubProcessModel().getSubProcesses().collect(Collectors.toList()));

@@ -1,7 +1,7 @@
 package maude.behaviortransformer.bpmn;
 
 import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.Process;
+import behavior.bpmn.BPMNProcess;
 import behavior.bpmn.events.StartEventType;
 import maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import maude.generation.BPMNMaudeRuleBuilder;
@@ -233,7 +233,7 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
         return ruleBuilder.createBPMNSystem(processes, NONE).generateObjectString();
     }
 
-    private String createStartTokens(Process process) {
+    private String createStartTokens(BPMNProcess process) {
         // Add a token for each none start event
         return process.getStartEvents().stream()
                       .filter(startEvent -> startEvent.getType() == StartEventType.NONE)

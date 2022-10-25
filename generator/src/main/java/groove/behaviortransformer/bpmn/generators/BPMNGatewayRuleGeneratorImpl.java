@@ -1,6 +1,6 @@
 package groove.behaviortransformer.bpmn.generators;
 
-import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.FlowNode;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
@@ -28,7 +28,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
     }
 
     @Override
-    public void createExclusiveGatewayRules(AbstractProcess process, ExclusiveGateway exclusiveGateway) {
+    public void createExclusiveGatewayRules(AbstractBPMNProcess process, ExclusiveGateway exclusiveGateway) {
         exclusiveGateway.getIncomingFlows().forEach(incomingFlow -> {
             final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow, this.useSFId);
             exclusiveGateway.getOutgoingFlows().forEach(outFlow -> {
@@ -50,7 +50,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
     }
 
     @Override
-    public void createParallelGatewayRule(AbstractProcess process, ParallelGateway parallelGateway) {
+    public void createParallelGatewayRule(AbstractBPMNProcess process, ParallelGateway parallelGateway) {
         ruleBuilder.startRule(parallelGateway.getName());
         GrooveNode processInstance = BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
 
@@ -74,7 +74,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
     }
 
     @Override
-    public void createEventBasedGatewayRule(EventBasedGateway eventBasedGateway, AbstractProcess process) {
+    public void createEventBasedGatewayRule(EventBasedGateway eventBasedGateway, AbstractBPMNProcess process) {
         boolean implicitExclusiveGateway = eventBasedGateway.getIncomingFlows().count() > 1;
         eventBasedGateway.getIncomingFlows().forEach(inFlow -> {
             String inFlowID = getSequenceFlowIdOrDescriptiveName(inFlow, this.useSFId);
@@ -94,7 +94,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
     }
 
     @Override
-    public void createInclusiveGatewayRules(AbstractProcess process, InclusiveGateway inclusiveGateway) {
+    public void createInclusiveGatewayRules(AbstractBPMNProcess process, InclusiveGateway inclusiveGateway) {
         long incomingFlowCount = inclusiveGateway.getIncomingFlows().count();
         long outgoingFlowCount = inclusiveGateway.getOutgoingFlows().count();
         if (incomingFlowCount <= 1 && outgoingFlowCount > 1) {
@@ -112,7 +112,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
         throw new BPMNRuntimeException("Inclusive gateway should not have multiple incoming and outgoing flows.");
     }
 
-    private void createMergingInclusiveGatewayRules(AbstractProcess process,
+    private void createMergingInclusiveGatewayRules(AbstractBPMNProcess process,
                                                     GrooveRuleBuilder ruleBuilder,
                                                     InclusiveGateway inclusiveGateway) {
         // Find the corresponding branching inclusive gateway
@@ -186,7 +186,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
         }
     }
 
-    private void createBranchingInclusiveGatewayRules(AbstractProcess process,
+    private void createBranchingInclusiveGatewayRules(AbstractBPMNProcess process,
                                                       GrooveRuleBuilder ruleBuilder,
                                                       InclusiveGateway inclusiveGateway) {
         Optional<SequenceFlow> incFlow = inclusiveGateway.getIncomingFlows().findFirst();
@@ -227,7 +227,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
     }
 
 
-    private void createExclusiveGatewayRule(AbstractProcess process,
+    private void createExclusiveGatewayRule(AbstractBPMNProcess process,
                                             GrooveRuleBuilder ruleBuilder,
                                             ExclusiveGateway exclusiveGateway,
                                             String oldTokenPosition,

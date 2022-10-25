@@ -1,6 +1,6 @@
 package maude.behaviortransformer.bpmn.generators;
 
-import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.gateways.EventBasedGateway;
@@ -27,7 +27,7 @@ public class BPMNMaudeGatewayRuleGenerator implements BPMNToMaudeTransformerHelp
         objectBuilder = new MaudeObjectBuilder();
     }
 
-    public void createExclusiveGatewayRule(AbstractProcess process, ExclusiveGateway exclusiveGateway) {
+    public void createExclusiveGatewayRule(AbstractBPMNProcess process, ExclusiveGateway exclusiveGateway) {
         exclusiveGateway.getIncomingFlows().forEach(incomingFlow -> exclusiveGateway.getOutgoingFlows().forEach(
                 outgoingFlow -> createExclusiveGatewayRule(process,
                                                            exclusiveGateway,
@@ -46,7 +46,7 @@ public class BPMNMaudeGatewayRuleGenerator implements BPMNToMaudeTransformerHelp
 
     }
 
-    private void createExclusiveGatewayRule(AbstractProcess process,
+    private void createExclusiveGatewayRule(AbstractBPMNProcess process,
                                             ExclusiveGateway exclusiveGateway,
                                             String preToken,
                                             SequenceFlow outgoingFlow) {
@@ -62,7 +62,7 @@ public class BPMNMaudeGatewayRuleGenerator implements BPMNToMaudeTransformerHelp
 
     }
 
-    public void createParallelGatewayRule(AbstractProcess process, ParallelGateway parallelGateway) {
+    public void createParallelGatewayRule(AbstractBPMNProcess process, ParallelGateway parallelGateway) {
         ruleBuilder.startRule(getFlowNodeRuleName(parallelGateway));
 
         String preTokens = getPreTokensForParallelGateway(parallelGateway) + ANY_OTHER_TOKENS;
@@ -83,7 +83,7 @@ public class BPMNMaudeGatewayRuleGenerator implements BPMNToMaudeTransformerHelp
                               .collect(Collectors.joining(" "));
     }
 
-    public void createEventBasedGatewayRule(AbstractProcess process, EventBasedGateway eventBasedGateway) {
+    public void createEventBasedGatewayRule(AbstractBPMNProcess process, EventBasedGateway eventBasedGateway) {
         eventBasedGateway.getIncomingFlows().forEach(inFlow -> {
             ruleBuilder.startRule(getFlowNodeRuleNameWithIncFlow(eventBasedGateway, inFlow.getId()));
 

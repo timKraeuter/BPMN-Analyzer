@@ -44,7 +44,7 @@ public class ReceiveTask extends AbstractTask {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof ReceiveTask)) {
             return false;
         }
         if (!super.equals(o)) {

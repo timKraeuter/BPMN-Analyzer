@@ -44,7 +44,7 @@ public class EventBasedGateway extends Gateway {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof EventBasedGateway)) {
             return false;
         }
         if (!super.equals(o)) {

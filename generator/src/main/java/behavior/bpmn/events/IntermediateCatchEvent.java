@@ -44,7 +44,7 @@ public class IntermediateCatchEvent extends CatchEvent {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof IntermediateCatchEvent)) {
             return false;
         }
         if (!super.equals(o)) {

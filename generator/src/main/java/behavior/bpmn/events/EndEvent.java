@@ -49,7 +49,7 @@ public class EndEvent extends ThrowEvent {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof EndEvent)) {
             return false;
         }
         if (!super.equals(o)) {

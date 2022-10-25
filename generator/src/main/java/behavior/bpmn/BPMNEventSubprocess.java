@@ -10,11 +10,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class EventSubprocess extends AbstractProcess {
-    public EventSubprocess(String name,
-                           Set<SequenceFlow> sequenceFlows,
-                           Set<FlowNode> flowNodes,
-                           Set<EventSubprocess> eventSubprocesses) {
+public class BPMNEventSubprocess extends AbstractBPMNProcess {
+    public BPMNEventSubprocess(String name,
+                               Set<SequenceFlow> sequenceFlows,
+                               Set<FlowNode> flowNodes,
+                               Set<BPMNEventSubprocess> eventSubprocesses) {
         super(name, sequenceFlows, flowNodes, eventSubprocesses);
     }
 

@@ -1,9 +1,9 @@
 package groove.behaviortransformer.bpmn;
 
-import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.BPMNCollaboration;
+import behavior.bpmn.BPMNProcess;
 import behavior.bpmn.FlowNode;
-import behavior.bpmn.Process;
 import com.google.common.collect.Sets;
 import groove.behaviortransformer.bpmn.generators.*;
 import groove.graph.GrooveNode;
@@ -19,7 +19,7 @@ import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*
 public class BPMNRuleGenerator {
     private final GrooveRuleBuilder ruleBuilder;
     private final BPMNCollaboration collaboration;
-    private final Set<Process> visitedProcessModels;
+    private final Set<BPMNProcess> visitedProcessModels;
 
     // Subgenerators
     private final BPMNTaskRuleGenerator taskRuleGenerator;
@@ -46,7 +46,7 @@ public class BPMNRuleGenerator {
         return ruleBuilder.getRules();
     }
 
-    public Set<Process> getVisitedProcessModels() {
+    public Set<BPMNProcess> getVisitedProcessModels() {
         return visitedProcessModels;
     }
 
@@ -83,7 +83,7 @@ public class BPMNRuleGenerator {
         });
     }
 
-    public void generateRulesForProcess(AbstractProcess process) {
+    public void generateRulesForProcess(AbstractBPMNProcess process) {
         process.getFlowNodes().forEach(node -> node.accept(new GrooveRuleGenerationFlowNodeVisitor(this, process)));
 
         getEventSubprocessRuleGenerator().generateRulesForEventSubprocesses(process);

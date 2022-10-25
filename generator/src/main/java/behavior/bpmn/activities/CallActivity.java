@@ -1,20 +1,20 @@
 package behavior.bpmn.activities;
 
-import behavior.bpmn.Process;
+import behavior.bpmn.BPMNProcess;
 import behavior.bpmn.auxiliary.visitors.ActivityVisitor;
 import behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 import com.google.common.base.Objects;
 
 public class CallActivity extends Activity {
 
-    private final Process subProcessModel;
+    private final BPMNProcess subProcessModel;
 
-    public CallActivity(String id, Process subProcessModel) {
+    public CallActivity(String id, BPMNProcess subProcessModel) {
         super(id, subProcessModel.getName());
         this.subProcessModel = subProcessModel;
     }
 
-    public Process getSubProcessModel() {
+    public BPMNProcess getSubProcessModel() {
         return subProcessModel;
     }
 
@@ -43,7 +43,7 @@ public class CallActivity extends Activity {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof CallActivity)) {
             return false;
         }
         if (!super.equals(o)) {

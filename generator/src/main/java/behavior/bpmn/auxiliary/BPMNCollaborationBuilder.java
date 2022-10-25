@@ -1,6 +1,5 @@
 package behavior.bpmn.auxiliary;
 
-import behavior.bpmn.Process;
 import behavior.bpmn.*;
 import behavior.bpmn.auxiliary.visitors.CallActivityFlowNodeVisitor;
 import behavior.bpmn.events.StartEvent;
@@ -10,8 +9,8 @@ import java.util.Set;
 
 public class BPMNCollaborationBuilder implements BPMNModelBuilder {
     private final Set<MessageFlow> messageFlows;
-    private final Set<Process> participants;
-    private final Set<Process> subprocesses;
+    private final Set<BPMNProcess> participants;
+    private final Set<BPMNProcess> subprocesses;
     private String name;
 
     private BPMNProcessBuilder currentProcessBuilder;
@@ -46,7 +45,7 @@ public class BPMNCollaborationBuilder implements BPMNModelBuilder {
     }
 
     @Override
-    public BPMNCollaborationBuilder eventSubprocess(EventSubprocess eventSubprocess) {
+    public BPMNCollaborationBuilder eventSubprocess(BPMNEventSubprocess eventSubprocess) {
         currentProcessBuilder.eventSubprocess(eventSubprocess);
         return this;
     }
@@ -62,7 +61,7 @@ public class BPMNCollaborationBuilder implements BPMNModelBuilder {
 
     private void findAndAddSubProcessIfPresent(FlowNode flowNode) {
         flowNode.accept(new CallActivityFlowNodeVisitor(callActivity -> {
-            Process subProcessModel = callActivity.getSubProcessModel();
+            BPMNProcess subProcessModel = callActivity.getSubProcessModel();
             if (!subprocesses.contains(subProcessModel) || !participants.contains(subProcessModel)) {
                 subprocesses.add(subProcessModel);
                 subProcessModel.getFlowNodes().forEach(BPMNCollaborationBuilder.this::findAndAddSubProcessIfPresent);

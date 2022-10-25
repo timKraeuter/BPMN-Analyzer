@@ -1,6 +1,6 @@
 package maude.behaviortransformer.bpmn;
 
-import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
@@ -17,9 +17,9 @@ import behavior.bpmn.gateways.ParallelGateway;
 
 public class MaudeRuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
     private final BPMNMaudeRuleGenerator generator;
-    private final AbstractProcess process;
+    private final AbstractBPMNProcess process;
 
-    public MaudeRuleGenerationFlowNodeVisitor(BPMNMaudeRuleGenerator generator, AbstractProcess process) {
+    public MaudeRuleGenerationFlowNodeVisitor(BPMNMaudeRuleGenerator generator, AbstractBPMNProcess process) {
         this.generator = generator;
         this.process = process;
     }

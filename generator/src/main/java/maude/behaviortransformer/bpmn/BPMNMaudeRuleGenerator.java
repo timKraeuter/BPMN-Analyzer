@@ -1,8 +1,8 @@
 package maude.behaviortransformer.bpmn;
 
-import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.Process;
+import behavior.bpmn.BPMNProcess;
 import com.google.common.collect.Sets;
 import maude.behaviortransformer.bpmn.generators.BPMNMaudeEventRuleGenerator;
 import maude.behaviortransformer.bpmn.generators.BPMNMaudeGatewayRuleGenerator;
@@ -16,7 +16,7 @@ import java.util.Set;
 public class BPMNMaudeRuleGenerator {
     private final BPMNCollaboration collaboration;
     private final MaudeBPMNGenerationSettings settings;
-    private final Set<Process> visitedProcessModels;
+    private final Set<BPMNProcess> visitedProcessModels;
 
     // Subgenerators
     private final BPMNMaudeTaskRuleGenerator taskRuleGenerator;
@@ -50,7 +50,7 @@ public class BPMNMaudeRuleGenerator {
         });
     }
 
-    public void generateRulesForProcess(AbstractProcess process) {
+    public void generateRulesForProcess(AbstractBPMNProcess process) {
         process.getFlowNodes().forEach(node -> node.accept(new MaudeRuleGenerationFlowNodeVisitor(this, process)));
     }
 
@@ -70,7 +70,7 @@ public class BPMNMaudeRuleGenerator {
         return subprocessRuleGenerator;
     }
 
-    public Set<Process> getVisitedProcessModels() {
+    public Set<BPMNProcess> getVisitedProcessModels() {
         return visitedProcessModels;
     }
 

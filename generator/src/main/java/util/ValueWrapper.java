@@ -4,7 +4,7 @@ public class ValueWrapper<T> {
     private T value;
 
     /**
-     * @return the wrapped value which might be null.
+     * Return the wrapped value which might be null.
      */
     public T getValueIfExists() {
         return value;

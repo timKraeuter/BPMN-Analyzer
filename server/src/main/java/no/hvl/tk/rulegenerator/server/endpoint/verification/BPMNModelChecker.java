@@ -1,14 +1,13 @@
 package no.hvl.tk.rulegenerator.server.endpoint.verification;
 
 import behavior.bpmn.*;
-import behavior.bpmn.Process;
+import groove.runner.GrooveJarRunner;
 import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNPropertyCheckingResult;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingProperty;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingRequest;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import no.hvl.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
-import groove.runner.GrooveJarRunner;
 
 import java.io.File;
 import java.io.IOException;
@@ -102,7 +101,7 @@ public class BPMNModelChecker {
                 Collectors.toSet());
     }
 
-    private Set<String> getAllActivityNames(Process process) {
+    private Set<String> getAllActivityNames(BPMNProcess process) {
         // Get all activities from subprocesses
         final Set<String> allActivityNames = process.getSubProcesses().flatMap(subprocess -> getAllActivityNames(
                 subprocess).stream()).collect(Collectors.toSet());
@@ -114,7 +113,7 @@ public class BPMNModelChecker {
         return allActivityNames;
     }
 
-    private Set<String> getAllActivityNames(EventSubprocess process) {
+    private Set<String> getAllActivityNames(BPMNEventSubprocess process) {
         // Get all activities from subprocesses
         Set<String> allActivityNames = process.getEventSubprocesses().flatMap(eventSubprocess -> getAllActivityNames(
                 eventSubprocess).stream()).collect(Collectors.toSet());
@@ -123,7 +122,7 @@ public class BPMNModelChecker {
         return allActivityNames;
     }
 
-    private void addActivityNamesForProcess(AbstractProcess process, Set<String> allActivityNames) {
+    private void addActivityNamesForProcess(AbstractBPMNProcess process, Set<String> allActivityNames) {
         process.getFlowNodes().filter(FlowNode::isTask).map(FlowNode::getName).forEach(allActivityNames::add);
     }
 

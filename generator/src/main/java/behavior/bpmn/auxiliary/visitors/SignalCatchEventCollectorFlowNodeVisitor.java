@@ -2,7 +2,7 @@ package behavior.bpmn.auxiliary.visitors;
 
 
 import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.Process;
+import behavior.bpmn.BPMNProcess;
 import behavior.bpmn.activities.Activity;
 import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
@@ -21,13 +21,13 @@ public class SignalCatchEventCollectorFlowNodeVisitor extends DoNothingFlowNodeV
     private final EventDefinition eventDefinition;
     private final Set<Event> signalCatchEvents;
     private final Set<BoundaryEvent> signalBoundaryCatchEvents;
-    private final Set<Process> seenProcesses;
+    private final Set<BPMNProcess> seenProcesses;
 
     public SignalCatchEventCollectorFlowNodeVisitor(BPMNCollaboration collaboration,
                                                     EventDefinition eventDefinition,
                                                     Set<Event> signalCatchEvents,
                                                     Set<BoundaryEvent> signalBoundaryCatchEvents,
-                                                    Set<Process> seenProcesses) {
+                                                    Set<BPMNProcess> seenProcesses) {
         this.collaboration = collaboration;
         this.eventDefinition = eventDefinition;
         this.signalCatchEvents = signalCatchEvents;

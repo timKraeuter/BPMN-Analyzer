@@ -1,6 +1,6 @@
 package groove.behaviortransformer.bpmn.generators;
 
-import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.FlowNode;
 import behavior.bpmn.SequenceFlow;
@@ -32,13 +32,13 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
     }
 
     @Override
-    public void createTaskRulesForProcess(AbstractProcess process, Task task) {
+    public void createTaskRulesForProcess(AbstractBPMNProcess process, Task task) {
         createTaskRulesForProcess(process, task, noop -> {
         });
     }
 
     @Override
-    public void createSendTaskRulesForProcess(AbstractProcess process, SendTask sendTask) {
+    public void createSendTaskRulesForProcess(AbstractBPMNProcess process, SendTask sendTask) {
         createTaskRulesForProcess(process,
                                   sendTask,
                                   builder -> addSendMessageBehaviorForFlowNode(collaboration,
@@ -49,7 +49,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
     }
 
     @Override
-    public void createReceiveTaskRulesForProcess(AbstractProcess process, ReceiveTask receiveTask) {
+    public void createReceiveTaskRulesForProcess(AbstractBPMNProcess process, ReceiveTask receiveTask) {
         // Create boundary event rules
         createBoundaryEventRules(process, receiveTask);
         if (!receiveTask.isInstantiate() && !isAfterInstantiateEventBasedGateway(receiveTask)) {
@@ -63,7 +63,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         });
     }
 
-    void createReceiveTaskStartRule(AbstractProcess process, ReceiveTask receiveTask, SequenceFlow incomingFlow) {
+    void createReceiveTaskStartRule(AbstractBPMNProcess process, ReceiveTask receiveTask, SequenceFlow incomingFlow) {
         if (incomingFlow.getSource().isExclusiveEventBasedGateway()) {
             createEventBasedGatewayStartTaskRule(process, receiveTask, incomingFlow);
         } else {
@@ -78,7 +78,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         }
     }
 
-    private void createEventBasedGatewayStartTaskRule(AbstractProcess process,
+    private void createEventBasedGatewayStartTaskRule(AbstractBPMNProcess process,
                                                       ReceiveTask receiveTask,
                                                       SequenceFlow incomingFlow) {
         collaboration.getIncomingMessageFlows(receiveTask).forEach(messageFlow -> {
@@ -97,7 +97,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         });
     }
 
-    void createTaskRulesForProcess(AbstractProcess process,
+    void createTaskRulesForProcess(AbstractBPMNProcess process,
                                    AbstractTask task,
                                    Consumer<GrooveRuleBuilder> endTaskRuleAdditions) {
         // Rules for starting the task
@@ -110,7 +110,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         createBoundaryEventRules(process, task);
     }
 
-    private void createBoundaryEventRules(AbstractProcess process, AbstractTask task) {
+    private void createBoundaryEventRules(AbstractBPMNProcess process, AbstractTask task) {
         task.getBoundaryEvents().forEach(boundaryEvent -> {
             switch (boundaryEvent.getType()) {
                 case NONE:
@@ -136,7 +136,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         });
     }
 
-    private void createBoundaryEventRule(AbstractProcess process,
+    private void createBoundaryEventRule(AbstractBPMNProcess process,
                                          BoundaryEvent boundaryEvent,
                                          AbstractTask task,
                                          Consumer<GrooveNode> additionalActions) {
@@ -158,7 +158,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         ruleBuilder.buildRule();
     }
 
-    void createStartTaskRule(AbstractProcess process,
+    void createStartTaskRule(AbstractBPMNProcess process,
                              AbstractTask task,
                              SequenceFlow incomingFlow,
                              Consumer<GrooveNode> startTaskRuleAdditions) {
@@ -171,7 +171,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         ruleBuilder.buildRule();
     }
 
-    void createEndTaskRule(AbstractProcess process,
+    void createEndTaskRule(AbstractBPMNProcess process,
                            AbstractTask task,
                            Consumer<GrooveRuleBuilder> endTaskRuleAdditions) {
         ruleBuilder.startRule(task.getName() + END);

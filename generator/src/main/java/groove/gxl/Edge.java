@@ -1,23 +1,15 @@
 
 package groove.gxl;
 
-import java.util.ArrayList;
-import java.util.List;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlID;
-import jakarta.xml.bind.annotation.XmlIDREF;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.*;
 import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import jakarta.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * 
- */
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "type",
@@ -52,11 +44,11 @@ public class Edge {
 
     /**
      * Gets the value of the id property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public java.lang.String getId() {
         return id;
@@ -64,11 +56,11 @@ public class Edge {
 
     /**
      * Sets the value of the id property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public void setId(java.lang.String value) {
         this.id = value;
@@ -76,11 +68,11 @@ public class Edge {
 
     /**
      * Gets the value of the from property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Object }
-     *     
+     *
      */
     public Object getFrom() {
         return from;
@@ -88,11 +80,11 @@ public class Edge {
 
     /**
      * Sets the value of the from property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Object }
-     *     
+     *
      */
     public void setFrom(Object value) {
         this.from = value;
@@ -100,11 +92,11 @@ public class Edge {
 
     /**
      * Gets the value of the to property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Object }
-     *     
+     *
      */
     public Object getTo() {
         return to;
@@ -112,11 +104,11 @@ public class Edge {
 
     /**
      * Sets the value of the to property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Object }
-     *     
+     *
      */
     public void setTo(Object value) {
         this.to = value;
@@ -124,11 +116,11 @@ public class Edge {
 
     /**
      * Gets the value of the fromorder property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public java.lang.String getFromorder() {
         return fromorder;
@@ -136,11 +128,11 @@ public class Edge {
 
     /**
      * Sets the value of the fromorder property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public void setFromorder(java.lang.String value) {
         this.fromorder = value;
@@ -148,11 +140,11 @@ public class Edge {
 
     /**
      * Gets the value of the toorder property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public java.lang.String getToorder() {
         return toorder;
@@ -160,11 +152,11 @@ public class Edge {
 
     /**
      * Sets the value of the toorder property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public void setToorder(java.lang.String value) {
         this.toorder = value;
@@ -172,11 +164,11 @@ public class Edge {
 
     /**
      * Gets the value of the isdirected property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public java.lang.String getIsdirected() {
         return isdirected;
@@ -184,11 +176,11 @@ public class Edge {
 
     /**
      * Sets the value of the isdirected property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link java.lang.String }
-     *     
+     *
      */
     public void setIsdirected(java.lang.String value) {
         this.isdirected = value;
@@ -196,11 +188,11 @@ public class Edge {
 
     /**
      * Gets the value of the type property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Type }
-     *     
+     *
      */
     public Type getType() {
         return type;
@@ -208,11 +200,11 @@ public class Edge {
 
     /**
      * Sets the value of the type property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Type }
-     *     
+     *
      */
     public void setType(Type value) {
         this.type = value;
@@ -220,25 +212,25 @@ public class Edge {
 
     /**
      * Gets the value of the attr property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attr property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttr().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link Attr }
-     * 
-     * 
+     *
+     *
      */
     public List<Attr> getAttr() {
         if (attr == null) {
@@ -249,25 +241,25 @@ public class Edge {
 
     /**
      * Gets the value of the graph property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the graph property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getGraph().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link Graph }
-     * 
-     * 
+     *
+     *
      */
     public List<Graph> getGraph() {
         if (graph == null) {

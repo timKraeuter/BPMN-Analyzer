@@ -18,6 +18,7 @@ public class IntegerComparisonExpression extends IntegerExpression {
         this.operator = operator;
     }
 
+    @Override
     public BooleanVariable getAssignee() {
         return this.assignee;
     }

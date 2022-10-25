@@ -1,10 +1,10 @@
 package groove.behaviortransformer.bpmn.generators;
 
-import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.activities.CallActivity;
 
 public interface BPMNSubprocessRuleGenerator {
-    void createCallActivityRulesForProcess(AbstractProcess process, CallActivity callActivity);
+    void createCallActivityRulesForProcess(AbstractBPMNProcess process, CallActivity callActivity);
 
 
     default boolean subprocessHasStartEvents(CallActivity callActivity) {

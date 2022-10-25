@@ -1,6 +1,6 @@
 package behavior.bpmn.auxiliary;
 
-import behavior.bpmn.EventSubprocess;
+import behavior.bpmn.BPMNEventSubprocess;
 import behavior.bpmn.FlowNode;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.events.StartEvent;
@@ -12,7 +12,7 @@ import java.util.Set;
 public class BPMNEventSubprocessBuilder implements BPMNModelBuilder {
     private final Set<SequenceFlow> sequenceFlows;
     private final Set<FlowNode> flowNodes;
-    private final Set<EventSubprocess> eventSubprocesses;
+    private final Set<BPMNEventSubprocess> eventSubprocesses;
     private String name;
 
     public BPMNEventSubprocessBuilder() {
@@ -26,6 +26,7 @@ public class BPMNEventSubprocessBuilder implements BPMNModelBuilder {
         return this;
     }
 
+    @Override
     public BPMNEventSubprocessBuilder sequenceFlow(String id, String name, FlowNode from, FlowNode to) {
         final SequenceFlow sequenceFlow = new SequenceFlow(id, name, from, to);
         this.sequenceFlows.add(sequenceFlow);
@@ -34,6 +35,7 @@ public class BPMNEventSubprocessBuilder implements BPMNModelBuilder {
         return this;
     }
 
+    @Override
     public BPMNEventSubprocessBuilder sequenceFlow(String id, FlowNode from, FlowNode to) {
         return sequenceFlow(id, "", from, to);
     }
@@ -45,7 +47,7 @@ public class BPMNEventSubprocessBuilder implements BPMNModelBuilder {
     }
 
     @Override
-    public BPMNEventSubprocessBuilder eventSubprocess(EventSubprocess eventSubprocess) {
+    public BPMNEventSubprocessBuilder eventSubprocess(BPMNEventSubprocess eventSubprocess) {
         eventSubprocesses.add(eventSubprocess);
         return this;
     }
@@ -61,7 +63,7 @@ public class BPMNEventSubprocessBuilder implements BPMNModelBuilder {
         return this;
     }
 
-    public EventSubprocess build() {
-        return new EventSubprocess(name, sequenceFlows, flowNodes, eventSubprocesses);
+    public BPMNEventSubprocess build() {
+        return new BPMNEventSubprocess(name, sequenceFlows, flowNodes, eventSubprocesses);
     }
 }

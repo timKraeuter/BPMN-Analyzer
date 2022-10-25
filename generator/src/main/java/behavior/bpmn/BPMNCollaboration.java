@@ -18,16 +18,16 @@ import java.util.stream.Collectors;
 
 public class BPMNCollaboration implements Behavior {
     private final String name;
-    private final Set<Process> participants;
+    private final Set<BPMNProcess> participants;
     /**
      * Recursively derived from all call activities of the participants.
      */
-    private final Set<Process> allSubprocesses;
+    private final Set<BPMNProcess> allSubprocesses;
     private final Set<MessageFlow> messageFlows;
 
     public BPMNCollaboration(String name,
-                             Set<Process> participants,
-                             Set<Process> allSubprocesses,
+                             Set<BPMNProcess> participants,
+                             Set<BPMNProcess> allSubprocesses,
                              Set<MessageFlow> messageFlows) {
         this.name = name;
         this.participants = participants;
@@ -35,7 +35,7 @@ public class BPMNCollaboration implements Behavior {
         this.messageFlows = messageFlows;
     }
 
-    public Set<Process> getParticipants() {
+    public Set<BPMNProcess> getParticipants() {
         return participants;
     }
 
@@ -45,14 +45,15 @@ public class BPMNCollaboration implements Behavior {
 
 
     public Set<MessageFlow> outgoingMessageFlows(FlowNode producingMessageFlowNode) {
-        return this.getMessageFlows().stream().filter(messageFlow -> messageFlow.getSource() ==
-                                                                     producingMessageFlowNode).collect(Collectors.toCollection(
-                LinkedHashSet::new));
+        return this.getMessageFlows().stream()
+                   .filter(messageFlow -> messageFlow.getSource().equals(producingMessageFlowNode))
+                   .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public Set<MessageFlow> getIncomingMessageFlows(FlowNode messageTarget) {
-        return this.getMessageFlows().stream().filter(flow -> flow.getTarget().equals(messageTarget)).collect(Collectors.toCollection(
-                LinkedHashSet::new));
+        return this.getMessageFlows().stream()
+                   .filter(flow -> flow.getTarget().equals(messageTarget))
+                   .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override
@@ -66,10 +67,10 @@ public class BPMNCollaboration implements Behavior {
     }
 
     /**
-     * @return the parent process or the process itself if it is at the top level of the collaboration.
+     * Returns the parent process or the process itself if it is at the top level of the collaboration.
      */
-    public AbstractProcess getParentProcess(AbstractProcess process) {
-        for (Process participant : participants) {
+    public AbstractBPMNProcess getParentProcess(AbstractBPMNProcess process) {
+        for (BPMNProcess participant : participants) {
             if (participant.equals(process)) {
                 return process; // Process is at the top level
             }
@@ -80,7 +81,7 @@ public class BPMNCollaboration implements Behavior {
                 return participant;
             }
         }
-        for (Process subprocess : allSubprocesses) {
+        for (BPMNProcess subprocess : allSubprocesses) {
             if (subprocess.getSubProcesses().anyMatch(Predicate.isEqual(process))) {
                 return subprocess;
             }
@@ -92,27 +93,27 @@ public class BPMNCollaboration implements Behavior {
                                                   process);
     }
 
-    public AbstractProcess getMessageFlowReceiverProcess(MessageFlow flow) {
+    public AbstractBPMNProcess getMessageFlowReceiverProcess(MessageFlow flow) {
         return findProcessForFlowNode(flow.getTarget());
     }
 
-    public AbstractProcess findProcessForFlowNode(FlowNode flowNode) {
+    public AbstractBPMNProcess findProcessForFlowNode(FlowNode flowNode) {
         // Check participants and der event subprocesses first.
-        for (Process participant : this.getParticipants()) {
+        for (BPMNProcess participant : this.getParticipants()) {
             if (participant.getFlowNodes().anyMatch(Predicate.isEqual(flowNode))) {
                 return participant;
             }
-            final Optional<EventSubprocess> eventSubprocess = getFromEVSubprocessIfExists(flowNode, participant);
+            final Optional<BPMNEventSubprocess> eventSubprocess = getFromEVSubprocessIfExists(flowNode, participant);
             if (eventSubprocess.isPresent()) {
                 return eventSubprocess.get();
             }
         }
         // Check all other subprocesses and their event subprocesses.
-        for (Process subprocess : allSubprocesses) {
+        for (BPMNProcess subprocess : allSubprocesses) {
             if (subprocess.getFlowNodes().anyMatch(Predicate.isEqual(flowNode))) {
                 return subprocess;
             }
-            final Optional<EventSubprocess> eventSubprocess = getFromEVSubprocessIfExists(flowNode, subprocess);
+            final Optional<BPMNEventSubprocess> eventSubprocess = getFromEVSubprocessIfExists(flowNode, subprocess);
             if (eventSubprocess.isPresent()) {
                 return eventSubprocess.get();
             }
@@ -121,7 +122,7 @@ public class BPMNCollaboration implements Behavior {
         throw new ShouldNotHappenRuntimeException(String.format("No process for the flow node %s found!", flowNode));
     }
 
-    private Optional<EventSubprocess> getFromEVSubprocessIfExists(FlowNode flowNode, Process participant) {
+    private Optional<BPMNEventSubprocess> getFromEVSubprocessIfExists(FlowNode flowNode, BPMNProcess participant) {
         return participant.getEventSubprocesses()
                           .filter(evSubprocess -> evSubprocess.getFlowNodes().anyMatch(Predicate.isEqual(flowNode)))
                           .findFirst();
@@ -131,7 +132,7 @@ public class BPMNCollaboration implements Behavior {
     public Pair<Set<Event>, Set<BoundaryEvent>> findAllCorrespondingSignalCatchEvents(EventDefinition eventDefinition) {
         Set<Event> signalCatchEvents = new LinkedHashSet<>();
         Set<BoundaryEvent> signalBoundaryCatchEvents = new LinkedHashSet<>();
-        Set<Process> seenProcesses = new HashSet<>();
+        Set<BPMNProcess> seenProcesses = new HashSet<>();
         this.getParticipants().forEach(process -> {
             Pair<Set<Event>, Set<BoundaryEvent>> signalAndSignalBoundaryCatchEvents =
                     findAllCorrespondingSignalCatchEvents(
@@ -144,9 +145,9 @@ public class BPMNCollaboration implements Behavior {
         return Pair.of(signalCatchEvents, signalBoundaryCatchEvents);
     }
 
-    public Pair<Set<Event>, Set<BoundaryEvent>> findAllCorrespondingSignalCatchEvents(Process process,
-                                                                               EventDefinition eventDefinition,
-                                                                               Set<Process> seenProcesses) {
+    public Pair<Set<Event>, Set<BoundaryEvent>> findAllCorrespondingSignalCatchEvents(BPMNProcess process,
+                                                                                      EventDefinition eventDefinition,
+                                                                                      Set<BPMNProcess> seenProcesses) {
         Set<Event> signalCatchEvents = new LinkedHashSet<>();
         Set<BoundaryEvent> signalBoundaryCatchEvents = new LinkedHashSet<>();
         if (seenProcesses.contains(process)) {

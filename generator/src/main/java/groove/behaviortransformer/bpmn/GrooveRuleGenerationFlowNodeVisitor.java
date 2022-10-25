@@ -1,6 +1,6 @@
 package groove.behaviortransformer.bpmn;
 
-import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
@@ -17,9 +17,9 @@ import behavior.bpmn.gateways.ParallelGateway;
 
 public class GrooveRuleGenerationFlowNodeVisitor implements FlowNodeVisitor {
     private final BPMNRuleGenerator generator;
-    private final AbstractProcess process;
+    private final AbstractBPMNProcess process;
 
-    public GrooveRuleGenerationFlowNodeVisitor(BPMNRuleGenerator generator, AbstractProcess process) {
+    public GrooveRuleGenerationFlowNodeVisitor(BPMNRuleGenerator generator, AbstractBPMNProcess process) {
         this.generator = generator;
         this.process = process;
     }

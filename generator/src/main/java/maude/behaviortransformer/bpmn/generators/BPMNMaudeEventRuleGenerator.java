@@ -1,6 +1,6 @@
 package maude.behaviortransformer.bpmn.generators;
 
-import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
@@ -28,7 +28,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
         this.objectBuilder = new MaudeObjectBuilder();
     }
 
-    public void createStartEventRulesForProcess(AbstractProcess process, StartEvent startEvent) {
+    public void createStartEventRulesForProcess(AbstractBPMNProcess process, StartEvent startEvent) {
         switch (startEvent.getType()) {
             case NONE:
                 createNoneStartEventRule(startEvent, process);
@@ -47,7 +47,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
         }
     }
 
-    private void createNoneStartEventRule(StartEvent startEvent, AbstractProcess process) {
+    private void createNoneStartEventRule(StartEvent startEvent, AbstractBPMNProcess process) {
         ruleBuilder.startRule(getFlowNodeRuleName(startEvent));
         String preTokens = getStartEventTokenName(startEvent) + ANY_OTHER_TOKENS;
         String postTokens = getOutgoingTokensForFlowNode(startEvent) + ANY_OTHER_TOKENS;
@@ -56,7 +56,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
         ruleBuilder.buildRule();
     }
 
-    public void createEndEventRule(AbstractProcess process, EndEvent endEvent) {
+    public void createEndEventRule(AbstractBPMNProcess process, EndEvent endEvent) {
         if (endEvent.getIncomingFlows().count() != 1) {
             throw new BPMNRuntimeException("End events should have exactly one incoming flow!");
         }
@@ -83,7 +83,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
         ruleBuilder.buildRule();
     }
 
-    private void createSignalEndEventRule(AbstractProcess process, EndEvent endEvent, String preTokens) {
+    private void createSignalEndEventRule(AbstractBPMNProcess process, EndEvent endEvent, String preTokens) {
         ruleBuilder.addPreObject(createProcessSnapshotObjectWithParents(process,
                                                                         ANY_SUBPROCESSES,
                                                                         preTokens));
@@ -93,7 +93,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
         createSignalThrowRulePart(endEvent, endEvent.getEventDefinition());
     }
 
-    private void createMessageEndEventRule(AbstractProcess process, EndEvent endEvent, String preTokens) {
+    private void createMessageEndEventRule(AbstractBPMNProcess process, EndEvent endEvent, String preTokens) {
         ruleBuilder.addPreObject(createProcessSnapshotObjectWithParents(process,
                                                                         ANY_SUBPROCESSES,
                                                                         preTokens));
@@ -103,7 +103,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
         addSendMessageBehaviorForFlowNode(endEvent);
     }
 
-    private void createTerminationEndEventRule(AbstractProcess process, String preTokens) {
+    private void createTerminationEndEventRule(AbstractBPMNProcess process, String preTokens) {
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndSignals(process,
                                                                                     preTokens));
         ruleBuilder.addPostObject(createProcessSnapshotObject(process,
@@ -113,7 +113,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                                                               TERMINATED));
     }
 
-    private void createPreAndPostObjectInRuleForProcess(AbstractProcess process, String preTokens, String postTokens) {
+    private void createPreAndPostObjectInRuleForProcess(AbstractBPMNProcess process, String preTokens, String postTokens) {
         ruleBuilder.addPreObject(createProcessSnapshotObjectAnySubProcessAndSignals(process, preTokens));
         ruleBuilder.addPostObject(createProcessSnapshotObjectAnySubProcessAndNoSignals(process, postTokens));
     }
@@ -148,7 +148,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
 
     private void createSignalStartEventRulePart(Event event) {
         String startTokens = getOutgoingTokensForFlowNode(event);
-        final AbstractProcess processForEvent =
+        final AbstractBPMNProcess processForEvent =
                 getCollaboration().findProcessForFlowNode(
                         event);
         ruleBuilder.addPostObject(createProcessSnapshotObjectNoSubProcessAndSignals(
@@ -156,7 +156,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                 startTokens));
     }
 
-    public void createIntermediateCatchEventRule(AbstractProcess process,
+    public void createIntermediateCatchEventRule(AbstractBPMNProcess process,
                                                  IntermediateCatchEvent intermediateCatchEvent) {
         switch (intermediateCatchEvent.getType()) {
             case LINK:
@@ -176,7 +176,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
     }
 
     private void createIntermediateSignalCatchEventRule(IntermediateCatchEvent intermediateCatchEvent,
-                                                        AbstractProcess process) {
+                                                        AbstractBPMNProcess process) {
         intermediateCatchEvent.getIncomingFlows().forEach(inFlow -> {
             String preToken;
             String signalOccurrence;
@@ -205,7 +205,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
     }
 
     private void createIntermediateLinkCatchEventRule(IntermediateCatchEvent linkCatchEvent,
-                                                      AbstractProcess process) {
+                                                      AbstractBPMNProcess process) {
         ruleBuilder.startRule(getFlowNodeRuleName(linkCatchEvent));
 
         // Consume a token at the link event.
@@ -220,7 +220,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
     }
 
     private void createIntermediateCatchMessageEventRule(IntermediateCatchEvent intermediateCatchEvent,
-                                                         AbstractProcess process) {
+                                                         AbstractBPMNProcess process) {
         // Start event rule
         createStartInteractionNodeRule(intermediateCatchEvent, process);
 
@@ -228,7 +228,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
         createEndInteractionNodeRule(intermediateCatchEvent, process);
     }
 
-    public void createIntermediateThrowEventRule(AbstractProcess process,
+    public void createIntermediateThrowEventRule(AbstractBPMNProcess process,
                                                  IntermediateThrowEvent intermediateThrowEvent) {
         // We currently limit to one incoming token, but we could implement an implicit exclusive gateway.
         if (intermediateThrowEvent.getIncomingFlows().count() != 1) {
@@ -253,7 +253,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
     }
 
     private void createIntermediateThrowSignalEventRule(IntermediateThrowEvent intermediateThrowEvent,
-                                                        AbstractProcess process) {
+                                                        AbstractBPMNProcess process) {
         intermediateThrowEvent.getIncomingFlows().forEach(incFlow -> {
             ruleBuilder.startRule(getFlowNodeRuleNameWithIncFlow(intermediateThrowEvent, incFlow.getId()));
 
@@ -274,7 +274,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
     }
 
     private void createIntermediateThrowLinkEventRule(IntermediateThrowEvent intermediateThrowEvent,
-                                                      AbstractProcess process) {
+                                                      AbstractBPMNProcess process) {
         intermediateThrowEvent.getIncomingFlows().forEach(incFlow -> {
             ruleBuilder.startRule(getFlowNodeRuleNameWithIncFlow(intermediateThrowEvent, incFlow.getId()));
 
@@ -291,7 +291,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
     }
 
     private void createIntermediateThrowMessageEventRule(IntermediateThrowEvent intermediateThrowEvent,
-                                                         AbstractProcess process) {
+                                                         AbstractBPMNProcess process) {
         intermediateThrowEvent.getIncomingFlows().forEach(incFlow -> {
             ruleBuilder.startRule(getFlowNodeRuleNameWithIncFlow(intermediateThrowEvent, incFlow.getId()));
 
@@ -311,7 +311,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
     }
 
     private void createIntermediateThrowNoneEventRule(Event intermediateThrowEvent,
-                                                      AbstractProcess process) {
+                                                      AbstractBPMNProcess process) {
         intermediateThrowEvent.getIncomingFlows().forEach(incFlow -> {
             ruleBuilder.startRule(getFlowNodeRuleNameWithIncFlow(intermediateThrowEvent, incFlow.getId()));
 

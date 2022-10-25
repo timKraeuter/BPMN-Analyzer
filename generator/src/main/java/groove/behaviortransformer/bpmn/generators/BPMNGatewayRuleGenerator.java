@@ -1,17 +1,17 @@
 package groove.behaviortransformer.bpmn.generators;
 
-import behavior.bpmn.AbstractProcess;
+import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.InclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
 
 public interface BPMNGatewayRuleGenerator {
-    void createExclusiveGatewayRules(AbstractProcess process, ExclusiveGateway exclusiveGateway);
+    void createExclusiveGatewayRules(AbstractBPMNProcess process, ExclusiveGateway exclusiveGateway);
 
-    void createParallelGatewayRule(AbstractProcess process, ParallelGateway parallelGateway);
+    void createParallelGatewayRule(AbstractBPMNProcess process, ParallelGateway parallelGateway);
 
-    void createEventBasedGatewayRule(EventBasedGateway eventBasedGateway, AbstractProcess process);
+    void createEventBasedGatewayRule(EventBasedGateway eventBasedGateway, AbstractBPMNProcess process);
 
-    void createInclusiveGatewayRules(AbstractProcess process, InclusiveGateway inclusiveGateway);
+    void createInclusiveGatewayRules(AbstractBPMNProcess process, InclusiveGateway inclusiveGateway);
 }

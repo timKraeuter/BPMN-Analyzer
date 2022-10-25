@@ -35,7 +35,7 @@ public abstract class FlowNode extends FlowElement {
     public abstract boolean isInclusiveGateway();
 
     /**
-     * @return is the flow nodes should instantiate the process, such as instantiate receive tasks, message start events or signal start events.
+     * Return if the flow nodes should instantiate the process, such as instantiate receive tasks, message start events or signal start events.
      */
     public abstract boolean isInstantiateFlowNode();
 

@@ -82,35 +82,35 @@ public interface BPMNToMaudeTransformerHelper {
         return getTokenOrSignalOccurrenceForSequenceFlow(sequenceFlow, TOKEN_FORMAT);
     }
 
-    default MaudeObject createTerminatedProcessSnapshot(AbstractProcess process) {
+    default MaudeObject createTerminatedProcessSnapshot(AbstractBPMNProcess process) {
         String oid = "OT";
         getRuleBuilder().addVar(OIDS, OID, oid);
         // Is a subprocess. Thus, should not have parents!
         return createProcessSnapshotObjectWithoutParents(process, oid, NONE, NONE, NONE, TERMINATED);
     }
 
-    default MaudeObject createProcessSnapshotObjectNoSubProcessAndSignals(AbstractProcess process,
+    default MaudeObject createProcessSnapshotObjectNoSubProcessAndSignals(AbstractBPMNProcess process,
                                                                           String oid,
                                                                           String tokens) {
         return createProcessSnapshotObject(process, oid, NONE, tokens, NONE, RUNNING);
     }
 
-    default MaudeObject createProcessSnapshotObjectNoSubProcessAndSignals(AbstractProcess process,
+    default MaudeObject createProcessSnapshotObjectNoSubProcessAndSignals(AbstractBPMNProcess process,
                                                                           String tokens) {
         return createProcessSnapshotObjectRunning(process, NONE, tokens, NONE);
     }
 
-    default MaudeObject createProcessSnapshotObjectAnySubProcessAndSignals(AbstractProcess process,
+    default MaudeObject createProcessSnapshotObjectAnySubProcessAndSignals(AbstractBPMNProcess process,
                                                                            String tokens) {
         return createProcessSnapshotObjectRunning(process, ANY_SUBPROCESSES, tokens, ANY_SIGNALS);
     }
 
-    default MaudeObject createProcessSnapshotObjectAnySubProcessAndNoSignals(AbstractProcess process,
+    default MaudeObject createProcessSnapshotObjectAnySubProcessAndNoSignals(AbstractBPMNProcess process,
                                                                              String tokens) {
         return createProcessSnapshotObjectRunning(process, ANY_SUBPROCESSES, tokens, NONE);
     }
 
-    default MaudeObject createProcessSnapshotObjectRunning(AbstractProcess process,
+    default MaudeObject createProcessSnapshotObjectRunning(AbstractBPMNProcess process,
                                                            String subprocesses,
                                                            String tokens,
                                                            String signals) {
@@ -118,7 +118,7 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
 
-    default MaudeObject createProcessSnapshotObjectWithParents(AbstractProcess process,
+    default MaudeObject createProcessSnapshotObjectWithParents(AbstractBPMNProcess process,
                                                                String subprocesses,
                                                                String tokens) {
         MaudeObject processObject = createProcessSnapshotObjectWithoutParents(process,
@@ -130,8 +130,8 @@ public interface BPMNToMaudeTransformerHelper {
         return wrapInParentIfNeeded(process, processObject, 1);
     }
 
-    default MaudeObject wrapInParentIfNeeded(AbstractProcess process, MaudeObject processObject, int counter) {
-        AbstractProcess parentProcess = getCollaboration().getParentProcess(process);
+    default MaudeObject wrapInParentIfNeeded(AbstractBPMNProcess process, MaudeObject processObject, int counter) {
+        AbstractBPMNProcess parentProcess = getCollaboration().getParentProcess(process);
         if (parentProcess.equals(process)) {
             return processObject;
         }
@@ -155,7 +155,7 @@ public interface BPMNToMaudeTransformerHelper {
         return wrapInParentIfNeeded(parentProcess, parentProcessObject, counter + 1);
     }
 
-    default MaudeObject createProcessSnapshotObject(AbstractProcess process,
+    default MaudeObject createProcessSnapshotObject(AbstractBPMNProcess process,
                                                     String subprocesses,
                                                     String tokens,
                                                     String signals,
@@ -163,7 +163,7 @@ public interface BPMNToMaudeTransformerHelper {
         return createProcessSnapshotObject(process, O + 0, subprocesses, tokens, signals, state);
     }
 
-    default MaudeObject createProcessSnapshotObject(AbstractProcess process,
+    default MaudeObject createProcessSnapshotObject(AbstractBPMNProcess process,
                                                     String oid,
                                                     String subprocesses,
                                                     String tokens,
@@ -187,7 +187,7 @@ public interface BPMNToMaudeTransformerHelper {
         return wrapInParentIfNeeded(process, processObject, 1);
     }
 
-    default MaudeObject createProcessSnapshotObjectWithoutParents(AbstractProcess process,
+    default MaudeObject createProcessSnapshotObjectWithoutParents(AbstractBPMNProcess process,
                                                                   String oid,
                                                                   String subprocesses,
                                                                   String tokens,
@@ -224,7 +224,7 @@ public interface BPMNToMaudeTransformerHelper {
 
     default void addMessageFlowInstantiateFlowNodeBehavior(BPMNCollaboration collaboration,
                                                            MessageFlow messageFlow) {
-        AbstractProcess receiverProcess = collaboration.getMessageFlowReceiverProcess(messageFlow);
+        AbstractBPMNProcess receiverProcess = collaboration.getMessageFlowReceiverProcess(messageFlow);
         FlowNode mFlowTarget = messageFlow.getTarget();
         String tokens = getTokenForFlowNode(mFlowTarget) + ANY_OTHER_TOKENS;
         getRuleBuilder().addPostObject(createProcessSnapshotObjectNoSubProcessAndSignals(receiverProcess,
@@ -253,7 +253,7 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
     /**
-     * @return the rule name of the interaction node (node which is source or target of a message flow).
+     * Return the rule name of the interaction node (node which is source or target of a message flow).
      */
     default String getInteractionNodeRuleName(FlowNode flowNode,
                                               Set<MessageFlow> incomingMessageFlows,
@@ -266,7 +266,7 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
     default void createStartInteractionNodeRule(FlowNode interactionNode,
-                                                AbstractProcess process) {
+                                                AbstractBPMNProcess process) {
         if (isAfterExclusiveEventBasedGateway(interactionNode) || interactionNode.isInstantiateFlowNode()) {
             return; // No start rule needed.
         }
@@ -285,7 +285,7 @@ public interface BPMNToMaudeTransformerHelper {
     }
 
     default void createEndInteractionNodeRule(FlowNode interactionNode,
-                                              AbstractProcess process) {
+                                              AbstractBPMNProcess process) {
         Set<MessageFlow> incomingMessageFlows = getCollaboration().getIncomingMessageFlows(interactionNode);
         incomingMessageFlows.forEach(messageFlow -> {
             getRuleBuilder().startRule(getInteractionNodeRuleName(interactionNode,
