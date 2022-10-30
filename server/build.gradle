@@ -5,6 +5,8 @@ plugins {
 	// Analysis
 	id "org.sonarqube" version "3.4.0.2513"
 	id 'jacoco'
+	id ("net.ltgt.errorprone") version "3.0.1"
+	id "com.diffplug.spotless" version "6.11.0"
 }
 
 group = 'no.hvl.tk'
@@ -43,6 +45,8 @@ dependencies {
 	// toString of input streams.
 	// https://mvnrepository.com/artifact/commons-io/commons-io
 	testImplementation 'commons-io:commons-io:2.11.0'
+
+	errorprone("com.google.errorprone:error_prone_core:2.16")
 }
 
 tasks.named('test') {
@@ -66,4 +70,11 @@ sonarqube {
 
 tasks.named('sonarqube').configure {
 	dependsOn jacocoTestReport
+}
+
+spotless {
+	java {
+		googleJavaFormat()
+		formatAnnotations()
+	}
 }

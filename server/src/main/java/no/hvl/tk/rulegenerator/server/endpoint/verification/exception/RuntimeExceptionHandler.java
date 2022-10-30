@@ -10,16 +10,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class RuntimeExceptionHandler extends ResponseEntityExceptionHandler {
-    private final Logger log = LoggerFactory.getLogger(RuntimeExceptionHandler.class);
+  private final Logger log = LoggerFactory.getLogger(RuntimeExceptionHandler.class);
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ModelCheckingErrorResponse> customHandleNotFound(Exception ex) {
-        log.error("Unexpected exception in controller!", ex);
+  @ExceptionHandler(RuntimeException.class)
+  public ResponseEntity<ModelCheckingErrorResponse> customHandleNotFound(Exception ex) {
+    log.error("Unexpected exception in controller!", ex);
 
-        ModelCheckingErrorResponse errors = new ModelCheckingErrorResponse();
-        errors.setMessage(ex.getMessage());
+    ModelCheckingErrorResponse errors = new ModelCheckingErrorResponse();
+    errors.setMessage(ex.getMessage());
 
-        return new ResponseEntity<>(errors, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
+    return new ResponseEntity<>(errors, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
 }
