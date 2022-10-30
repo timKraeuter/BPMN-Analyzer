@@ -3,28 +3,27 @@ package behavior.bpmn.gateways;
 import behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 
 public class InclusiveGateway extends Gateway {
-    public InclusiveGateway(String id, String name) {
-        super(id, name);
-    }
+  public InclusiveGateway(String id, String name) {
+    super(id, name);
+  }
 
-    @Override
-    public void accept(FlowNodeVisitor visitor) {
-        visitor.handle(this);
-    }
+  @Override
+  public void accept(FlowNodeVisitor visitor) {
+    visitor.handle(this);
+  }
 
-    @Override
-    public boolean isInclusiveGateway() {
-        return true;
-    }
+  @Override
+  public boolean isInclusiveGateway() {
+    return true;
+  }
 
-    @Override
-    public boolean isInstantiateFlowNode() {
-        return false;
-    }
+  @Override
+  public boolean isInstantiateFlowNode() {
+    return false;
+  }
 
-    @Override
-    public boolean isExclusiveEventBasedGateway() {
-        return false;
-    }
-
+  @Override
+  public boolean isExclusiveEventBasedGateway() {
+    return false;
+  }
 }

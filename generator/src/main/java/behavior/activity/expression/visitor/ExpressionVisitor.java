@@ -8,13 +8,13 @@ import behavior.activity.expression.integer.IntegerComparisonExpression;
 import behavior.activity.values.Value;
 
 public interface ExpressionVisitor {
-    <V extends Value> void handle(SetVariableExpression<V> setVariableExpression);
+  <V extends Value> void handle(SetVariableExpression<V> setVariableExpression);
 
-    void handle(IntegerCalculationExpression integerCalculationExpression);
+  void handle(IntegerCalculationExpression integerCalculationExpression);
 
-    void handle(IntegerComparisonExpression integerComparisonExpression);
+  void handle(IntegerComparisonExpression integerComparisonExpression);
 
-    void handle(BooleanBinaryExpression booleanBinaryExpression);
+  void handle(BooleanBinaryExpression booleanBinaryExpression);
 
-    void handle(BooleanUnaryExpression booleanUnaryExpression);
+  void handle(BooleanUnaryExpression booleanUnaryExpression);
 }

@@ -7,13 +7,13 @@ import behavior.petrinet.PetriNet;
 import behavior.picalculus.NamedPiProcess;
 
 public interface BehaviorVisitor {
-    void handle(FiniteStateMachine finiteStateMachine);
+  void handle(FiniteStateMachine finiteStateMachine);
 
-    void handle(PetriNet petriNet);
+  void handle(PetriNet petriNet);
 
-    void handle(BPMNCollaboration bpmnProcess);
+  void handle(BPMNCollaboration bpmnProcess);
 
-    void handle(NamedPiProcess piProcess);
+  void handle(NamedPiProcess piProcess);
 
-    void handle(ActivityDiagram activityDiagram);
+  void handle(ActivityDiagram activityDiagram);
 }

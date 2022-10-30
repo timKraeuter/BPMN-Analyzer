@@ -7,11 +7,13 @@ import behavior.bpmn.events.IntermediateThrowEvent;
 import behavior.bpmn.events.StartEvent;
 
 public interface BPMNEventRuleGenerator {
-    void createStartEventRulesForProcess(AbstractBPMNProcess process, StartEvent startEvent);
+  void createStartEventRulesForProcess(AbstractBPMNProcess process, StartEvent startEvent);
 
-    void createEndEventRule(AbstractBPMNProcess process, EndEvent endEvent);
+  void createEndEventRule(AbstractBPMNProcess process, EndEvent endEvent);
 
-    void createIntermediateThrowEventRule(AbstractBPMNProcess process, IntermediateThrowEvent intermediateThrowEvent);
+  void createIntermediateThrowEventRule(
+      AbstractBPMNProcess process, IntermediateThrowEvent intermediateThrowEvent);
 
-    void createIntermediateCatchEventRule(AbstractBPMNProcess process, IntermediateCatchEvent intermediateCatchEvent);
+  void createIntermediateCatchEventRule(
+      AbstractBPMNProcess process, IntermediateCatchEvent intermediateCatchEvent);
 }

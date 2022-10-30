@@ -3,6 +3,7 @@ plugins {
     id "org.sonarqube" version "3.4.0.2513"
     id 'jacoco'
     id ("net.ltgt.errorprone") version "3.0.1"
+    id "com.diffplug.spotless" version "6.11.0"
 }
 
 group = 'no.hvl.tk'
@@ -38,7 +39,6 @@ dependencies {
     implementation 'org.eclipse.elk:org.eclipse.elk.core:0.7.1'
     // https://mvnrepository.com/artifact/org.eclipse.elk/org.eclipse.elk.alg.layered
     implementation 'org.eclipse.elk:org.eclipse.elk.alg.layered:0.7.1'
-
 
     // https://mvnrepository.com/artifact/org.hamcrest/hamcrest
     testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
@@ -78,4 +78,11 @@ tasks.named('sonarqube').configure {
 tasks.compileJava {
     // Ignore classes generated from XSD.
     options.errorprone.excludedPaths = ".*/src/main/java/groove/gxl/.*"
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+        formatAnnotations()
+    }
 }

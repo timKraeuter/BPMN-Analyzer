@@ -7,11 +7,12 @@ import behavior.bpmn.gateways.InclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
 
 public interface BPMNGatewayRuleGenerator {
-    void createExclusiveGatewayRules(AbstractBPMNProcess process, ExclusiveGateway exclusiveGateway);
+  void createExclusiveGatewayRules(AbstractBPMNProcess process, ExclusiveGateway exclusiveGateway);
 
-    void createParallelGatewayRule(AbstractBPMNProcess process, ParallelGateway parallelGateway);
+  void createParallelGatewayRule(AbstractBPMNProcess process, ParallelGateway parallelGateway);
 
-    void createEventBasedGatewayRule(EventBasedGateway eventBasedGateway, AbstractBPMNProcess process);
+  void createEventBasedGatewayRule(
+      EventBasedGateway eventBasedGateway, AbstractBPMNProcess process);
 
-    void createInclusiveGatewayRules(AbstractBPMNProcess process, InclusiveGateway inclusiveGateway);
+  void createInclusiveGatewayRules(AbstractBPMNProcess process, InclusiveGateway inclusiveGateway);
 }

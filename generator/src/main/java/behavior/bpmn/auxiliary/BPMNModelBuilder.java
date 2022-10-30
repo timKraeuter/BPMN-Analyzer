@@ -3,19 +3,18 @@ package behavior.bpmn.auxiliary;
 import behavior.bpmn.BPMNEventSubprocess;
 import behavior.bpmn.FlowNode;
 import behavior.bpmn.events.StartEvent;
-
 import java.util.Set;
 
 public interface BPMNModelBuilder {
-    BPMNModelBuilder sequenceFlow(String id, String name, FlowNode from, FlowNode to);
+  BPMNModelBuilder sequenceFlow(String id, String name, FlowNode from, FlowNode to);
 
-    BPMNModelBuilder sequenceFlow(String id, FlowNode from, FlowNode to);
+  BPMNModelBuilder sequenceFlow(String id, FlowNode from, FlowNode to);
 
-    BPMNModelBuilder flowNode(FlowNode flowNode);
+  BPMNModelBuilder flowNode(FlowNode flowNode);
 
-    Set<StartEvent> getStartEvents();
+  Set<StartEvent> getStartEvents();
 
-    BPMNModelBuilder startEvent(StartEvent startEvent);
+  BPMNModelBuilder startEvent(StartEvent startEvent);
 
-    BPMNModelBuilder eventSubprocess(BPMNEventSubprocess eventSubprocess);
+  BPMNModelBuilder eventSubprocess(BPMNEventSubprocess eventSubprocess);
 }
