@@ -1,4 +1,3 @@
 package behavior.picalculus;
 
-public interface Sum extends PiProcess {
-}
+public interface Sum extends PiProcess {}

@@ -1,17 +1,14 @@
 package behavior.activity.nodes;
 
-/**
- * Represents the final node ending the execution of an activity diagram.
- */
+/** Represents the final node ending the execution of an activity diagram. */
 public class ActivityFinalNode extends ControlNode {
 
-    public ActivityFinalNode(String name) {
-        super(name);
-    }
+  public ActivityFinalNode(String name) {
+    super(name);
+  }
 
-    @Override
-    public void accept(ActivityNodeVisitor visitor) {
-        visitor.handle(this);
-    }
-
+  @Override
+  public void accept(ActivityNodeVisitor visitor) {
+    visitor.handle(this);
+  }
 }

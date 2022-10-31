@@ -7,7 +7,7 @@ import java.util.stream.Stream;
  */
 public interface Graph<N, E> {
 
-    Stream<N> nodes();
+  Stream<N> nodes();
 
-    Stream<E> edges();
+  Stream<E> edges();
 }

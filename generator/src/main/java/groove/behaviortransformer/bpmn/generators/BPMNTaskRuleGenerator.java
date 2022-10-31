@@ -6,9 +6,9 @@ import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
 
 public interface BPMNTaskRuleGenerator {
-    void createTaskRulesForProcess(AbstractBPMNProcess process, Task task);
+  void createTaskRulesForProcess(AbstractBPMNProcess process, Task task);
 
-    void createSendTaskRulesForProcess(AbstractBPMNProcess process, SendTask sendTask);
+  void createSendTaskRulesForProcess(AbstractBPMNProcess process, SendTask sendTask);
 
-    void createReceiveTaskRulesForProcess(AbstractBPMNProcess process, ReceiveTask receiveTask);
+  void createReceiveTaskRulesForProcess(AbstractBPMNProcess process, ReceiveTask receiveTask);
 }

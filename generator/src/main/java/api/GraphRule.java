@@ -1,4 +1,3 @@
 package api;
 
-public interface GraphRule {
-}
+public interface GraphRule {}

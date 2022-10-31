@@ -1,7 +1,7 @@
 package behavior;
 
 public interface Behavior {
-    String getName();
+  String getName();
 
-    void accept(BehaviorVisitor visitor);
+  void accept(BehaviorVisitor visitor);
 }

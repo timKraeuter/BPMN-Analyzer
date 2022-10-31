@@ -4,7 +4,7 @@ import behavior.bpmn.BPMNEventSubprocess;
 import behavior.bpmn.BPMNProcess;
 
 public interface AbstractProcessVisitor {
-    void handle(BPMNEventSubprocess eventSubprocess);
+  void handle(BPMNEventSubprocess eventSubprocess);
 
-    void handle(BPMNProcess process);
+  void handle(BPMNProcess process);
 }

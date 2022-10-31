@@ -5,36 +5,36 @@ import behavior.bpmn.auxiliary.visitors.EventVisitor;
 
 public abstract class Event extends FlowNode {
 
-    private final EventDefinition eventDefinition;
+  private final EventDefinition eventDefinition;
 
-    protected Event(String id, String name, EventDefinition eventDefinition) {
-        super(id, name);
-        this.eventDefinition = eventDefinition;
-    }
+  protected Event(String id, String name, EventDefinition eventDefinition) {
+    super(id, name);
+    this.eventDefinition = eventDefinition;
+  }
 
-    public abstract void accept(EventVisitor eventVisitor);
+  public abstract void accept(EventVisitor eventVisitor);
 
-    @Override
-    public boolean isInclusiveGateway() {
-        return false;
-    }
+  @Override
+  public boolean isInclusiveGateway() {
+    return false;
+  }
 
-    @Override
-    public boolean isTask() {
-        return false;
-    }
+  @Override
+  public boolean isTask() {
+    return false;
+  }
 
-    @Override
-    public boolean isGateway() {
-        return false;
-    }
+  @Override
+  public boolean isGateway() {
+    return false;
+  }
 
-    @Override
-    public boolean isExclusiveEventBasedGateway() {
-        return false;
-    }
+  @Override
+  public boolean isExclusiveEventBasedGateway() {
+    return false;
+  }
 
-    public EventDefinition getEventDefinition() {
-        return eventDefinition;
-    }
+  public EventDefinition getEventDefinition() {
+    return eventDefinition;
+  }
 }

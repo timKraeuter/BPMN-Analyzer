@@ -7,11 +7,11 @@ import behavior.bpmn.events.StartEvent;
 
 public interface EventVisitor {
 
-    void handle(StartEvent startEvent);
+  void handle(StartEvent startEvent);
 
-    void handle(IntermediateThrowEvent intermediateThrowEvent);
+  void handle(IntermediateThrowEvent intermediateThrowEvent);
 
-    void handle(IntermediateCatchEvent intermediateCatchEvent);
+  void handle(IntermediateCatchEvent intermediateCatchEvent);
 
-    void handle(EndEvent endEvent);
+  void handle(EndEvent endEvent);
 }

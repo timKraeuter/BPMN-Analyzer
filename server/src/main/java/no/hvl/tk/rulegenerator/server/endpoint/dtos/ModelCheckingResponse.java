@@ -4,16 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModelCheckingResponse {
-    private final List<BPMNPropertyCheckingResult> propertyCheckingResults;
-    public ModelCheckingResponse() {
-        this.propertyCheckingResults = new ArrayList<>();
-    }
+  private final List<BPMNPropertyCheckingResult> propertyCheckingResults;
 
-    public void addPropertyCheckingResult(BPMNPropertyCheckingResult result) {
-        this.propertyCheckingResults.add(result);
-    }
+  public ModelCheckingResponse() {
+    this.propertyCheckingResults = new ArrayList<>();
+  }
 
-    public List<BPMNPropertyCheckingResult> getPropertyCheckingResults() {
-        return propertyCheckingResults;
-    }
+  public void addPropertyCheckingResult(BPMNPropertyCheckingResult result) {
+    this.propertyCheckingResults.add(result);
+  }
+
+  public List<BPMNPropertyCheckingResult> getPropertyCheckingResults() {
+    return propertyCheckingResults;
+  }
 }
