@@ -33,3 +33,10 @@ A demo version of the tool is hosted [here](https://bpmn-analyzer.herokuapp.com/
 [![Tool screenshot](./documentation/impl.png)](https://bpmn-analyzer.herokuapp.com/)
 
 Go [here](/server/README.md) if you want to run the tool to generate graph-transformation rules for BPMN locally
+
+## Code style & Static analysis
+I use the [Google Java Code Style](https://google.github.io/styleguide/javaguide.html) in my project.
+The style is automatically enforced using [google-java-format](https://github.com/google/google-java-format) through the [spotless](https://github.com/diffplug/spotless/tree/main/plugin-gradle#google-java-format) gradle plugin and can also be installed in your IDE.
+
+I use sonarcloud for static analysis see/click on lines of code, coverage, bugs, code smells, and vulnerabilities above.
+In addition, I experiment with Google's [Error Prone](https://errorprone.info/), but it mostly finds the same issues as sonarcloud.
