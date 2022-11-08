@@ -51,7 +51,7 @@ public class RuleGeneratorControllerHelper {
           transformer.generateGrooveGrammarForBPMNProcessModel(
               bpmnCollaboration, new File(GRAPH_GRAMMAR_TEMP_DIR), false);
     } catch (GrooveGenerationRuntimeException e) {
-      // Retry but using sequence flow ids not descriptive names.
+      // Retry but using ids everywhere.
       grooveGrammarFolder =
           transformer.generateGrooveGrammarForBPMNProcessModel(
               bpmnCollaboration, new File(GRAPH_GRAMMAR_TEMP_DIR), true);

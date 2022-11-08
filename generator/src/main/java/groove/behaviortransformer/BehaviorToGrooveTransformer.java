@@ -26,7 +26,13 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
@@ -297,6 +303,7 @@ public class BehaviorToGrooveTransformer {
   }
 
   public File generateGrooveGrammarForBPMNProcessModel(
+      // TODO: rename useSFId to use IDS.
       BPMNCollaboration collaboration, File grooveDir, boolean useSFId) {
     File graphGrammarSubFolder = this.makeSubFolder(collaboration, grooveDir);
     BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer(useSFId);
