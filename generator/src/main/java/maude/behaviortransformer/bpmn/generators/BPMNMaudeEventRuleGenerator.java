@@ -1,20 +1,45 @@
 package maude.behaviortransformer.bpmn.generators;
 
-import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.*;
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_OTHER_SIGNALS;
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_OTHER_TOKENS;
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_SUBPROCESSES;
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_TOKENS;
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.NONE;
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.TERMINATED;
+import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.WHITE_SPACE;
 
 import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.BPMNCollaboration;
+import behavior.bpmn.FlowNode;
 import behavior.bpmn.SequenceFlow;
+import behavior.bpmn.activities.CallActivity;
+import behavior.bpmn.activities.tasks.ReceiveTask;
+import behavior.bpmn.activities.tasks.SendTask;
+import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
-import behavior.bpmn.events.*;
+import behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
+import behavior.bpmn.events.BoundaryEvent;
+import behavior.bpmn.events.EndEvent;
+import behavior.bpmn.events.Event;
+import behavior.bpmn.events.EventDefinition;
+import behavior.bpmn.events.IntermediateCatchEvent;
+import behavior.bpmn.events.IntermediateCatchEventType;
+import behavior.bpmn.events.IntermediateThrowEvent;
+import behavior.bpmn.events.StartEvent;
+import behavior.bpmn.gateways.EventBasedGateway;
+import behavior.bpmn.gateways.ExclusiveGateway;
+import behavior.bpmn.gateways.InclusiveGateway;
+import behavior.bpmn.gateways.ParallelGateway;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import maude.behaviortransformer.bpmn.BPMNMaudeRuleGenerator;
 import maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
 import maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import maude.generation.BPMNMaudeRuleBuilder;
 import maude.generation.MaudeObjectBuilder;
 import org.apache.commons.lang3.tuple.Pair;
+import util.ValueWrapper;
 
 public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper {
   private final BPMNMaudeRuleGenerator ruleGenerator;
@@ -164,7 +189,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
       AbstractBPMNProcess process, IntermediateCatchEvent intermediateCatchEvent) {
     switch (intermediateCatchEvent.getType()) {
       case LINK:
-        createIntermediateLinkCatchEventRule(intermediateCatchEvent, process);
+        // No catch rule needed since tokens are teleported when the link event happens.
         break;
       case MESSAGE:
         createIntermediateCatchMessageEventRule(intermediateCatchEvent, process);
@@ -212,21 +237,6 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                   createProcessSnapshotObjectAnySubProcessAndSignals(process, postTokens));
               ruleBuilder.buildRule();
             });
-  }
-
-  private void createIntermediateLinkCatchEventRule(
-      IntermediateCatchEvent linkCatchEvent, AbstractBPMNProcess process) {
-    ruleBuilder.startRule(getFlowNodeRuleName(linkCatchEvent));
-
-    // Consume a token at the link event.
-    String preTokens = String.format(ENQUOTE_FORMAT, linkCatchEvent.getName()) + ANY_OTHER_TOKENS;
-    ruleBuilder.addPreObject(
-        createProcessSnapshotObjectAnySubProcessAndSignals(process, preTokens));
-    // Produce a token for each outgoing flow.
-    String postTokens = getOutgoingTokensForFlowNode(linkCatchEvent) + ANY_OTHER_TOKENS;
-    ruleBuilder.addPostObject(
-        createProcessSnapshotObjectAnySubProcessAndNoSignals(process, postTokens));
-    ruleBuilder.buildRule();
   }
 
   private void createIntermediateCatchMessageEventRule(
@@ -302,14 +312,97 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
               String preTokens = getTokenForSequenceFlow(incFlow) + ANY_OTHER_TOKENS;
               ruleBuilder.addPreObject(
                   createProcessSnapshotObjectAnySubProcessAndSignals(process, preTokens));
-              // Produce a token for each outgoing flow.
+              // Find corresponding catching link events and put tokens on their outgoing flows
               String postTokens =
-                  String.format(ENQUOTE_FORMAT, intermediateThrowEvent.getName())
-                      + ANY_OTHER_TOKENS;
+                  createSignalThrowEventTokens(intermediateThrowEvent, process) + ANY_OTHER_TOKENS;
               ruleBuilder.addPostObject(
                   createProcessSnapshotObjectAnySubProcessAndNoSignals(process, postTokens));
               ruleBuilder.buildRule();
             });
+  }
+
+  private String createSignalThrowEventTokens(
+      IntermediateThrowEvent intermediateThrowEvent, AbstractBPMNProcess process) {
+    return process
+        .getFlowNodes()
+        // Find corresponding link events (correct name and type)
+        .filter(
+            flowNode ->
+                flowNode.getName().equals(intermediateThrowEvent.getName())
+                    && isLinkCatchEvent(flowNode))
+        // Get outgoing tokens for corresponding link events
+        .map(this::getOutgoingTokensForFlowNode)
+        .collect(Collectors.joining(WHITE_SPACE));
+  }
+
+  private boolean isLinkCatchEvent(FlowNode flowNode) {
+    ValueWrapper<Boolean> resultWrapper = new ValueWrapper<>();
+    resultWrapper.setValue(false);
+    flowNode.accept(
+        new FlowNodeVisitor() {
+          @Override
+          public void handle(ExclusiveGateway exclusiveGateway) {
+            // default is false
+          }
+
+          @Override
+          public void handle(ParallelGateway parallelGateway) {
+            // default is false
+          }
+
+          @Override
+          public void handle(InclusiveGateway inclusiveGateway) {
+            // default is false
+          }
+
+          @Override
+          public void handle(EventBasedGateway eventBasedGateway) {
+            // default is false
+          }
+
+          @Override
+          public void handle(Task task) {
+            // default is false
+          }
+
+          @Override
+          public void handle(SendTask task) {
+            // default is false
+          }
+
+          @Override
+          public void handle(ReceiveTask task) {
+            // default is false
+          }
+
+          @Override
+          public void handle(CallActivity callActivity) {
+            // default is false
+          }
+
+          @Override
+          public void handle(StartEvent startEvent) {
+            // default is false
+          }
+
+          @Override
+          public void handle(IntermediateThrowEvent intermediateThrowEvent) {
+            // default is false
+          }
+
+          @Override
+          public void handle(IntermediateCatchEvent intermediateCatchEvent) {
+            if (intermediateCatchEvent.getType() == IntermediateCatchEventType.LINK) {
+              resultWrapper.setValue(true);
+            }
+          }
+
+          @Override
+          public void handle(EndEvent endEvent) {
+            // default is false
+          }
+        });
+    return resultWrapper.getValueIfExists();
   }
 
   private void createIntermediateThrowMessageEventRule(
