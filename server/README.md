@@ -49,3 +49,27 @@ Release the container:
 ```console
 heroku container:release web
 ```
+
+# Deployment to Azure
+Follow this [tutorial](https://learn.microsoft.com/en-us/azure/container-instances/container-instances-tutorial-prepare-acr#log-in-to-container-registry) after building the container.
+Important commands are listed below.
+
+Login to container registry:
+```bash
+az acr login --name tg2022.azurecr.io
+```
+
+Tag container image
+```bash
+docker tag bpmnanalyzer tg2022.azurecr.io/bpmnanalyzer:v1
+```
+
+Push image to Azure Container Registry
+```bash
+docker push tg2022.azurecr.io/bpmnanalyzer:v1
+```
+
+List images in Azure Container Registry
+```bash
+az acr repository list --name tg2022.azurecr.io --output table
+```
