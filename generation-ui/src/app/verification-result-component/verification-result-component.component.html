@@ -11,11 +11,11 @@
       <mat-list>
         <div mat-subheader>BPMN-specific properties</div>
         <mat-list-item *ngFor="let property of properties">
-          <mat-icon mat-list-icon class="green-icon" *ngIf="property.holds; else doesNotHold">check</mat-icon>
+          <mat-icon matListItemIcon class="green-icon" *ngIf="property.holds; else doesNotHold">check</mat-icon>
           <ng-template #doesNotHold>
-            <mat-icon mat-list-icon class="red-icon">close</mat-icon>
+            <mat-icon matListItemIcon class="red-icon">close</mat-icon>
           </ng-template>
-          <div mat-line>{{property.name}} <span *ngIf="property.additionalInfo">({{property.additionalInfo}})</span>
+          <div matListItemTitle>{{property.name}} <span *ngIf="property.additionalInfo">({{property.additionalInfo}})</span>
           </div>
         </mat-list-item>
       </mat-list>
