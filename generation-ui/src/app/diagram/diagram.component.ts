@@ -32,11 +32,11 @@ import { BPMNModelerService } from '../services/bpmnmodeler.service';
     template: ` <div #ref class="diagram-container"></div> `,
     styles: [
         `
-            .diagram-container {
-                height: 100%;
-                width: 100%;
-            }
-        `,
+                     .diagram-container {
+                         height: 100%;
+                         width: 100%;
+                     }
+                 `,
     ],
 })
 export class DiagramComponent
