@@ -19,7 +19,7 @@ const checkBPMNSpecificPropsURL = baseURL + 'checkBPMNSpecificProperties';
 })
 export class GenerationComponent {
   diagramUrl =
-    'https://cdn.staticaly.com/gh/bpmn-io/bpmn-js-examples/dfceecba/starter/diagram.bpmn';
+    'https://raw.githubusercontent.com/timKraeuter/Rewrite_Rule_Generation/master/generation-ui/initial.bpmn';
   importError?: Error;
 
   // BPMN-specific property checking.
