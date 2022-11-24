@@ -46,3 +46,5 @@ Push image to Azure Container Registry
 ```bash
 docker push tg2022.azurecr.io/bpmnanalyzer:v1
 ```
+
+Create new container app revision.
