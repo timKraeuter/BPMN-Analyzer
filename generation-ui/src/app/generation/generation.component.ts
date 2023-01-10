@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 // @ts-ignore
-import { saveAs } from 'file-saver';
+import { saveAs } from 'file-saver-es';
 import { BPMNModelerService } from '../services/bpmnmodeler.service';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';

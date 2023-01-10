@@ -69,7 +69,7 @@ MIT
 bpmn-js
 SEE LICENSE IN LICENSE
 
-file-saver
+file-saver-es
 MIT
 The MIT License
 
