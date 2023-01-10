@@ -33,12 +33,20 @@
       <mat-icon>download</mat-icon>
       Download BPMN model
     </button>
-    <button mat-raised-button color='primary'
-            matTooltip='Download a groove graph grammar.'
-            (click)='downloadGGClicked()'>
-      <mat-icon>cloud_download</mat-icon>
-      Download graph grammar
-    </button>
+
+
+    <span *ngIf="graphGrammarGenerationRunning; else generationButton">
+    Generating graph grammar.
+    <mat-spinner class="margin-top"></mat-spinner>
+  </span>
+    <ng-template #generationButton>
+      <button mat-raised-button color='primary'
+              matTooltip='Download a groove graph grammar.'
+              (click)='downloadGGClicked()'>
+        <mat-icon>cloud_download</mat-icon>
+        Download graph grammar
+      </button>
+    </ng-template>
     <button mat-icon-button aria-label='Graph grammar download info button' color='primary' (click)='ggInfoClicked()'
             matTooltip='Further graph grammar information.'>
       <mat-icon>info</mat-icon>

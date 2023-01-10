@@ -6,7 +6,9 @@ import {HttpClient} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {LTlSyntaxComponent} from '../ltl-syntax/ltl-syntax.component';
 import {environment} from '../../environments/environment';
-import {BPMNProperty} from "../verification-result-component/verification-result-component.component";
+import {
+  BPMNProperty
+} from "../verification-result-component/verification-result-component.component";
 
 const baseURL = environment.production ? window.location.href : environment.apiURL;
 const generateGGAndZipURL = baseURL + 'generateGGAndZip';
@@ -22,10 +24,13 @@ export class GenerationComponent {
     'https://raw.githubusercontent.com/timKraeuter/Rewrite_Rule_Generation/master/generation-ui/initial.bpmn';
   importError?: Error;
 
+  public graphGrammarGenerationRunning: boolean = false;
+
   // BPMN-specific property checking.
   public bpmnSpecificPropertiesToBeChecked: string[];
   public bpmnSpecificVerificationRunning: boolean = false;
   public bpmnPropertyCheckingResults: BPMNProperty[] = [];
+
 
   public ltlProperty: string = "";
 
@@ -55,17 +60,17 @@ export class GenerationComponent {
 
   downloadBPMNClicked() {
     this.bpmnModeler
-      .getBPMNJs()
-      .saveXML({format: true})
-      // @ts-ignore
-      .then((result) => {
-        saveAs(
-          new Blob([result.xml], {
-            type: 'text/xml;charset=utf-8',
-          }),
-          'model.bpmn'
-        );
-      });
+    .getBPMNJs()
+    .saveXML({format: true})
+    // @ts-ignore
+    .then((result) => {
+      saveAs(
+        new Blob([result.xml], {
+          type: 'text/xml;charset=utf-8',
+        }),
+        'model.bpmn'
+      );
+    });
   }
 
   async uploadFile(event: Event) {
@@ -76,20 +81,33 @@ export class GenerationComponent {
   }
 
   async downloadGGClicked() {
+    this.graphGrammarGenerationRunning = true;
+
     const options = {
       responseType: 'arraybuffer',
     } as any; // Expect a zip/file response type.
     const formData = await this.createBPMNFileFormData();
 
     this.httpClient
-      .post(generateGGAndZipURL, formData, options)
-      .subscribe((data) => {
-        // Receive and save as zip.
-        const blob = new Blob([data], {
-          type: 'application/zip',
-        });
-        saveAs(blob, 'model.gps.zip');
-      });
+    .post(generateGGAndZipURL, formData, options)
+    .subscribe(
+      {
+        error: (error) => {
+          console.log(error);
+          this.snackBar.open(
+            error.error.message,
+            'close',
+          );
+        },
+        next: (data) => {
+          // Receive and save as zip.
+          const blob = new Blob([data], {
+            type: 'application/zip',
+          });
+          saveAs(blob, 'model.gps.zip');
+        },
+      })
+    .add(() => this.graphGrammarGenerationRunning = false);
   }
 
   private async createBPMNFileFormData() {
@@ -97,8 +115,8 @@ export class GenerationComponent {
 
     // Append bpmn file.
     const xmlResult = await this.bpmnModeler
-      .getBPMNJs()
-      .saveXML({format: true});
+    .getBPMNJs()
+    .saveXML({format: true});
     formData.append('file', new Blob([xmlResult.xml]));
     return formData;
   }
@@ -119,25 +137,22 @@ export class GenerationComponent {
       formData.append("propertiesToBeChecked[]", property));
 
     this.httpClient
-      .post(checkBPMNSpecificPropsURL, formData)
-      .subscribe({
-        complete: () => {
-          this.bpmnSpecificVerificationRunning = false;
-        },
-        error: (error) => {
-          console.log(error);
-          this.snackBar.open(
-            error.error.message,
-            'close',
-          );
-          this.bpmnSpecificVerificationRunning = false;
-          this.bpmnPropertyCheckingResults = [];
-        },
-        next: (data) => {
-          // @ts-ignore
-          this.bpmnPropertyCheckingResults = JSON.parse(JSON.stringify(data["propertyCheckingResults"]));
-        },
-      });
+    .post(checkBPMNSpecificPropsURL, formData)
+    .subscribe({
+      error: (error) => {
+        console.log(error);
+        this.snackBar.open(
+          error.error.message,
+          'close',
+        );
+        this.bpmnPropertyCheckingResults = [];
+      },
+      next: (data) => {
+        // @ts-ignore
+        this.bpmnPropertyCheckingResults = JSON.parse(JSON.stringify(data["propertyCheckingResults"]));
+      },
+    })
+    .add(() => this.bpmnSpecificVerificationRunning = false);;
   }
 
   checkLTLPropertyClicked() {
