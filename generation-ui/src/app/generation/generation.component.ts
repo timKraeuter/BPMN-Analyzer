@@ -154,6 +154,13 @@ export class GenerationComponent {
         console.log(
             'Check LTL property clicked with input: ' + this.ltlProperty
         );
+        this.snackBar.open(
+            'Checking BPMN-specific properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/.',
+            'close',
+            {
+                duration: 5000,
+            }
+        );
     }
 
     ltlInfoClicked() {
@@ -164,7 +171,7 @@ export class GenerationComponent {
 
     ggInfoClicked() {
         this.snackBar.open(
-            'Graph grammars are generated for the graph transformation tool Groove. You can find Groove at https://groove.ewi.utwente.nl/.',
+            'Graph transformation systems are generated for the graph transformation tool Groove. You can find Groove at https://groove.ewi.utwente.nl/.',
             'close'
         );
     }

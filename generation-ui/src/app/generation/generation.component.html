@@ -37,26 +37,26 @@
         </button>
 
         <span *ngIf="graphGrammarGenerationRunning; else generationButton">
-            Generating graph grammar.
+            Generating a graph transformation system.
             <mat-spinner class="margin-top"></mat-spinner>
         </span>
         <ng-template #generationButton>
             <button
                 mat-raised-button
                 color="primary"
-                matTooltip="Download a groove graph grammar."
+                matTooltip="Download a groove graph transformation system."
                 (click)="downloadGGClicked()"
             >
                 <mat-icon>cloud_download</mat-icon>
-                Download graph grammar
+                Download graph transformation system
             </button>
         </ng-template>
         <button
             mat-icon-button
-            aria-label="Graph grammar download info button"
+            aria-label="Graph transformation system download info button"
             color="primary"
             (click)="ggInfoClicked()"
-            matTooltip="Further graph grammar information."
+            matTooltip="Further graph transformation system information."
         >
             <mat-icon>info</mat-icon>
         </button>
@@ -103,7 +103,7 @@
                 <button
                     mat-raised-button
                     color="primary"
-                    matTooltip="Checking BPMN-specific properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/."
+                    matTooltip="Check the selected BPMN-specific properties by running groove."
                     class="top-margin"
                     (click)="checkBPMNSpecificPropertiesClicked()"
                 >
@@ -131,7 +131,6 @@
                     mat-raised-button
                     color="primary"
                     matTooltip="Checking custom LTL properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/."
-                    disabled
                     (click)="checkLTLPropertyClicked()"
                 >
                     <mat-icon>check</mat-icon>
