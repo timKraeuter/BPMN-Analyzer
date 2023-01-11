@@ -28,9 +28,9 @@ The project **Generation-ui** contains the ui code for the generation of Groove 
 The project **server** contains the webservices used by the generation-ui for BPMN rule generation and model-checking.
 
 ## BPMN generation
-A demo version of the tool is hosted [here](https://bpmn-analyzer.herokuapp.com/).
+A demo version of the tool is hosted [here](https://bpmnanalyzer.whitefield-c9fed487.northeurope.azurecontainerapps.io/).
 
-[![Tool screenshot](./documentation/impl.png)](https://bpmn-analyzer.herokuapp.com/)
+[![Tool screenshot](./documentation/impl.png)](https://bpmnanalyzer.whitefield-c9fed487.northeurope.azurecontainerapps.io/)
 
 Go [here](/server/README.md) if you want to run the tool to generate graph-transformation rules for BPMN locally
 
