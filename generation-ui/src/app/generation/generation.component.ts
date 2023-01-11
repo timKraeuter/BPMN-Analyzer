@@ -140,9 +140,11 @@ export class GenerationComponent {
                     this.snackBar.open(error.error.message, 'close');
                     this.bpmnPropertyCheckingResults = [];
                 },
-                next: (data) => {
+                next: (data: any) => {
                     // @ts-ignore
-                  this.bpmnPropertyCheckingResults = JSON.parse(JSON.stringify(data["propertyCheckingResults"]));
+                    this.bpmnPropertyCheckingResults = JSON.parse(
+                        JSON.stringify(data['propertyCheckingResults'])
+                    );
                 },
             })
             .add(() => (this.bpmnSpecificVerificationRunning = false));
