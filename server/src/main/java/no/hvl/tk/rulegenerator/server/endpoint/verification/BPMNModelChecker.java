@@ -20,6 +20,7 @@ import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import no.hvl.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
 
 public class BPMNModelChecker {
+
   private final File graphGrammarDir;
   private final BPMNCollaboration bpmnModel;
 
@@ -46,14 +47,33 @@ public class BPMNModelChecker {
       case NO_DEAD_ACTIVITIES:
         this.checkNoDeadActivities(response);
         break;
-        // Not supported atm.
       case SAFENESS:
+        this.checkSafeness(response);
         break;
       case OPTION_TO_COMPLETE:
+        this.checkOptionToComplete(response);
         break;
       default:
         throw new IllegalStateException("Unexpected value: " + modelCheckingProperty);
     }
+  }
+
+  private void checkOptionToComplete(ModelCheckingResponse response) {
+    // Not supported atm. We would run an LTL query but there is a bug in Groove.
+    response.addPropertyCheckingResult(
+        new BPMNPropertyCheckingResult(ModelCheckingProperty.SAFENESS,
+            false,
+            "Checking BPMN-specific properties is not implemented in the web interface yet "
+                + "due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/"));
+  }
+
+  private void checkSafeness(ModelCheckingResponse response) {
+    // Not supported atm. We would run an LTL query but there is a bug in Groove.
+    response.addPropertyCheckingResult(
+        new BPMNPropertyCheckingResult(ModelCheckingProperty.SAFENESS,
+            false,
+            "Checking BPMN-specific properties is not implemented in the web interface yet "
+                + "due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/"));
   }
 
   private void checkNoDeadActivities(ModelCheckingResponse response)
