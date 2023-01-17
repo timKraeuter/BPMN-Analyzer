@@ -76,6 +76,6 @@ public class BPMNProcessBuilder implements BPMNModelBuilder {
   }
 
   public BPMNProcess build() {
-    return new BPMNProcess(name, startEvents, sequenceFlows, flowNodes, eventSubprocesses);
+    return new BPMNProcess(name, sequenceFlows, flowNodes, eventSubprocesses, startEvents);
   }
 }

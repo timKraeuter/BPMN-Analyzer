@@ -138,7 +138,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
 
   /**
    * See test case <a href="https://cawemo.com/share/2a6dc064-a602-4bda-96d1-a788d9a0e363">
-   *   "Subprocess Error Catch Ordering"</a> in cawemo.
+   * "Subprocess Error Catch Ordering"</a> in cawemo.
    */
   @Test
   void testSubprocessErrorCatchOrdering() throws IOException {

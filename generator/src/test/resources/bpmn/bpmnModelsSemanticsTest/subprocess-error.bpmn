@@ -9,7 +9,7 @@
     <bpmn:startEvent id="Event_15sfpr9" name="start">
       <bpmn:outgoing>Flow_18ztzne</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:subProcess id="Activity_06vbn97">
+    <bpmn:subProcess id="Activity_06vbn97" name="Error_Subprocess">
       <bpmn:incoming>Flow_18ztzne</bpmn:incoming>
       <bpmn:outgoing>Flow_1ib4zkc</bpmn:outgoing>
       <bpmn:startEvent id="Event_105gifp" name="start_sub">
@@ -49,6 +49,7 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_06vbn97_di" bpmnElement="Activity_06vbn97" isExpanded="true">
         <dc:Bounds x="310" y="162" width="190" height="128"/>
+        <bpmndi:BPMNLabel/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_105gifp_di" bpmnElement="Event_105gifp">
         <dc:Bounds x="350" y="182" width="36" height="36"/>

@@ -13,6 +13,7 @@ import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
+import behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import behavior.bpmn.auxiliary.visitors.AbstractProcessVisitor;
 import behavior.bpmn.auxiliary.visitors.ActivityVisitor;
@@ -22,7 +23,9 @@ import groove.behaviortransformer.bpmn.BPMNRuleGenerator;
 import groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveRuleBuilder;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
@@ -59,11 +62,107 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     if (endEvent.getIncomingFlows().count() != 1) {
       throw new BPMNRuntimeException("End events should have exactly one incoming flow!");
     }
-    SequenceFlow incomingFlow =
-        endEvent.getIncomingFlows().findFirst().orElseThrow(); // Throw never reached due
-    // to check before.
-    final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow, this.useSFId);
     ruleBuilder.startRule(endEvent.getName());
+    switch (endEvent.getType()) {
+      case NONE:
+        {
+          GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
+          GrooveNode noneRunning = ruleBuilder.contextNode(TYPE_RUNNING);
+          ruleBuilder.contextEdge(STATE, processInstance, noneRunning);
+        }
+        break;
+      case TERMINATION:
+        {
+          GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
+          GrooveNode deletedRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
+          ruleBuilder.deleteEdge(STATE, processInstance, deletedRunning);
+
+          GrooveNode terminated = ruleBuilder.addNode(TYPE_TERMINATED);
+          ruleBuilder.addEdge(STATE, processInstance, terminated);
+
+          // Terminate possible subprocesses with a nested rule.
+          GrooveNode subProcess = ruleBuilder.contextNode(TYPE_PROCESS_SNAPSHOT);
+          ruleBuilder.contextEdge(SUBPROCESS, processInstance, subProcess);
+          GrooveNode subProcessRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
+          ruleBuilder.deleteEdge(STATE, subProcess, subProcessRunning);
+          GrooveNode subProcessTerminated = ruleBuilder.addNode(TYPE_TERMINATED);
+          ruleBuilder.addEdge(STATE, subProcess, subProcessTerminated);
+
+          GrooveNode forAll = ruleBuilder.contextNode(FORALL);
+          ruleBuilder.contextEdge(AT, subProcess, forAll);
+          ruleBuilder.contextEdge(AT, subProcessRunning, forAll);
+          ruleBuilder.contextEdge(AT, subProcessTerminated, forAll);
+          // We could also delete all tokens in the current and all subprocess instances.
+        }
+        break;
+      case MESSAGE:
+        {
+          GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
+          GrooveNode messageRunning = ruleBuilder.contextNode(TYPE_RUNNING);
+          ruleBuilder.contextEdge(STATE, processInstance, messageRunning);
+          BPMNToGrooveTransformerHelper.addSendMessageBehaviorForFlowNode(
+              collaboration, ruleBuilder, endEvent, this.useSFId);
+          break;
+        }
+      case ERROR:
+        // Find container process and see if a matching error catch event can be found.
+        AbstractBPMNProcess endEventProcess = this.collaboration.findProcessForFlowNode(endEvent);
+        endEventProcess.accept(
+            new AbstractProcessVisitor() {
+              @Override
+              public void handle(BPMNEventSubprocess eventSubprocess) {
+                // TODO: Implement behavior inside an event subprocess.
+              }
+
+              @Override
+              public void handle(BPMNProcess process) {
+                CallActivity callActivity = process.getCallActivityIfExists();
+                checkIfCallActivityExists(callActivity);
+
+                BoundaryEvent matchingBoundaryEvent =
+                    findMatchingBoundaryEvent(callActivity, endEvent);
+
+                // Add outgoing tokens to the boundary event for the father process instance.
+                GrooveNode fatherProcessInstance =
+                    contextProcessInstance(collaboration.getParentProcess(process), ruleBuilder);
+                addOutgoingTokensForFlowNodeToProcessInstance(
+                    matchingBoundaryEvent, ruleBuilder, fatherProcessInstance, useSFId);
+                // Interrupt the subprocess since there was an error.
+                GrooveNode forAll = ruleBuilder.contextNode(FORALL_NON_VACUOUS);
+                GrooveNode subprocess = interruptSubprocess(
+                    ruleBuilder,
+                    callActivity,
+                    fatherProcessInstance,
+                    forAll);
+
+                // Delete incoming end event token
+                GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
+                SequenceFlow incomingFlow = endEvent.getIncomingFlows().findFirst().orElseThrow();
+                final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow, BPMNEventRuleGeneratorImpl.this.useSFId);
+                GrooveNode position =
+                    ruleBuilder.contextNode(createStringNodeLabel(incomingFlowId));
+                ruleBuilder.deleteEdge(POSITION, token, position);
+                ruleBuilder.deleteEdge(TOKENS, subprocess, token);
+                ruleBuilder.contextEdge(AT, token, forAll);
+              }
+            });
+        break;
+      case SIGNAL:
+        {
+          GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
+          GrooveNode signalRunning = ruleBuilder.contextNode(TYPE_RUNNING);
+          ruleBuilder.contextEdge(STATE, processInstance, signalRunning);
+          createSignalThrowRulePart(endEvent.getEventDefinition());
+          break;
+        }
+    }
+
+    ruleBuilder.buildRule();
+  }
+
+  private GrooveNode deleteIncomingEndEventToken(AbstractBPMNProcess process, EndEvent endEvent) {
+    SequenceFlow incomingFlow = endEvent.getIncomingFlows().findFirst().orElseThrow();
+    final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow, this.useSFId);
 
     GrooveNode processInstance = contextProcessInstanceWithOnlyName(process, ruleBuilder);
 
@@ -71,51 +170,39 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     GrooveNode position = ruleBuilder.contextNode(createStringNodeLabel(incomingFlowId));
     ruleBuilder.deleteEdge(POSITION, token, position);
     ruleBuilder.deleteEdge(TOKENS, processInstance, token);
+    return processInstance;
+  }
 
-    switch (endEvent.getType()) {
-      case NONE:
-        GrooveNode noneRunning = ruleBuilder.contextNode(TYPE_RUNNING);
-        ruleBuilder.contextEdge(STATE, processInstance, noneRunning);
-        break;
-      case TERMINATION:
-        GrooveNode deletedRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
-        ruleBuilder.deleteEdge(STATE, processInstance, deletedRunning);
-
-        GrooveNode terminated = ruleBuilder.addNode(TYPE_TERMINATED);
-        ruleBuilder.addEdge(STATE, processInstance, terminated);
-
-        // Terminate possible subprocesses with a nested rule.
-        GrooveNode subProcess = ruleBuilder.contextNode(TYPE_PROCESS_SNAPSHOT);
-        ruleBuilder.contextEdge(SUBPROCESS, processInstance, subProcess);
-        GrooveNode subProcessRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
-        ruleBuilder.deleteEdge(STATE, subProcess, subProcessRunning);
-        GrooveNode subProcessTerminated = ruleBuilder.addNode(TYPE_TERMINATED);
-        ruleBuilder.addEdge(STATE, subProcess, subProcessTerminated);
-
-        GrooveNode forAll = ruleBuilder.contextNode(FORALL);
-        ruleBuilder.contextEdge(AT, subProcess, forAll);
-        ruleBuilder.contextEdge(AT, subProcessRunning, forAll);
-        ruleBuilder.contextEdge(AT, subProcessTerminated, forAll);
-        // We could also delete all tokens in the current and all subprocess instances.
-
-        break;
-      case MESSAGE:
-        GrooveNode messageRunning = ruleBuilder.contextNode(TYPE_RUNNING);
-        ruleBuilder.contextEdge(STATE, processInstance, messageRunning);
-        BPMNToGrooveTransformerHelper.addSendMessageBehaviorForFlowNode(
-            collaboration, ruleBuilder, endEvent, this.useSFId);
-        break;
-      case ERROR:
-        // TODO: Implement Error end events!.
-        break;
-      case SIGNAL:
-        GrooveNode signalRunning = ruleBuilder.contextNode(TYPE_RUNNING);
-        ruleBuilder.contextEdge(STATE, processInstance, signalRunning);
-        createSignalThrowRulePart(endEvent.getEventDefinition());
-        break;
+  private static void checkIfCallActivityExists(CallActivity callActivity) {
+    if (callActivity == null) {
+      // TODO: Think about if ordering might prevent the exception here.
+      throw new GrooveGenerationRuntimeException("Error or ordering");
     }
+  }
 
-    ruleBuilder.buildRule();
+  private static BoundaryEvent findMatchingBoundaryEvent(
+      CallActivity callActivity, EndEvent endEvent) {
+    List<BoundaryEvent> matchingBoundaryEvents =
+        callActivity.getBoundaryEvents().stream()
+            .filter(
+                boundaryEvent ->
+                    boundaryEvent.getType() == BoundaryEventType.ERROR
+                        && boundaryEvent.getEventDefinition().equals(endEvent.getEventDefinition()))
+            .collect(Collectors.toList());
+    if (matchingBoundaryEvents.isEmpty()) {
+      throw new GrooveGenerationRuntimeException(
+          String.format(
+              "No boundary error event found matching the error end event \"%s\"",
+              endEvent.getId()));
+    }
+    if (matchingBoundaryEvents.size() > 1) {
+      throw new GrooveGenerationRuntimeException(
+          String.format(
+              "Multiple boundary error events \"%s\" found matching the error end event \"%s\"!",
+              matchingBoundaryEvents.stream().map(FlowElement::getId).collect(Collectors.toList()),
+              endEvent.getId()));
+    }
+    return matchingBoundaryEvents.get(0);
   }
 
   @Override
@@ -620,18 +707,12 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
       case NONE:
         createNoneStartEventRule(startEvent, process);
         break;
+      case SIGNAL:
+      case ERROR:
       case MESSAGE:
         // Done in the corresponding throw rule.
         break;
       case MESSAGE_NON_INTERRUPTING:
-        // Implemented only in the event subprocess rule generator.
-        break;
-      case SIGNAL:
-        // Done in the corresponding throw rule.
-        break;
-      case ERROR:
-        // Done in the corresponding throw rule.
-        break;
       case SIGNAL_NON_INTERRUPTING:
         // Implemented only in the event subprocess rule generator.
         break;

@@ -322,7 +322,7 @@ public class BPMNToGrooveTransformerHelper {
     return forAll;
   }
 
-  public static void interruptSubprocess(
+  public static GrooveNode interruptSubprocess(
       GrooveRuleBuilder ruleBuilder,
       CallActivity callActivity,
       GrooveNode processInstance,
@@ -358,6 +358,8 @@ public class BPMNToGrooveTransformerHelper {
       ruleBuilder.contextEdge(IN, forAllTokens, quantifierIfExists);
       ruleBuilder.contextEdge(IN, forAllMessages, quantifierIfExists);
     }
+
+    return subprocessInstance;
   }
 
   public static String getStartEventTokenName(BPMNProcess process, StartEvent event) {

@@ -383,6 +383,7 @@ public class BPMNFileReader {
 
           @Override
           public behavior.bpmn.events.BoundaryEvent handle(SignalEventDefinition evDefinition) {
+            // TODO: Read signal event definition and make a test.
             return new behavior.bpmn.events.BoundaryEvent(
                 event.getId(),
                 getFlowElementName(event),
@@ -406,6 +407,7 @@ public class BPMNFileReader {
 
           @Override
           public behavior.bpmn.events.BoundaryEvent handle(ErrorEventDefinition evDefinition) {
+            // TODO: Read error event definition.
             return new behavior.bpmn.events.BoundaryEvent(
                 event.getId(),
                 getFlowElementName(event),

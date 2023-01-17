@@ -12,6 +12,7 @@ public class CallActivity extends Activity {
   public CallActivity(String id, BPMNProcess subProcessModel) {
     super(id, subProcessModel.getName());
     this.subProcessModel = subProcessModel;
+    subProcessModel.setCallActivity(this);
   }
 
   public BPMNProcess getSubProcessModel() {
