@@ -406,10 +406,10 @@ public class BPMNFileReader {
           @Override
           public behavior.bpmn.events.BoundaryEvent handle(ErrorEventDefinition evDefinition) {
             return new behavior.bpmn.events.BoundaryEvent(
-                    event.getId(),
-                    getFlowElementName(event),
-                    BoundaryEventType.ERROR,
-                    event.cancelActivity());
+                event.getId(),
+                getFlowElementName(event),
+                BoundaryEventType.ERROR,
+                event.cancelActivity());
           }
         };
     boundaryEvent = this.visitDefinition(eventDefinition, visitor);
@@ -511,7 +511,7 @@ public class BPMNFileReader {
             @Override
             public EndEvent handle(ErrorEventDefinition evDefinition) {
               return new EndEvent(
-                      flowNode.getId(), getFlowElementName(flowNode), EndEventType.ERROR);
+                  flowNode.getId(), getFlowElementName(flowNode), EndEventType.ERROR);
             }
 
             @Override
@@ -578,13 +578,13 @@ public class BPMNFileReader {
             @Override
             public StartEvent handle(TerminateEventDefinition evDefinition) {
               throw new BPMNRuntimeException(
-                      "Start event definitions should not be of type terminate!");
+                  "Start event definitions should not be of type terminate!");
             }
 
             @Override
             public StartEvent handle(ErrorEventDefinition evDefinition) {
               throw new BPMNRuntimeException(
-                      "Start event definitions should not be of type error!");
+                  "Start event definitions should not be of type error!");
             }
           };
       return this.visitDefinition(eventDefinition, visitor);
@@ -645,13 +645,13 @@ public class BPMNFileReader {
             @Override
             public IntermediateCatchEvent handle(TerminateEventDefinition evDefinition) {
               throw new BPMNRuntimeException(
-                      "Intermediate catch event definitions should not be of type terminate!");
+                  "Intermediate catch event definitions should not be of type terminate!");
             }
 
             @Override
             public IntermediateCatchEvent handle(ErrorEventDefinition evDefinition) {
               throw new BPMNRuntimeException(
-                      "Intermediate catch event definitions should not be of type error!");
+                  "Intermediate catch event definitions should not be of type error!");
             }
           };
       return this.visitDefinition(evDefinition, eventVisitor);
@@ -697,7 +697,7 @@ public class BPMNFileReader {
             @Override
             public IntermediateThrowEvent handle(ErrorEventDefinition evDefinition) {
               throw new BPMNRuntimeException(
-                      "Intermediate throw event definitions should not be of type error!");
+                  "Intermediate throw event definitions should not be of type error!");
             }
 
             @Override

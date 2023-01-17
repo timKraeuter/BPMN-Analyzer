@@ -530,7 +530,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
               case SIGNAL_NON_INTERRUPTING:
                 createSignalNonInterruptingStartRulePart(eventSubprocess, event);
                 break;
-              // Must be a signal event!
+                // Must be a signal event!
               case NONE:
               case MESSAGE:
               case MESSAGE_NON_INTERRUPTING:
