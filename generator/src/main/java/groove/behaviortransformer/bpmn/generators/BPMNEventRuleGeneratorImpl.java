@@ -26,6 +26,7 @@ import java.util.Set;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
+
   private final BPMNCollaboration collaboration;
   private final GrooveRuleBuilder ruleBuilder;
   private final boolean useSFId;
@@ -103,6 +104,9 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         ruleBuilder.contextEdge(STATE, processInstance, messageRunning);
         BPMNToGrooveTransformerHelper.addSendMessageBehaviorForFlowNode(
             collaboration, ruleBuilder, endEvent, this.useSFId);
+        break;
+      case ERROR:
+        // TODO: Implement Error end events!.
         break;
       case SIGNAL:
         GrooveNode signalRunning = ruleBuilder.contextNode(TYPE_RUNNING);
@@ -526,7 +530,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
               case SIGNAL_NON_INTERRUPTING:
                 createSignalNonInterruptingStartRulePart(eventSubprocess, event);
                 break;
-                // Must be a signal event!
+              // Must be a signal event!
               case NONE:
               case MESSAGE:
               case MESSAGE_NON_INTERRUPTING:

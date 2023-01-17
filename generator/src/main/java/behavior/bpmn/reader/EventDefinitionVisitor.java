@@ -13,4 +13,6 @@ public interface EventDefinitionVisitor<T> {
   T handle(TerminateEventDefinition evDefinition);
 
   T handle(TimerEventDefinition evDefinition);
+
+  T handle(ErrorEventDefinition evDefinition);
 }

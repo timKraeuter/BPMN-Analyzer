@@ -76,6 +76,9 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
       case MESSAGE:
         createMessageEndEventRule(process, endEvent, preTokens);
         break;
+      case ERROR:
+        // TODO: Implement Error end events!
+        break;
       case SIGNAL:
         createSignalEndEventRule(process, endEvent, preTokens);
         break;

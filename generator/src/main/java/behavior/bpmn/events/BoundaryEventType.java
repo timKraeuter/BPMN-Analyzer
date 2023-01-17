@@ -5,8 +5,8 @@ public enum BoundaryEventType {
   MESSAGE,
   SIGNAL,
   NONE,
+  ERROR,
   // Escalation,
-  // Error,
   // Compensation,
   // Conditional
 }

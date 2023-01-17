@@ -4,5 +4,6 @@ public enum EndEventType {
   NONE, // Default
   TERMINATION,
   MESSAGE,
+  ERROR,
   SIGNAL
 }
