@@ -5,5 +5,6 @@ public enum StartEventType {
   MESSAGE,
   MESSAGE_NON_INTERRUPTING,
   SIGNAL,
+  ERROR,
   SIGNAL_NON_INTERRUPTING
 }

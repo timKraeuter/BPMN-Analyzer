@@ -157,6 +157,9 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
                 case SIGNAL:
                   // Handled in the throw rule part.
                   break;
+                case ERROR:
+                  // Handled in the throw rule part.
+                  break;
                 default:
                   throw new IllegalStateException("Unexpected value: " + boundaryEvent.getType());
               }

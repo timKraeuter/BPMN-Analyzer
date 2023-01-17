@@ -629,6 +629,9 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
       case SIGNAL:
         // Done in the corresponding throw rule.
         break;
+      case ERROR:
+        // Done in the corresponding throw rule.
+        break;
       case SIGNAL_NON_INTERRUPTING:
         // Implemented only in the event subprocess rule generator.
         break;

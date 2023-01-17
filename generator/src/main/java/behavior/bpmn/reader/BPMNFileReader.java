@@ -38,6 +38,7 @@ import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 import org.camunda.bpm.model.xml.type.ModelElementType;
 
 public class BPMNFileReader {
+
   private Function<String, String> elementNameTransformer;
 
   public BPMNFileReader() {}
@@ -583,8 +584,8 @@ public class BPMNFileReader {
 
             @Override
             public StartEvent handle(ErrorEventDefinition evDefinition) {
-              throw new BPMNRuntimeException(
-                  "Start event definitions should not be of type error!");
+              return new StartEvent(
+                  flowNode.getId(), getFlowElementName(flowNode), StartEventType.ERROR);
             }
           };
       return this.visitDefinition(eventDefinition, visitor);

@@ -115,4 +115,33 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
   void testIntermediateThrowEvent() throws IOException {
     testGrooveGenerationForBPMNResourceFile("intermediate-throw-event.bpmn");
   }
+
+  /**
+   * See test case <a
+   * href="https://cawemo.com/share/8854a051-803d-4acf-b5f9-ffd3e7e984e9">"Subprocess - Error"</a>
+   * in cawemo.
+   */
+  @Test
+  void testSubprocessError() throws IOException {
+    testGrooveGenerationForBPMNResourceFile("subprocess-error.bpmn");
+  }
+
+  /**
+   * See test case <a href="https://cawemo.com/share/e10dfa71-5df9-40c5-bd0f-82c391b051e5">"Event
+   * Subprocess - Error"</a> in cawemo.
+   */
+  @Test
+  void testEventSubprocessError() throws IOException {
+    // TODO: Test interruption correctly! See other interruption tests
+    testGrooveGenerationForBPMNResourceFile("event-subprocess-error.bpmn");
+  }
+
+  /**
+   * See test case <a href="https://cawemo.com/share/2a6dc064-a602-4bda-96d1-a788d9a0e363">
+   *   "Subprocess Error Catch Ordering"</a> in cawemo.
+   */
+  @Test
+  void testSubprocessErrorCatchOrdering() throws IOException {
+    testGrooveGenerationForBPMNResourceFile("subprocess-error-catch-ordering.bpmn");
+  }
 }
