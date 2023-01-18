@@ -7,6 +7,8 @@ import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.auxiliary.BPMNCollaborationBuilder;
 import behavior.bpmn.events.*;
+import behavior.bpmn.events.definitions.EventDefinition;
+import behavior.bpmn.events.definitions.SignalEventDefinition;
 import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import java.io.IOException;
@@ -22,8 +24,8 @@ class UseCaseTest extends BPMNToGrooveTestBase {
    */
   @Test
   void testUseCase() throws IOException {
-    EventDefinition b_is_green = new EventDefinition("B_is_green");
-    EventDefinition a_c_are_green = new EventDefinition("A_C_are_green");
+    EventDefinition b_is_green = new SignalEventDefinition("B_is_green");
+    EventDefinition a_c_are_green = new SignalEventDefinition("A_C_are_green");
 
     // Phase 1
     StartEvent phase1_start = new StartEvent(getId(), "Phase1_start");

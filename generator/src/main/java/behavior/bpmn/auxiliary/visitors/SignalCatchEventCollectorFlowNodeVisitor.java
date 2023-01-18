@@ -8,6 +8,7 @@ import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.events.*;
+import behavior.bpmn.events.definitions.EventDefinition;
 import java.util.Set;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -68,10 +69,7 @@ public class SignalCatchEventCollectorFlowNodeVisitor extends DoNothingFlowNodeV
   public void handle(StartEvent startEvent) {
     if ((startEvent.getType() == StartEventType.SIGNAL
             || startEvent.getType() == StartEventType.SIGNAL_NON_INTERRUPTING)
-        && startEvent
-            .getEventDefinition()
-            .getGlobalSignalName()
-            .equals(eventDefinition.getGlobalSignalName())) {
+        && startEvent.getEventDefinition().equals(eventDefinition)) {
       signalCatchEvents.add(startEvent);
     }
   }
@@ -79,10 +77,7 @@ public class SignalCatchEventCollectorFlowNodeVisitor extends DoNothingFlowNodeV
   @Override
   public void handle(IntermediateCatchEvent intermediateCatchEvent) {
     if (intermediateCatchEvent.getType() == IntermediateCatchEventType.SIGNAL
-        && intermediateCatchEvent
-            .getEventDefinition()
-            .getGlobalSignalName()
-            .equals(eventDefinition.getGlobalSignalName())) {
+        && intermediateCatchEvent.getEventDefinition().equals(eventDefinition)) {
       signalCatchEvents.add(intermediateCatchEvent);
     }
   }

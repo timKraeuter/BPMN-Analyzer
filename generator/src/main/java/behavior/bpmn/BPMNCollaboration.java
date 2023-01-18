@@ -6,7 +6,7 @@ import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import behavior.bpmn.auxiliary.visitors.SignalCatchEventCollectorFlowNodeVisitor;
 import behavior.bpmn.events.BoundaryEvent;
 import behavior.bpmn.events.Event;
-import behavior.bpmn.events.EventDefinition;
+import behavior.bpmn.events.definitions.EventDefinition;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Optional;

@@ -2,6 +2,7 @@ package behavior.bpmn.events;
 
 import behavior.bpmn.auxiliary.visitors.EventVisitor;
 import behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
+import behavior.bpmn.events.definitions.EventDefinition;
 import com.google.common.base.Objects;
 
 public class IntermediateThrowEvent extends ThrowEvent {

@@ -7,6 +7,7 @@ import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import behavior.bpmn.events.*;
+import behavior.bpmn.events.definitions.EventDefinition;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import maude.behaviortransformer.bpmn.BPMNMaudeRuleGenerator;

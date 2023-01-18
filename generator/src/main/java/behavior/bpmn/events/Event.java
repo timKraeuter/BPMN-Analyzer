@@ -2,6 +2,7 @@ package behavior.bpmn.events;
 
 import behavior.bpmn.FlowNode;
 import behavior.bpmn.auxiliary.visitors.EventVisitor;
+import behavior.bpmn.events.definitions.EventDefinition;
 
 public abstract class Event extends FlowNode {
 

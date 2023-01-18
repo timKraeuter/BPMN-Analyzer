@@ -383,12 +383,12 @@ public class BPMNFileReader {
 
           @Override
           public behavior.bpmn.events.BoundaryEvent handle(SignalEventDefinition evDefinition) {
-            // TODO: Read signal event definition and make a test.
             return new behavior.bpmn.events.BoundaryEvent(
                 event.getId(),
                 getFlowElementName(event),
                 BoundaryEventType.SIGNAL,
-                event.cancelActivity());
+                event.cancelActivity(),
+                mapSignalEventDefinition(evDefinition, event));
           }
 
           @Override
@@ -407,16 +407,27 @@ public class BPMNFileReader {
 
           @Override
           public behavior.bpmn.events.BoundaryEvent handle(ErrorEventDefinition evDefinition) {
-            // TODO: Read error event definition.
             return new behavior.bpmn.events.BoundaryEvent(
                 event.getId(),
                 getFlowElementName(event),
                 BoundaryEventType.ERROR,
-                event.cancelActivity());
+                event.cancelActivity(),
+                mapErrorEventDefinition(evDefinition));
           }
         };
     boundaryEvent = this.visitDefinition(eventDefinition, visitor);
     return boundaryEvent;
+  }
+
+  private behavior.bpmn.events.definitions.EventDefinition mapErrorEventDefinition(
+      ErrorEventDefinition evDefinition) {
+    if (evDefinition.getError() != null
+        && evDefinition.getError().getErrorCode() != null
+        && !evDefinition.getError().getErrorCode().isBlank()) {
+      return new behavior.bpmn.events.definitions.ErrorEventDefinition(
+          evDefinition.getError().getErrorCode());
+    }
+    return behavior.bpmn.events.definitions.EventDefinition.empty();
   }
 
   private void handleEventSubProcess(
@@ -514,7 +525,10 @@ public class BPMNFileReader {
             @Override
             public EndEvent handle(ErrorEventDefinition evDefinition) {
               return new EndEvent(
-                  flowNode.getId(), getFlowElementName(flowNode), EndEventType.ERROR);
+                  flowNode.getId(),
+                  getFlowElementName(flowNode),
+                  EndEventType.ERROR,
+                  mapErrorEventDefinition(evDefinition));
             }
 
             @Override
@@ -595,14 +609,15 @@ public class BPMNFileReader {
     throw new BPMNRuntimeException("Start event has more than one event definition!");
   }
 
-  private behavior.bpmn.events.EventDefinition mapSignalEventDefinition(
+  private behavior.bpmn.events.definitions.SignalEventDefinition mapSignalEventDefinition(
       SignalEventDefinition evDefinition, FlowNode flowNode) {
     if (evDefinition.getSignal() != null
         && evDefinition.getSignal().getName() != null
         && !evDefinition.getSignal().getName().isBlank()) {
-      return new behavior.bpmn.events.EventDefinition(evDefinition.getSignal().getName());
+      return new behavior.bpmn.events.definitions.SignalEventDefinition(
+          evDefinition.getSignal().getName());
     }
-    return new behavior.bpmn.events.EventDefinition(getFlowElementName(flowNode));
+    return new behavior.bpmn.events.definitions.SignalEventDefinition(getFlowElementName(flowNode));
   }
 
   private behavior.bpmn.FlowNode mapIntermediateCatchEvent(FlowNode flowNode) {
