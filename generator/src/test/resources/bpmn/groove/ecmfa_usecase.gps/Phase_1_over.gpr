@@ -3,7 +3,7 @@
     <graph id="Phase_1_over" role="rule" edgeids="false" edgemode="directed">
         <node id="n135">
             <attr name="layout">
-                <string>552 422 0 0</string>
+                <string>552 242 0 0</string>
             </attr>
         </node>
         <edge from="n135" to="n135">
@@ -16,24 +16,24 @@
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n137">
+        <node id="n138">
             <attr name="layout">
-                <string>522 327 0 0</string>
+                <string>522 347 0 0</string>
             </attr>
         </node>
-        <edge from="n137" to="n137">
+        <edge from="n138" to="n138">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <edge from="n137" to="n137">
+        <edge from="n138" to="n138">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
         <node id="n139">
             <attr name="layout">
-                <string>892 82 0 0</string>
+                <string>892 332 0 0</string>
             </attr>
         </node>
         <edge from="n139" to="n139">
@@ -46,39 +46,39 @@
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n141">
+        <node id="n143">
             <attr name="layout">
-                <string>1072 252 0 0</string>
+                <string>1072 592 0 0</string>
             </attr>
         </node>
-        <edge from="n141" to="n141">
+        <edge from="n143" to="n143">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n141" to="n141">
+        <edge from="n143" to="n143">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n143">
+        <node id="n145">
             <attr name="layout">
-                <string>1057 342 0 0</string>
+                <string>1057 422 0 0</string>
             </attr>
         </node>
-        <edge from="n143" to="n143">
+        <edge from="n145" to="n145">
             <attr name="label">
                 <string>type:Message</string>
             </attr>
         </edge>
-        <edge from="n143" to="n143">
+        <edge from="n145" to="n145">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
         <node id="n132">
             <attr name="layout">
-                <string>62 407 0 0</string>
+                <string>62 87 0 0</string>
             </attr>
         </node>
         <edge from="n132" to="n132">
@@ -88,7 +88,7 @@
         </edge>
         <node id="n133">
             <attr name="layout">
-                <string>402 237 0 0</string>
+                <string>402 152 0 0</string>
             </attr>
         </node>
         <edge from="n133" to="n133">
@@ -98,7 +98,7 @@
         </edge>
         <node id="n134">
             <attr name="layout">
-                <string>402 157 0 0</string>
+                <string>402 72 0 0</string>
             </attr>
         </node>
         <edge from="n134" to="n134">
@@ -108,7 +108,7 @@
         </edge>
         <node id="n136">
             <attr name="layout">
-                <string>892 422 0 0</string>
+                <string>892 242 0 0</string>
             </attr>
         </node>
         <edge from="n136" to="n136">
@@ -116,32 +116,52 @@
                 <string>string:"Phase_1_over_Switch_to_P2"</string>
             </attr>
         </edge>
-        <node id="n138">
+        <node id="n137">
             <attr name="layout">
-                <string>892 162 0 0</string>
+                <string>1672 430 0 0</string>
             </attr>
         </node>
-        <edge from="n138" to="n138">
-            <attr name="label">
-                <string>string:"Phase_1"</string>
-            </attr>
-        </edge>
-        <node id="n140">
-            <attr name="layout">
-                <string>1422 252 0 0</string>
-            </attr>
-        </node>
-        <edge from="n140" to="n140">
+        <edge from="n137" to="n137">
             <attr name="label">
                 <string>forall:</string>
             </attr>
         </edge>
+        <node id="n140">
+            <attr name="layout">
+                <string>892 502 0 0</string>
+            </attr>
+        </node>
+        <edge from="n140" to="n140">
+            <attr name="label">
+                <string>string:"Phase_1"</string>
+            </attr>
+        </edge>
+        <node id="n141">
+            <attr name="layout">
+                <string>1547 430 0 0</string>
+            </attr>
+        </node>
+        <edge from="n141" to="n141">
+            <attr name="label">
+                <string>exists:</string>
+            </attr>
+        </edge>
         <node id="n142">
             <attr name="layout">
-                <string>1422 342 0 0</string>
+                <string>1422 592 0 0</string>
             </attr>
         </node>
         <edge from="n142" to="n142">
+            <attr name="label">
+                <string>forall:</string>
+            </attr>
+        </edge>
+        <node id="n144">
+            <attr name="layout">
+                <string>1422 422 0 0</string>
+            </attr>
+        </node>
+        <edge from="n144" to="n144">
             <attr name="label">
                 <string>forall:</string>
             </attr>
@@ -156,27 +176,27 @@
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n132" to="n137">
+        <edge from="n132" to="n138">
             <attr name="label">
                 <string>del:subprocess</string>
             </attr>
         </edge>
-        <edge from="n137" to="n138">
-            <attr name="label">
-                <string>del:name</string>
-            </attr>
-        </edge>
-        <edge from="n137" to="n139">
+        <edge from="n138" to="n139">
             <attr name="label">
                 <string>del:state</string>
             </attr>
         </edge>
-        <edge from="n137" to="n141">
+        <edge from="n138" to="n140">
+            <attr name="label">
+                <string>del:name</string>
+            </attr>
+        </edge>
+        <edge from="n138" to="n143">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n137" to="n143">
+        <edge from="n138" to="n145">
             <attr name="label">
                 <string>del:messages</string>
             </attr>
@@ -191,14 +211,29 @@
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n141" to="n140">
+        <edge from="n141" to="n137">
             <attr name="label">
-                <string>@</string>
+                <string>in</string>
             </attr>
         </edge>
         <edge from="n143" to="n142">
             <attr name="label">
                 <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n142" to="n141">
+            <attr name="label">
+                <string>in</string>
+            </attr>
+        </edge>
+        <edge from="n145" to="n144">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n144" to="n141">
+            <attr name="label">
+                <string>in</string>
             </attr>
         </edge>
     </graph>
