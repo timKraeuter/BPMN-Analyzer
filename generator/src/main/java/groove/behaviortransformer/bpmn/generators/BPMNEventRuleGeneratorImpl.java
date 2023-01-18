@@ -19,11 +19,14 @@ import behavior.bpmn.auxiliary.visitors.AbstractProcessVisitor;
 import behavior.bpmn.auxiliary.visitors.ActivityVisitor;
 import behavior.bpmn.auxiliary.visitors.EventVisitor;
 import behavior.bpmn.events.*;
+import behavior.bpmn.events.definitions.EventDefinition;
 import groove.behaviortransformer.bpmn.BPMNRuleGenerator;
 import groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveRuleBuilder;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
@@ -128,8 +131,68 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
   private void createErrorEndEventInSubprocessRule(BPMNProcess process, EndEvent endEvent) {
     CallActivity callActivity = process.getCallActivityIfExists();
-    checkIfCallActivityExists(callActivity);
+    // TODO: test with different error codes. ex/par gateway to end events.
+    // TODO: Should actually find the most suitable error catch event!
+    if (callActivity != null) {
+      createErrorBoundaryEventRule(process, endEvent, callActivity);
+    } else {
+      createErrorEventSubprocessRule(process, endEvent);
+    }
+  }
 
+  private void createErrorEventSubprocessRule(BPMNProcess process, EndEvent endEvent) {
+    Map<BPMNEventSubprocess, List<StartEvent>> matchingStartEventsPerProcess =
+        findMatchingEventSubprocessStartEvents(process, endEvent);
+
+    Entry<BPMNEventSubprocess, List<StartEvent>> matchingStartEventAndProcess =
+        matchingStartEventsPerProcess.entrySet().iterator().next();
+
+
+    GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
+
+    // Remove all tokens from the current process instance
+    GrooveNode anyToken = ruleBuilder.deleteNode(TYPE_TOKEN);
+    ruleBuilder.deleteEdge(TOKENS, processInstance, anyToken);
+
+    GrooveNode forAllTokens = ruleBuilder.contextNode(FORALL);
+    ruleBuilder.contextEdge(AT, anyToken, forAllTokens);
+
+    // Create event subprocess with tokens after the start event.
+    BPMNEventSubprocess eventSubprocess = matchingStartEventAndProcess.getKey();
+    GrooveNode eventSubProcessInstance = addProcessInstance(ruleBuilder, eventSubprocess.getName());
+    ruleBuilder.addEdge(SUBPROCESS, processInstance, eventSubProcessInstance);
+
+    StartEvent startEvent = matchingStartEventAndProcess.getValue().get(0);
+    addOutgoingTokensForFlowNodeToProcessInstance(startEvent, ruleBuilder, eventSubProcessInstance, useSFId);
+  }
+
+  private static Map<BPMNEventSubprocess, List<StartEvent>> findMatchingEventSubprocessStartEvents(
+      BPMNProcess process, EndEvent endEvent) {
+    Map<BPMNEventSubprocess, List<StartEvent>> startEventsPerEventSubprocess = process
+        .getEventSubprocesses()
+        .collect(
+            Collectors.toMap(
+                bpmnEventSubprocess -> bpmnEventSubprocess,
+                bpmnEventSubprocess ->
+                    bpmnEventSubprocess.getStartEvents().stream()
+                        .filter(startEvent -> errorEventsMatch(endEvent, startEvent))
+                        .collect(Collectors.toList())));
+    if (startEventsPerEventSubprocess.entrySet().isEmpty()) {
+      throw new GrooveGenerationRuntimeException("tbd");
+    }
+    if (startEventsPerEventSubprocess.entrySet().size() > 1) {
+      throw new GrooveGenerationRuntimeException("tbd");
+    }
+    return startEventsPerEventSubprocess;
+  }
+
+  private static boolean errorEventsMatch(EndEvent endEvent, StartEvent startEvent) {
+    return startEvent.getType() == StartEventType.ERROR
+        && startEvent.getEventDefinition().equals(endEvent.getEventDefinition());
+  }
+
+  private void createErrorBoundaryEventRule(
+      BPMNProcess process, EndEvent endEvent, CallActivity callActivity) {
     BoundaryEvent matchingBoundaryEvent = findMatchingBoundaryEvent(callActivity, endEvent);
 
     // Add outgoing tokens to the boundary event for the father process instance.
@@ -141,44 +204,30 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     GrooveNode subprocess =
         interruptSubprocess(ruleBuilder, callActivity, fatherProcessInstance, false);
 
-    // Delete incoming end event token
+    deleteIncomingEndEventToken(endEvent, subprocess);
+  }
+
+  private GrooveNode deleteIncomingEndEventToken(AbstractBPMNProcess process, EndEvent endEvent) {
+    GrooveNode processInstance = contextProcessInstanceWithOnlyName(process, ruleBuilder);
+    deleteIncomingEndEventToken(endEvent, processInstance);
+    return processInstance;
+  }
+
+  private void deleteIncomingEndEventToken(EndEvent endEvent, GrooveNode processInstance) {
     GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
     SequenceFlow incomingFlow = endEvent.getIncomingFlows().findFirst().orElseThrow();
     final String incomingFlowId =
         getSequenceFlowIdOrDescriptiveName(incomingFlow, BPMNEventRuleGeneratorImpl.this.useSFId);
     GrooveNode position = ruleBuilder.contextNode(createStringNodeLabel(incomingFlowId));
     ruleBuilder.deleteEdge(POSITION, token, position);
-    ruleBuilder.deleteEdge(TOKENS, subprocess, token);
-  }
-
-  private GrooveNode deleteIncomingEndEventToken(AbstractBPMNProcess process, EndEvent endEvent) {
-    SequenceFlow incomingFlow = endEvent.getIncomingFlows().findFirst().orElseThrow();
-    final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow, this.useSFId);
-
-    GrooveNode processInstance = contextProcessInstanceWithOnlyName(process, ruleBuilder);
-
-    GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
-    GrooveNode position = ruleBuilder.contextNode(createStringNodeLabel(incomingFlowId));
-    ruleBuilder.deleteEdge(POSITION, token, position);
     ruleBuilder.deleteEdge(TOKENS, processInstance, token);
-    return processInstance;
-  }
-
-  private static void checkIfCallActivityExists(CallActivity callActivity) {
-    if (callActivity == null) {
-      // TODO: Think about if ordering might prevent the exception here.
-      throw new GrooveGenerationRuntimeException("Error or ordering");
-    }
   }
 
   private static BoundaryEvent findMatchingBoundaryEvent(
       CallActivity callActivity, EndEvent endEvent) {
     List<BoundaryEvent> matchingBoundaryEvents =
         callActivity.getBoundaryEvents().stream()
-            .filter(
-                boundaryEvent ->
-                    boundaryEvent.getType() == BoundaryEventType.ERROR
-                        && boundaryEvent.getEventDefinition().equals(endEvent.getEventDefinition()))
+            .filter(boundaryEvent -> errorEventsMatch(endEvent, boundaryEvent))
             .collect(Collectors.toList());
     if (matchingBoundaryEvents.isEmpty()) {
       throw new GrooveGenerationRuntimeException(
@@ -194,6 +243,11 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
               endEvent.getId()));
     }
     return matchingBoundaryEvents.get(0);
+  }
+
+  private static boolean errorEventsMatch(EndEvent endEvent, BoundaryEvent boundaryEvent) {
+    return boundaryEvent.getType() == BoundaryEventType.ERROR
+        && boundaryEvent.getEventDefinition().equals(endEvent.getEventDefinition());
   }
 
   @Override

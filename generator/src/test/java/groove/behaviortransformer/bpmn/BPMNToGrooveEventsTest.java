@@ -132,7 +132,6 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    */
   @Test
   void testEventSubprocessError() throws IOException {
-    // TODO: Test interruption correctly! See other interruption tests
     testGrooveGenerationForBPMNResourceFile("event-subprocess-error.bpmn");
   }
 
@@ -142,6 +141,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    */
   @Test
   void testSubprocessErrorCatchOrdering() throws IOException {
+    // TODO: Test interruption correlation based on error codes!
     testGrooveGenerationForBPMNResourceFile("subprocess-error-catch-ordering.bpmn");
   }
 }
