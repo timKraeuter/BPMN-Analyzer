@@ -3,7 +3,7 @@
     <graph id="terminate_end" role="rule" edgeids="false" edgemode="directed">
         <node id="n54">
             <attr name="layout">
-                <string>412 172 0 0</string>
+                <string>422 252 0 0</string>
             </attr>
         </node>
         <edge from="n54" to="n54">
@@ -12,28 +12,13 @@
             </attr>
         </edge>
         <edge from="n54" to="n54">
-            <attr name="label">
-                <string>new:</string>
-            </attr>
-        </edge>
-        <node id="n57">
-            <attr name="layout">
-                <string>930 240 0 0</string>
-            </attr>
-        </node>
-        <edge from="n57" to="n57">
-            <attr name="label">
-                <string>type:Terminated</string>
-            </attr>
-        </edge>
-        <edge from="n57" to="n57">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
         <node id="n51">
             <attr name="layout">
-                <string>547 422 0 0</string>
+                <string>557 342 0 0</string>
             </attr>
         </node>
         <edge from="n51" to="n51">
@@ -48,7 +33,7 @@
         </edge>
         <node id="n53">
             <attr name="layout">
-                <string>412 82 0 0</string>
+                <string>422 82 0 0</string>
             </attr>
         </node>
         <edge from="n53" to="n53">
@@ -61,24 +46,84 @@
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n56">
+        <node id="n55">
             <attr name="layout">
-                <string>952 330 0 0</string>
+                <string>557 432 0 0</string>
             </attr>
         </node>
-        <edge from="n56" to="n56">
+        <edge from="n55" to="n55">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n55" to="n55">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n57">
+            <attr name="layout">
+                <string>518 537 0 0</string>
+            </attr>
+        </node>
+        <edge from="n57" to="n57">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <edge from="n57" to="n57">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n58">
+            <attr name="layout">
+                <string>1387 647 0 0</string>
+            </attr>
+        </node>
+        <edge from="n58" to="n58">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n56" to="n56">
+        <edge from="n58" to="n58">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n62">
+            <attr name="layout">
+                <string>987 612 0 0</string>
+            </attr>
+        </node>
+        <edge from="n62" to="n62">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n62" to="n62">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n64">
+            <attr name="layout">
+                <string>972 522 0 0</string>
+            </attr>
+        </node>
+        <edge from="n64" to="n64">
+            <attr name="label">
+                <string>type:Message</string>
+            </attr>
+        </edge>
+        <edge from="n64" to="n64">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
         <node id="n49">
             <attr name="layout">
-                <string>62 99 0 0</string>
+                <string>62 100 0 0</string>
             </attr>
         </node>
         <edge from="n49" to="n49">
@@ -88,7 +133,7 @@
         </edge>
         <node id="n50">
             <attr name="layout">
-                <string>412 332 0 0</string>
+                <string>422 162 0 0</string>
             </attr>
         </node>
         <edge from="n50" to="n50">
@@ -98,7 +143,7 @@
         </edge>
         <node id="n52">
             <attr name="layout">
-                <string>862 422 0 0</string>
+                <string>882 342 0 0</string>
             </attr>
         </node>
         <edge from="n52" to="n52">
@@ -106,32 +151,57 @@
                 <string>string:"B_terminate_end"</string>
             </attr>
         </edge>
-        <node id="n55">
+        <node id="n56">
             <attr name="layout">
-                <string>502 252 0 0</string>
+                <string>882 432 0 0</string>
             </attr>
         </node>
-        <edge from="n55" to="n55">
+        <edge from="n56" to="n56">
             <attr name="label">
-                <string>type:ProcessSnapshot</string>
+                <string>forall:</string>
             </attr>
         </edge>
-        <node id="n58">
+        <node id="n59">
             <attr name="layout">
-                <string>1242 330 0 0</string>
+                <string>1587 647 0 0</string>
             </attr>
         </node>
-        <edge from="n58" to="n58">
+        <edge from="n59" to="n59">
+            <attr name="label">
+                <string>forall:</string>
+            </attr>
+        </edge>
+        <node id="n60">
+            <attr name="layout">
+                <string>1412 530 0 0</string>
+            </attr>
+        </node>
+        <edge from="n60" to="n60">
+            <attr name="label">
+                <string>exists:</string>
+            </attr>
+        </edge>
+        <node id="n61">
+            <attr name="layout">
+                <string>1262 612 0 0</string>
+            </attr>
+        </node>
+        <edge from="n61" to="n61">
+            <attr name="label">
+                <string>forall:</string>
+            </attr>
+        </edge>
+        <node id="n63">
+            <attr name="layout">
+                <string>1262 522 0 0</string>
+            </attr>
+        </node>
+        <edge from="n63" to="n63">
             <attr name="label">
                 <string>forall:</string>
             </attr>
         </edge>
         <edge from="n49" to="n54">
-            <attr name="label">
-                <string>new:state</string>
-            </attr>
-        </edge>
-        <edge from="n55" to="n57">
             <attr name="label">
                 <string>new:state</string>
             </attr>
@@ -151,9 +221,29 @@
                 <string>del:state</string>
             </attr>
         </edge>
-        <edge from="n55" to="n56">
+        <edge from="n49" to="n55">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n49" to="n57">
+            <attr name="label">
+                <string>del:subprocess</string>
+            </attr>
+        </edge>
+        <edge from="n57" to="n58">
             <attr name="label">
                 <string>del:state</string>
+            </attr>
+        </edge>
+        <edge from="n57" to="n62">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n57" to="n64">
+            <attr name="label">
+                <string>del:messages</string>
             </attr>
         </edge>
         <edge from="n49" to="n50">
@@ -161,24 +251,44 @@
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n49" to="n55">
-            <attr name="label">
-                <string>subprocess</string>
-            </attr>
-        </edge>
-        <edge from="n55" to="n58">
+        <edge from="n55" to="n56">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n56" to="n58">
+        <edge from="n57" to="n59">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n57" to="n58">
+        <edge from="n58" to="n59">
             <attr name="label">
                 <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n60" to="n59">
+            <attr name="label">
+                <string>in</string>
+            </attr>
+        </edge>
+        <edge from="n62" to="n61">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n61" to="n60">
+            <attr name="label">
+                <string>in</string>
+            </attr>
+        </edge>
+        <edge from="n64" to="n63">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n63" to="n60">
+            <attr name="label">
+                <string>in</string>
             </attr>
         </edge>
     </graph>

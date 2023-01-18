@@ -1,77 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="end_error" role="rule" edgeids="false" edgemode="directed">
-        <node id="n48">
+        <node id="n57">
             <attr name="layout">
                 <string>505 242 0 0</string>
             </attr>
         </node>
-        <edge from="n48" to="n48">
+        <edge from="n57" to="n57">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n48" to="n48">
+        <edge from="n57" to="n57">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n46">
+        <node id="n55">
             <attr name="layout">
                 <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n46" to="n46">
+        <edge from="n55" to="n55">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n47">
+        <node id="n56">
             <attr name="layout">
                 <string>392 152 0 0</string>
             </attr>
         </node>
-        <edge from="n47" to="n47">
+        <edge from="n56" to="n56">
             <attr name="label">
                 <string>string:"Subprocess error"</string>
             </attr>
         </edge>
-        <node id="n49">
+        <node id="n58">
             <attr name="layout">
                 <string>787 242 0 0</string>
             </attr>
         </node>
-        <edge from="n49" to="n49">
+        <edge from="n58" to="n58">
             <attr name="label">
                 <string>string:"catch_error_end_error"</string>
             </attr>
         </edge>
-        <node id="n50">
+        <node id="n59">
             <attr name="layout">
                 <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n50" to="n50">
+        <edge from="n59" to="n59">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n48" to="n49">
+        <edge from="n57" to="n58">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n46" to="n48">
+        <edge from="n55" to="n57">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n46" to="n47">
+        <edge from="n55" to="n56">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n46" to="n50">
+        <edge from="n55" to="n59">
             <attr name="label">
                 <string>state</string>
             </attr>

@@ -155,8 +155,6 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
 
                   break;
                 case SIGNAL:
-                  // Handled in the throw rule part.
-                  break;
                 case ERROR:
                   // Handled in the throw rule part.
                   break;
@@ -178,7 +176,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
     additionalActions.accept(processInstance);
 
     if (boundaryEvent.isInterrupt()) {
-      interruptSubprocess(ruleBuilder, callActivity, processInstance, null);
+      interruptSubprocess(ruleBuilder, callActivity, processInstance, false);
     } else {
       // Subprocess must be running
       GrooveNode subprocessInstance =

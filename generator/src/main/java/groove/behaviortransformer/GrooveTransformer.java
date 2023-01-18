@@ -15,8 +15,8 @@ public interface GrooveTransformer<S extends Behavior> {
   // Special groove labels
   String AT = "@";
   String FORALL = "forall:";
-  String FORALL_NON_VACUOUS = "forallx:";
   String EXISTS_OPTIONAL = "existsx:";
+  String EXISTS = "exists:";
   // Nesting of quantifiers
   String IN = "in";
 

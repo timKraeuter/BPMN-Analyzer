@@ -68,7 +68,7 @@
         </node>
         <edge from="n9" to="n9">
             <attr name="label">
-                <string>string:"start_Activity_06vbn97"</string>
+                <string>string:"start_Error_Subprocess"</string>
             </attr>
         </edge>
         <node id="n11">

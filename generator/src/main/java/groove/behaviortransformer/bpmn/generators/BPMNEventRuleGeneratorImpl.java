@@ -74,25 +74,18 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
       case TERMINATION:
         {
           GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
-          GrooveNode deletedRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
-          ruleBuilder.deleteEdge(STATE, processInstance, deletedRunning);
+          GrooveNode running = ruleBuilder.deleteNode(TYPE_RUNNING);
+          ruleBuilder.deleteEdge(STATE, processInstance, running);
 
           GrooveNode terminated = ruleBuilder.addNode(TYPE_TERMINATED);
           ruleBuilder.addEdge(STATE, processInstance, terminated);
 
-          // Terminate possible subprocesses with a nested rule.
-          GrooveNode subProcess = ruleBuilder.contextNode(TYPE_PROCESS_SNAPSHOT);
-          ruleBuilder.contextEdge(SUBPROCESS, processInstance, subProcess);
-          GrooveNode subProcessRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
-          ruleBuilder.deleteEdge(STATE, subProcess, subProcessRunning);
-          GrooveNode subProcessTerminated = ruleBuilder.addNode(TYPE_TERMINATED);
-          ruleBuilder.addEdge(STATE, subProcess, subProcessTerminated);
-
+          GrooveNode anyToken = ruleBuilder.deleteNode(TYPE_TOKEN);
+          ruleBuilder.deleteEdge(TOKENS, processInstance, anyToken);
           GrooveNode forAll = ruleBuilder.contextNode(FORALL);
-          ruleBuilder.contextEdge(AT, subProcess, forAll);
-          ruleBuilder.contextEdge(AT, subProcessRunning, forAll);
-          ruleBuilder.contextEdge(AT, subProcessTerminated, forAll);
-          // We could also delete all tokens in the current and all subprocess instances.
+          ruleBuilder.contextEdge(AT, anyToken, forAll);
+
+          interruptSubprocess(ruleBuilder, null, processInstance, true);
         }
         break;
       case MESSAGE:
@@ -128,22 +121,19 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                 addOutgoingTokensForFlowNodeToProcessInstance(
                     matchingBoundaryEvent, ruleBuilder, fatherProcessInstance, useSFId);
                 // Interrupt the subprocess since there was an error.
-                GrooveNode forAll = ruleBuilder.contextNode(FORALL_NON_VACUOUS);
-                GrooveNode subprocess = interruptSubprocess(
-                    ruleBuilder,
-                    callActivity,
-                    fatherProcessInstance,
-                    forAll);
+                GrooveNode subprocess =
+                    interruptSubprocess(ruleBuilder, callActivity, fatherProcessInstance, false);
 
                 // Delete incoming end event token
                 GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
                 SequenceFlow incomingFlow = endEvent.getIncomingFlows().findFirst().orElseThrow();
-                final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow, BPMNEventRuleGeneratorImpl.this.useSFId);
+                final String incomingFlowId =
+                    getSequenceFlowIdOrDescriptiveName(
+                        incomingFlow, BPMNEventRuleGeneratorImpl.this.useSFId);
                 GrooveNode position =
                     ruleBuilder.contextNode(createStringNodeLabel(incomingFlowId));
                 ruleBuilder.deleteEdge(POSITION, token, position);
                 ruleBuilder.deleteEdge(TOKENS, subprocess, token);
-                ruleBuilder.contextEdge(AT, token, forAll);
               }
             });
         break;
@@ -521,7 +511,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                         boundarySignalEvent, process, ruleBuilder, forAll, useSFId);
 
             if (boundarySignalEvent.isInterrupt()) {
-              interruptSubprocess(ruleBuilder, callActivity, processInstance, forAll);
+              // TODO: custom signal interrupt logic.
             } else {
               // Subprocess must be running
               GrooveNode subprocessInstance =

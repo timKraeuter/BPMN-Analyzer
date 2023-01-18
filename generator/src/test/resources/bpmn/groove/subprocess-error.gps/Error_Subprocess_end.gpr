@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="Activity_06vbn97_end" role="rule" edgeids="false" edgemode="directed">
+    <graph id="Error_Subprocess_end" role="rule" edgeids="false" edgemode="directed">
         <node id="n28">
             <attr name="layout">
                 <string>515 162 0 0</string>
@@ -83,7 +83,7 @@
         </node>
         <edge from="n26" to="n26">
             <attr name="label">
-                <string>string:"Activity_06vbn97"</string>
+                <string>string:"Error_Subprocess"</string>
             </attr>
         </edge>
         <node id="n29">
@@ -93,7 +93,7 @@
         </node>
         <edge from="n29" to="n29">
             <attr name="label">
-                <string>string:"Activity_06vbn97_end"</string>
+                <string>string:"Error_Subprocess_end"</string>
             </attr>
         </edge>
         <edge from="n22" to="n28">

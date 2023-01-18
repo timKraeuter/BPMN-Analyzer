@@ -48,7 +48,7 @@
         </node>
         <edge from="n31" to="n31">
             <attr name="label">
-                <string>string:"Activity_06vbn97"</string>
+                <string>string:"Error_Subprocess"</string>
             </attr>
         </edge>
         <node id="n32">
@@ -78,7 +78,7 @@
         </node>
         <edge from="n36" to="n36">
             <attr name="label">
-                <string>string:"Activity_06vbn97_start_sub"</string>
+                <string>string:"Error_Subprocess_start_sub"</string>
             </attr>
         </edge>
         <edge from="n30" to="n33">
