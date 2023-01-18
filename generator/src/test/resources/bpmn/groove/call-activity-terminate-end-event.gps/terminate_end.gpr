@@ -61,32 +61,32 @@
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n78">
+        <node id="n79">
             <attr name="layout">
                 <string>686 537 0 0</string>
             </attr>
         </node>
-        <edge from="n78" to="n78">
+        <edge from="n79" to="n79">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <edge from="n78" to="n78">
+        <edge from="n79" to="n79">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n79">
+        <node id="n80">
             <attr name="layout">
                 <string>1612 647 0 0</string>
             </attr>
         </node>
-        <edge from="n79" to="n79">
+        <edge from="n80" to="n80">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n79" to="n79">
+        <edge from="n80" to="n80">
             <attr name="label">
                 <string>del:</string>
             </attr>
@@ -161,12 +161,12 @@
                 <string>forall:</string>
             </attr>
         </edge>
-        <node id="n80">
+        <node id="n78">
             <attr name="layout">
                 <string>1812 647 0 0</string>
             </attr>
         </node>
-        <edge from="n80" to="n80">
+        <edge from="n78" to="n78">
             <attr name="label">
                 <string>forall:</string>
             </attr>
@@ -226,22 +226,22 @@
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n70" to="n78">
+        <edge from="n70" to="n79">
             <attr name="label">
                 <string>del:subprocess</string>
             </attr>
         </edge>
-        <edge from="n78" to="n79">
+        <edge from="n79" to="n80">
             <attr name="label">
                 <string>del:state</string>
             </attr>
         </edge>
-        <edge from="n78" to="n83">
+        <edge from="n79" to="n83">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n78" to="n85">
+        <edge from="n79" to="n85">
             <attr name="label">
                 <string>del:messages</string>
             </attr>
@@ -256,17 +256,17 @@
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n78" to="n80">
+        <edge from="n79" to="n78">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n79" to="n80">
+        <edge from="n80" to="n78">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n81" to="n80">
+        <edge from="n81" to="n78">
             <attr name="label">
                 <string>in</string>
             </attr>

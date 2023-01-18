@@ -512,7 +512,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                         boundarySignalEvent, process, ruleBuilder, forAll, useSFId);
 
             if (boundarySignalEvent.isInterrupt()) {
-              // TODO: custom signal interrupt logic.
+              interruptSubprocess(ruleBuilder, callActivity, processInstance, true, forAll);
             } else {
               // Subprocess must be running
               GrooveNode subprocessInstance =

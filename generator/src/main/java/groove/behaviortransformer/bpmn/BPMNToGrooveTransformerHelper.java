@@ -325,7 +325,8 @@ public class BPMNToGrooveTransformerHelper {
       GrooveRuleBuilder ruleBuilder,
       CallActivity callActivityIfExists,
       GrooveNode processInstance,
-      boolean forAllDeleteSubProcess) {
+      boolean forAllDeleteSubProcess,
+      GrooveNode forAllRoot) {
     // Delete/Terminate subprocess
     GrooveNode subprocessInstance = ruleBuilder.deleteNode(TYPE_PROCESS_SNAPSHOT);
     ruleBuilder.deleteEdge(SUBPROCESS, processInstance, subprocessInstance);
@@ -336,7 +337,6 @@ public class BPMNToGrooveTransformerHelper {
       ruleBuilder.deleteEdge(
           NAME, subprocessInstance, ruleBuilder.contextNode(createStringNodeLabel(subprocessName)));
     }
-    GrooveNode forAllRoot = ruleBuilder.contextNode(FORALL);
     if (forAllDeleteSubProcess) { // for terminate and signal
       ruleBuilder.contextEdge(AT, subprocessInstance, forAllRoot);
       ruleBuilder.contextEdge(AT, subprocessRunning, forAllRoot);
@@ -361,6 +361,16 @@ public class BPMNToGrooveTransformerHelper {
     ruleBuilder.contextEdge(IN, forAllMessages, exists);
 
     return subprocessInstance;
+  }
+
+  public static GrooveNode interruptSubprocess(
+      GrooveRuleBuilder ruleBuilder,
+      CallActivity callActivityIfExists,
+      GrooveNode processInstance,
+      boolean forAllDeleteSubProcess) {
+    GrooveNode forAllRoot = ruleBuilder.contextNode(FORALL);
+    return interruptSubprocess(
+        ruleBuilder, callActivityIfExists, processInstance, forAllDeleteSubProcess, forAllRoot);
   }
 
   public static String getStartEventTokenName(BPMNProcess process, StartEvent event) {
