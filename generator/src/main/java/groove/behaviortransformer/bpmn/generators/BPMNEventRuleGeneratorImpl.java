@@ -109,31 +109,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
               @Override
               public void handle(BPMNProcess process) {
-                CallActivity callActivity = process.getCallActivityIfExists();
-                checkIfCallActivityExists(callActivity);
-
-                BoundaryEvent matchingBoundaryEvent =
-                    findMatchingBoundaryEvent(callActivity, endEvent);
-
-                // Add outgoing tokens to the boundary event for the father process instance.
-                GrooveNode fatherProcessInstance =
-                    contextProcessInstance(collaboration.getParentProcess(process), ruleBuilder);
-                addOutgoingTokensForFlowNodeToProcessInstance(
-                    matchingBoundaryEvent, ruleBuilder, fatherProcessInstance, useSFId);
-                // Interrupt the subprocess since there was an error.
-                GrooveNode subprocess =
-                    interruptSubprocess(ruleBuilder, callActivity, fatherProcessInstance, false);
-
-                // Delete incoming end event token
-                GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
-                SequenceFlow incomingFlow = endEvent.getIncomingFlows().findFirst().orElseThrow();
-                final String incomingFlowId =
-                    getSequenceFlowIdOrDescriptiveName(
-                        incomingFlow, BPMNEventRuleGeneratorImpl.this.useSFId);
-                GrooveNode position =
-                    ruleBuilder.contextNode(createStringNodeLabel(incomingFlowId));
-                ruleBuilder.deleteEdge(POSITION, token, position);
-                ruleBuilder.deleteEdge(TOKENS, subprocess, token);
+                createErrorEndEventInSubprocessRule(process, endEvent);
               }
             });
         break;
@@ -148,6 +124,31 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     }
 
     ruleBuilder.buildRule();
+  }
+
+  private void createErrorEndEventInSubprocessRule(BPMNProcess process, EndEvent endEvent) {
+    CallActivity callActivity = process.getCallActivityIfExists();
+    checkIfCallActivityExists(callActivity);
+
+    BoundaryEvent matchingBoundaryEvent = findMatchingBoundaryEvent(callActivity, endEvent);
+
+    // Add outgoing tokens to the boundary event for the father process instance.
+    GrooveNode fatherProcessInstance =
+        contextProcessInstance(collaboration.getParentProcess(process), ruleBuilder);
+    addOutgoingTokensForFlowNodeToProcessInstance(
+        matchingBoundaryEvent, ruleBuilder, fatherProcessInstance, useSFId);
+    // Interrupt the subprocess since there was an error.
+    GrooveNode subprocess =
+        interruptSubprocess(ruleBuilder, callActivity, fatherProcessInstance, false);
+
+    // Delete incoming end event token
+    GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
+    SequenceFlow incomingFlow = endEvent.getIncomingFlows().findFirst().orElseThrow();
+    final String incomingFlowId =
+        getSequenceFlowIdOrDescriptiveName(incomingFlow, BPMNEventRuleGeneratorImpl.this.useSFId);
+    GrooveNode position = ruleBuilder.contextNode(createStringNodeLabel(incomingFlowId));
+    ruleBuilder.deleteEdge(POSITION, token, position);
+    ruleBuilder.deleteEdge(TOKENS, subprocess, token);
   }
 
   private GrooveNode deleteIncomingEndEventToken(AbstractBPMNProcess process, EndEvent endEvent) {
