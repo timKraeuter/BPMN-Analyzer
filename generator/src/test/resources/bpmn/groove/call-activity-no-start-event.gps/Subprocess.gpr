@@ -3,7 +3,7 @@
     <graph id="Subprocess" role="rule" edgeids="false" edgemode="directed">
         <node id="n17">
             <attr name="layout">
-                <string>615 585 0 0</string>
+                <string>615 415 0 0</string>
             </attr>
         </node>
         <edge from="n17" to="n17">
@@ -18,7 +18,7 @@
         </edge>
         <node id="n19">
             <attr name="layout">
-                <string>1007 512 0 0</string>
+                <string>1007 342 0 0</string>
             </attr>
         </node>
         <edge from="n19" to="n19">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n20">
             <attr name="layout">
-                <string>1120 342 0 0</string>
+                <string>1120 252 0 0</string>
             </attr>
         </node>
         <edge from="n20" to="n20">
@@ -48,7 +48,7 @@
         </edge>
         <node id="n22">
             <attr name="layout">
-                <string>1120 602 0 0</string>
+                <string>1120 432 0 0</string>
             </attr>
         </node>
         <edge from="n22" to="n22">
@@ -63,7 +63,7 @@
         </edge>
         <node id="n24">
             <attr name="layout">
-                <string>1120 252 0 0</string>
+                <string>1120 162 0 0</string>
             </attr>
         </node>
         <edge from="n24" to="n24">
@@ -78,7 +78,7 @@
         </edge>
         <node id="n15">
             <attr name="layout">
-                <string>605 162 0 0</string>
+                <string>605 512 0 0</string>
             </attr>
         </node>
         <edge from="n15" to="n15">
@@ -93,7 +93,7 @@
         </edge>
         <node id="n12">
             <attr name="layout">
-                <string>62 570 0 0</string>
+                <string>62 497 0 0</string>
             </attr>
         </node>
         <edge from="n12" to="n12">
@@ -103,7 +103,7 @@
         </edge>
         <node id="n13">
             <attr name="layout">
-                <string>402 72 0 0</string>
+                <string>402 245 0 0</string>
             </attr>
         </node>
         <edge from="n13" to="n13">
@@ -113,7 +113,7 @@
         </edge>
         <node id="n14">
             <attr name="layout">
-                <string>402 495 0 0</string>
+                <string>402 325 0 0</string>
             </attr>
         </node>
         <edge from="n14" to="n14">
@@ -123,7 +123,7 @@
         </edge>
         <node id="n16">
             <attr name="layout">
-                <string>1007 162 0 0</string>
+                <string>1007 512 0 0</string>
             </attr>
         </node>
         <edge from="n16" to="n16">
@@ -133,7 +133,7 @@
         </edge>
         <node id="n18">
             <attr name="layout">
-                <string>1007 422 0 0</string>
+                <string>1007 72 0 0</string>
             </attr>
         </node>
         <edge from="n18" to="n18">
@@ -143,7 +143,7 @@
         </edge>
         <node id="n21">
             <attr name="layout">
-                <string>1402 342 0 0</string>
+                <string>1402 252 0 0</string>
             </attr>
         </node>
         <edge from="n21" to="n21">
@@ -153,7 +153,7 @@
         </edge>
         <node id="n23">
             <attr name="layout">
-                <string>1402 602 0 0</string>
+                <string>1402 432 0 0</string>
             </attr>
         </node>
         <edge from="n23" to="n23">
@@ -163,7 +163,7 @@
         </edge>
         <node id="n25">
             <attr name="layout">
-                <string>1402 252 0 0</string>
+                <string>1402 162 0 0</string>
             </attr>
         </node>
         <edge from="n25" to="n25">
@@ -171,14 +171,19 @@
                 <string>string:"p1"</string>
             </attr>
         </edge>
-        <edge from="n12" to="n17">
+        <edge from="n17" to="n18">
             <attr name="label">
-                <string>new:subprocess</string>
+                <string>new:name</string>
             </attr>
         </edge>
         <edge from="n17" to="n19">
             <attr name="label">
                 <string>new:state</string>
+            </attr>
+        </edge>
+        <edge from="n12" to="n17">
+            <attr name="label">
+                <string>new:subprocess</string>
             </attr>
         </edge>
         <edge from="n17" to="n20">
@@ -229,11 +234,6 @@
         <edge from="n12" to="n14">
             <attr name="label">
                 <string>state</string>
-            </attr>
-        </edge>
-        <edge from="n17" to="n18">
-            <attr name="label">
-                <string>name</string>
             </attr>
         </edge>
     </graph>

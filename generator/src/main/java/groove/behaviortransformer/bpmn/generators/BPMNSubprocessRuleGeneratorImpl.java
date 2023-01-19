@@ -1,6 +1,5 @@
 package groove.behaviortransformer.bpmn.generators;
 
-import static groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.*;
 
@@ -52,21 +51,13 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
     final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow, this.useSFId);
     ruleBuilder.startRule(
         bpmnRuleGenerator.getTaskOrCallActivityRuleName(callActivity, incomingFlowId));
-    GrooveNode processInstance =
-        BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
+    GrooveNode processInstance = contextProcessInstance(process, ruleBuilder);
     BPMNToGrooveTransformerHelper.deleteTokenWithPosition(
         ruleBuilder, processInstance, incomingFlowId);
 
-    // TODO: reuse createNewProcessInstance
-    GrooveNode subProcessInstance = ruleBuilder.addNode(TYPE_PROCESS_SNAPSHOT);
-    ruleBuilder.contextEdge(
-        NAME,
-        subProcessInstance,
-        ruleBuilder.contextNode(
-            createStringNodeLabel(callActivity.getSubProcessModel().getName())));
+    GrooveNode subProcessInstance =
+        addProcessInstance(ruleBuilder, callActivity.getSubProcessModel().getName());
     ruleBuilder.addEdge(SUBPROCESS, processInstance, subProcessInstance);
-    GrooveNode running = ruleBuilder.addNode(TYPE_RUNNING);
-    ruleBuilder.addEdge(STATE, subProcessInstance, running);
     if (subprocessHasStartEvents(callActivity)) {
       // Subprocess has a start events which get tokens!
       callActivity
@@ -98,8 +89,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
     ruleBuilder.startRule(callActivity.getName() + END);
 
     // Parent process is running
-    final GrooveNode parentProcess =
-        BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
+    final GrooveNode parentProcess = contextProcessInstance(process, ruleBuilder);
 
     // Delete subprocess
     String subProcessName = callActivity.getSubProcessModel().getName();
@@ -180,8 +170,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
     } else {
       // Subprocess must be running
       GrooveNode subprocessInstance =
-          BPMNToGrooveTransformerHelper.contextProcessInstance(
-              callActivity.getSubProcessModel(), ruleBuilder);
+          contextProcessInstance(callActivity.getSubProcessModel(), ruleBuilder);
       ruleBuilder.contextEdge(SUBPROCESS, processInstance, subprocessInstance);
     }
 
