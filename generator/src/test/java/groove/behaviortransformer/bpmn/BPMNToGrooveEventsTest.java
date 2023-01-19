@@ -141,6 +141,16 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
   }
 
   /**
+   * See test case <a
+   * href="https://cawemo.com/share/ca354679-b2a9-4deb-93f9-47069658e48f">"Subprocess Error Handling
+   * Complex"</a> in cawemo.
+   */
+  @Test
+  void testSubprocessErrorHandlingComplex() throws IOException {
+    testGrooveGenerationForBPMNResourceFile("subprocess-error-handling-complex.bpmn");
+  }
+
+  /**
    * See test case <a href="https://cawemo.com/share/2a6dc064-a602-4bda-96d1-a788d9a0e363">
    * "Subprocess Error Unclear Catch Event"</a> in cawemo.
    */

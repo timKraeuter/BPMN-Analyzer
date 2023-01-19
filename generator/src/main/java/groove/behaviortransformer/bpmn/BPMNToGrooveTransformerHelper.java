@@ -5,7 +5,6 @@ import static groove.behaviortransformer.GrooveTransformerHelper.createStringNod
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
 
 import behavior.bpmn.*;
-import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import behavior.bpmn.events.StartEvent;
 import groove.behaviortransformer.GrooveTransformer;
@@ -323,7 +322,7 @@ public class BPMNToGrooveTransformerHelper {
 
   public static GrooveNode interruptSubprocess(
       GrooveRuleBuilder ruleBuilder,
-      CallActivity callActivityIfExists,
+      AbstractBPMNProcess specificSubprocessIfExists,
       GrooveNode processInstance,
       boolean forAllDeleteSubProcess,
       GrooveNode forAllRoot) {
@@ -332,8 +331,8 @@ public class BPMNToGrooveTransformerHelper {
     ruleBuilder.deleteEdge(SUBPROCESS, processInstance, subprocessInstance);
     GrooveNode subprocessRunning = ruleBuilder.deleteNode(TYPE_RUNNING);
     ruleBuilder.deleteEdge(STATE, subprocessInstance, subprocessRunning);
-    if (callActivityIfExists != null) {
-      String subprocessName = callActivityIfExists.getSubProcessModel().getName();
+    if (specificSubprocessIfExists != null) {
+      String subprocessName = specificSubprocessIfExists.getName();
       ruleBuilder.deleteEdge(
           NAME, subprocessInstance, ruleBuilder.contextNode(createStringNodeLabel(subprocessName)));
     }
@@ -365,12 +364,12 @@ public class BPMNToGrooveTransformerHelper {
 
   public static GrooveNode interruptSubprocess(
       GrooveRuleBuilder ruleBuilder,
-      CallActivity callActivityIfExists,
+      AbstractBPMNProcess specificSubprocess,
       GrooveNode processInstance,
       boolean forAllDeleteSubProcess) {
     GrooveNode forAllRoot = ruleBuilder.contextNode(FORALL);
     return interruptSubprocess(
-        ruleBuilder, callActivityIfExists, processInstance, forAllDeleteSubProcess, forAllRoot);
+        ruleBuilder, specificSubprocess, processInstance, forAllDeleteSubProcess, forAllRoot);
   }
 
   public static String getStartEventTokenName(BPMNProcess process, StartEvent event) {

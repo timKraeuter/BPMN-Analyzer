@@ -176,7 +176,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
     additionalActions.accept(processInstance);
 
     if (boundaryEvent.isInterrupt()) {
-      interruptSubprocess(ruleBuilder, callActivity, processInstance, false);
+      interruptSubprocess(ruleBuilder, callActivity.getSubProcessModel(), processInstance, false);
     } else {
       // Subprocess must be running
       GrooveNode subprocessInstance =

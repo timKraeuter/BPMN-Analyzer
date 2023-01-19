@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class ErrorEventDefinition implements EventDefinition {
 
-  private String errorCode;
+  private final String errorCode;
 
   public ErrorEventDefinition(String errorCode) {
     this.errorCode = errorCode;
@@ -15,7 +15,7 @@ public class ErrorEventDefinition implements EventDefinition {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (!(o instanceof ErrorEventDefinition)) {
       return false;
     }
     ErrorEventDefinition that = (ErrorEventDefinition) o;

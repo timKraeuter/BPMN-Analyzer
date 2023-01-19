@@ -107,7 +107,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
             new AbstractProcessVisitor() {
               @Override
               public void handle(BPMNEventSubprocess eventSubprocess) {
-                // TODO: Implement behavior inside an event subprocess. Similar as below
+                createErrorEndEventRuleFromEventSubprocess(eventSubprocess, endEvent);
               }
 
               @Override
@@ -129,6 +129,46 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     ruleBuilder.buildRule();
   }
 
+  private void createErrorEndEventRuleFromEventSubprocess(
+      BPMNEventSubprocess eventSubprocess, EndEvent errorEndEvent) {
+    AbstractBPMNProcess parentProcess = collaboration.getParentProcess(eventSubprocess);
+    parentProcess.accept(
+        new AbstractProcessVisitor() {
+          @Override
+          public void handle(BPMNEventSubprocess eventSubprocess) {
+            throw new GrooveGenerationRuntimeException("Event subprocess nesting not supported!");
+          }
+
+          @Override
+          public void handle(BPMNProcess parentProcess) {
+            CallActivity callActivity = parentProcess.getCallActivityIfExists();
+            if (callActivity != null) {
+              Optional<BoundaryEvent> matchingBoundaryEvent =
+                  findMatchingErrorBoundaryEvent(callActivity, errorEndEvent);
+              if (matchingBoundaryEvent.isPresent()) {
+                // Add outgoing tokens to the boundary event for the parent parent process instance.
+                GrooveNode parentParentProcessInstance =
+                    contextProcessInstance(
+                        collaboration.getParentProcess(parentProcess), ruleBuilder);
+                addOutgoingTokensForFlowNodeToProcessInstance(
+                    matchingBoundaryEvent.get(), ruleBuilder, parentParentProcessInstance, useSFId);
+                // Interrupt the parent process and ev process since there was an error.
+                GrooveNode parentProcessInstance =
+                    interruptSubprocess(
+                        ruleBuilder, parentProcess, parentParentProcessInstance, false);
+                GrooveNode evProcessInstance =
+                    interruptSubprocess(ruleBuilder, eventSubprocess, parentProcessInstance, false);
+
+                deleteIncomingEndEventToken(errorEndEvent, evProcessInstance);
+                return;
+              }
+            }
+            throw new GrooveGenerationRuntimeException(
+                noMatchingErrorCatchEventFoundFor(errorEndEvent));
+          }
+        });
+  }
+
   private void createErrorEndEventRule(BPMNProcess process, EndEvent errorEndEvent) {
     CallActivity callActivity = process.getCallActivityIfExists();
     if (callActivity != null) {
@@ -140,7 +180,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         createErrorStartEventSubprocessRule(
             process, errorEndEvent, eSubProcessAndMatchingStartEvent.get());
       } else {
-        throw new GrooveGenerationRuntimeException("None present");
+        throw new GrooveGenerationRuntimeException(
+            noMatchingErrorCatchEventFoundFor(errorEndEvent));
       }
     }
   }
@@ -159,17 +200,19 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                   eSubProcessAndMatchingStartEvent.get().getValue(), matchingBoundaryEvent.get())));
     }
     if (eSubProcessAndMatchingStartEvent.isEmpty() && matchingBoundaryEvent.isEmpty()) {
-      throw new GrooveGenerationRuntimeException(
-          String.format("No matching error catch event found for \"%s\"!", errorEndEvent));
+      throw new GrooveGenerationRuntimeException(noMatchingErrorCatchEventFoundFor(errorEndEvent));
     }
     // Only one can be present.
     matchingBoundaryEvent.ifPresent(
-        boundaryEvent ->
-            createErrorBoundaryEventRule(process, errorEndEvent, callActivity, boundaryEvent));
+        boundaryEvent -> createErrorBoundaryEventRule(process, errorEndEvent, boundaryEvent));
     eSubProcessAndMatchingStartEvent.ifPresent(
         bpmnEventSubprocessStartEventPair ->
             createErrorStartEventSubprocessRule(
                 process, errorEndEvent, bpmnEventSubprocessStartEventPair));
+  }
+
+  private static String noMatchingErrorCatchEventFoundFor(EndEvent errorEndEvent) {
+    return String.format("No matching error catch event found for \"%s\"!", errorEndEvent);
   }
 
   private void createErrorStartEventSubprocessRule(
@@ -251,10 +294,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
   }
 
   private void createErrorBoundaryEventRule(
-      BPMNProcess process,
-      EndEvent endEvent,
-      CallActivity callActivity,
-      BoundaryEvent matchingBoundaryEvent) {
+      AbstractBPMNProcess process, EndEvent endEvent, BoundaryEvent matchingBoundaryEvent) {
 
     // Add outgoing tokens to the boundary event for the father process instance.
     GrooveNode fatherProcessInstance =
@@ -262,8 +302,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     addOutgoingTokensForFlowNodeToProcessInstance(
         matchingBoundaryEvent, ruleBuilder, fatherProcessInstance, useSFId);
     // Interrupt the subprocess since there was an error.
-    GrooveNode subprocess =
-        interruptSubprocess(ruleBuilder, callActivity, fatherProcessInstance, false);
+    GrooveNode subprocess = interruptSubprocess(ruleBuilder, process, fatherProcessInstance, false);
 
     deleteIncomingEndEventToken(endEvent, subprocess);
   }
@@ -624,7 +663,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                         boundarySignalEvent, process, ruleBuilder, forAll, useSFId);
 
             if (boundarySignalEvent.isInterrupt()) {
-              interruptSubprocess(ruleBuilder, callActivity, processInstance, true, forAll);
+              interruptSubprocess(
+                  ruleBuilder, callActivity.getSubProcessModel(), processInstance, true, forAll);
             } else {
               // Subprocess must be running
               GrooveNode subprocessInstance =
