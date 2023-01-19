@@ -1,6 +1,11 @@
 package groove.behaviortransformer.bpmn;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import java.io.IOException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
@@ -137,11 +142,36 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
 
   /**
    * See test case <a href="https://cawemo.com/share/2a6dc064-a602-4bda-96d1-a788d9a0e363">
-   * "Subprocess Error Catch Ordering"</a> in cawemo.
+   * "Subprocess Error Unclear Catch Event"</a> in cawemo.
    */
   @Test
-  void testSubprocessErrorCatchOrdering() throws IOException {
-    // TODO: Test interruption correlation based on error codes!
-    testGrooveGenerationForBPMNResourceFile("subprocess-error-catch-ordering.bpmn");
+  void testSubprocessErrorUnclearCatchEvent() {
+    GrooveGenerationRuntimeException exception =
+        Assertions.assertThrows(
+            GrooveGenerationRuntimeException.class,
+            () ->
+                testGrooveGenerationForBPMNResourceFile(
+                    "subprocess-error-unclear-catch-event.bpmn"));
+    assertThat(
+        exception.getMessage(),
+        is(
+            "There were multiple matching error catch events "
+                + "\"[catch_error_esub (Event_0050cj9), catch_error (Event_1yjmjxx)]\" "
+                + "for the error end event \"throw_error (Event_1qghjqc)\"!"));
+  }
+
+  /**
+   * See test case <a href="https://cawemo.com/share/fc49a2d8-60f3-409a-9225-715b2f682f90">"No Error
+   * Catch Event"</a> in cawemo.
+   */
+  @Test
+  void testNoErrorCatchEvent() {
+    GrooveGenerationRuntimeException exception =
+        Assertions.assertThrows(
+            GrooveGenerationRuntimeException.class,
+            () -> testGrooveGenerationForBPMNResourceFile("no-error-catch-event.bpmn"));
+    assertThat(
+        exception.getMessage(),
+        is("No matching error catch event found for \"error 1 (Event_1lfavsd)\"!"));
   }
 }

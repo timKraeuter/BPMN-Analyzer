@@ -601,7 +601,10 @@ public class BPMNFileReader {
             @Override
             public StartEvent handle(ErrorEventDefinition evDefinition) {
               return new StartEvent(
-                  flowNode.getId(), getFlowElementName(flowNode), StartEventType.ERROR);
+                  flowNode.getId(),
+                  getFlowElementName(flowNode),
+                  StartEventType.ERROR,
+                  mapErrorEventDefinition(evDefinition));
             }
           };
       return this.visitDefinition(eventDefinition, visitor);

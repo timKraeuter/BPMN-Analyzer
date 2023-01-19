@@ -10,6 +10,5 @@ public class NoEventDefinition implements EventDefinition {
     return instance;
   }
 
-  private NoEventDefinition() {
-  }
+  private NoEventDefinition() {}
 }

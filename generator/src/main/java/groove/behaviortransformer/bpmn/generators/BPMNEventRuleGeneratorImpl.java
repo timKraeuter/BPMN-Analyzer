@@ -25,8 +25,8 @@ import groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveRuleBuilder;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
@@ -107,12 +107,12 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
             new AbstractProcessVisitor() {
               @Override
               public void handle(BPMNEventSubprocess eventSubprocess) {
-                // TODO: Implement behavior inside an event subprocess.
+                // TODO: Implement behavior inside an event subprocess. Similar as below
               }
 
               @Override
               public void handle(BPMNProcess process) {
-                createErrorEndEventInSubprocessRule(process, endEvent);
+                createErrorEndEventRule(process, endEvent);
               }
             });
         break;
@@ -129,24 +129,53 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     ruleBuilder.buildRule();
   }
 
-  private void createErrorEndEventInSubprocessRule(BPMNProcess process, EndEvent endEvent) {
+  private void createErrorEndEventRule(BPMNProcess process, EndEvent errorEndEvent) {
     CallActivity callActivity = process.getCallActivityIfExists();
-    // TODO: test with different error codes. ex/par gateway to end events.
-    // TODO: Should actually find the most suitable error catch event!
     if (callActivity != null) {
-      createErrorBoundaryEventRule(process, endEvent, callActivity);
+      createErrorEndEventInSubprocessRule(process, errorEndEvent, callActivity);
     } else {
-      createErrorEventSubprocessRule(process, endEvent);
+      Optional<Pair<BPMNEventSubprocess, StartEvent>> eSubProcessAndMatchingStartEvent =
+          findMatchingEventSubprocessWithErrorStartEvent(process, errorEndEvent);
+      if (eSubProcessAndMatchingStartEvent.isPresent()) {
+        createErrorStartEventSubprocessRule(
+            process, errorEndEvent, eSubProcessAndMatchingStartEvent.get());
+      } else {
+        throw new GrooveGenerationRuntimeException("None present");
+      }
     }
   }
 
-  private void createErrorEventSubprocessRule(BPMNProcess process, EndEvent endEvent) {
-    Map<BPMNEventSubprocess, List<StartEvent>> matchingStartEventsPerProcess =
-        findMatchingEventSubprocessStartEvents(process, endEvent);
+  private void createErrorEndEventInSubprocessRule(
+      BPMNProcess process, EndEvent errorEndEvent, CallActivity callActivity) {
+    Optional<Pair<BPMNEventSubprocess, StartEvent>> eSubProcessAndMatchingStartEvent =
+        findMatchingEventSubprocessWithErrorStartEvent(process, errorEndEvent);
+    Optional<BoundaryEvent> matchingBoundaryEvent =
+        findMatchingErrorBoundaryEvent(callActivity, errorEndEvent);
+    if (eSubProcessAndMatchingStartEvent.isPresent() && matchingBoundaryEvent.isPresent()) {
+      throw new GrooveGenerationRuntimeException(
+          multipleErrorCatchEventsFoundMessage(
+              errorEndEvent,
+              List.of(
+                  eSubProcessAndMatchingStartEvent.get().getValue(), matchingBoundaryEvent.get())));
+    }
+    if (eSubProcessAndMatchingStartEvent.isEmpty() && matchingBoundaryEvent.isEmpty()) {
+      throw new GrooveGenerationRuntimeException(
+          String.format("No matching error catch event found for \"%s\"!", errorEndEvent));
+    }
+    // Only one can be present.
+    matchingBoundaryEvent.ifPresent(
+        boundaryEvent ->
+            createErrorBoundaryEventRule(process, errorEndEvent, callActivity, boundaryEvent));
+    eSubProcessAndMatchingStartEvent.ifPresent(
+        bpmnEventSubprocessStartEventPair ->
+            createErrorStartEventSubprocessRule(
+                process, errorEndEvent, bpmnEventSubprocessStartEventPair));
+  }
 
-    Entry<BPMNEventSubprocess, List<StartEvent>> matchingStartEventAndProcess =
-        matchingStartEventsPerProcess.entrySet().iterator().next();
-
+  private void createErrorStartEventSubprocessRule(
+      BPMNProcess process,
+      EndEvent endEvent,
+      Pair<BPMNEventSubprocess, StartEvent> matchingStartEventAndProcess) {
 
     GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
 
@@ -162,28 +191,58 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     GrooveNode eventSubProcessInstance = addProcessInstance(ruleBuilder, eventSubprocess.getName());
     ruleBuilder.addEdge(SUBPROCESS, processInstance, eventSubProcessInstance);
 
-    StartEvent startEvent = matchingStartEventAndProcess.getValue().get(0);
-    addOutgoingTokensForFlowNodeToProcessInstance(startEvent, ruleBuilder, eventSubProcessInstance, useSFId);
+    StartEvent startEvent = matchingStartEventAndProcess.getValue();
+    addOutgoingTokensForFlowNodeToProcessInstance(
+        startEvent, ruleBuilder, eventSubProcessInstance, useSFId);
   }
 
-  private static Map<BPMNEventSubprocess, List<StartEvent>> findMatchingEventSubprocessStartEvents(
-      BPMNProcess process, EndEvent endEvent) {
-    Map<BPMNEventSubprocess, List<StartEvent>> startEventsPerEventSubprocess = process
-        .getEventSubprocesses()
-        .collect(
-            Collectors.toMap(
-                bpmnEventSubprocess -> bpmnEventSubprocess,
-                bpmnEventSubprocess ->
-                    bpmnEventSubprocess.getStartEvents().stream()
-                        .filter(startEvent -> errorEventsMatch(endEvent, startEvent))
-                        .collect(Collectors.toList())));
-    if (startEventsPerEventSubprocess.entrySet().isEmpty()) {
-      throw new GrooveGenerationRuntimeException("tbd");
+  private static Optional<Pair<BPMNEventSubprocess, StartEvent>>
+      findMatchingEventSubprocessWithErrorStartEvent(BPMNProcess process, EndEvent endEvent) {
+    List<Pair<BPMNEventSubprocess, List<StartEvent>>> startEventsPerEventSubprocess =
+        process
+            .getEventSubprocesses()
+            .map(
+                bpmnEventSubprocess -> {
+                  List<StartEvent> matchingStartEvents =
+                      bpmnEventSubprocess.getStartEvents().stream()
+                          .filter(startEvent -> errorEventsMatch(endEvent, startEvent))
+                          .collect(Collectors.toList());
+                  return matchingStartEvents.isEmpty()
+                      ? null
+                      : Pair.of(bpmnEventSubprocess, matchingStartEvents);
+                })
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+    if (startEventsPerEventSubprocess.size() > 1) {
+      throw new GrooveGenerationRuntimeException(
+          multipleEventSubprocessesFoundErrorMessage(startEventsPerEventSubprocess, endEvent));
     }
-    if (startEventsPerEventSubprocess.entrySet().size() > 1) {
-      throw new GrooveGenerationRuntimeException("tbd");
+    if (startEventsPerEventSubprocess.isEmpty()) {
+      return Optional.empty();
     }
-    return startEventsPerEventSubprocess;
+    Pair<BPMNEventSubprocess, List<StartEvent>> matchingPair = startEventsPerEventSubprocess.get(0);
+    if (matchingPair.getRight().size() > 1) {
+      throw new GrooveGenerationRuntimeException(
+          multipleErrorCatchEventsFoundMessage(endEvent, matchingPair.getRight()));
+    }
+    return Optional.of(Pair.of(matchingPair.getLeft(), matchingPair.getRight().get(0)));
+  }
+
+  private static String multipleEventSubprocessesFoundErrorMessage(
+      List<Pair<BPMNEventSubprocess, List<StartEvent>>> startEventsPerEventSubprocess,
+      EndEvent endEvent) {
+    List<StartEvent> matchingStartEvents =
+        startEventsPerEventSubprocess.stream()
+            .flatMap(bpmnEventSubprocessListPair -> bpmnEventSubprocessListPair.getRight().stream())
+            .collect(Collectors.toList());
+    return multipleErrorCatchEventsFoundMessage(endEvent, matchingStartEvents);
+  }
+
+  private static String multipleErrorCatchEventsFoundMessage(
+      EndEvent endEvent, List<? extends Event> matchingStartEvents) {
+    return String.format(
+        "There were multiple matching error catch events \"%s\" for the error end event \"%s\"!",
+        matchingStartEvents, endEvent);
   }
 
   private static boolean errorEventsMatch(EndEvent endEvent, StartEvent startEvent) {
@@ -192,8 +251,10 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
   }
 
   private void createErrorBoundaryEventRule(
-      BPMNProcess process, EndEvent endEvent, CallActivity callActivity) {
-    BoundaryEvent matchingBoundaryEvent = findMatchingBoundaryEvent(callActivity, endEvent);
+      BPMNProcess process,
+      EndEvent endEvent,
+      CallActivity callActivity,
+      BoundaryEvent matchingBoundaryEvent) {
 
     // Add outgoing tokens to the boundary event for the father process instance.
     GrooveNode fatherProcessInstance =
@@ -223,17 +284,14 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     ruleBuilder.deleteEdge(TOKENS, processInstance, token);
   }
 
-  private static BoundaryEvent findMatchingBoundaryEvent(
+  private static Optional<BoundaryEvent> findMatchingErrorBoundaryEvent(
       CallActivity callActivity, EndEvent endEvent) {
     List<BoundaryEvent> matchingBoundaryEvents =
         callActivity.getBoundaryEvents().stream()
             .filter(boundaryEvent -> errorEventsMatch(endEvent, boundaryEvent))
             .collect(Collectors.toList());
     if (matchingBoundaryEvents.isEmpty()) {
-      throw new GrooveGenerationRuntimeException(
-          String.format(
-              "No boundary error event found matching the error end event \"%s\"",
-              endEvent.getId()));
+      return Optional.empty();
     }
     if (matchingBoundaryEvents.size() > 1) {
       throw new GrooveGenerationRuntimeException(
@@ -242,7 +300,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
               matchingBoundaryEvents.stream().map(FlowElement::getId).collect(Collectors.toList()),
               endEvent.getId()));
     }
-    return matchingBoundaryEvents.get(0);
+    return Optional.of(matchingBoundaryEvents.get(0));
   }
 
   private static boolean errorEventsMatch(EndEvent endEvent, BoundaryEvent boundaryEvent) {
