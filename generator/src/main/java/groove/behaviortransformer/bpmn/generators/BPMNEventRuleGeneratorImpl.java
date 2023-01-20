@@ -101,23 +101,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
           break;
         }
       case ERROR:
-        // Find container process and see if a matching error catch event can be found.
-        AbstractBPMNProcess endEventProcess = this.collaboration.findProcessForFlowNode(endEvent);
-        endEventProcess.accept(
-            new AbstractProcessVisitor() {
-              @Override
-              public void handle(BPMNEventSubprocess eventSubprocess) {
-                createErrorEndEventRuleFromEventSubprocess(eventSubprocess, endEvent);
-              }
-
-              @Override
-              public void handle(BPMNProcess process) {
-                createErrorEndEventRule(process, endEvent);
-              }
-            });
-        break;
       case ESCALATION:
-        // TODO: Implement Escalation similar to Error.
+        createErrorOrEscalationEndEventRule(endEvent);
         break;
       case SIGNAL:
         {
@@ -132,8 +117,25 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     ruleBuilder.buildRule();
   }
 
-  private void createErrorEndEventRuleFromEventSubprocess(
-      BPMNEventSubprocess eventSubprocess, EndEvent errorEndEvent) {
+  private void createErrorOrEscalationEndEventRule(EndEvent endEvent) {
+    // Find container process and see if a matching error/escalation catch event can be found.
+    AbstractBPMNProcess endEventProcess = this.collaboration.findProcessForFlowNode(endEvent);
+    endEventProcess.accept(
+        new AbstractProcessVisitor() {
+          @Override
+          public void handle(BPMNEventSubprocess eventSubprocess) {
+            createErrorOrEscalationEndEventRuleForEventSubprocess(eventSubprocess, endEvent);
+          }
+
+          @Override
+          public void handle(BPMNProcess process) {
+            createErrorOrEscalationEndEventRule(process, endEvent);
+          }
+        });
+  }
+
+  private void createErrorOrEscalationEndEventRuleForEventSubprocess(
+      BPMNEventSubprocess eventSubprocess, EndEvent errorOrEscalationEndEvent) {
     AbstractBPMNProcess parentProcess = collaboration.getParentProcess(eventSubprocess);
     parentProcess.accept(
         new AbstractProcessVisitor() {
@@ -147,7 +149,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
             CallActivity callActivity = parentProcess.getCallActivityIfExists();
             if (callActivity != null) {
               Optional<BoundaryEvent> matchingBoundaryEvent =
-                  findMatchingErrorBoundaryEvent(callActivity, errorEndEvent);
+                  findMatchingErrorOrEscalationBoundaryEvent(
+                      callActivity, errorOrEscalationEndEvent);
               if (matchingBoundaryEvent.isPresent()) {
                 // Add outgoing tokens to the boundary event for the parent parent process instance.
                 GrooveNode parentParentProcessInstance =
@@ -155,70 +158,82 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                         collaboration.getParentProcess(parentProcess), ruleBuilder);
                 addOutgoingTokensForFlowNodeToProcessInstance(
                     matchingBoundaryEvent.get(), ruleBuilder, parentParentProcessInstance, useSFId);
-                // Interrupt the parent process and ev process since there was an error.
+                // Interrupt the parent process and ev process since there was an error/escalation.
                 GrooveNode parentProcessInstance =
                     interruptSubprocess(
                         ruleBuilder, parentProcess, parentParentProcessInstance, false);
                 GrooveNode evProcessInstance =
                     interruptSubprocess(ruleBuilder, eventSubprocess, parentProcessInstance, false);
 
-                deleteIncomingEndEventToken(errorEndEvent, evProcessInstance);
+                deleteIncomingEndEventToken(errorOrEscalationEndEvent, evProcessInstance);
                 return;
               }
             }
             throw new GrooveGenerationRuntimeException(
-                noMatchingErrorCatchEventFoundFor(errorEndEvent));
+                noMatchingErrorOrEscalationCatchEventFoundFor(errorOrEscalationEndEvent));
           }
         });
   }
 
-  private void createErrorEndEventRule(BPMNProcess process, EndEvent errorEndEvent) {
+  private void createErrorOrEscalationEndEventRule(BPMNProcess process, EndEvent errorEndEvent) {
     CallActivity callActivity = process.getCallActivityIfExists();
     if (callActivity != null) {
-      createErrorEndEventInSubprocessRule(process, errorEndEvent, callActivity);
+      createErrorOrEscalationEndEventInSubprocessRule(process, errorEndEvent, callActivity);
     } else {
       Optional<Pair<BPMNEventSubprocess, StartEvent>> eSubProcessAndMatchingStartEvent =
-          findMatchingEventSubprocessWithErrorStartEvent(process, errorEndEvent);
+          findMatchingEventSubprocessWithErrorOrEscalationStartEvent(process, errorEndEvent);
       if (eSubProcessAndMatchingStartEvent.isPresent()) {
-        createErrorStartEventSubprocessRule(
+        createErrorOrEscalationStartEventSubprocessRule(
             process, errorEndEvent, eSubProcessAndMatchingStartEvent.get());
       } else {
         throw new GrooveGenerationRuntimeException(
-            noMatchingErrorCatchEventFoundFor(errorEndEvent));
+            noMatchingErrorOrEscalationCatchEventFoundFor(errorEndEvent));
       }
     }
   }
 
-  private void createErrorEndEventInSubprocessRule(
+  private void createErrorOrEscalationEndEventInSubprocessRule(
       BPMNProcess process, EndEvent errorEndEvent, CallActivity callActivity) {
     Optional<Pair<BPMNEventSubprocess, StartEvent>> eSubProcessAndMatchingStartEvent =
-        findMatchingEventSubprocessWithErrorStartEvent(process, errorEndEvent);
+        findMatchingEventSubprocessWithErrorOrEscalationStartEvent(process, errorEndEvent);
     Optional<BoundaryEvent> matchingBoundaryEvent =
-        findMatchingErrorBoundaryEvent(callActivity, errorEndEvent);
+        findMatchingErrorOrEscalationBoundaryEvent(callActivity, errorEndEvent);
     if (eSubProcessAndMatchingStartEvent.isPresent() && matchingBoundaryEvent.isPresent()) {
       throw new GrooveGenerationRuntimeException(
-          multipleErrorCatchEventsFoundMessage(
+          multipleErrorOrEscalationCatchEventsFoundMessage(
               errorEndEvent,
               List.of(
                   eSubProcessAndMatchingStartEvent.get().getValue(), matchingBoundaryEvent.get())));
     }
     if (eSubProcessAndMatchingStartEvent.isEmpty() && matchingBoundaryEvent.isEmpty()) {
-      throw new GrooveGenerationRuntimeException(noMatchingErrorCatchEventFoundFor(errorEndEvent));
+      throw new GrooveGenerationRuntimeException(
+          noMatchingErrorOrEscalationCatchEventFoundFor(errorEndEvent));
     }
     // Only one can be present.
     matchingBoundaryEvent.ifPresent(
-        boundaryEvent -> createErrorBoundaryEventRule(process, errorEndEvent, boundaryEvent));
+        boundaryEvent ->
+            createErrorOrEscalationBoundaryEventRule(process, errorEndEvent, boundaryEvent));
     eSubProcessAndMatchingStartEvent.ifPresent(
         bpmnEventSubprocessStartEventPair ->
-            createErrorStartEventSubprocessRule(
+            createErrorOrEscalationStartEventSubprocessRule(
                 process, errorEndEvent, bpmnEventSubprocessStartEventPair));
   }
 
-  private static String noMatchingErrorCatchEventFoundFor(EndEvent errorEndEvent) {
-    return String.format("No matching error catch event found for \"%s\"!", errorEndEvent);
+  private static String noMatchingErrorOrEscalationCatchEventFoundFor(EndEvent errorEndEvent) {
+    return String.format(
+        "No matching %s catch event found for \"%s\"!",
+        getErrorOrEscalationString(errorEndEvent), errorEndEvent);
   }
 
-  private void createErrorStartEventSubprocessRule(
+  private static String getErrorOrEscalationString(EndEvent errorEndEvent) {
+    if (errorEndEvent.getType() == EndEventType.ERROR) {
+      return "error";
+    }
+    // Must be escalation then.
+    return "escalation";
+  }
+
+  private void createErrorOrEscalationStartEventSubprocessRule(
       BPMNProcess process,
       EndEvent endEvent,
       Pair<BPMNEventSubprocess, StartEvent> matchingStartEventAndProcess) {
@@ -243,7 +258,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
   }
 
   private static Optional<Pair<BPMNEventSubprocess, StartEvent>>
-      findMatchingEventSubprocessWithErrorStartEvent(BPMNProcess process, EndEvent endEvent) {
+      findMatchingEventSubprocessWithErrorOrEscalationStartEvent(
+          BPMNProcess process, EndEvent endEvent) {
     List<Pair<BPMNEventSubprocess, List<StartEvent>>> startEventsPerEventSubprocess =
         process
             .getEventSubprocesses()
@@ -251,7 +267,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                 bpmnEventSubprocess -> {
                   List<StartEvent> matchingStartEvents =
                       bpmnEventSubprocess.getStartEvents().stream()
-                          .filter(startEvent -> errorEventsMatch(endEvent, startEvent))
+                          .filter(startEvent -> errorOrEscalationEventsMatch(endEvent, startEvent))
                           .collect(Collectors.toList());
                   return matchingStartEvents.isEmpty()
                       ? null
@@ -269,7 +285,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     Pair<BPMNEventSubprocess, List<StartEvent>> matchingPair = startEventsPerEventSubprocess.get(0);
     if (matchingPair.getRight().size() > 1) {
       throw new GrooveGenerationRuntimeException(
-          multipleErrorCatchEventsFoundMessage(endEvent, matchingPair.getRight()));
+          multipleErrorOrEscalationCatchEventsFoundMessage(endEvent, matchingPair.getRight()));
     }
     return Optional.of(Pair.of(matchingPair.getLeft(), matchingPair.getRight().get(0)));
   }
@@ -281,22 +297,24 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         startEventsPerEventSubprocess.stream()
             .flatMap(bpmnEventSubprocessListPair -> bpmnEventSubprocessListPair.getRight().stream())
             .collect(Collectors.toList());
-    return multipleErrorCatchEventsFoundMessage(endEvent, matchingStartEvents);
+    return multipleErrorOrEscalationCatchEventsFoundMessage(endEvent, matchingStartEvents);
   }
 
-  private static String multipleErrorCatchEventsFoundMessage(
+  private static String multipleErrorOrEscalationCatchEventsFoundMessage(
       EndEvent endEvent, List<? extends Event> matchingStartEvents) {
     return String.format(
-        "There were multiple matching error catch events \"%s\" for the error end event \"%s\"!",
-        matchingStartEvents, endEvent);
+        "There were multiple matching %s catch events \"%s\" for the end event \"%s\"!",
+        getErrorOrEscalationString(endEvent), matchingStartEvents, endEvent);
   }
 
-  private static boolean errorEventsMatch(EndEvent endEvent, StartEvent startEvent) {
-    return startEvent.getType() == StartEventType.ERROR
+  private static boolean errorOrEscalationEventsMatch(EndEvent endEvent, StartEvent startEvent) {
+    StartEventType errorOrEscalation =
+        endEvent.getType() == EndEventType.ERROR ? StartEventType.ERROR : StartEventType.ESCALATION;
+    return startEvent.getType() == errorOrEscalation
         && startEvent.getEventDefinition().equals(endEvent.getEventDefinition());
   }
 
-  private void createErrorBoundaryEventRule(
+  private void createErrorOrEscalationBoundaryEventRule(
       AbstractBPMNProcess process, EndEvent endEvent, BoundaryEvent matchingBoundaryEvent) {
 
     // Add outgoing tokens to the boundary event for the father process instance.
@@ -326,11 +344,11 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     ruleBuilder.deleteEdge(TOKENS, processInstance, token);
   }
 
-  private static Optional<BoundaryEvent> findMatchingErrorBoundaryEvent(
+  private static Optional<BoundaryEvent> findMatchingErrorOrEscalationBoundaryEvent(
       CallActivity callActivity, EndEvent endEvent) {
     List<BoundaryEvent> matchingBoundaryEvents =
         callActivity.getBoundaryEvents().stream()
-            .filter(boundaryEvent -> errorEventsMatch(endEvent, boundaryEvent))
+            .filter(boundaryEvent -> errorOrEscalationEventsMatch(endEvent, boundaryEvent))
             .collect(Collectors.toList());
     if (matchingBoundaryEvents.isEmpty()) {
       return Optional.empty();
@@ -345,8 +363,13 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     return Optional.of(matchingBoundaryEvents.get(0));
   }
 
-  private static boolean errorEventsMatch(EndEvent endEvent, BoundaryEvent boundaryEvent) {
-    return boundaryEvent.getType() == BoundaryEventType.ERROR
+  private static boolean errorOrEscalationEventsMatch(
+      EndEvent endEvent, BoundaryEvent boundaryEvent) {
+    BoundaryEventType errorOrEscalation =
+        endEvent.getType() == EndEventType.ERROR
+            ? BoundaryEventType.ERROR
+            : BoundaryEventType.ESCALATION;
+    return boundaryEvent.getType() == errorOrEscalation
         && boundaryEvent.getEventDefinition().equals(endEvent.getEventDefinition());
   }
 

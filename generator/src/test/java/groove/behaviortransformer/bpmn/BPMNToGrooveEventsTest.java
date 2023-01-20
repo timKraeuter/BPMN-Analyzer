@@ -167,7 +167,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
         is(
             "There were multiple matching error catch events "
                 + "\"[catch_error_esub (Event_0050cj9), catch_error (Event_1yjmjxx)]\" "
-                + "for the error end event \"throw_error (Event_1qghjqc)\"!"));
+                + "for the end event \"throw_error (Event_1qghjqc)\"!"));
   }
 
   /**
@@ -230,8 +230,8 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
         exception.getMessage(),
         is(
             "There were multiple matching escalation catch events "
-                + "\"[catch_error_esub (Event_0050cj9), catch_error (Event_1yjmjxx)]\" "
-                + "for the error end event \"throw_error (Event_1qghjqc)\"!"));
+                + "\"[catch_escalation1 (Event_0050cj9), catch_escalation2 (Event_1yjmjxx)]\" "
+                + "for the end event \"throw_escalation (Event_1qghjqc)\"!"));
   }
 
   /**
@@ -243,9 +243,9 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
     GrooveGenerationRuntimeException exception =
         Assertions.assertThrows(
             GrooveGenerationRuntimeException.class,
-            () -> testGrooveGenerationForBPMNResourceFile("no-error-catch-event.bpmn"));
+            () -> testGrooveGenerationForBPMNResourceFile("no-escalation-catch-event.bpmn"));
     assertThat(
         exception.getMessage(),
-        is("No matching error catch event found for \"error 1 (Event_1lfavsd)\"!"));
+        is("No matching escalation catch event found for \"escalation 1 (Event_1lfavsd)\"!"));
   }
 }
