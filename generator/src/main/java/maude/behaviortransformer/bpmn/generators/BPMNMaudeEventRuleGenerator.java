@@ -35,16 +35,14 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
         createNoneStartEventRule(startEvent, process);
         break;
       case MESSAGE:
-        // Done in the corresponding throw rule.
         createEndInteractionNodeRule(startEvent, process);
         break;
-      case MESSAGE_NON_INTERRUPTING:
-        // Implemented only in the event subprocess rule generator.
       case SIGNAL:
-        // Done in the corresponding throw rule.
       case ERROR:
+      case ESCALATION:
         // Done in the corresponding throw rule.
         break;
+      case MESSAGE_NON_INTERRUPTING:
       case SIGNAL_NON_INTERRUPTING:
         // Implemented only in the event subprocess rule generator.
         break;
@@ -82,6 +80,9 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
         break;
       case ERROR:
         // TODO: Implement Error end events!
+        break;
+      case ESCALATION:
+        // TODO: Implement Escalation end events!
         break;
       case SIGNAL:
         createSignalEndEventRule(process, endEvent, preTokens);

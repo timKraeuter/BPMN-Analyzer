@@ -116,6 +116,9 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
               }
             });
         break;
+      case ESCALATION:
+        // TODO: Implement Escalation similar to Error.
+        break;
       case SIGNAL:
         {
           GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
@@ -853,6 +856,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
       case SIGNAL:
       case ERROR:
       case MESSAGE:
+      case ESCALATION:
         // Done in the corresponding throw rule.
         break;
       case MESSAGE_NON_INTERRUPTING:
