@@ -6,7 +6,7 @@ public enum BoundaryEventType {
   SIGNAL,
   NONE,
   ERROR,
-  // Escalation,
+  ESCALATION,
   // Compensation,
   // Conditional
 }

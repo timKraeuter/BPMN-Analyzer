@@ -15,4 +15,6 @@ public interface EventDefinitionVisitor<T> {
   T handle(TimerEventDefinition evDefinition);
 
   T handle(ErrorEventDefinition evDefinition);
+
+  T handle(EscalationEventDefinition evDefinition);
 }

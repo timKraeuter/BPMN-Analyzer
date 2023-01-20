@@ -414,9 +414,30 @@ public class BPMNFileReader {
                 event.cancelActivity(),
                 mapErrorEventDefinition(evDefinition));
           }
+
+          @Override
+          public behavior.bpmn.events.BoundaryEvent handle(EscalationEventDefinition evDefinition) {
+            return new behavior.bpmn.events.BoundaryEvent(
+                event.getId(),
+                getFlowElementName(event),
+                BoundaryEventType.ESCALATION,
+                event.cancelActivity(),
+                mapEscalationEventDefinition(evDefinition));
+          }
         };
     boundaryEvent = this.visitDefinition(eventDefinition, visitor);
     return boundaryEvent;
+  }
+
+  private behavior.bpmn.events.definitions.EventDefinition mapEscalationEventDefinition(
+      EscalationEventDefinition evDefinition) {
+    if (evDefinition.getEscalation() != null
+        && evDefinition.getEscalation().getEscalationCode() != null
+        && !evDefinition.getEscalation().getEscalationCode().isBlank()) {
+      return new behavior.bpmn.events.definitions.EscalationEventDefinition(
+          evDefinition.getEscalation().getEscalationCode());
+    }
+    return behavior.bpmn.events.definitions.EventDefinition.empty();
   }
 
   private behavior.bpmn.events.definitions.EventDefinition mapErrorEventDefinition(
@@ -532,6 +553,15 @@ public class BPMNFileReader {
             }
 
             @Override
+            public EndEvent handle(EscalationEventDefinition evDefinition) {
+              return new EndEvent(
+                  flowNode.getId(),
+                  getFlowElementName(flowNode),
+                  EndEventType.ESCALATION,
+                  mapEscalationEventDefinition(evDefinition));
+            }
+
+            @Override
             public EndEvent handle(TimerEventDefinition evDefinition) {
               throw new BPMNRuntimeException("End event definitions should not be of type timer!");
             }
@@ -606,6 +636,15 @@ public class BPMNFileReader {
                   StartEventType.ERROR,
                   mapErrorEventDefinition(evDefinition));
             }
+
+            @Override
+            public StartEvent handle(EscalationEventDefinition evDefinition) {
+              return new StartEvent(
+                  flowNode.getId(),
+                  getFlowElementName(flowNode),
+                  StartEventType.ESCALATION,
+                  mapEscalationEventDefinition(evDefinition));
+            }
           };
       return this.visitDefinition(eventDefinition, visitor);
     }
@@ -674,6 +713,12 @@ public class BPMNFileReader {
               throw new BPMNRuntimeException(
                   "Intermediate catch event definitions should not be of type error!");
             }
+
+            @Override
+            public IntermediateCatchEvent handle(EscalationEventDefinition evDefinition) {
+              throw new BPMNRuntimeException(
+                  "Intermediate catch event definitions should not be of type escalation!");
+            }
           };
       return this.visitDefinition(evDefinition, eventVisitor);
     }
@@ -713,6 +758,15 @@ public class BPMNFileReader {
                   getFlowElementName(flowNode),
                   IntermediateThrowEventType.SIGNAL,
                   mapSignalEventDefinition(evDefinition, flowNode));
+            }
+
+            @Override
+            public IntermediateThrowEvent handle(EscalationEventDefinition evDefinition) {
+              return new IntermediateThrowEvent(
+                  flowNode.getId(),
+                  getFlowElementName(flowNode),
+                  IntermediateThrowEventType.ESCALATION,
+                  mapEscalationEventDefinition(evDefinition));
             }
 
             @Override
@@ -758,6 +812,9 @@ public class BPMNFileReader {
     }
     if (evDefinition instanceof ErrorEventDefinition) {
       return eventVisitor.handle((ErrorEventDefinition) evDefinition);
+    }
+    if (evDefinition instanceof EscalationEventDefinition) {
+      return eventVisitor.handle((EscalationEventDefinition) evDefinition);
     }
     throw new BPMNRuntimeException("Unknown event definition found!" + evDefinition);
   }
