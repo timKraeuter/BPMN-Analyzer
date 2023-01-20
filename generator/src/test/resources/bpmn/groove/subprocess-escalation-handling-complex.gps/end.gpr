@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="end" role="rule" edgeids="false" edgemode="directed">
+        <node id="n14">
+            <attr name="layout">
+                <string>670 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n14" to="n14">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n14" to="n14">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n12">
+            <attr name="layout">
+                <string>62 85 0 0</string>
+            </attr>
+        </node>
+        <edge from="n12" to="n12">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n13">
+            <attr name="layout">
+                <string>392 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n13" to="n13">
+            <attr name="label">
+                <string>string:"Subprocess Escalation Handling Complex"</string>
+            </attr>
+        </edge>
+        <node id="n15">
+            <attr name="layout">
+                <string>1117 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n15" to="n15">
+            <attr name="label">
+                <string>string:"Activity_0wd8u0e_end"</string>
+            </attr>
+        </edge>
+        <node id="n16">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n16" to="n16">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <edge from="n14" to="n15">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n12" to="n14">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n12" to="n13">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n12" to="n16">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>
