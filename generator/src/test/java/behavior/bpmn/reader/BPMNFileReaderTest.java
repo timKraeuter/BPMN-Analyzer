@@ -161,8 +161,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
                 "e2_linkTEvent",
                 "signalCEvent_e2",
                 "signalTEvent_e2",
-                "escalationTEvent_e2"
-                )));
+                "escalationTEvent_e2")));
 
     Map<String, FlowNode> flowNodes = createFlowNodeNameToFlowNodeMap(participant);
     // Check start events
@@ -284,9 +283,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     FlowNode errorEndEvent = flowNodes.get(errorEndEventName);
     assertThat(
         errorEndEvent,
-        is(
-            new EndEvent(
-                errorEndEvent.getId(), errorEndEventName, EndEventType.ERROR)));
+        is(new EndEvent(errorEndEvent.getId(), errorEndEventName, EndEventType.ERROR)));
     String escalationEndEventName = "escalationEnd";
     FlowNode escalationEndEvent = flowNodes.get(escalationEndEventName);
     assertThat(

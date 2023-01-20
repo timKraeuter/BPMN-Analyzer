@@ -4,5 +4,6 @@ public enum IntermediateThrowEventType {
   NONE,
   LINK,
   MESSAGE,
-  ESCALATION, SIGNAL
+  ESCALATION,
+  SIGNAL
 }

@@ -5,5 +5,6 @@ public enum EndEventType {
   TERMINATION,
   MESSAGE,
   ERROR,
-  ESCALATION, SIGNAL
+  ESCALATION,
+  SIGNAL
 }
