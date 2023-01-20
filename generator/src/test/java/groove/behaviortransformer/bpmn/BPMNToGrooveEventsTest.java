@@ -187,8 +187,8 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
 
   /**
    * See test case <a
-   * href="https://cawemo.com/share/5b367115-13ea-41f5-8c08-5c1453c090fc">"Subprocess - Escalation"</a>
-   * in cawemo.
+   * href="https://cawemo.com/share/5b367115-13ea-41f5-8c08-5c1453c090fc">"Subprocess -
+   * Escalation"</a> in cawemo.
    */
   @Test
   void testSubprocessEscalation() throws IOException {
@@ -206,8 +206,8 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
 
   /**
    * See test case <a
-   * href="https://cawemo.com/share/1512a5dd-45f4-4209-9e24-efcfd5dddc8a">"Subprocess Escalation Handling
-   * Complex"</a> in cawemo.
+   * href="https://cawemo.com/share/1512a5dd-45f4-4209-9e24-efcfd5dddc8a">"Subprocess Escalation
+   * Handling Complex"</a> in cawemo.
    */
   @Test
   void testSubprocessEscalationHandlingComplex() throws IOException {
