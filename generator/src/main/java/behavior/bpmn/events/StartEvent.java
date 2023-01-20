@@ -28,6 +28,7 @@ public class StartEvent extends CatchEvent {
     this.type = type;
     this.interrupt = interrupt;
   }
+
   public boolean isInterrupt() {
     return interrupt;
   }

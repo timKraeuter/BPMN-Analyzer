@@ -599,12 +599,12 @@ public class BPMNFileReader {
 
             @Override
             public StartEvent handle(SignalEventDefinition evDefinition) {
-                return new StartEvent(
-                    flowNode.getId(),
-                    getFlowElementName(flowNode),
-                    StartEventType.SIGNAL,
-                    mapSignalEventDefinition(evDefinition, flowNode),
-                    startEvent.isInterrupting());
+              return new StartEvent(
+                  flowNode.getId(),
+                  getFlowElementName(flowNode),
+                  StartEventType.SIGNAL,
+                  mapSignalEventDefinition(evDefinition, flowNode),
+                  startEvent.isInterrupting());
             }
 
             @Override
