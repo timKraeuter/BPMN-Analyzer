@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="A_end" role="rule" edgeids="false" edgemode="directed">
+        <node id="n61">
+            <attr name="layout">
+                <string>542 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n61" to="n61">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n61" to="n61">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n58">
+            <attr name="layout">
+                <string>62 85 0 0</string>
+            </attr>
+        </node>
+        <edge from="n58" to="n58">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n59">
+            <attr name="layout">
+                <string>392 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n59" to="n59">
+            <attr name="label">
+                <string>string:"Escalation_Subprocess"</string>
+            </attr>
+        </edge>
+        <node id="n60">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n60" to="n60">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n62">
+            <attr name="layout">
+                <string>862 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n62" to="n62">
+            <attr name="label">
+                <string>string:"A"</string>
+            </attr>
+        </edge>
+        <edge from="n58" to="n61">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n61" to="n62">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n58" to="n59">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n58" to="n60">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

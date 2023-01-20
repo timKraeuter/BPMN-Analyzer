@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="throw_esc2" role="rule" edgeids="false" edgemode="directed">
+        <node id="n82">
+            <attr name="layout">
+                <string>542 322 0 0</string>
+            </attr>
+        </node>
+        <edge from="n82" to="n82">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n82" to="n82">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n87">
+            <attr name="layout">
+                <string>1012 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n87" to="n87">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n87" to="n87">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n79">
+            <attr name="layout">
+                <string>62 157 0 0</string>
+            </attr>
+        </node>
+        <edge from="n79" to="n79">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n80">
+            <attr name="layout">
+                <string>392 232 0 0</string>
+            </attr>
+        </node>
+        <edge from="n80" to="n80">
+            <attr name="label">
+                <string>string:"Subprocess escalation"</string>
+            </attr>
+        </edge>
+        <node id="n81">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n81" to="n81">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n83">
+            <attr name="layout">
+                <string>862 322 0 0</string>
+            </attr>
+        </node>
+        <edge from="n83" to="n83">
+            <attr name="label">
+                <string>string:"catch_esc2_end_esc2"</string>
+            </attr>
+        </edge>
+        <node id="n84">
+            <attr name="layout">
+                <string>505 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n84" to="n84">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n85">
+            <attr name="layout">
+                <string>862 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n85" to="n85">
+            <attr name="label">
+                <string>string:"Escalation_Subprocess"</string>
+            </attr>
+        </edge>
+        <node id="n86">
+            <attr name="layout">
+                <string>862 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n86" to="n86">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n88">
+            <attr name="layout">
+                <string>1332 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n88" to="n88">
+            <attr name="label">
+                <string>string:"Gateway_02dcjtb_throw_esc2"</string>
+            </attr>
+        </edge>
+        <edge from="n79" to="n82">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n82" to="n83">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n87" to="n88">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n84" to="n87">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n79" to="n80">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n79" to="n81">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n84" to="n85">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n84" to="n86">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n79" to="n84">
+            <attr name="label">
+                <string>subprocess</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>
