@@ -7,18 +7,29 @@ import com.google.common.base.Objects;
 
 public class StartEvent extends CatchEvent {
   private final StartEventType type;
+  /** Decides if the event is interrupting or non-interrupting. */
+  private final boolean interrupt;
 
   public StartEvent(String id, String name) {
     this(id, name, StartEventType.NONE);
   }
 
   public StartEvent(String id, String name, StartEventType type) {
-    this(id, name, type, EventDefinition.empty());
+    this(id, name, type, EventDefinition.empty(), false);
   }
 
-  public StartEvent(String id, String name, StartEventType type, EventDefinition eventDefinition) {
+  public StartEvent(
+      String id,
+      String name,
+      StartEventType type,
+      EventDefinition eventDefinition,
+      boolean interrupt) {
     super(id, name, eventDefinition);
     this.type = type;
+    this.interrupt = interrupt;
+  }
+  public boolean isInterrupt() {
+    return interrupt;
   }
 
   @Override
@@ -35,8 +46,8 @@ public class StartEvent extends CatchEvent {
   public boolean isInstantiateFlowNode() {
     return this.type == StartEventType.MESSAGE
         || this.type == StartEventType.SIGNAL
-        || this.type == StartEventType.MESSAGE_NON_INTERRUPTING
-        || this.type == StartEventType.SIGNAL_NON_INTERRUPTING;
+        || this.type == StartEventType.ERROR
+        || this.type == StartEventType.ESCALATION;
   }
 
   public StartEventType getType() {

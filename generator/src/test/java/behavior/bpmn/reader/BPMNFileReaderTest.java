@@ -11,6 +11,7 @@ import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.events.*;
+import behavior.bpmn.events.definitions.EventDefinition;
 import behavior.bpmn.events.definitions.SignalEventDefinition;
 import behavior.bpmn.gateways.EventBasedGateway;
 import com.google.common.collect.Sets;
@@ -185,7 +186,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
                 signalStartEvent.getId(),
                 signalStartEventName,
                 StartEventType.SIGNAL,
-                new SignalEventDefinition(startEndSignalEventDefinition))));
+                new SignalEventDefinition(startEndSignalEventDefinition),
+                true)));
 
     // Check intermediate events
     String intermediateEventName = "intermediateEvent";
@@ -504,33 +506,43 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         startEvents,
         is(
             Sets.newHashSet(
-                new StartEvent("Event_0ylomzh", "msgNon", StartEventType.MESSAGE_NON_INTERRUPTING),
+                new StartEvent(
+                    "Event_0ylomzh",
+                    "msgNon",
+                    StartEventType.MESSAGE,
+                    EventDefinition.empty(),
+                    false),
                 new StartEvent("Event_1jhx76i", "msg", StartEventType.MESSAGE),
                 new StartEvent(
                     "Event_0two4fk",
                     signalNonStartName,
-                    StartEventType.SIGNAL_NON_INTERRUPTING,
-                    new SignalEventDefinition(signalNonStartName)),
+                    StartEventType.SIGNAL,
+                    new SignalEventDefinition(signalNonStartName),
+                    false),
                 new StartEvent(
                     "Event_1dxg1zq",
                     signalStartName,
                     StartEventType.SIGNAL,
-                    new SignalEventDefinition(signalStartName)),
+                    new SignalEventDefinition(signalStartName),
+                    true),
                 new StartEvent(
                     "Event_19zuytf",
                     escNonStartName,
                     StartEventType.ESCALATION,
-                    new SignalEventDefinition(escNonStartName)),
+                    new SignalEventDefinition(escNonStartName),
+                    false),
                 new StartEvent(
                     "Event_16jr11v",
                     escStartName,
                     StartEventType.ESCALATION,
-                    new SignalEventDefinition(escStartName)),
+                    new SignalEventDefinition(escStartName),
+                    true),
                 new StartEvent(
                     "Event_0kibv8n",
                     errorStartName,
                     StartEventType.ERROR,
-                    new SignalEventDefinition(errorStartName)))));
+                    new SignalEventDefinition(errorStartName),
+                    true))));
 
     // Check event subprocess inside event subprocess
     assertThat(eventSubprocess1.getEventSubprocesses().count(), is(1L));

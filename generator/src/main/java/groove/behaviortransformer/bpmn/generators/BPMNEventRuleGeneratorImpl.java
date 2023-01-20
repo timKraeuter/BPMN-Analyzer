@@ -156,6 +156,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                         collaboration.getParentProcess(parentProcess), ruleBuilder);
                 addOutgoingTokensForFlowNodeToProcessInstance(
                     matchingBoundaryEvent.get(), ruleBuilder, parentParentProcessInstance, useSFId);
+                // TODO: fix this. And add to test case.
                 // Interrupt the parent process and ev process since there was an error/escalation.
                 GrooveNode parentProcessInstance =
                     interruptSubprocess(
@@ -238,19 +239,21 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
     GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
 
-    // Remove all tokens from the current process instance
-    GrooveNode anyToken = ruleBuilder.deleteNode(TYPE_TOKEN);
-    ruleBuilder.deleteEdge(TOKENS, processInstance, anyToken);
+    StartEvent startEvent = matchingStartEventAndProcess.getValue();
+    // Remove all tokens from the current process instance if interrupting
+    if (startEvent.isInterrupt()) {
+      GrooveNode anyToken = ruleBuilder.deleteNode(TYPE_TOKEN);
+      ruleBuilder.deleteEdge(TOKENS, processInstance, anyToken);
 
-    GrooveNode forAllTokens = ruleBuilder.contextNode(FORALL);
-    ruleBuilder.contextEdge(AT, anyToken, forAllTokens);
+      GrooveNode forAllTokens = ruleBuilder.contextNode(FORALL);
+      ruleBuilder.contextEdge(AT, anyToken, forAllTokens);
+    }
 
     // Create event subprocess with tokens after the start event.
     BPMNEventSubprocess eventSubprocess = matchingStartEventAndProcess.getKey();
     GrooveNode eventSubProcessInstance = addProcessInstance(ruleBuilder, eventSubprocess.getName());
     ruleBuilder.addEdge(SUBPROCESS, processInstance, eventSubProcessInstance);
 
-    StartEvent startEvent = matchingStartEventAndProcess.getValue();
     addOutgoingTokensForFlowNodeToProcessInstance(
         startEvent, ruleBuilder, eventSubProcessInstance, useSFId);
   }
@@ -777,15 +780,14 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
           public void handle(StartEvent startEvent) {
             switch (startEvent.getType()) {
               case SIGNAL:
-                createSignalInterruptingStartRulePart(eventSubprocess, event);
+                if (startEvent.isInterrupt()) {
+                  createSignalInterruptingStartRulePart(eventSubprocess, event);
+                } else {
+                  createSignalNonInterruptingStartRulePart(eventSubprocess, event);
+                }
                 break;
-              case SIGNAL_NON_INTERRUPTING:
-                createSignalNonInterruptingStartRulePart(eventSubprocess, event);
-                break;
-                // Must be a signal event!
               case NONE:
               case MESSAGE:
-              case MESSAGE_NON_INTERRUPTING:
               default:
                 throw new IllegalStateException("Unexpected value: " + startEvent.getType());
             }
@@ -875,10 +877,6 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
       case MESSAGE:
       case ESCALATION:
         // Done in the corresponding throw rule.
-        break;
-      case MESSAGE_NON_INTERRUPTING:
-      case SIGNAL_NON_INTERRUPTING:
-        // Implemented only in the event subprocess rule generator.
         break;
     }
   }

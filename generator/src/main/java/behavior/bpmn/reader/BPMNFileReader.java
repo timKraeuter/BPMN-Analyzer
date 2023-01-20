@@ -584,15 +584,12 @@ public class BPMNFileReader {
           new EventDefinitionVisitor<>() {
             @Override
             public StartEvent handle(MessageEventDefinition evDefinition) {
-              if (startEvent.isInterrupting()) {
-                return new StartEvent(
-                    flowNode.getId(), getFlowElementName(flowNode), StartEventType.MESSAGE);
-              } else {
-                return new StartEvent(
-                    flowNode.getId(),
-                    getFlowElementName(flowNode),
-                    StartEventType.MESSAGE_NON_INTERRUPTING);
-              }
+              return new StartEvent(
+                  flowNode.getId(),
+                  getFlowElementName(flowNode),
+                  StartEventType.MESSAGE,
+                  behavior.bpmn.events.definitions.EventDefinition.empty(),
+                  startEvent.isInterrupting());
             }
 
             @Override
@@ -602,19 +599,12 @@ public class BPMNFileReader {
 
             @Override
             public StartEvent handle(SignalEventDefinition evDefinition) {
-              if (startEvent.isInterrupting()) {
                 return new StartEvent(
                     flowNode.getId(),
                     getFlowElementName(flowNode),
                     StartEventType.SIGNAL,
-                    mapSignalEventDefinition(evDefinition, flowNode));
-              } else {
-                return new StartEvent(
-                    flowNode.getId(),
-                    getFlowElementName(flowNode),
-                    StartEventType.SIGNAL_NON_INTERRUPTING,
-                    mapSignalEventDefinition(evDefinition, flowNode));
-              }
+                    mapSignalEventDefinition(evDefinition, flowNode),
+                    startEvent.isInterrupting());
             }
 
             @Override
@@ -634,7 +624,8 @@ public class BPMNFileReader {
                   flowNode.getId(),
                   getFlowElementName(flowNode),
                   StartEventType.ERROR,
-                  mapErrorEventDefinition(evDefinition));
+                  mapErrorEventDefinition(evDefinition),
+                  startEvent.isInterrupting());
             }
 
             @Override
@@ -643,7 +634,8 @@ public class BPMNFileReader {
                   flowNode.getId(),
                   getFlowElementName(flowNode),
                   StartEventType.ESCALATION,
-                  mapEscalationEventDefinition(evDefinition));
+                  mapEscalationEventDefinition(evDefinition),
+                  startEvent.isInterrupting());
             }
           };
       return this.visitDefinition(eventDefinition, visitor);

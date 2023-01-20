@@ -73,19 +73,17 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
                   throw new BPMNRuntimeException(
                       "None start events in event subprocesses are useless!");
                 case MESSAGE:
-                  createStartInterruptingEvenSubprocessFromMessageRules(
-                      process, eventSubprocess, collaboration, ruleBuilder, startEvent);
-                  break;
-                case MESSAGE_NON_INTERRUPTING:
-                  createStartNonInterruptingEvenSubprocessFromMessageRules(
-                      process, eventSubprocess, collaboration, ruleBuilder, startEvent);
-
+                  if (startEvent.isInterrupt()) {
+                    createStartInterruptingEvenSubprocessFromMessageRules(
+                        process, eventSubprocess, collaboration, ruleBuilder, startEvent);
+                  } else {
+                    createStartNonInterruptingEvenSubprocessFromMessageRules(
+                        process, eventSubprocess, collaboration, ruleBuilder, startEvent);
+                  }
                   break;
                 case SIGNAL:
                 case ERROR:
                 case ESCALATION:
-                case SIGNAL_NON_INTERRUPTING:
-                  // Implemented in the throw part.
                   break;
                 default:
                   throw new BPMNRuntimeException(

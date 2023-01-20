@@ -67,8 +67,7 @@ public class SignalCatchEventCollectorFlowNodeVisitor extends DoNothingFlowNodeV
 
   @Override
   public void handle(StartEvent startEvent) {
-    if ((startEvent.getType() == StartEventType.SIGNAL
-            || startEvent.getType() == StartEventType.SIGNAL_NON_INTERRUPTING)
+    if (startEvent.getType() == StartEventType.SIGNAL
         && startEvent.getEventDefinition().equals(eventDefinition)) {
       signalCatchEvents.add(startEvent);
     }

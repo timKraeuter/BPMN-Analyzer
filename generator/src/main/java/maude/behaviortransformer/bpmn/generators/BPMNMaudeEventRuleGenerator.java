@@ -42,10 +42,6 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
       case ESCALATION:
         // Done in the corresponding throw rule.
         break;
-      case MESSAGE_NON_INTERRUPTING:
-      case SIGNAL_NON_INTERRUPTING:
-        // Implemented only in the event subprocess rule generator.
-        break;
     }
   }
 
