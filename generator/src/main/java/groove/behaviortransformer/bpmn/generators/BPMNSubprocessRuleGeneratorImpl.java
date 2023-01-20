@@ -146,6 +146,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
                   break;
                 case SIGNAL:
                 case ERROR:
+                case ESCALATION:
                   // Handled in the throw rule part.
                   break;
                 default:

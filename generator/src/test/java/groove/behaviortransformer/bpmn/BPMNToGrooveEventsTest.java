@@ -184,4 +184,68 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
         exception.getMessage(),
         is("No matching error catch event found for \"error 1 (Event_1lfavsd)\"!"));
   }
+
+  /**
+   * See test case <a
+   * href="https://cawemo.com/share/5b367115-13ea-41f5-8c08-5c1453c090fc">"Subprocess - Escalation"</a>
+   * in cawemo.
+   */
+  @Test
+  void testSubprocessEscalation() throws IOException {
+    testGrooveGenerationForBPMNResourceFile("subprocess-escalation.bpmn");
+  }
+
+  /**
+   * See test case <a href="https://cawemo.com/share/27f3844c-87a7-46cb-a18f-6183d4e0340f">"Event
+   * Subprocess - Escalation"</a> in cawemo.
+   */
+  @Test
+  void testEventSubprocessEscalation() throws IOException {
+    testGrooveGenerationForBPMNResourceFile("event-subprocess-escalation.bpmn");
+  }
+
+  /**
+   * See test case <a
+   * href="https://cawemo.com/share/1512a5dd-45f4-4209-9e24-efcfd5dddc8a">"Subprocess Escalation Handling
+   * Complex"</a> in cawemo.
+   */
+  @Test
+  void testSubprocessEscalationHandlingComplex() throws IOException {
+    testGrooveGenerationForBPMNResourceFile("subprocess-escalation-handling-complex.bpmn");
+  }
+
+  /**
+   * See test case <a href="https://cawemo.com/share/2f2a2535-bb4a-4290-aef8-3877b3808030">
+   * "Subprocess Escalation Unclear Catch Event"</a> in cawemo.
+   */
+  @Test
+  void testSubprocessEscalationUnclearCatchEvent() {
+    GrooveGenerationRuntimeException exception =
+        Assertions.assertThrows(
+            GrooveGenerationRuntimeException.class,
+            () ->
+                testGrooveGenerationForBPMNResourceFile(
+                    "subprocess-escalation-unclear-catch-event.bpmn"));
+    assertThat(
+        exception.getMessage(),
+        is(
+            "There were multiple matching escalation catch events "
+                + "\"[catch_error_esub (Event_0050cj9), catch_error (Event_1yjmjxx)]\" "
+                + "for the error end event \"throw_error (Event_1qghjqc)\"!"));
+  }
+
+  /**
+   * See test case <a href="https://cawemo.com/share/120ed7b8-70e6-4eb2-8b84-b2f74e4f52dd">"No
+   * Escalation Catch Event"</a> in cawemo.
+   */
+  @Test
+  void testNoEscalationCatchEvent() {
+    GrooveGenerationRuntimeException exception =
+        Assertions.assertThrows(
+            GrooveGenerationRuntimeException.class,
+            () -> testGrooveGenerationForBPMNResourceFile("no-error-catch-event.bpmn"));
+    assertThat(
+        exception.getMessage(),
+        is("No matching error catch event found for \"error 1 (Event_1lfavsd)\"!"));
+  }
 }

@@ -82,10 +82,8 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
 
                   break;
                 case SIGNAL:
-                  // Implemented in the throw part.
                 case ERROR:
-                  // Implemented in the throw part.
-                  break;
+                case ESCALATION:
                 case SIGNAL_NON_INTERRUPTING:
                   // Implemented in the throw part.
                   break;
