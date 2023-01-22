@@ -394,10 +394,8 @@ public class BPMNToGrooveTransformerHelper {
     return useID ? flow.getId() : flow.getDescriptiveName();
   }
 
-
-
-  public static boolean matchesLinkThrowEvent(IntermediateThrowEvent intermediateThrowEvent,
-      FlowNode flowNode) {
+  public static boolean matchesLinkThrowEvent(
+      IntermediateThrowEvent intermediateThrowEvent, FlowNode flowNode) {
     return flowNode.getName().equals(intermediateThrowEvent.getName())
         && isLinkCatchEvent(flowNode);
   }

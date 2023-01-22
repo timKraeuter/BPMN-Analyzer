@@ -80,8 +80,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
   @Override
   public Stream<GrooveGraphRule> generateRules(BPMNCollaboration collaboration) {
     GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder();
-    BPMNRuleGenerator bpmnRuleGenerator =
-        new BPMNRuleGenerator(ruleBuilder, collaboration, useIDs);
+    BPMNRuleGenerator bpmnRuleGenerator = new BPMNRuleGenerator(ruleBuilder, collaboration, useIDs);
 
     return bpmnRuleGenerator.getRules();
   }

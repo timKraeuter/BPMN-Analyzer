@@ -12,8 +12,8 @@ import org.junit.jupiter.api.BeforeEach;
 import util.FileTestHelper;
 
 public abstract class BehaviorToGrooveTransformerTestHelper {
-  //  private final String outputPath = "C:/Source/groove/bin";
-  private final String outputPath = FileUtils.getTempDirectoryPath();
+  private final String outputPath = "C:/Source/groove/bin";
+  //  private final String outputPath = FileUtils.getTempDirectoryPath();
 
   private Function<String, Boolean> fileNameFilter = x -> false;
 
@@ -39,7 +39,7 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
   }
 
   public void checkGrooveGeneration(Behavior behavior) throws IOException {
-    this.checkGrooveGeneration(behavior, this.fileNameFilter ,false);
+    this.checkGrooveGeneration(behavior, this.fileNameFilter, false);
   }
 
   public void checkGrooveGenerationWithIDs(Behavior behavior) throws IOException {
@@ -47,7 +47,8 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
   }
 
   @SuppressWarnings("ConstantConditions")
-  private void checkGrooveGeneration(Behavior behavior, Function<String, Boolean> fileNameFilter, boolean useIDs)
+  private void checkGrooveGeneration(
+      Behavior behavior, Function<String, Boolean> fileNameFilter, boolean useIDs)
       throws IOException {
     String modelName = behavior.getName();
     BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();

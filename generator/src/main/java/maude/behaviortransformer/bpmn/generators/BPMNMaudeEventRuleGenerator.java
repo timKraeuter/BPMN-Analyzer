@@ -11,26 +11,15 @@ import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.WHI
 
 import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.FlowNode;
 import behavior.bpmn.SequenceFlow;
-import behavior.bpmn.activities.CallActivity;
-import behavior.bpmn.activities.tasks.ReceiveTask;
-import behavior.bpmn.activities.tasks.SendTask;
-import behavior.bpmn.activities.tasks.Task;
 import behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
-import behavior.bpmn.events.definitions.EventDefinition;
-import behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 import behavior.bpmn.events.BoundaryEvent;
 import behavior.bpmn.events.EndEvent;
 import behavior.bpmn.events.Event;
 import behavior.bpmn.events.IntermediateCatchEvent;
-import behavior.bpmn.events.IntermediateCatchEventType;
 import behavior.bpmn.events.IntermediateThrowEvent;
 import behavior.bpmn.events.StartEvent;
-import behavior.bpmn.gateways.EventBasedGateway;
-import behavior.bpmn.gateways.ExclusiveGateway;
-import behavior.bpmn.gateways.InclusiveGateway;
-import behavior.bpmn.gateways.ParallelGateway;
+import behavior.bpmn.events.definitions.EventDefinition;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,7 +29,6 @@ import maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import maude.generation.BPMNMaudeRuleBuilder;
 import maude.generation.MaudeObjectBuilder;
 import org.apache.commons.lang3.tuple.Pair;
-import util.ValueWrapper;
 
 public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper {
 
@@ -319,8 +307,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                   createProcessSnapshotObjectAnySubProcessAndSignals(process, preTokens));
               // Find corresponding catching link events and put tokens on their outgoing flows
               String postTokens =
-                  createLinkThrowEventTokens(intermediateThrowEvent, process)
-                      + ANY_OTHER_TOKENS;
+                  createLinkThrowEventTokens(intermediateThrowEvent, process) + ANY_OTHER_TOKENS;
               ruleBuilder.addPostObject(
                   createProcessSnapshotObjectAnySubProcessAndNoSignals(process, postTokens));
               ruleBuilder.buildRule();
@@ -332,9 +319,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
     return process
         .getFlowNodes()
         // Find corresponding link events (correct name and type)
-        .filter(
-            flowNode ->
-                matchesLinkThrowEvent(intermediateThrowEvent, flowNode))
+        .filter(flowNode -> matchesLinkThrowEvent(intermediateThrowEvent, flowNode))
         // Get outgoing tokens for corresponding link events
         .map(this::getOutgoingTokensForFlowNode)
         .collect(Collectors.joining(WHITE_SPACE));
