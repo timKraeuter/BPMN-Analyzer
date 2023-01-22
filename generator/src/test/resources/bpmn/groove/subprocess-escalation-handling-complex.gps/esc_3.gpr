@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="esc_3" role="rule" edgeids="false" edgemode="directed">
+        <node id="n88">
+            <attr name="layout">
+                <string>680 325 0 0</string>
+            </attr>
+        </node>
+        <edge from="n88" to="n88">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n88" to="n88">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n96">
+            <attr name="layout">
+                <string>1647 257 0 0</string>
+            </attr>
+        </node>
+        <edge from="n96" to="n96">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n96" to="n96">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n85">
+            <attr name="layout">
+                <string>62 310 0 0</string>
+            </attr>
+        </node>
+        <edge from="n85" to="n85">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n86">
+            <attr name="layout">
+                <string>402 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n86" to="n86">
+            <attr name="label">
+                <string>string:"Subprocess Escalation Handling Complex"</string>
+            </attr>
+        </edge>
+        <node id="n87">
+            <attr name="layout">
+                <string>402 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n87" to="n87">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n89">
+            <attr name="layout">
+                <string>1137 325 0 0</string>
+            </attr>
+        </node>
+        <edge from="n89" to="n89">
+            <attr name="label">
+                <string>string:"esc_3_end_esc3"</string>
+            </attr>
+        </edge>
+        <node id="n90">
+            <attr name="layout">
+                <string>706 232 0 0</string>
+            </attr>
+        </node>
+        <edge from="n90" to="n90">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n91">
+            <attr name="layout">
+                <string>1137 165 0 0</string>
+            </attr>
+        </node>
+        <edge from="n91" to="n91">
+            <attr name="label">
+                <string>string:"Activity_0wd8u0e"</string>
+            </attr>
+        </edge>
+        <node id="n92">
+            <attr name="layout">
+                <string>1137 85 0 0</string>
+            </attr>
+        </node>
+        <edge from="n92" to="n92">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n93">
+            <attr name="layout">
+                <string>1193 245 0 0</string>
+            </attr>
+        </node>
+        <edge from="n93" to="n93">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n94">
+            <attr name="layout">
+                <string>1542 167 0 0</string>
+            </attr>
+        </node>
+        <edge from="n94" to="n94">
+            <attr name="label">
+                <string>string:"Error_converter"</string>
+            </attr>
+        </edge>
+        <node id="n95">
+            <attr name="layout">
+                <string>1542 87 0 0</string>
+            </attr>
+        </node>
+        <edge from="n95" to="n95">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n97">
+            <attr name="layout">
+                <string>1922 257 0 0</string>
+            </attr>
+        </node>
+        <edge from="n97" to="n97">
+            <attr name="label">
+                <string>string:"Gateway_1h7r0ek_esc_3"</string>
+            </attr>
+        </edge>
+        <edge from="n85" to="n88">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n88" to="n89">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n96" to="n97">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n93" to="n96">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n85" to="n86">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n85" to="n87">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n90" to="n91">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n90" to="n92">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n93" to="n94">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n93" to="n95">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n90" to="n93">
+            <attr name="label">
+                <string>subprocess</string>
+            </attr>
+        </edge>
+        <edge from="n85" to="n90">
+            <attr name="label">
+                <string>subprocess</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>
