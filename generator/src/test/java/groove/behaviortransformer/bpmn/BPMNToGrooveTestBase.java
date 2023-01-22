@@ -39,4 +39,10 @@ public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTe
     BPMNCollaboration collaboration = readModelFromResourceFolder(resourceFileName);
     this.checkGrooveGeneration(collaboration);
   }
+
+  protected void testGrooveGenerationWithIDsForBPMNResourceFile(String resourceFileName)
+      throws IOException {
+    BPMNCollaboration collaboration = readModelFromResourceFolder(resourceFileName);
+    this.checkGrooveGenerationWithIDs(collaboration);
+  }
 }

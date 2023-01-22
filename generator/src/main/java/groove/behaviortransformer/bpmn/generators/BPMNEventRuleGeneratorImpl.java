@@ -28,6 +28,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
@@ -401,7 +402,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
   public void createIntermediateThrowEventRule(
       AbstractBPMNProcess process, IntermediateThrowEvent intermediateThrowEvent) {
 
-    String ruleName = THROW + intermediateThrowEvent.getName();
+    String ruleName =
+        THROW + intermediateThrowEvent.getName() + "_" + intermediateThrowEvent.getId();
     // We currently limit to one incoming token, but we could implement an implicit exclusive
     // gateway.
     if (intermediateThrowEvent.getIncomingFlows().count() != 1) {
@@ -432,16 +434,12 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
   @Override
   public void createIntermediateCatchEventRule(
       AbstractBPMNProcess process, IntermediateCatchEvent intermediateCatchEvent) {
-    String ruleName = CATCH + intermediateCatchEvent.getName();
     switch (intermediateCatchEvent.getType()) {
-      case LINK:
-        createIntermediateCatchLinkEventRule(
-            intermediateCatchEvent, process, ruleName, ruleBuilder);
-        break;
       case MESSAGE:
         createIntermediateCatchMessageEventRule(
             intermediateCatchEvent, process, ruleBuilder, collaboration);
         break;
+      case LINK:
       case SIGNAL:
         // Done in the corresponding throw rule.
         break;
@@ -546,25 +544,6 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     return intermediateCatchEvent.getName() + "_" + messageFlow.getNameOrDescriptiveName();
   }
 
-  private void createIntermediateCatchLinkEventRule(
-      IntermediateCatchEvent intermediateCatchEvent,
-      AbstractBPMNProcess process,
-      String ruleName,
-      GrooveRuleBuilder ruleBuilder) {
-    ruleBuilder.startRule(ruleName);
-
-    GrooveNode processInstance =
-        addTokensForOutgoingFlowsToRunningInstance(
-            intermediateCatchEvent, process, ruleBuilder, useSFId);
-    if (intermediateCatchEvent.getIncomingFlows().findAny().isPresent()) {
-      throw new BPMNRuntimeException(
-          "Link intermediate catch events are not allowed to have incoming sequence " + "flows!");
-    }
-    deleteTokenWithPosition(ruleBuilder, processInstance, intermediateCatchEvent.getName());
-
-    ruleBuilder.buildRule();
-  }
-
   private void createIntermediateThrowNoneEventRule(
       IntermediateThrowEvent intermediateThrowEvent,
       String ruleName,
@@ -638,19 +617,32 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     intermediateThrowEvent
         .getIncomingFlows()
         .forEach(
-            sequenceFlow ->
-                deleteTokenWithPosition(
-                    ruleBuilder,
-                    processInstance,
-                    getSequenceFlowIdOrDescriptiveName(sequenceFlow, this.useSFId)));
-    addTokenWithPosition(ruleBuilder, processInstance, intermediateThrowEvent.getName());
+            sequenceFlow -> {
+              deleteTokenWithPosition(
+                  ruleBuilder,
+                  processInstance,
+                  getSequenceFlowIdOrDescriptiveName(sequenceFlow, this.useSFId));
+              // Add outgoing flows for corresponding link events.
+              findMatchingLinkCatchEvents(intermediateThrowEvent, process).forEach(
+                  matchingLinkCatchEvent -> addOutgoingTokensForFlowNodeToProcessInstance(
+                      matchingLinkCatchEvent,
+                      ruleBuilder, processInstance, this.useSFId));
+            });
 
     ruleBuilder.buildRule();
   }
 
+  private Stream<FlowNode> findMatchingLinkCatchEvents(
+      IntermediateThrowEvent intermediateThrowEvent, AbstractBPMNProcess process) {
+    return process
+        .getFlowNodes()
+        // Find corresponding link events (correct name and type)
+        .filter(flowNode -> matchesLinkThrowEvent(intermediateThrowEvent, flowNode));
+  }
+
   private void createSignalThrowRulePart(EventDefinition eventDefinition) {
     Pair<Set<Event>, Set<BoundaryEvent>> correspondingSignalCatchEvents =
-        collaboration.findAllCorrespondingSignalCatchEvents(eventDefinition);
+        collaboration.findAllCorrespondingCatchEvents(eventDefinition);
 
     correspondingSignalCatchEvents.getLeft().forEach(this::createCatchSignalEventRulePart);
     correspondingSignalCatchEvents.getRight().forEach(this::createBoundarySignalCatchEventRulePart);

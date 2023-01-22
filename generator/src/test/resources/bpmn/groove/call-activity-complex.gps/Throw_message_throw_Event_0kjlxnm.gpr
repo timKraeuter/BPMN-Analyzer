@@ -1,252 +1,247 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="Throw_S1_throw" role="rule" edgeids="false" edgemode="directed">
-        <node id="n180">
+    <graph id="Throw_message_throw_Event_0kjlxnm" role="rule" edgeids="false" edgemode="directed">
+        <node id="n119">
             <attr name="layout">
                 <string>492 332 0 0</string>
             </attr>
         </node>
-        <edge from="n180" to="n180">
+        <edge from="n119" to="n119">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n180" to="n180">
+        <edge from="n119" to="n119">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n188">
+        <node id="n125">
             <attr name="layout">
-                <string>532 502 0 0</string>
+                <string>492 582 0 0</string>
             </attr>
         </node>
-        <edge from="n188" to="n188">
+        <edge from="n125" to="n125">
             <attr name="label">
-                <string>type:Token</string>
+                <string>type:Message</string>
             </attr>
         </edge>
-        <edge from="n188" to="n188">
+        <edge from="n125" to="n125">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n178">
+        <node id="n117">
             <attr name="layout">
                 <string>492 242 0 0</string>
             </attr>
         </node>
-        <edge from="n178" to="n178">
+        <edge from="n117" to="n117">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n178" to="n178">
+        <edge from="n117" to="n117">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n186">
-            <attr name="layout">
-                <string>532 673 0 0</string>
-            </attr>
-        </node>
-        <edge from="n186" to="n186">
-            <attr name="label">
-                <string>type:Token</string>
-            </attr>
-        </edge>
-        <edge from="n186" to="n186">
-            <attr name="label">
-                <string>del:</string>
-            </attr>
-        </edge>
-        <node id="n175">
+        <node id="n114">
             <attr name="layout">
                 <string>62 87 0 0</string>
             </attr>
         </node>
-        <edge from="n175" to="n175">
+        <edge from="n114" to="n114">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n176">
+        <node id="n115">
             <attr name="layout">
                 <string>402 152 0 0</string>
             </attr>
         </node>
-        <edge from="n176" to="n176">
-            <attr name="label">
-                <string>string:"P2_Subprocess"</string>
-            </attr>
-        </edge>
-        <node id="n177">
-            <attr name="layout">
-                <string>402 72 0 0</string>
-            </attr>
-        </node>
-        <edge from="n177" to="n177">
-            <attr name="label">
-                <string>type:Running</string>
-            </attr>
-        </edge>
-        <node id="n179">
-            <attr name="layout">
-                <string>752 242 0 0</string>
-            </attr>
-        </node>
-        <edge from="n179" to="n179">
-            <attr name="label">
-                <string>string:"start_sub_p2_S1_throw"</string>
-            </attr>
-        </edge>
-        <node id="n181">
-            <attr name="layout">
-                <string>752 332 0 0</string>
-            </attr>
-        </node>
-        <edge from="n181" to="n181">
-            <attr name="label">
-                <string>string:"S1_throw_message_catch"</string>
-            </attr>
-        </edge>
-        <node id="n182">
-            <attr name="layout">
-                <string>772 578 0 0</string>
-            </attr>
-        </node>
-        <edge from="n182" to="n182">
-            <attr name="label">
-                <string>forall:</string>
-            </attr>
-        </edge>
-        <node id="n183">
-            <attr name="layout">
-                <string>62 656 0 0</string>
-            </attr>
-        </node>
-        <edge from="n183" to="n183">
-            <attr name="label">
-                <string>type:ProcessSnapshot</string>
-            </attr>
-        </edge>
-        <node id="n184">
-            <attr name="layout">
-                <string>412 412 0 0</string>
-            </attr>
-        </node>
-        <edge from="n184" to="n184">
+        <edge from="n115" to="n115">
             <attr name="label">
                 <string>string:"P1_Subprocess"</string>
             </attr>
         </edge>
-        <node id="n185">
+        <node id="n116">
             <attr name="layout">
-                <string>487 583 0 0</string>
+                <string>402 72 0 0</string>
             </attr>
         </node>
-        <edge from="n185" to="n185">
+        <edge from="n116" to="n116">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n187">
+        <node id="n118">
             <attr name="layout">
-                <string>772 681 0 0</string>
+                <string>752 242 0 0</string>
             </attr>
         </node>
-        <edge from="n187" to="n187">
-            <attr name="label">
-                <string>string:"start_p2_S1_catch"</string>
-            </attr>
-        </edge>
-        <node id="n189">
-            <attr name="layout">
-                <string>772 494 0 0</string>
-            </attr>
-        </node>
-        <edge from="n189" to="n189">
+        <edge from="n118" to="n118">
             <attr name="label">
                 <string>string:"S1_catch_message_throw"</string>
             </attr>
         </edge>
-        <edge from="n175" to="n180">
+        <node id="n120">
+            <attr name="layout">
+                <string>752 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n120" to="n120">
+            <attr name="label">
+                <string>string:"message_throw_end_sub_p1"</string>
+            </attr>
+        </edge>
+        <node id="n121">
+            <attr name="layout">
+                <string>762 654 0 0</string>
+            </attr>
+        </node>
+        <edge from="n121" to="n121">
+            <attr name="label">
+                <string>existsx:</string>
+            </attr>
+        </edge>
+        <node id="n122">
+            <attr name="layout">
+                <string>62 582 0 0</string>
+            </attr>
+        </node>
+        <edge from="n122" to="n122">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n123">
+            <attr name="layout">
+                <string>392 412 0 0</string>
+            </attr>
+        </node>
+        <edge from="n123" to="n123">
+            <attr name="label">
+                <string>string:"P2_Subprocess"</string>
+            </attr>
+        </edge>
+        <node id="n124">
+            <attr name="layout">
+                <string>467 669 0 0</string>
+            </attr>
+        </node>
+        <edge from="n124" to="n124">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n126">
+            <attr name="layout">
+                <string>762 574 0 0</string>
+            </attr>
+        </node>
+        <edge from="n126" to="n126">
+            <attr name="label">
+                <string>string:"message_throw_message_catch"</string>
+            </attr>
+        </edge>
+        <node id="n127">
+            <attr name="layout">
+                <string>512 492 0 0</string>
+            </attr>
+        </node>
+        <edge from="n127" to="n127">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n128">
+            <attr name="layout">
+                <string>762 484 0 0</string>
+            </attr>
+        </node>
+        <edge from="n128" to="n128">
+            <attr name="label">
+                <string>string:"S1_throw_message_catch"</string>
+            </attr>
+        </edge>
+        <edge from="n114" to="n119">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n180" to="n181">
+        <edge from="n119" to="n120">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n183" to="n188">
+        <edge from="n122" to="n125">
             <attr name="label">
-                <string>new:tokens</string>
+                <string>new:messages</string>
             </attr>
         </edge>
-        <edge from="n188" to="n189">
+        <edge from="n125" to="n126">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n175" to="n178">
+        <edge from="n114" to="n117">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n178" to="n179">
+        <edge from="n117" to="n118">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n183" to="n186">
-            <attr name="label">
-                <string>del:tokens</string>
-            </attr>
-        </edge>
-        <edge from="n186" to="n187">
-            <attr name="label">
-                <string>del:position</string>
-            </attr>
-        </edge>
-        <edge from="n175" to="n176">
+        <edge from="n114" to="n115">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n175" to="n177">
+        <edge from="n114" to="n116">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n183" to="n184">
+        <edge from="n122" to="n123">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n183" to="n185">
+        <edge from="n122" to="n124">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n183" to="n182">
+        <edge from="n122" to="n121">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n185" to="n182">
+        <edge from="n124" to="n121">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n186" to="n182">
+        <edge from="n125" to="n121">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n188" to="n182">
+        <edge from="n122" to="n127">
+            <attr name="label">
+                <string>tokens</string>
+            </attr>
+        </edge>
+        <edge from="n127" to="n128">
+            <attr name="label">
+                <string>position</string>
+            </attr>
+        </edge>
+        <edge from="n127" to="n121">
             <attr name="label">
                 <string>@</string>
             </attr>

@@ -72,7 +72,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    */
   @Test
   void testLinkEvent() throws IOException {
-    testGrooveGenerationForBPMNResourceFile("link-event.bpmn");
+    testGrooveGenerationWithIDsForBPMNResourceFile("link-event.bpmn");
   }
 
   /**

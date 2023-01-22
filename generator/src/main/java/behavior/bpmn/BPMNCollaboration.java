@@ -132,7 +132,7 @@ public class BPMNCollaboration implements Behavior {
         .findFirst();
   }
 
-  public Pair<Set<Event>, Set<BoundaryEvent>> findAllCorrespondingSignalCatchEvents(
+  public Pair<Set<Event>, Set<BoundaryEvent>> findAllCorrespondingCatchEvents(
       EventDefinition eventDefinition) {
     Set<Event> signalCatchEvents = new LinkedHashSet<>();
     Set<BoundaryEvent> signalBoundaryCatchEvents = new LinkedHashSet<>();
@@ -141,14 +141,14 @@ public class BPMNCollaboration implements Behavior {
         .forEach(
             process -> {
               Pair<Set<Event>, Set<BoundaryEvent>> signalAndSignalBoundaryCatchEvents =
-                  findAllCorrespondingSignalCatchEvents(process, eventDefinition, seenProcesses);
+                  findAllCorrespondingCatchEvents(process, eventDefinition, seenProcesses);
               signalCatchEvents.addAll(signalAndSignalBoundaryCatchEvents.getLeft());
               signalBoundaryCatchEvents.addAll(signalAndSignalBoundaryCatchEvents.getRight());
             });
     return Pair.of(signalCatchEvents, signalBoundaryCatchEvents);
   }
 
-  public Pair<Set<Event>, Set<BoundaryEvent>> findAllCorrespondingSignalCatchEvents(
+  public Pair<Set<Event>, Set<BoundaryEvent>> findAllCorrespondingCatchEvents(
       BPMNProcess process, EventDefinition eventDefinition, Set<BPMNProcess> seenProcesses) {
     Set<Event> signalCatchEvents = new LinkedHashSet<>();
     Set<BoundaryEvent> signalBoundaryCatchEvents = new LinkedHashSet<>();

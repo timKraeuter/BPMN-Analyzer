@@ -228,7 +228,7 @@ public class BehaviorToGrooveTransformer {
         graph -> GrooveTransformer.writeStartGraph(graphGrammarSubFolder, graph, true));
   }
 
-  public File generateGrooveGrammar(Behavior behavior, File targetFolder) {
+  public File generateGrooveGrammar(Behavior behavior, File targetFolder, boolean useIDs) {
     ValueWrapper<File> result = new ValueWrapper<>();
     behavior.accept(
         new BehaviorVisitor() {
@@ -250,7 +250,7 @@ public class BehaviorToGrooveTransformer {
           public void handle(BPMNCollaboration collaboration) {
             result.setValue(
                 BehaviorToGrooveTransformer.this.generateGrooveGrammarForBPMNProcessModel(
-                    collaboration, targetFolder, false));
+                    collaboration, targetFolder, useIDs));
           }
 
           @Override
@@ -303,10 +303,9 @@ public class BehaviorToGrooveTransformer {
   }
 
   public File generateGrooveGrammarForBPMNProcessModel(
-      // TODO: rename useSFId to use IDS.
-      BPMNCollaboration collaboration, File grooveDir, boolean useSFId) {
+      BPMNCollaboration collaboration, File grooveDir, boolean useIDs) {
     File graphGrammarSubFolder = this.makeSubFolder(collaboration, grooveDir);
-    BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer(useSFId);
+    BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer(useIDs);
 
     // Generate start graph
     transformer.generateAndWriteStartGraph(collaboration, graphGrammarSubFolder);

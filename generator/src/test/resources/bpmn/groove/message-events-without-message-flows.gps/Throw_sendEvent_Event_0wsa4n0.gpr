@@ -1,112 +1,112 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="Throw_Link1" role="rule" edgeids="false" edgemode="directed">
-        <node id="n40">
+    <graph id="Throw_sendEvent_Event_0wsa4n0" role="rule" edgeids="false" edgemode="directed">
+        <node id="n17">
             <attr name="layout">
-                <string>470 332 0 0</string>
+                <string>417 332 0 0</string>
             </attr>
         </node>
-        <edge from="n40" to="n40">
+        <edge from="n17" to="n17">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n40" to="n40">
+        <edge from="n17" to="n17">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n38">
+        <node id="n15">
             <attr name="layout">
-                <string>470 242 0 0</string>
+                <string>417 242 0 0</string>
             </attr>
         </node>
-        <edge from="n38" to="n38">
+        <edge from="n15" to="n15">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n38" to="n38">
+        <edge from="n15" to="n15">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n35">
+        <node id="n12">
             <attr name="layout">
                 <string>62 87 0 0</string>
             </attr>
         </node>
-        <edge from="n35" to="n35">
+        <edge from="n12" to="n12">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n36">
+        <node id="n13">
             <attr name="layout">
                 <string>402 152 0 0</string>
             </attr>
         </node>
-        <edge from="n36" to="n36">
+        <edge from="n13" to="n13">
             <attr name="label">
-                <string>string:"link-event"</string>
+                <string>string:"p1"</string>
             </attr>
         </edge>
-        <node id="n37">
+        <node id="n14">
             <attr name="layout">
                 <string>402 72 0 0</string>
             </attr>
         </node>
-        <edge from="n37" to="n37">
+        <edge from="n14" to="n14">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n39">
+        <node id="n16">
             <attr name="layout">
-                <string>707 242 0 0</string>
+                <string>602 242 0 0</string>
             </attr>
         </node>
-        <edge from="n39" to="n39">
+        <edge from="n16" to="n16">
             <attr name="label">
-                <string>string:"p1_Link1"</string>
+                <string>string:"start_sendEvent"</string>
             </attr>
         </edge>
-        <node id="n41">
+        <node id="n18">
             <attr name="layout">
-                <string>707 332 0 0</string>
+                <string>602 332 0 0</string>
             </attr>
         </node>
-        <edge from="n41" to="n41">
+        <edge from="n18" to="n18">
             <attr name="label">
-                <string>string:"Link1"</string>
+                <string>string:"sendEvent_SendTask"</string>
             </attr>
         </edge>
-        <edge from="n35" to="n40">
+        <edge from="n12" to="n17">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n40" to="n41">
+        <edge from="n17" to="n18">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n35" to="n38">
+        <edge from="n12" to="n15">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n38" to="n39">
+        <edge from="n15" to="n16">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n35" to="n36">
+        <edge from="n12" to="n13">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n35" to="n37">
+        <edge from="n12" to="n14">
             <attr name="label">
                 <string>state</string>
             </attr>

@@ -37,7 +37,7 @@
       <bpmn:outgoing>Flow_0eumlnw</bpmn:outgoing>
       <bpmn:linkEventDefinition id="LinkEventDefinition_1vthiwz" name=""/>
     </bpmn:intermediateCatchEvent>
-    <bpmn:parallelGateway id="Gateway_0bwp5hb" name="p2_pg2">
+    <bpmn:parallelGateway id="Gateway_0bwp5hb" name="p1_pg2">
       <bpmn:incoming>Flow_1m1cy19</bpmn:incoming>
       <bpmn:incoming>Flow_0eumlnw</bpmn:incoming>
       <bpmn:outgoing>Flow_0vgr37e</bpmn:outgoing>
@@ -267,21 +267,21 @@
         <di:waypoint x="716" y="408"/>
         <di:waypoint x="773" y="408"/>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="TextAnnotation_02htwjx_di" bpmnElement="TextAnnotation_02htwjx">
-        <dc:Bounds x="881" y="163" width="100" height="84"/>
-        <bpmndi:BPMNLabel/>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1tp1g3d_di" bpmnElement="TextAnnotation_1tp1g3d">
         <dc:Bounds x="881" y="430" width="100" height="70"/>
         <bpmndi:BPMNLabel/>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_1lio4q2_di" bpmnElement="Association_1lio4q2">
-        <di:waypoint x="830" y="184"/>
-        <di:waypoint x="881" y="181"/>
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_02htwjx_di" bpmnElement="TextAnnotation_02htwjx">
+        <dc:Bounds x="881" y="163" width="100" height="84"/>
+        <bpmndi:BPMNLabel/>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_0f1i8op_di" bpmnElement="Association_0f1i8op">
         <di:waypoint x="830" y="450"/>
         <di:waypoint x="881" y="448"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1lio4q2_di" bpmnElement="Association_1lio4q2">
+        <di:waypoint x="830" y="184"/>
+        <di:waypoint x="881" y="181"/>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

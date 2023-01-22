@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="Throw_throw_A" role="rule" edgeids="false" edgemode="directed">
+    <graph id="Throw_throw_A_Event_1c7b7i9" role="rule" edgeids="false" edgemode="directed">
         <node id="n61">
             <attr name="layout">
                 <string>417 929 0 0</string>

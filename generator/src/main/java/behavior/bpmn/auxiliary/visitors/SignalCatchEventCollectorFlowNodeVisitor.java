@@ -57,7 +57,7 @@ public class SignalCatchEventCollectorFlowNodeVisitor extends DoNothingFlowNodeV
   @Override
   public void handle(CallActivity callActivity) {
     Pair<Set<Event>, Set<BoundaryEvent>> signalAndBoundarySignalEvents =
-        collaboration.findAllCorrespondingSignalCatchEvents(
+        collaboration.findAllCorrespondingCatchEvents(
             callActivity.getSubProcessModel(), eventDefinition, seenProcesses);
     signalCatchEvents.addAll(signalAndBoundarySignalEvents.getLeft());
     signalBoundaryCatchEvents.addAll(signalAndBoundarySignalEvents.getRight());

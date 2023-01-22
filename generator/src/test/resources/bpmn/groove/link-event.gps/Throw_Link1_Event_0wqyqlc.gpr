@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="p1" role="rule" edgeids="false" edgemode="directed">
+    <graph id="Throw_Link1_Event_0wqyqlc" role="rule" edgeids="false" edgemode="directed">
         <node id="n31">
             <attr name="layout">
-                <string>480 162 0 0</string>
+                <string>417 332 0 0</string>
             </attr>
         </node>
         <edge from="n31" to="n31">
@@ -12,28 +12,13 @@
             </attr>
         </edge>
         <edge from="n31" to="n31">
-            <attr name="label">
-                <string>new:</string>
-            </attr>
-        </edge>
-        <node id="n33">
-            <attr name="layout">
-                <string>480 252 0 0</string>
-            </attr>
-        </node>
-        <edge from="n33" to="n33">
-            <attr name="label">
-                <string>type:Token</string>
-            </attr>
-        </edge>
-        <edge from="n33" to="n33">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
         <node id="n29">
             <attr name="layout">
-                <string>480 422 0 0</string>
+                <string>417 242 0 0</string>
             </attr>
         </node>
         <edge from="n29" to="n29">
@@ -48,7 +33,7 @@
         </edge>
         <node id="n26">
             <attr name="layout">
-                <string>62 89 0 0</string>
+                <string>62 87 0 0</string>
             </attr>
         </node>
         <edge from="n26" to="n26">
@@ -58,17 +43,17 @@
         </edge>
         <node id="n27">
             <attr name="layout">
-                <string>412 72 0 0</string>
+                <string>402 152 0 0</string>
             </attr>
         </node>
         <edge from="n27" to="n27">
             <attr name="label">
-                <string>string:"link-event"</string>
+                <string>string:"p1"</string>
             </attr>
         </edge>
         <node id="n28">
             <attr name="layout">
-                <string>412 332 0 0</string>
+                <string>402 72 0 0</string>
             </attr>
         </node>
         <edge from="n28" to="n28">
@@ -78,32 +63,22 @@
         </edge>
         <node id="n30">
             <attr name="layout">
-                <string>717 422 0 0</string>
+                <string>602 242 0 0</string>
             </attr>
         </node>
         <edge from="n30" to="n30">
             <attr name="label">
-                <string>string:"start_p1"</string>
+                <string>string:"Flow_03y9o1z"</string>
             </attr>
         </edge>
         <node id="n32">
             <attr name="layout">
-                <string>717 162 0 0</string>
+                <string>602 332 0 0</string>
             </attr>
         </node>
         <edge from="n32" to="n32">
             <attr name="label">
-                <string>string:"p1_Link1"</string>
-            </attr>
-        </edge>
-        <node id="n34">
-            <attr name="layout">
-                <string>717 252 0 0</string>
-            </attr>
-        </node>
-        <edge from="n34" to="n34">
-            <attr name="label">
-                <string>string:"p1_Link2"</string>
+                <string>string:"Flow_1m1cy19"</string>
             </attr>
         </edge>
         <edge from="n26" to="n31">
@@ -112,16 +87,6 @@
             </attr>
         </edge>
         <edge from="n31" to="n32">
-            <attr name="label">
-                <string>new:position</string>
-            </attr>
-        </edge>
-        <edge from="n26" to="n33">
-            <attr name="label">
-                <string>new:tokens</string>
-            </attr>
-        </edge>
-        <edge from="n33" to="n34">
             <attr name="label">
                 <string>new:position</string>
             </attr>

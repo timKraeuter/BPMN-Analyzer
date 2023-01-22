@@ -39,16 +39,20 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
   }
 
   public void checkGrooveGeneration(Behavior behavior) throws IOException {
-    this.checkGrooveGeneration(behavior, this.fileNameFilter);
+    this.checkGrooveGeneration(behavior, this.fileNameFilter ,false);
+  }
+
+  public void checkGrooveGenerationWithIDs(Behavior behavior) throws IOException {
+    this.checkGrooveGeneration(behavior, this.fileNameFilter, true);
   }
 
   @SuppressWarnings("ConstantConditions")
-  private void checkGrooveGeneration(Behavior behavior, Function<String, Boolean> fileNameFilter)
+  private void checkGrooveGeneration(Behavior behavior, Function<String, Boolean> fileNameFilter, boolean useIDs)
       throws IOException {
     String modelName = behavior.getName();
     BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
     File outputDir = new File(this.getOutputPathIncludingSubFolder());
-    transformer.generateGrooveGrammar(behavior, outputDir);
+    transformer.generateGrooveGrammar(behavior, outputDir, useIDs);
 
     // assert
     File expectedDir =
