@@ -29,24 +29,9 @@
                 <string>622 189 71 18</string>
             </attr>
         </node>
-        <node id="n4">
-            <attr name="layout">
-                <string>116 143 91 36</string>
-            </attr>
-        </node>
-        <node id="n5">
-            <attr name="layout">
-                <string>333 24 106 18</string>
-            </attr>
-        </node>
         <node id="n6">
             <attr name="layout">
                 <string>362 195 90 36</string>
-            </attr>
-        </node>
-        <node id="n7">
-            <attr name="layout">
-                <string>733 191 70 18</string>
             </attr>
         </node>
         <edge from="n13" to="n13">
@@ -69,9 +54,9 @@
                 <string>string:name</string>
             </attr>
         </edge>
-        <edge from="n0" to="n4">
+        <edge from="n0" to="n13">
             <attr name="label">
-                <string>decisions</string>
+                <string>tokens</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">
@@ -79,24 +64,17 @@
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n0" to="n5">
+        <edge from="n0" to="n0">
             <attr name="label">
                 <string>subprocess</string>
+            </attr>
+            <attr name="layout">
+                <string>500 0 365 111 352 47 365 111 11</string>
             </attr>
         </edge>
         <edge from="n0" to="n6">
             <attr name="label">
                 <string>messages</string>
-            </attr>
-        </edge>
-        <edge from="n0" to="n5">
-            <attr name="label">
-                <string>sub:</string>
-            </attr>
-        </edge>
-        <edge from="n0" to="n13">
-            <attr name="label">
-                <string>tokens</string>
             </attr>
         </edge>
         <edge from="n1" to="n1">
@@ -129,26 +107,6 @@
                 <string>sub:</string>
             </attr>
         </edge>
-        <edge from="n4" to="n4">
-            <attr name="label">
-                <string>type:Decision</string>
-            </attr>
-        </edge>
-        <edge from="n4" to="n4">
-            <attr name="label">
-                <string>string:decision</string>
-            </attr>
-        </edge>
-        <edge from="n5" to="n5">
-            <attr name="label">
-                <string>abs:</string>
-            </attr>
-        </edge>
-        <edge from="n5" to="n5">
-            <attr name="label">
-                <string>type:IProcessSnapshot</string>
-            </attr>
-        </edge>
         <edge from="n6" to="n6">
             <attr name="label">
                 <string>type:Message</string>
@@ -157,16 +115,6 @@
         <edge from="n6" to="n6">
             <attr name="label">
                 <string>string:position</string>
-            </attr>
-        </edge>
-        <edge from="n7" to="n7">
-            <attr name="label">
-                <string>type:Interrupted</string>
-            </attr>
-        </edge>
-        <edge from="n7" to="n1">
-            <attr name="label">
-                <string>sub:</string>
             </attr>
         </edge>
     </graph>
