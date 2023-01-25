@@ -3,7 +3,7 @@
     <graph id="end" role="rule" edgeids="false" edgemode="directed">
         <node id="n42">
             <attr name="layout">
-                <string>542 242 0 0</string>
+                <string>437 242 0 0</string>
             </attr>
         </node>
         <edge from="n42" to="n42">
@@ -33,12 +33,12 @@
         </node>
         <edge from="n41" to="n41">
             <attr name="label">
-                <string>string:"sequential-activities"</string>
+                <string>string:"Process"</string>
             </attr>
         </edge>
         <node id="n43">
             <attr name="layout">
-                <string>862 242 0 0</string>
+                <string>652 242 0 0</string>
             </attr>
         </node>
         <edge from="n43" to="n43">

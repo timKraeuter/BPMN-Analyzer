@@ -12,7 +12,7 @@ class BPMNToMaudeTaskTest implements BPMNMaudeTestHelper {
    */
   @Test
   void testSequentialTasks() throws IOException {
-    testBPMNMaudeGeneration("sequential-activities");
+    testBPMNMaudeGeneration("sequential-tasks");
   }
 
   /**
