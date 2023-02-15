@@ -22,4 +22,14 @@ class GrooveJarRunnerTest {
     File expected = new File(this.getClass().getResource("/statespace.txt").getFile());
     FileTestHelper.testFileEquals(expected, stateSpace);
   }
+
+  /**
+   * If this tests does not terminate, one possible reasons is that the gradle JVM/JDK does not
+   * match the Java JDK.
+   */
+  @Test
+  void testModelChecking() throws IOException, InterruptedException {
+    GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
+    grooveJarRunner.checkCTL("../groove/bin/circular.gps", "AG(!false)", true);
+  }
 }

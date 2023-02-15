@@ -33,11 +33,28 @@ public class GrooveJarRunner {
 
   public File generateStateSpace(String graphGrammar, String resultFilePath, boolean printOutput)
       throws IOException, InterruptedException {
-    // java -jar GraphGrammarPath -o StateSpaceFilePath
+    // java -jar Generator.jar graphGrammar -o StateSpaceFilePath
     ProcessBuilder builder =
         new ProcessBuilder(
             "java", "-jar", grooveBinDir + "/Generator.jar", graphGrammar, "-o", resultFilePath);
 
+    runProcess(printOutput, builder);
+    return new File(resultFilePath);
+  }
+
+  public File checkCTL(String graphGrammar, String ctlProperty, boolean printOutput)
+      throws IOException, InterruptedException {
+    // java -jar ModelChecker.jar graphGrammar -ctl ctlProperty
+    ProcessBuilder builder =
+        new ProcessBuilder(
+            "java", "-jar", grooveBinDir + "/ModelChecker.jar", graphGrammar, "-ctl", ctlProperty);
+
+    runProcess(printOutput, builder); // Need to grab the info from the output here somehow.
+    return null;
+  }
+
+  private void runProcess(boolean printOutput, ProcessBuilder builder)
+      throws IOException, InterruptedException {
     builder.redirectErrorStream(true);
     Process process = builder.start();
     if (printOutput) {
@@ -46,7 +63,6 @@ public class GrooveJarRunner {
     process.waitFor(60, TimeUnit.SECONDS);
     process.destroy(); // no op if already stopped.
     process.waitFor();
-    return new File(resultFilePath);
   }
 
   private void printOutput(Process p) {
