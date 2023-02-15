@@ -62,7 +62,7 @@ public class BPMNModelChecker {
     // Not supported atm. We would run an LTL query but there is a bug in Groove.
     response.addPropertyCheckingResult(
         new BPMNPropertyCheckingResult(
-            ModelCheckingProperty.SAFENESS,
+            ModelCheckingProperty.OPTION_TO_COMPLETE,
             false,
             "Checking BPMN-specific properties is not implemented in the web interface yet "
                 + "due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/"));
