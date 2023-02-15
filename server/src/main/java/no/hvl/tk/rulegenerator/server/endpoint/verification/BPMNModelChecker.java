@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNPropertyCheckingResult;
-import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingProperty;
+import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingRequest;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import no.hvl.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
@@ -33,17 +33,16 @@ public class BPMNModelChecker {
       throws InterruptedException, IOException {
     ModelCheckingResponse response = new ModelCheckingResponse();
 
-    for (ModelCheckingProperty modelCheckingProperty :
-        modelCheckingRequest.getPropertiesToBeChecked()) {
-      this.checkPropertyAndRecordResult(modelCheckingProperty, response);
+    for (BPMNSpecificProperty property : modelCheckingRequest.getPropertiesToBeChecked()) {
+      this.checkPropertyAndRecordResult(property, response);
     }
     return response;
   }
 
   private void checkPropertyAndRecordResult(
-      ModelCheckingProperty modelCheckingProperty, ModelCheckingResponse response)
+      BPMNSpecificProperty property, ModelCheckingResponse response)
       throws InterruptedException, IOException {
-    switch (modelCheckingProperty) {
+    switch (property) {
       case NO_DEAD_ACTIVITIES:
         this.checkNoDeadActivities(response);
         break;
@@ -54,7 +53,7 @@ public class BPMNModelChecker {
         this.checkOptionToComplete(response);
         break;
       default:
-        throw new IllegalStateException("Unexpected value: " + modelCheckingProperty);
+        throw new IllegalStateException("Unexpected value: " + property);
     }
   }
 
@@ -62,7 +61,7 @@ public class BPMNModelChecker {
     // Not supported atm. We would run an LTL query but there is a bug in Groove.
     response.addPropertyCheckingResult(
         new BPMNPropertyCheckingResult(
-            ModelCheckingProperty.OPTION_TO_COMPLETE,
+            BPMNSpecificProperty.OPTION_TO_COMPLETE,
             false,
             "Checking BPMN-specific properties is not implemented in the web interface yet "
                 + "due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/"));
@@ -72,7 +71,7 @@ public class BPMNModelChecker {
     // Not supported atm. We would run an LTL query but there is a bug in Groove.
     response.addPropertyCheckingResult(
         new BPMNPropertyCheckingResult(
-            ModelCheckingProperty.SAFENESS,
+            BPMNSpecificProperty.SAFENESS,
             false,
             "Checking BPMN-specific properties is not implemented in the web interface yet "
                 + "due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/"));
@@ -111,13 +110,13 @@ public class BPMNModelChecker {
       ModelCheckingResponse response, Set<String> deadActivities) {
     if (deadActivities.isEmpty()) {
       response.addPropertyCheckingResult(
-          new BPMNPropertyCheckingResult(ModelCheckingProperty.NO_DEAD_ACTIVITIES, true, ""));
+          new BPMNPropertyCheckingResult(BPMNSpecificProperty.NO_DEAD_ACTIVITIES, true, ""));
     } else {
       String deadActivitiesHint =
           String.format("Dead activities: %s", String.join(",", deadActivities));
       response.addPropertyCheckingResult(
           new BPMNPropertyCheckingResult(
-              ModelCheckingProperty.NO_DEAD_ACTIVITIES, false, deadActivitiesHint));
+              BPMNSpecificProperty.NO_DEAD_ACTIVITIES, false, deadActivitiesHint));
     }
   }
 

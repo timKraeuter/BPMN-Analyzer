@@ -1,18 +1,18 @@
 package no.hvl.tk.rulegenerator.server.endpoint.dtos;
 
 public class BPMNPropertyCheckingResult {
-  private final ModelCheckingProperty name;
+  private final BPMNSpecificProperty name;
   private final boolean holds;
   private final String additionalInfo;
 
   public BPMNPropertyCheckingResult(
-      ModelCheckingProperty name, boolean holds, String additionalInfo) {
+      BPMNSpecificProperty name, boolean holds, String additionalInfo) {
     this.name = name;
     this.holds = holds;
     this.additionalInfo = additionalInfo;
   }
 
-  public ModelCheckingProperty getName() {
+  public BPMNSpecificProperty getName() {
     return name;
   }
 

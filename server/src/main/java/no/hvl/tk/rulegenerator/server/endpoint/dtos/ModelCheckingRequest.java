@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class ModelCheckingRequest {
   MultipartFile file;
-  Set<ModelCheckingProperty> propertiesToBeChecked;
+  Set<BPMNSpecificProperty> propertiesToBeChecked;
 
   public ModelCheckingRequest() {
     propertiesToBeChecked = new HashSet<>();
@@ -16,7 +16,7 @@ public class ModelCheckingRequest {
     return file;
   }
 
-  public Set<ModelCheckingProperty> getPropertiesToBeChecked() {
+  public Set<BPMNSpecificProperty> getPropertiesToBeChecked() {
     return propertiesToBeChecked;
   }
 
@@ -24,7 +24,7 @@ public class ModelCheckingRequest {
     this.file = file;
   }
 
-  public void setPropertiesToBeChecked(Set<ModelCheckingProperty> propertiesToBeChecked) {
+  public void setPropertiesToBeChecked(Set<BPMNSpecificProperty> propertiesToBeChecked) {
     this.propertiesToBeChecked = propertiesToBeChecked;
   }
 }

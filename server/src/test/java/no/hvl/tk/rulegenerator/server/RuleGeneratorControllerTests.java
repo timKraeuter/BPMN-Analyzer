@@ -4,16 +4,21 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorController;
+import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -103,7 +108,9 @@ class RuleGeneratorControllerTests {
     @SuppressWarnings("ConstantConditions")
     File bpmnModelFile = new File(this.getClass().getResource(BPMN_FILE).getFile());
 
-    String response = makeMultipartRequest(bpmnModelFile);
+    String response =
+        makeMultipartRequest(
+            bpmnModelFile, Lists.newArrayList(BPMNSpecificProperty.NO_DEAD_ACTIVITIES));
     assertThat(
         response,
         is(
@@ -116,7 +123,9 @@ class RuleGeneratorControllerTests {
     @SuppressWarnings("ConstantConditions")
     File bpmnModelFile = new File(this.getClass().getResource(BPMN_FILE_DEAD).getFile());
 
-    String response = makeMultipartRequest(bpmnModelFile);
+    String response =
+        makeMultipartRequest(
+            bpmnModelFile, Lists.newArrayList(BPMNSpecificProperty.NO_DEAD_ACTIVITIES));
     assertThat(
         response,
         is(
@@ -126,11 +135,28 @@ class RuleGeneratorControllerTests {
   }
 
   @Test
+  void testCheckBPMNSpecificPropertiesSafenessAndOptionToComplete() throws Exception {
+    @SuppressWarnings("ConstantConditions")
+    File bpmnModelFile = new File(this.getClass().getResource(BPMN_FILE_DEAD).getFile());
+
+    String response =
+        makeMultipartRequest(
+            bpmnModelFile,
+            Lists.newArrayList(
+                BPMNSpecificProperty.SAFENESS, BPMNSpecificProperty.OPTION_TO_COMPLETE));
+    assertThat(
+        response,
+        is(
+            "{\"propertyCheckingResults\":[{\"name\":\"Safeness\",\"holds\":false,\"additionalInfo\":\"Checking BPMN-specific properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/\"},"
+                + "{\"name\":\"Option to complete\",\"holds\":false,\"additionalInfo\":\"Checking BPMN-specific properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/\"}]}"));
+  }
+
+  @Test
   void testCheckBPMNSpecificPropertiesError() throws Exception {
     @SuppressWarnings("ConstantConditions")
     File bpmnModelFile = new File(this.getClass().getResource(BPMN_FILE_ERROR).getFile());
 
-    String response = makeMultipartRequest(bpmnModelFile);
+    String response = makeMultipartRequest(bpmnModelFile, Collections.emptyList());
     assertThat(
         response,
         is(
@@ -138,14 +164,17 @@ class RuleGeneratorControllerTests {
                 + "flow!\"}"));
   }
 
-  private String makeMultipartRequest(File bpmnModelFile) throws IOException {
+  private String makeMultipartRequest(File bpmnModelFile, List<BPMNSpecificProperty> properties)
+      throws IOException {
     String responseString;
     try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
       CloseableHttpResponse response;
       // Build request
       HttpPost uploadFile = new HttpPost(getUrl("checkBPMNSpecificProperties"));
       MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-      builder.addTextBody("propertiesToBeChecked[]", "NO_DEAD_ACTIVITIES");
+      builder.addTextBody(
+          "propertiesToBeChecked[]",
+          properties.stream().map(BPMNSpecificProperty::toString).collect(Collectors.joining(",")));
       builder.addBinaryBody(
           "file",
           new FileInputStream(bpmnModelFile),
