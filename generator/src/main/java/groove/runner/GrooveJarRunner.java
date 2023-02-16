@@ -1,7 +1,11 @@
 package groove.runner;
 
 import com.google.common.collect.Lists;
+import com.google.common.io.CharStreams;
+import groove.runner.checking.ModelCheckingResult;
+import groove.runner.checking.TemporalLogic;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -42,15 +46,21 @@ public class GrooveJarRunner {
     return new File(resultFilePath);
   }
 
-  public File checkCTL(String graphGrammar, String ctlProperty, boolean printOutput)
+  public ModelCheckingResult checkCTL(String graphGrammar, String ctlProperty)
       throws IOException, InterruptedException {
     // java -jar ModelChecker.jar graphGrammar -ctl ctlProperty
     ProcessBuilder builder =
         new ProcessBuilder(
             "java", "-jar", grooveBinDir + "/ModelChecker.jar", graphGrammar, "-ctl", ctlProperty);
 
-    runProcess(printOutput, builder); // Need to grab the info from the output here somehow.
-    return null;
+    String grooveOutput = runProcessAndReturnOutput(builder);
+    return readModelCheckingResultFromGrooveOutput(grooveOutput, ctlProperty);
+  }
+
+  private ModelCheckingResult readModelCheckingResultFromGrooveOutput(
+      String output, String ctlProperty) {
+    boolean valid = output.contains(": satisfied");
+    return new ModelCheckingResult(TemporalLogic.CTL, ctlProperty, valid);
   }
 
   private void runProcess(boolean printOutput, ProcessBuilder builder)
@@ -63,6 +73,18 @@ public class GrooveJarRunner {
     process.waitFor(60, TimeUnit.SECONDS);
     process.destroy(); // no op if already stopped.
     process.waitFor();
+  }
+
+  private String runProcessAndReturnOutput(ProcessBuilder builder)
+      throws IOException, InterruptedException {
+    builder.redirectErrorStream(true);
+    Process process = builder.start();
+    process.waitFor(60, TimeUnit.SECONDS);
+    process.destroy(); // no op if already stopped.
+    process.waitFor();
+
+    return CharStreams.toString(
+        new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
   }
 
   private void printOutput(Process p) {
