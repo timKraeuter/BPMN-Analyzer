@@ -40,8 +40,9 @@ public class BPMNPropertyCheckingResult implements Comparable<BPMNPropertyChecki
       return false;
     }
     BPMNPropertyCheckingResult that = (BPMNPropertyCheckingResult) o;
-    return holds == that.holds && name == that.name && Objects.equals(additionalInfo,
-        that.additionalInfo);
+    return holds == that.holds
+        && name == that.name
+        && Objects.equals(additionalInfo, that.additionalInfo);
   }
 
   @Override
