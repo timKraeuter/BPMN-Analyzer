@@ -42,7 +42,7 @@ class GrooveJarRunnerTest {
    * match the Java JDK.
    */
   @Test
-  void testModelChecking() throws IOException, InterruptedException {
+  void testCTLModelChecking() throws IOException, InterruptedException {
     GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
     String trueCTLProperty = "AG(!false)";
     String wrongCTLProperty = "AG(!true)";
