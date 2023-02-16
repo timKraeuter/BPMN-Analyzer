@@ -4,7 +4,7 @@ import {saveAs} from 'file-saver-es';
 import {BPMNModelerService} from '../services/bpmnmodeler.service';
 import {HttpClient} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {LTlSyntaxComponent} from '../ltl-syntax/ltl-syntax.component';
+import {TemporalLogicSyntaxComponent} from '../temporal-logic-syntax/temporal-logic-syntax.component';
 import {environment} from '../../environments/environment';
 import {
   BPMNProperty
@@ -167,8 +167,7 @@ export class GenerationComponent {
   }
 
   temporalLogicInfoClicked() {
-    // TODO: Make general also fitting CTL.
-    this.snackBar.openFromComponent(LTlSyntaxComponent, {
+    this.snackBar.openFromComponent(TemporalLogicSyntaxComponent, {
       duration: 10000,
     });
   }

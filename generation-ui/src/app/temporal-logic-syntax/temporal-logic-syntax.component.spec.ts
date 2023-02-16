@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LTlSyntaxComponent } from './ltl-syntax.component';
+import { TemporalLogicSyntaxComponent } from './temporal-logic-syntax.component';
 
 describe('LTlSyntaxComponent', () => {
-    let component: LTlSyntaxComponent;
-    let fixture: ComponentFixture<LTlSyntaxComponent>;
+    let component: TemporalLogicSyntaxComponent;
+    let fixture: ComponentFixture<TemporalLogicSyntaxComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [LTlSyntaxComponent],
+            declarations: [TemporalLogicSyntaxComponent],
         }).compileComponents();
     });
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(LTlSyntaxComponent);
+        fixture = TestBed.createComponent(TemporalLogicSyntaxComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
