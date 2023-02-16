@@ -1,7 +1,6 @@
 package groove.runner;
 
 import com.google.common.collect.Lists;
-import com.google.common.io.CharStreams;
 import groove.runner.checking.ModelCheckingResult;
 import groove.runner.checking.TemporalLogic;
 import java.io.*;
@@ -59,7 +58,6 @@ public class GrooveJarRunner {
 
   private ModelCheckingResult readModelCheckingResultFromGrooveOutput(
       String output, String ctlProperty) {
-    System.out.println(output);
     boolean valid = output.contains(": satisfied");
     return new ModelCheckingResult(TemporalLogic.CTL, ctlProperty, valid);
   }
@@ -79,20 +77,31 @@ public class GrooveJarRunner {
   private String runProcessAndReturnOutput(ProcessBuilder builder)
       throws IOException, InterruptedException {
     builder.redirectErrorStream(true);
+
     Process process = builder.start();
+    ByteArrayOutputStream output = new ByteArrayOutputStream();
+    new Thread(() -> printOutput(process, output)).start();
+
     process.waitFor(60, TimeUnit.SECONDS);
     process.destroy(); // no op if already stopped.
     process.waitFor();
 
-    return CharStreams.toString(
-        new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
+    return output.toString(StandardCharsets.UTF_8);
   }
 
   private void printOutput(Process p) {
+    printOutput(p, null);
+  }
+
+  private void printOutput(Process p, ByteArrayOutputStream output) {
+    boolean saveOutput = output != null;
     try {
       byte[] buffer = new byte[1024];
       for (int length; (length = p.getInputStream().read(buffer)) != -1; ) {
         System.out.write(buffer, 0, length);
+        if (saveOutput) {
+          output.write(buffer, 0, length);
+        }
       }
     } catch (IOException e) {
       System.out.println("Process output could not be read! " + e.getMessage());
