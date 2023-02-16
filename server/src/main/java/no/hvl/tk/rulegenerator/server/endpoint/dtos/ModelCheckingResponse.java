@@ -17,4 +17,8 @@ public class ModelCheckingResponse {
   public List<BPMNPropertyCheckingResult> getPropertyCheckingResults() {
     return propertyCheckingResults;
   }
+
+  public void sortResults() {
+    this.propertyCheckingResults.sort(BPMNPropertyCheckingResult::compareTo);
+  }
 }

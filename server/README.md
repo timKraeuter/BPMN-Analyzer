@@ -19,6 +19,7 @@ This will start the application with the specified port.
 ## Docker
 Build the application image:
 ```bash
+cd ..
 docker build -t bpmnanalyzer .
 ```
 

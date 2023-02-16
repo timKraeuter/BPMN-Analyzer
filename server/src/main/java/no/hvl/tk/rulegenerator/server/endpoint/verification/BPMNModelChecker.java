@@ -36,6 +36,7 @@ public class BPMNModelChecker {
     for (BPMNSpecificProperty property : modelCheckingRequest.getPropertiesToBeChecked()) {
       this.checkPropertyAndRecordResult(property, response);
     }
+    response.sortResults();
     return response;
   }
 
