@@ -4,13 +4,13 @@ import java.util.Objects;
 
 public class BPMNPropertyCheckingResult implements Comparable<BPMNPropertyCheckingResult> {
   private final BPMNSpecificProperty name;
-  private final boolean holds;
+  private final boolean valid;
   private final String additionalInfo;
 
   public BPMNPropertyCheckingResult(
-      BPMNSpecificProperty name, boolean holds, String additionalInfo) {
+      BPMNSpecificProperty name, boolean valid, String additionalInfo) {
     this.name = name;
-    this.holds = holds;
+    this.valid = valid;
     this.additionalInfo = additionalInfo;
   }
 
@@ -18,8 +18,8 @@ public class BPMNPropertyCheckingResult implements Comparable<BPMNPropertyChecki
     return name;
   }
 
-  public boolean isHolds() {
-    return holds;
+  public boolean isValid() {
+    return valid;
   }
 
   public String getAdditionalInfo() {
@@ -40,13 +40,13 @@ public class BPMNPropertyCheckingResult implements Comparable<BPMNPropertyChecki
       return false;
     }
     BPMNPropertyCheckingResult that = (BPMNPropertyCheckingResult) o;
-    return holds == that.holds
+    return valid == that.valid
         && name == that.name
         && Objects.equals(additionalInfo, that.additionalInfo);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, holds, additionalInfo);
+    return Objects.hash(name, valid, additionalInfo);
   }
 }

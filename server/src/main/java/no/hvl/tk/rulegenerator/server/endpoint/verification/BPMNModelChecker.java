@@ -2,6 +2,7 @@ package no.hvl.tk.rulegenerator.server.endpoint.verification;
 
 import behavior.bpmn.*;
 import groove.runner.GrooveJarRunner;
+import groove.runner.checking.ModelCheckingResult;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -68,14 +69,18 @@ public class BPMNModelChecker {
                 + "due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/"));
   }
 
-  private void checkSafeness(ModelCheckingResponse response) {
+  private void checkSafeness(ModelCheckingResponse response)
+      throws IOException, InterruptedException {
+    final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
+    ModelCheckingResult safenessResult =
+        grooveJarRunner.checkCTL(graphGrammarDir.getPath(), "AG(!Unsafe)");
+
     // Not supported atm. We would run an LTL query but there is a bug in Groove.
     response.addPropertyCheckingResult(
         new BPMNPropertyCheckingResult(
             BPMNSpecificProperty.SAFENESS,
-            false,
-            "Checking BPMN-specific properties is not implemented in the web interface yet "
-                + "due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/"));
+            safenessResult.isValid(),
+            ""));
   }
 
   private void checkNoDeadActivities(ModelCheckingResponse response)

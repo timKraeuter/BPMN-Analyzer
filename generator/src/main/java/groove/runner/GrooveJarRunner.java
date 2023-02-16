@@ -59,6 +59,7 @@ public class GrooveJarRunner {
 
   private ModelCheckingResult readModelCheckingResultFromGrooveOutput(
       String output, String ctlProperty) {
+    System.out.println(output);
     boolean valid = output.contains(": satisfied");
     return new ModelCheckingResult(TemporalLogic.CTL, ctlProperty, valid);
   }
