@@ -14,12 +14,17 @@ class GrooveJarRunnerTest {
   @Test
   void testGenerateStateSpace() throws IOException, InterruptedException {
     GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
+    String tempOutputFile = System.getProperty("java.io.tmpdir") + "/grooveJarRunner/statespace.txt";
+    String graphGrammar = new File(
+        this.getClass().getResource("/grooveJarRunner/circular.gps").getFile()).getAbsolutePath();
     File stateSpace =
         grooveJarRunner.generateStateSpace(
-            "../groove/bin/circular.gps", "../groove/bin/statespaces/statespace.txt", true);
+            graphGrammar,
+            tempOutputFile,
+            true);
 
     // Check state space files
-    File expected = new File(this.getClass().getResource("/statespace.txt").getFile());
+    File expected = new File(this.getClass().getResource("/grooveJarRunner/statespace.txt").getFile());
     FileTestHelper.testFileEquals(expected, stateSpace);
   }
 
@@ -30,6 +35,6 @@ class GrooveJarRunnerTest {
   @Test
   void testModelChecking() throws IOException, InterruptedException {
     GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
-    grooveJarRunner.checkCTL("../groove/bin/circular.gps", "AG(!false)", true);
+    grooveJarRunner.checkCTL("../server/groove/bin/circular.gps", "AG(!false)", true);
   }
 }

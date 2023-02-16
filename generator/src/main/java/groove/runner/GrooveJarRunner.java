@@ -10,7 +10,7 @@ public class GrooveJarRunner {
   private static final String GROOVE_BIN_DIR = findGrooveBinDir();
 
   private static String findGrooveBinDir() {
-    List<String> possibleLocations = Lists.newArrayList("groove/bin", "../groove/bin");
+    List<String> possibleLocations = Lists.newArrayList("groove/bin", "../server/groove/bin");
     for (String possibleLocation : possibleLocations) {
       if (new File(possibleLocation).exists()) {
         return possibleLocation;
