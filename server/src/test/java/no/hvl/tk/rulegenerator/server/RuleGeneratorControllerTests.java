@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +20,7 @@ import java.util.zip.ZipInputStream;
 import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorController;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -38,6 +39,9 @@ class RuleGeneratorControllerTests {
   public static final String BPMN_FILE_ERROR = "/ruleGeneratorController/errorModel.bpmn";
   public static final String BPMN_FILE_DEAD = "/ruleGeneratorController/dead.bpmn";
   public static final String LOCALHOST = "http://localhost:%s/%s";
+  public static final String PROPERTIES_TO_BE_CHECKED = "propertiesToBeChecked[]";
+  public static final String CHECK_BPMN_SPECIFIC_PROPERTIES = "checkBPMNSpecificProperties";
+  public static final String CHECK_TEMPORAL_LOGIC = "checkTemporalLogic";
   @LocalServerPort private int port;
 
   @Autowired private RuleGeneratorController restController;
@@ -49,14 +53,13 @@ class RuleGeneratorControllerTests {
 
   @Test
   void testGenerateGGAndZip() throws Exception {
-    @SuppressWarnings("ConstantConditions")
-    File bpmnModelFile = new File(this.getClass().getResource(BPMN_FILE).getFile());
+    File bpmnModelFile = getBpmnModelFile(BPMN_FILE);
     assertNotNull(bpmnModelFile);
 
     CloseableHttpResponse response;
     try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
       // Build request
-      HttpPost uploadFile = new HttpPost(getUrl("generateGGAndZip"));
+      HttpPost uploadFile = new HttpPost(getFullUrl("generateGGAndZip"));
       MultipartEntityBuilder builder = MultipartEntityBuilder.create();
       builder.addBinaryBody(
           "file",
@@ -90,7 +93,7 @@ class RuleGeneratorControllerTests {
     }
   }
 
-  private String getUrl(String generateGGAndZip) {
+  private String getFullUrl(String generateGGAndZip) {
     return String.format(LOCALHOST, port, generateGGAndZip);
   }
 
@@ -105,58 +108,71 @@ class RuleGeneratorControllerTests {
 
   @Test
   void testCheckBPMNSpecificPropertiesNoDeadActivities() throws Exception {
-    @SuppressWarnings("ConstantConditions")
-    File bpmnModelFile = new File(this.getClass().getResource(BPMN_FILE).getFile());
+    File bpmnModelFile = getBpmnModelFile(BPMN_FILE);
+    String properties = convertProps(Lists.newArrayList(BPMNSpecificProperty.NO_DEAD_ACTIVITIES));
 
     String response =
         makeMultipartRequest(
-            bpmnModelFile, Lists.newArrayList(BPMNSpecificProperty.NO_DEAD_ACTIVITIES));
+            CHECK_BPMN_SPECIFIC_PROPERTIES,
+            bpmnModelFile,
+            Pair.of(PROPERTIES_TO_BE_CHECKED, properties));
     assertThat(
         response,
         is(
             "{\"propertyCheckingResults\":[{\"name\":\"No dead activities\","
-                + "\"holds\":true,\"additionalInfo\":\"\"}]}"));
+                + "\"valid\":true,\"additionalInfo\":\"\"}]}"));
   }
 
   @Test
   void testCheckBPMNSpecificPropertiesDeadActivities() throws Exception {
-    @SuppressWarnings("ConstantConditions")
-    File bpmnModelFile = new File(this.getClass().getResource(BPMN_FILE_DEAD).getFile());
+    File bpmnModelFile = getBpmnModelFile(BPMN_FILE_DEAD);
+    String properties = convertProps(Lists.newArrayList(BPMNSpecificProperty.NO_DEAD_ACTIVITIES));
 
     String response =
         makeMultipartRequest(
-            bpmnModelFile, Lists.newArrayList(BPMNSpecificProperty.NO_DEAD_ACTIVITIES));
+            CHECK_BPMN_SPECIFIC_PROPERTIES,
+            bpmnModelFile,
+            Pair.of(PROPERTIES_TO_BE_CHECKED, properties));
+
     assertThat(
         response,
         is(
             "{\"propertyCheckingResults\":[{\"name\":\"No dead activities\","
-                + "\"holds\":false,\"additionalInfo\":\"Dead activities: DEAD_1,"
+                + "\"valid\":false,\"additionalInfo\":\"Dead activities: DEAD_1,"
                 + "DEAD_2\"}]}"));
   }
 
   @Test
   void testCheckBPMNSpecificPropertiesSafenessAndOptionToComplete() throws Exception {
-    @SuppressWarnings("ConstantConditions")
-    File bpmnModelFile = new File(this.getClass().getResource(BPMN_FILE_DEAD).getFile());
+    File bpmnModelFile = getBpmnModelFile(BPMN_FILE);
+    String properties =
+        convertProps(
+            Lists.newArrayList(
+                BPMNSpecificProperty.SAFENESS, BPMNSpecificProperty.OPTION_TO_COMPLETE));
 
     String response =
         makeMultipartRequest(
+            CHECK_BPMN_SPECIFIC_PROPERTIES,
             bpmnModelFile,
-            Lists.newArrayList(
-                BPMNSpecificProperty.SAFENESS, BPMNSpecificProperty.OPTION_TO_COMPLETE));
+            Pair.of(PROPERTIES_TO_BE_CHECKED, properties));
     assertThat(
         response,
         is(
-            "{\"propertyCheckingResults\":[{\"name\":\"Safeness\",\"holds\":false,\"additionalInfo\":\"Checking BPMN-specific properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/\"},"
-                + "{\"name\":\"Option to complete\",\"holds\":false,\"additionalInfo\":\"Checking BPMN-specific properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/\"}]}"));
+            "{\"propertyCheckingResults\":[{\"name\":\"Safeness\",\"valid\":true,\"additionalInfo\":\"\"},"
+                + "{\"name\":\"Option to complete\",\"valid\":false,\"additionalInfo\":\"Checking BPMN-specific properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/\"}]}"));
+  }
+
+  private String convertProps(Collection<BPMNSpecificProperty> properties) {
+    return properties.stream().map(BPMNSpecificProperty::toString).collect(Collectors.joining(","));
   }
 
   @Test
   void testCheckBPMNSpecificPropertiesError() throws Exception {
-    @SuppressWarnings("ConstantConditions")
-    File bpmnModelFile = new File(this.getClass().getResource(BPMN_FILE_ERROR).getFile());
+    File bpmnModelFile = getBpmnModelFile(BPMN_FILE_ERROR);
 
-    String response = makeMultipartRequest(bpmnModelFile, Collections.emptyList());
+    String response =
+        makeMultipartRequest(
+            CHECK_BPMN_SPECIFIC_PROPERTIES, bpmnModelFile, Pair.of(PROPERTIES_TO_BE_CHECKED, ""));
     assertThat(
         response,
         is(
@@ -164,17 +180,33 @@ class RuleGeneratorControllerTests {
                 + "flow!\"}"));
   }
 
-  private String makeMultipartRequest(File bpmnModelFile, List<BPMNSpecificProperty> properties)
-      throws IOException {
+  @Test
+  void testCheckCTL() throws Exception {
+    File bpmnModelFile = getBpmnModelFile(BPMN_FILE);
+
+    String response =
+        makeMultipartRequest(
+            CHECK_TEMPORAL_LOGIC,
+            bpmnModelFile,
+            Lists.newArrayList(Pair.of("logic", "CTL"), Pair.of("property", "AG(!Unsafe)")));
+    assertThat(response, is("{\"valid\":true}"));
+  }
+
+  private File getBpmnModelFile(String bpmnFile) {
+    @SuppressWarnings("ConstantConditions")
+    File bpmnModelFile = new File(this.getClass().getResource(bpmnFile).getFile());
+    return bpmnModelFile;
+  }
+
+  private String makeMultipartRequest(
+      String url, File bpmnModelFile, List<Pair<String, String>> body) throws IOException {
     String responseString;
     try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
       CloseableHttpResponse response;
       // Build request
-      HttpPost uploadFile = new HttpPost(getUrl("checkBPMNSpecificProperties"));
+      HttpPost uploadFile = new HttpPost(getFullUrl(url));
       MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-      builder.addTextBody(
-          "propertiesToBeChecked[]",
-          properties.stream().map(BPMNSpecificProperty::toString).collect(Collectors.joining(",")));
+      body.forEach(bodyPart -> builder.addTextBody(bodyPart.getLeft(), bodyPart.getRight()));
       builder.addBinaryBody(
           "file",
           new FileInputStream(bpmnModelFile),
@@ -190,5 +222,10 @@ class RuleGeneratorControllerTests {
           IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset());
     }
     return responseString;
+  }
+
+  private String makeMultipartRequest(String url, File bpmnModelFile, Pair<String, String> body)
+      throws IOException {
+    return makeMultipartRequest(url, bpmnModelFile, Lists.newArrayList(body));
   }
 }
