@@ -169,7 +169,7 @@ export class GenerationComponent {
         this.snackBar.open(error.error.message, 'close');
       },
       next: (response: ModelCheckingResponse) => {
-        console.log(response);
+        console.log(response); // TODO: Show somewhere in the UI.
       },
     });
   }
