@@ -189,7 +189,19 @@ class RuleGeneratorControllerTests {
             CHECK_TEMPORAL_LOGIC,
             bpmnModelFile,
             Lists.newArrayList(Pair.of("logic", "CTL"), Pair.of("property", "AG(!Unsafe)")));
-    assertThat(response, is("{\"valid\":true}"));
+    assertThat(response, is("{\"valid\":true,\"error\":\"\"}"));
+  }
+
+  @Test
+  void testCheckCTLError() throws Exception {
+    File bpmnModelFile = getBpmnModelFile(BPMN_FILE);
+
+    String response =
+        makeMultipartRequest(
+            CHECK_TEMPORAL_LOGIC,
+            bpmnModelFile,
+            Lists.newArrayList(Pair.of("logic", "CTL"), Pair.of("property", "G(!Unsafe)")));
+    assertThat(response, is("{\"valid\":false,\"error\":\"Error: groove.util.parse.FormatException: Temporal operator 'G' should be nested inside path quantifier in CTL formula\"}"));
   }
 
   private File getBpmnModelFile(String bpmnFile) {
