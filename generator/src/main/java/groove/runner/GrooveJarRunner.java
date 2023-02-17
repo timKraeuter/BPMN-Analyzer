@@ -70,7 +70,7 @@ public class GrooveJarRunner {
     return output
         .substring(output.indexOf("Error: "), output.indexOf("Usage: "))
         .replace("\r\n", "")
-        .replace("\n","");
+        .replace("\n", "");
   }
 
   private static boolean containsError(String output) {
