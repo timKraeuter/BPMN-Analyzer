@@ -9,6 +9,7 @@ public class ModelCheckingRequest {
   private TemporalLogic logic;
 
   public ModelCheckingRequest() {
+    // DTO
   }
 
   public String getProperty() {
