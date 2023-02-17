@@ -1,7 +1,10 @@
 package no.hvl.tk.rulegenerator.server.endpoint.verification;
 
 import behavior.bpmn.*;
+import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import groove.runner.GrooveJarRunner;
+import groove.runner.checking.ModelCheckingResult;
+import groove.runner.checking.TemporalLogic;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,7 +18,8 @@ import java.util.stream.Collectors;
 import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNPropertyCheckingResult;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
-import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingRequest;
+import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingRequest;
+import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResponse;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import no.hvl.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
 
@@ -29,18 +33,32 @@ public class BPMNModelChecker {
     this.bpmnModel = bpmnModel;
   }
 
-  public ModelCheckingResponse runModelChecking(ModelCheckingRequest modelCheckingRequest)
-      throws InterruptedException, IOException {
-    ModelCheckingResponse response = new ModelCheckingResponse();
+  public ModelCheckingResponse checkTemporalLogicProperty(TemporalLogic logic, String property)
+      throws IOException, InterruptedException {
+    if (logic == TemporalLogic.CTL) {
+      final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
+      ModelCheckingResult propertyCheckingResult =
+          grooveJarRunner.checkCTL(graphGrammarDir.getPath(), property);
+      return new ModelCheckingResponse(
+          propertyCheckingResult.isValid(), propertyCheckingResult.getError());
+    }
+    throw new ShouldNotHappenRuntimeException("Only CTL model checking is currently supported!");
+  }
 
-    for (BPMNSpecificProperty property : modelCheckingRequest.getPropertiesToBeChecked()) {
+  public BPMNSpecificPropertyCheckingResponse checkBPMNProperties(
+      BPMNSpecificPropertyCheckingRequest propertyCheckingRequest)
+      throws InterruptedException, IOException {
+    BPMNSpecificPropertyCheckingResponse response = new BPMNSpecificPropertyCheckingResponse();
+
+    for (BPMNSpecificProperty property : propertyCheckingRequest.getPropertiesToBeChecked()) {
       this.checkPropertyAndRecordResult(property, response);
     }
+    response.sortResults();
     return response;
   }
 
   private void checkPropertyAndRecordResult(
-      BPMNSpecificProperty property, ModelCheckingResponse response)
+      BPMNSpecificProperty property, BPMNSpecificPropertyCheckingResponse response)
       throws InterruptedException, IOException {
     switch (property) {
       case NO_DEAD_ACTIVITIES:
@@ -57,7 +75,7 @@ public class BPMNModelChecker {
     }
   }
 
-  private void checkOptionToComplete(ModelCheckingResponse response) {
+  private void checkOptionToComplete(BPMNSpecificPropertyCheckingResponse response) {
     // Not supported atm. We would run an LTL query but there is a bug in Groove.
     response.addPropertyCheckingResult(
         new BPMNPropertyCheckingResult(
@@ -67,17 +85,19 @@ public class BPMNModelChecker {
                 + "due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/"));
   }
 
-  private void checkSafeness(ModelCheckingResponse response) {
+  private void checkSafeness(BPMNSpecificPropertyCheckingResponse response)
+      throws IOException, InterruptedException {
+    final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
+    ModelCheckingResult safenessResult =
+        grooveJarRunner.checkCTL(graphGrammarDir.getPath(), "AG(!Unsafe)");
+
     // Not supported atm. We would run an LTL query but there is a bug in Groove.
     response.addPropertyCheckingResult(
         new BPMNPropertyCheckingResult(
-            BPMNSpecificProperty.SAFENESS,
-            false,
-            "Checking BPMN-specific properties is not implemented in the web interface yet "
-                + "due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/"));
+            BPMNSpecificProperty.SAFENESS, safenessResult.isValid(), ""));
   }
 
-  private void checkNoDeadActivities(ModelCheckingResponse response)
+  private void checkNoDeadActivities(BPMNSpecificPropertyCheckingResponse response)
       throws InterruptedException, IOException {
     // Generate state space for graph grammar.
     final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
@@ -90,7 +110,7 @@ public class BPMNModelChecker {
   }
 
   private void readStateSpaceAndCheckActivities(
-      ModelCheckingResponse response, String stateSpaceTempFile) throws IOException {
+      BPMNSpecificPropertyCheckingResponse response, String stateSpaceTempFile) throws IOException {
     try {
       // Read the state space file and find the executed activities
       final Set<String> executedActivities = findExecutedActivitiesInStateSpace(stateSpaceTempFile);
@@ -107,7 +127,7 @@ public class BPMNModelChecker {
   }
 
   private void recordNoDeadActivitiesResult(
-      ModelCheckingResponse response, Set<String> deadActivities) {
+      BPMNSpecificPropertyCheckingResponse response, Set<String> deadActivities) {
     if (deadActivities.isEmpty()) {
       response.addPropertyCheckingResult(
           new BPMNPropertyCheckingResult(BPMNSpecificProperty.NO_DEAD_ACTIVITIES, true, ""));

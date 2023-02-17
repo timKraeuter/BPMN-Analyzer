@@ -18,18 +18,20 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { LTlSyntaxComponent } from './ltl-syntax/ltl-syntax.component';
+import { TemporalLogicSyntaxComponent } from './temporal-logic-syntax/temporal-logic-syntax.component';
 import { VerificationResultComponentComponent } from './verification-result-component/verification-result-component.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatListModule } from '@angular/material/list';
+import { CTLResultSnackbarComponent } from './ctlresult-snackbar/ctlresult-snackbar.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         GenerationComponent,
         DiagramComponent,
-        LTlSyntaxComponent,
+        TemporalLogicSyntaxComponent,
         VerificationResultComponentComponent,
+        CTLResultSnackbarComponent,
     ],
     imports: [
         BrowserModule,

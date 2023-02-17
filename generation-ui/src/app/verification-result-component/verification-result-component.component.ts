@@ -15,12 +15,12 @@ export class VerificationResultComponentComponent {
 
 export class BPMNProperty {
     public name: string;
-    public holds: boolean;
+    public valid: boolean;
     public additionalInfo: string;
 
-    constructor(name: string, holds: boolean, additionalInfo: string = '') {
+    constructor(name: string, valid: boolean, additionalInfo: string = '') {
         this.name = name;
-        this.holds = holds;
+        this.valid = valid;
         this.additionalInfo = additionalInfo;
     }
 }

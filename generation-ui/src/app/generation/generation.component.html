@@ -140,8 +140,43 @@
                     mat-icon-button
                     aria-label="LTL syntax info button"
                     color="primary"
-                    (click)="ltlInfoClicked()"
+                    (click)="temporalLogicInfoClicked()"
                     matTooltip="Show LTL syntax."
+                >
+                    <mat-icon>info</mat-icon>
+                </button>
+            </mat-card-content>
+        </mat-tab>
+        <mat-tab label="CTL properties">
+            <mat-card-content class="top-margin">
+                Specify a CTL property to check for the BPMN model.
+                <br />
+                <form class="form top-margin">
+                    <mat-form-field class="full-width" appearance="fill">
+                        <mat-label>CTL Property</mat-label>
+                        <textarea
+                            matInput
+                            [(ngModel)]="ctlProperty"
+                            placeholder="AG(!Unsafe)"
+                            name="ctlProperty"
+                        ></textarea>
+                    </mat-form-field>
+                </form>
+                <button
+                    mat-raised-button
+                    color="primary"
+                    matTooltip="Checking custom CTL properties is not implemented in the web interface yet."
+                    (click)="checkCTLPropertyClicked()"
+                >
+                    <mat-icon>check</mat-icon>
+                    Check CTL property
+                </button>
+                <button
+                    mat-icon-button
+                    aria-label="CTL syntax info button"
+                    color="primary"
+                    (click)="temporalLogicInfoClicked()"
+                    matTooltip="Show CTL syntax."
                 >
                     <mat-icon>info</mat-icon>
                 </button>

@@ -14,10 +14,10 @@
                     <mat-icon
                         matListItemIcon
                         class="green-icon"
-                        *ngIf="property.holds; else doesNotHold"
+                        *ngIf="property.valid; else notValid"
                         >check</mat-icon
                     >
-                    <ng-template #doesNotHold>
+                    <ng-template #notValid>
                         <mat-icon matListItemIcon class="red-icon"
                             >close</mat-icon
                         >

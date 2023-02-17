@@ -4,15 +4,13 @@ import { saveAs } from 'file-saver-es';
 import { BPMNModelerService } from '../services/bpmnmodeler.service';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LTlSyntaxComponent } from '../ltl-syntax/ltl-syntax.component';
-import { environment } from '../../environments/environment';
+import { TemporalLogicSyntaxComponent } from '../temporal-logic-syntax/temporal-logic-syntax.component';
 import { BPMNProperty } from '../verification-result-component/verification-result-component.component';
-
-const baseURL = environment.production
-    ? window.location.href
-    : environment.apiURL;
-const generateGGAndZipURL = baseURL + 'generateGGAndZip';
-const checkBPMNSpecificPropsURL = baseURL + 'checkBPMNSpecificProperties';
+import {
+    GrooveService,
+    ModelCheckingResponse,
+} from '../services/groove.service';
+import { CTLResultSnackbarComponent } from '../ctlresult-snackbar/ctlresult-snackbar.component';
 
 @Component({
     selector: 'app-generation',
@@ -31,19 +29,21 @@ export class GenerationComponent {
     public bpmnSpecificVerificationRunning: boolean = false;
     public bpmnPropertyCheckingResults: BPMNProperty[] = [];
 
-    public ltlProperty: string = '';
+    public ltlProperty: string;
+    public ctlProperty: string;
 
     constructor(
         private bpmnModeler: BPMNModelerService,
         private httpClient: HttpClient,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private grooveService: GrooveService
     ) {
         this.bpmnSpecificPropertiesToBeChecked = [];
         this.ltlProperty = '';
+        this.ctlProperty = '';
     }
 
-    // @ts-ignore
-    handleImported(event) {
+    handleImported(event: any) {
         const { type, error, warnings } = event;
 
         if (type === 'success') {
@@ -81,20 +81,16 @@ export class GenerationComponent {
 
     async downloadGGClicked() {
         this.graphGrammarGenerationRunning = true;
+        const xmlModel = await this.getBPMNModelXML();
 
-        const options = {
-            responseType: 'arraybuffer',
-        } as any; // Expect a zip/file response type.
-        const formData = await this.createBPMNFileFormData();
-
-        this.httpClient
-            .post(generateGGAndZipURL, formData, options)
+        this.grooveService
+            .downloadGG(xmlModel)
             .subscribe({
                 error: (error) => {
                     console.log(error);
                     this.snackBar.open(error.error.message, 'close');
                 },
-                next: (data) => {
+                next: (data: ArrayBuffer) => {
                     // Receive and save as zip.
                     const blob = new Blob([data], {
                         type: 'application/zip',
@@ -105,15 +101,12 @@ export class GenerationComponent {
             .add(() => (this.graphGrammarGenerationRunning = false));
     }
 
-    private async createBPMNFileFormData() {
-        const formData = new FormData();
-
-        // Append bpmn file.
+    private async getBPMNModelXML(): Promise<Blob> {
         const xmlResult = await this.bpmnModeler
             .getBPMNJs()
             .saveXML({ format: true });
-        formData.append('file', new Blob([xmlResult.xml]));
-        return formData;
+
+        return new Blob([xmlResult.xml]);
     }
 
     async checkBPMNSpecificPropertiesClicked() {
@@ -127,13 +120,12 @@ export class GenerationComponent {
             );
         }
         this.bpmnSpecificVerificationRunning = true;
-        const formData = await this.createBPMNFileFormData();
-        this.bpmnSpecificPropertiesToBeChecked.forEach((property) =>
-            formData.append('propertiesToBeChecked[]', property)
-        );
-
-        this.httpClient
-            .post(checkBPMNSpecificPropsURL, formData)
+        const xmlModel = await this.getBPMNModelXML();
+        this.grooveService
+            .checkBPMNSpecificProperties(
+                this.bpmnSpecificPropertiesToBeChecked,
+                xmlModel
+            )
             .subscribe({
                 error: (error) => {
                     console.log(error);
@@ -155,7 +147,7 @@ export class GenerationComponent {
             'Check LTL property clicked with input: ' + this.ltlProperty
         );
         this.snackBar.open(
-            'Checking BPMN-specific properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/.',
+            'Checking LTL properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/.',
             'close',
             {
                 duration: 5000,
@@ -163,8 +155,8 @@ export class GenerationComponent {
         );
     }
 
-    ltlInfoClicked() {
-        this.snackBar.openFromComponent(LTlSyntaxComponent, {
+    temporalLogicInfoClicked() {
+        this.snackBar.openFromComponent(TemporalLogicSyntaxComponent, {
             duration: 10000,
         });
     }
@@ -174,5 +166,27 @@ export class GenerationComponent {
             'Graph transformation systems are generated for the graph transformation tool Groove. You can find Groove at https://groove.ewi.utwente.nl/.',
             'close'
         );
+    }
+
+    async checkCTLPropertyClicked() {
+        const xmlModel = await this.getBPMNModelXML();
+        this.grooveService
+            .checkTemporalLogic('CTL', this.ctlProperty, xmlModel)
+            .subscribe({
+                error: (error) => {
+                    console.log(error);
+                    this.snackBar.open(error.error.message, 'close');
+                },
+                next: (response: ModelCheckingResponse) => {
+                    console.log(response);
+                    this.snackBar.openFromComponent(
+                        CTLResultSnackbarComponent,
+                        {
+                            duration: 10000,
+                            data: { result: response },
+                        }
+                    );
+                },
+            });
     }
 }
