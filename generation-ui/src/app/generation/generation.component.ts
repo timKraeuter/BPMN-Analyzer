@@ -4,17 +4,13 @@ import {saveAs} from 'file-saver-es';
 import {BPMNModelerService} from '../services/bpmnmodeler.service';
 import {HttpClient} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {TemporalLogicSyntaxComponent} from '../temporal-logic-syntax/temporal-logic-syntax.component';
-import {environment} from '../../environments/environment';
+import {
+  TemporalLogicSyntaxComponent
+} from '../temporal-logic-syntax/temporal-logic-syntax.component';
 import {
   BPMNProperty
 } from '../verification-result-component/verification-result-component.component';
-
-const baseURL = environment.production
-  ? window.location.href
-  : environment.apiURL;
-const generateGGAndZipURL = baseURL + 'generateGGAndZip';
-const checkBPMNSpecificPropsURL = baseURL + 'checkBPMNSpecificProperties';
+import {GrooveService, ModelCheckingResponse} from "../services/groove.service";
 
 @Component({
   selector: 'app-generation',
@@ -39,7 +35,8 @@ export class GenerationComponent {
   constructor(
     private bpmnModeler: BPMNModelerService,
     private httpClient: HttpClient,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private grooveService: GrooveService
   ) {
     this.bpmnSpecificPropertiesToBeChecked = [];
     this.ltlProperty = '';
@@ -84,20 +81,14 @@ export class GenerationComponent {
 
   async downloadGGClicked() {
     this.graphGrammarGenerationRunning = true;
+    const xmlModel = await this.getBPMNModelXML()
 
-    const options = {
-      responseType: 'arraybuffer',
-    } as any; // Expect a zip/file response type.
-    const formData = await this.createBPMNFileFormData();
-
-    this.httpClient
-    .post(generateGGAndZipURL, formData, options)
-    .subscribe({
+    this.grooveService.downloadGG(xmlModel).subscribe({
       error: (error) => {
         console.log(error);
         this.snackBar.open(error.error.message, 'close');
       },
-      next: (data) => {
+      next: (data: ArrayBuffer) => {
         // Receive and save as zip.
         const blob = new Blob([data], {
           type: 'application/zip',
@@ -107,16 +98,12 @@ export class GenerationComponent {
     })
     .add(() => (this.graphGrammarGenerationRunning = false));
   }
-
-  private async createBPMNFileFormData() {
-    const formData = new FormData();
-
-    // Append bpmn file.
+  private async getBPMNModelXML(): Promise<Blob> {
     const xmlResult = await this.bpmnModeler
     .getBPMNJs()
     .saveXML({format: true});
-    formData.append('file', new Blob([xmlResult.xml]));
-    return formData;
+
+    return new Blob([xmlResult.xml]);
   }
 
   async checkBPMNSpecificPropertiesClicked() {
@@ -130,13 +117,8 @@ export class GenerationComponent {
       );
     }
     this.bpmnSpecificVerificationRunning = true;
-    const formData = await this.createBPMNFileFormData();
-    this.bpmnSpecificPropertiesToBeChecked.forEach((property) =>
-      formData.append('propertiesToBeChecked[]', property)
-    );
-
-    this.httpClient
-    .post(checkBPMNSpecificPropsURL, formData)
+    const xmlModel = await this.getBPMNModelXML()
+    this.grooveService.checkBPMNSpecificProperties(this.bpmnSpecificPropertiesToBeChecked, xmlModel)
     .subscribe({
       error: (error) => {
         console.log(error);
@@ -179,16 +161,16 @@ export class GenerationComponent {
     );
   }
 
-  checkCTLLPropertyClicked() {
-    console.log(
-      'Check CTL property clicked with input: ' + this.ctlProperty
-    );
-    this.snackBar.open(
-      'Checking CTL properties is not implemented in the web interface yet.',
-      'close',
-      {
-        duration: 5000,
-      }
-    );
+  async checkCTLPropertyClicked() {
+    const xmlModel = await this.getBPMNModelXML()
+    this.grooveService.checkTemporalLogic("CTL", this.ctlProperty, xmlModel).subscribe({
+      error: (error) => {
+        console.log(error);
+        this.snackBar.open(error.error.message, 'close');
+      },
+      next: (response: ModelCheckingResponse) => {
+        console.log(response);
+      },
+    });
   }
 }

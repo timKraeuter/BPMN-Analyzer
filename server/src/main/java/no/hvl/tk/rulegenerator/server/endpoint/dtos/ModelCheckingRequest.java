@@ -1,30 +1,37 @@
 package no.hvl.tk.rulegenerator.server.endpoint.dtos;
 
-import java.util.HashSet;
-import java.util.Set;
+import groove.runner.checking.TemporalLogic;
 import org.springframework.web.multipart.MultipartFile;
 
 public class ModelCheckingRequest {
   MultipartFile file;
-  Set<BPMNSpecificProperty> propertiesToBeChecked;
+  private String property;
+  private TemporalLogic logic;
 
   public ModelCheckingRequest() {
-    propertiesToBeChecked = new HashSet<>();
+  }
+
+  public String getProperty() {
+    return property;
+  }
+
+  public void setProperty(String property) {
+    this.property = property;
+  }
+
+  public TemporalLogic getLogic() {
+    return logic;
+  }
+
+  public void setLogic(TemporalLogic logic) {
+    this.logic = logic;
   }
 
   public MultipartFile getFile() {
     return file;
   }
 
-  public Set<BPMNSpecificProperty> getPropertiesToBeChecked() {
-    return propertiesToBeChecked;
-  }
-
   public void setFile(MultipartFile file) {
     this.file = file;
-  }
-
-  public void setPropertiesToBeChecked(Set<BPMNSpecificProperty> propertiesToBeChecked) {
-    this.propertiesToBeChecked = propertiesToBeChecked;
   }
 }

@@ -1,24 +1,17 @@
 package no.hvl.tk.rulegenerator.server.endpoint.dtos;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ModelCheckingResponse {
-  private final List<BPMNPropertyCheckingResult> propertyCheckingResults;
 
-  public ModelCheckingResponse() {
-    this.propertyCheckingResults = new ArrayList<>();
+  private boolean valid;
+  public ModelCheckingResponse(boolean valid) {
+    this.valid = valid;
   }
 
-  public void addPropertyCheckingResult(BPMNPropertyCheckingResult result) {
-    this.propertyCheckingResults.add(result);
+  public boolean isValid() {
+    return valid;
   }
 
-  public List<BPMNPropertyCheckingResult> getPropertyCheckingResults() {
-    return propertyCheckingResults;
-  }
-
-  public void sortResults() {
-    this.propertyCheckingResults.sort(BPMNPropertyCheckingResult::compareTo);
+  public void setValid(boolean valid) {
+    this.valid = valid;
   }
 }

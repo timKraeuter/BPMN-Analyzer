@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingRequest;
+import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResponse;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingRequest;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import no.hvl.tk.rulegenerator.server.endpoint.verification.BPMNModelChecker;
@@ -71,12 +73,30 @@ public class RuleGeneratorController {
    * @return model-checking results for the requested properties.
    */
   @PostMapping(value = "/checkBPMNSpecificProperties")
-  public ModelCheckingResponse checkBPMNSpecificProperties(
+  public BPMNSpecificPropertyCheckingResponse checkBPMNSpecificProperties(
+      @ModelAttribute BPMNSpecificPropertyCheckingRequest request)
+      throws IOException, InterruptedException {
+    deleteOldGGsAndCreateNewDir();
+
+    Pair<File, BPMNCollaboration> result = generateGGForBPMNFile(request.getFile());
+
+    return new BPMNModelChecker(result.getLeft(), result.getRight()).checkBPMNProperties(request);
+  }
+
+  /**
+   * Run model-checking of certain BPMN-specific properties for a BPMN collaboration.
+   *
+   * @param request contains the BPMN file and properties to be checked.
+   * @return model-checking results for the requested properties.
+   */
+  @PostMapping(value = "/checkTemporalLogic")
+  public ModelCheckingResponse checkTemporalLogicProperty(
       @ModelAttribute ModelCheckingRequest request) throws IOException, InterruptedException {
     deleteOldGGsAndCreateNewDir();
 
     Pair<File, BPMNCollaboration> result = generateGGForBPMNFile(request.getFile());
 
-    return new BPMNModelChecker(result.getLeft(), result.getRight()).runModelChecking(request);
+    return new BPMNModelChecker(result.getLeft(), result.getRight())
+        .checkTemporalLogicProperty(request.getLogic(), request.getProperty());
   }
 }
