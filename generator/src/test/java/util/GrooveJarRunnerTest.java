@@ -53,6 +53,7 @@ class GrooveJarRunnerTest {
     assertThat(result1.getUsedLogic(), is(TemporalLogic.CTL));
     assertThat(result1.getProperty(), is(trueCTLProperty));
     assertTrue(result1.isValid());
+    assertFalse(result1.hasError());
 
     ModelCheckingResult result2 =
         grooveJarRunner.checkCTL(getCircularGraphGrammar(), wrongCTLProperty);
@@ -60,5 +61,27 @@ class GrooveJarRunnerTest {
     assertThat(result2.getUsedLogic(), is(TemporalLogic.CTL));
     assertThat(result2.getProperty(), is(wrongCTLProperty));
     assertFalse(result2.isValid());
+    assertFalse(result2.hasError());
+  }
+
+  /**
+   * If this tests does not terminate, one possible reasons is that the gradle JVM/JDK does not
+   * match the Java JDK.
+   */
+  @Test
+  void testCTLModelCheckingError() throws IOException, InterruptedException {
+    GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
+    String property = "G(!false)";
+
+    ModelCheckingResult result = grooveJarRunner.checkCTL(getCircularGraphGrammar(), property);
+
+    assertThat(result.getUsedLogic(), is(TemporalLogic.CTL));
+    assertThat(result.getProperty(), is(property));
+    assertTrue(result.hasError());
+    assertFalse(result.isValid());
+    assertThat(
+        result.getError(),
+        is(
+            "Error: groove.util.parse.FormatException: Temporal operator 'G' should be nested inside path quantifier in CTL formula"));
   }
 }
