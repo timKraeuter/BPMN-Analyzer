@@ -6,9 +6,7 @@ public class ModelCheckingResult {
   private final String property;
   private final boolean valid;
 
-  /**
-   * Empty means no error. Non-empty means error with the given message.
-   */
+  /** Empty means no error. Non-empty means error with the given message. */
   private final String error;
 
   public ModelCheckingResult(

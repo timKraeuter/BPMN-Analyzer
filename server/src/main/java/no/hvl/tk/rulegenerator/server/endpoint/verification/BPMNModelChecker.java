@@ -39,7 +39,8 @@ public class BPMNModelChecker {
       final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
       ModelCheckingResult propertyCheckingResult =
           grooveJarRunner.checkCTL(graphGrammarDir.getPath(), property);
-      return new ModelCheckingResponse(propertyCheckingResult.isValid());
+      return new ModelCheckingResponse(
+          propertyCheckingResult.isValid(), propertyCheckingResult.getError());
     }
     throw new ShouldNotHappenRuntimeException("Only CTL model checking is currently supported!");
   }
