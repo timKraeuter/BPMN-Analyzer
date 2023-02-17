@@ -3,14 +3,14 @@
         Property checking {{ result.error }}
     </div>
     <ng-template #noError>
-    <div>Property is {{result.valid ? "valid" : "not valid"}}</div>
+        <div>Property is {{ result.valid ? 'valid' : 'not valid' }}</div>
     </ng-template>
 </span>
 <span matSnackBarActions>
     <button
-      mat-button
-      matSnackBarAction
-      (click)="snackBarRef.dismissWithAction()"
+        mat-button
+        matSnackBarAction
+        (click)="snackBarRef.dismissWithAction()"
     >
         close
     </button>
