@@ -56,7 +56,12 @@ export class GrooveService {
 }
 
 export class ModelCheckingResponse {
-    constructor(public valid: boolean, public error: string) {
+    constructor(
+        public property: string,
+        public valid: boolean,
+        public error: string
+    ) {
+        this.property = property;
         this.valid = valid;
         this.error = error;
     }

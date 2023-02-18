@@ -22,7 +22,6 @@ import { TemporalLogicSyntaxComponent } from './temporal-logic-syntax/temporal-l
 import { VerificationResultComponentComponent } from './verification-result-component/verification-result-component.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatListModule } from '@angular/material/list';
-import { CTLResultSnackbarComponent } from './ctlresult-snackbar/ctlresult-snackbar.component';
 
 @NgModule({
     declarations: [
@@ -31,7 +30,6 @@ import { CTLResultSnackbarComponent } from './ctlresult-snackbar/ctlresult-snack
         DiagramComponent,
         TemporalLogicSyntaxComponent,
         VerificationResultComponentComponent,
-        CTLResultSnackbarComponent,
     ],
     imports: [
         BrowserModule,

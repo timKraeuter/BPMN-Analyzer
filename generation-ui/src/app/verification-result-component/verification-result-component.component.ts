@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ModelCheckingResponse } from '../services/groove.service';
 
 @Component({
     selector: 'verification-result-component',
@@ -11,6 +12,9 @@ export class VerificationResultComponentComponent {
 
     @Input()
     public properties!: BPMNProperty[];
+
+    @Input()
+    public ctlPropertyResult: ModelCheckingResponse | undefined = undefined;
 }
 
 export class BPMNProperty {

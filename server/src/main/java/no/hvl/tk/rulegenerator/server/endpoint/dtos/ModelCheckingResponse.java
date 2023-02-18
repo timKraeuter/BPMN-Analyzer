@@ -2,12 +2,23 @@ package no.hvl.tk.rulegenerator.server.endpoint.dtos;
 
 public class ModelCheckingResponse {
 
+  private String property;
+
   private boolean valid;
   private String error;
 
-  public ModelCheckingResponse(boolean valid, String error) {
+  public ModelCheckingResponse(String property, boolean valid, String error) {
+    this.property = property;
     this.valid = valid;
     this.error = error;
+  }
+
+  public String getProperty() {
+    return property;
+  }
+
+  public void setProperty(String property) {
+    this.property = property;
   }
 
   public boolean isValid() {

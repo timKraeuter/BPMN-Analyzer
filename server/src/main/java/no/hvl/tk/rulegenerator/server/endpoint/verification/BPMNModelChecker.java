@@ -1,6 +1,10 @@
 package no.hvl.tk.rulegenerator.server.endpoint.verification;
 
-import behavior.bpmn.*;
+import behavior.bpmn.AbstractBPMNProcess;
+import behavior.bpmn.BPMNCollaboration;
+import behavior.bpmn.BPMNEventSubprocess;
+import behavior.bpmn.BPMNProcess;
+import behavior.bpmn.FlowNode;
 import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import groove.runner.GrooveJarRunner;
 import groove.runner.checking.ModelCheckingResult;
@@ -40,7 +44,7 @@ public class BPMNModelChecker {
       ModelCheckingResult propertyCheckingResult =
           grooveJarRunner.checkCTL(graphGrammarDir.getPath(), property);
       return new ModelCheckingResponse(
-          propertyCheckingResult.isValid(), propertyCheckingResult.getError());
+          property, propertyCheckingResult.isValid(), propertyCheckingResult.getError());
     }
     throw new ShouldNotHappenRuntimeException("Only CTL model checking is currently supported!");
   }

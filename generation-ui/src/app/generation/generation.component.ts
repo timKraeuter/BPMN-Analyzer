@@ -10,7 +10,6 @@ import {
     GrooveService,
     ModelCheckingResponse,
 } from '../services/groove.service';
-import { CTLResultSnackbarComponent } from '../ctlresult-snackbar/ctlresult-snackbar.component';
 
 @Component({
     selector: 'app-generation',
@@ -25,23 +24,21 @@ export class GenerationComponent {
     public graphGrammarGenerationRunning: boolean = false;
 
     // BPMN-specific property checking.
-    public bpmnSpecificPropertiesToBeChecked: string[];
+    public bpmnSpecificPropertiesToBeChecked: string[] = [];
     public bpmnSpecificVerificationRunning: boolean = false;
     public bpmnPropertyCheckingResults: BPMNProperty[] = [];
 
-    public ltlProperty: string;
-    public ctlProperty: string;
+    // CTL property checking
+    public ctlProperty: string = '';
+    public ctlPropertyResult: ModelCheckingResponse | undefined;
+    public ltlProperty: string = '';
 
     constructor(
         private bpmnModeler: BPMNModelerService,
         private httpClient: HttpClient,
         private snackBar: MatSnackBar,
         private grooveService: GrooveService
-    ) {
-        this.bpmnSpecificPropertiesToBeChecked = [];
-        this.ltlProperty = '';
-        this.ctlProperty = '';
-    }
+    ) {}
 
     handleImported(event: any) {
         const { type, error, warnings } = event;
@@ -128,7 +125,7 @@ export class GenerationComponent {
             )
             .subscribe({
                 error: (error) => {
-                    console.log(error);
+                    console.error(error);
                     this.snackBar.open(error.error.message, 'close');
                     this.bpmnPropertyCheckingResults = [];
                 },
@@ -170,23 +167,19 @@ export class GenerationComponent {
 
     async checkCTLPropertyClicked() {
         const xmlModel = await this.getBPMNModelXML();
+        this.bpmnSpecificVerificationRunning = true;
         this.grooveService
             .checkTemporalLogic('CTL', this.ctlProperty, xmlModel)
             .subscribe({
                 error: (error) => {
-                    console.log(error);
+                    console.error(error);
                     this.snackBar.open(error.error.message, 'close');
                 },
                 next: (response: ModelCheckingResponse) => {
                     console.log(response);
-                    this.snackBar.openFromComponent(
-                        CTLResultSnackbarComponent,
-                        {
-                            duration: 10000,
-                            data: { result: response },
-                        }
-                    );
+                    this.ctlPropertyResult = response;
                 },
-            });
+            })
+            .add(() => (this.bpmnSpecificVerificationRunning = false));
     }
 }

@@ -103,7 +103,7 @@
                 <button
                     mat-raised-button
                     color="primary"
-                    matTooltip="Check the selected BPMN-specific properties by running groove."
+                    matTooltip="Check the selected BPMN-specific properties using groove."
                     class="top-margin"
                     (click)="checkBPMNSpecificPropertiesClicked()"
                 >
@@ -165,7 +165,7 @@
                 <button
                     mat-raised-button
                     color="primary"
-                    matTooltip="Checking custom CTL properties is not implemented in the web interface yet."
+                    matTooltip="Check the given CTL property using groove."
                     (click)="checkCTLPropertyClicked()"
                 >
                     <mat-icon>check</mat-icon>
@@ -187,5 +187,6 @@
 <verification-result-component
     [running]="bpmnSpecificVerificationRunning"
     [properties]="bpmnPropertyCheckingResults"
+    [ctlPropertyResult]="ctlPropertyResult"
 ></verification-result-component>
 <input hidden type="file" #uploader (change)="uploadFile($event)" />
