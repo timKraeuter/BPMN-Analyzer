@@ -12,18 +12,23 @@ class BPMNSpecificPropertyTest {
 
   @Test
   void orderingTest() {
-    List<BPMNSpecificProperty> properties = Lists.newArrayList(
-        BPMNSpecificProperty.SAFENESS, BPMNSpecificProperty.NO_DEAD_ACTIVITIES,
-        BPMNSpecificProperty.OPTION_TO_COMPLETE);
+    List<BPMNSpecificProperty> properties =
+        Lists.newArrayList(
+            BPMNSpecificProperty.SAFENESS,
+            BPMNSpecificProperty.NO_DEAD_ACTIVITIES,
+            BPMNSpecificProperty.OPTION_TO_COMPLETE);
 
     // shuffle
     Collections.shuffle(properties);
 
     // sort
     properties.sort(Enum::compareTo);
-    assertThat(properties, is(Lists.newArrayList(
-        BPMNSpecificProperty.SAFENESS, BPMNSpecificProperty.OPTION_TO_COMPLETE,
-        BPMNSpecificProperty.NO_DEAD_ACTIVITIES)));
+    assertThat(
+        properties,
+        is(
+            Lists.newArrayList(
+                BPMNSpecificProperty.SAFENESS,
+                BPMNSpecificProperty.OPTION_TO_COMPLETE,
+                BPMNSpecificProperty.NO_DEAD_ACTIVITIES)));
   }
-
 }
