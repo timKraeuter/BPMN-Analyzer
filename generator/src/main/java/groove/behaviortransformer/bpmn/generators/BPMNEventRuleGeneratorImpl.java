@@ -1,11 +1,48 @@
 package groove.behaviortransformer.bpmn.generators;
 
-import static groove.behaviortransformer.GrooveTransformer.*;
+import static groove.behaviortransformer.GrooveTransformer.AT;
+import static groove.behaviortransformer.GrooveTransformer.EXISTS_OPTIONAL;
+import static groove.behaviortransformer.GrooveTransformer.FORALL;
+import static groove.behaviortransformer.GrooveTransformer.IN;
+import static groove.behaviortransformer.GrooveTransformer.UNEQUALS;
 import static groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
-import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
-import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.*;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.MESSAGES;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.POSITION;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.STATE;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.SUBPROCESS;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.THROW;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TOKENS;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_MESSAGE;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_RUNNING;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_TERMINATED;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_TOKEN;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.addOutgoingTokensForFlowNodeToProcessInstance;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.addProcessInstance;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.addProcessInstanceWithQuantifier;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.addSendMessageBehaviorForFlowNode;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.addTokensForOutgoingFlowsToRunningInstance;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.addTokensForOutgoingFlowsToRunningInstanceWithQuantifier;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.contextProcessInstance;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.contextProcessInstanceWithOnlyName;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.contextProcessInstanceWithQuantifier;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.contextTokenWithPosition;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteAllTokensForProcess;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteMessageToProcessInstanceWithPosition;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteTokenWithPosition;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.getSequenceFlowIdOrDescriptiveName;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.getStartEventTokenName;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.interruptSubprocess;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.isAfterInstantiateEventBasedGateway;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.matchesLinkThrowEvent;
 
-import behavior.bpmn.*;
+import behavior.bpmn.AbstractBPMNProcess;
+import behavior.bpmn.BPMNCollaboration;
+import behavior.bpmn.BPMNEventSubprocess;
+import behavior.bpmn.BPMNProcess;
+import behavior.bpmn.FlowElement;
+import behavior.bpmn.FlowNode;
+import behavior.bpmn.MessageFlow;
+import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.activities.Activity;
 import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.AbstractTask;
@@ -18,7 +55,15 @@ import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import behavior.bpmn.auxiliary.visitors.AbstractProcessVisitor;
 import behavior.bpmn.auxiliary.visitors.ActivityVisitor;
 import behavior.bpmn.auxiliary.visitors.EventVisitor;
-import behavior.bpmn.events.*;
+import behavior.bpmn.events.BoundaryEvent;
+import behavior.bpmn.events.BoundaryEventType;
+import behavior.bpmn.events.EndEvent;
+import behavior.bpmn.events.EndEventType;
+import behavior.bpmn.events.Event;
+import behavior.bpmn.events.IntermediateCatchEvent;
+import behavior.bpmn.events.IntermediateThrowEvent;
+import behavior.bpmn.events.StartEvent;
+import behavior.bpmn.events.StartEventType;
 import behavior.bpmn.events.definitions.EventDefinition;
 import groove.behaviortransformer.bpmn.BPMNRuleGenerator;
 import groove.graph.GrooveNode;
@@ -46,6 +91,11 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
   @Override
   public void createStartEventRulesForProcess(AbstractBPMNProcess process, StartEvent startEvent) {
+    if (startEvent.getOutgoingFlows().findAny().isEmpty()) {
+      throw new GrooveGenerationRuntimeException(
+          String.format(
+              "The start event %s has no outgoing sequence flows!", startEvent.getName()));
+    }
     process.accept(
         new AbstractProcessVisitor() {
           @Override
