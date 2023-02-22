@@ -27,6 +27,9 @@
                     </ng-template>
                     <div matListItemTitle>
                         {{ ctlPropertyResult.property }}
+                        <span *ngIf="ctlPropertyResult.error"
+                            >: {{ ctlPropertyResult.error }}</span
+                        >
                     </div>
                 </mat-list-item>
             </mat-list>
