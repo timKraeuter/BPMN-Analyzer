@@ -158,8 +158,8 @@ class RuleGeneratorControllerTests {
     assertThat(
         response,
         is(
-            "{\"propertyCheckingResults\":[{\"name\":\"Safeness\",\"valid\":true,\"additionalInfo\":\"\"},"
-                + "{\"name\":\"Option to complete\",\"valid\":false,\"additionalInfo\":\"Checking BPMN-specific properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/\"}]}"));
+            "{\"propertyCheckingResults\":[{\"name\":\"Safeness\",\"valid\":true,\"additionalInfo\":\"CTL: AG(!Unsafe)\"},"
+                + "{\"name\":\"Option to complete\",\"valid\":true,\"additionalInfo\":\"CTL: AF(AllTerminated)\"}]}"));
   }
 
   private String convertProps(Collection<BPMNSpecificProperty> properties) {
