@@ -84,8 +84,11 @@ export class GenerationComponent {
             .downloadGG(xmlModel)
             .subscribe({
                 error: (error) => {
-                    console.log(error);
-                    this.snackBar.open(error.error.message, 'close');
+                    const errorObject = JSON.parse(
+                        new TextDecoder().decode(error.error)
+                    );
+                    console.log(errorObject);
+                    this.snackBar.open(errorObject.message, 'close');
                 },
                 next: (data: ArrayBuffer) => {
                     // Receive and save as zip.

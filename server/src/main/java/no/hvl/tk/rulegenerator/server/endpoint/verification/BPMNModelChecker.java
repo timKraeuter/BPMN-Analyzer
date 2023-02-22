@@ -29,6 +29,8 @@ import no.hvl.tk.rulegenerator.server.endpoint.verification.exception.ModelCheck
 
 public class BPMNModelChecker {
 
+  public static final String OPTION_TO_COMPLETE_CTL = "AF(AllTerminated)";
+  public static final String UNSAFE_CTL = "AG(!Unsafe)";
   private final File graphGrammarDir;
   private final BPMNCollaboration bpmnModel;
 
@@ -79,26 +81,28 @@ public class BPMNModelChecker {
     }
   }
 
-  private void checkOptionToComplete(BPMNSpecificPropertyCheckingResponse response) {
-    // Not supported atm. We would run an LTL query but there is a bug in Groove.
+  private void checkOptionToComplete(BPMNSpecificPropertyCheckingResponse response)
+      throws IOException, InterruptedException {
+    final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
+    ModelCheckingResult safenessResult =
+        grooveJarRunner.checkCTL(graphGrammarDir.getPath(), OPTION_TO_COMPLETE_CTL);
+
     response.addPropertyCheckingResult(
         new BPMNPropertyCheckingResult(
             BPMNSpecificProperty.OPTION_TO_COMPLETE,
-            false,
-            "Checking BPMN-specific properties is not implemented in the web interface yet "
-                + "due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/"));
+            safenessResult.isValid(),
+            "CTL: " + OPTION_TO_COMPLETE_CTL));
   }
 
   private void checkSafeness(BPMNSpecificPropertyCheckingResponse response)
       throws IOException, InterruptedException {
     final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
     ModelCheckingResult safenessResult =
-        grooveJarRunner.checkCTL(graphGrammarDir.getPath(), "AG(!Unsafe)");
+        grooveJarRunner.checkCTL(graphGrammarDir.getPath(), UNSAFE_CTL);
 
-    // Not supported atm. We would run an LTL query but there is a bug in Groove.
     response.addPropertyCheckingResult(
         new BPMNPropertyCheckingResult(
-            BPMNSpecificProperty.SAFENESS, safenessResult.isValid(), ""));
+            BPMNSpecificProperty.SAFENESS, safenessResult.isValid(), "CTL: " + UNSAFE_CTL));
   }
 
   private void checkNoDeadActivities(BPMNSpecificPropertyCheckingResponse response)
