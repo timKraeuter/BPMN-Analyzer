@@ -4,6 +4,7 @@ import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import behavior.bpmn.reader.BPMNFileReader;
 import groove.behaviortransformer.BehaviorToGrooveTransformer;
+import groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -34,7 +35,7 @@ public class RuleGeneratorControllerHelper {
   public static Pair<File, BPMNCollaboration> generateGGForBPMNFile(MultipartFile file)
       throws IOException {
     BPMNFileReader bpmnFileReader =
-        new BPMNFileReader(RuleGeneratorControllerHelper::transformToQualifiedGrooveNameIfNeeded);
+        new BPMNFileReader(BPMNToGrooveTransformerHelper::transformToQualifiedGrooveNameIfNeeded);
     BPMNCollaboration bpmnCollaboration = bpmnFileReader.readModelFromStream(file.getInputStream());
 
     final File grooveGrammarFolder = generateGG(bpmnCollaboration);
@@ -57,18 +58,5 @@ public class RuleGeneratorControllerHelper {
               bpmnCollaboration, new File(GRAPH_GRAMMAR_TEMP_DIR), true);
     }
     return grooveGrammarFolder;
-  }
-
-  private static String transformToQualifiedGrooveNameIfNeeded(String name) {
-    String transformedName =
-        name.replaceAll("[\\\\/:*?\"<>|]", "") // Remove unallowed characters for windows filenames.
-            //
-            .replace("\u00a0", "_") // Replace non-breaking whitespaces with _
-            .replaceAll("\\s+", "_"); // Replace whitespaces with _
-    if (!transformedName.isEmpty() && Character.isDigit(transformedName.charAt(0))) {
-      // Prefix the name with a number to make it a qualified name in Groove.
-      return "_" + transformedName;
-    }
-    return transformedName;
   }
 }

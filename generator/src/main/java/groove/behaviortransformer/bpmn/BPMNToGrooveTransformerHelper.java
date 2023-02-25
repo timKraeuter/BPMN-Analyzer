@@ -1,10 +1,28 @@
 package groove.behaviortransformer.bpmn;
 
-import static groove.behaviortransformer.GrooveTransformer.*;
+import static groove.behaviortransformer.GrooveTransformer.AT;
+import static groove.behaviortransformer.GrooveTransformer.EXISTS;
+import static groove.behaviortransformer.GrooveTransformer.EXISTS_OPTIONAL;
+import static groove.behaviortransformer.GrooveTransformer.FORALL;
+import static groove.behaviortransformer.GrooveTransformer.IN;
 import static groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
-import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.MESSAGES;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.NAME;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.POSITION;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.STATE;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.SUBPROCESS;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TOKENS;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_MESSAGE;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_PROCESS_SNAPSHOT;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_RUNNING;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_TOKEN;
 
-import behavior.bpmn.*;
+import behavior.bpmn.AbstractBPMNProcess;
+import behavior.bpmn.BPMNCollaboration;
+import behavior.bpmn.BPMNProcess;
+import behavior.bpmn.FlowNode;
+import behavior.bpmn.MessageFlow;
+import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.activities.CallActivity;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
@@ -468,5 +486,18 @@ public class BPMNToGrooveTransformerHelper {
           }
         });
     return resultWrapper.getValueIfExists();
+  }
+
+  public static String transformToQualifiedGrooveNameIfNeeded(String name) {
+    String transformedName =
+        name.replaceAll("[\\\\/:*?\"<>|]", "") // Remove unallowed characters for windows filenames.
+            //
+            .replace("\u00a0", "_") // Replace non-breaking whitespaces with _
+            .replaceAll("\\s+", "_"); // Replace whitespaces with _
+    if (!transformedName.isEmpty() && Character.isDigit(transformedName.charAt(0))) {
+      // Prefix the name with a number to make it a qualified name in Groove.
+      return "_" + transformedName;
+    }
+    return transformedName;
   }
 }
