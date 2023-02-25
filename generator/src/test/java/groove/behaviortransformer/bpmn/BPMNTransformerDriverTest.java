@@ -16,6 +16,12 @@ class BPMNTransformerDriverTest extends BPMNToGrooveTestBase {
   }
 
   @Test
+  void noFileExistsTest() {
+    String[] args = {"notAFile", "./"};
+    assertThrows(GrooveGenerationRuntimeException.class, () -> BPMNTransformerDriver.main(args));
+  }
+
+  @Test
   void mainTest() {
     String bpmnFileName = "cyclic.bpmn";
     String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + bpmnFileName;
