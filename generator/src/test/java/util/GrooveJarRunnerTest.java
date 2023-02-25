@@ -44,8 +44,8 @@ class GrooveJarRunnerTest {
   @Test
   void testCTLModelChecking() throws IOException, InterruptedException {
     GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
-    String trueCTLProperty = "AG(!false)";
-    String wrongCTLProperty = "AG(!true)";
+    String trueCTLProperty = "AG(true)";
+    String wrongCTLProperty = "AG(false)";
 
     ModelCheckingResult result1 =
         grooveJarRunner.checkCTL(getCircularGraphGrammar(), trueCTLProperty);

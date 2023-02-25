@@ -12,8 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import util.FileTestHelper;
 
 public abstract class BehaviorToGrooveTransformerTestHelper {
-  private final String outputPath = "C:/Source/groove/bin";
-  //  private final String outputPath = FileUtils.getTempDirectoryPath();
+
+  //  private final String outputPath = "C:/Source/groove/bin";
+  private final String outputPath = FileUtils.getTempDirectoryPath();
 
   private Function<String, Boolean> fileNameFilter = x -> false;
 
@@ -56,6 +57,14 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
     transformer.generateGrooveGrammar(behavior, outputDir, useIDs);
 
     // assert
+    checkGenerationEqualToExpected(fileNameFilter, modelName, outputDir);
+
+    File propertiesFile = new File(outputDir + "/" + modelName + ".gps/system.properties");
+    this.checkPropertiesFile(propertiesFile);
+  }
+
+  protected void checkGenerationEqualToExpected(
+      Function<String, Boolean> fileNameFilter, String modelName, File outputDir) {
     File expectedDir =
         new File(
             this.getClass()
@@ -65,13 +74,8 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
     FileTestHelper.testDirEquals(
         expectedDir,
         new File(outputDir + "/" + modelName + ".gps"),
-        fileName ->
-            fileName.equals("system.properties")
-                || fileNameFilter.apply(fileName)); // Ignore the system.properties
-    // file because it contains a timestamp and a dir.
-
-    File propertiesFile = new File(outputDir + "/" + modelName + ".gps/system.properties");
-    this.checkPropertiesFile(propertiesFile);
+        // Ignore the system.propertie file because it contains a timestamp and a dir.
+        fileName -> fileName.equals("system.properties") || fileNameFilter.apply(fileName));
   }
 
   void checkPropertiesFile(File propertiesFile) throws IOException {
