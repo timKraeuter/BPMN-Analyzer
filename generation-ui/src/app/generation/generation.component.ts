@@ -224,8 +224,8 @@ export class GenerationComponent {
     private colorElementsInRed(elementsToColor: any[]) {
         const modeling = this.bpmnModeler.getBPMNJs().get('modeling');
         modeling.setColor(elementsToColor, {
-            stroke: '#000000',
-            fill: '#ff1a1a',
+            stroke: '#831311',
+            fill: '#ffcdd2',
         });
     }
 
