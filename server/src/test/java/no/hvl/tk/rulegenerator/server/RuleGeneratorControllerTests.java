@@ -138,8 +138,7 @@ class RuleGeneratorControllerTests {
         response,
         is(
             "{\"propertyCheckingResults\":[{\"name\":\"No dead activities\","
-                + "\"valid\":false,\"additionalInfo\":\"Dead activities: dead1_id,"
-                + "dead2_id\"}]}"));
+                + "\"valid\":false,\"additionalInfo\":\"dead1_id,dead2_id\"}]}"));
   }
 
   @Test
