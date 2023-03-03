@@ -22,12 +22,12 @@
     <sequenceFlow id="Flow_1a5719w" sourceRef="Gateway_03jdmk3" targetRef="Activity_1sj6mb9" />
     <sequenceFlow id="Flow_1p2wkp3" sourceRef="Activity_1p1s8qg" targetRef="Gateway_0banw3t" />
     <sequenceFlow id="Flow_1ysij23" sourceRef="Activity_1sj6mb9" targetRef="Gateway_0banw3t" />
-    <task id="Activity_1si6bga" name="DEAD 1">
+    <task id="dead1_id" name="DEAD 1">
       <incoming>Flow_1jupegm</incoming>
       <outgoing>Flow_1l3dqe2</outgoing>
     </task>
     <sequenceFlow id="Flow_1jupegm" sourceRef="Gateway_0banw3t" targetRef="Activity_1si6bga" />
-    <task id="Activity_0rkzdwg" name="DEAD 2">
+    <task id="dead2_id" name="DEAD 2">
       <incoming>Flow_1l3dqe2</incoming>
       <outgoing>Flow_04sy08h</outgoing>
     </task>

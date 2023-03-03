@@ -143,6 +143,7 @@ export class GenerationComponent {
                     this.bpmnPropertyCheckingResults = JSON.parse(
                         JSON.stringify(data['propertyCheckingResults'])
                     );
+                    this.colorDeadActivitiesAndSetNamesIfNeeded();
                 },
             })
             .add(() => (this.bpmnSpecificVerificationRunning = false));
@@ -190,5 +191,48 @@ export class GenerationComponent {
                 },
             })
             .add(() => (this.bpmnSpecificVerificationRunning = false));
+    }
+
+    private colorDeadActivitiesAndSetNamesIfNeeded(): void {
+        this.bpmnPropertyCheckingResults.forEach((value) => {
+            if (value.name === 'No dead activities' && value.additionalInfo) {
+                const deadActivities = this.getElementsForIDs(
+                    value.additionalInfo.split(',')
+                );
+                this.colorElementsInRed(deadActivities);
+                this.setActivityNamesAsInfo(value, deadActivities);
+            }
+        });
+    }
+
+    private setActivityNamesAsInfo(value: BPMNProperty, deadActivities: any[]) {
+        value.additionalInfo =
+            'Dead activities: ' + this.getActivityNameOrIdList(deadActivities);
+    }
+
+    private getActivityNameOrIdList(deadActivities: any[]): string {
+        return deadActivities
+            .map((value1) => {
+                if (!value1.businessObject.name) {
+                    return value1.id;
+                }
+                return value1.businessObject.name;
+            })
+            .join(', ');
+    }
+
+    private colorElementsInRed(elementsToColor: any[]) {
+        const modeling = this.bpmnModeler.getBPMNJs().get('modeling');
+        modeling.setColor(elementsToColor, {
+            stroke: '#000000',
+            fill: '#ff1a1a',
+        });
+    }
+
+    private getElementsForIDs(ids: string[]) {
+        const elementRegistry = this.bpmnModeler
+            .getBPMNJs()
+            .get('elementRegistry');
+        return ids.map((id) => elementRegistry.get(id));
     }
 }

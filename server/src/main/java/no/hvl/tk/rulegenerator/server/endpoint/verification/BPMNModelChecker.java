@@ -15,6 +15,8 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -124,10 +126,11 @@ public class BPMNModelChecker {
       final Set<String> executedActivities = findExecutedActivitiesInStateSpace(stateSpaceTempFile);
 
       // Compare to all activities
-      final Set<String> allActivityNames = getAllActivityNames();
-      allActivityNames.removeAll(executedActivities);
+      final Map<String, String> nameToIdActivityMap = getAllActivities();
+      Set<String> deadActivities = nameToIdActivityMap.keySet();
+      deadActivities.removeAll(executedActivities);
 
-      recordNoDeadActivitiesResult(response, allActivityNames);
+      recordNoDeadActivitiesResult(response, nameToIdActivityMap, deadActivities);
     } catch (NoSuchFileException exception) {
       throw new ModelCheckingException(
           "The state space could not be generated or generation timed out after 60 seconds.");
@@ -135,61 +138,69 @@ public class BPMNModelChecker {
   }
 
   private void recordNoDeadActivitiesResult(
-      BPMNSpecificPropertyCheckingResponse response, Set<String> deadActivities) {
+      BPMNSpecificPropertyCheckingResponse response,
+      Map<String, String> nameToIdActivityMap,
+      Set<String> deadActivities) {
+
     if (deadActivities.isEmpty()) {
       response.addPropertyCheckingResult(
           new BPMNPropertyCheckingResult(BPMNSpecificProperty.NO_DEAD_ACTIVITIES, true, ""));
     } else {
       String deadActivitiesHint =
-          String.format("Dead activities: %s", String.join(",", deadActivities));
+          String.join(",", this.getIds(deadActivities, nameToIdActivityMap));
       response.addPropertyCheckingResult(
           new BPMNPropertyCheckingResult(
               BPMNSpecificProperty.NO_DEAD_ACTIVITIES, false, deadActivitiesHint));
     }
   }
 
-  private Set<String> getAllActivityNames() {
-    return this.bpmnModel.getParticipants().stream()
-        .flatMap(process -> getAllActivityNames(process).stream())
-        .collect(Collectors.toSet());
+  private Set<String> getIds(Set<String> deadActivities, Map<String, String> nameToIdActivityMap) {
+    return deadActivities.stream().map(nameToIdActivityMap::get).collect(Collectors.toSet());
   }
 
-  private Set<String> getAllActivityNames(BPMNProcess process) {
+  private Map<String, String> getAllActivities() {
+    return this.bpmnModel.getParticipants().stream()
+        .flatMap(process -> getAllActivities(process).entrySet().stream())
+        .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+  }
+
+  private Map<String, String> getAllActivities(BPMNProcess process) {
     // Get all activities from subprocesses
-    final Set<String> allActivityNames =
+    final Map<String, String> allActivityNames =
         process
             .getSubProcesses()
-            .flatMap(subprocess -> getAllActivityNames(subprocess).stream())
-            .collect(Collectors.toSet());
+            .flatMap(subprocess -> getAllActivities(subprocess).entrySet().stream())
+            .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
     // Get all activities from event subprocesses
     process
         .getEventSubprocesses()
-        .flatMap(eventSubprocess -> getAllActivityNames(eventSubprocess).stream())
-        .forEach(allActivityNames::add);
+        .flatMap(eventSubprocess -> getAllActivities(eventSubprocess).entrySet().stream())
+        .forEach(
+            nameToIdEntry ->
+                allActivityNames.put(nameToIdEntry.getKey(), nameToIdEntry.getValue()));
 
     addActivityNamesForProcess(process, allActivityNames);
     return allActivityNames;
   }
 
-  private Set<String> getAllActivityNames(BPMNEventSubprocess process) {
+  private Map<String, String> getAllActivities(BPMNEventSubprocess process) {
     // Get all activities from subprocesses
-    Set<String> allActivityNames =
+    Map<String, String> nameToIdActivityMap =
         process
             .getEventSubprocesses()
-            .flatMap(eventSubprocess -> getAllActivityNames(eventSubprocess).stream())
-            .collect(Collectors.toSet());
+            .flatMap(eventSubprocess -> getAllActivities(eventSubprocess).entrySet().stream())
+            .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
 
-    addActivityNamesForProcess(process, allActivityNames);
-    return allActivityNames;
+    addActivityNamesForProcess(process, nameToIdActivityMap);
+    return nameToIdActivityMap;
   }
 
   private void addActivityNamesForProcess(
-      AbstractBPMNProcess process, Set<String> allActivityNames) {
+      AbstractBPMNProcess process, Map<String, String> nameToIdActivityMap) {
     process
         .getFlowNodes()
         .filter(FlowNode::isTask)
-        .map(FlowNode::getName)
-        .forEach(allActivityNames::add);
+        .forEach(task -> nameToIdActivityMap.put(task.getName(), task.getId()));
   }
 
   private Set<String> findExecutedActivitiesInStateSpace(String stateSpaceTempFile)
