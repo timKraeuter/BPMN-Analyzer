@@ -29,6 +29,7 @@ import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.cont
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteAllTokensForProcess;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteMessageToProcessInstanceWithPosition;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteTokenWithPosition;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.distinctByKey;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.getSequenceFlowIdOrDescriptiveName;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.getStartEventTokenName;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.interruptSubprocess;
@@ -775,8 +776,12 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
       GrooveNode processInstance =
           contextProcessInstanceWithQuantifier(processForEvent, ruleBuilder, forAll);
 
+      //
       catchSignalEvent
           .getIncomingFlows()
+          .filter(
+              distinctByKey(
+                  (SequenceFlow flow) -> getSequenceFlowIdOrDescriptiveName(flow, this.useSFId)))
           .forEach(
               inFlow -> {
                 String position;
@@ -790,10 +795,9 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                 ruleBuilder.deleteEdge(TOKENS, processInstance, token);
                 ruleBuilder.deleteEdge(
                     POSITION, token, ruleBuilder.contextNode(createStringNodeLabel(position)));
-
-                addOutgoingTokensForFlowNodeWithNestedRuleQuantifier(
-                    catchSignalEvent, forAll, processInstance);
               });
+      addOutgoingTokensForFlowNodeWithNestedRuleQuantifier(
+          catchSignalEvent, forAll, processInstance);
     }
   }
 

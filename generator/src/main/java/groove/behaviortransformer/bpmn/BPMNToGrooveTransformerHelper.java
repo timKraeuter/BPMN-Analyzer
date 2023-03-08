@@ -41,6 +41,10 @@ import behavior.bpmn.gateways.ParallelGateway;
 import groove.behaviortransformer.GrooveTransformer;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveRuleBuilder;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import util.ValueWrapper;
 
 public class BPMNToGrooveTransformerHelper {
@@ -499,5 +503,10 @@ public class BPMNToGrooveTransformerHelper {
       return "_" + transformedName;
     }
     return transformedName;
+  }
+
+  public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+    Set<Object> seen = ConcurrentHashMap.newKeySet();
+    return t -> seen.add(keyExtractor.apply(t));
   }
 }
