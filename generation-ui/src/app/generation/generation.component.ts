@@ -23,7 +23,7 @@ export class GenerationComponent {
         'https://raw.githubusercontent.com/timKraeuter/Rewrite_Rule_Generation/master/generation-ui/initial.bpmn';
     importError?: Error;
 
-    public fileName: String = 'model';
+    public fileName: string = 'model';
 
     public graphGrammarGenerationRunning: boolean = false;
 
@@ -101,7 +101,7 @@ export class GenerationComponent {
                     const blob = new Blob([data], {
                         type: 'application/zip',
                     });
-                    saveAs(blob, 'model.gps.zip');
+                    saveAs(blob, this.fileName + '.gps.zip');
                 },
             })
             .add(() => (this.graphGrammarGenerationRunning = false));
