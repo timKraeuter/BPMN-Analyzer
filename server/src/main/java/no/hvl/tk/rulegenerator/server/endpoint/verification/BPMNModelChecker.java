@@ -111,8 +111,8 @@ public class BPMNModelChecker {
         this.getClass().getResourceAsStream(DISABLED_RULES_DIR + UNSAFE_FILE_NAME);
     try {
       if (unsafeDisabledGraph != null) {
-        FileUtils.copyInputStreamToFile(unsafeDisabledGraph,
-            new File(this.graphGrammarDir, UNSAFE_FILE_NAME));
+        FileUtils.copyInputStreamToFile(
+            unsafeDisabledGraph, new File(this.graphGrammarDir, UNSAFE_FILE_NAME));
       }
     } catch (IOException e) {
       throw new ShouldNotHappenRuntimeException(e);
