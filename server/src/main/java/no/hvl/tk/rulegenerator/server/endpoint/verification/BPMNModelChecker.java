@@ -1,5 +1,7 @@
 package no.hvl.tk.rulegenerator.server.endpoint.verification;
 
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformer.UNSAFE_FILE_NAME;
+
 import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.BPMNEventSubprocess;
@@ -11,6 +13,7 @@ import groove.runner.checking.ModelCheckingResult;
 import groove.runner.checking.TemporalLogic;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -28,11 +31,13 @@ import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyChecking
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResponse;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import no.hvl.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
+import org.apache.commons.io.FileUtils;
 
 public class BPMNModelChecker {
 
   public static final String OPTION_TO_COMPLETE_CTL = "AF(AllTerminated)";
   public static final String UNSAFE_CTL = "AG(!Unsafe)";
+  private static final String DISABLED_RULES_DIR = "/DisabledGraphConditions/";
   private final File graphGrammarDir;
   private final BPMNCollaboration bpmnModel;
 
@@ -85,6 +90,11 @@ public class BPMNModelChecker {
 
   private void checkOptionToComplete(BPMNSpecificPropertyCheckingResponse response)
       throws IOException, InterruptedException {
+    // Workaround: Disable unsafe before model checking due to a bug in Groove.
+    // Otherwise option to complete might return a wrong result!
+    // https://sourceforge.net/p/groove/bugs/503/
+    this.disableUnsafeRule();
+
     final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
     ModelCheckingResult safenessResult =
         grooveJarRunner.checkCTL(graphGrammarDir.getPath(), OPTION_TO_COMPLETE_CTL);
@@ -94,6 +104,19 @@ public class BPMNModelChecker {
             BPMNSpecificProperty.OPTION_TO_COMPLETE,
             safenessResult.isValid(),
             "CTL: " + OPTION_TO_COMPLETE_CTL));
+  }
+
+  private void disableUnsafeRule() {
+    InputStream unsafeDisabledGraph =
+        this.getClass().getResourceAsStream(DISABLED_RULES_DIR + UNSAFE_FILE_NAME);
+    try {
+      if (unsafeDisabledGraph != null) {
+        FileUtils.copyInputStreamToFile(unsafeDisabledGraph,
+            new File(this.graphGrammarDir, UNSAFE_FILE_NAME));
+      }
+    } catch (IOException e) {
+      throw new ShouldNotHappenRuntimeException(e);
+    }
   }
 
   private void checkSafeness(BPMNSpecificPropertyCheckingResponse response)

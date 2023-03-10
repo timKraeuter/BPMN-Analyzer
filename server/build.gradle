@@ -31,6 +31,8 @@ dependencies {
 	// Add pair class
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+	// https://mvnrepository.com/artifact/commons-io/commons-io
+	implementation 'commons-io:commons-io:2.11.0'
 
 	// Spring
 	implementation 'org.springframework.boot:spring-boot-starter-web'
