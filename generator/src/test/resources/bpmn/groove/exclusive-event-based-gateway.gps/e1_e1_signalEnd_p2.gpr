@@ -1,87 +1,87 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="e1_e1_signalEnd_p2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n84">
+        <node id="n70">
             <attr name="layout">
                 <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n84" to="n84">
+        <edge from="n70" to="n70">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n85">
+        <node id="n71">
             <attr name="layout">
                 <string>392 232 0 0</string>
             </attr>
         </node>
-        <edge from="n85" to="n85">
+        <edge from="n71" to="n71">
             <attr name="label">
                 <string>string:"p2"</string>
             </attr>
         </edge>
-        <node id="n86">
+        <node id="n72">
             <attr name="layout">
                 <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n86" to="n86">
+        <edge from="n72" to="n72">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n87">
+        <node id="n73">
             <attr name="layout">
                 <string>412 152 0 0</string>
             </attr>
         </node>
-        <edge from="n87" to="n87">
+        <edge from="n73" to="n73">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n88">
+        <node id="n74">
             <attr name="layout">
                 <string>592 224 0 0</string>
             </attr>
         </node>
-        <edge from="n88" to="n88">
+        <edge from="n74" to="n74">
             <attr name="label">
                 <string>string:"start_p2_e1"</string>
             </attr>
         </edge>
-        <node id="n89">
+        <node id="n75">
             <attr name="layout">
                 <string>592 144 0 0</string>
             </attr>
         </node>
-        <edge from="n89" to="n89">
+        <edge from="n75" to="n75">
             <attr name="label">
                 <string>string:"e1_signalEnd_p2"</string>
             </attr>
         </edge>
-        <edge from="n87" to="n89">
+        <edge from="n73" to="n75">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n87" to="n88">
+        <edge from="n73" to="n74">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n84" to="n85">
+        <edge from="n70" to="n71">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n84" to="n86">
+        <edge from="n70" to="n72">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n84" to="n87">
+        <edge from="n70" to="n73">
             <attr name="label">
                 <string>tokens</string>
             </attr>

@@ -48,7 +48,7 @@
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"inclusive-gateway-complex_start"</string>
+                <string>string:"start_i1"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">

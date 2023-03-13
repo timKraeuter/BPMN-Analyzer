@@ -1,87 +1,87 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="e2_stop" role="rule" edgeids="false" edgemode="directed">
-        <node id="n336">
+        <node id="n315">
             <attr name="layout">
                 <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n336" to="n336">
+        <edge from="n315" to="n315">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n337">
+        <node id="n316">
             <attr name="layout">
                 <string>392 232 0 0</string>
             </attr>
         </node>
-        <edge from="n337" to="n337">
+        <edge from="n316" to="n316">
             <attr name="label">
                 <string>string:"T-Junction Controller"</string>
             </attr>
         </edge>
-        <node id="n338">
+        <node id="n317">
             <attr name="layout">
                 <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n338" to="n338">
+        <edge from="n317" to="n317">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n339">
+        <node id="n318">
             <attr name="layout">
                 <string>592 152 0 0</string>
             </attr>
         </node>
-        <edge from="n339" to="n339">
+        <edge from="n318" to="n318">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n340">
+        <node id="n319">
             <attr name="layout">
                 <string>862 224 0 0</string>
             </attr>
         </node>
-        <edge from="n340" to="n340">
+        <edge from="n319" to="n319">
             <attr name="label">
                 <string>string:"A_C_are_green_t_e2"</string>
             </attr>
         </edge>
-        <node id="n341">
+        <node id="n320">
             <attr name="layout">
                 <string>862 144 0 0</string>
             </attr>
         </node>
-        <edge from="n341" to="n341">
+        <edge from="n320" to="n320">
             <attr name="label">
                 <string>string:"stop"</string>
             </attr>
         </edge>
-        <edge from="n339" to="n341">
+        <edge from="n318" to="n320">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n339" to="n340">
+        <edge from="n318" to="n319">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n336" to="n337">
+        <edge from="n315" to="n316">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n336" to="n338">
+        <edge from="n315" to="n317">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n336" to="n339">
+        <edge from="n315" to="n318">
             <attr name="label">
                 <string>tokens</string>
             </attr>

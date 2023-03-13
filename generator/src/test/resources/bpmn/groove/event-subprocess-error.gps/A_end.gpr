@@ -1,77 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="A_end" role="rule" edgeids="false" edgemode="directed">
-        <node id="n35">
+        <node id="n28">
             <attr name="layout">
                 <string>535 242 0 0</string>
             </attr>
         </node>
-        <edge from="n35" to="n35">
+        <edge from="n28" to="n28">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n35" to="n35">
+        <edge from="n28" to="n28">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n32">
+        <node id="n25">
             <attr name="layout">
                 <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n32" to="n32">
+        <edge from="n25" to="n25">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n33">
+        <node id="n26">
             <attr name="layout">
                 <string>392 152 0 0</string>
             </attr>
         </node>
-        <edge from="n33" to="n33">
+        <edge from="n26" to="n26">
             <attr name="label">
                 <string>string:"Trigger error in sub"</string>
             </attr>
         </edge>
-        <node id="n34">
+        <node id="n27">
             <attr name="layout">
                 <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n34" to="n34">
+        <edge from="n27" to="n27">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n36">
+        <node id="n29">
             <attr name="layout">
                 <string>847 242 0 0</string>
             </attr>
         </node>
-        <edge from="n36" to="n36">
+        <edge from="n29" to="n29">
             <attr name="label">
                 <string>string:"A"</string>
             </attr>
         </edge>
-        <edge from="n32" to="n35">
+        <edge from="n25" to="n28">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n35" to="n36">
+        <edge from="n28" to="n29">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n32" to="n33">
+        <edge from="n25" to="n26">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n32" to="n34">
+        <edge from="n25" to="n27">
             <attr name="label">
                 <string>state</string>
             </attr>

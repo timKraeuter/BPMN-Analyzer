@@ -3,7 +3,7 @@
     <graph id="task-interrupting-boundary-events_start" role="rule" edgeids="false" edgemode="directed">
         <node id="n0">
             <attr name="layout">
-                <string>62 325 0 0</string>
+                <string>62 85 0 0</string>
             </attr>
         </node>
         <edge from="n0" to="n0">
@@ -13,7 +13,7 @@
         </edge>
         <node id="n1">
             <attr name="layout">
-                <string>392 392 0 0</string>
+                <string>392 152 0 0</string>
             </attr>
         </node>
         <edge from="n1" to="n1">
@@ -23,7 +23,7 @@
         </edge>
         <node id="n2">
             <attr name="layout">
-                <string>392 312 0 0</string>
+                <string>392 72 0 0</string>
             </attr>
         </node>
         <edge from="n2" to="n2">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n3">
             <attr name="layout">
-                <string>565 472 0 0</string>
+                <string>565 232 0 0</string>
             </attr>
         </node>
         <edge from="n3" to="n3">
@@ -43,17 +43,17 @@
         </edge>
         <node id="n4">
             <attr name="layout">
-                <string>907 472 0 0</string>
+                <string>907 232 0 0</string>
             </attr>
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"Activity boundary events_start"</string>
+                <string>string:"start_Task"</string>
             </attr>
         </edge>
         <node id="n5">
             <attr name="layout">
-                <string>62 85 0 0</string>
+                <string>62 325 0 0</string>
             </attr>
         </node>
         <edge from="n5" to="n5">
@@ -63,7 +63,7 @@
         </edge>
         <node id="n6">
             <attr name="layout">
-                <string>392 72 0 0</string>
+                <string>392 312 0 0</string>
             </attr>
         </node>
         <edge from="n6" to="n6">
@@ -73,7 +73,7 @@
         </edge>
         <node id="n7">
             <attr name="layout">
-                <string>392 152 0 0</string>
+                <string>392 392 0 0</string>
             </attr>
         </node>
         <edge from="n7" to="n7">
@@ -83,7 +83,7 @@
         </edge>
         <node id="n8">
             <attr name="layout">
-                <string>505 232 0 0</string>
+                <string>505 472 0 0</string>
             </attr>
         </node>
         <edge from="n8" to="n8">
@@ -93,12 +93,12 @@
         </edge>
         <node id="n9">
             <attr name="layout">
-                <string>787 232 0 0</string>
+                <string>787 472 0 0</string>
             </attr>
         </node>
         <edge from="n9" to="n9">
             <attr name="label">
-                <string>string:"interruptTrigger_start_trigger"</string>
+                <string>string:"start_trigger_signalOrMessage"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">

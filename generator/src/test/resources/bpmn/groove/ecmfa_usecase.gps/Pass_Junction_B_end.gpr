@@ -1,112 +1,112 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="Pass_Junction_B_end" role="rule" edgeids="false" edgemode="directed">
-        <node id="n458">
+        <node id="n430">
             <attr name="layout">
                 <string>530 332 0 0</string>
             </attr>
         </node>
-        <edge from="n458" to="n458">
+        <edge from="n430" to="n430">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n458" to="n458">
+        <edge from="n430" to="n430">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n456">
+        <node id="n428">
             <attr name="layout">
                 <string>530 242 0 0</string>
             </attr>
         </node>
-        <edge from="n456" to="n456">
+        <edge from="n428" to="n428">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n456" to="n456">
+        <edge from="n428" to="n428">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n453">
+        <node id="n425">
             <attr name="layout">
                 <string>62 87 0 0</string>
             </attr>
         </node>
-        <edge from="n453" to="n453">
+        <edge from="n425" to="n425">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n454">
+        <node id="n426">
             <attr name="layout">
                 <string>402 152 0 0</string>
             </attr>
         </node>
-        <edge from="n454" to="n454">
+        <edge from="n426" to="n426">
             <attr name="label">
                 <string>string:"Bus controller (B)"</string>
             </attr>
         </edge>
-        <node id="n455">
+        <node id="n427">
             <attr name="layout">
                 <string>402 72 0 0</string>
             </attr>
         </node>
-        <edge from="n455" to="n455">
+        <edge from="n427" to="n427">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n457">
+        <node id="n429">
             <attr name="layout">
                 <string>827 242 0 0</string>
             </attr>
         </node>
-        <edge from="n457" to="n457">
+        <edge from="n429" to="n429">
             <attr name="label">
                 <string>string:"Pass_Junction_B"</string>
             </attr>
         </edge>
-        <node id="n459">
+        <node id="n431">
             <attr name="layout">
                 <string>827 332 0 0</string>
             </attr>
         </node>
-        <edge from="n459" to="n459">
+        <edge from="n431" to="n431">
             <attr name="label">
                 <string>string:"Pass_Junction_B_Passed_junction_B"</string>
             </attr>
         </edge>
-        <edge from="n453" to="n458">
+        <edge from="n425" to="n430">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n458" to="n459">
+        <edge from="n430" to="n431">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n453" to="n456">
+        <edge from="n425" to="n428">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n456" to="n457">
+        <edge from="n428" to="n429">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n453" to="n454">
+        <edge from="n425" to="n426">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n453" to="n455">
+        <edge from="n425" to="n427">
             <attr name="label">
                 <string>state</string>
             </attr>

@@ -48,7 +48,7 @@
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"p1_start"</string>
+                <string>string:"start_Subprocess1"</string>
             </attr>
         </edge>
         <node id="n5">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n9" to="n9">
             <attr name="label">
-                <string>string:"interruptTrigger_start_trigger"</string>
+                <string>string:"start_trigger_interruptMessage"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">

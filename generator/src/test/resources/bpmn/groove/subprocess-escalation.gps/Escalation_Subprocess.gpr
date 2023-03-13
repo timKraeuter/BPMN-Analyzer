@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="Escalation_Subprocess" role="rule" edgeids="false" edgemode="directed">
-        <node id="n17">
+        <node id="n10">
             <attr name="layout">
-                <string>505 162 0 0</string>
+                <string>522 327 0 0</string>
             </attr>
         </node>
-        <edge from="n17" to="n17">
+        <edge from="n10" to="n10">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <edge from="n17" to="n17">
+        <edge from="n10" to="n10">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n19">
+        <node id="n12">
             <attr name="layout">
-                <string>862 82 0 0</string>
+                <string>892 82 0 0</string>
             </attr>
         </node>
-        <edge from="n19" to="n19">
+        <edge from="n12" to="n12">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n19" to="n19">
+        <edge from="n12" to="n12">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n20">
+        <node id="n13">
             <attr name="layout">
-                <string>1057 252 0 0</string>
+                <string>1087 252 0 0</string>
             </attr>
         </node>
-        <edge from="n20" to="n20">
+        <edge from="n13" to="n13">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n20" to="n20">
+        <edge from="n13" to="n13">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
         <node id="n15">
             <attr name="layout">
-                <string>542 332 0 0</string>
+                <string>1087 342 0 0</string>
             </attr>
         </node>
         <edge from="n15" to="n15">
@@ -58,110 +58,145 @@
         </edge>
         <edge from="n15" to="n15">
             <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n8">
+            <attr name="layout">
+                <string>552 422 0 0</string>
+            </attr>
+        </node>
+        <edge from="n8" to="n8">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n8" to="n8">
+            <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n12">
+        <node id="n5">
             <attr name="layout">
-                <string>62 167 0 0</string>
+                <string>62 407 0 0</string>
             </attr>
         </node>
-        <edge from="n12" to="n12">
+        <edge from="n5" to="n5">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n13">
+        <node id="n6">
             <attr name="layout">
-                <string>392 242 0 0</string>
+                <string>402 237 0 0</string>
             </attr>
         </node>
-        <edge from="n13" to="n13">
+        <edge from="n6" to="n6">
             <attr name="label">
                 <string>string:"Subprocess escalation"</string>
             </attr>
         </edge>
-        <node id="n14">
+        <node id="n7">
             <attr name="layout">
-                <string>392 72 0 0</string>
+                <string>402 157 0 0</string>
             </attr>
         </node>
-        <edge from="n14" to="n14">
+        <edge from="n7" to="n7">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n16">
+        <node id="n9">
             <attr name="layout">
-                <string>862 332 0 0</string>
+                <string>892 422 0 0</string>
             </attr>
         </node>
-        <edge from="n16" to="n16">
+        <edge from="n9" to="n9">
             <attr name="label">
                 <string>string:"start_Escalation_Subprocess"</string>
             </attr>
         </edge>
-        <node id="n18">
+        <node id="n11">
             <attr name="layout">
-                <string>862 162 0 0</string>
+                <string>892 162 0 0</string>
             </attr>
         </node>
-        <edge from="n18" to="n18">
+        <edge from="n11" to="n11">
             <attr name="label">
                 <string>string:"Escalation_Subprocess"</string>
             </attr>
         </edge>
-        <node id="n21">
+        <node id="n14">
             <attr name="layout">
-                <string>1422 252 0 0</string>
+                <string>1452 252 0 0</string>
             </attr>
         </node>
-        <edge from="n21" to="n21">
+        <edge from="n14" to="n14">
             <attr name="label">
-                <string>string:"Escalation_Subprocess_start_sub"</string>
+                <string>string:"start_sub_Gateway_02dcjtb"</string>
             </attr>
         </edge>
-        <edge from="n17" to="n18">
+        <node id="n16">
+            <attr name="layout">
+                <string>1452 342 0 0</string>
+            </attr>
+        </node>
+        <edge from="n16" to="n16">
+            <attr name="label">
+                <string>string:"start_sub_A"</string>
+            </attr>
+        </edge>
+        <edge from="n10" to="n11">
             <attr name="label">
                 <string>new:name</string>
             </attr>
         </edge>
-        <edge from="n17" to="n19">
+        <edge from="n10" to="n12">
             <attr name="label">
                 <string>new:state</string>
             </attr>
         </edge>
-        <edge from="n12" to="n17">
+        <edge from="n5" to="n10">
             <attr name="label">
                 <string>new:subprocess</string>
             </attr>
         </edge>
-        <edge from="n17" to="n20">
+        <edge from="n10" to="n13">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n20" to="n21">
+        <edge from="n13" to="n14">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n12" to="n15">
+        <edge from="n10" to="n15">
             <attr name="label">
-                <string>del:tokens</string>
+                <string>new:tokens</string>
             </attr>
         </edge>
         <edge from="n15" to="n16">
             <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n5" to="n8">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n8" to="n9">
+            <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n12" to="n13">
+        <edge from="n5" to="n6">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n12" to="n14">
+        <edge from="n5" to="n7">
             <attr name="label">
                 <string>state</string>
             </attr>

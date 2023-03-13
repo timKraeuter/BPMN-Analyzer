@@ -1,142 +1,142 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="m1" role="rule" edgeids="false" edgemode="directed">
-        <node id="n41">
+        <node id="n34">
             <attr name="layout">
                 <string>585 162 0 0</string>
             </attr>
         </node>
-        <edge from="n41" to="n41">
+        <edge from="n34" to="n34">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n41" to="n41">
+        <edge from="n34" to="n34">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n43">
+        <node id="n36">
             <attr name="layout">
                 <string>570 252 0 0</string>
             </attr>
         </node>
-        <edge from="n43" to="n43">
+        <edge from="n36" to="n36">
             <attr name="label">
                 <string>type:Message</string>
             </attr>
         </edge>
-        <edge from="n43" to="n43">
+        <edge from="n36" to="n36">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n38">
+        <node id="n31">
             <attr name="layout">
                 <string>62 89 0 0</string>
             </attr>
         </node>
-        <edge from="n38" to="n38">
+        <edge from="n31" to="n31">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n39">
+        <node id="n32">
             <attr name="layout">
                 <string>412 72 0 0</string>
             </attr>
         </node>
-        <edge from="n39" to="n39">
+        <edge from="n32" to="n32">
             <attr name="label">
                 <string>string:"Activity boundary events"</string>
             </attr>
         </edge>
-        <node id="n40">
+        <node id="n33">
             <attr name="layout">
                 <string>412 332 0 0</string>
             </attr>
         </node>
-        <edge from="n40" to="n40">
+        <edge from="n33" to="n33">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n42">
+        <node id="n35">
             <attr name="layout">
                 <string>927 162 0 0</string>
             </attr>
         </node>
-        <edge from="n42" to="n42">
+        <edge from="n35" to="n35">
             <attr name="label">
                 <string>string:"m1_m1_end"</string>
             </attr>
         </edge>
-        <node id="n44">
+        <node id="n37">
             <attr name="layout">
                 <string>927 252 0 0</string>
             </attr>
         </node>
-        <edge from="n44" to="n44">
+        <edge from="n37" to="n37">
             <attr name="label">
                 <string>string:"interruptMessage_m1"</string>
             </attr>
         </edge>
-        <node id="n45">
+        <node id="n38">
             <attr name="layout">
                 <string>585 412 0 0</string>
             </attr>
         </node>
-        <edge from="n45" to="n45">
+        <edge from="n38" to="n38">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n46">
+        <node id="n39">
             <attr name="layout">
                 <string>927 412 0 0</string>
             </attr>
         </node>
-        <edge from="n46" to="n46">
+        <edge from="n39" to="n39">
             <attr name="label">
                 <string>string:"Task"</string>
             </attr>
         </edge>
-        <edge from="n38" to="n41">
+        <edge from="n31" to="n34">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n41" to="n42">
+        <edge from="n34" to="n35">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n38" to="n43">
+        <edge from="n31" to="n36">
             <attr name="label">
                 <string>del:messages</string>
             </attr>
         </edge>
-        <edge from="n43" to="n44">
+        <edge from="n36" to="n37">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n38" to="n39">
+        <edge from="n31" to="n32">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n38" to="n40">
+        <edge from="n31" to="n33">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n38" to="n45">
+        <edge from="n31" to="n38">
             <attr name="label">
                 <string>tokens</string>
             </attr>
         </edge>
-        <edge from="n45" to="n46">
+        <edge from="n38" to="n39">
             <attr name="label">
                 <string>position</string>
             </attr>

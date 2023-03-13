@@ -48,7 +48,7 @@
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"Subprocess Error Handling Complex_start"</string>
+                <string>string:"start_Activity_0wd8u0e"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">

@@ -48,7 +48,7 @@
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"p1_start1_p1"</string>
+                <string>string:"start1_p1_p_p1"</string>
             </attr>
         </edge>
         <node id="n5">
@@ -68,7 +68,7 @@
         </node>
         <edge from="n6" to="n6">
             <attr name="label">
-                <string>string:"p1_start2_p1"</string>
+                <string>string:"start2_p1_p_p1"</string>
             </attr>
         </edge>
         <node id="n7">
@@ -118,7 +118,7 @@
         </node>
         <edge from="n11" to="n11">
             <attr name="label">
-                <string>string:"p2_start1_p2"</string>
+                <string>string:"start1_p2_p_p2"</string>
             </attr>
         </edge>
         <node id="n12">
@@ -138,7 +138,7 @@
         </node>
         <edge from="n13" to="n13">
             <attr name="label">
-                <string>string:"p2_start2_p2"</string>
+                <string>string:"start2_p2_p_p2"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">
