@@ -211,7 +211,8 @@ class UseCaseTest extends BPMNToGrooveTestBase {
   // States:       6366
   // Transitions:  19329
   //
-  // 9 result states found: Result [elements=[s1454, s3481, s3485, s4402, s4544, s5247, s5263, s5328, s5921]]
+  // 9 result states found: Result [elements=[s1454, s3481, s3485, s4402, s4544, s5247, s5263,
+  // s5328, s5921]]
 
   private String getId() {
     return Integer.toString(counter.getAndIncrement());
