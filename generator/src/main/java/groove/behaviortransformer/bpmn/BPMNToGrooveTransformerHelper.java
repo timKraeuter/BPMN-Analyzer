@@ -19,7 +19,6 @@ import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.T
 
 import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.BPMNProcess;
 import behavior.bpmn.FlowNode;
 import behavior.bpmn.MessageFlow;
 import behavior.bpmn.SequenceFlow;
@@ -406,10 +405,6 @@ public class BPMNToGrooveTransformerHelper {
     GrooveNode forAllRoot = ruleBuilder.contextNode(FORALL);
     return interruptSubprocess(
         ruleBuilder, specificSubprocess, processInstance, forAllDeleteSubProcess, forAllRoot);
-  }
-
-  public static String getStartEventTokenName(BPMNProcess process, StartEvent event) {
-    return process.getName() + "_" + event.getName();
   }
 
   public static String getSequenceFlowIdOrDescriptiveName(SequenceFlow flow, boolean useID) {

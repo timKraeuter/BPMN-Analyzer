@@ -31,7 +31,6 @@ import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.dele
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteTokenWithPosition;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.distinctByKey;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.getSequenceFlowIdOrDescriptiveName;
-import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.getStartEventTokenName;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.interruptSubprocess;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.isAfterInstantiateEventBasedGateway;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.matchesLinkThrowEvent;
@@ -97,18 +96,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
           String.format(
               "The start event %s has no outgoing sequence flows!", startEvent.getName()));
     }
-    process.accept(
-        new AbstractProcessVisitor() {
-          @Override
-          public void handle(BPMNEventSubprocess eventSubprocess) {
-            // Handled elsewhere for event subprocesses.
-          }
-
-          @Override
-          public void handle(BPMNProcess process) {
-            createStartEventRule(startEvent, process);
-          }
-        });
+    // Done in the corresponding throw rules.
   }
 
   @Override
@@ -931,29 +919,5 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
       BPMNEventSubprocess eventSubprocess, GrooveNode existsOptional) {
     AbstractBPMNProcess parentProcess = collaboration.getParentProcess(eventSubprocess);
     return contextProcessInstanceWithQuantifier(parentProcess, ruleBuilder, existsOptional);
-  }
-
-  void createStartEventRule(StartEvent startEvent, BPMNProcess process) {
-    switch (startEvent.getType()) {
-      case NONE:
-        createNoneStartEventRule(startEvent, process);
-        break;
-      case SIGNAL:
-      case ERROR:
-      case MESSAGE:
-      case ESCALATION:
-        // Done in the corresponding throw rule.
-        break;
-    }
-  }
-
-  private void createNoneStartEventRule(StartEvent startEvent, BPMNProcess process) {
-    ruleBuilder.startRule(startEvent.getName());
-    GrooveNode processInstance = contextProcessInstance(process, ruleBuilder);
-    addOutgoingTokensForFlowNodeToProcessInstance(
-        startEvent, ruleBuilder, processInstance, useSFId);
-    deleteTokenWithPosition(
-        ruleBuilder, processInstance, getStartEventTokenName(process, startEvent));
-    ruleBuilder.buildRule();
   }
 }

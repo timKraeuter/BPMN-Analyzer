@@ -2,11 +2,12 @@ package groove.behaviortransformer.bpmn;
 
 import static groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
-import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.getStartEventTokenName;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.getSequenceFlowIdOrDescriptiveName;
 
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.BPMNProcess;
 import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
+import behavior.bpmn.events.StartEvent;
 import behavior.bpmn.events.StartEventType;
 import groove.behaviortransformer.GrooveTransformer;
 import groove.graph.GrooveGraph;
@@ -67,13 +68,24 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         .forEach(
             startEvent -> {
               if (startEvent.getType() == StartEventType.NONE) {
-                GrooveNode startToken = new GrooveNode(TYPE_TOKEN);
-                GrooveNode tokenName =
-                    new GrooveNode(
-                        createStringNodeLabel(getStartEventTokenName(process, startEvent)));
-                startGraphBuilder.addEdge(POSITION, startToken, tokenName);
-                startGraphBuilder.addEdge(TOKENS, processInstance, startToken);
+                addTokenToEachOutgoingFlow(startGraphBuilder, processInstance, startEvent);
               }
+            });
+  }
+
+  private void addTokenToEachOutgoingFlow(
+      GrooveGraphBuilder startGraphBuilder, GrooveNode processInstance, StartEvent startEvent) {
+    startEvent
+        .getOutgoingFlows()
+        .forEach(
+            incFlow -> {
+              GrooveNode token = new GrooveNode(TYPE_TOKEN);
+              GrooveNode tokenName =
+                  new GrooveNode(
+                      createStringNodeLabel(
+                          getSequenceFlowIdOrDescriptiveName(incFlow, this.useIDs)));
+              startGraphBuilder.addEdge(POSITION, token, tokenName);
+              startGraphBuilder.addEdge(TOKENS, processInstance, token);
             });
   }
 
