@@ -80,7 +80,6 @@ class RuleGeneratorControllerTests {
           zipEntryNames,
           is(
               Sets.newHashSet(
-                  "_1.gpr",
                   "_2__345_end.gpr",
                   "_2__345_start.gpr",
                   "_3.gpr",
