@@ -65,10 +65,8 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
           .getStartEvents()
           .forEach(
               startEvent ->
-                  BPMNToGrooveTransformerHelper.addTokenWithPosition(
-                      ruleBuilder,
-                      subProcessInstance,
-                      getStartEventTokenName(callActivity.getSubProcessModel(), startEvent)));
+                  BPMNToGrooveTransformerHelper.addOutgoingTokensForFlowNodeToProcessInstance(
+                      startEvent, ruleBuilder, subProcessInstance, this.useSFId));
     } else {
       // All activites and gateways without incoming sequence flows get a token.
       callActivity
