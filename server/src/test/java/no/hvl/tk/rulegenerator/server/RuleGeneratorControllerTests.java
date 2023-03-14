@@ -1,8 +1,12 @@
 package no.hvl.tk.rulegenerator.server;
 
+import static no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper.DTF;
+import static no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper.GRAPH_GRAMMAR_TEMP_DIR;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -10,6 +14,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorController;
+import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -28,6 +35,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,6 +43,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RuleGeneratorControllerTests {
+
   public static final String BPMN_FILE = "/ruleGeneratorController/name-with-numbers.bpmn";
   public static final String BPMN_FILE_ERROR = "/ruleGeneratorController/errorModel.bpmn";
   public static final String BPMN_FILE_DEAD = "/ruleGeneratorController/dead.bpmn";
@@ -203,6 +212,38 @@ class RuleGeneratorControllerTests {
         response,
         is(
             "{\"property\":\"G(!Unsafe)\",\"valid\":false,\"error\":\"Error: groove.util.parse.FormatException: Temporal operator 'G' should be nested inside path quantifier in CTL formula\"}"));
+  }
+
+  @Test
+  void timestampFormatTest() {
+    Instant instant = Instant.now().truncatedTo(ChronoUnit.SECONDS);
+    assertThat(DTF.parse(DTF.format(instant), Instant::from), is(instant));
+  }
+
+  @Test
+  void deleteGGsOlderThanOneHourTest() throws IOException {
+    deleteGGTempDir();
+    // Given
+    // Create two GGs: one older than one hour and one younger
+    File ggTempDir = new File(GRAPH_GRAMMAR_TEMP_DIR);
+    assertTrue(ggTempDir.mkdirs());
+    String oldGG =
+        RuleGeneratorControllerHelper.getGGOrStateSpaceDirName(
+            "old", Instant.now().minus(1, ChronoUnit.HOURS));
+    String youngGG = RuleGeneratorControllerHelper.getGGOrStateSpaceDirName("young");
+    assertTrue(new File(GRAPH_GRAMMAR_TEMP_DIR + File.separator + oldGG).mkdir());
+    assertTrue(new File(GRAPH_GRAMMAR_TEMP_DIR + File.separator + youngGG).mkdir());
+
+    // When
+    RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
+
+    // Then: Only the younger GG survives.
+    assertFalse(new File(GRAPH_GRAMMAR_TEMP_DIR + File.separator + oldGG).exists());
+    assertTrue(new File(GRAPH_GRAMMAR_TEMP_DIR + File.separator + youngGG).exists());
+  }
+
+  private void deleteGGTempDir() throws IOException {
+    FileUtils.deleteDirectory(new File(GRAPH_GRAMMAR_TEMP_DIR));
   }
 
   private File getBpmnModelFile(String bpmnFile) {

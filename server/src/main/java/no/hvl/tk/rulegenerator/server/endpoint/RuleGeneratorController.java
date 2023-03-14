@@ -1,6 +1,6 @@
 package no.hvl.tk.rulegenerator.server.endpoint;
 
-import static no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper.deleteOldGGsAndCreateNewDir;
+import static no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour;
 import static no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper.generateGGForBPMNFile;
 
 import behavior.bpmn.BPMNCollaboration;
@@ -35,8 +35,7 @@ public class RuleGeneratorController {
   @PostMapping(value = "/generateGGAndZip", produces = "application/zip")
   public void generateGGAndZip(
       @RequestParam("file") MultipartFile file, HttpServletResponse response) throws IOException {
-    // Not made for concurrent access of the application!
-    deleteOldGGsAndCreateNewDir();
+    deleteGGsAndStateSpacesOlderThanOneHour();
 
     File resultDir = generateGGForBPMNFile(file).getLeft();
 
@@ -76,7 +75,7 @@ public class RuleGeneratorController {
   public BPMNSpecificPropertyCheckingResponse checkBPMNSpecificProperties(
       @ModelAttribute BPMNSpecificPropertyCheckingRequest request)
       throws IOException, InterruptedException {
-    deleteOldGGsAndCreateNewDir();
+    deleteGGsAndStateSpacesOlderThanOneHour();
 
     Pair<File, BPMNCollaboration> result = generateGGForBPMNFile(request.getFile());
 
@@ -92,7 +91,7 @@ public class RuleGeneratorController {
   @PostMapping(value = "/checkTemporalLogic")
   public ModelCheckingResponse checkTemporalLogicProperty(
       @ModelAttribute ModelCheckingRequest request) throws IOException, InterruptedException {
-    deleteOldGGsAndCreateNewDir();
+    deleteGGsAndStateSpacesOlderThanOneHour();
 
     Pair<File, BPMNCollaboration> result = generateGGForBPMNFile(request.getFile());
 
