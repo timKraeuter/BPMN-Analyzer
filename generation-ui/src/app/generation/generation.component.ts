@@ -27,7 +27,7 @@ export class GenerationComponent {
 
     public graphGrammarGenerationRunning: boolean = false;
 
-    // BPMN-specific property checking.
+    // General BPMN property checking.
     public bpmnSpecificPropertiesToBeChecked: string[] = [];
     public bpmnSpecificVerificationRunning: boolean = false;
     public bpmnPropertyCheckingResults: BPMNProperty[] = [];

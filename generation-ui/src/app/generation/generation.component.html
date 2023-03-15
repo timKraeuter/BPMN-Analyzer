@@ -68,7 +68,7 @@
         <mat-card-title>Verification</mat-card-title>
     </mat-card-header>
     <mat-tab-group animationDuration="0ms">
-        <mat-tab label="BPMN-specific properties">
+        <mat-tab label="General BPMN properties">
             <mat-card-content class="top-margin">
                 Select one or more of the following properties to check for the
                 BPMN model.
@@ -76,7 +76,7 @@
                 <mat-button-toggle-group
                     name="bpmnProperties"
                     [(ngModel)]="bpmnSpecificPropertiesToBeChecked"
-                    aria-label="BPMN-specific Properties"
+                    aria-label="general BPMN Properties"
                     multiple
                     class="top-margin"
                 >
@@ -103,7 +103,7 @@
                 <button
                     mat-raised-button
                     color="primary"
-                    matTooltip="Check the selected BPMN-specific properties using groove."
+                    matTooltip="Check the selected general BPMN properties using groove."
                     class="top-margin"
                     (click)="checkBPMNSpecificPropertiesClicked()"
                 >
