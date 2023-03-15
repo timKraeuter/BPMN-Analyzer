@@ -16,12 +16,14 @@
                 <mat-list-item>
                     <mat-icon
                         matListItemIcon
-                        class="green-icon"
+                        class="material-icons color_green"
                         *ngIf="ctlPropertyResult.valid; else notValid"
                         >check
                     </mat-icon>
                     <ng-template #notValid>
-                        <mat-icon matListItemIcon class="red-icon"
+                        <mat-icon
+                            matListItemIcon
+                            class="material-icons color_red"
                             >close
                         </mat-icon>
                     </ng-template>
@@ -38,12 +40,14 @@
                 <mat-list-item *ngFor="let property of properties">
                     <mat-icon
                         matListItemIcon
-                        class="green-icon"
+                        class="material-icons color_green"
                         *ngIf="property.valid; else notValid"
                         >check
                     </mat-icon>
                     <ng-template #notValid>
-                        <mat-icon matListItemIcon class="red-icon"
+                        <mat-icon
+                            matListItemIcon
+                            class="material-icons color_red"
                             >close
                         </mat-icon>
                     </ng-template>
