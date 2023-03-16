@@ -12,6 +12,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
+import java.util.concurrent.locks.ReentrantLock;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +24,8 @@ public class RuleGeneratorControllerHelper {
   public static final DateTimeFormatter DTF =
       DateTimeFormatter.ofPattern("dd.MM.yyyy-HH.mm.ss").withZone(ZoneId.systemDefault());
 
+  public static final ReentrantLock deleteLock = new ReentrantLock();
+
   private static String getTempDir() {
     String tempDir = System.getProperty("java.io.tmpdir");
     if (tempDir.endsWith(File.separator)) {
@@ -31,13 +34,19 @@ public class RuleGeneratorControllerHelper {
     return tempDir + File.separator;
   }
 
-  private RuleGeneratorControllerHelper() {}
+  private RuleGeneratorControllerHelper() {
+  }
 
   public static void deleteGGsAndStateSpacesOlderThanOneHour() throws IOException {
-    // Delete ggs
-    deleteTimeStampFilesOlderThanOneHour(GRAPH_GRAMMAR_TEMP_DIR);
-    // Delete state spaces
-    deleteTimeStampFilesOlderThanOneHour(STATE_SPACE_TEMP_DIR);
+    deleteLock.lock();
+    try {
+      // Delete ggs
+      deleteTimeStampFilesOlderThanOneHour(GRAPH_GRAMMAR_TEMP_DIR);
+      // Delete state spaces
+      deleteTimeStampFilesOlderThanOneHour(STATE_SPACE_TEMP_DIR);
+    } finally {
+      deleteLock.unlock();
+    }
   }
 
   private static void deleteTimeStampFilesOlderThanOneHour(String dirPath) throws IOException {
