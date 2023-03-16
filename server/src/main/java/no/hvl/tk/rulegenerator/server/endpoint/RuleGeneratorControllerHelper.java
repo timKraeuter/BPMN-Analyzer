@@ -34,8 +34,7 @@ public class RuleGeneratorControllerHelper {
     return tempDir + File.separator;
   }
 
-  private RuleGeneratorControllerHelper() {
-  }
+  private RuleGeneratorControllerHelper() {}
 
   public static void deleteGGsAndStateSpacesOlderThanOneHour() throws IOException {
     deleteLock.lock();
