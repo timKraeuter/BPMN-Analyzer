@@ -52,6 +52,9 @@ public class RuleGeneratorControllerHelper {
 
   private static void deleteTimeStampFilesOlderThanOneHour(String dirPath) throws IOException {
     Path dir = Path.of(dirPath);
+    if (!Files.exists(dir)) {
+      return;
+    }
     Instant oneHourBefore = Instant.now().minus(1, ChronoUnit.HOURS);
     try (DirectoryStream<Path> files = Files.newDirectoryStream(dir)) {
       for (Path graphGrammar : files) {
