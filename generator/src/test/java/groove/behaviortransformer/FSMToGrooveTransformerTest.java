@@ -3,7 +3,6 @@ package groove.behaviortransformer;
 import behavior.fsm.FiniteStateMachine;
 import behavior.fsm.State;
 import behavior.fsm.Transition;
-import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 class FSMToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
@@ -27,7 +26,7 @@ class FSMToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
   }
 
   @Test
-  void testFSMGenerationABC() throws IOException {
+  void testFSMGenerationABC() throws Exception {
     setFileNameFilter(s -> false); // We want to check for the type graph in this testcase.
 
     State start = new State("start");
@@ -44,7 +43,7 @@ class FSMToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
   }
 
   @Test
-  void testFSMGenerationResources() throws IOException {
+  void testFSMGenerationResources() throws Exception {
     State start = new State("start");
     String fsmName = "2_Resource_Process";
     FiniteStateMachine fsm = new FiniteStateMachine(fsmName, start);
@@ -61,7 +60,7 @@ class FSMToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
   }
 
   @Test
-  void testFSMGenerationTrafficLight() throws IOException {
+  void testFSMGenerationTrafficLight() throws Exception {
     State red = new State("red");
     String fsmName = "trafficLight";
     FiniteStateMachine fsm = new FiniteStateMachine(fsmName, red);

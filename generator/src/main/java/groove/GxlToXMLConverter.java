@@ -5,21 +5,21 @@ import groove.gxl.Gxl;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
-import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class GxlToXMLConverter {
 
   private GxlToXMLConverter() {}
 
-  public static void toXml(final Gxl gxl, File outputFile) {
+  public static void toXml(final Gxl gxl, Path outputFile) {
     try {
-      outputFile.getParentFile().mkdirs();
-      outputFile.createNewFile();
+      Files.createFile(outputFile);
 
       Marshaller jaxbMarshaller = createJAXBMarshaller();
-      jaxbMarshaller.marshal(gxl, outputFile);
+      jaxbMarshaller.marshal(gxl, Files.newOutputStream(outputFile));
     } catch (final JAXBException | IOException e) {
       throw new ShouldNotHappenRuntimeException(e);
     }

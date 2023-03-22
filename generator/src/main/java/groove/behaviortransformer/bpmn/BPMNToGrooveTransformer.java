@@ -15,11 +15,11 @@ import groove.graph.GrooveGraphBuilder;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveGraphRule;
 import groove.graph.rule.GrooveRuleBuilder;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.stream.Stream;
-import org.apache.commons.io.FileUtils;
 
 public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaboration> {
 
@@ -98,11 +98,11 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
   }
 
   @Override
-  public void generateAndWriteRulesFurther(BPMNCollaboration collaboration, File targetFolder) {
+  public void generateAndWriteRulesFurther(BPMNCollaboration collaboration, Path targetFolder) {
     this.copyTypeGraphAndFixedRules(targetFolder);
   }
 
-  private void copyTypeGraphAndFixedRules(File targetFolder) {
+  private void copyTypeGraphAndFixedRules(Path targetFolder) {
     InputStream typeGraph =
         this.getClass().getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR + TYPE_GRAPH_FILE_NAME);
     InputStream terminateRule =
@@ -114,12 +114,12 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
         this.getClass()
             .getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR + ALL_TERMINATED_FILE_NAME);
     try {
-      FileUtils.copyInputStreamToFile(typeGraph, new File(targetFolder, TYPE_GRAPH_FILE_NAME));
-      FileUtils.copyInputStreamToFile(
-          terminateRule, new File(targetFolder, TERMINATE_RULE_FILE_NAME));
-      FileUtils.copyInputStreamToFile(unsafeGraph, new File(targetFolder, UNSAFE_FILE_NAME));
-      FileUtils.copyInputStreamToFile(
-          allterminatedGraph, new File(targetFolder, ALL_TERMINATED_FILE_NAME));
+      Files.copy(typeGraph, Path.of(targetFolder.toString(), TYPE_GRAPH_FILE_NAME));
+      Files.copy(
+          terminateRule, Path.of(targetFolder.toString(), TERMINATE_RULE_FILE_NAME));
+      Files.copy(unsafeGraph, Path.of(targetFolder.toString(), UNSAFE_FILE_NAME));
+      Files.copy(
+          allterminatedGraph, Path.of(targetFolder.toString(), ALL_TERMINATED_FILE_NAME));
     } catch (IOException e) {
       throw new ShouldNotHappenRuntimeException(e);
     }

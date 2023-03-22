@@ -4,7 +4,9 @@ import behavior.Behavior;
 import groove.graph.GrooveNode;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.function.Function;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
@@ -39,21 +41,22 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
     this.fileNameFilter = fileNameFilter;
   }
 
-  public void checkGrooveGeneration(Behavior behavior) throws IOException {
+  public void checkGrooveGeneration(Behavior behavior) throws IOException, URISyntaxException {
     this.checkGrooveGeneration(behavior, this.fileNameFilter, false);
   }
 
-  public void checkGrooveGenerationWithIDs(Behavior behavior) throws IOException {
+  public void checkGrooveGenerationWithIDs(Behavior behavior)
+      throws IOException, URISyntaxException {
     this.checkGrooveGeneration(behavior, this.fileNameFilter, true);
   }
 
   @SuppressWarnings("ConstantConditions")
   private void checkGrooveGeneration(
       Behavior behavior, Function<String, Boolean> fileNameFilter, boolean useIDs)
-      throws IOException {
+      throws IOException, URISyntaxException {
     String modelName = behavior.getName();
     BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
-    File outputDir = new File(this.getOutputPathIncludingSubFolder());
+    Path outputDir = Path.of(this.getOutputPathIncludingSubFolder());
     transformer.generateGrooveGrammar(behavior, outputDir, useIDs);
 
     // assert
@@ -64,16 +67,12 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
   }
 
   protected void checkGenerationEqualToExpected(
-      Function<String, Boolean> fileNameFilter, String modelName, File outputDir) {
-    File expectedDir =
-        new File(
-            this.getClass()
-                .getResource(
-                    "/" + this.getTestResourcePathSubFolderName() + "/" + modelName + ".gps")
-                .getFile());
+      Function<String, Boolean> fileNameFilter, String modelName, Path outputDir)
+      throws IOException, URISyntaxException {
+    Path expectedDir = FileTestHelper.getResource(getTestResourcePathSubFolderName() + "/" + modelName + ".gps");
     FileTestHelper.testDirEquals(
         expectedDir,
-        new File(outputDir + "/" + modelName + ".gps"),
+        Path.of(outputDir.toString(), modelName + ".gps"),
         // Ignore the system.propertie file because it contains a timestamp and a dir.
         fileName -> fileName.equals("system.properties") || fileNameFilter.apply(fileName));
   }

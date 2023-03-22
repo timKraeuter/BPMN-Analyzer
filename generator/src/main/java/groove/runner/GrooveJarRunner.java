@@ -34,7 +34,7 @@ public class GrooveJarRunner {
     this.grooveBinDir = grooveBinDir;
   }
 
-  public File generateStateSpace(String graphGrammar, String resultFilePath, boolean printOutput)
+  public Path generateStateSpace(String graphGrammar, String resultFilePath, boolean printOutput)
       throws IOException, InterruptedException {
     // java -jar Generator.jar graphGrammar -o StateSpaceFilePath
     ProcessBuilder builder =
@@ -42,7 +42,7 @@ public class GrooveJarRunner {
             "java", "-jar", grooveBinDir + "/Generator.jar", graphGrammar, "-o", resultFilePath);
 
     runProcess(printOutput, builder);
-    return new File(resultFilePath);
+    return Path.of(resultFilePath);
   }
 
   public ModelCheckingResult checkCTL(String graphGrammar, String ctlProperty)

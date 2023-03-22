@@ -7,11 +7,14 @@ import groove.graph.GrooveGraph;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveGraphRule;
 import groove.graph.rule.GrooveRuleBuilder;
-import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Stream;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProcess> {
@@ -51,7 +54,7 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
   }
 
   @Override
-  public void generateAndWriteRules(NamedPiProcess namedPiProcess, File targetFolder) {
+  public void generateAndWriteRules(NamedPiProcess namedPiProcess, Path targetFolder) {
     this.copyPiRulesAndTypeGraph(targetFolder);
   }
 
@@ -60,11 +63,11 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
     return true; // TODO: implement layout as parameter!
   }
 
-  void copyPiRulesAndTypeGraph(File targetFolder) {
-    File sourceDirectory = new File(this.getClass().getResource("/GaducciPi").getFile());
+  void copyPiRulesAndTypeGraph(Path targetFolder) {
     try {
-      FileUtils.copyDirectory(sourceDirectory, targetFolder);
-    } catch (IOException e) {
+      Path sourceDirectory = Paths.get(this.getClass().getResource("/GaducciPi").toURI());
+      PathUtils.copyDirectory(sourceDirectory, targetFolder, StandardCopyOption.REPLACE_EXISTING);
+    } catch (IOException | URISyntaxException e) {
       throw new ShouldNotHappenRuntimeException(e);
     }
   }

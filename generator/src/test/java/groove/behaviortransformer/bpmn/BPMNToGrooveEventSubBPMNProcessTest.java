@@ -1,6 +1,5 @@
 package groove.behaviortransformer.bpmn;
 
-import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 class BPMNToGrooveEventSubBPMNProcessTest extends BPMNToGrooveTestBase {
@@ -10,7 +9,7 @@ class BPMNToGrooveEventSubBPMNProcessTest extends BPMNToGrooveTestBase {
    * sub process - Non-interrupting"</a> in cawemo.
    */
   @Test
-  void testEventSubProcessNonInterrupting() throws IOException {
+  void testEventSubProcessNonInterrupting() throws Exception {
     testGrooveGenerationForBPMNResourceFile("event-sub-process-non-interrupting.bpmn");
   }
 
@@ -19,7 +18,7 @@ class BPMNToGrooveEventSubBPMNProcessTest extends BPMNToGrooveTestBase {
    * sub process - Interrupting"</a> in cawemo.
    */
   @Test
-  void testEventSubProcessInterrupting() throws IOException {
+  void testEventSubProcessInterrupting() throws Exception {
     testGrooveGenerationForBPMNResourceFile("event-sub-process-interrupting.bpmn");
   }
 }

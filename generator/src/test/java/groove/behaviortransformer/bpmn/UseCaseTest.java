@@ -11,7 +11,6 @@ import behavior.bpmn.events.definitions.EventDefinition;
 import behavior.bpmn.events.definitions.SignalEventDefinition;
 import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +22,7 @@ class UseCaseTest extends BPMNToGrooveTestBase {
    * Test"</a> in cawemo.
    */
   @Test
-  void testUseCase() throws IOException {
+  void testUseCase() throws Exception {
     EventDefinition b_is_green = new SignalEventDefinition("B_is_green");
     EventDefinition a_c_are_green = new SignalEventDefinition("A_C_are_green");
 

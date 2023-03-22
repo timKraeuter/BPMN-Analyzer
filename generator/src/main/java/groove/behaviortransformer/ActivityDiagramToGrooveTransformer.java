@@ -22,11 +22,14 @@ import groove.graph.GrooveGraphBuilder;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveGraphRule;
 import groove.graph.rule.GrooveRuleBuilder;
-import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.file.PathUtils;
 
 public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<ActivityDiagram> {
   private static final String TYPE_GRAPH_DIR = "/ActivityDiagramTypeGraph";
@@ -645,7 +648,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
   }
 
   @Override
-  public void generateAndWriteRulesFurther(ActivityDiagram activityDiagram, File targetFolder) {
+  public void generateAndWriteRulesFurther(ActivityDiagram activityDiagram, Path targetFolder) {
     this.copyTypeGraph(targetFolder);
   }
 
@@ -654,11 +657,11 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     return this.doLayout;
   }
 
-  private void copyTypeGraph(File targetFolder) {
-    File sourceDirectory = new File(this.getClass().getResource(TYPE_GRAPH_DIR).getFile());
+  private void copyTypeGraph(Path targetFolder) {
     try {
-      FileUtils.copyDirectory(sourceDirectory, targetFolder);
-    } catch (IOException e) {
+      Path sourceDirectory = Paths.get(this.getClass().getResource(TYPE_GRAPH_DIR).toURI());
+      PathUtils.copyDirectory(sourceDirectory, targetFolder, StandardCopyOption.REPLACE_EXISTING);
+    } catch (IOException | URISyntaxException e) {
       throw new ShouldNotHappenRuntimeException(e);
     }
   }

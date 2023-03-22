@@ -5,6 +5,7 @@ import behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import behavior.bpmn.reader.BPMNFileReader;
 import groove.behaviortransformer.BehaviorToGrooveTransformer;
 import java.io.File;
+import java.nio.file.Path;
 
 public class BPMNTransformerDriver {
 
@@ -20,10 +21,9 @@ public class BPMNTransformerDriver {
 
   private static void generateGraphGrammar(BPMNCollaboration bpmnCollaboration, String outputPath) {
     BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
-    File outputDir = new File(outputPath);
-    File file = transformer.generateGrooveGrammar(bpmnCollaboration, outputDir, false);
-
-    System.out.println("Generation finished see " + file.getAbsolutePath());
+    Path outputDir = Path.of(outputPath);
+    Path file = transformer.generateGrooveGrammar(bpmnCollaboration, outputDir, false);
+    System.out.println("Generation finished see " + file.toString());
   }
 
   private static void checkBPMNFilePathIsPresent(String[] args) {

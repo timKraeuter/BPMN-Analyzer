@@ -3,28 +3,31 @@ package util;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.apache.commons.io.FileUtils;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 
 public class FileTestHelper {
-  public static void testFileEquals(File expected, File actual) {
+
+  public static void testFileEquals(Path expected, Path actual) {
     try {
       final String actualString =
-          FileUtils.readFileToString(actual, StandardCharsets.UTF_8)
+          Files.readString(actual)
               .replaceAll("\r?\n", "\r\n"); // force consistent line separators
       final String expectedString =
-          FileUtils.readFileToString(expected, StandardCharsets.UTF_8)
+          Files.readString(expected)
               .replaceAll("\r?\n", "\r\n"); // force consistent line separators
       assertThat(
           String.format(
-              "The file %s is not equal to the file %s!", expected.getName(), actual.getName()),
+              "The file %s is not equal to the file %s!", expected.getFileName(),
+              actual.getFileName()),
           actualString,
           is(expectedString));
     } catch (IOException e) {
@@ -32,30 +35,38 @@ public class FileTestHelper {
     }
   }
 
-  /** Test if the files in the dirs are equal. Shallow, i.e., no recursion! */
+  /**
+   * Test if the files in the dirs are equal. Shallow, i.e., no recursion!
+   */
   @SuppressWarnings("ConstantConditions")
   public static void testDirEquals(
-      File expected, File actual, Function<String, Boolean> fileNameFilter) {
+      Path expected, Path actual, Function<String, Boolean> fileNameFilter) throws IOException {
     Assertions.assertNotNull(expected);
     Assertions.assertNotNull(actual);
 
-    Map<String, File> expectedFileNamesToFile =
-        Arrays.stream(expected.listFiles())
-            .collect(Collectors.toMap(File::getName, Function.identity()));
+    Map<String, Path> expectedFileNamesToFile;
+    try (Stream<Path> expectedFiles = Files.list(expected);
+        Stream<Path> actualFiles = Files.list(actual)) {
+      expectedFileNamesToFile = expectedFiles
+          .collect(Collectors.toMap(o -> o.getFileName().toString(), Function.identity()));
 
-    Map<String, File> actualFileNamesToFile =
-        Arrays.stream(actual.listFiles())
-            .filter(file -> !fileNameFilter.apply(file.getName()))
-            .collect(Collectors.toMap(File::getName, Function.identity()));
-    // First check if the folders have files with the same name.
-    assertThat(actualFileNamesToFile.keySet(), is(expectedFileNamesToFile.keySet()));
-    // Check each individual file.
-    expectedFileNamesToFile.forEach(
-        (expectedFileName, expectedFile) -> {
-          if (!fileNameFilter.apply(expectedFileName)) {
-            File actualFile = actualFileNamesToFile.get(expectedFileName);
-            testFileEquals(expectedFile, actualFile);
-          }
-        });
+      Map<String, Path> actualFileNamesToFile =
+          actualFiles
+              .filter(file -> !fileNameFilter.apply(file.getFileName().toString()))
+              .collect(Collectors.toMap(o -> o.getFileName().toString(), Function.identity()));
+      // First check if the folders have files with the same name.
+      assertThat(actualFileNamesToFile.keySet(), is(expectedFileNamesToFile.keySet()));
+      // Check each individual file.
+      expectedFileNamesToFile.forEach(
+          (expectedFileName, expectedFile) -> {
+            if (!fileNameFilter.apply(expectedFileName)) {
+              Path actualFile = actualFileNamesToFile.get(expectedFileName);
+              testFileEquals(expectedFile, actualFile);
+            }
+          });
+    }
+  }
+  public static Path getResource(String resource) throws URISyntaxException {
+    return Paths.get(FileTestHelper.class.getResource("/" + resource).toURI());
   }
 }

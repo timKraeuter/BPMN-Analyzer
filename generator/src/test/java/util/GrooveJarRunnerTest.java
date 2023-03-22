@@ -10,6 +10,7 @@ import groove.runner.checking.ModelCheckingResult;
 import groove.runner.checking.TemporalLogic;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 class GrooveJarRunnerTest {
@@ -19,16 +20,15 @@ class GrooveJarRunnerTest {
    * match the Java JDK.
    */
   @Test
-  void testGenerateStateSpace() throws IOException, InterruptedException {
+  void testGenerateStateSpace() throws Exception {
     GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
     String tempOutputFile =
         System.getProperty("java.io.tmpdir") + "/grooveJarRunner/statespace.txt";
-    File stateSpace =
+    Path stateSpace =
         grooveJarRunner.generateStateSpace(getCircularGraphGrammar(), tempOutputFile, true);
 
     // Check state space files
-    File expected =
-        new File(this.getClass().getResource("/grooveJarRunner/statespace.txt").getFile());
+    Path expected = FileTestHelper.getResource("grooveJarRunner/statespace.txt");
     FileTestHelper.testFileEquals(expected, stateSpace);
   }
 

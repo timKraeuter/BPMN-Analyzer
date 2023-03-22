@@ -4,7 +4,6 @@ import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.reader.BPMNFileReaderTestHelper;
 import com.google.common.collect.Sets;
 import groove.behaviortransformer.BehaviorToGrooveTransformerTestHelper;
-import java.io.IOException;
 import java.util.Set;
 
 public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTestHelper
@@ -35,13 +34,13 @@ public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTe
   }
 
   protected void testGrooveGenerationForBPMNResourceFile(String resourceFileName)
-      throws IOException {
+      throws Exception {
     BPMNCollaboration collaboration = readModelFromResourceFolder(resourceFileName);
     this.checkGrooveGeneration(collaboration);
   }
 
   protected void testGrooveGenerationWithIDsForBPMNResourceFile(String resourceFileName)
-      throws IOException {
+      throws Exception {
     BPMNCollaboration collaboration = readModelFromResourceFolder(resourceFileName);
     this.checkGrooveGenerationWithIDs(collaboration);
   }

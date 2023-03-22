@@ -9,10 +9,13 @@ import groove.graph.GrooveGraphBuilder;
 import groove.graph.GrooveNode;
 import groove.graph.rule.GrooveGraphRule;
 import groove.graph.rule.GrooveRuleBuilder;
-import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.file.PathUtils;
 
 public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMachine> {
 
@@ -27,16 +30,15 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
   private static final String CURRENT_STATE = "currentState";
 
   @Override
-  public void generateAndWriteRulesFurther(FiniteStateMachine fsm, File targetFolder) {
+  public void generateAndWriteRulesFurther(FiniteStateMachine fsm, Path targetFolder) {
     this.copyTypeGraph(targetFolder);
   }
 
-  private void copyTypeGraph(File targetFolder) {
-    //noinspection ConstantConditions must be present!. Otherwise, tests will also fail!
-    File sourceDirectory = new File(this.getClass().getResource(FSM_TYPE_GRAPH_DIR).getFile());
+  private void copyTypeGraph(Path targetFolder) {
     try {
-      FileUtils.copyDirectory(sourceDirectory, targetFolder);
-    } catch (IOException e) {
+      Path sourceDirectory = Paths.get(this.getClass().getResource(FSM_TYPE_GRAPH_DIR).toURI());
+      PathUtils.copyDirectory(sourceDirectory, targetFolder, StandardCopyOption.REPLACE_EXISTING);
+    } catch (IOException | URISyntaxException e) {
       throw new ShouldNotHappenRuntimeException(e);
     }
   }

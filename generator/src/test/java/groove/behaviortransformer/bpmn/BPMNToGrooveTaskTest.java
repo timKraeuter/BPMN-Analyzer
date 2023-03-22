@@ -1,6 +1,5 @@
 package groove.behaviortransformer.bpmn;
 
-import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
@@ -11,7 +10,7 @@ class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
    * cawemo.
    */
   @Test
-  void testSequentialTasks() throws IOException {
+  void testSequentialTasks() throws Exception {
     this.setFileNameFilter(x -> false); // Expect type graph here.
     testGrooveGenerationForBPMNResourceFile("sequential-tasks.bpmn");
   }
@@ -21,7 +20,7 @@ class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
    * Exclusive Gateway"</a> in cawemo.
    */
   @Test
-  void testImplicitExclusiveGateway() throws IOException {
+  void testImplicitExclusiveGateway() throws Exception {
     testGrooveGenerationForBPMNResourceFile("implicit-exclusive-gateway.bpmn");
   }
 
@@ -30,7 +29,7 @@ class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
    * Parallel Gateway"</a> in cawemo.
    */
   @Test
-  void testImplicitParallelGateway() throws IOException {
+  void testImplicitParallelGateway() throws Exception {
     testGrooveGenerationForBPMNResourceFile("implicit-parallel-gateway.bpmn");
   }
 
@@ -40,7 +39,7 @@ class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
    * Tasks"</a> in cawemo.
    */
   @Test
-  void testSendReceiveTask() throws IOException {
+  void testSendReceiveTask() throws Exception {
     testGrooveGenerationForBPMNResourceFile("send-receive-message-tasks.bpmn");
   }
 
@@ -50,7 +49,7 @@ class BPMNToGrooveTaskTest extends BPMNToGrooveTestBase {
    * Task"</a> in cawemo.
    */
   @Test
-  void testInstantiateReceiveTask() throws IOException {
+  void testInstantiateReceiveTask() throws Exception {
     testGrooveGenerationForBPMNResourceFile("instantiate-receive-task.bpmn");
   }
 }

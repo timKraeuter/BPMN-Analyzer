@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import util.FileTestHelper;
@@ -38,13 +39,11 @@ class PiCalcToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelpe
     NamedPiProcess namedProcess = new NamedPiProcess("emptySum", empty);
     this.checkGrooveGeneration(namedProcess);
 
-    File outputDir =
-        new File(
-            new File(this.getOutputPathIncludingSubFolder())
-                + "/"
-                + namedProcess.getName()
-                + ".gps/");
-    File ruleAndTypeGraphDir = new File(this.getClass().getResource("/GaducciPi").getFile());
+    Path outputDir =
+        Path.of(
+            this.getOutputPathIncludingSubFolder()
+            , namedProcess.getName() + ".gps/");
+    Path ruleAndTypeGraphDir = FileTestHelper.getResource("GaducciPi");
 
     FileTestHelper.testDirEquals(
         ruleAndTypeGraphDir,

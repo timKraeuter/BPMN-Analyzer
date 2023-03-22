@@ -7,6 +7,7 @@ import behavior.fsm.State;
 import behavior.fsm.Transition;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
@@ -34,7 +35,7 @@ class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTransforme
   }
 
   //    @Test
-  void tlSynchTest() {
+  void tlSynchTest() throws IOException {
     FiniteStateMachine tl_a = this.createTrafficLight("A", "green");
     FiniteStateMachine tl_b = this.createTrafficLight("B", "red");
     FiniteStateMachine tl_c = this.createTrafficLight("C", "green");
@@ -46,7 +47,7 @@ class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTransforme
     phases.addTransition(new Transition(SW_TO_PHASE_1, phase2, phase1));
 
     BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
-    File outputDir = new File(this.getOutputPathIncludingSubFolder());
+    Path outputDir = Path.of(this.getOutputPathIncludingSubFolder());
 
     Map<String, Set<String>> nameToToBeSynchedRules = new LinkedHashMap<>();
 
@@ -69,9 +70,9 @@ class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTransforme
     transformer.generateGrooveGrammar(
         outputDir, "trafficLightsSynch", nameToToBeSynchedRules, tl_a, tl_b, tl_c, phases);
 
-    File expected_dir =
-        new File(this.getClass().getResource("/synch/trafficLightsSynch.gps").getFile());
-    File actual_dir = new File(this.getOutputPathIncludingSubFolder() + "/trafficLightsSynch.gps");
+    Path expected_dir =
+        Path.of(this.getClass().getResource("/synch/trafficLightsSynch.gps").getFile());
+    Path actual_dir = Path.of(this.getOutputPathIncludingSubFolder(), "trafficLightsSynch.gps");
 
     FileTestHelper.testDirEquals(
         expected_dir, actual_dir, fileName -> fileName.equals("system.properties"));

@@ -7,7 +7,8 @@ import groove.graph.GrooveNode;
 import groove.gxl.Graph;
 import groove.gxl.Gxl;
 import groove.gxl.Node;
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,7 +23,7 @@ public class GrooveRuleWriter {
   public static final String ASPECT_LABEL_NEW = "new:";
   public static final String ASPECT_LABEL_DEL = "del:";
 
-  public static void writeRules(Stream<GrooveGraphRule> rules, File dir) {
+  public static void writeRules(Stream<GrooveGraphRule> rules, Path dir) {
     rules.forEach(
         grooveGraphRule -> {
           // Create gxl with a graph for each rule
@@ -135,8 +136,8 @@ public class GrooveRuleWriter {
     }
   }
 
-  private static void writeRuleToFile(File dir, GrooveGraphRule grooveGraphRule, Gxl gxl) {
-    File file = new File(dir.getPath() + File.separator + grooveGraphRule.getRuleName() + ".gpr");
+  private static void writeRuleToFile(Path dir, GrooveGraphRule grooveGraphRule, Gxl gxl) {
+    Path file = Paths.get(dir.toString(), grooveGraphRule.getRuleName() + ".gpr");
     GxlToXMLConverter.toXml(gxl, file);
   }
 }
