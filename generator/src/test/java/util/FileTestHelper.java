@@ -19,15 +19,14 @@ public class FileTestHelper {
   public static void testFileEquals(Path expected, Path actual) {
     try {
       final String actualString =
-          Files.readString(actual)
-              .replaceAll("\r?\n", "\r\n"); // force consistent line separators
+          Files.readString(actual).replaceAll("\r?\n", "\r\n"); // force consistent line separators
       final String expectedString =
           Files.readString(expected)
               .replaceAll("\r?\n", "\r\n"); // force consistent line separators
       assertThat(
           String.format(
-              "The file %s is not equal to the file %s!", expected.getFileName(),
-              actual.getFileName()),
+              "The file %s is not equal to the file %s!",
+              expected.getFileName(), actual.getFileName()),
           actualString,
           is(expectedString));
     } catch (IOException e) {
@@ -35,9 +34,7 @@ public class FileTestHelper {
     }
   }
 
-  /**
-   * Test if the files in the dirs are equal. Shallow, i.e., no recursion!
-   */
+  /** Test if the files in the dirs are equal. Shallow, i.e., no recursion! */
   @SuppressWarnings("ConstantConditions")
   public static void testDirEquals(
       Path expected, Path actual, Function<String, Boolean> fileNameFilter) throws IOException {
@@ -47,8 +44,9 @@ public class FileTestHelper {
     Map<String, Path> expectedFileNamesToFile;
     try (Stream<Path> expectedFiles = Files.list(expected);
         Stream<Path> actualFiles = Files.list(actual)) {
-      expectedFileNamesToFile = expectedFiles
-          .collect(Collectors.toMap(o -> o.getFileName().toString(), Function.identity()));
+      expectedFileNamesToFile =
+          expectedFiles.collect(
+              Collectors.toMap(o -> o.getFileName().toString(), Function.identity()));
 
       Map<String, Path> actualFileNamesToFile =
           actualFiles
@@ -66,6 +64,7 @@ public class FileTestHelper {
           });
     }
   }
+
   public static Path getResource(String resource) throws URISyntaxException {
     return Paths.get(FileTestHelper.class.getResource("/" + resource).toURI());
   }

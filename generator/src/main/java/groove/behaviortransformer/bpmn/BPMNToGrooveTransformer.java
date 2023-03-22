@@ -115,11 +115,9 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
             .getResourceAsStream(FIXED_RULES_AND_TYPE_GRAPH_DIR + ALL_TERMINATED_FILE_NAME);
     try {
       Files.copy(typeGraph, Path.of(targetFolder.toString(), TYPE_GRAPH_FILE_NAME));
-      Files.copy(
-          terminateRule, Path.of(targetFolder.toString(), TERMINATE_RULE_FILE_NAME));
+      Files.copy(terminateRule, Path.of(targetFolder.toString(), TERMINATE_RULE_FILE_NAME));
       Files.copy(unsafeGraph, Path.of(targetFolder.toString(), UNSAFE_FILE_NAME));
-      Files.copy(
-          allterminatedGraph, Path.of(targetFolder.toString(), ALL_TERMINATED_FILE_NAME));
+      Files.copy(allterminatedGraph, Path.of(targetFolder.toString(), ALL_TERMINATED_FILE_NAME));
     } catch (IOException e) {
       throw new ShouldNotHappenRuntimeException(e);
     }

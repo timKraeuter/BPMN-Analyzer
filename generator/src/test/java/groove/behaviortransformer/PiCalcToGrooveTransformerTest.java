@@ -40,9 +40,7 @@ class PiCalcToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelpe
     this.checkGrooveGeneration(namedProcess);
 
     Path outputDir =
-        Path.of(
-            this.getOutputPathIncludingSubFolder()
-            , namedProcess.getName() + ".gps/");
+        Path.of(this.getOutputPathIncludingSubFolder(), namedProcess.getName() + ".gps/");
     Path ruleAndTypeGraphDir = FileTestHelper.getResource("GaducciPi");
 
     FileTestHelper.testDirEquals(

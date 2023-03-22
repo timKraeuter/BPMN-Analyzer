@@ -33,8 +33,7 @@ public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTe
     return "bpmn/";
   }
 
-  protected void testGrooveGenerationForBPMNResourceFile(String resourceFileName)
-      throws Exception {
+  protected void testGrooveGenerationForBPMNResourceFile(String resourceFileName) throws Exception {
     BPMNCollaboration collaboration = readModelFromResourceFolder(resourceFileName);
     this.checkGrooveGeneration(collaboration);
   }

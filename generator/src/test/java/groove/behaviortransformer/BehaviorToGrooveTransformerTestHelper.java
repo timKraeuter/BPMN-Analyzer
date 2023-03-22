@@ -69,7 +69,8 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
   protected void checkGenerationEqualToExpected(
       Function<String, Boolean> fileNameFilter, String modelName, Path outputDir)
       throws IOException, URISyntaxException {
-    Path expectedDir = FileTestHelper.getResource(getTestResourcePathSubFolderName() + "/" + modelName + ".gps");
+    Path expectedDir =
+        FileTestHelper.getResource(getTestResourcePathSubFolderName() + "/" + modelName + ".gps");
     FileTestHelper.testDirEquals(
         expectedDir,
         Path.of(outputDir.toString(), modelName + ".gps"),
