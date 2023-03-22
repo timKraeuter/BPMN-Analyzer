@@ -7,13 +7,15 @@ import groove.behaviortransformer.BehaviorToGrooveTransformer;
 import groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,7 +36,8 @@ public class RuleGeneratorControllerHelper {
     return tempDir + File.separator;
   }
 
-  private RuleGeneratorControllerHelper() {}
+  private RuleGeneratorControllerHelper() {
+  }
 
   public static void deleteGGsAndStateSpacesOlderThanOneHour() throws IOException {
     deleteLock.lock();
@@ -49,53 +52,53 @@ public class RuleGeneratorControllerHelper {
   }
 
   private static void deleteTimeStampFilesOlderThanOneHour(String dirPath) throws IOException {
-    File dir = new File(dirPath);
-    if (dir.listFiles() == null) {
-      return;
-    }
+    Path dir = Path.of(dirPath);
     Instant oneHourBefore = Instant.now().minus(1, ChronoUnit.HOURS);
-    for (File graphGrammar : dir.listFiles()) {
-      deleteIfOlderThan(graphGrammar, oneHourBefore);
+    try (DirectoryStream<Path> files = Files.newDirectoryStream(dir)) {
+      for (Path graphGrammar : files) {
+        deleteIfOlderThan(graphGrammar, oneHourBefore);
+      }
     }
   }
 
-  private static void deleteIfOlderThan(File timestampedFile, Instant oneHourBefore)
+  private static void deleteIfOlderThan(Path timestampedFile, Instant oneHourBefore)
       throws IOException {
     String timeStampString =
-        timestampedFile.getName().substring(0, timestampedFile.getName().indexOf("_"));
+        timestampedFile.getFileName().toString()
+            .substring(0, timestampedFile.getFileName().toString().indexOf("_"));
     Instant fileTimeStamp = DTF.parse(timeStampString, Instant::from);
 
     if (fileTimeStamp.isBefore(oneHourBefore)) {
-      FileUtils.deleteDirectory(timestampedFile);
+      Files.delete(timestampedFile);
     }
   }
 
-  public static Pair<File, BPMNCollaboration> generateGGForBPMNFile(MultipartFile file)
+  public static Pair<Path, BPMNCollaboration> generateGGForBPMNFile(MultipartFile file)
       throws IOException {
     BPMNFileReader bpmnFileReader =
         new BPMNFileReader(BPMNToGrooveTransformerHelper::transformToQualifiedGrooveNameIfNeeded);
     BPMNCollaboration bpmnCollaboration = bpmnFileReader.readModelFromStream(file.getInputStream());
 
-    final File grooveGrammarFolder = generateGG(bpmnCollaboration);
+    final Path grooveGrammarFolder = generateGG(bpmnCollaboration);
 
     return Pair.of(grooveGrammarFolder, bpmnCollaboration);
   }
 
-  private static File generateGG(BPMNCollaboration bpmnCollaboration) {
+  private static Path generateGG(BPMNCollaboration bpmnCollaboration) {
     BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
     String subFolderName =
         RuleGeneratorControllerHelper.getGGOrStateSpaceDirName(bpmnCollaboration.getName());
-    File grooveGrammarFolder;
+    Path grooveGrammarFolder;
     try {
 
       grooveGrammarFolder =
           transformer.generateGrooveGrammarForBPMNProcessModel(
-              bpmnCollaboration, new File(getGGDirPathname(subFolderName)), false);
+              bpmnCollaboration, Path.of(getGGDirPathname(subFolderName)), false);
     } catch (GrooveGenerationRuntimeException e) {
       // Retry but using ids everywhere.
       grooveGrammarFolder =
           transformer.generateGrooveGrammarForBPMNProcessModel(
-              bpmnCollaboration, new File(getGGDirPathname(subFolderName)), true);
+              bpmnCollaboration, Path.of(getGGDirPathname(subFolderName)), true);
     }
     return grooveGrammarFolder;
   }
