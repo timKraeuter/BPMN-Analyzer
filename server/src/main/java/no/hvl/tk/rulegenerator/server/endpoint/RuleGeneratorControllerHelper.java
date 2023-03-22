@@ -36,8 +36,7 @@ public class RuleGeneratorControllerHelper {
     return tempDir + File.separator;
   }
 
-  private RuleGeneratorControllerHelper() {
-  }
+  private RuleGeneratorControllerHelper() {}
 
   public static void deleteGGsAndStateSpacesOlderThanOneHour() throws IOException {
     deleteLock.lock();
@@ -64,7 +63,9 @@ public class RuleGeneratorControllerHelper {
   private static void deleteIfOlderThan(Path timestampedFile, Instant oneHourBefore)
       throws IOException {
     String timeStampString =
-        timestampedFile.getFileName().toString()
+        timestampedFile
+            .getFileName()
+            .toString()
             .substring(0, timestampedFile.getFileName().toString().indexOf("_"));
     Instant fileTimeStamp = DTF.parse(timeStampString, Instant::from);
 
