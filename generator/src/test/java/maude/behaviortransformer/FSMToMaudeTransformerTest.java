@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 class FSMToMaudeTransformerTest implements MaudeTestHelper {
 
-  private static final String MAUDE_MODULE_FOLDER = "/fsm/maude/";
+  private static final String MAUDE_MODULE_FOLDER = "fsm/maude/";
 
   @Test
   void generateTwoStateFSMTest() throws Exception {

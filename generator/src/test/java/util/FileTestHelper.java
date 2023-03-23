@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -65,7 +66,17 @@ public class FileTestHelper {
     }
   }
 
-  public static Path getResource(String resource) throws URISyntaxException {
-    return Paths.get(FileTestHelper.class.getResource("/" + resource).toURI());
+  public static Path getResource(String resource) {
+    String resourcePath = "/" + resource;
+    URL resourceURL = FileTestHelper.class.getResource(resourcePath);
+    if (resourceURL == null) {
+      throw new RuntimeException(
+          String.format("Resource with the path \"%s\" could not be found!", resourcePath));
+    }
+    try {
+      return Paths.get(resourceURL.toURI());
+    } catch (URISyntaxException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

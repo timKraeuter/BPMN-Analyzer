@@ -4,12 +4,13 @@ import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import behavior.bpmn.reader.BPMNFileReader;
 import groove.behaviortransformer.BehaviorToGrooveTransformer;
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class BPMNTransformerDriver {
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
     checkBPMNFilePathIsPresent(args);
 
     String pathToBPMNFile = args[0];
@@ -33,14 +34,14 @@ public class BPMNTransformerDriver {
     }
   }
 
-  private static BPMNCollaboration readBPMNFileFromPath(String pathToBPMNFile) {
-    File model = new File(pathToBPMNFile);
-    if (!model.exists()) {
+  private static BPMNCollaboration readBPMNFileFromPath(String pathToBPMNFile) throws IOException {
+    Path model = Path.of(pathToBPMNFile);
+    if (!Files.exists(model)) {
       throw new GrooveGenerationRuntimeException(
           String.format("No file at the path %s exists.", pathToBPMNFile));
     }
     BPMNFileReader bpmnFileReader =
         new BPMNFileReader(BPMNToGrooveTransformerHelper::transformToQualifiedGrooveNameIfNeeded);
-    return bpmnFileReader.readModelFromFile(model);
+    return bpmnFileReader.readModelFromFilePath(model);
   }
 }

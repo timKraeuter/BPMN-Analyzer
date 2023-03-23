@@ -4,11 +4,9 @@ import behavior.Behavior;
 import groove.graph.GrooveNode;
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Function;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import util.FileTestHelper;
@@ -41,19 +39,18 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
     this.fileNameFilter = fileNameFilter;
   }
 
-  public void checkGrooveGeneration(Behavior behavior) throws IOException, URISyntaxException {
+  public void checkGrooveGeneration(Behavior behavior) throws IOException {
     this.checkGrooveGeneration(behavior, this.fileNameFilter, false);
   }
 
-  public void checkGrooveGenerationWithIDs(Behavior behavior)
-      throws IOException, URISyntaxException {
+  public void checkGrooveGenerationWithIDs(Behavior behavior) throws IOException {
     this.checkGrooveGeneration(behavior, this.fileNameFilter, true);
   }
 
   @SuppressWarnings("ConstantConditions")
   private void checkGrooveGeneration(
       Behavior behavior, Function<String, Boolean> fileNameFilter, boolean useIDs)
-      throws IOException, URISyntaxException {
+      throws IOException {
     String modelName = behavior.getName();
     BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
     Path outputDir = Path.of(this.getOutputPathIncludingSubFolder());
@@ -62,13 +59,13 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
     // assert
     checkGenerationEqualToExpected(fileNameFilter, modelName, outputDir);
 
-    File propertiesFile = new File(outputDir + "/" + modelName + ".gps/system.properties");
+    Path propertiesFile = Path.of(outputDir.toString(), modelName + ".gps/system.properties");
     this.checkPropertiesFile(propertiesFile);
   }
 
   protected void checkGenerationEqualToExpected(
       Function<String, Boolean> fileNameFilter, String modelName, Path outputDir)
-      throws IOException, URISyntaxException {
+      throws IOException {
     Path expectedDir =
         FileTestHelper.getResource(getTestResourcePathSubFolderName() + "/" + modelName + ".gps");
     FileTestHelper.testDirEquals(
@@ -78,9 +75,9 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
         fileName -> fileName.equals("system.properties") || fileNameFilter.apply(fileName));
   }
 
-  void checkPropertiesFile(File propertiesFile) throws IOException {
+  void checkPropertiesFile(Path propertiesFile) throws IOException {
     Assertions.assertTrue(
-        FileUtils.readFileToString(propertiesFile, StandardCharsets.UTF_8)
+        Files.readString(propertiesFile)
             .replaceAll("\r?\n", "\r\n")
             // force identical line separators
             .endsWith("grooveVersion=5.8.1\r\n" + "grammarVersion=3.7"));

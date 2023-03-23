@@ -19,8 +19,10 @@ import behavior.bpmn.gateways.EventBasedGateway;
 import behavior.bpmn.gateways.ExclusiveGateway;
 import behavior.bpmn.gateways.InclusiveGateway;
 import behavior.bpmn.gateways.ParallelGateway;
-import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -47,14 +49,18 @@ public class BPMNFileReader {
     this.elementNameTransformer = elementNameTransformer;
   }
 
-  public BPMNCollaboration readModelFromFile(File file) {
-    BpmnModelInstance bpmnModelInstance = Bpmn.readModelFromFile(file);
-    return convertModel(FilenameUtils.removeExtension(file.getName()), bpmnModelInstance);
+  public BPMNCollaboration readModelFromFilePath(Path file) throws IOException {
+    String modelName = FilenameUtils.removeExtension(file.getFileName().toString());
+    return readModelFromStream(modelName, Files.newInputStream(file));
   }
 
   public BPMNCollaboration readModelFromStream(InputStream stream) {
+    return readModelFromStream("model", stream);
+  }
+
+  public BPMNCollaboration readModelFromStream(String modelName, InputStream stream) {
     BpmnModelInstance bpmnModelInstance = Bpmn.readModelFromStream(stream);
-    return convertModel("model", bpmnModelInstance);
+    return convertModel(modelName, bpmnModelInstance);
   }
 
   private BPMNCollaboration convertModel(
