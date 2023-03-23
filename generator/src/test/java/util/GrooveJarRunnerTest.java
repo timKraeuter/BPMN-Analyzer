@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import groove.runner.GrooveJarRunner;
 import groove.runner.checking.ModelCheckingResult;
 import groove.runner.checking.TemporalLogic;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
@@ -33,8 +32,7 @@ class GrooveJarRunnerTest {
   }
 
   private String getCircularGraphGrammar() {
-    return new File(this.getClass().getResource("/grooveJarRunner/circular.gps").getFile())
-        .getAbsolutePath();
+    return FileTestHelper.getResource("/grooveJarRunner/circular.gps").toString();
   }
 
   /**

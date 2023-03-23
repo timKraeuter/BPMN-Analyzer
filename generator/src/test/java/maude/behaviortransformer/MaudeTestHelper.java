@@ -1,11 +1,9 @@
 package maude.behaviortransformer;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.apache.commons.io.FileUtils;
 import util.FileTestHelper;
 
 public interface MaudeTestHelper {
@@ -28,8 +26,7 @@ public interface MaudeTestHelper {
     String expectedFileFilePath = "src/test/resources/" + folder + resourceFileName + ".maude";
     if (!actualMaudeModule.equals(expectedMaudeModule)) {
       // Only replace if reduced to true. Run model!
-      FileUtils.writeStringToFile(
-          new File(expectedFileFilePath), actualMaudeModule, Charset.defaultCharset());
+      Files.writeString(Path.of(expectedFileFilePath), actualMaudeModule, Charset.defaultCharset());
       System.out.println("Replaced module with actual!");
     }
   }

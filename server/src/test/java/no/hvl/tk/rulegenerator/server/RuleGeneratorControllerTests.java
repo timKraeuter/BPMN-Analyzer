@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
@@ -31,6 +30,7 @@ import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorController;
 import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -39,7 +39,6 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -228,25 +227,24 @@ class RuleGeneratorControllerTests {
     deleteGGTempDir();
     // Given
     // Create two GGs: one older than one hour and one younger
-    File ggTempDir = new File(GRAPH_GRAMMAR_TEMP_DIR);
-    assertTrue(ggTempDir.mkdirs());
+    Files.createDirectories(Path.of(GRAPH_GRAMMAR_TEMP_DIR));
     String oldGG =
         RuleGeneratorControllerHelper.getGGOrStateSpaceDirName(
             "old", Instant.now().minus(1, ChronoUnit.HOURS));
     String youngGG = RuleGeneratorControllerHelper.getGGOrStateSpaceDirName("young");
-    assertTrue(new File(GRAPH_GRAMMAR_TEMP_DIR + File.separator + oldGG).mkdir());
-    assertTrue(new File(GRAPH_GRAMMAR_TEMP_DIR + File.separator + youngGG).mkdir());
+    Path oldGGPath = Files.createDirectories(Path.of(GRAPH_GRAMMAR_TEMP_DIR, oldGG));
+    Path youngGGPath = Files.createDirectories(Path.of(GRAPH_GRAMMAR_TEMP_DIR, youngGG));
 
     // When
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
     // Then: Only the younger GG survives.
-    assertFalse(new File(GRAPH_GRAMMAR_TEMP_DIR + File.separator + oldGG).exists());
-    assertTrue(new File(GRAPH_GRAMMAR_TEMP_DIR + File.separator + youngGG).exists());
+    assertFalse(Files.exists(oldGGPath));
+    assertTrue(Files.exists(youngGGPath));
   }
 
   private void deleteGGTempDir() throws IOException {
-    FileUtils.deleteDirectory(new File(GRAPH_GRAMMAR_TEMP_DIR));
+    PathUtils.deleteDirectory(Path.of(GRAPH_GRAMMAR_TEMP_DIR));
   }
 
   private Path getBpmnModelFile(String bpmnFile) throws URISyntaxException {
