@@ -4,11 +4,10 @@ import static no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHel
 import static no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper.generateGGForBPMNFile;
 
 import behavior.bpmn.BPMNCollaboration;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +17,6 @@ import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingRequest;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import no.hvl.tk.rulegenerator.server.endpoint.verification.BPMNModelChecker;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,15 +35,15 @@ public class RuleGeneratorController {
       @RequestParam("file") MultipartFile file, HttpServletResponse response) throws IOException {
     deleteGGsAndStateSpacesOlderThanOneHour();
 
-    File resultDir = generateGGForBPMNFile(file).getLeft();
+    Path resultDir = generateGGForBPMNFile(file).getLeft();
 
     // Zip all files
-    File[] allFiles = resultDir.listFiles();
-    List<File> graphGrammarFiles = Arrays.asList(allFiles != null ? allFiles : new File[] {});
-    zipAndReturnFiles(response, graphGrammarFiles);
+    try (DirectoryStream<Path> graphGrammarFiles = Files.newDirectoryStream(resultDir)) {
+      zipAndReturnFiles(response, graphGrammarFiles);
+    }
   }
 
-  private void zipAndReturnFiles(HttpServletResponse response, List<File> files)
+  private void zipAndReturnFiles(HttpServletResponse response, DirectoryStream<Path> files)
       throws IOException {
     // Setting headers
     response.setStatus(HttpServletResponse.SC_OK);
@@ -53,13 +51,11 @@ public class RuleGeneratorController {
 
     // Zipping files
     try (ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())) {
-      for (File file : files) {
-        zipOutputStream.putNextEntry(new ZipEntry(file.getName()));
-        FileInputStream fileInputStream = new FileInputStream(file);
+      for (Path file : files) {
+        zipOutputStream.putNextEntry(new ZipEntry(file.getFileName().toString()));
 
-        IOUtils.copy(fileInputStream, zipOutputStream);
+        Files.copy(file, zipOutputStream);
 
-        fileInputStream.close();
         zipOutputStream.closeEntry();
       }
     }
@@ -77,7 +73,7 @@ public class RuleGeneratorController {
       throws IOException, InterruptedException {
     deleteGGsAndStateSpacesOlderThanOneHour();
 
-    Pair<File, BPMNCollaboration> result = generateGGForBPMNFile(request.getFile());
+    Pair<Path, BPMNCollaboration> result = generateGGForBPMNFile(request.getFile());
 
     return new BPMNModelChecker(result.getLeft(), result.getRight()).checkBPMNProperties(request);
   }
@@ -93,7 +89,7 @@ public class RuleGeneratorController {
       @ModelAttribute ModelCheckingRequest request) throws IOException, InterruptedException {
     deleteGGsAndStateSpacesOlderThanOneHour();
 
-    Pair<File, BPMNCollaboration> result = generateGGForBPMNFile(request.getFile());
+    Pair<Path, BPMNCollaboration> result = generateGGForBPMNFile(request.getFile());
 
     return new BPMNModelChecker(result.getLeft(), result.getRight())
         .checkTemporalLogicProperty(request.getLogic(), request.getProperty());

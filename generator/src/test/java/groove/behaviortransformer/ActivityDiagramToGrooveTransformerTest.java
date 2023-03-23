@@ -16,7 +16,6 @@ import behavior.activity.values.IntegerValue;
 import behavior.activity.variables.BooleanVariable;
 import behavior.activity.variables.IntegerVariable;
 import com.google.common.collect.Lists;
-import java.io.IOException;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +34,7 @@ class ActivityDiagramToGrooveTransformerTest extends BehaviorToGrooveTransformer
    * activity_diagrams/activity.
    */
   @Test
-  void testActivity() throws IOException {
+  void testActivity() throws Exception {
     ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
     InitialNode initNode = new InitialNode("initial");
     OpaqueAction action1 = new OpaqueAction("Action1", Collections.emptyList());
@@ -57,7 +56,7 @@ class ActivityDiagramToGrooveTransformerTest extends BehaviorToGrooveTransformer
 
   /** Tests an activity diagram with a decision and merge node. See activity_diagrams/decision. */
   @Test
-  void testDecision() throws IOException {
+  void testDecision() throws Exception {
     ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
     InitialNode initNode = new InitialNode("initial");
     OpaqueAction action1 = new OpaqueAction("Action1", Collections.emptyList());
@@ -89,7 +88,7 @@ class ActivityDiagramToGrooveTransformerTest extends BehaviorToGrooveTransformer
 
   /** Tests an activity diagram with a fork and join node. See activity_diagrams/fork. */
   @Test
-  void testFork() throws IOException {
+  void testFork() throws Exception {
     ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
     InitialNode initNode = new InitialNode("initial");
     OpaqueAction action1 = new OpaqueAction("Action1", Collections.emptyList());
@@ -121,7 +120,7 @@ class ActivityDiagramToGrooveTransformerTest extends BehaviorToGrooveTransformer
 
   /** Tests an activity diagram which sets variables. See activity_diagrams/vars. */
   @Test
-  void testVariables() throws IOException {
+  void testVariables() throws Exception {
     ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
     InitialNode initNode = new InitialNode("initial");
     IntegerVariable x = new IntegerVariable("x", 0);
@@ -152,7 +151,7 @@ class ActivityDiagramToGrooveTransformerTest extends BehaviorToGrooveTransformer
 
   /** Tests an activity diagram with one activity which has a lot of different expressions. */
   @Test
-  void testExpression() throws IOException {
+  void testExpression() throws Exception {
     ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
     InitialNode initNode = new InitialNode("initial");
 
@@ -232,7 +231,7 @@ class ActivityDiagramToGrooveTransformerTest extends BehaviorToGrooveTransformer
    * Tests the semantics using the example from the TTC 2015. See activity_diagrams/ttc_workflow.
    */
   @Test
-  void testTTCExample() throws IOException {
+  void testTTCExample() throws Exception {
     BooleanVariable not_internal = new BooleanVariable("not internal", false);
     BooleanVariable internal = new BooleanVariable("internal", false);
     BooleanUnaryExpression notInternalExp =
@@ -287,7 +286,7 @@ class ActivityDiagramToGrooveTransformerTest extends BehaviorToGrooveTransformer
   }
 
   //    @Test
-  void perf1() throws IOException {
+  void perf1() throws Exception {
     // Around 5000ms
     ActivityDiagramBuilder builder = new ActivityDiagramBuilder();
     InitialNode initNode = new InitialNode("initial");
@@ -308,7 +307,7 @@ class ActivityDiagramToGrooveTransformerTest extends BehaviorToGrooveTransformer
   }
 
   //    @Test
-  void perf3_2() throws IOException {
+  void perf3_2() throws Exception {
     // Around 630 ms
     IntegerVariable i_var = new IntegerVariable("i", 1);
 
@@ -405,7 +404,7 @@ class ActivityDiagramToGrooveTransformerTest extends BehaviorToGrooveTransformer
   }
 
   //    @Test
-  void myPerf() throws IOException {
+  void myPerf() throws Exception {
     // 36/37s on hvl laptop before mini
     // 32/33s after min
     IntegerVariable counter = new IntegerVariable("i", 1);

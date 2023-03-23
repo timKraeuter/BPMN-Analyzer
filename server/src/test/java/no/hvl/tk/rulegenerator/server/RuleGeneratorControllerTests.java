@@ -10,15 +10,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
@@ -27,6 +30,7 @@ import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorController;
 import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -35,7 +39,6 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -62,8 +65,7 @@ class RuleGeneratorControllerTests {
 
   @Test
   void testGenerateGGAndZip() throws Exception {
-    File bpmnModelFile = getBpmnModelFile(BPMN_FILE);
-    assertNotNull(bpmnModelFile);
+    Path bpmnModelFile = getBpmnModelFile(BPMN_FILE);
 
     CloseableHttpResponse response;
     try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
@@ -72,9 +74,9 @@ class RuleGeneratorControllerTests {
       MultipartEntityBuilder builder = MultipartEntityBuilder.create();
       builder.addBinaryBody(
           "file",
-          new FileInputStream(bpmnModelFile),
+          Files.newInputStream(bpmnModelFile),
           ContentType.APPLICATION_OCTET_STREAM,
-          bpmnModelFile.getName());
+          bpmnModelFile.getFileName().toString());
       HttpEntity multipart = builder.build();
       uploadFile.setEntity(multipart);
 
@@ -116,7 +118,7 @@ class RuleGeneratorControllerTests {
 
   @Test
   void testCheckBPMNSpecificPropertiesNoDeadActivities() throws Exception {
-    File bpmnModelFile = getBpmnModelFile(BPMN_FILE);
+    Path bpmnModelFile = getBpmnModelFile(BPMN_FILE);
     String properties = convertProps(Lists.newArrayList(BPMNSpecificProperty.NO_DEAD_ACTIVITIES));
 
     String response =
@@ -133,7 +135,7 @@ class RuleGeneratorControllerTests {
 
   @Test
   void testCheckBPMNSpecificPropertiesDeadActivities() throws Exception {
-    File bpmnModelFile = getBpmnModelFile(BPMN_FILE_DEAD);
+    Path bpmnModelFile = getBpmnModelFile(BPMN_FILE_DEAD);
     String properties = convertProps(Lists.newArrayList(BPMNSpecificProperty.NO_DEAD_ACTIVITIES));
 
     String response =
@@ -151,7 +153,7 @@ class RuleGeneratorControllerTests {
 
   @Test
   void testCheckBPMNSpecificPropertiesSafenessAndOptionToComplete() throws Exception {
-    File bpmnModelFile = getBpmnModelFile(BPMN_FILE);
+    Path bpmnModelFile = getBpmnModelFile(BPMN_FILE);
     String properties =
         convertProps(
             Lists.newArrayList(
@@ -175,7 +177,7 @@ class RuleGeneratorControllerTests {
 
   @Test
   void testCheckBPMNSpecificPropertiesError() throws Exception {
-    File bpmnModelFile = getBpmnModelFile(BPMN_FILE_ERROR);
+    Path bpmnModelFile = getBpmnModelFile(BPMN_FILE_ERROR);
 
     String response =
         makeMultipartRequest(
@@ -189,7 +191,7 @@ class RuleGeneratorControllerTests {
 
   @Test
   void testCheckCTL() throws Exception {
-    File bpmnModelFile = getBpmnModelFile(BPMN_FILE);
+    Path bpmnModelFile = getBpmnModelFile(BPMN_FILE);
 
     String response =
         makeMultipartRequest(
@@ -201,7 +203,7 @@ class RuleGeneratorControllerTests {
 
   @Test
   void testCheckCTLError() throws Exception {
-    File bpmnModelFile = getBpmnModelFile(BPMN_FILE);
+    Path bpmnModelFile = getBpmnModelFile(BPMN_FILE);
 
     String response =
         makeMultipartRequest(
@@ -225,35 +227,35 @@ class RuleGeneratorControllerTests {
     deleteGGTempDir();
     // Given
     // Create two GGs: one older than one hour and one younger
-    File ggTempDir = new File(GRAPH_GRAMMAR_TEMP_DIR);
-    assertTrue(ggTempDir.mkdirs());
+    Files.createDirectories(Path.of(GRAPH_GRAMMAR_TEMP_DIR));
     String oldGG =
         RuleGeneratorControllerHelper.getGGOrStateSpaceDirName(
             "old", Instant.now().minus(1, ChronoUnit.HOURS));
     String youngGG = RuleGeneratorControllerHelper.getGGOrStateSpaceDirName("young");
-    assertTrue(new File(GRAPH_GRAMMAR_TEMP_DIR + File.separator + oldGG).mkdir());
-    assertTrue(new File(GRAPH_GRAMMAR_TEMP_DIR + File.separator + youngGG).mkdir());
+    Path oldGGPath = Files.createDirectories(Path.of(GRAPH_GRAMMAR_TEMP_DIR, oldGG));
+    Path youngGGPath = Files.createDirectories(Path.of(GRAPH_GRAMMAR_TEMP_DIR, youngGG));
 
     // When
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
     // Then: Only the younger GG survives.
-    assertFalse(new File(GRAPH_GRAMMAR_TEMP_DIR + File.separator + oldGG).exists());
-    assertTrue(new File(GRAPH_GRAMMAR_TEMP_DIR + File.separator + youngGG).exists());
+    assertFalse(Files.exists(oldGGPath));
+    assertTrue(Files.exists(youngGGPath));
   }
 
   private void deleteGGTempDir() throws IOException {
-    FileUtils.deleteDirectory(new File(GRAPH_GRAMMAR_TEMP_DIR));
+    Path tempDir = Path.of(GRAPH_GRAMMAR_TEMP_DIR);
+    if (Files.exists(tempDir)) {
+      PathUtils.deleteDirectory(tempDir);
+    }
   }
 
-  private File getBpmnModelFile(String bpmnFile) {
-    @SuppressWarnings("ConstantConditions")
-    File bpmnModelFile = new File(this.getClass().getResource(bpmnFile).getFile());
-    return bpmnModelFile;
+  private Path getBpmnModelFile(String bpmnFile) throws URISyntaxException {
+    return Paths.get(Objects.requireNonNull(this.getClass().getResource(bpmnFile)).toURI());
   }
 
   private String makeMultipartRequest(
-      String url, File bpmnModelFile, List<Pair<String, String>> body) throws IOException {
+      String url, Path bpmnModelFile, List<Pair<String, String>> body) throws IOException {
     String responseString;
     try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
       CloseableHttpResponse response;
@@ -263,9 +265,9 @@ class RuleGeneratorControllerTests {
       body.forEach(bodyPart -> builder.addTextBody(bodyPart.getLeft(), bodyPart.getRight()));
       builder.addBinaryBody(
           "file",
-          new FileInputStream(bpmnModelFile),
+          Files.newInputStream(bpmnModelFile),
           ContentType.APPLICATION_OCTET_STREAM,
-          bpmnModelFile.getName());
+          bpmnModelFile.getFileName().toString());
       HttpEntity multipart = builder.build();
       uploadFile.setEntity(multipart);
 
@@ -278,7 +280,7 @@ class RuleGeneratorControllerTests {
     return responseString;
   }
 
-  private String makeMultipartRequest(String url, File bpmnModelFile, Pair<String, String> body)
+  private String makeMultipartRequest(String url, Path bpmnModelFile, Pair<String, String> body)
       throws IOException {
     return makeMultipartRequest(url, bpmnModelFile, Lists.newArrayList(body));
   }

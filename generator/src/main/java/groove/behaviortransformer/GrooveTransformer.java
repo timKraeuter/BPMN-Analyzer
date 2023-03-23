@@ -8,7 +8,8 @@ import groove.graph.GrooveGraph;
 import groove.graph.rule.GrooveGraphRule;
 import groove.graph.rule.GrooveRuleWriter;
 import groove.gxl.Gxl;
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public interface GrooveTransformer<S extends Behavior> {
@@ -42,29 +43,29 @@ public interface GrooveTransformer<S extends Behavior> {
   String TYPE = "type:";
   String STRING = "string:";
 
-  static void writeStartGraph(File targetFolder, GrooveGraph startGraph, boolean layoutActivated) {
+  static void writeStartGraph(Path targetFolder, GrooveGraph startGraph, boolean layoutActivated) {
     Gxl gxl = BehaviorToGrooveTransformer.createGxlFromGrooveGraph(startGraph, layoutActivated);
-    File startGraphFile = new File(targetFolder.getPath() + START_GST);
+    Path startGraphFile = Paths.get(targetFolder.toString(), START_GST);
 
     GxlToXMLConverter.toXml(gxl, startGraphFile);
   }
 
   GrooveGraph generateStartGraph(S source);
 
-  default void generateAndWriteStartGraph(S source, File targetFolder) {
+  default void generateAndWriteStartGraph(S source, Path targetFolder) {
     GrooveGraph startGraph = this.generateStartGraph(source);
     writeStartGraph(targetFolder, startGraph, this.isLayoutActivated());
   }
 
   Stream<GrooveGraphRule> generateRules(S source);
 
-  default void generateAndWriteRules(S source, File targetFolder) {
+  default void generateAndWriteRules(S source, Path targetFolder) {
     Stream<GrooveGraphRule> rules = this.generateRules(source);
     GrooveRuleWriter.writeRules(rules, targetFolder);
     this.generateAndWriteRulesFurther(source, targetFolder);
   }
 
-  default void generateAndWriteRulesFurther(S source, File targetFolder) {
+  default void generateAndWriteRulesFurther(S source, Path targetFolder) {
     // to be overridden if needed
   }
 

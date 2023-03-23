@@ -20,9 +20,10 @@ import groove.graph.rule.GrooveRuleWriter;
 import groove.gxl.Graph;
 import groove.gxl.Gxl;
 import groove.gxl.Node;
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -35,11 +36,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.file.PathUtils;
 import util.ValueWrapper;
 
 public class BehaviorToGrooveTransformer {
-  static final String START_GST = "/start.gst";
+
+  static final String START_GST = "start.gst";
   static final String START = "start";
   private static final String ACTIVITY_DIAGRAM_TYPE_GRAPH_FILE_NAME = "type";
   private static final String PI_TYPE_GRAPH_FILE_NAME = "Type";
@@ -105,11 +107,11 @@ public class BehaviorToGrooveTransformer {
   }
 
   void generateGrooveGrammar(
-      File grooveFolder,
+      Path grooveFolder,
       String graphGrammarName,
       Map<String, Set<String>> nameToToBeSynchedRuleNames,
       Behavior... behaviors) {
-    File graphGrammarSubFolder = this.makeSubFolder(graphGrammarName, grooveFolder);
+    Path graphGrammarSubFolder = this.makeSubFolder(graphGrammarName, grooveFolder);
 
     final boolean[] piProcessIncluded = {false};
     Set<String> typeGraphs = new LinkedHashSet<>();
@@ -201,7 +203,7 @@ public class BehaviorToGrooveTransformer {
   private void writeAndSynchRules(
       Map<String, Set<String>> nameToToBeSynchedRuleNames,
       Map<String, GrooveGraphRule> indexedRules,
-      File targetFolder) {
+      Path targetFolder) {
     Map<String, Set<GrooveGraphRule>> nameToToBeSynchedRules = new LinkedHashMap<>();
     Set<GrooveGraphRule> unsynchedRules = new LinkedHashSet<>(indexedRules.values());
 
@@ -220,7 +222,7 @@ public class BehaviorToGrooveTransformer {
     GrooveRuleWriter.writeRules(unsynchedRules.stream(), targetFolder);
   }
 
-  private void mergeAndWriteStartGraphs(File graphGrammarSubFolder, Set<GrooveGraph> startGraphs) {
+  private void mergeAndWriteStartGraphs(Path graphGrammarSubFolder, Set<GrooveGraph> startGraphs) {
     Optional<GrooveGraph> startGraph =
         startGraphs.stream()
             .reduce((graph, graph2) -> graph.union(graph2, (name1, name2) -> name1));
@@ -228,8 +230,8 @@ public class BehaviorToGrooveTransformer {
         graph -> GrooveTransformer.writeStartGraph(graphGrammarSubFolder, graph, true));
   }
 
-  public File generateGrooveGrammar(Behavior behavior, File targetFolder, boolean useIDs) {
-    ValueWrapper<File> result = new ValueWrapper<>();
+  public Path generateGrooveGrammar(Behavior behavior, Path targetFolder, boolean useIDs) {
+    ValueWrapper<Path> result = new ValueWrapper<>();
     behavior.accept(
         new BehaviorVisitor() {
           @Override
@@ -270,9 +272,9 @@ public class BehaviorToGrooveTransformer {
     return result.getValueIfExists();
   }
 
-  private File generateGrooveGrammarForActivityDiagram(
-      ActivityDiagram activityDiagram, File targetFolder) {
-    File graphGrammarSubFolder = this.makeSubFolder(activityDiagram, targetFolder);
+  private Path generateGrooveGrammarForActivityDiagram(
+      ActivityDiagram activityDiagram, Path targetFolder) {
+    Path graphGrammarSubFolder = this.makeSubFolder(activityDiagram, targetFolder);
     ActivityDiagramToGrooveTransformer transformer = new ActivityDiagramToGrooveTransformer(true);
 
     transformer.generateAndWriteStartGraph(activityDiagram, graphGrammarSubFolder);
@@ -286,8 +288,8 @@ public class BehaviorToGrooveTransformer {
     return graphGrammarSubFolder;
   }
 
-  private File generateGrooveGrammarForPiProcess(NamedPiProcess piProcess, File grooveDir) {
-    File graphGrammarSubFolder = this.makeSubFolder(piProcess, grooveDir);
+  private Path generateGrooveGrammarForPiProcess(NamedPiProcess piProcess, Path grooveDir) {
+    Path graphGrammarSubFolder = this.makeSubFolder(piProcess, grooveDir);
     PiCalcToGrooveTransformer transformer = new PiCalcToGrooveTransformer();
 
     transformer.generateAndWriteStartGraph(piProcess, graphGrammarSubFolder);
@@ -302,9 +304,9 @@ public class BehaviorToGrooveTransformer {
     return graphGrammarSubFolder;
   }
 
-  public File generateGrooveGrammarForBPMNProcessModel(
-      BPMNCollaboration collaboration, File grooveDir, boolean useIDs) {
-    File graphGrammarSubFolder = this.makeSubFolder(collaboration, grooveDir);
+  public Path generateGrooveGrammarForBPMNProcessModel(
+      BPMNCollaboration collaboration, Path grooveDir, boolean useIDs) {
+    Path graphGrammarSubFolder = this.makeSubFolder(collaboration, grooveDir);
     BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer(useIDs);
 
     // Generate start graph
@@ -319,8 +321,8 @@ public class BehaviorToGrooveTransformer {
     return graphGrammarSubFolder;
   }
 
-  private File generateGrooveGrammarForPN(PetriNet petriNet, File grooveDir) {
-    File graphGrammarSubFolder = this.makeSubFolder(petriNet, grooveDir);
+  private Path generateGrooveGrammarForPN(PetriNet petriNet, Path grooveDir) {
+    Path graphGrammarSubFolder = this.makeSubFolder(petriNet, grooveDir);
     PNToGrooveTransformer transformer = new PNToGrooveTransformer();
 
     // Generate start graph
@@ -334,8 +336,8 @@ public class BehaviorToGrooveTransformer {
     return graphGrammarSubFolder;
   }
 
-  private File generateGrooveGrammarForFSM(FiniteStateMachine finiteStateMachine, File grooveDir) {
-    File graphGrammarSubFolder = this.makeSubFolder(finiteStateMachine, grooveDir);
+  private Path generateGrooveGrammarForFSM(FiniteStateMachine finiteStateMachine, Path grooveDir) {
+    Path graphGrammarSubFolder = this.makeSubFolder(finiteStateMachine, grooveDir);
     FSMToGrooveTransformer transformer = new FSMToGrooveTransformer();
 
     // Generate start graph
@@ -350,33 +352,33 @@ public class BehaviorToGrooveTransformer {
     return graphGrammarSubFolder;
   }
 
-  private File makeSubFolder(Behavior behavior, File grooveDir) {
+  private Path makeSubFolder(Behavior behavior, Path grooveDir) {
     return this.makeSubFolder(behavior.getName(), grooveDir);
   }
 
-  private File makeSubFolder(String folderName, File grooveDir) {
-    File graphGrammarSubFolder = new File(grooveDir + File.separator + folderName + ".gps");
-    if (!graphGrammarSubFolder.mkdirs()) {
-      // Clean dir if not fresh
-      cleanSubDir(graphGrammarSubFolder);
-    }
+  private Path makeSubFolder(String folderName, Path grooveDir) {
+    Path graphGrammarSubFolder = Paths.get(grooveDir.toString(), folderName + ".gps");
+    createEmptyDir(graphGrammarSubFolder);
     return graphGrammarSubFolder;
   }
 
-  private static void cleanSubDir(File graphGrammarSubFolder) {
+  private static void createEmptyDir(Path graphGrammarSubFolder) {
     try {
-      FileUtils.cleanDirectory(graphGrammarSubFolder);
+      Files.createDirectories(graphGrammarSubFolder);
+      if (!PathUtils.isEmpty(graphGrammarSubFolder)) {
+        PathUtils.cleanDirectory(graphGrammarSubFolder);
+      }
     } catch (IOException e) {
-      throw new FolderCouldNotBeCleanedException(
+      throw new EmptyFolderCouldNotBeCreatedException(
           String.format(
-              "The subfolder %s for the groove rule generation could not be cleaned.",
-              graphGrammarSubFolder.getAbsolutePath()),
+              "The empty subfolder %s for the groove rule generation could not be created.",
+              graphGrammarSubFolder),
           e);
     }
   }
 
   private void generatePropertiesFile(
-      File subFolder, String startGraph, Map<String, String> additionalProperties) {
+      Path subFolder, String startGraph, Map<String, String> additionalProperties) {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
 
@@ -384,12 +386,12 @@ public class BehaviorToGrooveTransformer {
         String.format(
             "# %s (Groove rule generator)%nlocation=%s%nstartGraph=%s%n%sgrooveVersion=5.8.1%ngrammarVersion=3.7",
             dtf.format(now),
-            subFolder.getPath(),
+            subFolder,
             startGraph,
             this.getAdditionalProperties(additionalProperties));
-    File propertiesFile = new File(subFolder + File.separator + "system.properties");
+    Path propertiesFile = Paths.get(subFolder.toString(), "system.properties");
     try {
-      FileUtils.writeStringToFile(propertiesFile, propertiesContent, StandardCharsets.UTF_8, false);
+      Files.writeString(propertiesFile, propertiesContent);
     } catch (IOException e) {
       throw new ShouldNotHappenRuntimeException(e);
     }

@@ -2,7 +2,6 @@ package groove.behaviortransformer;
 
 import behavior.petrinet.PetriNet;
 import behavior.petrinet.Place;
-import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 class PNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
@@ -21,7 +20,7 @@ class PNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
   }
 
   @Test
-  void testPNGenerationResources() throws IOException {
+  void testPNGenerationResources() throws Exception {
     String petriNetName = "pn";
     PetriNet pn = new PetriNet(petriNetName);
     // Places

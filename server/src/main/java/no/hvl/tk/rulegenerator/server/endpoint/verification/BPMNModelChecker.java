@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,17 +32,16 @@ import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyChecking
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResponse;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import no.hvl.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
-import org.apache.commons.io.FileUtils;
 
 public class BPMNModelChecker {
 
   public static final String OPTION_TO_COMPLETE_CTL = "AF(AllTerminated)";
   public static final String UNSAFE_CTL = "AG(!Unsafe)";
   private static final String DISABLED_RULES_DIR = "/DisabledGraphConditions/";
-  private final File graphGrammarDir;
+  private final Path graphGrammarDir;
   private final BPMNCollaboration bpmnModel;
 
-  public BPMNModelChecker(File graphGrammarDir, BPMNCollaboration bpmnModel) {
+  public BPMNModelChecker(Path graphGrammarDir, BPMNCollaboration bpmnModel) {
     this.graphGrammarDir = graphGrammarDir;
     this.bpmnModel = bpmnModel;
   }
@@ -51,7 +51,7 @@ public class BPMNModelChecker {
     if (logic == TemporalLogic.CTL) {
       final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
       ModelCheckingResult propertyCheckingResult =
-          grooveJarRunner.checkCTL(graphGrammarDir.getPath(), property);
+          grooveJarRunner.checkCTL(graphGrammarDir.toString(), property);
       return new ModelCheckingResponse(
           property, propertyCheckingResult.isValid(), propertyCheckingResult.getError());
     }
@@ -97,7 +97,7 @@ public class BPMNModelChecker {
 
     final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
     ModelCheckingResult safenessResult =
-        grooveJarRunner.checkCTL(graphGrammarDir.getPath(), OPTION_TO_COMPLETE_CTL);
+        grooveJarRunner.checkCTL(graphGrammarDir.toString(), OPTION_TO_COMPLETE_CTL);
 
     response.addPropertyCheckingResult(
         new BPMNPropertyCheckingResult(
@@ -111,8 +111,10 @@ public class BPMNModelChecker {
         this.getClass().getResourceAsStream(DISABLED_RULES_DIR + UNSAFE_FILE_NAME);
     try {
       if (unsafeDisabledGraph != null) {
-        FileUtils.copyInputStreamToFile(
-            unsafeDisabledGraph, new File(this.graphGrammarDir, UNSAFE_FILE_NAME));
+        Files.copy(
+            unsafeDisabledGraph,
+            Path.of(this.graphGrammarDir.toString(), UNSAFE_FILE_NAME),
+            StandardCopyOption.REPLACE_EXISTING);
       }
     } catch (IOException e) {
       throw new ShouldNotHappenRuntimeException(e);
@@ -123,7 +125,7 @@ public class BPMNModelChecker {
       throws IOException, InterruptedException {
     final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
     ModelCheckingResult safenessResult =
-        grooveJarRunner.checkCTL(graphGrammarDir.getPath(), UNSAFE_CTL);
+        grooveJarRunner.checkCTL(graphGrammarDir.toString(), UNSAFE_CTL);
 
     response.addPropertyCheckingResult(
         new BPMNPropertyCheckingResult(
@@ -136,7 +138,7 @@ public class BPMNModelChecker {
     final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
     final String stateSpaceTempFile =
         String.format("%s%s.txt", this.getStateSpaceDirPath(), bpmnModel.getName() + "_StateSpace");
-    grooveJarRunner.generateStateSpace(graphGrammarDir.getPath(), stateSpaceTempFile, true);
+    grooveJarRunner.generateStateSpace(graphGrammarDir.toString(), stateSpaceTempFile, true);
 
     readStateSpaceAndCheckActivities(response, stateSpaceTempFile);
   }

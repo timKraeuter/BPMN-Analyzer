@@ -5,6 +5,7 @@ import groove.runner.checking.ModelCheckingResult;
 import groove.runner.checking.TemporalLogic;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -15,7 +16,7 @@ public class GrooveJarRunner {
   private static String findGrooveBinDir() {
     List<String> possibleLocations = Lists.newArrayList("groove/bin", "../groove/bin");
     for (String possibleLocation : possibleLocations) {
-      if (new File(possibleLocation).exists()) {
+      if (Files.exists(Path.of(possibleLocation))) {
         return possibleLocation;
       }
     }
@@ -34,7 +35,7 @@ public class GrooveJarRunner {
     this.grooveBinDir = grooveBinDir;
   }
 
-  public File generateStateSpace(String graphGrammar, String resultFilePath, boolean printOutput)
+  public Path generateStateSpace(String graphGrammar, String resultFilePath, boolean printOutput)
       throws IOException, InterruptedException {
     // java -jar Generator.jar graphGrammar -o StateSpaceFilePath
     ProcessBuilder builder =
@@ -42,7 +43,7 @@ public class GrooveJarRunner {
             "java", "-jar", grooveBinDir + "/Generator.jar", graphGrammar, "-o", resultFilePath);
 
     runProcess(printOutput, builder);
-    return new File(resultFilePath);
+    return Path.of(resultFilePath);
   }
 
   public ModelCheckingResult checkCTL(String graphGrammar, String ctlProperty)

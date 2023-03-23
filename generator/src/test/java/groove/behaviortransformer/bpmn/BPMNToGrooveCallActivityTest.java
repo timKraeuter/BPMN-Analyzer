@@ -1,6 +1,5 @@
 package groove.behaviortransformer.bpmn;
 
-import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
@@ -10,7 +9,7 @@ class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
    * activity - Simple"</a> in cawemo.
    */
   @Test
-  void testCallActivity() throws IOException {
+  void testCallActivity() throws Exception {
     testGrooveGenerationForBPMNResourceFile("call-activity-simple.bpmn");
   }
 
@@ -19,7 +18,7 @@ class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
    * activity - Implicit exclusive and parallel gateway"</a> in cawemo.
    */
   @Test
-  void testCallActivityImplicitGateways() throws IOException {
+  void testCallActivityImplicitGateways() throws Exception {
     testGrooveGenerationForBPMNResourceFile(
         "call-activity-implicit-exclusive-and-parallel-gateway.bpmn");
   }
@@ -29,7 +28,7 @@ class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
    * activity - Terminate end event"</a> in cawemo.
    */
   @Test
-  void testCallActivityTerminateEvent() throws IOException {
+  void testCallActivityTerminateEvent() throws Exception {
     testGrooveGenerationForBPMNResourceFile("call-activity-terminate-end-event.bpmn");
   }
 
@@ -38,7 +37,7 @@ class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
    * activity - No start event"</a> in cawemo.
    */
   @Test
-  void testCallActivityNoStartEvent() throws IOException {
+  void testCallActivityNoStartEvent() throws Exception {
     testGrooveGenerationForBPMNResourceFile("call-activity-no-start-event.bpmn");
   }
 
@@ -47,7 +46,7 @@ class BPMNToGrooveCallActivityTest extends BPMNToGrooveTestBase {
    * activity - Complex"</a> in cawemo.
    */
   @Test
-  void testCallActivityComplex() throws IOException {
+  void testCallActivityComplex() throws Exception {
     testGrooveGenerationForBPMNResourceFile("call-activity-complex.bpmn");
   }
 }

@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
-import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +14,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * Start Events"</a> in cawemo.
    */
   @Test
-  void testMultipleStartEvents() throws IOException {
+  void testMultipleStartEvents() throws Exception {
     testGrooveGenerationForBPMNResourceFile("multiple-start-events.bpmn");
   }
 
@@ -24,7 +23,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * Events"</a> in cawemo.
    */
   @Test
-  void testMessageEvents() throws IOException {
+  void testMessageEvents() throws Exception {
     testGrooveGenerationForBPMNResourceFile("message-events.bpmn");
   }
 
@@ -33,7 +32,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * Events without Message Flows"</a> in cawemo.
    */
   @Test
-  void testMessageEventsNoMessageFlows() throws IOException {
+  void testMessageEventsNoMessageFlows() throws Exception {
     testGrooveGenerationForBPMNResourceFile("message-events-without-message-flows.bpmn");
   }
 
@@ -42,7 +41,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * Incoming Message Flows"</a> in cawemo.
    */
   @Test
-  void testTwoIncomingMessageFlows() throws IOException {
+  void testTwoIncomingMessageFlows() throws Exception {
     // TODO: Implement the terminating example which supersedes this one.
     testGrooveGenerationForBPMNResourceFile("two-incoming-message-flows-no-termination.bpmn");
   }
@@ -52,7 +51,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * Events"</a> in cawemo.
    */
   @Test
-  void testTwoEndEvents() throws IOException {
+  void testTwoEndEvents() throws Exception {
     testGrooveGenerationForBPMNResourceFile("two-end-events.bpmn");
   }
 
@@ -62,7 +61,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * in cawemo.
    */
   @Test
-  void testTerminateEndEvent() throws IOException {
+  void testTerminateEndEvent() throws Exception {
     testGrooveGenerationForBPMNResourceFile("terminate-end-event.bpmn");
   }
 
@@ -71,7 +70,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * Event"</a> in cawemo.
    */
   @Test
-  void testLinkEvent() throws IOException {
+  void testLinkEvent() throws Exception {
     testGrooveGenerationWithIDsForBPMNResourceFile("link-event.bpmn");
   }
 
@@ -80,7 +79,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * Events"</a> in cawemo.
    */
   @Test
-  void testSignalEvents() throws IOException {
+  void testSignalEvents() throws Exception {
     testGrooveGenerationForBPMNResourceFile("signal-events.bpmn");
   }
 
@@ -89,7 +88,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * Events - Multi Activation"</a> in cawemo.
    */
   @Test
-  void testSignalEventsMultiActivation() throws IOException {
+  void testSignalEventsMultiActivation() throws Exception {
     testGrooveGenerationForBPMNResourceFile("signal-events-multi-activation.bpmn");
   }
 
@@ -98,7 +97,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * events - Multi Activation - Same Process"</a> in cawemo.
    */
   @Test
-  void testSignalEventsMultiActivationSameProcess() throws IOException {
+  void testSignalEventsMultiActivationSameProcess() throws Exception {
     testGrooveGenerationForBPMNResourceFile("signal-events-multi-activation-same-process.bpmn");
   }
 
@@ -107,7 +106,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * events"</a> in cawemo.
    */
   @Test
-  void testTimerEvents() throws IOException {
+  void testTimerEvents() throws Exception {
     testGrooveGenerationForBPMNResourceFile("timer-events.bpmn");
   }
 
@@ -117,7 +116,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * Event"</a> in cawemo.
    */
   @Test
-  void testIntermediateThrowEvent() throws IOException {
+  void testIntermediateThrowEvent() throws Exception {
     testGrooveGenerationForBPMNResourceFile("intermediate-throw-event.bpmn");
   }
 
@@ -127,7 +126,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * in cawemo.
    */
   @Test
-  void testSubprocessError() throws IOException {
+  void testSubprocessError() throws Exception {
     testGrooveGenerationForBPMNResourceFile("subprocess-error.bpmn");
   }
 
@@ -136,7 +135,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * Subprocess - Error"</a> in cawemo.
    */
   @Test
-  void testEventSubprocessError() throws IOException {
+  void testEventSubprocessError() throws Exception {
     testGrooveGenerationForBPMNResourceFile("event-subprocess-error.bpmn");
   }
 
@@ -146,7 +145,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * Complex"</a> in cawemo.
    */
   @Test
-  void testSubprocessErrorHandlingComplex() throws IOException {
+  void testSubprocessErrorHandlingComplex() throws Exception {
     testGrooveGenerationForBPMNResourceFile("subprocess-error-handling-complex.bpmn");
   }
 
@@ -191,7 +190,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * Escalation"</a> in cawemo.
    */
   @Test
-  void testSubprocessEscalation() throws IOException {
+  void testSubprocessEscalation() throws Exception {
     testGrooveGenerationForBPMNResourceFile("subprocess-escalation.bpmn");
   }
 
@@ -200,7 +199,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * Subprocess - Escalation"</a> in cawemo.
    */
   @Test
-  void testEventSubprocessEscalation() throws IOException {
+  void testEventSubprocessEscalation() throws Exception {
     testGrooveGenerationForBPMNResourceFile("event-subprocess-escalation.bpmn");
   }
 
@@ -210,7 +209,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    * Handling Complex"</a> in cawemo.
    */
   @Test
-  void testSubprocessEscalationHandlingComplex() throws IOException {
+  void testSubprocessEscalationHandlingComplex() throws Exception {
     testGrooveGenerationForBPMNResourceFile("subprocess-escalation-handling-complex.bpmn");
   }
 

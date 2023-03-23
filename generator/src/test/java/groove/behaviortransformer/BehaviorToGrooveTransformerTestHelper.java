@@ -4,9 +4,9 @@ import behavior.Behavior;
 import groove.graph.GrooveNode;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.function.Function;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import util.FileTestHelper;
@@ -53,34 +53,31 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
       throws IOException {
     String modelName = behavior.getName();
     BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
-    File outputDir = new File(this.getOutputPathIncludingSubFolder());
+    Path outputDir = Path.of(this.getOutputPathIncludingSubFolder());
     transformer.generateGrooveGrammar(behavior, outputDir, useIDs);
 
     // assert
     checkGenerationEqualToExpected(fileNameFilter, modelName, outputDir);
 
-    File propertiesFile = new File(outputDir + "/" + modelName + ".gps/system.properties");
+    Path propertiesFile = Path.of(outputDir.toString(), modelName + ".gps/system.properties");
     this.checkPropertiesFile(propertiesFile);
   }
 
   protected void checkGenerationEqualToExpected(
-      Function<String, Boolean> fileNameFilter, String modelName, File outputDir) {
-    File expectedDir =
-        new File(
-            this.getClass()
-                .getResource(
-                    "/" + this.getTestResourcePathSubFolderName() + "/" + modelName + ".gps")
-                .getFile());
+      Function<String, Boolean> fileNameFilter, String modelName, Path outputDir)
+      throws IOException {
+    Path expectedDir =
+        FileTestHelper.getResource(getTestResourcePathSubFolderName() + "/" + modelName + ".gps");
     FileTestHelper.testDirEquals(
         expectedDir,
-        new File(outputDir + "/" + modelName + ".gps"),
+        Path.of(outputDir.toString(), modelName + ".gps"),
         // Ignore the system.propertie file because it contains a timestamp and a dir.
         fileName -> fileName.equals("system.properties") || fileNameFilter.apply(fileName));
   }
 
-  void checkPropertiesFile(File propertiesFile) throws IOException {
+  void checkPropertiesFile(Path propertiesFile) throws IOException {
     Assertions.assertTrue(
-        FileUtils.readFileToString(propertiesFile, StandardCharsets.UTF_8)
+        Files.readString(propertiesFile)
             .replaceAll("\r?\n", "\r\n")
             // force identical line separators
             .endsWith("grooveVersion=5.8.1\r\n" + "grammarVersion=3.7"));

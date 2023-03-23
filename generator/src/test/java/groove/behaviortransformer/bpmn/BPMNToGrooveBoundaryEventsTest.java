@@ -1,6 +1,5 @@
 package groove.behaviortransformer.bpmn;
 
-import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 class BPMNToGrooveBoundaryEventsTest extends BPMNToGrooveTestBase {
@@ -11,7 +10,7 @@ class BPMNToGrooveBoundaryEventsTest extends BPMNToGrooveTestBase {
    * Boundary Events"</a> in cawemo.
    */
   @Test
-  void testSubProcessInterruptingBoundaryEvents() throws IOException {
+  void testSubProcessInterruptingBoundaryEvents() throws Exception {
     testGrooveGenerationForBPMNResourceFile("subprocess-interrupting-boundary-events.bpmn");
   }
 
@@ -21,7 +20,7 @@ class BPMNToGrooveBoundaryEventsTest extends BPMNToGrooveTestBase {
    * Non-Interrupting Boundary Events"</a> in cawemo.
    */
   @Test
-  void testSubProcessNonInterruptingBoundaryEvents() throws IOException {
+  void testSubProcessNonInterruptingBoundaryEvents() throws Exception {
     testGrooveGenerationForBPMNResourceFile("subprocess-non-interrupting-boundary-events.bpmn");
   }
 
@@ -30,7 +29,7 @@ class BPMNToGrooveBoundaryEventsTest extends BPMNToGrooveTestBase {
    * Interrupting Boundary Events"</a> in cawemo.
    */
   @Test
-  void testTaskInterruptingBoundaryEvents() throws IOException {
+  void testTaskInterruptingBoundaryEvents() throws Exception {
     testGrooveGenerationForBPMNResourceFile("task-interrupting-boundary-events.bpmn");
   }
 
@@ -39,7 +38,7 @@ class BPMNToGrooveBoundaryEventsTest extends BPMNToGrooveTestBase {
    * Non-Interrupting Boundary Events"</a> in cawemo.
    */
   @Test
-  void testTaskNonInterruptingBoundaryEvents() throws IOException {
+  void testTaskNonInterruptingBoundaryEvents() throws Exception {
     testGrooveGenerationForBPMNResourceFile("task-non-interrupting-boundary-events.bpmn");
   }
 }

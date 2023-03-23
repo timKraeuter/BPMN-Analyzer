@@ -15,9 +15,9 @@ import behavior.bpmn.events.definitions.EventDefinition;
 import behavior.bpmn.events.definitions.SignalEventDefinition;
 import behavior.bpmn.gateways.EventBasedGateway;
 import com.google.common.collect.Sets;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -25,14 +25,15 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
+import util.FileTestHelper;
 
 class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
 
-  public static final String BPMN_BPMN_MODELS_READER_TEST = "/bpmn/bpmnModelsReaderTest/";
+  public static final String READER_TEST_PATH = "bpmn/bpmnModelsReaderTest/";
 
   @Test
-  void readTasks() {
-    BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "tasks.bpmn");
+  void readTasks() throws IOException {
+    BPMNCollaboration result = readModelFromResource(READER_TEST_PATH + "tasks.bpmn");
 
     // Expect the model shown here: https://cawemo.com/share/882d7c5b-bff0-4244-a39f-a234795035e5
     assertNotNull(result);
@@ -72,9 +73,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
   }
 
   @Test
-  void readUnconnectedElements() {
-    BPMNCollaboration result =
-        readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "unconnected.bpmn");
+  void readUnconnectedElements() throws IOException {
+    BPMNCollaboration result = readModelFromResource(READER_TEST_PATH + "unconnected.bpmn");
 
     // Expect the model shown here: https://cawemo.com/share/11f6314a-43f9-475d-94ae-149ad85119c1
     assertNotNull(result);
@@ -88,9 +88,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
   }
 
   @Test
-  void readGateways() {
-    BPMNCollaboration result =
-        readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "gateways.bpmn");
+  void readGateways() throws IOException {
+    BPMNCollaboration result = readModelFromResource(READER_TEST_PATH + "gateways.bpmn");
 
     // Expect the model shown here: https://cawemo.com/share/bfb5f9e4-1b24-4ff7-bee1-278ea6aa80bc
     assertNotNull(result);
@@ -125,8 +124,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
   }
 
   @Test
-  void readEvents() {
-    BPMNCollaboration result = readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "events.bpmn");
+  void readEvents() throws IOException {
+    BPMNCollaboration result = readModelFromResource(READER_TEST_PATH + "events.bpmn");
 
     // Expect the model shown here: https://cawemo.com/share/19b961cd-d4e2-4af8-8994-2e43e7ed094b
     assertNotNull(result);
@@ -296,9 +295,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
   }
 
   @Test
-  void readBoundaryEvents() {
-    BPMNCollaboration result =
-        readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "boundary-events.bpmn");
+  void readBoundaryEvents() throws IOException {
+    BPMNCollaboration result = readModelFromResource(READER_TEST_PATH + "boundary-events.bpmn");
 
     // Expect the model shown here: https://cawemo.com/share/9831098e-dba7-446c-9f35-d1af37295551
     assertNotNull(result);
@@ -398,9 +396,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
   }
 
   @Test
-  void readPoolsAndMessageFlows() {
-    BPMNCollaboration result =
-        readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "pools-message-flows.bpmn");
+  void readPoolsAndMessageFlows() throws IOException {
+    BPMNCollaboration result = readModelFromResource(READER_TEST_PATH + "pools-message-flows.bpmn");
 
     // Expect the model shown here: https://cawemo.com/share/a7b1034d-da01-4afd-afdc-26cfdb33ef06
     assertNotNull(result);
@@ -433,9 +430,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
   }
 
   @Test
-  void readContainedSubprocess() {
-    BPMNCollaboration result =
-        readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "subprocesses.bpmn");
+  void readContainedSubprocess() throws IOException {
+    BPMNCollaboration result = readModelFromResource(READER_TEST_PATH + "subprocesses.bpmn");
 
     // Expect the model shown here: https://cawemo.com/share/f26bcf22-fbb8-4cf7-8fd9-1b9004163e8d
     assertNotNull(result);
@@ -474,9 +470,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
   }
 
   @Test
-  void readEventSubprocess() {
-    BPMNCollaboration result =
-        readModelFromResource(BPMN_BPMN_MODELS_READER_TEST + "event-subprocesses.bpmn");
+  void readEventSubprocess() throws IOException {
+    BPMNCollaboration result = readModelFromResource(READER_TEST_PATH + "event-subprocesses.bpmn");
 
     // Expect the model shown here: https://cawemo.com/share/1d7d7d68-c480-45f1-85e4-ed579c944295
     assertNotNull(result);
@@ -555,13 +550,13 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
   }
 
   @Test
-  void readFromStream() throws FileNotFoundException {
-    String resourcePath = BPMN_BPMN_MODELS_READER_TEST + "pools-message-flows.bpmn";
+  void readFromStream() throws Exception {
+    String resourcePath = READER_TEST_PATH + "pools-message-flows.bpmn";
     @SuppressWarnings("ConstantConditions")
-    File model = new File(this.getClass().getResource(resourcePath).getFile());
+    Path model = FileTestHelper.getResource(resourcePath);
     BPMNFileReader bpmnFileReader = new BPMNFileReader();
     BPMNCollaboration bpmnCollaboration =
-        bpmnFileReader.readModelFromStream(new FileInputStream(model));
+        bpmnFileReader.readModelFromStream(Files.newInputStream(model));
 
     assertNotNull(bpmnCollaboration);
     assertThat(bpmnCollaboration.getParticipants().size(), is(2));
@@ -569,10 +564,10 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
   }
 
   @Test
-  void readWithElementNameTransformer() {
+  void readWithElementNameTransformer() throws IOException {
     BPMNCollaboration result =
         readModelFromResource(
-            BPMN_BPMN_MODELS_READER_TEST + "tasks.bpmn",
+            READER_TEST_PATH + "tasks.bpmn",
             (name) -> {
               if (name.equals("start")) {
                 return "startNameChanged";
