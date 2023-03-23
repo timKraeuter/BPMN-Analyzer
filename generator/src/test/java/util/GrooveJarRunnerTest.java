@@ -32,7 +32,7 @@ class GrooveJarRunnerTest {
   }
 
   private String getCircularGraphGrammar() {
-    return FileTestHelper.getResource("/grooveJarRunner/circular.gps").toString();
+    return FileTestHelper.getResource("grooveJarRunner/circular.gps").toString();
   }
 
   /**
