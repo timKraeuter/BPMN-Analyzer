@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
+import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -73,7 +74,7 @@ public class RuleGeneratorControllerHelper {
     Instant fileTimeStamp = DTF.parse(timeStampString, Instant::from);
 
     if (fileTimeStamp.isBefore(oneHourBefore)) {
-      Files.delete(timestampedFile);
+      PathUtils.delete(timestampedFile);
     }
   }
 
