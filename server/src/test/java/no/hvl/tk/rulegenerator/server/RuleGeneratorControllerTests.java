@@ -31,6 +31,7 @@ import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper;
 import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.PathUtils;
+import org.apache.commons.io.file.StandardDeleteOption;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -54,9 +55,11 @@ class RuleGeneratorControllerTests {
   public static final String PROPERTIES_TO_BE_CHECKED = "propertiesToBeChecked[]";
   public static final String CHECK_BPMN_SPECIFIC_PROPERTIES = "checkBPMNSpecificProperties";
   public static final String CHECK_TEMPORAL_LOGIC = "checkTemporalLogic";
-  @LocalServerPort private int port;
+  @LocalServerPort
+  private int port;
 
-  @Autowired private RuleGeneratorController restController;
+  @Autowired
+  private RuleGeneratorController restController;
 
   @Test
   void testContextLoads() {
@@ -244,7 +247,10 @@ class RuleGeneratorControllerTests {
   }
 
   private void deleteGGTempDir() throws IOException {
-    PathUtils.deleteDirectory(Path.of(GRAPH_GRAMMAR_TEMP_DIR));
+    Path tempDir = Path.of(GRAPH_GRAMMAR_TEMP_DIR);
+    if (Files.exists(tempDir)) {
+      PathUtils.deleteDirectory(tempDir, StandardDeleteOption.);
+    }
   }
 
   private Path getBpmnModelFile(String bpmnFile) throws URISyntaxException {
