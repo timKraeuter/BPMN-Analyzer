@@ -6,10 +6,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import behavior.picalculus.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import java.io.File;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import util.FileTestHelper;
 
@@ -56,12 +54,12 @@ class PiCalcToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelpe
     NamedPiProcess namedProcess = new NamedPiProcess("emptySum", empty);
     this.checkGrooveGeneration(namedProcess);
 
-    File outputDir = new File(this.getOutputPathIncludingSubFolder());
-    File propertiesFile =
-        new File(outputDir + "/" + namedProcess.getName() + ".gps/system.properties");
-    final String propertiesContent =
-        FileUtils.readFileToString(propertiesFile, StandardCharsets.UTF_8)
-            .replaceAll("\r?\n", "\r\n");
+    Path propertiesFile =
+        Path.of(
+            this.getOutputPathIncludingSubFolder(),
+            namedProcess.getName() + ".gps",
+            "system.properties");
+    final String propertiesContent = Files.readString(propertiesFile).replaceAll("\r?\n", "\r\n");
 
     assertThat(
         propertiesContent.contains("typeGraph=Type\r\n" + "checkDangling=true\r\n"), is(true));

@@ -5,12 +5,11 @@ import static groove.behaviortransformer.FSMToGrooveTransformer.FSM_TYPE_GRAPH_D
 import behavior.fsm.FiniteStateMachine;
 import behavior.fsm.State;
 import behavior.fsm.Transition;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.file.PathUtils;
 import util.FileTestHelper;
 
 class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTransformerTestHelper {
@@ -21,7 +20,7 @@ class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTransforme
 
   @Override
   protected void setUpFurther() {
-    copyTypeGraph(new File("./synch/trafficLightsSynch"));
+    copyTypeGraph(Path.of("./synch/trafficLightsSynch"));
   }
 
   @Override
@@ -104,11 +103,11 @@ class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTransforme
     return fsm;
   }
 
-  private void copyTypeGraph(File targetFolder) {
+  private void copyTypeGraph(Path targetFolder) {
     //noinspection ConstantConditions must be present!. Otherwise, tests will also fail!
-    File sourceDirectory = new File(this.getClass().getResource(FSM_TYPE_GRAPH_DIR).getFile());
+    Path sourceDirectory = FileTestHelper.getResource(FSM_TYPE_GRAPH_DIR);
     try {
-      FileUtils.copyDirectory(sourceDirectory, targetFolder);
+      PathUtils.copyDirectory(sourceDirectory, targetFolder);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
