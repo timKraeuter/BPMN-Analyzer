@@ -96,7 +96,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
               String inFlowID = getSequenceFlowIdOrDescriptiveName(inFlow, this.useSFId);
               String ruleName =
                   implicitExclusiveGateway
-                      ? inFlowID + "_" + eventBasedGateway.getName()
+                      ? (inFlowID + "_" + eventBasedGateway.getName())
                       : eventBasedGateway.getName();
               ruleBuilder.startRule(ruleName);
               updateTokenPositionWhenRunning(
