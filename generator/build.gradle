@@ -91,6 +91,7 @@ jar {
     manifest {
         attributes 'Main-Class': 'groove.behaviortransformer.bpmn.BPMNTransformerDriver'
     }
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
     // Builds a fat jar.
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
