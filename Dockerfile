@@ -1,4 +1,4 @@
-FROM openjdk:11.0.15
+FROM openjdk:17.0.2
 ARG JAR_FILE=server/build/libs/*.jar
 COPY ${JAR_FILE} app.jar
 ADD /groove/ /groove/
