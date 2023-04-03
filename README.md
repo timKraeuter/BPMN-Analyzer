@@ -39,6 +39,7 @@ Go [here](/server/README.md) if you want to run the tool to generate graph-trans
 ## Code style & Static analysis
 I use the [Google Java Code Style](https://google.github.io/styleguide/javaguide.html) in my project.
 The style is automatically enforced using [google-java-format](https://github.com/google/google-java-format) through the [spotless](https://github.com/diffplug/spotless/tree/main/plugin-gradle#google-java-format) gradle plugin and can also be installed in your IDE.
+For the UI part written in typescript, HTML, and CSS, I use the [Prettier](https://prettier.io/) code formatter.
 
-I use sonarcloud for static analysis see/click on lines of code, coverage, bugs, code smells, and vulnerabilities above.
+Sonarcloud is used for static analysis click on lines of code, coverage, bugs, code smells, and vulnerabilities above.
 In addition, I experiment with Google's [Error Prone](https://errorprone.info/), but it mostly finds the same issues as sonarcloud.
