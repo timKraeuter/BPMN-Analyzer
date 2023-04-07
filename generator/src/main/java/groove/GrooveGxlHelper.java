@@ -95,8 +95,7 @@ public class GrooveGxlHelper {
         .getNodeOrEdgeOrRel()
         .forEach(
             nodeOrEdge -> {
-              if (nodeOrEdge instanceof groove.gxl.Node) {
-                final groove.gxl.Node gxlNode = ((groove.gxl.Node) nodeOrEdge);
+              if (nodeOrEdge instanceof groove.gxl.Node gxlNode) {
                 final ElkNode layoutNode = layoutNodes.get(gxlNode.getId());
                 GrooveGxlHelper.addLayoutToNode(
                     gxlNode,
@@ -119,12 +118,10 @@ public class GrooveGxlHelper {
         .getNodeOrEdgeOrRel()
         .forEach(
             nodeOrEdge -> {
-              if (nodeOrEdge instanceof groove.gxl.Node) {
-                final groove.gxl.Node gxlNode = ((groove.gxl.Node) nodeOrEdge);
+              if (nodeOrEdge instanceof groove.gxl.Node gxlNode) {
                 createNodeIfNeeded(layoutNodes, layoutGraph, gxlNode.getId(), nodeLabels);
               }
-              if (nodeOrEdge instanceof Edge) {
-                Edge edge = (Edge) nodeOrEdge;
+              if (nodeOrEdge instanceof Edge edge) {
                 final String fromId = ((groove.gxl.Node) edge.getFrom()).getId();
                 final String toId = ((groove.gxl.Node) edge.getTo()).getId();
 
