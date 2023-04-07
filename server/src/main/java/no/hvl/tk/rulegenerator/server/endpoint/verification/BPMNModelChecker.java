@@ -1,7 +1,5 @@
 package no.hvl.tk.rulegenerator.server.endpoint.verification;
 
-import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformer.UNSAFE_FILE_NAME;
-
 import behavior.bpmn.AbstractBPMNProcess;
 import behavior.bpmn.BPMNCollaboration;
 import behavior.bpmn.BPMNEventSubprocess;
@@ -13,11 +11,9 @@ import groove.runner.checking.ModelCheckingResult;
 import groove.runner.checking.TemporalLogic;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -37,7 +33,6 @@ public class BPMNModelChecker {
 
   public static final String OPTION_TO_COMPLETE_CTL = "AF(AllTerminated)";
   public static final String UNSAFE_CTL = "AG(!Unsafe)";
-  private static final String DISABLED_RULES_DIR = "/DisabledGraphConditions/";
   private final Path graphGrammarDir;
   private final BPMNCollaboration bpmnModel;
 
@@ -74,26 +69,15 @@ public class BPMNModelChecker {
       BPMNSpecificProperty property, BPMNSpecificPropertyCheckingResponse response)
       throws InterruptedException, IOException {
     switch (property) {
-      case NO_DEAD_ACTIVITIES:
-        this.checkNoDeadActivities(response);
-        break;
-      case SAFENESS:
-        this.checkSafeness(response);
-        break;
-      case OPTION_TO_COMPLETE:
-        this.checkOptionToComplete(response);
-        break;
-      default:
-        throw new IllegalStateException("Unexpected value: " + property);
+      case NO_DEAD_ACTIVITIES -> this.checkNoDeadActivities(response);
+      case SAFENESS -> this.checkSafeness(response);
+      case OPTION_TO_COMPLETE -> this.checkOptionToComplete(response);
+      default -> throw new IllegalStateException("Unexpected value: " + property);
     }
   }
 
   private void checkOptionToComplete(BPMNSpecificPropertyCheckingResponse response)
       throws IOException, InterruptedException {
-    // Workaround: Disable unsafe before model checking due to a bug in Groove.
-    // Otherwise option to complete might return a wrong result!
-    // https://sourceforge.net/p/groove/bugs/503/
-    this.disableUnsafeRule();
 
     final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
     ModelCheckingResult safenessResult =
@@ -104,21 +88,6 @@ public class BPMNModelChecker {
             BPMNSpecificProperty.OPTION_TO_COMPLETE,
             safenessResult.isValid(),
             "CTL: " + OPTION_TO_COMPLETE_CTL));
-  }
-
-  private void disableUnsafeRule() {
-    InputStream unsafeDisabledGraph =
-        this.getClass().getResourceAsStream(DISABLED_RULES_DIR + UNSAFE_FILE_NAME);
-    try {
-      if (unsafeDisabledGraph != null) {
-        Files.copy(
-            unsafeDisabledGraph,
-            Path.of(this.graphGrammarDir.toString(), UNSAFE_FILE_NAME),
-            StandardCopyOption.REPLACE_EXISTING);
-      }
-    } catch (IOException e) {
-      throw new ShouldNotHappenRuntimeException(e);
-    }
   }
 
   private void checkSafeness(BPMNSpecificPropertyCheckingResponse response)
