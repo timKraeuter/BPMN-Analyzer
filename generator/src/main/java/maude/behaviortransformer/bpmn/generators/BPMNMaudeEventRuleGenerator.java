@@ -248,21 +248,12 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
           "Intermediate throw events should have exactly one incoming sequence flow!");
     }
     switch (intermediateThrowEvent.getType()) {
-      case NONE:
-        createIntermediateThrowNoneEventRule(intermediateThrowEvent, process);
-        break;
-      case LINK:
-        createIntermediateThrowLinkEventRule(intermediateThrowEvent, process);
-        break;
-      case MESSAGE:
-        createIntermediateThrowMessageEventRule(intermediateThrowEvent, process);
-        break;
-      case SIGNAL:
-        createIntermediateThrowSignalEventRule(intermediateThrowEvent, process);
-        break;
-      default:
-        throw new BPMNRuntimeException(
-            "Unexpected throw event type: " + intermediateThrowEvent.getType());
+      case NONE -> createIntermediateThrowNoneEventRule(intermediateThrowEvent, process);
+      case LINK -> createIntermediateThrowLinkEventRule(intermediateThrowEvent, process);
+      case MESSAGE -> createIntermediateThrowMessageEventRule(intermediateThrowEvent, process);
+      case SIGNAL -> createIntermediateThrowSignalEventRule(intermediateThrowEvent, process);
+      default -> throw new BPMNRuntimeException(
+          "Unexpected throw event type: " + intermediateThrowEvent.getType());
     }
   }
 

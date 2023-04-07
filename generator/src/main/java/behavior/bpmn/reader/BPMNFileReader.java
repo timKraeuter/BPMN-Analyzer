@@ -132,22 +132,20 @@ public class BPMNFileReader {
       Map<String, Boolean> mappedSequenceFlows) {
     InteractionNode sourceInteractionNode = messageFlow.getSource();
     InteractionNode targetInteractionNode = messageFlow.getTarget();
-    if (!(sourceInteractionNode instanceof FlowNode)) {
+    if (!(sourceInteractionNode instanceof FlowNode source)) {
       throw new BPMNRuntimeException(
           String.format(
               "Message flow with id \"%s\" has an invalid source with id "
                   + "\"%s\", which is not a flow node (event, activity, ...)!",
               messageFlow.getId(), sourceInteractionNode.getId()));
     }
-    if (!(targetInteractionNode instanceof FlowNode)) {
+    if (!(targetInteractionNode instanceof FlowNode target)) {
       throw new BPMNRuntimeException(
           String.format(
               "Message flow with id \"%s\" has an invalid target with id "
                   + "\"%s\", which is not a flow node (event, activity, ...)!",
               messageFlow.getId(), targetInteractionNode.getId()));
     }
-    FlowNode source = (FlowNode) sourceInteractionNode;
-    FlowNode target = (FlowNode) targetInteractionNode;
     bpmnCollaborationBuilder.messageFlow(
         messageFlow.getId(),
         messageFlow.getName() == null ? "" : messageFlow.getName(),
@@ -254,33 +252,30 @@ public class BPMNFileReader {
     behavior.bpmn.FlowNode resultingFlowNode;
     switch (taskTypeName) {
         // Events
-      case "startEvent":
+      case "startEvent" -> {
         StartEvent startEvent = mapStartEvent(flowNode);
         bpmnModelBuilder.startEvent(startEvent);
         resultingFlowNode = startEvent;
-        break;
-      case "intermediateThrowEvent":
-        resultingFlowNode = this.mapIntermediateThrowEvent(flowNode);
-        break;
-      case "intermediateCatchEvent":
-        resultingFlowNode = this.mapIntermediateCatchEvent(flowNode);
-        break;
-      case "endEvent":
-        resultingFlowNode = mapEndEvent(flowNode);
-        break;
+      }
+      case "intermediateThrowEvent" -> resultingFlowNode = this.mapIntermediateThrowEvent(flowNode);
+      case "intermediateCatchEvent" -> resultingFlowNode = this.mapIntermediateCatchEvent(flowNode);
+      case "endEvent" -> resultingFlowNode = mapEndEvent(flowNode);
+
         // Tasks
-      case "businessRuleTask", "scriptTask", "serviceTask", "manualTask", "userTask", "task":
-        resultingFlowNode = new Task(flowNode.getId(), getFlowElementName(flowNode));
-        break;
-      case "sendTask":
-        resultingFlowNode = new SendTask(flowNode.getId(), getFlowElementName(flowNode));
-        break;
-      case "receiveTask":
+      case "businessRuleTask",
+          "scriptTask",
+          "serviceTask",
+          "manualTask",
+          "userTask",
+          "task" -> resultingFlowNode = new Task(flowNode.getId(), getFlowElementName(flowNode));
+      case "sendTask" -> resultingFlowNode =
+          new SendTask(flowNode.getId(), getFlowElementName(flowNode));
+      case "receiveTask" -> {
         boolean instantiate = hasInstantiateCamundaProperty(flowNode);
         resultingFlowNode =
             new ReceiveTask(flowNode.getId(), getFlowElementName(flowNode), instantiate);
-        break;
-      case "subProcess":
+      }
+      case "subProcess" -> {
         SubProcess subprocess = (SubProcess) flowNode;
         if (subprocess.triggeredByEvent()) {
           handleEventSubProcess(subprocess, mappedFlowNodes, mappedSequenceFlows, bpmnModelBuilder);
@@ -289,33 +284,28 @@ public class BPMNFileReader {
         } else {
           resultingFlowNode = mapSubProcess(subprocess, mappedFlowNodes, mappedSequenceFlows);
         }
-        break;
-      case "callActivity":
-        // Call Activity = Reusable sub-processes (external).
-        throw new BPMNRuntimeException("External subprocesses currently not supported!");
+      }
+      case "callActivity" ->
+      // Call Activity = Reusable sub-processes (external).
+      throw new BPMNRuntimeException("External subprocesses currently not supported!");
+
         // Gateways
-      case "parallelGateway":
-        resultingFlowNode = new ParallelGateway(flowNode.getId(), getFlowElementName(flowNode));
-        break;
-      case "exclusiveGateway":
-        resultingFlowNode = new ExclusiveGateway(flowNode.getId(), getFlowElementName(flowNode));
-        break;
-      case "eventBasedGateway":
+      case "parallelGateway" -> resultingFlowNode =
+          new ParallelGateway(flowNode.getId(), getFlowElementName(flowNode));
+      case "exclusiveGateway" -> resultingFlowNode =
+          new ExclusiveGateway(flowNode.getId(), getFlowElementName(flowNode));
+      case "eventBasedGateway" -> {
         boolean instantiateGateway = hasInstantiateCamundaProperty(flowNode);
         resultingFlowNode =
             new EventBasedGateway(
                 flowNode.getId(), getFlowElementName(flowNode), instantiateGateway);
-        break;
-      case "inclusiveGateway":
-        resultingFlowNode = new InclusiveGateway(flowNode.getId(), getFlowElementName(flowNode));
-        break;
-      case "boundaryEvent":
-        resultingFlowNode =
-            handleBoundaryEvent(flowNode, mappedFlowNodes, mappedSequenceFlows, bpmnModelBuilder);
-        break;
-      default:
-        throw new BPMNRuntimeException(
-            String.format("Unknown task type \"%s\" found!", taskTypeName));
+      }
+      case "inclusiveGateway" -> resultingFlowNode =
+          new InclusiveGateway(flowNode.getId(), getFlowElementName(flowNode));
+      case "boundaryEvent" -> resultingFlowNode =
+          handleBoundaryEvent(flowNode, mappedFlowNodes, mappedSequenceFlows, bpmnModelBuilder);
+      default -> throw new BPMNRuntimeException(
+          String.format("Unknown task type \"%s\" found!", taskTypeName));
     }
     if (resultingFlowNode != null) {
       bpmnModelBuilder.flowNode(resultingFlowNode);

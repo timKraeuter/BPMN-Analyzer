@@ -105,49 +105,39 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     }
     ruleBuilder.startRule(endEvent.getName());
     switch (endEvent.getType()) {
-      case NONE:
-        {
-          GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
-          GrooveNode noneRunning = ruleBuilder.contextNode(TYPE_RUNNING);
-          ruleBuilder.contextEdge(STATE, processInstance, noneRunning);
-        }
-        break;
-      case TERMINATION:
-        {
-          GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
-          GrooveNode running = ruleBuilder.deleteNode(TYPE_RUNNING);
-          ruleBuilder.deleteEdge(STATE, processInstance, running);
+      case NONE -> {
+        GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
+        GrooveNode noneRunning = ruleBuilder.contextNode(TYPE_RUNNING);
+        ruleBuilder.contextEdge(STATE, processInstance, noneRunning);
+      }
+      case TERMINATION -> {
+        GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
+        GrooveNode running = ruleBuilder.deleteNode(TYPE_RUNNING);
+        ruleBuilder.deleteEdge(STATE, processInstance, running);
 
-          GrooveNode terminated = ruleBuilder.addNode(TYPE_TERMINATED);
-          ruleBuilder.addEdge(STATE, processInstance, terminated);
+        GrooveNode terminated = ruleBuilder.addNode(TYPE_TERMINATED);
+        ruleBuilder.addEdge(STATE, processInstance, terminated);
 
-          GrooveNode anyToken = ruleBuilder.deleteNode(TYPE_TOKEN);
-          ruleBuilder.deleteEdge(TOKENS, processInstance, anyToken);
-          GrooveNode forAll = ruleBuilder.contextNode(FORALL);
-          ruleBuilder.contextEdge(AT, anyToken, forAll);
+        GrooveNode anyToken = ruleBuilder.deleteNode(TYPE_TOKEN);
+        ruleBuilder.deleteEdge(TOKENS, processInstance, anyToken);
+        GrooveNode forAll = ruleBuilder.contextNode(FORALL);
+        ruleBuilder.contextEdge(AT, anyToken, forAll);
 
-          interruptSubprocess(ruleBuilder, null, processInstance, true);
-        }
-        break;
-      case MESSAGE:
-        {
-          GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
-          GrooveNode messageRunning = ruleBuilder.contextNode(TYPE_RUNNING);
-          ruleBuilder.contextEdge(STATE, processInstance, messageRunning);
-          addSendMessageBehaviorForFlowNode(collaboration, ruleBuilder, endEvent, this.useSFId);
-          break;
-        }
-      case ERROR, ESCALATION:
-        createErrorOrEscalationEndEventRule(endEvent);
-        break;
-      case SIGNAL:
-        {
-          GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
-          GrooveNode signalRunning = ruleBuilder.contextNode(TYPE_RUNNING);
-          ruleBuilder.contextEdge(STATE, processInstance, signalRunning);
-          createSignalThrowRulePart(endEvent.getEventDefinition());
-          break;
-        }
+        interruptSubprocess(ruleBuilder, null, processInstance, true);
+      }
+      case MESSAGE -> {
+        GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
+        GrooveNode messageRunning = ruleBuilder.contextNode(TYPE_RUNNING);
+        ruleBuilder.contextEdge(STATE, processInstance, messageRunning);
+        addSendMessageBehaviorForFlowNode(collaboration, ruleBuilder, endEvent, this.useSFId);
+      }
+      case ERROR, ESCALATION -> createErrorOrEscalationEndEventRule(endEvent);
+      case SIGNAL -> {
+        GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
+        GrooveNode signalRunning = ruleBuilder.contextNode(TYPE_RUNNING);
+        ruleBuilder.contextEdge(STATE, processInstance, signalRunning);
+        createSignalThrowRulePart(endEvent.getEventDefinition());
+      }
     }
 
     ruleBuilder.buildRule();
@@ -449,23 +439,16 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
           "Intermediate throw events should have exactly one incoming sequence flow!");
     }
     switch (intermediateThrowEvent.getType()) {
-      case NONE:
-        createIntermediateThrowNoneEventRule(
-            intermediateThrowEvent, ruleName, ruleBuilder, process);
-        break;
-      case LINK:
-        createIntermediateThrowLinkEventRule(
-            intermediateThrowEvent, ruleName, ruleBuilder, process);
-        break;
-      case MESSAGE:
-        createIntermediateThrowMessageEventRule(intermediateThrowEvent, ruleName, process);
-        break;
-      case SIGNAL:
-        createIntermediateThrowSignalEventRule(intermediateThrowEvent, ruleName, process);
-        break;
-      default:
-        throw new BPMNRuntimeException(
-            "Unexpected throw event type: " + intermediateThrowEvent.getType());
+      case NONE -> createIntermediateThrowNoneEventRule(
+          intermediateThrowEvent, ruleName, ruleBuilder, process);
+      case LINK -> createIntermediateThrowLinkEventRule(
+          intermediateThrowEvent, ruleName, ruleBuilder, process);
+      case MESSAGE -> createIntermediateThrowMessageEventRule(
+          intermediateThrowEvent, ruleName, process);
+      case SIGNAL -> createIntermediateThrowSignalEventRule(
+          intermediateThrowEvent, ruleName, process);
+      default -> throw new BPMNRuntimeException(
+          "Unexpected throw event type: " + intermediateThrowEvent.getType());
     }
   }
 
@@ -829,16 +812,16 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
           @Override
           public void handle(StartEvent startEvent) {
             switch (startEvent.getType()) {
-              case SIGNAL:
+              case SIGNAL -> {
                 if (startEvent.isInterrupt()) {
                   createSignalInterruptingStartRulePart(eventSubprocess, event);
                 } else {
                   createSignalNonInterruptingStartRulePart(eventSubprocess, event);
                 }
-                break;
-              case NONE, MESSAGE:
-              default:
-                throw new IllegalStateException("Unexpected value: " + startEvent.getType());
+              }
+              case NONE, MESSAGE -> {}
+              default -> throw new IllegalStateException(
+                  "Unexpected value: " + startEvent.getType());
             }
           }
 
