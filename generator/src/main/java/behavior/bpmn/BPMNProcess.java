@@ -6,7 +6,6 @@ import behavior.bpmn.auxiliary.visitors.CallActivityFlowNodeVisitor;
 import behavior.bpmn.events.StartEvent;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -42,10 +41,7 @@ public class BPMNProcess extends AbstractBPMNProcess {
                         callAct -> {
                           subProcesses.add(callAct.getSubProcessModel());
                           subProcesses.addAll(
-                              callAct
-                                  .getSubProcessModel()
-                                  .getSubProcesses()
-                                  .collect(Collectors.toList()));
+                              callAct.getSubProcessModel().getSubProcesses().toList());
                         })));
     return subProcesses.stream();
   }

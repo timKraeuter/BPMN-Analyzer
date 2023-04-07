@@ -203,12 +203,11 @@ public class BPMNFileReader {
       Map<String, Boolean> mappedSequenceFlows,
       FlowElement flowElement) {
     // Map flow nodes
-    if (flowElement instanceof FlowNode) {
-      mapFlowNode((FlowNode) flowElement, mappedFlowNodes, mappedSequenceFlows, bpmnModelBuilder);
+    if (flowElement instanceof FlowNode flowNode) {
+      mapFlowNode(flowNode, mappedFlowNodes, mappedSequenceFlows, bpmnModelBuilder);
     }
     // Map sequence flows
-    if (flowElement instanceof SequenceFlow) {
-      SequenceFlow sequenceFlow = (SequenceFlow) flowElement;
+    if (flowElement instanceof SequenceFlow sequenceFlow) {
       mapSequenceFlow(sequenceFlow, mappedFlowNodes, mappedSequenceFlows, bpmnModelBuilder);
     }
   }
@@ -270,12 +269,7 @@ public class BPMNFileReader {
         resultingFlowNode = mapEndEvent(flowNode);
         break;
         // Tasks
-      case "businessRuleTask":
-      case "scriptTask":
-      case "serviceTask":
-      case "manualTask":
-      case "userTask":
-      case "task":
+      case "businessRuleTask", "scriptTask", "serviceTask", "manualTask", "userTask", "task":
         resultingFlowNode = new Task(flowNode.getId(), getFlowElementName(flowNode));
         break;
       case "sendTask":
@@ -793,26 +787,26 @@ public class BPMNFileReader {
   private <T> T visitDefinition(
       org.camunda.bpm.model.bpmn.instance.EventDefinition evDefinition,
       EventDefinitionVisitor<T> eventVisitor) {
-    if (evDefinition instanceof MessageEventDefinition) {
-      return eventVisitor.handle((MessageEventDefinition) evDefinition);
+    if (evDefinition instanceof MessageEventDefinition messageEventDefinition) {
+      return eventVisitor.handle(messageEventDefinition);
     }
-    if (evDefinition instanceof LinkEventDefinition) {
-      return eventVisitor.handle((LinkEventDefinition) evDefinition);
+    if (evDefinition instanceof LinkEventDefinition linkEventDefinition) {
+      return eventVisitor.handle(linkEventDefinition);
     }
-    if (evDefinition instanceof SignalEventDefinition) {
-      return eventVisitor.handle((SignalEventDefinition) evDefinition);
+    if (evDefinition instanceof SignalEventDefinition signalEventDefinition) {
+      return eventVisitor.handle(signalEventDefinition);
     }
-    if (evDefinition instanceof TerminateEventDefinition) {
-      return eventVisitor.handle((TerminateEventDefinition) evDefinition);
+    if (evDefinition instanceof TerminateEventDefinition terminateEventDefinition) {
+      return eventVisitor.handle(terminateEventDefinition);
     }
-    if (evDefinition instanceof TimerEventDefinition) {
-      return eventVisitor.handle((TimerEventDefinition) evDefinition);
+    if (evDefinition instanceof TimerEventDefinition timerEventDefinition) {
+      return eventVisitor.handle(timerEventDefinition);
     }
-    if (evDefinition instanceof ErrorEventDefinition) {
-      return eventVisitor.handle((ErrorEventDefinition) evDefinition);
+    if (evDefinition instanceof ErrorEventDefinition errEvDef) {
+      return eventVisitor.handle(errEvDef);
     }
-    if (evDefinition instanceof EscalationEventDefinition) {
-      return eventVisitor.handle((EscalationEventDefinition) evDefinition);
+    if (evDefinition instanceof EscalationEventDefinition escEvDef) {
+      return eventVisitor.handle(escEvDef);
     }
     throw new BPMNRuntimeException("Unknown event definition found!" + evDefinition);
   }

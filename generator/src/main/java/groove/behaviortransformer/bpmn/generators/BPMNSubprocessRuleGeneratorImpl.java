@@ -122,8 +122,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
         .forEach(
             boundaryEvent -> {
               switch (boundaryEvent.getType()) {
-                case NONE:
-                case TIMER:
+                case NONE, TIMER:
                   createSubProcessBoundaryEventRule(process, callActivity, boundaryEvent, x -> {});
                   break;
                 case MESSAGE:
@@ -142,9 +141,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
                                           messageFlow.getNameOrDescriptiveName())));
 
                   break;
-                case SIGNAL:
-                case ERROR:
-                case ESCALATION:
+                case SIGNAL, ERROR, ESCALATION:
                   // Handled in the throw rule part.
                   break;
                 default:

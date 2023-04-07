@@ -51,9 +51,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
       case MESSAGE:
         createEndInteractionNodeRule(startEvent, process);
         break;
-      case SIGNAL:
-      case ERROR:
-      case ESCALATION:
+      case SIGNAL, ERROR, ESCALATION:
         // Done in the corresponding throw rule.
         break;
     }

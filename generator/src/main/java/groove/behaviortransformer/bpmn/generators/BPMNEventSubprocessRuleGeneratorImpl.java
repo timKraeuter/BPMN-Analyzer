@@ -81,9 +81,7 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
                         process, eventSubprocess, collaboration, ruleBuilder, startEvent);
                   }
                   break;
-                case SIGNAL:
-                case ERROR:
-                case ESCALATION:
+                case SIGNAL, ERROR, ESCALATION:
                   break;
                 default:
                   throw new BPMNRuntimeException(

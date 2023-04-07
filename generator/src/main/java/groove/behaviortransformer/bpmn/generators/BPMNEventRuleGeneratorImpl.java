@@ -72,7 +72,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -138,8 +137,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
           addSendMessageBehaviorForFlowNode(collaboration, ruleBuilder, endEvent, this.useSFId);
           break;
         }
-      case ERROR:
-      case ESCALATION:
+      case ERROR, ESCALATION:
         createErrorOrEscalationEndEventRule(endEvent);
         break;
       case SIGNAL:
@@ -328,13 +326,13 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                   List<StartEvent> matchingStartEvents =
                       bpmnEventSubprocess.getStartEvents().stream()
                           .filter(startEvent -> errorOrEscalationEventsMatch(endEvent, startEvent))
-                          .collect(Collectors.toList());
+                          .toList();
                   return matchingStartEvents.isEmpty()
                       ? null
                       : Pair.of(bpmnEventSubprocess, matchingStartEvents);
                 })
             .filter(Objects::nonNull)
-            .collect(Collectors.toList());
+            .toList();
     if (startEventsPerEventSubprocess.size() > 1) {
       throw new GrooveGenerationRuntimeException(
           multipleEventSubprocessesFoundErrorMessage(startEventsPerEventSubprocess, endEvent));
@@ -356,7 +354,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     List<StartEvent> matchingStartEvents =
         startEventsPerEventSubprocess.stream()
             .flatMap(bpmnEventSubprocessListPair -> bpmnEventSubprocessListPair.getRight().stream())
-            .collect(Collectors.toList());
+            .toList();
     return multipleErrorOrEscalationCatchEventsFoundMessage(endEvent, matchingStartEvents);
   }
 
@@ -415,7 +413,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     List<BoundaryEvent> matchingBoundaryEvents =
         callActivity.getBoundaryEvents().stream()
             .filter(boundaryEvent -> errorOrEscalationEventsMatch(endEvent, boundaryEvent))
-            .collect(Collectors.toList());
+            .toList();
     if (matchingBoundaryEvents.isEmpty()) {
       return Optional.empty();
     }
@@ -423,8 +421,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
       throw new GrooveGenerationRuntimeException(
           String.format(
               "Multiple boundary error events \"%s\" found matching the error end event \"%s\"!",
-              matchingBoundaryEvents.stream().map(FlowElement::getId).collect(Collectors.toList()),
-              endEvent.getId()));
+              matchingBoundaryEvents.stream().map(FlowElement::getId).toList(), endEvent.getId()));
     }
     return Optional.of(matchingBoundaryEvents.get(0));
   }
@@ -480,8 +477,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
         createIntermediateCatchMessageEventRule(
             intermediateCatchEvent, process, ruleBuilder, collaboration);
         break;
-      case LINK:
-      case SIGNAL:
+      case LINK, SIGNAL:
         // Done in the corresponding throw rule.
         break;
       case TIMER:
@@ -840,8 +836,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                   createSignalNonInterruptingStartRulePart(eventSubprocess, event);
                 }
                 break;
-              case NONE:
-              case MESSAGE:
+              case NONE, MESSAGE:
               default:
                 throw new IllegalStateException("Unexpected value: " + startEvent.getType());
             }

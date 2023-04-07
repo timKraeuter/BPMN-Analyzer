@@ -59,8 +59,7 @@ public class BPMNMaudeSubprocessRuleGenerator
         .forEach(
             boundaryEvent -> {
               switch (boundaryEvent.getType()) {
-                case NONE:
-                case TIMER:
+                case NONE, TIMER:
                   createSubProcessBoundaryEventRule(
                       process, callActivity, boundaryEvent, rb -> {}); // NOOP
                   break;

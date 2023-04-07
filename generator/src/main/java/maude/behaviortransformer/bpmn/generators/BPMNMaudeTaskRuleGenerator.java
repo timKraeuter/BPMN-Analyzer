@@ -51,8 +51,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
         .forEach(
             boundaryEvent -> {
               switch (boundaryEvent.getType()) {
-                case NONE:
-                case TIMER:
+                case NONE, TIMER:
                   createTaskBoundaryEventRule(process, task, boundaryEvent, rb -> {}); // NOOP
                   break;
                 case MESSAGE:
