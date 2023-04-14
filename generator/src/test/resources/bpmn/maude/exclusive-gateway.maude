@@ -98,7 +98,6 @@ mod BPMN-EXECUTION-exclusive-gateway is
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < o0 : ProcessSnapshot | name : "exclusive-gateway", tokens : ("start (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "exclusive-gateway", tokens : ("start_a0 (Flow_1qxu4uv)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [a0_Activity_029uqdv_start] :  < o0 : ProcessSnapshot | name : "exclusive-gateway", tokens : ("start_a0 (Flow_1qxu4uv)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "exclusive-gateway", tokens : ("a0 (Activity_029uqdv)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [a0_Activity_029uqdv_end] :  < o0 : ProcessSnapshot | name : "exclusive-gateway", tokens : ("a0 (Activity_029uqdv)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "exclusive-gateway", tokens : ("a0_a1 (Flow_0cg7cqo)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [a1_Activity_194ixr2_start] :  < o0 : ProcessSnapshot | name : "exclusive-gateway", tokens : ("a0_a1 (Flow_0cg7cqo)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "exclusive-gateway", tokens : ("a1 (Activity_194ixr2)" T), signals : (none), subprocesses : (S), state : Running > .
@@ -117,7 +116,7 @@ mod BPMN-EXECUTION-exclusive-gateway is
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "exclusive-gateway" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "exclusive-gateway", tokens : ("start (StartEvent_1)"), signals : (none), subprocesses : (none), state : Running >) > .
+    eq init = < "exclusive-gateway" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "exclusive-gateway", tokens : ("start_a0 (Flow_1qxu4uv)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is

@@ -98,7 +98,6 @@ mod BPMN-EXECUTION-sequential-tasks is
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < o0 : ProcessSnapshot | name : "Process", tokens : ("start (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "Process", tokens : ("start_A (Flow_1u1u0cf)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [A_Activity_1hogwa8_start] :  < o0 : ProcessSnapshot | name : "Process", tokens : ("start_A (Flow_1u1u0cf)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "Process", tokens : ("A (Activity_1hogwa8)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [A_Activity_1hogwa8_end] :  < o0 : ProcessSnapshot | name : "Process", tokens : ("A (Activity_1hogwa8)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "Process", tokens : ("A_B (Flow_1b2a4a3)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [B_Activity_02rpmxb_start] :  < o0 : ProcessSnapshot | name : "Process", tokens : ("A_B (Flow_1b2a4a3)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "Process", tokens : ("B (Activity_02rpmxb)" T), signals : (none), subprocesses : (S), state : Running > .
@@ -107,7 +106,7 @@ mod BPMN-EXECUTION-sequential-tasks is
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "sequential-tasks" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "Process", tokens : ("start (StartEvent_1)"), signals : (none), subprocesses : (none), state : Running >) > .
+    eq init = < "sequential-tasks" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "Process", tokens : ("start_A (Flow_1u1u0cf)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is

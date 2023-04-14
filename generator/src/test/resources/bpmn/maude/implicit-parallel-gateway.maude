@@ -98,7 +98,6 @@ mod BPMN-EXECUTION-implicit-parallel-gateway is
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < o0 : ProcessSnapshot | name : "implicit-parallel-gateway", tokens : ("start (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "implicit-parallel-gateway", tokens : ("start_A (Flow_0ieyd6c)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [A_Activity_1l6v9dq_start] :  < o0 : ProcessSnapshot | name : "implicit-parallel-gateway", tokens : ("start_A (Flow_0ieyd6c)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "implicit-parallel-gateway", tokens : ("A (Activity_1l6v9dq)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [A_Activity_1l6v9dq_end] :  < o0 : ProcessSnapshot | name : "implicit-parallel-gateway", tokens : ("A (Activity_1l6v9dq)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "implicit-parallel-gateway", tokens : ("A_B (Flow_0ck3822)" "A_C (Flow_0e4dh5d)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [B_Activity_0b4qs7m_start] :  < o0 : ProcessSnapshot | name : "implicit-parallel-gateway", tokens : ("A_B (Flow_0ck3822)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "implicit-parallel-gateway", tokens : ("B (Activity_0b4qs7m)" T), signals : (none), subprocesses : (S), state : Running > .
@@ -110,7 +109,7 @@ mod BPMN-EXECUTION-implicit-parallel-gateway is
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "implicit-parallel-gateway" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "implicit-parallel-gateway", tokens : ("start (StartEvent_1)"), signals : (none), subprocesses : (none), state : Running >) > .
+    eq init = < "implicit-parallel-gateway" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "implicit-parallel-gateway", tokens : ("start_A (Flow_0ieyd6c)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is

@@ -25,7 +25,7 @@ class BPMNToMaudeComplexDiagramsTest implements BPMNMaudeTestHelper {
    */
   @Test
   void testUseCase() throws IOException {
-    // Persistent message lead to many possible final states!.
+    // Persistent message would lead to many possible final states!.
     testBPMNMaudeGeneration(
         "use-case-execution",
         CAN_TERMINATE_QUERY,

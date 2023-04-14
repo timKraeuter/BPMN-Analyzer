@@ -99,7 +99,6 @@ mod BPMN-EXECUTION-signal-events-multi-activation-same-process is
     vars PS : Configuration . --- other processes
 
     --- Generated rules
-    rl [start_p1_StartEvent_1] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("start_p1 (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : ("start_p1_S1_Throw (Flow_09vy9fu)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [S1_Throw_Event_17hujxw] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("start_p1_S1_Throw (Flow_09vy9fu)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : ("S1_Throw_S2_Catch_1 (Flow_0leshl2)" T), signals : (SIG), subprocesses : (S), state : Running > < o0 : ProcessSnapshot | name : "p3", tokens : ("sf2 (Flow_1a4s6h3)" "sf1 (Flow_005lzx7)"), signals : (none), subprocesses : (none), state : Running > .
     rl [S3_Throw_Event_0mh8q9a] :  < "signal-events-multi-activation-same-process" : BPMNSystem | messages : (M), processes : (< o0 : ProcessSnapshot | name : "p1", tokens : ("S2_Catch_2_S3_Throw (Flow_0njnnw5)" T), signals : (SIG), subprocesses : (S), state : Running > PS) > => < "signal-events-multi-activation-same-process" : BPMNSystem | messages : (M), processes : (signalAll(< o0 : ProcessSnapshot | name : "p1", tokens : (T), signals : (SIG), subprocesses : (S), state : Running > PS, "S2_Throw_S3_Catch (Flow_1e60pp7)")) > .
     rl [S2_Catch_2_Event_0a9nmst] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("S2_Catch_1_S2_Catch_2 (Flow_0flpy34)" T), signals : ("S2_Catch_1_S2_Catch_2 (Flow_0flpy34)_signal" SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : ("S2_Catch_2_S3_Throw (Flow_0njnnw5)" T), signals : (SIG), subprocesses : (S), state : Running > .
@@ -112,7 +111,7 @@ mod BPMN-EXECUTION-signal-events-multi-activation-same-process is
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "signal-events-multi-activation-same-process" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "p1", tokens : ("start_p1 (StartEvent_1)"), signals : (none), subprocesses : (none), state : Running >) > .
+    eq init = < "signal-events-multi-activation-same-process" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "p1", tokens : ("start_p1_S1_Throw (Flow_09vy9fu)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is

@@ -153,14 +153,14 @@ public class BPMNMaudeSubprocessRuleGenerator
 
     String subProcessTokens;
     if (subprocessHasStartEvents(callActivity)) {
-      // Subprocess has start events which get tokens!
+      // Subprocess has start events which get tokens on outgoing sequence flows!
       subProcessTokens =
           callActivity.getSubProcessModel().getStartEvents().stream()
               .filter(startEvent -> startEvent.getType() == StartEventType.NONE)
-              .map(this::getTokenForFlowNode)
+              .map(this::getOutgoingTokensForFlowNode)
               .collect(Collectors.joining(" "));
     } else {
-      // All activites and gateways without incoming sequence flows get a token.
+      // All activities and gateways without incoming sequence flows get a token.
       subProcessTokens =
           callActivity
               .getSubProcessModel()

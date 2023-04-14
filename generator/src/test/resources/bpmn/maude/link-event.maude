@@ -98,13 +98,11 @@ mod BPMN-EXECUTION-link-event is
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_p1_StartEvent_1] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("start_p1 (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : ("start_p1_p1_pg1 (Flow_1fl0c6v)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [p1_pg1_Gateway_0qx5e75] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("start_p1_p1_pg1 (Flow_1fl0c6v)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : ("p1_pg1_Link1 (Flow_03y9o1z)" "p1_pg1_Link2 (Flow_0kxj4zu)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [Link1_Event_0wqyqlc] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("p1_pg1_Link1 (Flow_03y9o1z)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : ("Link1_p1_pg2 (Flow_1m1cy19)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [Link2_Event_05f4y5b] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("p1_pg1_Link2 (Flow_0kxj4zu)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : ("Link2_p1_pg2 (Flow_0eumlnw)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [p1_pg2_Gateway_0bwp5hb] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("Link1_p1_pg2 (Flow_1m1cy19)" "Link2_p1_pg2 (Flow_0eumlnw)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : ("p1_pg2_end_p1 (Flow_0vgr37e)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [end_p1_Event_0q8vo7d] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("p1_pg2_end_p1 (Flow_0vgr37e)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : (T), signals : (none), subprocesses : (S), state : Running > .
-    rl [start_p2_Event_0ogq010] :  < o0 : ProcessSnapshot | name : "p2", tokens : ("start_p2 (Event_0ogq010)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p2", tokens : ("start_p2_p2_pg1 (Flow_1pptdul)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [p2_pg1_Gateway_1soqpw4] :  < o0 : ProcessSnapshot | name : "p2", tokens : ("start_p2_p2_pg1 (Flow_1pptdul)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p2", tokens : ("p2_pg1_Link1 (Flow_0lfpdhx)" "p2_pg1_Link2 (Flow_0ffqovc)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [Link1_Event_1w81q7o] :  < o0 : ProcessSnapshot | name : "p2", tokens : ("p2_pg1_Link1 (Flow_0lfpdhx)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p2", tokens : ("Link1_p2_pg2 (Flow_0yi349b)" "Link1_p2_pg2 (Flow_0z8awck)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [p2_pg2_Gateway_12jffsl] :  < o0 : ProcessSnapshot | name : "p2", tokens : ("Link1_p2_pg2 (Flow_0yi349b)" "Link2_p2_pg2 (Flow_0l2nycr)" "Link1_p2_pg2 (Flow_0z8awck)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p2", tokens : ("p2_pg2_end_p2 (Flow_1gudwyv)" T), signals : (none), subprocesses : (S), state : Running > .
@@ -113,8 +111,8 @@ mod BPMN-EXECUTION-link-event is
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "link-event" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "p1", tokens : ("start_p1 (StartEvent_1)"), signals : (none), subprocesses : (none), state : Running >
-    < "1" : ProcessSnapshot | name : "p2", tokens : ("start_p2 (Event_0ogq010)"), signals : (none), subprocesses : (none), state : Running >) > .
+    eq init = < "link-event" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "p1", tokens : ("start_p1_p1_pg1 (Flow_1fl0c6v)"), signals : (none), subprocesses : (none), state : Running >
+    < "1" : ProcessSnapshot | name : "p2", tokens : ("start_p2_p2_pg1 (Flow_1pptdul)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is

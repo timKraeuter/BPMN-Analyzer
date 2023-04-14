@@ -46,7 +46,6 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
   public void createStartEventRulesForProcess(AbstractBPMNProcess process, StartEvent startEvent) {
     switch (startEvent.getType()) {
       case NONE:
-        createNoneStartEventRule(startEvent, process);
         break;
       case MESSAGE:
         createEndInteractionNodeRule(startEvent, process);
@@ -55,15 +54,6 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
         // Done in the corresponding throw rule.
         break;
     }
-  }
-
-  private void createNoneStartEventRule(StartEvent startEvent, AbstractBPMNProcess process) {
-    ruleBuilder.startRule(getFlowNodeRuleName(startEvent));
-    String preTokens = getStartEventTokenName(startEvent) + ANY_OTHER_TOKENS;
-    String postTokens = getOutgoingTokensForFlowNode(startEvent) + ANY_OTHER_TOKENS;
-
-    createPreAndPostObjectInRuleForProcess(process, preTokens, postTokens);
-    ruleBuilder.buildRule();
   }
 
   public void createEndEventRule(AbstractBPMNProcess process, EndEvent endEvent) {

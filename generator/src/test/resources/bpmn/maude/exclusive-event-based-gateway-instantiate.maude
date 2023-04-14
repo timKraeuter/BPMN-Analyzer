@@ -105,7 +105,6 @@ mod BPMN-EXECUTION-exclusive-event-based-gateway-instantiate is
     rl [end1_p1_Event_1udsije] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("r_msg1_end1_p1 (Flow_19bavl8)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : (T), signals : (none), subprocesses : (S), state : Running > .
     rl [end3_p1_Event_1xkc4kj] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("signal_end3_p1 (Flow_0r7wbno)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : (T), signals : (none), subprocesses : (S), state : Running > .
     rl [signal_Event_0o4nh53] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("eventG (Gateway_0xg98fy)" T), signals : ("eventG (Gateway_0xg98fy)_signal" SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : ("signal_end3_p1 (Flow_0r7wbno)" T), signals : (SIG), subprocesses : (S), state : Running > .
-    rl [start_p2_Event_08j4bud] :  < o0 : ProcessSnapshot | name : "p2", tokens : ("start_p2 (Event_08j4bud)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p2", tokens : ("start_p2_e1 (Flow_1w3o3v4)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [end2_p2_Event_0lg0bxg] :  < o0 : ProcessSnapshot | name : "p2", tokens : ("t_msg2_end2_p2 (Flow_0up8qhv)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p2", tokens : (T), signals : (none), subprocesses : (S), state : Running > .
     rl [e1_Gateway_1i0mins] :  < o0 : ProcessSnapshot | name : "p2", tokens : ("start_p2_e1 (Flow_1w3o3v4)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p2", tokens : ("e1_t_msg1 (Flow_1ef2vkv)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [e1_Gateway_1i0mins] :  < o0 : ProcessSnapshot | name : "p2", tokens : ("start_p2_e1 (Flow_1w3o3v4)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p2", tokens : ("e1_t_msg2 (Flow_1ou7p80)" T), signals : (none), subprocesses : (S), state : Running > .
@@ -118,7 +117,7 @@ mod BPMN-EXECUTION-exclusive-event-based-gateway-instantiate is
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "exclusive-event-based-gateway-instantiate" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "p2", tokens : ("start_p2 (Event_08j4bud)"), signals : (none), subprocesses : (none), state : Running >) > .
+    eq init = < "exclusive-event-based-gateway-instantiate" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "p2", tokens : ("start_p2_e1 (Flow_1w3o3v4)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is

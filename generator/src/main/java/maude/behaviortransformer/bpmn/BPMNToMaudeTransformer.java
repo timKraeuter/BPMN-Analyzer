@@ -241,7 +241,7 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
     // Add a token for each none start event
     return process.getStartEvents().stream()
         .filter(startEvent -> startEvent.getType() == StartEventType.NONE)
-        .map(this::getStartEventTokenName)
+        .map(this::getOutgoingTokensForFlowNode)
         .collect(Collectors.joining(WHITE_SPACE));
   }
 

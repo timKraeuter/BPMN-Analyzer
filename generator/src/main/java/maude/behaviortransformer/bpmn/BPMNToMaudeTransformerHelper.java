@@ -5,7 +5,6 @@ import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.isAf
 import static maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.*;
 
 import behavior.bpmn.*;
-import behavior.bpmn.events.StartEvent;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -65,10 +64,6 @@ public interface BPMNToMaudeTransformerHelper {
             ? sequenceFlow.getDescriptiveName()
             : sequenceFlow.getName();
     return String.format(signalOccurenceFormat, nameOrDescriptiveName, sequenceFlow.getId());
-  }
-
-  default String getStartEventTokenName(StartEvent event) {
-    return String.format(TOKEN_FORMAT, event.getName(), event.getId());
   }
 
   default String getOutgoingTokensForFlowNode(FlowNode flowNode) {

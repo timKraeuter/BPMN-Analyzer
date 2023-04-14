@@ -98,13 +98,12 @@ mod BPMN-EXECUTION-intermediate-throw-event is
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("start (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : ("start_intermediate (Flow_0i4cd7b)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [end_Event_0luomob] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("intermediate_end (Flow_04utr3x)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : (T), signals : (none), subprocesses : (S), state : Running > .
     rl [intermediate_Event_1mrcnu0] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("start_intermediate (Flow_0i4cd7b)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : ("intermediate_end (Flow_04utr3x)" T), signals : (none), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "intermediate-throw-event" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "p1", tokens : ("start (StartEvent_1)"), signals : (none), subprocesses : (none), state : Running >) > .
+    eq init = < "intermediate-throw-event" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "p1", tokens : ("start_intermediate (Flow_0i4cd7b)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is

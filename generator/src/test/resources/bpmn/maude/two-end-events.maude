@@ -98,7 +98,6 @@ mod BPMN-EXECUTION-two-end-events is
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [start_StartEvent_1] :  < o0 : ProcessSnapshot | name : "two-end-events", tokens : ("start (StartEvent_1)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "two-end-events", tokens : ("start_p1 (Flow_13k6w21)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [p1_Gateway_1yacsp8] :  < o0 : ProcessSnapshot | name : "two-end-events", tokens : ("start_p1 (Flow_13k6w21)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "two-end-events", tokens : ("p1_a1 (Flow_1rs2mzm)" "p1_a2 (Flow_0pjzntx)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [a1_Activity_05y4j8k_start] :  < o0 : ProcessSnapshot | name : "two-end-events", tokens : ("p1_a1 (Flow_1rs2mzm)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "two-end-events", tokens : ("a1 (Activity_05y4j8k)" T), signals : (none), subprocesses : (S), state : Running > .
     rl [a1_Activity_05y4j8k_end] :  < o0 : ProcessSnapshot | name : "two-end-events", tokens : ("a1 (Activity_05y4j8k)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "two-end-events", tokens : ("a1_end1 (Flow_0vhuqrp)" T), signals : (none), subprocesses : (S), state : Running > .
@@ -109,7 +108,7 @@ mod BPMN-EXECUTION-two-end-events is
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "two-end-events" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "two-end-events", tokens : ("start (StartEvent_1)"), signals : (none), subprocesses : (none), state : Running >) > .
+    eq init = < "two-end-events" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "two-end-events", tokens : ("start_p1 (Flow_13k6w21)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is
