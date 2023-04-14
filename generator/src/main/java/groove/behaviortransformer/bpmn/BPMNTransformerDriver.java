@@ -23,7 +23,7 @@ public class BPMNTransformerDriver {
   private static void generateGraphGrammar(BPMNCollaboration bpmnCollaboration, String outputPath) {
     BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
     Path outputDir = Path.of(outputPath);
-    Path file = transformer.generateGrooveGrammar(bpmnCollaboration, outputDir, false);
+    Path file = transformer.generateGrooveGrammar(bpmnCollaboration, outputDir);
     System.out.println("Generation finished see " + file.toString());
   }
 

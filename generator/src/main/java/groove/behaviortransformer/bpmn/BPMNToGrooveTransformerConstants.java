@@ -3,10 +3,11 @@ package groove.behaviortransformer.bpmn;
 import static groove.behaviortransformer.GrooveTransformer.TYPE;
 
 public final class BPMNToGrooveTransformerConstants {
+  public static final String GROOVE_ID_FORMAT = "%s_%s"; // name_id
+
   // Rule prefixes/suffixes
   public static final String END = "_end";
   public static final String THROW = "Throw_";
-  public static final String CATCH = "Catch_";
   public static final String START = "_start";
   // Node names
   public static final String TYPE_TOKEN = TYPE + "Token";
