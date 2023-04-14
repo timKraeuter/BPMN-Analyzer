@@ -22,7 +22,7 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
   public static final String SYSTEM_PROPERTIES_FILE_NAME = "system.properties";
   private final String outputPath = FileUtils.getTempDirectoryPath();
   //  private final String outputPath = "C:/Source/groove/bin";
-  boolean REPLACE_EXPECTED_FILES_WITH_ACTUAL = false;
+  boolean REPLACE_EXPECTED_FILES_WITH_ACTUAL = true;
 
   private Function<String, Boolean> fileNameFilter = x -> false;
 
@@ -48,21 +48,21 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
   }
 
   public void checkGrooveGeneration(Behavior behavior) throws IOException {
-    this.checkGrooveGeneration(behavior, this.fileNameFilter, false);
+    this.checkGrooveGeneration(behavior, this.fileNameFilter);
   }
 
   public void checkGrooveGenerationWithIDs(Behavior behavior) throws IOException {
-    this.checkGrooveGeneration(behavior, this.fileNameFilter, true);
+    this.checkGrooveGeneration(behavior, this.fileNameFilter);
   }
 
   @SuppressWarnings("ConstantConditions")
   private void checkGrooveGeneration(
-      Behavior behavior, Function<String, Boolean> fileNameFilter, boolean useIDs)
+      Behavior behavior, Function<String, Boolean> fileNameFilter)
       throws IOException {
     String modelName = behavior.getName();
     BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
     Path outputDir = Path.of(this.getOutputPathIncludingSubFolder());
-    Path grammarDir = transformer.generateGrooveGrammar(behavior, outputDir, useIDs);
+    Path grammarDir = transformer.generateGrooveGrammar(behavior, outputDir);
     if (REPLACE_EXPECTED_FILES_WITH_ACTUAL) {
       replaceExpectedFilesWithActual(modelName, grammarDir);
     }

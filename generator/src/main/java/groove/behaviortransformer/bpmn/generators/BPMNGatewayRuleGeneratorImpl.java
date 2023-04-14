@@ -19,11 +19,9 @@ import java.util.stream.Collectors;
 
 public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
   private final GrooveRuleBuilder ruleBuilder;
-  private final boolean useSFId;
 
-  public BPMNGatewayRuleGeneratorImpl(GrooveRuleBuilder ruleBuilder, boolean useSFId) {
+  public BPMNGatewayRuleGeneratorImpl(GrooveRuleBuilder ruleBuilder) {
     this.ruleBuilder = ruleBuilder;
-    this.useSFId = useSFId;
   }
 
   @Override
@@ -34,13 +32,13 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
         .forEach(
             incomingFlow -> {
               final String incomingFlowId =
-                  getSequenceFlowIdOrDescriptiveName(incomingFlow, this.useSFId);
+                  getSequenceFlowIdOrDescriptiveName(incomingFlow );
               exclusiveGateway
                   .getOutgoingFlows()
                   .forEach(
                       outFlow -> {
                         String outFlowID =
-                            getSequenceFlowIdOrDescriptiveName(outFlow, this.useSFId);
+                            getSequenceFlowIdOrDescriptiveName(outFlow );
                         createExclusiveGatewayRule(
                             process, ruleBuilder, exclusiveGateway, incomingFlowId, outFlowID);
                       });
@@ -51,7 +49,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
           .getOutgoingFlows()
           .forEach(
               outFlow -> {
-                String outFlowID = getSequenceFlowIdOrDescriptiveName(outFlow, this.useSFId);
+                String outFlowID = getSequenceFlowIdOrDescriptiveName(outFlow );
                 createExclusiveGatewayRule(
                     process, ruleBuilder, exclusiveGateway, exclusiveGateway.getName(), outFlowID);
               });
@@ -72,7 +70,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
                 BPMNToGrooveTransformerHelper.deleteTokenWithPosition(
                     ruleBuilder,
                     processInstance,
-                    getSequenceFlowIdOrDescriptiveName(sequenceFlow, this.useSFId)));
+                    getSequenceFlowIdOrDescriptiveName(sequenceFlow )));
     // If no incoming flows we consume a token at the position of the gateway.
     if (parallelGateway.getIncomingFlows().findAny().isEmpty()) {
       BPMNToGrooveTransformerHelper.deleteTokenWithPosition(
@@ -80,7 +78,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
     }
 
     BPMNToGrooveTransformerHelper.addOutgoingTokensForFlowNodeToProcessInstance(
-        parallelGateway, ruleBuilder, processInstance, useSFId);
+        parallelGateway, ruleBuilder, processInstance);
 
     ruleBuilder.buildRule();
   }
@@ -93,7 +91,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
         .getIncomingFlows()
         .forEach(
             inFlow -> {
-              String inFlowID = getSequenceFlowIdOrDescriptiveName(inFlow, this.useSFId);
+              String inFlowID = getSequenceFlowIdOrDescriptiveName(inFlow );
               String ruleName =
                   implicitExclusiveGateway
                       ? (inFlowID + "_" + eventBasedGateway.getName())
@@ -152,7 +150,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
             BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
         GrooveNode newToken = ruleBuilder.addNode(TYPE_TOKEN);
         ruleBuilder.addEdge(TOKENS, processInstance, newToken);
-        String outFlowID = getSequenceFlowIdOrDescriptiveName(outFlow, this.useSFId);
+        String outFlowID = getSequenceFlowIdOrDescriptiveName(outFlow );
         ruleBuilder.addEdge(
             POSITION, newToken, ruleBuilder.contextNode(createStringNodeLabel(outFlowID)));
 
@@ -160,10 +158,10 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
         branchGatewayOutFlows.forEach(
             branchOutFlow -> {
               String branchOutFlowID =
-                  getSequenceFlowIdOrDescriptiveName(branchOutFlow, this.useSFId);
+                  getSequenceFlowIdOrDescriptiveName(branchOutFlow );
               final SequenceFlow correspondingInFlow = branchFlowsToInFlows.get(branchOutFlow);
               String correspondingInFlowID =
-                  getSequenceFlowIdOrDescriptiveName(correspondingInFlow, this.useSFId);
+                  getSequenceFlowIdOrDescriptiveName(correspondingInFlow );
               BPMNToGrooveTransformerHelper.deleteTokenWithPosition(
                   ruleBuilder, processInstance, correspondingInFlowID);
               stringBuilder.append(branchOutFlowID);
@@ -232,7 +230,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
             BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
         String deleteTokenPosition;
         if (incFlow.isPresent()) {
-          deleteTokenPosition = getSequenceFlowIdOrDescriptiveName(incFlow.get(), this.useSFId);
+          deleteTokenPosition = getSequenceFlowIdOrDescriptiveName(incFlow.get() );
         } else {
           deleteTokenPosition = inclusiveGateway.getName();
         }
@@ -242,7 +240,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
         StringBuilder stringBuilder = new StringBuilder();
         outFlows.forEach(
             outFlow -> {
-              String outFlowID = getSequenceFlowIdOrDescriptiveName(outFlow, this.useSFId);
+              String outFlowID = getSequenceFlowIdOrDescriptiveName(outFlow );
               GrooveNode newToken = ruleBuilder.addNode(TYPE_TOKEN);
               ruleBuilder.addEdge(TOKENS, processInstance, newToken);
               ruleBuilder.addEdge(
