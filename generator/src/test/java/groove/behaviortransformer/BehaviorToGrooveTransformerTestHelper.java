@@ -7,14 +7,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Function;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import util.FileTestHelper;
 
 public abstract class BehaviorToGrooveTransformerTestHelper {
 
-  private final String outputPath = "C:/Source/groove/bin";
-  //  private final String outputPath = FileUtils.getTempDirectoryPath();
+  //  private final String outputPath = "C:/Source/groove/bin";
+  private final String outputPath = FileUtils.getTempDirectoryPath();
 
   private Function<String, Boolean> fileNameFilter = x -> false;
 
@@ -54,23 +55,23 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
     String modelName = behavior.getName();
     BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
     Path outputDir = Path.of(this.getOutputPathIncludingSubFolder());
-    transformer.generateGrooveGrammar(behavior, outputDir, useIDs);
+    Path grammarDir = transformer.generateGrooveGrammar(behavior, outputDir, useIDs);
 
     // assert
-    checkGenerationEqualToExpected(fileNameFilter, modelName, outputDir);
+    checkGenerationEqualToExpected(fileNameFilter, modelName, grammarDir);
 
     Path propertiesFile = Path.of(outputDir.toString(), modelName + ".gps/system.properties");
     this.checkPropertiesFile(propertiesFile);
   }
 
   protected void checkGenerationEqualToExpected(
-      Function<String, Boolean> fileNameFilter, String modelName, Path outputDir)
+      Function<String, Boolean> fileNameFilter, String modelName, Path grammarDir)
       throws IOException {
     Path expectedDir =
         FileTestHelper.getResource(getTestResourcePathSubFolderName() + "/" + modelName + ".gps");
     FileTestHelper.testDirEquals(
         expectedDir,
-        Path.of(outputDir.toString(), modelName + ".gps"),
+        grammarDir,
         // Ignore the system.propertie file because it contains a timestamp and a dir.
         fileName -> fileName.equals("system.properties") || fileNameFilter.apply(fileName));
   }

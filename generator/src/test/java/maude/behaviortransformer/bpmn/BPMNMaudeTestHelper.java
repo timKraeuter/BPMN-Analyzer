@@ -13,7 +13,7 @@ import maude.behaviortransformer.bpmn.settings.MessagePersistence;
 public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper, MaudeTestHelper {
 
   String MAUDE_MODULE_FOLDER = "bpmn/maude/";
-  boolean REPLACE_EXPECTED_FILE_WITH_ACTUAL = true;
+  boolean REPLACE_EXPECTED_FILE_WITH_ACTUAL = false;
   String WILL_ALWAYS_TERMINATE_QUERY = "red modelCheck(init,  <> [] allTerminated)";
   String CAN_TERMINATE_QUERY = "search init =>! X such that X |= allTerminated = true";
   String DOT_BPMN = ".bpmn";
