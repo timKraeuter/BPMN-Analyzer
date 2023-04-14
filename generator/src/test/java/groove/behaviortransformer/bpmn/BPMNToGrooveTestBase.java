@@ -10,7 +10,7 @@ public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTe
     implements BPMNFileReaderTestHelper {
   public static final String BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER =
       "bpmn/bpmnModelsSemanticsTest/";
-  static final Set<String> fixedRules =
+  public static final Set<String> fixedRules =
       Sets.newHashSet(
           BPMNToGrooveTransformer.ALL_TERMINATED_FILE_NAME,
           BPMNToGrooveTransformer.TERMINATE_RULE_FILE_NAME,

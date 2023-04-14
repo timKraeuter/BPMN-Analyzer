@@ -23,10 +23,10 @@ public interface MaudeTestHelper {
   default void replaceWithActualIfNeeded(
       String folder, String resourceFileName, String actualMaudeModule, String expectedMaudeModule)
       throws IOException {
-    String expectedFileFilePath = "src/test/resources/" + folder + resourceFileName + ".maude";
+    String expectedFilePath = "src/test/resources/" + folder + resourceFileName + ".maude";
     if (!actualMaudeModule.equals(expectedMaudeModule)) {
-      // Only replace if reduced to true. Run model!
-      Files.writeString(Path.of(expectedFileFilePath), actualMaudeModule, Charset.defaultCharset());
+      // Only replace if reduced to true. Run model in the future!
+      Files.writeString(Path.of(expectedFilePath), actualMaudeModule, Charset.defaultCharset());
       System.out.println("Replaced module with actual!");
     }
   }
