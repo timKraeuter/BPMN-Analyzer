@@ -1,87 +1,87 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="e1_e1_a2_2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n39">
+    <graph id="e1_e1_t_msg1_Flow_1ef2vkv" role="rule" edgeids="false" edgemode="directed">
+        <node id="n58">
             <attr name="layout">
                 <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n39" to="n39">
+        <edge from="n58" to="n58">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n40">
+        <node id="n59">
             <attr name="layout">
                 <string>392 232 0 0</string>
             </attr>
         </node>
-        <edge from="n40" to="n40">
+        <edge from="n59" to="n59">
             <attr name="label">
-                <string>string:"exclusive-gateway"</string>
+                <string>string:"p2"</string>
             </attr>
         </edge>
-        <node id="n41">
+        <node id="n60">
             <attr name="layout">
                 <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n41" to="n41">
+        <edge from="n60" to="n60">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n42">
+        <node id="n61">
             <attr name="layout">
-                <string>552 152 0 0</string>
+                <string>412 152 0 0</string>
             </attr>
         </node>
-        <edge from="n42" to="n42">
+        <edge from="n61" to="n61">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n43">
+        <node id="n62">
             <attr name="layout">
-                <string>802 224 0 0</string>
+                <string>592 224 0 0</string>
             </attr>
         </node>
-        <edge from="n43" to="n43">
+        <edge from="n62" to="n62">
             <attr name="label">
-                <string>string:"a1_e1"</string>
+                <string>string:"start_p2_e1_Flow_1w3o3v4"</string>
             </attr>
         </edge>
-        <node id="n44">
+        <node id="n63">
             <attr name="layout">
-                <string>802 144 0 0</string>
+                <string>592 144 0 0</string>
             </attr>
         </node>
-        <edge from="n44" to="n44">
+        <edge from="n63" to="n63">
             <attr name="label">
-                <string>string:"e1_a2_2"</string>
+                <string>string:"e1_t_msg1_Flow_1ef2vkv"</string>
             </attr>
         </edge>
-        <edge from="n42" to="n44">
+        <edge from="n61" to="n63">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n42" to="n43">
+        <edge from="n61" to="n62">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n39" to="n40">
+        <edge from="n58" to="n59">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n39" to="n41">
+        <edge from="n58" to="n60">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n39" to="n42">
+        <edge from="n58" to="n61">
             <attr name="label">
                 <string>tokens</string>
             </attr>
