@@ -21,6 +21,7 @@ class BPMNToGrooveBoundaryEventsTest extends BPMNToGrooveTestBase {
    */
   @Test
   void testSubProcessNonInterruptingBoundaryEvents() throws Exception {
+    // Infinite state space!
     testGrooveGenerationForBPMNResourceFile("subprocess-non-interrupting-boundary-events.bpmn");
   }
 
@@ -39,6 +40,7 @@ class BPMNToGrooveBoundaryEventsTest extends BPMNToGrooveTestBase {
    */
   @Test
   void testTaskNonInterruptingBoundaryEvents() throws Exception {
+    // Infinite state space!
     testGrooveGenerationForBPMNResourceFile("task-non-interrupting-boundary-events.bpmn");
   }
 }

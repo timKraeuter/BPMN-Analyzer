@@ -1,87 +1,87 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="signalOrMessage_signalOrMessage_interruptMessage" role="rule" edgeids="false" edgemode="directed">
-        <node id="n72">
+    <graph id="signalOrMessage_signalOrMessage_interruptMessage_Flow_0uvbzn4" role="rule" edgeids="false" edgemode="directed">
+        <node id="n60">
             <attr name="layout">
                 <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n72" to="n72">
+        <edge from="n60" to="n60">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n73">
+        <node id="n61">
             <attr name="layout">
                 <string>392 232 0 0</string>
             </attr>
         </node>
-        <edge from="n73" to="n73">
+        <edge from="n61" to="n61">
             <attr name="label">
                 <string>string:"interruptTrigger"</string>
             </attr>
         </edge>
-        <node id="n74">
+        <node id="n62">
             <attr name="layout">
                 <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n74" to="n74">
+        <edge from="n62" to="n62">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n75">
+        <node id="n63">
             <attr name="layout">
                 <string>542 152 0 0</string>
             </attr>
         </node>
-        <edge from="n75" to="n75">
+        <edge from="n63" to="n63">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n76">
+        <node id="n64">
             <attr name="layout">
                 <string>787 224 0 0</string>
             </attr>
         </node>
-        <edge from="n76" to="n76">
+        <edge from="n64" to="n64">
             <attr name="label">
-                <string>string:"start_trigger_signalOrMessage"</string>
+                <string>string:"start_trigger_signalOrMessage_Flow_0kk10m4"</string>
             </attr>
         </edge>
-        <node id="n77">
+        <node id="n65">
             <attr name="layout">
                 <string>787 144 0 0</string>
             </attr>
         </node>
-        <edge from="n77" to="n77">
+        <edge from="n65" to="n65">
             <attr name="label">
-                <string>string:"signalOrMessage_interruptMessage"</string>
+                <string>string:"signalOrMessage_interruptMessage_Flow_0uvbzn4"</string>
             </attr>
         </edge>
-        <edge from="n75" to="n77">
+        <edge from="n63" to="n65">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n75" to="n76">
+        <edge from="n63" to="n64">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n72" to="n73">
+        <edge from="n60" to="n61">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n72" to="n74">
+        <edge from="n60" to="n62">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n72" to="n75">
+        <edge from="n60" to="n63">
             <attr name="label">
                 <string>tokens</string>
             </attr>
