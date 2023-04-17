@@ -68,7 +68,7 @@
         </node>
         <edge from="n107" to="n107">
             <attr name="label">
-                <string>string:"TReceive_2"</string>
+                <string>string:"TReceive_2_Activity_0paqxj7"</string>
             </attr>
         </edge>
         <node id="n109">
@@ -78,7 +78,7 @@
         </node>
         <edge from="n109" to="n109">
             <attr name="label">
-                <string>string:"TReceive_2_end_p2"</string>
+                <string>string:"TReceive_2_end_p2_Flow_1oin9h6"</string>
             </attr>
         </edge>
         <edge from="n103" to="n108">
