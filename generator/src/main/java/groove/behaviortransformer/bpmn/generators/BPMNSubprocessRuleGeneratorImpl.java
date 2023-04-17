@@ -66,16 +66,16 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
                   BPMNToGrooveTransformerHelper.addOutgoingTokensForFlowNodeToProcessInstance(
                       startEvent, ruleBuilder, subProcessInstance));
     } else {
-      // All activites and gateways without incoming sequence flows get a token.
+      // All activities and gateways without incoming sequence flows get a token.
       callActivity
           .getSubProcessModel()
           .getFlowNodes()
-          .filter(controlFlowNode -> controlFlowNode.isTask() || controlFlowNode.isGateway())
-          .filter(controlFlowNode -> controlFlowNode.getIncomingFlows().findAny().isEmpty())
+          .filter(flowNode -> flowNode.isTask() || flowNode.isGateway())
+          .filter(flowNode -> flowNode.getIncomingFlows().findAny().isEmpty())
           .forEach(
-              controlFlowNode ->
+              flowNode ->
                   BPMNToGrooveTransformerHelper.addTokenWithPosition(
-                      ruleBuilder, subProcessInstance, controlFlowNode.getName()));
+                      ruleBuilder, subProcessInstance, getFlowNodeNameAndID(flowNode)));
     }
 
     ruleBuilder.buildRule();

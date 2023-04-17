@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="message" role="rule" edgeids="false" edgemode="directed">
+        <node id="n78">
+            <attr name="layout">
+                <string>487 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n78" to="n78">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n78" to="n78">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n80">
+            <attr name="layout">
+                <string>472 412 0 0</string>
+            </attr>
+        </node>
+        <edge from="n80" to="n80">
+            <attr name="label">
+                <string>type:Message</string>
+            </attr>
+        </edge>
+        <edge from="n80" to="n80">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n75">
+            <attr name="layout">
+                <string>62 395 0 0</string>
+            </attr>
+        </node>
+        <edge from="n75" to="n75">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n76">
+            <attr name="layout">
+                <string>412 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n76" to="n76">
+            <attr name="label">
+                <string>string:"p1"</string>
+            </attr>
+        </edge>
+        <node id="n77">
+            <attr name="layout">
+                <string>412 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n77" to="n77">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n79">
+            <attr name="layout">
+                <string>732 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n79" to="n79">
+            <attr name="label">
+                <string>string:"message_message_end_Flow_0z1ut3g"</string>
+            </attr>
+        </edge>
+        <node id="n81">
+            <attr name="layout">
+                <string>732 412 0 0</string>
+            </attr>
+        </node>
+        <edge from="n81" to="n81">
+            <attr name="label">
+                <string>string:"interruptMessage_message"</string>
+            </attr>
+        </edge>
+        <node id="n82">
+            <attr name="layout">
+                <string>412 322 0 0</string>
+            </attr>
+        </node>
+        <edge from="n82" to="n82">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n83">
+            <attr name="layout">
+                <string>732 330 0 0</string>
+            </attr>
+        </node>
+        <edge from="n83" to="n83">
+            <attr name="label">
+                <string>string:"Subprocess"</string>
+            </attr>
+        </edge>
+        <node id="n84">
+            <attr name="layout">
+                <string>732 250 0 0</string>
+            </attr>
+        </node>
+        <edge from="n84" to="n84">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <edge from="n75" to="n78">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n78" to="n79">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n75" to="n80">
+            <attr name="label">
+                <string>del:messages</string>
+            </attr>
+        </edge>
+        <edge from="n80" to="n81">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n75" to="n76">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n75" to="n77">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n82" to="n83">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n82" to="n84">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n75" to="n82">
+            <attr name="label">
+                <string>subprocess</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

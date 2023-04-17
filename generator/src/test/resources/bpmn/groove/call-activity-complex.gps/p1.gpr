@@ -83,7 +83,7 @@
         </node>
         <edge from="n46" to="n46">
             <attr name="label">
-                <string>string:"start_sub_p1_p1"</string>
+                <string>string:"start_sub_p1_p1_Flow_1bemas0"</string>
             </attr>
         </edge>
         <node id="n48">
@@ -93,7 +93,7 @@
         </node>
         <edge from="n48" to="n48">
             <attr name="label">
-                <string>string:"p1_C1"</string>
+                <string>string:"p1_C1_Flow_1uk7xtk"</string>
             </attr>
         </edge>
         <node id="n50">
@@ -103,7 +103,7 @@
         </node>
         <edge from="n50" to="n50">
             <attr name="label">
-                <string>string:"p1_C2"</string>
+                <string>string:"p1_C2_Flow_0nea78g"</string>
             </attr>
         </edge>
         <edge from="n42" to="n47">

@@ -1,167 +1,167 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="Subprocess_a1" role="rule" edgeids="false" edgemode="directed">
-        <node id="n62">
+    <graph id="Subprocess1" role="rule" edgeids="false" edgemode="directed">
+        <node id="n15">
             <attr name="layout">
-                <string>865 162 0 0</string>
+                <string>392 162 0 0</string>
             </attr>
         </node>
-        <edge from="n62" to="n62">
+        <edge from="n15" to="n15">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <edge from="n62" to="n62">
+        <edge from="n15" to="n15">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n64">
+        <node id="n17">
             <attr name="layout">
-                <string>1342 82 0 0</string>
+                <string>712 82 0 0</string>
             </attr>
         </node>
-        <edge from="n64" to="n64">
+        <edge from="n17" to="n17">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n64" to="n64">
+        <edge from="n17" to="n17">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n65">
+        <node id="n18">
             <attr name="layout">
-                <string>1410 252 0 0</string>
+                <string>930 252 0 0</string>
             </attr>
         </node>
-        <edge from="n65" to="n65">
+        <edge from="n18" to="n18">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n65" to="n65">
+        <edge from="n18" to="n18">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n60">
+        <node id="n13">
             <attr name="layout">
-                <string>782 332 0 0</string>
+                <string>467 332 0 0</string>
             </attr>
         </node>
-        <edge from="n60" to="n60">
+        <edge from="n13" to="n13">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n60" to="n60">
+        <edge from="n13" to="n13">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n57">
+        <node id="n10">
             <attr name="layout">
                 <string>62 167 0 0</string>
             </attr>
         </node>
-        <edge from="n57" to="n57">
+        <edge from="n10" to="n10">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n58">
+        <node id="n11">
             <attr name="layout">
                 <string>392 242 0 0</string>
             </attr>
         </node>
-        <edge from="n58" to="n58">
+        <edge from="n11" to="n11">
             <attr name="label">
-                <string>string:"call-activity-implicit-exclusive-and-parallel-gateway"</string>
+                <string>string:"p1"</string>
             </attr>
         </edge>
-        <node id="n59">
+        <node id="n12">
             <attr name="layout">
                 <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n59" to="n59">
+        <edge from="n12" to="n12">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n61">
+        <node id="n14">
             <attr name="layout">
-                <string>1342 332 0 0</string>
+                <string>712 332 0 0</string>
             </attr>
         </node>
-        <edge from="n61" to="n61">
+        <edge from="n14" to="n14">
             <attr name="label">
-                <string>string:"a1"</string>
+                <string>string:"start_Subprocess1_Flow_114zxb5"</string>
             </attr>
         </edge>
-        <node id="n63">
+        <node id="n16">
             <attr name="layout">
-                <string>1342 162 0 0</string>
+                <string>712 162 0 0</string>
             </attr>
         </node>
-        <edge from="n63" to="n63">
+        <edge from="n16" to="n16">
             <attr name="label">
-                <string>string:"Subprocess"</string>
+                <string>string:"Subprocess1"</string>
             </attr>
         </edge>
-        <node id="n66">
+        <node id="n19">
             <attr name="layout">
-                <string>1647 252 0 0</string>
+                <string>1317 252 0 0</string>
             </attr>
         </node>
-        <edge from="n66" to="n66">
+        <edge from="n19" to="n19">
             <attr name="label">
-                <string>string:"start_sub_Subactivity"</string>
+                <string>string:"start_sub1_end_sub1_Flow_1uendr0"</string>
             </attr>
         </edge>
-        <edge from="n62" to="n63">
+        <edge from="n15" to="n16">
             <attr name="label">
                 <string>new:name</string>
             </attr>
         </edge>
-        <edge from="n62" to="n64">
+        <edge from="n15" to="n17">
             <attr name="label">
                 <string>new:state</string>
             </attr>
         </edge>
-        <edge from="n57" to="n62">
+        <edge from="n10" to="n15">
             <attr name="label">
                 <string>new:subprocess</string>
             </attr>
         </edge>
-        <edge from="n62" to="n65">
+        <edge from="n15" to="n18">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n65" to="n66">
+        <edge from="n18" to="n19">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n57" to="n60">
+        <edge from="n10" to="n13">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n60" to="n61">
+        <edge from="n13" to="n14">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n57" to="n58">
+        <edge from="n10" to="n11">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n57" to="n59">
+        <edge from="n10" to="n12">
             <attr name="label">
                 <string>state</string>
             </attr>

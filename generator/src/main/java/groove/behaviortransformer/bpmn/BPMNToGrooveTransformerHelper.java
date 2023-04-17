@@ -285,7 +285,7 @@ public class BPMNToGrooveTransformerHelper {
       addTokenWithPosition(
           ruleBuilder,
           newReceiverProcessInstance,
-          BPMNToGrooveTransformerHelper.getActivityID(messageFlow.getTarget()));
+          BPMNToGrooveTransformerHelper.getFlowNodeNameAndID(messageFlow.getTarget()));
     } else {
       // Message start events get outgoing tokens
       addOutgoingTokensForFlowNodeToProcessInstance(
@@ -487,7 +487,7 @@ public class BPMNToGrooveTransformerHelper {
     return t -> seen.add(keyExtractor.apply(t));
   }
 
-  public static String getActivityID(FlowNode activity) {
-    return String.format(GROOVE_ID_FORMAT, activity.getName(), activity.getId());
+  public static String getFlowNodeNameAndID(FlowNode flowNode) {
+    return String.format(GROOVE_ID_FORMAT, flowNode.getName(), flowNode.getId());
   }
 }
