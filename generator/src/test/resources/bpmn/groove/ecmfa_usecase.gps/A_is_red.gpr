@@ -33,7 +33,7 @@
         </edge>
         <node id="n480">
             <attr name="layout">
-                <string>967 279 0 0</string>
+                <string>982 279 0 0</string>
             </attr>
         </node>
         <edge from="n480" to="n480">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n477" to="n477">
             <attr name="label">
-                <string>string:"A_is_red_Request_green_tl_A"</string>
+                <string>string:"A_is_red_Request_green_tl_A_92"</string>
             </attr>
         </edge>
         <node id="n479">
@@ -113,7 +113,7 @@
         </edge>
         <node id="n481">
             <attr name="layout">
-                <string>1407 279 0 0</string>
+                <string>1452 279 0 0</string>
             </attr>
         </node>
         <edge from="n481" to="n481">

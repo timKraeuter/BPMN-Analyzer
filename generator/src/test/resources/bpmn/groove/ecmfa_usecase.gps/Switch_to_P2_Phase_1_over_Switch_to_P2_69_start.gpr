@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="Switch_to_P2_Phase_1_over_Switch_to_P2_start" role="rule" edgeids="false" edgemode="directed">
+    <graph id="Switch_to_P2_Phase_1_over_Switch_to_P2_69_start" role="rule" edgeids="false" edgemode="directed">
         <node id="n144">
             <attr name="layout">
                 <string>552 332 0 0</string>
@@ -68,7 +68,7 @@
         </node>
         <edge from="n143" to="n143">
             <attr name="label">
-                <string>string:"Phase_1_over_Switch_to_P2"</string>
+                <string>string:"Phase_1_over_Switch_to_P2_69"</string>
             </attr>
         </edge>
         <node id="n145">
@@ -78,7 +78,7 @@
         </node>
         <edge from="n145" to="n145">
             <attr name="label">
-                <string>string:"Switch_to_P2"</string>
+                <string>string:"Switch_to_P2_28"</string>
             </attr>
         </edge>
         <edge from="n139" to="n144">

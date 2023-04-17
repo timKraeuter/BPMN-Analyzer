@@ -1,87 +1,87 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="e3_B_B_is_green_r_e3_B" role="rule" edgeids="false" edgemode="directed">
-        <node id="n412">
+    <graph id="B_green_t_evp2_21_evp2" role="rule" edgeids="false" edgemode="directed">
+        <node id="n200">
             <attr name="layout">
                 <string>62 85 0 0</string>
             </attr>
         </node>
-        <edge from="n412" to="n412">
+        <edge from="n200" to="n200">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n413">
+        <node id="n201">
             <attr name="layout">
                 <string>392 232 0 0</string>
             </attr>
         </node>
-        <edge from="n413" to="n413">
+        <edge from="n201" to="n201">
             <attr name="label">
-                <string>string:"Bus controller (B)"</string>
+                <string>string:"Phase_2"</string>
             </attr>
         </edge>
-        <node id="n414">
+        <node id="n202">
             <attr name="layout">
                 <string>392 72 0 0</string>
             </attr>
         </node>
-        <edge from="n414" to="n414">
+        <edge from="n202" to="n202">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n415">
+        <node id="n203">
             <attr name="layout">
-                <string>562 152 0 0</string>
+                <string>452 152 0 0</string>
             </attr>
         </node>
-        <edge from="n415" to="n415">
+        <edge from="n203" to="n203">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n416">
+        <node id="n204">
             <attr name="layout">
-                <string>817 224 0 0</string>
+                <string>652 224 0 0</string>
             </attr>
         </node>
-        <edge from="n416" to="n416">
+        <edge from="n204" to="n204">
             <attr name="label">
-                <string>string:"B_is_green_r_e3_B"</string>
+                <string>string:"B_green_t_evp2_21"</string>
             </attr>
         </edge>
-        <node id="n417">
+        <node id="n205">
             <attr name="layout">
-                <string>817 144 0 0</string>
+                <string>652 144 0 0</string>
             </attr>
         </node>
-        <edge from="n417" to="n417">
+        <edge from="n205" to="n205">
             <attr name="label">
-                <string>string:"e3_B_Pass_Junction_B"</string>
+                <string>string:"evp2"</string>
             </attr>
         </edge>
-        <edge from="n415" to="n417">
+        <edge from="n203" to="n205">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n415" to="n416">
+        <edge from="n203" to="n204">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n412" to="n413">
+        <edge from="n200" to="n201">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n412" to="n414">
+        <edge from="n200" to="n202">
             <attr name="label">
                 <string>state</string>
             </attr>
         </edge>
-        <edge from="n412" to="n415">
+        <edge from="n200" to="n203">
             <attr name="label">
                 <string>tokens</string>
             </attr>

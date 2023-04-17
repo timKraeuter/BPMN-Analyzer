@@ -128,7 +128,7 @@
         </node>
         <edge from="n157" to="n157">
             <attr name="label">
-                <string>string:"Switch_to_P2_B_is_green_t"</string>
+                <string>string:"Switch_to_P2_B_is_green_t_70"</string>
             </attr>
         </edge>
         <node id="n159">
@@ -138,7 +138,7 @@
         </node>
         <edge from="n159" to="n159">
             <attr name="label">
-                <string>string:"B_is_green_t_Phase_2"</string>
+                <string>string:"B_is_green_t_Phase_2_71"</string>
             </attr>
         </edge>
         <node id="n160">
@@ -188,7 +188,7 @@
         </node>
         <edge from="n165" to="n165">
             <attr name="label">
-                <string>string:"Request_green_tl_B_B_is_green_signal"</string>
+                <string>string:"Request_green_tl_B_B_is_green_signal_83"</string>
             </attr>
         </edge>
         <node id="n167">
@@ -198,7 +198,7 @@
         </node>
         <edge from="n167" to="n167">
             <attr name="label">
-                <string>string:"B_is_green_signal_e3_B"</string>
+                <string>string:"B_is_green_signal_e3_B_84"</string>
             </attr>
         </edge>
         <node id="n168">
@@ -248,7 +248,7 @@
         </node>
         <edge from="n173" to="n173">
             <attr name="label">
-                <string>string:"Request_green_tl_A_A_is_green_signal"</string>
+                <string>string:"Request_green_tl_A_A_is_green_signal_93"</string>
             </attr>
         </edge>
         <node id="n175">
@@ -258,7 +258,7 @@
         </node>
         <edge from="n175" to="n175">
             <attr name="label">
-                <string>string:"A_is_green_signal_e3_A"</string>
+                <string>string:"A_is_green_signal_e3_A_94"</string>
             </attr>
         </edge>
         <edge from="n153" to="n158">
