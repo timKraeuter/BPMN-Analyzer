@@ -30,6 +30,7 @@ import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.dele
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteMessageToProcessInstanceWithPosition;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteTokenWithPosition;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.distinctByKey;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.getActivityID;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.getSequenceFlowIdOrDescriptiveName;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.interruptSubprocess;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.isAfterInstantiateEventBasedGateway;
@@ -690,11 +691,11 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
             // Delete token in task if interrupt.
             if (boundarySignalEvent.isInterrupt()) {
               GrooveNode deletedToken =
-                  deleteTokenWithPosition(ruleBuilder, processInstance, task.getName());
+                  deleteTokenWithPosition(ruleBuilder, processInstance, getActivityID(task));
               ruleBuilder.contextEdge(AT, deletedToken, forAll);
             } else {
               GrooveNode contextToken =
-                  contextTokenWithPosition(ruleBuilder, processInstance, task.getName());
+                  contextTokenWithPosition(ruleBuilder, processInstance, getActivityID(task));
               ruleBuilder.contextEdge(AT, contextToken, forAll);
             }
           }
