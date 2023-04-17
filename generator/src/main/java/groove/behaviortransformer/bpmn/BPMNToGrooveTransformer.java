@@ -73,8 +73,7 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
               GrooveNode token = new GrooveNode(TYPE_TOKEN);
               GrooveNode tokenName =
                   new GrooveNode(
-                      createStringNodeLabel(
-                          getSequenceFlowIdOrDescriptiveName(incFlow)));
+                      createStringNodeLabel(getSequenceFlowIdOrDescriptiveName(incFlow)));
               startGraphBuilder.addEdge(POSITION, token, tokenName);
               startGraphBuilder.addEdge(TOKENS, processInstance, token);
             });

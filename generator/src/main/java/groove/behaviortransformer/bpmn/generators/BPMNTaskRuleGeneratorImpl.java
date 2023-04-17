@@ -23,8 +23,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
   private final BPMNCollaboration collaboration;
   private final GrooveRuleBuilder ruleBuilder;
 
-  public BPMNTaskRuleGeneratorImpl(
-      BPMNCollaboration collaboration, GrooveRuleBuilder ruleBuilder) {
+  public BPMNTaskRuleGeneratorImpl(BPMNCollaboration collaboration, GrooveRuleBuilder ruleBuilder) {
     this.collaboration = collaboration;
     this.ruleBuilder = ruleBuilder;
   }
@@ -39,8 +38,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
     createTaskRulesForProcess(
         process,
         sendTask,
-        builder ->
-            addSendMessageBehaviorForFlowNode(collaboration, builder, sendTask));
+        builder -> addSendMessageBehaviorForFlowNode(collaboration, builder, sendTask));
   }
 
   @Override
@@ -88,8 +86,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         .getIncomingMessageFlows(receiveTask)
         .forEach(
             messageFlow -> {
-              final String incomingFlowId =
-                  getSequenceFlowIdOrDescriptiveName(incomingFlow );
+              final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow);
               ruleBuilder.startRule(
                   this.getTaskOrCallActivityRuleName(receiveTask, incomingFlowId) + START);
               GrooveNode processInstance =
@@ -180,7 +177,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
       AbstractTask task,
       SequenceFlow incomingFlow,
       Consumer<GrooveNode> startTaskRuleAdditions) {
-    final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow );
+    final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow);
     ruleBuilder.startRule(this.getTaskOrCallActivityRuleName(task, incomingFlowId) + START);
     GrooveNode processInstance =
         BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
@@ -205,8 +202,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
     task.getOutgoingFlows()
         .forEach(
             outgoingFlow -> {
-              final String outgoingFlowID =
-                  getSequenceFlowIdOrDescriptiveName(outgoingFlow );
+              final String outgoingFlowID = getSequenceFlowIdOrDescriptiveName(outgoingFlow);
               BPMNToGrooveTransformerHelper.addTokenWithPosition(
                   ruleBuilder, processInstance, outgoingFlowID);
             });
