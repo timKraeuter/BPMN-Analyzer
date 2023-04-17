@@ -83,7 +83,7 @@
         </node>
         <edge from="n16" to="n16">
             <attr name="label">
-                <string>string:"A"</string>
+                <string>string:"A_Activity_1gofaru"</string>
             </attr>
         </edge>
         <node id="n18">
@@ -93,7 +93,7 @@
         </node>
         <edge from="n18" to="n18">
             <attr name="label">
-                <string>string:"a2"</string>
+                <string>string:"a2_Flow_0mnkkon"</string>
             </attr>
         </edge>
         <node id="n20">
@@ -103,7 +103,7 @@
         </node>
         <edge from="n20" to="n20">
             <attr name="label">
-                <string>string:"a1"</string>
+                <string>string:"a1_Flow_0g9v3mg"</string>
             </attr>
         </edge>
         <edge from="n12" to="n17">

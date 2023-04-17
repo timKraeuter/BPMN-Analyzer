@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="Throw_interruptMessage_Event_0ajr2wq" role="rule" edgeids="false" edgemode="directed">
+        <node id="n168">
+            <attr name="layout">
+                <string>515 593 0 0</string>
+            </attr>
+        </node>
+        <edge from="n168" to="n168">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n168" to="n168">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n174">
+            <attr name="layout">
+                <string>402 82 0 0</string>
+            </attr>
+        </node>
+        <edge from="n174" to="n174">
+            <attr name="label">
+                <string>type:Message</string>
+            </attr>
+        </edge>
+        <edge from="n174" to="n174">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n166">
+            <attr name="layout">
+                <string>515 503 0 0</string>
+            </attr>
+        </node>
+        <edge from="n166" to="n166">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n166" to="n166">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n163">
+            <attr name="layout">
+                <string>62 348 0 0</string>
+            </attr>
+        </node>
+        <edge from="n163" to="n163">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n164">
+            <attr name="layout">
+                <string>402 413 0 0</string>
+            </attr>
+        </node>
+        <edge from="n164" to="n164">
+            <attr name="label">
+                <string>string:"interruptTrigger"</string>
+            </attr>
+        </edge>
+        <node id="n165">
+            <attr name="layout">
+                <string>402 333 0 0</string>
+            </attr>
+        </node>
+        <edge from="n165" to="n165">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n167">
+            <attr name="layout">
+                <string>797 503 0 0</string>
+            </attr>
+        </node>
+        <edge from="n167" to="n167">
+            <attr name="label">
+                <string>string:"start_trigger_interruptMessage_Flow_0u2o9mg"</string>
+            </attr>
+        </edge>
+        <node id="n169">
+            <attr name="layout">
+                <string>797 593 0 0</string>
+            </attr>
+        </node>
+        <edge from="n169" to="n169">
+            <attr name="label">
+                <string>string:"interruptMessage_interruptSignal_Flow_18eds9w"</string>
+            </attr>
+        </edge>
+        <node id="n170">
+            <attr name="layout">
+                <string>602 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n170" to="n170">
+            <attr name="label">
+                <string>existsx:</string>
+            </attr>
+        </edge>
+        <node id="n171">
+            <attr name="layout">
+                <string>62 97 0 0</string>
+            </attr>
+        </node>
+        <edge from="n171" to="n171">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n172">
+            <attr name="layout">
+                <string>402 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n172" to="n172">
+            <attr name="label">
+                <string>string:"p1"</string>
+            </attr>
+        </edge>
+        <node id="n173">
+            <attr name="layout">
+                <string>402 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n173" to="n173">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n175">
+            <attr name="layout">
+                <string>602 74 0 0</string>
+            </attr>
+        </node>
+        <edge from="n175" to="n175">
+            <attr name="label">
+                <string>string:"interruptMessage_message"</string>
+            </attr>
+        </edge>
+        <edge from="n163" to="n168">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n168" to="n169">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n171" to="n174">
+            <attr name="label">
+                <string>new:messages</string>
+            </attr>
+        </edge>
+        <edge from="n174" to="n175">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n163" to="n166">
+            <attr name="label">
+                <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n166" to="n167">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n163" to="n164">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n163" to="n165">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n171" to="n172">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n171" to="n173">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n171" to="n170">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n173" to="n170">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n174" to="n170">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="Subprocess3_end" role="rule" edgeids="false" edgemode="directed">
+        <node id="n146">
+            <attr name="layout">
+                <string>477 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n146" to="n146">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n146" to="n146">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n143">
+            <attr name="layout">
+                <string>402 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n143" to="n143">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <edge from="n143" to="n143">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n145">
+            <attr name="layout">
+                <string>722 340 0 0</string>
+            </attr>
+        </node>
+        <edge from="n145" to="n145">
+            <attr name="label">
+                <string>type:Terminated</string>
+            </attr>
+        </edge>
+        <edge from="n145" to="n145">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n140">
+            <attr name="layout">
+                <string>62 317 0 0</string>
+            </attr>
+        </node>
+        <edge from="n140" to="n140">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n141">
+            <attr name="layout">
+                <string>402 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n141" to="n141">
+            <attr name="label">
+                <string>string:"p1"</string>
+            </attr>
+        </edge>
+        <node id="n142">
+            <attr name="layout">
+                <string>402 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n142" to="n142">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n144">
+            <attr name="layout">
+                <string>722 250 0 0</string>
+            </attr>
+        </node>
+        <edge from="n144" to="n144">
+            <attr name="label">
+                <string>string:"Subprocess3"</string>
+            </attr>
+        </edge>
+        <node id="n147">
+            <attr name="layout">
+                <string>722 162 0 0</string>
+            </attr>
+        </node>
+        <edge from="n147" to="n147">
+            <attr name="label">
+                <string>string:"Subprocess3_end_Flow_0uhx7oz"</string>
+            </attr>
+        </edge>
+        <edge from="n140" to="n146">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n146" to="n147">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n143" to="n144">
+            <attr name="label">
+                <string>del:name</string>
+            </attr>
+        </edge>
+        <edge from="n140" to="n143">
+            <attr name="label">
+                <string>del:subprocess</string>
+            </attr>
+        </edge>
+        <edge from="n143" to="n145">
+            <attr name="label">
+                <string>del:state</string>
+            </attr>
+        </edge>
+        <edge from="n140" to="n141">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n140" to="n142">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

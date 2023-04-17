@@ -43,7 +43,7 @@
         </node>
         <edge from="n123" to="n123">
             <attr name="label">
-                <string>string:"P2_Subprocess_end_p2"</string>
+                <string>string:"P2_Subprocess_end_p2_Flow_01hejlw"</string>
             </attr>
         </edge>
         <node id="n124">

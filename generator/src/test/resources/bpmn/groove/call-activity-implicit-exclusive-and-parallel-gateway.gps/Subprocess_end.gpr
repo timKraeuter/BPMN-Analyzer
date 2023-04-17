@@ -108,7 +108,7 @@
         </node>
         <edge from="n74" to="n74">
             <attr name="label">
-                <string>string:"a3"</string>
+                <string>string:"a3_Flow_08du15s"</string>
             </attr>
         </edge>
         <node id="n76">
@@ -118,7 +118,7 @@
         </node>
         <edge from="n76" to="n76">
             <attr name="label">
-                <string>string:"a4"</string>
+                <string>string:"a4_Flow_1tp5cpl"</string>
             </attr>
         </edge>
         <edge from="n67" to="n73">

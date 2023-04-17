@@ -2,6 +2,7 @@ package groove.behaviortransformer.bpmn.generators;
 
 import static groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
+import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.getFlowNodeNameAndID;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.getSequenceFlowIdOrDescriptiveName;
 import static groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.updateTokenPositionWhenRunning;
 
@@ -49,9 +50,13 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
           .getOutgoingFlows()
           .forEach(
               outFlow -> {
-                String outFlowID = getSequenceFlowIdOrDescriptiveName(outFlow );
+                String outFlowID = getSequenceFlowIdOrDescriptiveName(outFlow);
                 createExclusiveGatewayRule(
-                    process, ruleBuilder, exclusiveGateway, exclusiveGateway.getName(), outFlowID);
+                    process,
+                    ruleBuilder,
+                    exclusiveGateway,
+                    getFlowNodeNameAndID(exclusiveGateway),
+                    outFlowID);
               });
     }
   }
@@ -74,7 +79,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
     // If no incoming flows we consume a token at the position of the gateway.
     if (parallelGateway.getIncomingFlows().findAny().isEmpty()) {
       BPMNToGrooveTransformerHelper.deleteTokenWithPosition(
-          ruleBuilder, processInstance, parallelGateway.getName());
+          ruleBuilder, processInstance, getFlowNodeNameAndID(parallelGateway));
     }
 
     BPMNToGrooveTransformerHelper.addOutgoingTokensForFlowNodeToProcessInstance(
