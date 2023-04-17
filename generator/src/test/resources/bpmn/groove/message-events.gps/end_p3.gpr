@@ -43,7 +43,7 @@
         </node>
         <edge from="n92" to="n92">
             <attr name="label">
-                <string>string:"catch_B_p3_end_p3"</string>
+                <string>string:"catch_B_p3_end_p3_Flow_1p2rxrx"</string>
             </attr>
         </edge>
         <node id="n93">

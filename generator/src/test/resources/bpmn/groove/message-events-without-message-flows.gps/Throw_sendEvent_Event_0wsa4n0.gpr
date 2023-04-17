@@ -68,7 +68,7 @@
         </node>
         <edge from="n9" to="n9">
             <attr name="label">
-                <string>string:"start_sendEvent"</string>
+                <string>string:"start_sendEvent_Flow_1bq0iji"</string>
             </attr>
         </edge>
         <node id="n11">
@@ -78,7 +78,7 @@
         </node>
         <edge from="n11" to="n11">
             <attr name="label">
-                <string>string:"sendEvent_SendTask"</string>
+                <string>string:"sendEvent_SendTask_Flow_17n7skq"</string>
             </attr>
         </edge>
         <edge from="n5" to="n10">
