@@ -73,7 +73,7 @@
         </node>
         <edge from="n98" to="n98">
             <attr name="label">
-                <string>string:"signalOrMessage_interruptSignal"</string>
+                <string>string:"signalOrMessage_interruptSignal_Flow_0ldpkta"</string>
             </attr>
         </edge>
         <node id="n99">
@@ -133,7 +133,7 @@
         </node>
         <edge from="n105" to="n105">
             <attr name="label">
-                <string>string:"s1_s1_end"</string>
+                <string>string:"s1_s1_end_Flow_1udtcnz"</string>
             </attr>
         </edge>
         <node id="n107">
@@ -143,7 +143,7 @@
         </node>
         <edge from="n107" to="n107">
             <attr name="label">
-                <string>string:"Task"</string>
+                <string>string:"Task_Activity_0l12w7i"</string>
             </attr>
         </edge>
         <edge from="n101" to="n104">
