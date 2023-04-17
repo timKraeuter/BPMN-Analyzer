@@ -16,57 +16,58 @@ public class FSMToMaudeTransformer {
   public static final String ENQUOTE = "\"%s\"";
   private final FiniteStateMachine finiteStateMachine;
   private final Set<StateAtomicProposition> atomicPropositions;
+
   private static final String MODULE_TEMPLATE =
-      "load model-checker.maude .\r\n"
-          + "\r\n"
-          + "mod FSM-BEHAVIOR is\r\n"
-          + "    pr STRING .\r\n"
-          + "    pr CONFIGURATION .\r\n"
-          + "\r\n"
-          + "    op state :_ : String -> Attribute [ctor].\r\n"
-          + "    op name :_ : String -> Attribute [ctor].\r\n"
-          + "    op FSM : -> Cid [ctor] .\r\n"
-          + "\r\n"
-          + "    subsort String < Oid .\r\n"
-          + "endm\r\n"
-          + "\r\n"
-          + "mod FSM-BEHAVIOR-${name} is\r\n"
-          + "    pr FSM-BEHAVIOR .\r\n"
-          + "\r\n"
-          + "    var X : String .\r\n"
-          + "\r\n"
-          + "    --- Generated rules\r\n"
-          + "    ${rules}\r\n"
-          + "\r\n"
-          + "    --- Generated initial config representing the start state of "
-          + "the FSM.\r\n"
-          + "    op initial : -> Configuration .\r\n"
-          + "    eq initial = < \"1\" : FSM | name : \"${name}\", state : "
-          + "\"${startState}\" > .\r\n"
-          + "endm\r\n"
-          + "\r\n"
-          + "mod FSM-BEHAVIOR-${name}-PREDS is\r\n"
-          + "    pr FSM-BEHAVIOR-${name} .\r\n"
-          + "    pr SATISFACTION .\r\n"
-          + "    subsort Configuration < State .\r\n"
-          + "\r\n"
-          + "    var X : Oid .\r\n"
-          + "    var C : Configuration .\r\n"
-          + "    var P : Prop .\r\n"
-          + "\r\n"
-          + "    --- Generated atomic propositions\r\n"
-          + "    ${atomicPropositions}\r\n"
-          + "\r\n"
-          + "    eq C |= P = false [owise] .\r\n"
-          + "endm\r\n"
-          + "\r\n"
-          + "mod FSM-CHECK is\r\n"
-          + "    pr FSM-BEHAVIOR-${name}-PREDS .\r\n"
-          + "    pr MODEL-CHECKER .\r\n"
-          + "    pr LTL-SIMPLIFIER .\r\n"
-          + "endm\r\n"
-          + "\r\n"
-          + "red modelCheck(initial, ${ltlQuery}) .\r\n";
+      """
+load model-checker.maude .\r
+\r
+mod FSM-BEHAVIOR is\r
+    pr STRING .\r
+    pr CONFIGURATION .\r
+\r
+    op state :_ : String -> Attribute [ctor].\r
+    op name :_ : String -> Attribute [ctor].\r
+    op FSM : -> Cid [ctor] .\r
+\r
+    subsort String < Oid .\r
+endm\r
+\r
+mod FSM-BEHAVIOR-${name} is\r
+    pr FSM-BEHAVIOR .\r
+\r
+    var X : String .\r
+\r
+    --- Generated rules\r
+    ${rules}\r
+\r
+    --- Generated initial config representing the start state of the FSM.\r
+    op initial : -> Configuration .\r
+    eq initial = < "1" : FSM | name : "${name}", state : "${startState}" > .\r
+endm\r
+\r
+mod FSM-BEHAVIOR-${name}-PREDS is\r
+    pr FSM-BEHAVIOR-${name} .\r
+    pr SATISFACTION .\r
+    subsort Configuration < State .\r
+\r
+    var X : Oid .\r
+    var C : Configuration .\r
+    var P : Prop .\r
+\r
+    --- Generated atomic propositions\r
+    ${atomicPropositions}\r
+\r
+    eq C |= P = false [owise] .\r
+endm\r
+\r
+mod FSM-CHECK is\r
+    pr FSM-BEHAVIOR-${name}-PREDS .\r
+    pr MODEL-CHECKER .\r
+    pr LTL-SIMPLIFIER .\r
+endm\r
+\r
+red modelCheck(initial, ${ltlQuery}) .\r
+""";
 
   public FSMToMaudeTransformer(
       FiniteStateMachine finiteStateMachine, Set<StateAtomicProposition> atomicPropositions) {
