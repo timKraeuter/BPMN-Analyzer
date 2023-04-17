@@ -83,7 +83,7 @@
         </node>
         <edge from="n105" to="n105">
             <attr name="label">
-                <string>string:"e1_t_msg2"</string>
+                <string>string:"e1_t_msg2_Flow_0te57tb"</string>
             </attr>
         </edge>
         <node id="n107">
@@ -93,7 +93,7 @@
         </node>
         <edge from="n107" to="n107">
             <attr name="label">
-                <string>string:"t_msg2_end2_p2"</string>
+                <string>string:"t_msg2_end2_p2_Flow_1fqp9d1"</string>
             </attr>
         </edge>
         <node id="n108">
