@@ -58,7 +58,7 @@
         </node>
         <edge from="n72" to="n72">
             <attr name="label">
-                <string>string:"signalOrMessage_startMessage"</string>
+                <string>string:"signalOrMessage_startMessage_Flow_16p4idf"</string>
             </attr>
         </edge>
         <node id="n73">

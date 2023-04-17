@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="Subactivity_messageStartSub_Subactivity_start" role="rule" edgeids="false" edgemode="directed">
+    <graph id="Subactivity_messageStartSub_Subactivity_Flow_1j7mnby_start" role="rule" edgeids="false" edgemode="directed">
         <node id="n37">
             <attr name="layout">
                 <string>507 332 0 0</string>
@@ -68,7 +68,7 @@
         </node>
         <edge from="n36" to="n36">
             <attr name="label">
-                <string>string:"messageStartSub_Subactivity"</string>
+                <string>string:"messageStartSub_Subactivity_Flow_1j7mnby"</string>
             </attr>
         </edge>
         <node id="n38">
@@ -78,7 +78,7 @@
         </node>
         <edge from="n38" to="n38">
             <attr name="label">
-                <string>string:"Subactivity"</string>
+                <string>string:"Subactivity_Activity_1foo2u4"</string>
             </attr>
         </edge>
         <edge from="n32" to="n37">

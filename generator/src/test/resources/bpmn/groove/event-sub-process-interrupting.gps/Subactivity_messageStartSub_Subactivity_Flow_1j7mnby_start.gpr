@@ -1,112 +1,112 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="Subactivity_signalStartSub_Subactivity_start" role="rule" edgeids="false" edgemode="directed">
-        <node id="n30">
+    <graph id="Subactivity_messageStartSub_Subactivity_Flow_1j7mnby_start" role="rule" edgeids="false" edgemode="directed">
+        <node id="n39">
             <attr name="layout">
                 <string>507 332 0 0</string>
             </attr>
         </node>
-        <edge from="n30" to="n30">
+        <edge from="n39" to="n39">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n30" to="n30">
+        <edge from="n39" to="n39">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
-        <node id="n28">
+        <node id="n37">
             <attr name="layout">
                 <string>507 242 0 0</string>
             </attr>
         </node>
-        <edge from="n28" to="n28">
+        <edge from="n37" to="n37">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n28" to="n28">
+        <edge from="n37" to="n37">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n25">
+        <node id="n34">
             <attr name="layout">
                 <string>62 87 0 0</string>
             </attr>
         </node>
-        <edge from="n25" to="n25">
+        <edge from="n34" to="n34">
             <attr name="label">
                 <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <node id="n26">
+        <node id="n35">
             <attr name="layout">
                 <string>402 152 0 0</string>
             </attr>
         </node>
-        <edge from="n26" to="n26">
+        <edge from="n35" to="n35">
             <attr name="label">
                 <string>string:"EventSubprocess"</string>
             </attr>
         </edge>
-        <node id="n27">
+        <node id="n36">
             <attr name="layout">
                 <string>402 72 0 0</string>
             </attr>
         </node>
-        <edge from="n27" to="n27">
+        <edge from="n36" to="n36">
             <attr name="label">
                 <string>type:Running</string>
             </attr>
         </edge>
-        <node id="n29">
+        <node id="n38">
             <attr name="layout">
                 <string>782 242 0 0</string>
             </attr>
         </node>
-        <edge from="n29" to="n29">
+        <edge from="n38" to="n38">
             <attr name="label">
-                <string>string:"signalStartSub_Subactivity"</string>
+                <string>string:"messageStartSub_Subactivity_Flow_1j7mnby"</string>
             </attr>
         </edge>
-        <node id="n31">
+        <node id="n40">
             <attr name="layout">
                 <string>782 332 0 0</string>
             </attr>
         </node>
-        <edge from="n31" to="n31">
+        <edge from="n40" to="n40">
             <attr name="label">
-                <string>string:"Subactivity"</string>
+                <string>string:"Subactivity_Activity_1foo2u4"</string>
             </attr>
         </edge>
-        <edge from="n25" to="n30">
+        <edge from="n34" to="n39">
             <attr name="label">
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n30" to="n31">
+        <edge from="n39" to="n40">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n25" to="n28">
+        <edge from="n34" to="n37">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n28" to="n29">
+        <edge from="n37" to="n38">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n25" to="n26">
+        <edge from="n34" to="n35">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n25" to="n27">
+        <edge from="n34" to="n36">
             <attr name="label">
                 <string>state</string>
             </attr>

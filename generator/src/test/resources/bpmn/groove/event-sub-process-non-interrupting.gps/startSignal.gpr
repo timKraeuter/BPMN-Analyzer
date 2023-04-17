@@ -88,7 +88,7 @@
         </node>
         <edge from="n79" to="n79">
             <attr name="label">
-                <string>string:"signalOrMessage_startSignal"</string>
+                <string>string:"signalOrMessage_startSignal_Flow_0uljums"</string>
             </attr>
         </edge>
         <node id="n80">
@@ -158,7 +158,7 @@
         </node>
         <edge from="n89" to="n89">
             <attr name="label">
-                <string>string:"signalStartSub_Subactivity"</string>
+                <string>string:"signalStartSub_Subactivity_Flow_18uv228"</string>
             </attr>
         </edge>
         <edge from="n85" to="n86">

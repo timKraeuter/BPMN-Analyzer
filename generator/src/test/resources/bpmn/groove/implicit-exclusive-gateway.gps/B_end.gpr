@@ -1,57 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph role="rule" edgeids="false" edgemode="directed" id="B_end">
-        <attr name="$version">
-            <string>curly</string>
-        </attr>
+    <graph id="B_end" role="rule" edgeids="false" edgemode="directed">
         <node id="n36">
             <attr name="layout">
                 <string>590 332 0 0</string>
             </attr>
         </node>
-        <node id="n34">
-            <attr name="layout">
-                <string>590 242 0 0</string>
-            </attr>
-        </node>
-        <node id="n31">
-            <attr name="layout">
-                <string>62 87 0 0</string>
-            </attr>
-        </node>
-        <node id="n32">
-            <attr name="layout">
-                <string>402 152 0 0</string>
-            </attr>
-        </node>
-        <node id="n33">
-            <attr name="layout">
-                <string>402 72 0 0</string>
-            </attr>
-        </node>
-        <node id="n35">
-            <attr name="layout">
-                <string>947 242 0 0</string>
-            </attr>
-        </node>
-        <node id="n37">
-            <attr name="layout">
-                <string>947 332 0 0</string>
-            </attr>
-        </node>
-        <edge from="n36" to="n36">
-            <attr name="label">
-                <string>new:</string>
-            </attr>
-        </edge>
         <edge from="n36" to="n36">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <edge from="n36" to="n37">
+        <edge from="n36" to="n36">
             <attr name="label">
-                <string>new:position</string>
+                <string>new:</string>
+            </attr>
+        </edge>
+        <node id="n34">
+            <attr name="layout">
+                <string>590 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n34" to="n34">
+            <attr name="label">
+                <string>type:Token</string>
             </attr>
         </edge>
         <edge from="n34" to="n34">
@@ -59,14 +31,54 @@
                 <string>del:</string>
             </attr>
         </edge>
-        <edge from="n34" to="n35">
+        <node id="n31">
+            <attr name="layout">
+                <string>62 87 0 0</string>
+            </attr>
+        </node>
+        <edge from="n31" to="n31">
             <attr name="label">
-                <string>del:position</string>
+                <string>type:ProcessSnapshot</string>
             </attr>
         </edge>
-        <edge from="n34" to="n34">
+        <node id="n32">
+            <attr name="layout">
+                <string>402 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n32" to="n32">
             <attr name="label">
-                <string>type:Token</string>
+                <string>string:"implicit-exclusive-gateway"</string>
+            </attr>
+        </edge>
+        <node id="n33">
+            <attr name="layout">
+                <string>402 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n33" to="n33">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n35">
+            <attr name="layout">
+                <string>947 242 0 0</string>
+            </attr>
+        </node>
+        <edge from="n35" to="n35">
+            <attr name="label">
+                <string>string:"B_Activity_10w538h"</string>
+            </attr>
+        </edge>
+        <node id="n37">
+            <attr name="layout">
+                <string>947 332 0 0</string>
+            </attr>
+        </node>
+        <edge from="n37" to="n37">
+            <attr name="label">
+                <string>string:"B_end_Flow_1invg8j"</string>
             </attr>
         </edge>
         <edge from="n31" to="n36">
@@ -74,9 +86,9 @@
                 <string>new:tokens</string>
             </attr>
         </edge>
-        <edge from="n31" to="n32">
+        <edge from="n36" to="n37">
             <attr name="label">
-                <string>name</string>
+                <string>new:position</string>
             </attr>
         </edge>
         <edge from="n31" to="n34">
@@ -84,34 +96,19 @@
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n31" to="n31">
+        <edge from="n34" to="n35">
             <attr name="label">
-                <string>type:ProcessSnapshot</string>
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n31" to="n32">
+            <attr name="label">
+                <string>name</string>
             </attr>
         </edge>
         <edge from="n31" to="n33">
             <attr name="label">
                 <string>state</string>
-            </attr>
-        </edge>
-        <edge from="n32" to="n32">
-            <attr name="label">
-                <string>string:"implicit-exclusive-gateway"</string>
-            </attr>
-        </edge>
-        <edge from="n33" to="n33">
-            <attr name="label">
-                <string>type:Running</string>
-            </attr>
-        </edge>
-        <edge from="n35" to="n35">
-            <attr name="label">
-                <string>string:"B_Activity_10w538h"</string>
-            </attr>
-        </edge>
-        <edge from="n37" to="n37">
-            <attr name="label">
-                <string>string:"B_end_Flow_1invg8j"</string>
             </attr>
         </edge>
     </graph>
