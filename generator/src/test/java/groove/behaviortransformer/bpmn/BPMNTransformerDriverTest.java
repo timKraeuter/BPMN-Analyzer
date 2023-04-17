@@ -28,12 +28,13 @@ class BPMNTransformerDriverTest extends BPMNToGrooveTestBase {
     String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + bpmnFileName;
     Path pathToBPMNModel = FileTestHelper.getResource(resourcePath);
 
-    String tempDirectoryPath = FileUtils.getTempDirectoryPath();
+    String tempDirectoryPath = FileUtils.getTempDirectoryPath() + "bpmn";
 
     String[] args = {pathToBPMNModel.toString(), tempDirectoryPath};
 
     BPMNTransformerDriver.main(args);
 
-    checkGenerationEqualToExpected(fixedRules::contains, "cyclic", Path.of(tempDirectoryPath));
+    checkGenerationEqualToExpected(
+        fixedRules::contains, "cyclic", Path.of(tempDirectoryPath, "cyclic.gps"));
   }
 }
