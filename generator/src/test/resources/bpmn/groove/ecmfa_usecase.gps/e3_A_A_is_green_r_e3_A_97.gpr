@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="e3_A_A_is_green_r_e3_A" role="rule" edgeids="false" edgemode="directed">
+    <graph id="e3_A_A_is_green_r_e3_A_97" role="rule" edgeids="false" edgemode="directed">
         <node id="n523">
             <attr name="layout">
                 <string>62 85 0 0</string>
@@ -48,7 +48,7 @@
         </node>
         <edge from="n527" to="n527">
             <attr name="label">
-                <string>string:"A_is_green_r_e3_A"</string>
+                <string>string:"A_is_green_r_e3_A_97"</string>
             </attr>
         </edge>
         <node id="n528">
@@ -58,7 +58,7 @@
         </node>
         <edge from="n528" to="n528">
             <attr name="label">
-                <string>string:"e3_A_Pass_Junction_A"</string>
+                <string>string:"e3_A_Pass_Junction_A_95"</string>
             </attr>
         </edge>
         <edge from="n526" to="n528">

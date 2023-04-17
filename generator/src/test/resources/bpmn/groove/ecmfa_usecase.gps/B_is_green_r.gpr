@@ -33,7 +33,7 @@
         </edge>
         <node id="n380">
             <attr name="layout">
-                <string>917 279 0 0</string>
+                <string>932 279 0 0</string>
             </attr>
         </node>
         <edge from="n380" to="n380">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n377" to="n377">
             <attr name="label">
-                <string>string:"B_is_green_r_e3_B"</string>
+                <string>string:"B_is_green_r_e3_B_87"</string>
             </attr>
         </edge>
         <node id="n379">
@@ -113,7 +113,7 @@
         </edge>
         <node id="n381">
             <attr name="layout">
-                <string>1257 279 0 0</string>
+                <string>1302 279 0 0</string>
             </attr>
         </node>
         <edge from="n381" to="n381">

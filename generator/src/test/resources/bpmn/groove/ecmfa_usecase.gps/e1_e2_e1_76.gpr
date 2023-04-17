@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="e1_e2_e1" role="rule" edgeids="false" edgemode="directed">
+    <graph id="e1_e2_e1_76" role="rule" edgeids="false" edgemode="directed">
         <node id="n21">
             <attr name="layout">
                 <string>62 85 0 0</string>
@@ -48,7 +48,7 @@
         </node>
         <edge from="n25" to="n25">
             <attr name="label">
-                <string>string:"e2_e1"</string>
+                <string>string:"e2_e1_76"</string>
             </attr>
         </edge>
         <node id="n26">
@@ -58,7 +58,7 @@
         </node>
         <edge from="n26" to="n26">
             <attr name="label">
-                <string>string:"e1_Phase_1"</string>
+                <string>string:"e1_Phase_1_67"</string>
             </attr>
         </edge>
         <edge from="n24" to="n26">
