@@ -24,6 +24,7 @@ import behavior.bpmn.FlowNode;
 import behavior.bpmn.MessageFlow;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.activities.CallActivity;
+import behavior.bpmn.activities.tasks.AbstractTask;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
@@ -131,9 +132,7 @@ public class BPMNToGrooveTransformerHelper {
   }
 
   public static void addOutgoingTokensForFlowNodeToProcessInstance(
-      FlowNode flowNode,
-      GrooveRuleBuilder ruleBuilder,
-      GrooveNode processInstance) {
+      FlowNode flowNode, GrooveRuleBuilder ruleBuilder, GrooveNode processInstance) {
     flowNode
         .getOutgoingFlows()
         .forEach(
@@ -141,7 +140,7 @@ public class BPMNToGrooveTransformerHelper {
                 addTokenWithPosition(
                     ruleBuilder,
                     processInstance,
-                    getSequenceFlowIdOrDescriptiveName(sequenceFlow )));
+                    getSequenceFlowIdOrDescriptiveName(sequenceFlow)));
   }
 
   public static void addOutgoingTokensForFlowNodeToProcessInstanceWithQuantifier(
@@ -157,7 +156,7 @@ public class BPMNToGrooveTransformerHelper {
                   addTokenWithPosition(
                       ruleBuilder,
                       processInstance,
-                      getSequenceFlowIdOrDescriptiveName(sequenceFlow ));
+                      getSequenceFlowIdOrDescriptiveName(sequenceFlow));
               ruleBuilder.contextEdge(AT, addedToken, quantifier);
             });
   }
@@ -220,22 +219,17 @@ public class BPMNToGrooveTransformerHelper {
         .forEach(
             messageFlow -> {
               if (messageFlow.getTarget().isInstantiateFlowNode()) {
-                addMessageFlowInstantiateFlowNodeBehavior(
-                    collaboration, ruleBuilder, messageFlow);
+                addMessageFlowInstantiateFlowNodeBehavior(collaboration, ruleBuilder, messageFlow);
               } else if (isAfterInstantiateEventBasedGateway(messageFlow.getTarget())) {
-                instantiateMessageFlowReceiverProcess(
-                    collaboration, ruleBuilder, messageFlow);
+                instantiateMessageFlowReceiverProcess(collaboration, ruleBuilder, messageFlow);
               } else {
-                addMessageSendBehaviorIfProcessExists(
-                    collaboration, ruleBuilder, messageFlow);
+                addMessageSendBehaviorIfProcessExists(collaboration, ruleBuilder, messageFlow);
               }
             });
   }
 
   private static void addMessageSendBehaviorIfProcessExists(
-      BPMNCollaboration collaboration,
-      GrooveRuleBuilder ruleBuilder,
-      MessageFlow messageFlow) {
+      BPMNCollaboration collaboration, GrooveRuleBuilder ruleBuilder, MessageFlow messageFlow) {
     AbstractBPMNProcess messageFlowReceiver =
         collaboration.getMessageFlowReceiverProcess(messageFlow);
     // If a process instance exists, send a message.
@@ -256,7 +250,7 @@ public class BPMNToGrooveTransformerHelper {
               if (sequenceFlow.getSource().isExclusiveEventBasedGateway()) {
                 tokenPosition = sequenceFlow.getSource().getName();
               } else {
-                tokenPosition = getSequenceFlowIdOrDescriptiveName(sequenceFlow );
+                tokenPosition = getSequenceFlowIdOrDescriptiveName(sequenceFlow);
               }
               ruleBuilder.contextEdge(
                   POSITION, token, ruleBuilder.contextNode(createStringNodeLabel(tokenPosition)));
@@ -265,9 +259,7 @@ public class BPMNToGrooveTransformerHelper {
   }
 
   private static void addMessageFlowInstantiateFlowNodeBehavior(
-      BPMNCollaboration collaboration,
-      GrooveRuleBuilder ruleBuilder,
-      MessageFlow messageFlow) {
+      BPMNCollaboration collaboration, GrooveRuleBuilder ruleBuilder, MessageFlow messageFlow) {
     AbstractBPMNProcess messageFlowReceiverProcess =
         collaboration.getMessageFlowReceiverProcess(messageFlow);
     if (messageFlowReceiverProcess.isEventSubprocess()) {
@@ -284,9 +276,7 @@ public class BPMNToGrooveTransformerHelper {
   }
 
   private static void instantiateMessageFlowReceiverProcess(
-      BPMNCollaboration collaboration,
-      GrooveRuleBuilder ruleBuilder,
-      MessageFlow messageFlow) {
+      BPMNCollaboration collaboration, GrooveRuleBuilder ruleBuilder, MessageFlow messageFlow) {
     AbstractBPMNProcess receiverProcess =
         collaboration.findProcessForFlowNode(messageFlow.getTarget());
     GrooveNode newReceiverProcessInstance =
@@ -319,9 +309,7 @@ public class BPMNToGrooveTransformerHelper {
   }
 
   public static GrooveNode addTokensForOutgoingFlowsToRunningInstance(
-      FlowNode flowNode,
-      AbstractBPMNProcess process,
-      GrooveRuleBuilder ruleBuilder) {
+      FlowNode flowNode, AbstractBPMNProcess process, GrooveRuleBuilder ruleBuilder) {
     GrooveNode processInstance = contextProcessInstance(process, ruleBuilder);
     addOutgoingTokensForFlowNodeToProcessInstance(flowNode, ruleBuilder, processInstance);
     return processInstance;
@@ -335,7 +323,7 @@ public class BPMNToGrooveTransformerHelper {
     GrooveNode processInstance =
         contextProcessInstanceWithQuantifier(process, ruleBuilder, quantifier);
     addOutgoingTokensForFlowNodeToProcessInstanceWithQuantifier(
-        flowNode, ruleBuilder, processInstance, quantifier );
+        flowNode, ruleBuilder, processInstance, quantifier);
     return processInstance;
   }
 
@@ -496,5 +484,9 @@ public class BPMNToGrooveTransformerHelper {
   public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
     Set<Object> seen = ConcurrentHashMap.newKeySet();
     return t -> seen.add(keyExtractor.apply(t));
+  }
+
+  public static String getActivityID(AbstractTask task) {
+    return String.format(GROOVE_ID_FORMAT, task.getName(), task.getId());
   }
 }
