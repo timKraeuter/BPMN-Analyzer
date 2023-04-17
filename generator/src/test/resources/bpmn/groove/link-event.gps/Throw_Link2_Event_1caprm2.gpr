@@ -68,7 +68,7 @@
         </node>
         <edge from="n85" to="n85">
             <attr name="label">
-                <string>string:"Flow_0ffqovc"</string>
+                <string>string:"p2_pg1_Link2_Flow_0ffqovc"</string>
             </attr>
         </edge>
         <node id="n87">
@@ -78,7 +78,7 @@
         </node>
         <edge from="n87" to="n87">
             <attr name="label">
-                <string>string:"Flow_0l2nycr"</string>
+                <string>string:"Link2_p2_pg2_Flow_0l2nycr"</string>
             </attr>
         </edge>
         <edge from="n81" to="n86">

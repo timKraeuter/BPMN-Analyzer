@@ -128,7 +128,7 @@
         </node>
         <edge from="n46" to="n46">
             <attr name="label">
-                <string>string:"start_p2_throw_A"</string>
+                <string>string:"start_p2_throw_A_Flow_1sb90yn"</string>
             </attr>
         </edge>
         <node id="n48">
@@ -138,7 +138,7 @@
         </node>
         <edge from="n48" to="n48">
             <attr name="label">
-                <string>string:"throw_A_catch_B_p2"</string>
+                <string>string:"throw_A_catch_B_p2_Flow_1k62gnk"</string>
             </attr>
         </edge>
         <node id="n49">
@@ -208,7 +208,7 @@
         </node>
         <edge from="n56" to="n56">
             <attr name="label">
-                <string>string:"start_p1_catch_A"</string>
+                <string>string:"start_p1_catch_A_Flow_12mxyv6"</string>
             </attr>
         </edge>
         <node id="n58">
@@ -228,7 +228,7 @@
         </node>
         <edge from="n61" to="n61">
             <attr name="label">
-                <string>string:"start_p3_catch_B_p3"</string>
+                <string>string:"start_p3_catch_B_p3_Flow_18621tw"</string>
             </attr>
         </edge>
         <edge from="n42" to="n47">

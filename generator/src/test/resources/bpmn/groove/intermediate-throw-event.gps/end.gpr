@@ -43,7 +43,7 @@
         </node>
         <edge from="n8" to="n8">
             <attr name="label">
-                <string>string:"intermediate_end"</string>
+                <string>string:"intermediate_end_Flow_04utr3x"</string>
             </attr>
         </edge>
         <node id="n9">
