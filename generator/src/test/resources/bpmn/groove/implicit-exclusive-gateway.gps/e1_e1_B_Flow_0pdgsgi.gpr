@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="e1_e1_B" role="rule" edgeids="false" edgemode="directed">
+    <graph id="e1_e1_B_Flow_0pdgsgi" role="rule" edgeids="false" edgemode="directed">
         <node id="n5">
             <attr name="layout">
                 <string>62 85 0 0</string>
@@ -48,7 +48,7 @@
         </node>
         <edge from="n9" to="n9">
             <attr name="label">
-                <string>string:"start_e1"</string>
+                <string>string:"start_e1_Flow_10t9zap"</string>
             </attr>
         </edge>
         <node id="n10">
@@ -58,7 +58,7 @@
         </node>
         <edge from="n10" to="n10">
             <attr name="label">
-                <string>string:"e1_B"</string>
+                <string>string:"e1_B_Flow_0pdgsgi"</string>
             </attr>
         </edge>
         <edge from="n8" to="n10">

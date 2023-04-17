@@ -24,7 +24,6 @@ import behavior.bpmn.FlowNode;
 import behavior.bpmn.MessageFlow;
 import behavior.bpmn.SequenceFlow;
 import behavior.bpmn.activities.CallActivity;
-import behavior.bpmn.activities.tasks.AbstractTask;
 import behavior.bpmn.activities.tasks.ReceiveTask;
 import behavior.bpmn.activities.tasks.SendTask;
 import behavior.bpmn.activities.tasks.Task;
@@ -284,7 +283,9 @@ public class BPMNToGrooveTransformerHelper {
     if (messageFlow.getTarget().isTask()) {
       // Instantiate tasks get a token on the task.
       addTokenWithPosition(
-          ruleBuilder, newReceiverProcessInstance, messageFlow.getTarget().getName());
+          ruleBuilder,
+          newReceiverProcessInstance,
+          BPMNToGrooveTransformerHelper.getActivityID(messageFlow.getTarget()));
     } else {
       // Message start events get outgoing tokens
       addOutgoingTokensForFlowNodeToProcessInstance(
@@ -486,7 +487,7 @@ public class BPMNToGrooveTransformerHelper {
     return t -> seen.add(keyExtractor.apply(t));
   }
 
-  public static String getActivityID(AbstractTask task) {
-    return String.format(GROOVE_ID_FORMAT, task.getName(), task.getId());
+  public static String getActivityID(FlowNode activity) {
+    return String.format(GROOVE_ID_FORMAT, activity.getName(), activity.getId());
   }
 }
