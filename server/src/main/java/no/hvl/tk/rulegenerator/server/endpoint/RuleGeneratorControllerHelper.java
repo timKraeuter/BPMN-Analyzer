@@ -1,7 +1,6 @@
 package no.hvl.tk.rulegenerator.server.endpoint;
 
 import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import behavior.bpmn.reader.BPMNFileReader;
 import groove.behaviortransformer.BehaviorToGrooveTransformer;
 import groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
@@ -93,19 +92,8 @@ public class RuleGeneratorControllerHelper {
     BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
     String subFolderName =
         RuleGeneratorControllerHelper.getGGOrStateSpaceDirName(bpmnCollaboration.getName());
-    Path grooveGrammarFolder;
-    try {
-
-      grooveGrammarFolder =
-          transformer.generateGrooveGrammarForBPMNProcessModel(
-              bpmnCollaboration, Path.of(getGGDirPathname(subFolderName)), false);
-    } catch (GrooveGenerationRuntimeException e) {
-      // Retry but using ids everywhere.
-      grooveGrammarFolder =
-          transformer.generateGrooveGrammarForBPMNProcessModel(
-              bpmnCollaboration, Path.of(getGGDirPathname(subFolderName)), true);
-    }
-    return grooveGrammarFolder;
+    return transformer.generateGrooveGrammarForBPMNProcessModel(
+        bpmnCollaboration, Path.of(getGGDirPathname(subFolderName)));
   }
 
   private static String getGGDirPathname(String subFolderName) {
