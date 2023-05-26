@@ -3,8 +3,8 @@ package maude.behaviortransformer;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import behavior.fsm.FiniteStateMachine;
 import behavior.fsm.FSMStateAtomicProposition;
+import behavior.fsm.FiniteStateMachine;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;

@@ -1,7 +1,7 @@
 package maude.behaviortransformer;
 
-import behavior.fsm.FiniteStateMachine;
 import behavior.fsm.FSMStateAtomicProposition;
+import behavior.fsm.FiniteStateMachine;
 import behavior.fsm.Transition;
 import java.util.HashMap;
 import java.util.Map;
