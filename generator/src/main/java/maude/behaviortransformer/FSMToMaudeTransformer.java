@@ -1,7 +1,7 @@
 package maude.behaviortransformer;
 
 import behavior.fsm.FiniteStateMachine;
-import behavior.fsm.StateAtomicProposition;
+import behavior.fsm.FSMStateAtomicProposition;
 import behavior.fsm.Transition;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ import org.apache.commons.text.StringSubstitutor;
 public class FSMToMaudeTransformer {
   public static final String ENQUOTE = "\"%s\"";
   private final FiniteStateMachine finiteStateMachine;
-  private final Set<StateAtomicProposition> atomicPropositions;
+  private final Set<FSMStateAtomicProposition> atomicPropositions;
 
   private static final String MODULE_TEMPLATE =
       """
@@ -70,7 +70,7 @@ red modelCheck(initial, ${ltlQuery}) .\r
 """;
 
   public FSMToMaudeTransformer(
-      FiniteStateMachine finiteStateMachine, Set<StateAtomicProposition> atomicPropositions) {
+      FiniteStateMachine finiteStateMachine, Set<FSMStateAtomicProposition> atomicPropositions) {
     this.finiteStateMachine = finiteStateMachine;
     this.atomicPropositions = atomicPropositions;
   }
@@ -88,14 +88,14 @@ red modelCheck(initial, ${ltlQuery}) .\r
   private String makeAtomicPropositions() {
     return this.atomicPropositions.stream()
         .map(
-            stateAtomicProposition ->
+            proposition ->
                 String.format(
                     "op %s : Oid -> Prop .\r\n    eq < X : FSM | name : \"%s\", state : \"%s\" > C |= %s"
                         + "(X) = true .",
-                    stateAtomicProposition.getName(),
+                    proposition.getName(),
                     finiteStateMachine.getName(),
-                    stateAtomicProposition.getState().getName(),
-                    stateAtomicProposition.getName()))
+                    proposition.getState().getName(),
+                    proposition.getName()))
         .collect(Collectors.joining("\r\n    "));
   }
 

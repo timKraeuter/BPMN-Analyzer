@@ -1,12 +1,31 @@
 package maude.behaviortransformer;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import behavior.fsm.FiniteStateMachine;
+import behavior.fsm.FSMStateAtomicProposition;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Set;
 import util.FileTestHelper;
 
 public interface MaudeTestHelper {
+  String MAUDE_FSM_MODULE_FOLDER = "fsm/maude/";
+
+  default void testFSMMaudeGeneration(
+      FiniteStateMachine fsm, Set<FSMStateAtomicProposition> props, String finalQuery)
+      throws IOException {
+    String actualMaudeModule = new FSMToMaudeTransformer(fsm, props).generate(finalQuery);
+
+    String expectedMaudeModule = readExpectedMaudeModule(MAUDE_FSM_MODULE_FOLDER, fsm.getName());
+    if (!actualMaudeModule.equals(expectedMaudeModule)) {
+      System.out.println(actualMaudeModule);
+    }
+    assertThat(actualMaudeModule, is(expectedMaudeModule));
+  }
 
   default String readExpectedMaudeModule(String folder, String resourceFileName)
       throws IOException {

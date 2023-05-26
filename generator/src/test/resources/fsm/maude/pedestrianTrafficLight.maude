@@ -1,0 +1,52 @@
+load model-checker.maude .
+
+mod FSM-BEHAVIOR is
+    pr STRING .
+    pr CONFIGURATION .
+
+    op state :_ : String -> Attribute [ctor].
+    op name :_ : String -> Attribute [ctor].
+    op FSM : -> Cid [ctor] .
+
+    subsort String < Oid .
+endm
+
+mod FSM-BEHAVIOR-pedestrianTrafficLight is
+    pr FSM-BEHAVIOR .
+
+    var X : String .
+
+    --- Generated rules
+    rl [turnGreen] :  < X : FSM | name : "pedestrianTrafficLight", state : "red" > => < X : FSM | name : "pedestrianTrafficLight", state : "green" > .
+    rl [turnRed] :  < X : FSM | name : "pedestrianTrafficLight", state : "green" > => < X : FSM | name : "pedestrianTrafficLight", state : "red" > .
+
+    --- Generated initial config representing the start state of the FSM.
+    op initial : -> Configuration .
+    eq initial = < "1" : FSM | name : "pedestrianTrafficLight", state : "red" > .
+endm
+
+mod FSM-BEHAVIOR-pedestrianTrafficLight-PREDS is
+    pr FSM-BEHAVIOR-pedestrianTrafficLight .
+    pr SATISFACTION .
+    subsort Configuration < State .
+
+    var X : Oid .
+    var C : Configuration .
+    var P : Prop .
+
+    --- Generated atomic propositions
+    op red : Oid -> Prop .
+    eq < X : FSM | name : "pedestrianTrafficLight", state : "red" > C |= red(X) = true .
+    op green : Oid -> Prop .
+    eq < X : FSM | name : "pedestrianTrafficLight", state : "green" > C |= green(X) = true .
+
+    eq C |= P = false [owise] .
+endm
+
+mod FSM-CHECK is
+    pr FSM-BEHAVIOR-pedestrianTrafficLight-PREDS .
+    pr MODEL-CHECKER .
+    pr LTL-SIMPLIFIER .
+endm
+
+red modelCheck(initial, <> green("1")) .

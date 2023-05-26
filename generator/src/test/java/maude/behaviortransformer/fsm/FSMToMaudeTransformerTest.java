@@ -1,56 +1,39 @@
-package maude.behaviortransformer;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+package maude.behaviortransformer.fsm;
 
 import behavior.fsm.FiniteStateMachine;
 import behavior.fsm.State;
-import behavior.fsm.StateAtomicProposition;
+import behavior.fsm.FSMStateAtomicProposition;
 import behavior.fsm.Transition;
 import com.google.common.collect.ImmutableSet;
-import java.io.IOException;
 import java.util.Set;
+import maude.behaviortransformer.MaudeTestHelper;
 import org.junit.jupiter.api.Test;
 
 class FSMToMaudeTransformerTest implements MaudeTestHelper {
 
-  private static final String MAUDE_MODULE_FOLDER = "fsm/maude/";
-
   @Test
-  void generateTwoStateFSMTest() throws Exception {
+  void generatePedestrianTrafficLightFSMTest() throws Exception {
     // Create FSM
     State red = new State("red");
-    FiniteStateMachine fsm = new FiniteStateMachine("X", red);
+    FiniteStateMachine fsm = new FiniteStateMachine("pedestrianTrafficLight", red);
     State green = new State("green");
     fsm.addTransition(new Transition("turnGreen", red, green));
     fsm.addTransition(new Transition("turnRed", green, red));
 
-    Set<StateAtomicProposition> props =
-        ImmutableSet.of(new StateAtomicProposition(red), new StateAtomicProposition(green));
-    testFSMMaudeGeneration(fsm, props, "<> green(\"X\")");
+    Set<FSMStateAtomicProposition> props =
+        ImmutableSet.of(new FSMStateAtomicProposition(red), new FSMStateAtomicProposition(green));
+    testFSMMaudeGeneration(fsm, props, "<> green(\"1\")");
     // Maude output:
     // reduce in FSM-CHECK : modelCheck(initial, <> green("X")) .
     // rewrites: 10 in 0ms cpu (0ms real) (~ rewrites/second)
     // result Bool: true
   }
 
-  private void testFSMMaudeGeneration(
-      FiniteStateMachine fsm, Set<StateAtomicProposition> props, String finalQuery)
-      throws IOException {
-    String actualMaudeModule = new FSMToMaudeTransformer(fsm, props).generate(finalQuery);
-
-    String expectedMaudeModule = readExpectedMaudeModule(MAUDE_MODULE_FOLDER, fsm.getName());
-    if (!actualMaudeModule.equals(expectedMaudeModule)) {
-      System.out.println(actualMaudeModule);
-    }
-    assertThat(actualMaudeModule, is(expectedMaudeModule));
-  }
-
   @Test
-  void generateFourStateFSMTest() throws Exception {
+  void generateCarTrafficLightFSMTest() throws Exception {
     // Create FSM
     State red = new State("red");
-    String fsmName = "trafficLight";
+    String fsmName = "carTrafficLight";
     FiniteStateMachine fsm = new FiniteStateMachine(fsmName, red);
     State red_amber = new State("red-amber");
     State green = new State("green");
@@ -60,8 +43,8 @@ class FSMToMaudeTransformerTest implements MaudeTestHelper {
     fsm.addTransition(new Transition("turn_amber", green, amber));
     fsm.addTransition(new Transition("turn_red", amber, red));
 
-    Set<StateAtomicProposition> props =
-        ImmutableSet.of(new StateAtomicProposition("red", red), new StateAtomicProposition(green));
+    Set<FSMStateAtomicProposition> props =
+        ImmutableSet.of(new FSMStateAtomicProposition("red", red), new FSMStateAtomicProposition(green));
 
     testFSMMaudeGeneration(fsm, props, "<> red(\"1\")");
     // Maude output:

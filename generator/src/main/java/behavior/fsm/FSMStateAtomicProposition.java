@@ -1,16 +1,16 @@
 package behavior.fsm;
 
-public class StateAtomicProposition {
+public class FSMStateAtomicProposition {
   private final String name;
 
   private final State state;
 
-  public StateAtomicProposition(String name, State state) {
+  public FSMStateAtomicProposition(String name, State state) {
     this.name = name;
     this.state = state;
   }
 
-  public StateAtomicProposition(State state) {
+  public FSMStateAtomicProposition(State state) {
     this.name = state.getName();
     this.state = state;
   }
