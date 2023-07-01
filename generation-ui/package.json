@@ -26,7 +26,7 @@
         "file-saver-es": "^2.0.5",
         "rxjs": "~7.8.1",
         "tslib": "^2.5.2",
-        "zone.js": "~0.11.4"
+        "zone.js": "~0.13.1"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^15.2.4",
