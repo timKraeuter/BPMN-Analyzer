@@ -41,7 +41,7 @@ export class GenerationComponent {
         private bpmnModeler: BPMNModelerService,
         private httpClient: HttpClient,
         private snackBar: MatSnackBar,
-        private grooveService: GrooveService
+        private grooveService: GrooveService,
     ) {}
 
     handleImported(event: any) {
@@ -68,7 +68,7 @@ export class GenerationComponent {
                     new Blob([result.xml], {
                         type: 'text/xml;charset=utf-8',
                     }),
-                    this.fileName + BPMN_FILE_EXTENSION
+                    this.fileName + BPMN_FILE_EXTENSION,
                 );
             });
     }
@@ -91,7 +91,7 @@ export class GenerationComponent {
             .subscribe({
                 error: (error) => {
                     const errorObject = JSON.parse(
-                        new TextDecoder().decode(error.error)
+                        new TextDecoder().decode(error.error),
                     );
                     console.log(errorObject);
                     this.snackBar.open(errorObject.message, 'close');
@@ -122,7 +122,7 @@ export class GenerationComponent {
                 'close',
                 {
                     duration: 5000,
-                }
+                },
             );
         }
         this.bpmnSpecificVerificationRunning = true;
@@ -130,7 +130,7 @@ export class GenerationComponent {
         this.grooveService
             .checkBPMNSpecificProperties(
                 this.bpmnSpecificPropertiesToBeChecked,
-                xmlModel
+                xmlModel,
             )
             .subscribe({
                 error: (error) => {
@@ -141,7 +141,7 @@ export class GenerationComponent {
                 next: (data: any) => {
                     // @ts-ignore
                     this.bpmnPropertyCheckingResults = JSON.parse(
-                        JSON.stringify(data['propertyCheckingResults'])
+                        JSON.stringify(data['propertyCheckingResults']),
                     );
                     this.colorDeadActivitiesAndSetNamesIfNeeded();
                 },
@@ -151,14 +151,14 @@ export class GenerationComponent {
 
     checkLTLPropertyClicked() {
         console.log(
-            'Check LTL property clicked with input: ' + this.ltlProperty
+            'Check LTL property clicked with input: ' + this.ltlProperty,
         );
         this.snackBar.open(
             'Checking LTL properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/.',
             'close',
             {
                 duration: 5000,
-            }
+            },
         );
     }
 
@@ -171,7 +171,7 @@ export class GenerationComponent {
     ggInfoClicked() {
         this.snackBar.open(
             'Graph transformation systems are generated for the graph transformation tool Groove. You can find Groove at https://groove.ewi.utwente.nl/.',
-            'close'
+            'close',
         );
     }
 
@@ -197,7 +197,7 @@ export class GenerationComponent {
         this.bpmnPropertyCheckingResults.forEach((value) => {
             if (value.name === 'No dead activities' && value.additionalInfo) {
                 const deadActivities = this.getElementsForIDs(
-                    value.additionalInfo.split(',')
+                    value.additionalInfo.split(','),
                 );
                 this.colorElementsInRed(deadActivities);
                 this.setActivityNamesAsInfo(value, deadActivities);

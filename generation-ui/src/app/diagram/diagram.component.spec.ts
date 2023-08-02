@@ -102,7 +102,7 @@ describe('DiagramComponent', () => {
 
             expect(result.warnings.length).toEqual(1);
             expect(result.warnings[0].message).toContain(
-                'unparsable content <process> detected'
+                'unparsable content <process> detected',
             );
 
             done();
@@ -128,7 +128,7 @@ describe('DiagramComponent', () => {
             // then
             expect(result.type).toEqual('error');
             expect(result.error.message).toEqual(
-                'Http failure response for some-url: 404 FOO'
+                'Http failure response for some-url: 404 FOO',
             );
 
             done();

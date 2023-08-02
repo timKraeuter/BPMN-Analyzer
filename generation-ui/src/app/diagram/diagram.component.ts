@@ -51,7 +51,7 @@ export class DiagramComponent
 
     constructor(
         private bpmnModeler: BPMNModelerService,
-        private http: HttpClient
+        private http: HttpClient,
     ) {
         this.bpmnJS = bpmnModeler.getBPMNJs();
 
@@ -86,7 +86,7 @@ export class DiagramComponent
             .get(url, { responseType: 'text' })
             .pipe(
                 switchMap((xml: string) => this.importDiagram(xml)),
-                map((result) => result.warnings)
+                map((result) => result.warnings),
             )
             .subscribe(
                 (warnings) => {
@@ -100,7 +100,7 @@ export class DiagramComponent
                         type: 'error',
                         error: err,
                     });
-                }
+                },
             );
     }
 
@@ -112,7 +112,7 @@ export class DiagramComponent
      */
     private importDiagram(xml: string): Observable<{ warnings: Array<any> }> {
         return from(
-            this.bpmnJS.importXML(xml) as Promise<{ warnings: Array<any> }>
+            this.bpmnJS.importXML(xml) as Promise<{ warnings: Array<any> }>,
         );
     }
 }

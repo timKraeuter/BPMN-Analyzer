@@ -28,11 +28,11 @@ export class GrooveService {
 
     checkBPMNSpecificProperties(
         bpmnSpecificPropertiesToBeChecked: string[],
-        xmlModel: Blob
+        xmlModel: Blob,
     ) {
         const formData = new FormData();
         bpmnSpecificPropertiesToBeChecked.forEach((property) =>
-            formData.append('propertiesToBeChecked[]', property)
+            formData.append('propertiesToBeChecked[]', property),
         );
         formData.append('file', xmlModel);
 
@@ -42,7 +42,7 @@ export class GrooveService {
     checkTemporalLogic(
         logic: string,
         property: string,
-        xmlModel: Blob
+        xmlModel: Blob,
     ): Observable<ModelCheckingResponse> {
         const formData = new FormData();
         formData.append('logic', logic);
@@ -50,7 +50,7 @@ export class GrooveService {
         formData.append('file', xmlModel);
         return this.httpClient.post<ModelCheckingResponse>(
             checkTemporalLogicPropertyURL,
-            formData
+            formData,
         );
     }
 }
@@ -59,7 +59,7 @@ export class ModelCheckingResponse {
     constructor(
         public property: string,
         public valid: boolean,
-        public error: string
+        public error: string,
     ) {
         this.property = property;
         this.valid = valid;
