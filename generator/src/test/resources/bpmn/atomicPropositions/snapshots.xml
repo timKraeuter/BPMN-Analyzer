@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:bt="http://tk/schema/1.0/bt" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collaboration_0dpqxab">
+    <bpmn:participant id="Participant_1ahkco9" name="Process Snapshots" processRef="Process_1" />
+    <bt:processSnapshot id="ProcessSnapshot_17eg177" />
+    <bpmn:association id="Association_130thld" sourceRef="Participant_1ahkco9" targetRef="ProcessSnapshot_17eg177" />
+    <bt:processSnapshot id="ProcessSnapshot_0u3n6dv" />
+    <bpmn:association id="Association_1tiz30j" sourceRef="Participant_1ahkco9" targetRef="ProcessSnapshot_0u3n6dv" />
+    <bt:processSnapshot id="ProcessSnapshot_0i1gx0u" />
+    <bpmn:association id="Association_08vdeku" sourceRef="Participant_1ahkco9" targetRef="ProcessSnapshot_0i1gx0u" />
+    <bt:processSnapshot id="ProcessSnapshot_15aymd8" />
+    <bpmn:association id="Association_15hs7wo" sourceRef="Participant_1ahkco9" targetRef="ProcessSnapshot_15aymd8" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_1" isExecutable="false">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1180px9</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Activity_0n3nrlr">
+      <bpmn:incoming>Flow_1180px9</bpmn:incoming>
+      <bpmn:outgoing>Flow_1tl1gka</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_1180px9" sourceRef="StartEvent_1" targetRef="Activity_0n3nrlr" />
+    <bpmn:endEvent id="Event_01p45qa">
+      <bpmn:incoming>Flow_1tl1gka</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1tl1gka" sourceRef="Activity_0n3nrlr" targetRef="Event_01p45qa" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0dpqxab">
+      <bpmndi:BPMNShape id="Participant_1ahkco9_di" bpmnElement="Participant_1ahkco9" isHorizontal="true">
+        <dc:Bounds x="123" y="150" width="347" height="120" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="173" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0n3nrlr_di" bpmnElement="Activity_0n3nrlr">
+        <dc:Bounds x="260" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_01p45qa_di" bpmnElement="Event_01p45qa">
+        <dc:Bounds x="412" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1180px9_di" bpmnElement="Flow_1180px9">
+        <di:waypoint x="209" y="210" />
+        <di:waypoint x="260" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tl1gka_di" bpmnElement="Flow_1tl1gka">
+        <di:waypoint x="360" y="210" />
+        <di:waypoint x="412" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ProcessSnapshot_17eg177_di" bpmnElement="ProcessSnapshot_17eg177" bioc:fill="#7909f9" color:background-color="#7909f9">
+        <dc:Bounds x="210" y="310" width="20" height="20" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ProcessSnapshot_0u3n6dv_di" bpmnElement="ProcessSnapshot_0u3n6dv" bioc:fill="#9a92db" color:background-color="#9a92db">
+        <dc:Bounds x="270" y="310" width="20" height="20" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ProcessSnapshot_0i1gx0u_di" bpmnElement="ProcessSnapshot_0i1gx0u" bioc:fill="#791cb2" color:background-color="#791cb2">
+        <dc:Bounds x="320" y="310" width="20" height="20" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ProcessSnapshot_15aymd8_di" bpmnElement="ProcessSnapshot_15aymd8" bioc:fill="#14ad61" color:background-color="#14ad61">
+        <dc:Bounds x="370" y="310" width="20" height="20" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_130thld_di" bpmnElement="Association_130thld">
+        <di:waypoint x="254" y="270" />
+        <di:waypoint x="227" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1tiz30j_di" bpmnElement="Association_1tiz30j">
+        <di:waypoint x="288" y="270" />
+        <di:waypoint x="282" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_08vdeku_di" bpmnElement="Association_08vdeku">
+        <di:waypoint x="315" y="270" />
+        <di:waypoint x="327" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_15hs7wo_di" bpmnElement="Association_15hs7wo">
+        <di:waypoint x="343" y="270" />
+        <di:waypoint x="373" y="310" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
