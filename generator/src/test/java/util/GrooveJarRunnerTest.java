@@ -20,7 +20,7 @@ class GrooveJarRunnerTest {
    */
   @Test
   void testGenerateStateSpace() throws Exception {
-    GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
+    GrooveJarRunner grooveJarRunner = new GrooveJarRunner(false);
     String tempOutputFile =
         System.getProperty("java.io.tmpdir") + "/grooveJarRunner/statespace.txt";
     Path stateSpace =
@@ -41,7 +41,7 @@ class GrooveJarRunnerTest {
    */
   @Test
   void testCTLModelChecking() throws IOException, InterruptedException {
-    GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
+    GrooveJarRunner grooveJarRunner = new GrooveJarRunner(false);
     String trueCTLProperty = "AG(true)";
     String wrongCTLProperty = "AG(false)";
 
@@ -68,7 +68,7 @@ class GrooveJarRunnerTest {
    */
   @Test
   void testCTLModelCheckingError() throws IOException, InterruptedException {
-    GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
+    GrooveJarRunner grooveJarRunner = new GrooveJarRunner(false);
     String property = "G(!false)";
 
     ModelCheckingResult result = grooveJarRunner.checkCTL(getCircularGraphGrammar(), property);

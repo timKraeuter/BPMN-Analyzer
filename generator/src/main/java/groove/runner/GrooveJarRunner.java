@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class GrooveJarRunner {
+
   private static final String GROOVE_BIN_DIR = findGrooveBinDir();
+  private final boolean printOutputToConsole;
 
   private static String findGrooveBinDir() {
     List<String> possibleLocations = Lists.newArrayList("groove/bin", "../groove/bin");
@@ -28,11 +30,16 @@ public class GrooveJarRunner {
   private final String grooveBinDir;
 
   public GrooveJarRunner() {
-    this(GROOVE_BIN_DIR);
+    this(true);
   }
 
-  private GrooveJarRunner(String grooveBinDir) {
+  public GrooveJarRunner(boolean printOutputToConsole) {
+    this(GROOVE_BIN_DIR, printOutputToConsole);
+  }
+
+  private GrooveJarRunner(String grooveBinDir, boolean printOutputToConsole) {
     this.grooveBinDir = grooveBinDir;
+    this.printOutputToConsole = printOutputToConsole;
   }
 
   public Path generateStateSpace(String graphGrammar, String resultFilePath, boolean printOutput)
@@ -114,7 +121,9 @@ public class GrooveJarRunner {
     try {
       byte[] buffer = new byte[1024];
       for (int length; (length = p.getInputStream().read(buffer)) != -1; ) {
-        System.out.write(buffer, 0, length);
+        if (this.printOutputToConsole) {
+          System.out.write(buffer, 0, length);
+        }
         if (saveOutput) {
           output.write(buffer, 0, length);
         }
