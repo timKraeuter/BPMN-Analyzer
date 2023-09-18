@@ -3,7 +3,6 @@ package groove.atomicPropositions;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import behavior.bpmn.*;
 import behavior.bpmn.activities.tasks.ReceiveTask;
