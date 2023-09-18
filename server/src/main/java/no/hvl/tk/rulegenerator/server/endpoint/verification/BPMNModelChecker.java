@@ -1,14 +1,14 @@
 package no.hvl.tk.rulegenerator.server.endpoint.verification;
 
-import behavior.bpmn.AbstractBPMNProcess;
-import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.BPMNEventSubprocess;
-import behavior.bpmn.BPMNProcess;
-import behavior.bpmn.FlowNode;
-import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
-import groove.runner.GrooveJarRunner;
-import groove.runner.checking.ModelCheckingResult;
-import groove.runner.checking.TemporalLogic;
+import no.tk.behavior.bpmn.AbstractBPMNProcess;
+import no.tk.behavior.bpmn.BPMNCollaboration;
+import no.tk.behavior.bpmn.BPMNEventSubprocess;
+import no.tk.behavior.bpmn.BPMNProcess;
+import no.tk.behavior.bpmn.FlowNode;
+import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
+import no.tk.groove.runner.GrooveJarRunner;
+import no.tk.groove.runner.checking.ModelCheckingResult;
+import no.tk.groove.runner.checking.TemporalLogic;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

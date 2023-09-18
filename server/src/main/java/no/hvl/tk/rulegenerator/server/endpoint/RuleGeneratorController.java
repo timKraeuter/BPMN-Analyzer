@@ -3,7 +3,7 @@ package no.hvl.tk.rulegenerator.server.endpoint;
 import static no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour;
 import static no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper.generateGGForBPMNFile;
 
-import behavior.bpmn.BPMNCollaboration;
+import no.tk.behavior.bpmn.BPMNCollaboration;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;

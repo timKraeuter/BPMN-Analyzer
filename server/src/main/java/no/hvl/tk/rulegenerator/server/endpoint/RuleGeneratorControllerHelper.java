@@ -1,9 +1,9 @@
 package no.hvl.tk.rulegenerator.server.endpoint;
 
-import behavior.bpmn.BPMNCollaboration;
-import behavior.bpmn.reader.BPMNFileReader;
-import groove.behaviortransformer.BehaviorToGrooveTransformer;
-import groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
+import no.tk.behavior.bpmn.BPMNCollaboration;
+import no.tk.behavior.bpmn.reader.BPMNFileReader;
+import no.tk.groove.behaviortransformer.BehaviorToGrooveTransformer;
+import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;

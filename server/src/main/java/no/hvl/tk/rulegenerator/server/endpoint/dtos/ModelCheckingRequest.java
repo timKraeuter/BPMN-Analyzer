@@ -1,6 +1,6 @@
 package no.hvl.tk.rulegenerator.server.endpoint.dtos;
 
-import groove.runner.checking.TemporalLogic;
+import no.tk.groove.runner.checking.TemporalLogic;
 import org.springframework.web.multipart.MultipartFile;
 
 public class ModelCheckingRequest {

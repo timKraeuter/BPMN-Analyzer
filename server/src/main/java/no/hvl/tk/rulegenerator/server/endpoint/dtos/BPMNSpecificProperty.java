@@ -1,6 +1,6 @@
 package no.hvl.tk.rulegenerator.server.endpoint.dtos;
 
-import behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
+import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum BPMNSpecificProperty {
