@@ -28,7 +28,7 @@ class AtomicPropositionGeneratorTest implements BPMNFileReaderTestHelper {
     BPMNCollaboration result = readModelFromResource(AP_TEST_PATH + "snapshots.xml");
 
     assertNotNull(result);
-    String name = "tasks";
+    String name = "snapshots";
     assertThat(result.getName(), is(name));
     // No pools so only one participant.
     assertThat(result.getParticipants().size(), is(1));
