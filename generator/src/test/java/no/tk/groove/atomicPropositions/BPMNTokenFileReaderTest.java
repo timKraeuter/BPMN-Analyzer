@@ -120,22 +120,22 @@ class BPMNTokenFileReaderTest {
     assertFalse(snapshot3.isShouldExist());
   }
 
-  private static List<Boolean> getShouldExistListForTokens(ProcessSnapshot snapshot2) {
+  private List<Boolean> getShouldExistListForTokens(ProcessSnapshot snapshot2) {
     return snapshot2.getTokens().stream().map(Token::isShouldExist).collect(Collectors.toList());
   }
 
-  private static List<String> getElementIDsForTokens(ProcessSnapshot snapshot1) {
+  private List<String> getElementIDsForTokens(ProcessSnapshot snapshot1) {
     return snapshot1.getTokens().stream().map(Token::getElementID).collect(Collectors.toList());
   }
 
-  private static ProcessSnapshot getSnapshotWithID(BPMNProcessSnapshot bpmnSnapshot, String id) {
+  private ProcessSnapshot getSnapshotWithID(BPMNProcessSnapshot bpmnSnapshot, String id) {
     return bpmnSnapshot.getProcessSnapshots().stream()
         .filter(processSnapshot -> processSnapshot.getSnapshotID().equals(id))
         .findFirst()
         .orElseThrow();
   }
 
-  BPMNProcessSnapshot readBPMNSnapshotFromResource(String resourcePath) throws IOException {
+  private BPMNProcessSnapshot readBPMNSnapshotFromResource(String resourcePath) throws IOException {
     @SuppressWarnings("ConstantConditions")
     Path model = FileTestHelper.getResource(AP_TEST_PATH + resourcePath);
     BPMNTokenFileReader bpmnTokenFileReader = new BPMNTokenFileReader();
