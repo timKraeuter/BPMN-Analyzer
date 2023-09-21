@@ -5,9 +5,8 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
 import no.tk.behavior.bpmn.reader.token.extension.TokenBPMN;
+import no.tk.behavior.bpmn.reader.token.extension.instance.BTToken;
 import no.tk.behavior.bpmn.reader.token.model.BPMNProcessSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.ProcessSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.Token;
@@ -23,21 +22,9 @@ public class TokenBPMNFileReader {
     Bpmn.INSTANCE = new TokenBPMN();
   }
 
-  private Function<String, String> elementNameTransformer;
-
-  public TokenBPMNFileReader() {}
-
-  public TokenBPMNFileReader(UnaryOperator<String> elementNameTransformer) {
-    this.elementNameTransformer = elementNameTransformer;
-  }
-
   public BPMNProcessSnapshot readModelFromFilePath(Path file) throws IOException {
     String modelName = FilenameUtils.removeExtension(file.getFileName().toString());
     return readModelFromStream(modelName, Files.newInputStream(file));
-  }
-
-  public BPMNProcessSnapshot readModelFromStream(InputStream stream) {
-    return readModelFromStream("model", stream);
   }
 
   public BPMNProcessSnapshot readModelFromStream(String modelName, InputStream stream) {
@@ -48,28 +35,42 @@ public class TokenBPMNFileReader {
   private BPMNProcessSnapshot readBPMNProcessSnapshot(
       String name, BpmnModelInstance bpmnModelInstance) {
     BPMNProcessSnapshot bpmnProcessSnapshot = new BPMNProcessSnapshot(name);
-    ModelElementType tokenType =
-        bpmnModelInstance
-            .getModel()
-            .getType(no.tk.behavior.bpmn.reader.token.extension.instance.Token.class);
-    // Could be indexed once but not needed for this scale.
-    Collection<ModelElementInstance> tokens = bpmnModelInstance.getModelElementsByType(tokenType);
 
-    ModelElementType associationType = bpmnModelInstance.getModel().getType(Association.class);
-    Collection<ModelElementInstance> associations =
-        bpmnModelInstance.getModelElementsByType(associationType);
+    Collection<ModelElementInstance> tokens = getAllTokens(bpmnModelInstance);
+
+    Collection<ModelElementInstance> associations = getAllAssociations(bpmnModelInstance);
 
     for (ModelElementInstance association : associations) {
-      String targetRef = association.getAttributeValue("targetRef");
-      if (targetRef.startsWith("ProcessSnapshot")) {
-        saveProcessSnapshot(bpmnModelInstance, association, bpmnProcessSnapshot, targetRef);
-      }
-      if (targetRef.startsWith("Token")) {
-        saveToken(association, bpmnProcessSnapshot, targetRef, tokens);
-      }
+      followAssociationToSaveTokenOrSnapshot(
+          bpmnModelInstance, association, bpmnProcessSnapshot, tokens);
     }
 
     return bpmnProcessSnapshot;
+  }
+
+  private Collection<ModelElementInstance> getAllAssociations(BpmnModelInstance bpmnModelInstance) {
+    ModelElementType associationType = bpmnModelInstance.getModel().getType(Association.class);
+    return bpmnModelInstance.getModelElementsByType(associationType);
+  }
+
+  private Collection<ModelElementInstance> getAllTokens(BpmnModelInstance bpmnModelInstance) {
+    ModelElementType tokenType = bpmnModelInstance.getModel().getType(BTToken.class);
+    // Could be indexed once for faster retrieval later.
+    return bpmnModelInstance.getModelElementsByType(tokenType);
+  }
+
+  private void followAssociationToSaveTokenOrSnapshot(
+      BpmnModelInstance bpmnModelInstance,
+      ModelElementInstance association,
+      BPMNProcessSnapshot bpmnProcessSnapshot,
+      Collection<ModelElementInstance> tokens) {
+    String targetRef = association.getAttributeValue("targetRef");
+    if (targetRef.startsWith("ProcessSnapshot")) {
+      saveProcessSnapshot(bpmnModelInstance, association, bpmnProcessSnapshot, targetRef);
+    }
+    if (targetRef.startsWith("Token")) {
+      saveToken(association, bpmnProcessSnapshot, targetRef, tokens);
+    }
   }
 
   private void saveToken(
@@ -77,25 +78,19 @@ public class TokenBPMNFileReader {
       BPMNProcessSnapshot bpmnProcessSnapshot,
       String targetRef,
       Collection<ModelElementInstance> tokens) {
-    ModelElementInstance token = getTokenForTargetRef(targetRef, tokens);
-    String pSnapshotID = token.getAttributeValue("processSnapshot");
+    BTToken token = getTokenForTargetRef(targetRef, tokens);
     bpmnProcessSnapshot.addToken(
-        pSnapshotID, new Token(association.getAttributeValue("sourceRef"), readShouldExist(token)));
+        token.processSnapshotID(),
+        new Token(association.getAttributeValue("sourceRef"), token.shouldExist()));
   }
 
-  private boolean readShouldExist(ModelElementInstance token) {
-    no.tk.behavior.bpmn.reader.token.extension.instance.Token t =
-        (no.tk.behavior.bpmn.reader.token.extension.instance.Token) token;
-    return t.shouldExist();
-  }
-
-  private static ModelElementInstance getTokenForTargetRef(
-      String targetRef, Collection<ModelElementInstance> tokens) {
+  private BTToken getTokenForTargetRef(String targetRef, Collection<ModelElementInstance> tokens) {
     // A matching token should always exist.
-    return tokens.stream()
-        .filter(t -> t.getAttributeValue("id").equals(targetRef))
-        .findFirst()
-        .orElseThrow();
+    return (BTToken)
+        tokens.stream()
+            .filter(t -> t.getAttributeValue("id").equals(targetRef))
+            .findFirst()
+            .orElseThrow();
   }
 
   private void saveProcessSnapshot(

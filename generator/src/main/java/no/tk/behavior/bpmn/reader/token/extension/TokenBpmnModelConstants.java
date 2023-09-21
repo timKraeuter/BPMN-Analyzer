@@ -17,9 +17,8 @@
 package no.tk.behavior.bpmn.reader.token.extension;
 
 /**
- * Constants used in the BPMN token Language (Semantic)
+ * Constants used in the BPMN token language
  *
- * @author Tim Kräuter
  */
 public final class TokenBpmnModelConstants {
 
@@ -33,5 +32,6 @@ public final class TokenBpmnModelConstants {
   public static final String TOKEN_BPMN_ELEMENT_PROCESS_SNAPSHOT = "processSnapshot";
   public static final String TOKEN_BPMN_ELEMENT_TOKEN = "token";
   public static final String TOKEN_BPMN_ATTRIBUTE_SHOULD_EXIST = "shouldExist";
+  public static final String TOKEN_BPMN_ATTRIBUTE_PROCESS_SNAPSHOT = "processSnapshot";
 
 }

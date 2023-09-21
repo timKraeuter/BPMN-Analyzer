@@ -1,7 +1,7 @@
 package no.tk.behavior.bpmn.reader.token.extension;
 
-import no.tk.behavior.bpmn.reader.token.extension.instance.ProcessSnapshotImpl;
-import no.tk.behavior.bpmn.reader.token.extension.instance.TokenImpl;
+import no.tk.behavior.bpmn.reader.token.extension.instance.BTProcessSnapshotImpl;
+import no.tk.behavior.bpmn.reader.token.extension.instance.BTTokenImpl;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.xml.ModelBuilder;
 
@@ -12,7 +12,7 @@ public class TokenBPMN extends Bpmn {
     super.doRegisterTypes(bpmnModelBuilder);
 
     /* Token BPMN extensions */
-    ProcessSnapshotImpl.registerType(bpmnModelBuilder);
-    TokenImpl.registerType(bpmnModelBuilder);
+    BTProcessSnapshotImpl.registerType(bpmnModelBuilder);
+    BTTokenImpl.registerType(bpmnModelBuilder);
   }
 }

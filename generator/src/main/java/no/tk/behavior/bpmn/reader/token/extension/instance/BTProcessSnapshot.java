@@ -19,11 +19,9 @@ package no.tk.behavior.bpmn.reader.token.extension.instance;
 import org.camunda.bpm.model.bpmn.instance.Artifact;
 
 /**
- * The token element
- *
- * @author Tim Kräuter
+ * The process snapshot element in the Schema.
  */
-public interface Token extends Artifact {
+public interface BTProcessSnapshot extends Artifact {
 
   boolean shouldExist();
 

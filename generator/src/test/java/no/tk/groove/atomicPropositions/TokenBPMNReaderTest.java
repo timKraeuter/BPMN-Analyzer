@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.google.common.collect.Lists;
 import java.nio.file.Path;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import no.tk.behavior.bpmn.reader.token.TokenBPMNFileReader;
 import no.tk.behavior.bpmn.reader.token.model.BPMNProcessSnapshot;
@@ -23,7 +22,7 @@ class TokenBPMNReaderTest {
   @Test
   void readSnapshotWithTokens() throws IOException {
     BPMNProcessSnapshot bpmnSnapshot =
-        readBPMNSnapshotFromResource(AP_TEST_PATH + "snapshotWithTokens.xml", x -> x);
+        readBPMNSnapshotFromResource(AP_TEST_PATH + "snapshotWithTokens.xml");
 
     assertNotNull(bpmnSnapshot);
     String name = "snapshotWithTokens";
@@ -47,11 +46,10 @@ class TokenBPMNReaderTest {
         is(Lists.newArrayList(true, true, false)));
   }
 
-  BPMNProcessSnapshot readBPMNSnapshotFromResource(
-      String resourcePath, UnaryOperator<String> elementNameTransformer) throws IOException {
+  BPMNProcessSnapshot readBPMNSnapshotFromResource(String resourcePath) throws IOException {
     @SuppressWarnings("ConstantConditions")
     Path model = FileTestHelper.getResource(resourcePath);
-    TokenBPMNFileReader tokenBpmnFileReader = new TokenBPMNFileReader(elementNameTransformer);
+    TokenBPMNFileReader tokenBpmnFileReader = new TokenBPMNFileReader();
     return tokenBpmnFileReader.readModelFromFilePath(model);
   }
 }

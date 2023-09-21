@@ -16,8 +16,9 @@
  */
 package no.tk.behavior.bpmn.reader.token.extension.instance;
 
+import static no.tk.behavior.bpmn.reader.token.extension.TokenBpmnModelConstants.TOKEN_BPMN_ATTRIBUTE_PROCESS_SNAPSHOT;
 import static no.tk.behavior.bpmn.reader.token.extension.TokenBpmnModelConstants.TOKEN_BPMN_ATTRIBUTE_SHOULD_EXIST;
-import static no.tk.behavior.bpmn.reader.token.extension.TokenBpmnModelConstants.TOKEN_BPMN_ELEMENT_PROCESS_SNAPSHOT;
+import static no.tk.behavior.bpmn.reader.token.extension.TokenBpmnModelConstants.TOKEN_BPMN_ELEMENT_TOKEN;
 import static no.tk.behavior.bpmn.reader.token.extension.TokenBpmnModelConstants.TOKEN_BPMN_NS;
 import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
@@ -28,31 +29,38 @@ import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
-/**
- * The BPMN dataObject element
- *
- * @author Dario Campagna
- */
-public class ProcessSnapshotImpl extends ArtifactImpl implements ProcessSnapshot {
+/** The Token element impl. */
+public class BTTokenImpl extends ArtifactImpl implements BTToken {
 
   protected static Attribute<Boolean> shouldExistAttribute;
+  protected static Attribute<String> processSnapshotAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Token.class,
-            TOKEN_BPMN_ELEMENT_PROCESS_SNAPSHOT)
-        .namespaceUri(TOKEN_BPMN_NS)
-        .extendsType(Artifact.class)
-        .instanceProvider((ModelTypeInstanceProvider<ProcessSnapshot>) ProcessSnapshotImpl::new);
+    ModelElementTypeBuilder typeBuilder =
+        modelBuilder
+            .defineType(BTToken.class, TOKEN_BPMN_ELEMENT_TOKEN)
+            .namespaceUri(TOKEN_BPMN_NS)
+            .extendsType(Artifact.class)
+            .instanceProvider((ModelTypeInstanceProvider<BTToken>) BTTokenImpl::new);
 
-    shouldExistAttribute = typeBuilder.booleanAttribute(TOKEN_BPMN_ATTRIBUTE_SHOULD_EXIST)
-        .defaultValue(true)
-        .namespace(TOKEN_BPMN_NS)
-        .build();
+    shouldExistAttribute =
+        typeBuilder
+            .booleanAttribute(TOKEN_BPMN_ATTRIBUTE_SHOULD_EXIST)
+            .defaultValue(true)
+            .namespace(TOKEN_BPMN_NS)
+            .build();
+
+    processSnapshotAttribute =
+        typeBuilder
+            .stringAttribute(TOKEN_BPMN_ATTRIBUTE_PROCESS_SNAPSHOT)
+            .defaultValue("")
+            .namespace(TOKEN_BPMN_NS)
+            .build();
 
     typeBuilder.build();
   }
 
-  public ProcessSnapshotImpl(ModelTypeInstanceContext instanceContext) {
+  public BTTokenImpl(ModelTypeInstanceContext instanceContext) {
     super(instanceContext);
   }
 
@@ -62,7 +70,7 @@ public class ProcessSnapshotImpl extends ArtifactImpl implements ProcessSnapshot
   }
 
   @Override
-  public void setShouldExist(boolean shouldExist) {
-    shouldExistAttribute.setValue(this, shouldExist);
+  public String processSnapshotID() {
+    return processSnapshotAttribute.getValue(this);
   }
 }

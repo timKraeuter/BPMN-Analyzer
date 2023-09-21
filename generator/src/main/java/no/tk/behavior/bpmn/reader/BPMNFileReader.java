@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-import no.tk.behavior.bpmn.reader.token.extension.TokenBPMN;
 import org.apache.commons.io.FilenameUtils;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
@@ -38,10 +37,6 @@ import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 import org.camunda.bpm.model.xml.type.ModelElementType;
 
 public class BPMNFileReader {
-  static {
-    Bpmn.INSTANCE = new TokenBPMN();
-  }
-
   private Function<String, String> elementNameTransformer;
 
   public BPMNFileReader() {}

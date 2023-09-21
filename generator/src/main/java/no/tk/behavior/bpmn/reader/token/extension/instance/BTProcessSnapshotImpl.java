@@ -17,7 +17,7 @@
 package no.tk.behavior.bpmn.reader.token.extension.instance;
 
 import static no.tk.behavior.bpmn.reader.token.extension.TokenBpmnModelConstants.TOKEN_BPMN_ATTRIBUTE_SHOULD_EXIST;
-import static no.tk.behavior.bpmn.reader.token.extension.TokenBpmnModelConstants.TOKEN_BPMN_ELEMENT_TOKEN;
+import static no.tk.behavior.bpmn.reader.token.extension.TokenBpmnModelConstants.TOKEN_BPMN_ELEMENT_PROCESS_SNAPSHOT;
 import static no.tk.behavior.bpmn.reader.token.extension.TokenBpmnModelConstants.TOKEN_BPMN_NS;
 import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
@@ -29,20 +29,18 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 /**
- * The BPMN dataObject element
- *
- * @author Dario Campagna
+ * The process snapshot element impl.
  */
-public class TokenImpl extends ArtifactImpl implements Token {
+public class BTProcessSnapshotImpl extends ArtifactImpl implements BTProcessSnapshot {
 
   protected static Attribute<Boolean> shouldExistAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Token.class,
-            TOKEN_BPMN_ELEMENT_TOKEN)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(BTToken.class,
+            TOKEN_BPMN_ELEMENT_PROCESS_SNAPSHOT)
         .namespaceUri(TOKEN_BPMN_NS)
         .extendsType(Artifact.class)
-        .instanceProvider((ModelTypeInstanceProvider<Token>) TokenImpl::new);
+        .instanceProvider((ModelTypeInstanceProvider<BTProcessSnapshot>) BTProcessSnapshotImpl::new);
 
     shouldExistAttribute = typeBuilder.booleanAttribute(TOKEN_BPMN_ATTRIBUTE_SHOULD_EXIST)
         .defaultValue(true)
@@ -52,7 +50,7 @@ public class TokenImpl extends ArtifactImpl implements Token {
     typeBuilder.build();
   }
 
-  public TokenImpl(ModelTypeInstanceContext instanceContext) {
+  public BTProcessSnapshotImpl(ModelTypeInstanceContext instanceContext) {
     super(instanceContext);
   }
 
