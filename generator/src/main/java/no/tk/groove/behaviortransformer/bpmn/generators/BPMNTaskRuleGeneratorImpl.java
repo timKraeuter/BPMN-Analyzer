@@ -1,6 +1,5 @@
 package no.tk.groove.behaviortransformer.bpmn.generators;
 
-import static no.tk.behavior.bpmn.events.BoundaryEventType.*;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.END;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.START;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.*;
@@ -87,7 +86,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         .getIncomingMessageFlows(receiveTask)
         .forEach(
             messageFlow -> {
-              final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow);
+              final String incomingFlowId = getSequenceFlowDescriptiveNameAndID(incomingFlow);
               ruleBuilder.startRule(
                   this.getTaskOrCallActivityRuleName(receiveTask, incomingFlowId) + START);
               GrooveNode processInstance =
@@ -178,7 +177,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
       AbstractTask task,
       SequenceFlow incomingFlow,
       Consumer<GrooveNode> startTaskRuleAdditions) {
-    final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow);
+    final String incomingFlowId = getSequenceFlowDescriptiveNameAndID(incomingFlow);
     ruleBuilder.startRule(this.getTaskOrCallActivityRuleName(task, incomingFlowId) + START);
     GrooveNode processInstance =
         BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
@@ -203,7 +202,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
     task.getOutgoingFlows()
         .forEach(
             outgoingFlow -> {
-              final String outgoingFlowID = getSequenceFlowIdOrDescriptiveName(outgoingFlow);
+              final String outgoingFlowID = getSequenceFlowDescriptiveNameAndID(outgoingFlow);
               BPMNToGrooveTransformerHelper.addTokenWithPosition(
                   ruleBuilder, processInstance, outgoingFlowID);
             });

@@ -24,10 +24,9 @@ public abstract class FlowElement {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof FlowElement)) {
+    if (!(o instanceof FlowElement that)) {
       return false;
     }
-    FlowElement that = (FlowElement) o;
     return getId().equals(that.getId());
   }
 

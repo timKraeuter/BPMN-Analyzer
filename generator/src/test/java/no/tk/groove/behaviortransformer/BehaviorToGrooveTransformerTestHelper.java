@@ -6,23 +6,22 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import no.tk.behavior.Behavior;
 import no.tk.groove.graph.GrooveNode;
 import no.tk.util.FileTestHelper;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.file.PathUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 
 public abstract class BehaviorToGrooveTransformerTestHelper {
 
   public static final String SYSTEM_PROPERTIES_FILE_NAME = "system.properties";
-  private final String outputPath = FileUtils.getTempDirectoryPath();
-  //  private final String outputPath = "C:/Source/groove/bin";
-  boolean REPLACE_EXPECTED_FILES_WITH_ACTUAL = false;
+  //  private final String outputPath = FileUtils.getTempDirectoryPath();
+  private final String outputPath = "C:/Source/groove/bin";
+  boolean REPLACE_EXPECTED_FILES_WITH_ACTUAL = true;
 
   private Function<String, Boolean> fileNameFilter = x -> false;
 
@@ -77,6 +76,7 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
       throws IOException {
     try (Stream<Path> files = Files.list(grammarDir)) {
       Path expectedDir = Path.of("src/test/resources/bpmn/groove", modelName + ".gps");
+      PathUtils.cleanDirectory(expectedDir);
       List<Path> generatedFiles =
           files
               .filter(
@@ -85,9 +85,7 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
       // Copy all remaining files.
       for (Path generatedFile : generatedFiles) {
         Files.copy(
-            generatedFile,
-            Path.of(expectedDir.toString(), generatedFile.getFileName().toString()),
-            StandardCopyOption.REPLACE_EXISTING);
+            generatedFile, Path.of(expectedDir.toString(), generatedFile.getFileName().toString()));
       }
     }
   }

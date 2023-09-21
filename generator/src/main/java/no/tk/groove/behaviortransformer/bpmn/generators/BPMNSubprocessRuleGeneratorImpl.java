@@ -46,7 +46,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
 
   void createSubProcessInstantiationRule(
       AbstractBPMNProcess process, CallActivity callActivity, SequenceFlow incomingFlow) {
-    final String incomingFlowId = getSequenceFlowIdOrDescriptiveName(incomingFlow);
+    final String incomingFlowId = getSequenceFlowDescriptiveNameAndID(incomingFlow);
     ruleBuilder.startRule(
         bpmnRuleGenerator.getTaskOrCallActivityRuleName(callActivity, incomingFlowId));
     GrooveNode processInstance = contextProcessInstance(process, ruleBuilder);
@@ -96,7 +96,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
         .getOutgoingFlows()
         .forEach(
             outgoingFlow -> {
-              final String outgoingFlowID = getSequenceFlowIdOrDescriptiveName(outgoingFlow);
+              final String outgoingFlowID = getSequenceFlowDescriptiveNameAndID(outgoingFlow);
               BPMNToGrooveTransformerHelper.addTokenWithPosition(
                   ruleBuilder, parentProcess, outgoingFlowID);
             });

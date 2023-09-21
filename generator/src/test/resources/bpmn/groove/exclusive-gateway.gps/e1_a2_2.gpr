@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="e1_a2_2" role="rule" edgeids="false" edgemode="directed">
+        <node id="n39">
+            <attr name="layout">
+                <string>62 85 0 0</string>
+            </attr>
+        </node>
+        <edge from="n39" to="n39">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n40">
+            <attr name="layout">
+                <string>392 232 0 0</string>
+            </attr>
+        </node>
+        <edge from="n40" to="n40">
+            <attr name="label">
+                <string>string:"exclusive-gateway"</string>
+            </attr>
+        </edge>
+        <node id="n41">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n41" to="n41">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n42">
+            <attr name="layout">
+                <string>552 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n42" to="n42">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n43">
+            <attr name="layout">
+                <string>802 224 0 0</string>
+            </attr>
+        </node>
+        <edge from="n43" to="n43">
+            <attr name="label">
+                <string>string:"a1_e1_Flow_1pf5izs"</string>
+            </attr>
+        </edge>
+        <node id="n44">
+            <attr name="layout">
+                <string>802 144 0 0</string>
+            </attr>
+        </node>
+        <edge from="n44" to="n44">
+            <attr name="label">
+                <string>string:"e1_a2_2_Flow_1id82hx"</string>
+            </attr>
+        </edge>
+        <edge from="n42" to="n44">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n42" to="n43">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n39" to="n40">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n39" to="n41">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n39" to="n42">
+            <attr name="label">
+                <string>tokens</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

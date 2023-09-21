@@ -144,7 +144,7 @@ public class BPMNToGrooveTransformerHelper {
                 addTokenWithPosition(
                     ruleBuilder,
                     processInstance,
-                    getSequenceFlowIdOrDescriptiveName(sequenceFlow)));
+                    getSequenceFlowDescriptiveNameAndID(sequenceFlow)));
   }
 
   public static void addOutgoingTokensForFlowNodeToProcessInstanceWithQuantifier(
@@ -160,7 +160,7 @@ public class BPMNToGrooveTransformerHelper {
                   addTokenWithPosition(
                       ruleBuilder,
                       processInstance,
-                      getSequenceFlowIdOrDescriptiveName(sequenceFlow));
+                      getSequenceFlowDescriptiveNameAndID(sequenceFlow));
               ruleBuilder.contextEdge(AT, addedToken, quantifier);
             });
   }
@@ -269,7 +269,7 @@ public class BPMNToGrooveTransformerHelper {
               if (sequenceFlow.getSource().isExclusiveEventBasedGateway()) {
                 tokenPosition = sequenceFlow.getSource().getName();
               } else {
-                tokenPosition = getSequenceFlowIdOrDescriptiveName(sequenceFlow);
+                tokenPosition = getSequenceFlowDescriptiveNameAndID(sequenceFlow);
               }
               ruleBuilder.contextEdge(
                   POSITION, token, ruleBuilder.contextNode(createStringNodeLabel(tokenPosition)));
@@ -409,7 +409,7 @@ public class BPMNToGrooveTransformerHelper {
         ruleBuilder, specificSubprocess, processInstance, forAllDeleteSubProcess, forAllRoot);
   }
 
-  public static String getSequenceFlowIdOrDescriptiveName(SequenceFlow flow) {
+  public static String getSequenceFlowDescriptiveNameAndID(SequenceFlow flow) {
     return String.format(GROOVE_ID_FORMAT, flow.getDescriptiveName(), flow.getId());
   }
 
