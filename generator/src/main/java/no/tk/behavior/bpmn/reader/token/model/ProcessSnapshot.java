@@ -9,10 +9,6 @@ public class ProcessSnapshot {
   private final Set<Token> tokens = new LinkedHashSet<>();
   private final boolean shouldExist;
 
-  public ProcessSnapshot(String processID, String snapshotID) {
-    this(processID, snapshotID, true);
-  }
-
   public ProcessSnapshot(String processID, String snapshotID, boolean shouldExist) {
     this.processID = processID;
     this.snapshotID = snapshotID;

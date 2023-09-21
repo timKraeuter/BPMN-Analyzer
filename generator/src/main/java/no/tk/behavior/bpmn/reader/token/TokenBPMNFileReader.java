@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import no.tk.behavior.bpmn.reader.token.extension.TokenBPMN;
+import no.tk.behavior.bpmn.reader.token.extension.instance.BTProcessSnapshot;
 import no.tk.behavior.bpmn.reader.token.extension.instance.BTToken;
 import no.tk.behavior.bpmn.reader.token.model.BPMNProcessSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.ProcessSnapshot;
@@ -37,15 +38,22 @@ public class TokenBPMNFileReader {
     BPMNProcessSnapshot bpmnProcessSnapshot = new BPMNProcessSnapshot(name);
 
     Collection<ModelElementInstance> tokens = getAllTokens(bpmnModelInstance);
+    Collection<ModelElementInstance> snapshots = getAllSnapshots(bpmnModelInstance);
 
     Collection<ModelElementInstance> associations = getAllAssociations(bpmnModelInstance);
 
     for (ModelElementInstance association : associations) {
       followAssociationToSaveTokenOrSnapshot(
-          bpmnModelInstance, association, bpmnProcessSnapshot, tokens);
+          bpmnModelInstance, association, bpmnProcessSnapshot, tokens, snapshots);
     }
 
     return bpmnProcessSnapshot;
+  }
+
+  private Collection<ModelElementInstance> getAllSnapshots(BpmnModelInstance bpmnModelInstance) {
+    ModelElementType snapshotType = bpmnModelInstance.getModel().getType(BTProcessSnapshot.class);
+    // Could be indexed once for faster retrieval later.
+    return bpmnModelInstance.getModelElementsByType(snapshotType);
   }
 
   private Collection<ModelElementInstance> getAllAssociations(BpmnModelInstance bpmnModelInstance) {
@@ -63,10 +71,12 @@ public class TokenBPMNFileReader {
       BpmnModelInstance bpmnModelInstance,
       ModelElementInstance association,
       BPMNProcessSnapshot bpmnProcessSnapshot,
-      Collection<ModelElementInstance> tokens) {
+      Collection<ModelElementInstance> tokens,
+      Collection<ModelElementInstance> snapshots) {
     String targetRef = association.getAttributeValue("targetRef");
     if (targetRef.startsWith("ProcessSnapshot")) {
-      saveProcessSnapshot(bpmnModelInstance, association, bpmnProcessSnapshot, targetRef);
+      saveProcessSnapshot(
+          bpmnModelInstance, association, bpmnProcessSnapshot, targetRef, snapshots);
     }
     if (targetRef.startsWith("Token")) {
       saveToken(association, bpmnProcessSnapshot, targetRef, tokens);
@@ -78,29 +88,39 @@ public class TokenBPMNFileReader {
       BPMNProcessSnapshot bpmnProcessSnapshot,
       String targetRef,
       Collection<ModelElementInstance> tokens) {
-    BTToken token = getTokenForTargetRef(targetRef, tokens);
+    BTToken token = (BTToken) getTokenOrSnapshotWithID(targetRef, tokens);
     bpmnProcessSnapshot.addToken(
         token.processSnapshotID(),
         new Token(association.getAttributeValue("sourceRef"), token.shouldExist()));
   }
 
-  private BTToken getTokenForTargetRef(String targetRef, Collection<ModelElementInstance> tokens) {
+  private ModelElementInstance getTokenOrSnapshotWithID(
+      String id, Collection<ModelElementInstance> tokensOrSnapshots) {
     // A matching token should always exist.
-    return (BTToken)
-        tokens.stream()
-            .filter(t -> t.getAttributeValue("id").equals(targetRef))
-            .findFirst()
-            .orElseThrow();
+    return tokensOrSnapshots.stream()
+        .filter(t -> t.getAttributeValue("id").equals(id))
+        .findFirst()
+        .orElseThrow();
   }
 
   private void saveProcessSnapshot(
       BpmnModelInstance bpmnModelInstance,
       ModelElementInstance association,
       BPMNProcessSnapshot bpmnProcessSnapshot,
-      String snapshotID) {
+      String snapshotID,
+      Collection<ModelElementInstance> snapshots) {
+    BTProcessSnapshot snapshot =
+        (BTProcessSnapshot) getTokenOrSnapshotWithID(snapshotID, snapshots);
+
+    String processID = getProcessIDForSnapshot(bpmnModelInstance, association);
+    bpmnProcessSnapshot.addProcessSnapshot(
+        new ProcessSnapshot(processID, snapshotID, snapshot.shouldExist()));
+  }
+
+  private String getProcessIDForSnapshot(
+      BpmnModelInstance bpmnModelInstance, ModelElementInstance association) {
     String participantID = association.getAttributeValue("sourceRef");
     ModelElementInstance participant = bpmnModelInstance.getModelElementById(participantID);
-    String processID = participant.getAttributeValue("processRef");
-    bpmnProcessSnapshot.addProcessSnapshot(new ProcessSnapshot(processID, snapshotID));
+    return participant.getAttributeValue("processRef");
   }
 }

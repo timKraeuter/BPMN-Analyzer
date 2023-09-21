@@ -28,24 +28,26 @@ import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
-/**
- * The process snapshot element impl.
- */
+/** The process snapshot element impl. */
 public class BTProcessSnapshotImpl extends ArtifactImpl implements BTProcessSnapshot {
 
   protected static Attribute<Boolean> shouldExistAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(BTToken.class,
-            TOKEN_BPMN_ELEMENT_PROCESS_SNAPSHOT)
-        .namespaceUri(TOKEN_BPMN_NS)
-        .extendsType(Artifact.class)
-        .instanceProvider((ModelTypeInstanceProvider<BTProcessSnapshot>) BTProcessSnapshotImpl::new);
+    ModelElementTypeBuilder typeBuilder =
+        modelBuilder
+            .defineType(BTProcessSnapshot.class, TOKEN_BPMN_ELEMENT_PROCESS_SNAPSHOT)
+            .namespaceUri(TOKEN_BPMN_NS)
+            .extendsType(Artifact.class)
+            .instanceProvider(
+                (ModelTypeInstanceProvider<BTProcessSnapshot>) BTProcessSnapshotImpl::new);
 
-    shouldExistAttribute = typeBuilder.booleanAttribute(TOKEN_BPMN_ATTRIBUTE_SHOULD_EXIST)
-        .defaultValue(true)
-        .namespace(TOKEN_BPMN_NS)
-        .build();
+    shouldExistAttribute =
+        typeBuilder
+            .booleanAttribute(TOKEN_BPMN_ATTRIBUTE_SHOULD_EXIST)
+            .defaultValue(true)
+            .namespace(TOKEN_BPMN_NS)
+            .build();
 
     typeBuilder.build();
   }
