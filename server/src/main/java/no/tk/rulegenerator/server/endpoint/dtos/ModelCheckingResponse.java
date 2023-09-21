@@ -1,4 +1,4 @@
-package no.hvl.tk.rulegenerator.server.endpoint.dtos;
+package no.tk.rulegenerator.server.endpoint.dtos;
 
 public class ModelCheckingResponse {
 

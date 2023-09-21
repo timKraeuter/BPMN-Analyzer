@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id "org.sonarqube" version "3.4.0.2513"
     id 'jacoco'
-    id ("net.ltgt.errorprone") version "3.0.1"
+    id("net.ltgt.errorprone") version "3.0.1"
     id "com.diffplug.spotless" version "6.11.0"
 }
 
@@ -77,7 +77,7 @@ tasks.named('sonarqube').configure {
 
 tasks.compileJava {
     // Ignore classes generated from XSD.
-    options.errorprone.excludedPaths = ".*/src/main/java/groove/gxl/.*"
+    options.errorprone.excludedPaths = ".*/src/main/java/no/tk/groove/gxl/.*"
 }
 
 spotless {
@@ -91,7 +91,7 @@ jar {
     manifest {
         attributes 'Main-Class': 'groove.behaviortransformer.bpmn.BPMNTransformerDriver'
     }
-    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
     // Builds a fat jar.
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }

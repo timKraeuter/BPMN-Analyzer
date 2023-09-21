@@ -1,7 +1,5 @@
-package no.hvl.tk.rulegenerator.server;
+package no.tk.rulegenerator.server;
 
-import static no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper.DTF;
-import static no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper.GRAPH_GRAMMAR_TEMP_DIR;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -26,9 +24,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorController;
-import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper;
-import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
+import no.tk.rulegenerator.server.endpoint.RuleGeneratorController;
+import no.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper;
+import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -39,6 +37,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -219,7 +218,10 @@ class RuleGeneratorControllerTests {
   @Test
   void timestampFormatTest() {
     Instant instant = Instant.now().truncatedTo(ChronoUnit.SECONDS);
-    assertThat(DTF.parse(DTF.format(instant), Instant::from), is(instant));
+    MatcherAssert.assertThat(
+        RuleGeneratorControllerHelper.DTF.parse(
+            RuleGeneratorControllerHelper.DTF.format(instant), Instant::from),
+        is(instant));
   }
 
   @Test
@@ -227,13 +229,17 @@ class RuleGeneratorControllerTests {
     deleteGGTempDir();
     // Given
     // Create two GGs: one older than one hour and one younger
-    Files.createDirectories(Path.of(GRAPH_GRAMMAR_TEMP_DIR));
+    Files.createDirectories(Path.of(RuleGeneratorControllerHelper.GRAPH_GRAMMAR_TEMP_DIR));
     String oldGG =
         RuleGeneratorControllerHelper.getGGOrStateSpaceDirName(
             "old", Instant.now().minus(1, ChronoUnit.HOURS));
     String youngGG = RuleGeneratorControllerHelper.getGGOrStateSpaceDirName("young");
-    Path oldGGPath = Files.createDirectories(Path.of(GRAPH_GRAMMAR_TEMP_DIR, oldGG));
-    Path youngGGPath = Files.createDirectories(Path.of(GRAPH_GRAMMAR_TEMP_DIR, youngGG));
+    Path oldGGPath =
+        Files.createDirectories(
+            Path.of(RuleGeneratorControllerHelper.GRAPH_GRAMMAR_TEMP_DIR, oldGG));
+    Path youngGGPath =
+        Files.createDirectories(
+            Path.of(RuleGeneratorControllerHelper.GRAPH_GRAMMAR_TEMP_DIR, youngGG));
 
     // When
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
@@ -244,7 +250,7 @@ class RuleGeneratorControllerTests {
   }
 
   private void deleteGGTempDir() throws IOException {
-    Path tempDir = Path.of(GRAPH_GRAMMAR_TEMP_DIR);
+    Path tempDir = Path.of(RuleGeneratorControllerHelper.GRAPH_GRAMMAR_TEMP_DIR);
     if (Files.exists(tempDir)) {
       PathUtils.deleteDirectory(tempDir);
     }

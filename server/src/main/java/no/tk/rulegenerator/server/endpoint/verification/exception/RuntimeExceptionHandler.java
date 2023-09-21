@@ -1,4 +1,4 @@
-package no.hvl.tk.rulegenerator.server.endpoint.verification.exception;
+package no.tk.rulegenerator.server.endpoint.verification.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

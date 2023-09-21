@@ -1,9 +1,5 @@
-package no.hvl.tk.rulegenerator.server.endpoint;
+package no.tk.rulegenerator.server.endpoint;
 
-import static no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour;
-import static no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper.generateGGForBPMNFile;
-
-import no.tk.behavior.bpmn.BPMNCollaboration;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -11,11 +7,12 @@ import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingRequest;
-import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResponse;
-import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingRequest;
-import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
-import no.hvl.tk.rulegenerator.server.endpoint.verification.BPMNModelChecker;
+import no.tk.behavior.bpmn.BPMNCollaboration;
+import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingRequest;
+import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResponse;
+import no.tk.rulegenerator.server.endpoint.dtos.ModelCheckingRequest;
+import no.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
+import no.tk.rulegenerator.server.endpoint.verification.BPMNModelChecker;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,9 +30,9 @@ public class RuleGeneratorController {
   @PostMapping(value = "/generateGGAndZip", produces = "application/zip")
   public void generateGGAndZip(
       @RequestParam("file") MultipartFile file, HttpServletResponse response) throws IOException {
-    deleteGGsAndStateSpacesOlderThanOneHour();
+    RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
-    Path resultDir = generateGGForBPMNFile(file).getLeft();
+    Path resultDir = RuleGeneratorControllerHelper.generateGGForBPMNFile(file).getLeft();
 
     // Zip all files
     try (DirectoryStream<Path> graphGrammarFiles = Files.newDirectoryStream(resultDir)) {
@@ -71,9 +68,10 @@ public class RuleGeneratorController {
   public BPMNSpecificPropertyCheckingResponse checkBPMNSpecificProperties(
       @ModelAttribute BPMNSpecificPropertyCheckingRequest request)
       throws IOException, InterruptedException {
-    deleteGGsAndStateSpacesOlderThanOneHour();
+    RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
-    Pair<Path, BPMNCollaboration> result = generateGGForBPMNFile(request.getFile());
+    Pair<Path, BPMNCollaboration> result =
+        RuleGeneratorControllerHelper.generateGGForBPMNFile(request.getFile());
 
     return new BPMNModelChecker(result.getLeft(), result.getRight()).checkBPMNProperties(request);
   }
@@ -87,9 +85,10 @@ public class RuleGeneratorController {
   @PostMapping(value = "/checkTemporalLogic")
   public ModelCheckingResponse checkTemporalLogicProperty(
       @ModelAttribute ModelCheckingRequest request) throws IOException, InterruptedException {
-    deleteGGsAndStateSpacesOlderThanOneHour();
+    RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
-    Pair<Path, BPMNCollaboration> result = generateGGForBPMNFile(request.getFile());
+    Pair<Path, BPMNCollaboration> result =
+        RuleGeneratorControllerHelper.generateGGForBPMNFile(request.getFile());
 
     return new BPMNModelChecker(result.getLeft(), result.getRight())
         .checkTemporalLogicProperty(request.getLogic(), request.getProperty());

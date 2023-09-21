@@ -1,7 +1,7 @@
-package no.hvl.tk.rulegenerator.server.endpoint.dtos;
+package no.tk.rulegenerator.server.endpoint.dtos;
 
-import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import com.fasterxml.jackson.annotation.JsonValue;
+import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 
 public enum BPMNSpecificProperty {
   SAFENESS("Safeness"),

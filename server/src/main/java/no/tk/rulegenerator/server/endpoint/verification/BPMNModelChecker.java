@@ -1,14 +1,5 @@
-package no.hvl.tk.rulegenerator.server.endpoint.verification;
+package no.tk.rulegenerator.server.endpoint.verification;
 
-import no.tk.behavior.bpmn.AbstractBPMNProcess;
-import no.tk.behavior.bpmn.BPMNCollaboration;
-import no.tk.behavior.bpmn.BPMNEventSubprocess;
-import no.tk.behavior.bpmn.BPMNProcess;
-import no.tk.behavior.bpmn.FlowNode;
-import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
-import no.tk.groove.runner.GrooveJarRunner;
-import no.tk.groove.runner.checking.ModelCheckingResult;
-import no.tk.groove.runner.checking.TemporalLogic;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,13 +12,22 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import no.hvl.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper;
-import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNPropertyCheckingResult;
-import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
-import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingRequest;
-import no.hvl.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResponse;
-import no.hvl.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
-import no.hvl.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
+import no.tk.behavior.bpmn.AbstractBPMNProcess;
+import no.tk.behavior.bpmn.BPMNCollaboration;
+import no.tk.behavior.bpmn.BPMNEventSubprocess;
+import no.tk.behavior.bpmn.BPMNProcess;
+import no.tk.behavior.bpmn.FlowNode;
+import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
+import no.tk.groove.runner.GrooveJarRunner;
+import no.tk.groove.runner.checking.ModelCheckingResult;
+import no.tk.groove.runner.checking.TemporalLogic;
+import no.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper;
+import no.tk.rulegenerator.server.endpoint.dtos.BPMNPropertyCheckingResult;
+import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
+import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingRequest;
+import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResponse;
+import no.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
+import no.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
 
 public class BPMNModelChecker {
 

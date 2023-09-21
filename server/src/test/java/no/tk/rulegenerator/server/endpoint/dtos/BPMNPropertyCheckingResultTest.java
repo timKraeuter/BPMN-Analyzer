@@ -1,4 +1,4 @@
-package no.hvl.tk.rulegenerator.server.endpoint.dtos;
+package no.tk.rulegenerator.server.endpoint.dtos;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -6,6 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.Collections;
 import java.util.List;
 import org.assertj.core.util.Lists;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 
 class BPMNPropertyCheckingResultTest {
@@ -40,7 +41,8 @@ class BPMNPropertyCheckingResultTest {
   void equalsAndHashcode() {
     assertThat(
         new BPMNPropertyCheckingResult(BPMNSpecificProperty.SAFENESS, false, "123"),
-        is(new BPMNPropertyCheckingResult(BPMNSpecificProperty.SAFENESS, false, "123")));
+        CoreMatchers.is(
+            new BPMNPropertyCheckingResult(BPMNSpecificProperty.SAFENESS, false, "123")));
     assertThat(
         new BPMNPropertyCheckingResult(BPMNSpecificProperty.SAFENESS, false, "123").hashCode(),
         is(new BPMNPropertyCheckingResult(BPMNSpecificProperty.SAFENESS, false, "123").hashCode()));

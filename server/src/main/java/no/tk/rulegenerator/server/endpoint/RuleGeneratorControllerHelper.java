@@ -1,9 +1,5 @@
-package no.hvl.tk.rulegenerator.server.endpoint;
+package no.tk.rulegenerator.server.endpoint;
 
-import no.tk.behavior.bpmn.BPMNCollaboration;
-import no.tk.behavior.bpmn.reader.BPMNFileReader;
-import no.tk.groove.behaviortransformer.BehaviorToGrooveTransformer;
-import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -15,6 +11,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
+import no.tk.behavior.bpmn.BPMNCollaboration;
+import no.tk.behavior.bpmn.reader.BPMNFileReader;
+import no.tk.groove.behaviortransformer.BehaviorToGrooveTransformer;
+import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.multipart.MultipartFile;
