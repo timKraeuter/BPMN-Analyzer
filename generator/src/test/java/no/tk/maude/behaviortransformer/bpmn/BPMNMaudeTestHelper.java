@@ -3,12 +3,12 @@ package no.tk.maude.behaviortransformer.bpmn;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import no.tk.reader.BPMNFileReaderTestHelper;
 import java.io.IOException;
 import java.util.function.UnaryOperator;
 import no.tk.maude.behaviortransformer.MaudeTestHelper;
 import no.tk.maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import no.tk.maude.behaviortransformer.bpmn.settings.MessagePersistence;
+import no.tk.reader.BPMNFileReaderTestHelper;
 
 public interface BPMNMaudeTestHelper extends BPMNFileReaderTestHelper, MaudeTestHelper {
 

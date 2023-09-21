@@ -133,8 +133,8 @@ public class Attr {
    * </pre>
    *
    * <p>Objects of the following type(s) are allowed in the list {@link Locator } {@link Bool }
-   * {@link Int } {@link Float } {@link String } {@link Enum } {@link Seq } {@link Set }
-   * {@link Bag } {@link Tup }
+   * {@link Int } {@link Float } {@link String } {@link Enum } {@link Seq } {@link Set } {@link Bag
+   * } {@link Tup }
    */
   public List<Object> getLocatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup() {
     if (locatorOrBoolOrIntOrFloatOrStringOrEnumOrSeqOrSetOrBagOrTup == null) {

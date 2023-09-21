@@ -4,11 +4,11 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConst
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.MESSAGES;
 import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.*;
 
-import no.tk.behavior.bpmn.BPMNCollaboration;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 
 /** A special smart Maude rule builder to build BPMN rules for a given collaboration. */

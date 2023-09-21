@@ -1,15 +1,14 @@
 package no.tk.groove.runner;
 
 import com.google.common.collect.Lists;
-import no.tk.groove.runner.checking.ModelCheckingResult;
-import no.tk.groove.runner.checking.TemporalLogic;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import no.tk.groove.runner.checking.ModelCheckingResult;
+import no.tk.groove.runner.checking.TemporalLogic;
 
 public class GrooveJarRunner {
 

@@ -1,8 +1,7 @@
 package no.tk.behavior.bpmn.auxiliary.visitors;
 
-import no.tk.behavior.bpmn.activities.CallActivity;
-
 import java.util.function.Consumer;
+import no.tk.behavior.bpmn.activities.CallActivity;
 
 public class CallActivityFlowNodeVisitor extends DoNothingFlowNodeVisitor {
 

@@ -1,13 +1,12 @@
 package no.tk.behavior.bpmn;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Stream;
 import no.tk.behavior.bpmn.activities.CallActivity;
 import no.tk.behavior.bpmn.auxiliary.visitors.AbstractProcessVisitor;
 import no.tk.behavior.bpmn.auxiliary.visitors.CallActivityFlowNodeVisitor;
 import no.tk.behavior.bpmn.events.StartEvent;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.stream.Stream;
 
 /**
  * Represents a process model in BPMN. Gateways or Activities without incoming sequence flows are

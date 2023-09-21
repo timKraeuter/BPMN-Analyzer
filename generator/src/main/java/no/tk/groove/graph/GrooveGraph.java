@@ -1,11 +1,10 @@
 package no.tk.groove.graph;
 
-import no.tk.api.Graph;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.stream.Stream;
+import no.tk.api.Graph;
 
 /** Represents a graph which is used to generate a graph grammar for the tool groove. */
 public class GrooveGraph implements Graph<GrooveNode, GrooveEdge> {

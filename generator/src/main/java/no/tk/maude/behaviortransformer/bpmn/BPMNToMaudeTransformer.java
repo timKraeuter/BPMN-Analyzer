@@ -1,18 +1,18 @@
 package no.tk.maude.behaviortransformer.bpmn;
 
-import no.tk.behavior.bpmn.BPMNCollaboration;
-import no.tk.behavior.bpmn.BPMNProcess;
-import no.tk.behavior.bpmn.events.StartEventType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
+import no.tk.behavior.bpmn.BPMNCollaboration;
+import no.tk.behavior.bpmn.BPMNProcess;
+import no.tk.behavior.bpmn.events.StartEventType;
+import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants;
 import no.tk.maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import no.tk.maude.generation.BPMNMaudeRuleBuilder;
 import no.tk.maude.generation.MaudeObject;
 import no.tk.maude.generation.MaudeObjectBuilder;
 import no.tk.maude.generation.MaudeRule;
-import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants;
 import org.apache.commons.text.StringSubstitutor;
 
 public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
@@ -171,12 +171,30 @@ ${finalQuery} .\r
     this.settings = settings;
     objectBuilder = new MaudeObjectBuilder();
     ruleBuilder = new BPMNMaudeRuleBuilder(collaboration, settings);
-    ruleBuilder.addVar(BPMNToGrooveTransformerConstants.OIDS, BPMNToGrooveTransformerConstants.OID, BPMNToGrooveTransformerConstants.O + 0);
-    ruleBuilder.addVar(BPMNToGrooveTransformerConstants.TOKENS, BPMNToGrooveTransformerConstants.MSET, BPMNToMaudeTransformerConstants.ANY_TOKENS);
-    ruleBuilder.addVar(BPMNToGrooveTransformerConstants.SIGNALS, BPMNToGrooveTransformerConstants.MSET, BPMNToMaudeTransformerConstants.ANY_SIGNALS);
-    ruleBuilder.addVar(BPMNToGrooveTransformerConstants.MESSAGES, BPMNToGrooveTransformerConstants.MSET, BPMNToMaudeTransformerConstants.ANY_MESSAGES);
-    ruleBuilder.addVar(BPMNToGrooveTransformerConstants.SUBPROCESSES, BPMNToGrooveTransformerConstants.CONFIGURATION, BPMNToMaudeTransformerConstants.ANY_SUBPROCESSES);
-    ruleBuilder.addVar(BPMNToMaudeTransformerConstants.PROCESSES, BPMNToGrooveTransformerConstants.CONFIGURATION, BPMNToMaudeTransformerConstants.ANY_PROCESS);
+    ruleBuilder.addVar(
+        BPMNToGrooveTransformerConstants.OIDS,
+        BPMNToGrooveTransformerConstants.OID,
+        BPMNToGrooveTransformerConstants.O + 0);
+    ruleBuilder.addVar(
+        BPMNToGrooveTransformerConstants.TOKENS,
+        BPMNToGrooveTransformerConstants.MSET,
+        BPMNToMaudeTransformerConstants.ANY_TOKENS);
+    ruleBuilder.addVar(
+        BPMNToGrooveTransformerConstants.SIGNALS,
+        BPMNToGrooveTransformerConstants.MSET,
+        BPMNToMaudeTransformerConstants.ANY_SIGNALS);
+    ruleBuilder.addVar(
+        BPMNToGrooveTransformerConstants.MESSAGES,
+        BPMNToGrooveTransformerConstants.MSET,
+        BPMNToMaudeTransformerConstants.ANY_MESSAGES);
+    ruleBuilder.addVar(
+        BPMNToGrooveTransformerConstants.SUBPROCESSES,
+        BPMNToGrooveTransformerConstants.CONFIGURATION,
+        BPMNToMaudeTransformerConstants.ANY_SUBPROCESSES);
+    ruleBuilder.addVar(
+        BPMNToMaudeTransformerConstants.PROCESSES,
+        BPMNToGrooveTransformerConstants.CONFIGURATION,
+        BPMNToMaudeTransformerConstants.ANY_PROCESS);
   }
 
   public String generate(String finalQuery) {
@@ -203,12 +221,16 @@ ${finalQuery} .\r
                   MaudeObject maudeObject =
                       createProcessSnapshotObjectNoSubProcessAndSignals(
                           process,
-                          String.format(BPMNToMaudeTransformerConstants.ENQUOTE_FORMAT, oidCounter.getAndIncrement()),
+                          String.format(
+                              BPMNToMaudeTransformerConstants.ENQUOTE_FORMAT,
+                              oidCounter.getAndIncrement()),
                           this.createStartTokens(process));
                   return maudeObject.generateObjectString();
                 })
             .collect(Collectors.joining(BPMNToMaudeTransformerConstants.NEW_LINE));
-    return ruleBuilder.createBPMNSystem(processes, BPMNToMaudeTransformerConstants.NONE).generateObjectString();
+    return ruleBuilder
+        .createBPMNSystem(processes, BPMNToMaudeTransformerConstants.NONE)
+        .generateObjectString();
   }
 
   private String createStartTokens(BPMNProcess process) {

@@ -1,9 +1,9 @@
 package no.tk.behavior.bpmn.auxiliary;
 
+import java.util.Set;
 import no.tk.behavior.bpmn.BPMNEventSubprocess;
 import no.tk.behavior.bpmn.FlowNode;
 import no.tk.behavior.bpmn.events.StartEvent;
-import java.util.Set;
 
 public interface BPMNModelBuilder {
   BPMNModelBuilder sequenceFlow(String id, String name, FlowNode from, FlowNode to);

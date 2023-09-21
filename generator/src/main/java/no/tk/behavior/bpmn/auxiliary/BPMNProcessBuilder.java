@@ -1,12 +1,12 @@
 package no.tk.behavior.bpmn.auxiliary;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
 import no.tk.behavior.bpmn.BPMNEventSubprocess;
 import no.tk.behavior.bpmn.BPMNProcess;
 import no.tk.behavior.bpmn.FlowNode;
 import no.tk.behavior.bpmn.SequenceFlow;
 import no.tk.behavior.bpmn.events.StartEvent;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 public class BPMNProcessBuilder implements BPMNModelBuilder {
   private final Set<SequenceFlow> sequenceFlows;

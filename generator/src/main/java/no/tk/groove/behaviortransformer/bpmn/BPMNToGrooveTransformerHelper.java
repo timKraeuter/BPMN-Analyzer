@@ -18,6 +18,10 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConst
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_RUNNING;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_TOKEN;
 
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.FlowNode;
@@ -41,11 +45,6 @@ import no.tk.behavior.bpmn.gateways.ParallelGateway;
 import no.tk.groove.behaviortransformer.GrooveTransformer;
 import no.tk.groove.graph.GrooveNode;
 import no.tk.groove.graph.rule.GrooveRuleBuilder;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
-
 import no.tk.util.ValueWrapper;
 
 public class BPMNToGrooveTransformerHelper {
@@ -132,7 +131,7 @@ public class BPMNToGrooveTransformerHelper {
   }
 
   public static void addOutgoingTokensForFlowNodeToProcessInstance(
-          FlowNode flowNode, GrooveRuleBuilder ruleBuilder, GrooveNode processInstance) {
+      FlowNode flowNode, GrooveRuleBuilder ruleBuilder, GrooveNode processInstance) {
     flowNode
         .getOutgoingFlows()
         .forEach(
@@ -395,7 +394,7 @@ public class BPMNToGrooveTransformerHelper {
   }
 
   public static boolean matchesLinkThrowEvent(
-          IntermediateThrowEvent intermediateThrowEvent, FlowNode flowNode) {
+      IntermediateThrowEvent intermediateThrowEvent, FlowNode flowNode) {
     return flowNode.getName().equals(intermediateThrowEvent.getName())
         && isLinkCatchEvent(flowNode);
   }

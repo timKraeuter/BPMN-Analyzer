@@ -4,22 +4,22 @@ import static no.tk.behavior.bpmn.events.BoundaryEventType.*;
 import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.*;
 import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.NONE;
 
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.SequenceFlow;
 import no.tk.behavior.bpmn.activities.CallActivity;
 import no.tk.behavior.bpmn.events.BoundaryEvent;
 import no.tk.behavior.bpmn.events.StartEventType;
+import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants;
 import no.tk.groove.behaviortransformer.bpmn.generators.BPMNSubprocessRuleGenerator;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import no.tk.maude.behaviortransformer.bpmn.BPMNMaudeRuleGenerator;
 import no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
 import no.tk.maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import no.tk.maude.generation.BPMNMaudeRuleBuilder;
 import no.tk.maude.generation.MaudeObject;
 import no.tk.maude.generation.MaudeObjectBuilder;
-import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants;
 
 public class BPMNMaudeSubprocessRuleGenerator
     implements BPMNSubprocessRuleGenerator, BPMNToMaudeTransformerHelper {
@@ -36,7 +36,7 @@ public class BPMNMaudeSubprocessRuleGenerator
 
   @Override
   public void createCallActivityRulesForProcess(
-          AbstractBPMNProcess process, CallActivity callActivity) {
+      AbstractBPMNProcess process, CallActivity callActivity) {
     // Rules for instantiating a subprocess
     callActivity
         .getIncomingFlows()
@@ -108,11 +108,24 @@ public class BPMNMaudeSubprocessRuleGenerator
     String anyOtherSignals1 = ANY_SIGNALS + "1";
     String anyOtherSubprocesses1 = ANY_SUBPROCESSES + "1";
     String anyOtherSubprocesses2 = ANY_SUBPROCESSES + "2";
-    ruleBuilder.addVar(BPMNToGrooveTransformerConstants.OIDS, BPMNToGrooveTransformerConstants.OID, oid);
-    ruleBuilder.addVar(BPMNToGrooveTransformerConstants.TOKENS, BPMNToGrooveTransformerConstants.MSET, anyOtherTokens1);
-    ruleBuilder.addVar(BPMNToGrooveTransformerConstants.SIGNALS, BPMNToGrooveTransformerConstants.MSET, anyOtherSignals1);
-    ruleBuilder.addVar(BPMNToGrooveTransformerConstants.SUBPROCESSES, BPMNToGrooveTransformerConstants.CONFIGURATION, anyOtherSubprocesses1);
-    ruleBuilder.addVar(BPMNToGrooveTransformerConstants.SUBPROCESSES, BPMNToGrooveTransformerConstants.CONFIGURATION, anyOtherSubprocesses2);
+    ruleBuilder.addVar(
+        BPMNToGrooveTransformerConstants.OIDS, BPMNToGrooveTransformerConstants.OID, oid);
+    ruleBuilder.addVar(
+        BPMNToGrooveTransformerConstants.TOKENS,
+        BPMNToGrooveTransformerConstants.MSET,
+        anyOtherTokens1);
+    ruleBuilder.addVar(
+        BPMNToGrooveTransformerConstants.SIGNALS,
+        BPMNToGrooveTransformerConstants.MSET,
+        anyOtherSignals1);
+    ruleBuilder.addVar(
+        BPMNToGrooveTransformerConstants.SUBPROCESSES,
+        BPMNToGrooveTransformerConstants.CONFIGURATION,
+        anyOtherSubprocesses1);
+    ruleBuilder.addVar(
+        BPMNToGrooveTransformerConstants.SUBPROCESSES,
+        BPMNToGrooveTransformerConstants.CONFIGURATION,
+        anyOtherSubprocesses2);
 
     // Setup pre
     // Subprocess must be running
@@ -147,7 +160,8 @@ public class BPMNMaudeSubprocessRuleGenerator
       AbstractBPMNProcess process, CallActivity callActivity, SequenceFlow incomingFlow) {
 
     ruleBuilder.startRule(
-        getFlowNodeRuleNameWithIncFlow(callActivity, incomingFlow.getId()) + BPMNToGrooveTransformerConstants.START);
+        getFlowNodeRuleNameWithIncFlow(callActivity, incomingFlow.getId())
+            + BPMNToGrooveTransformerConstants.START);
 
     String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
     ruleBuilder.addPreObject(

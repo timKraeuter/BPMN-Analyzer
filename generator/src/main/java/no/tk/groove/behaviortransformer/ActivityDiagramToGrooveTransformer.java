@@ -1,5 +1,12 @@
 package no.tk.groove.behaviortransformer;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Stream;
 import no.tk.behavior.activity.ActivityDiagram;
 import no.tk.behavior.activity.expression.Expression;
 import no.tk.behavior.activity.expression.SetVariableExpression;
@@ -8,6 +15,7 @@ import no.tk.behavior.activity.expression.bool.BooleanUnaryExpression;
 import no.tk.behavior.activity.expression.integer.IntegerCalculationExpression;
 import no.tk.behavior.activity.expression.integer.IntegerComparisonExpression;
 import no.tk.behavior.activity.expression.visitor.ExpressionVisitor;
+import no.tk.behavior.activity.nodes.*;
 import no.tk.behavior.activity.values.BooleanValue;
 import no.tk.behavior.activity.values.IntegerValue;
 import no.tk.behavior.activity.values.Value;
@@ -21,15 +29,6 @@ import no.tk.groove.graph.GrooveGraphBuilder;
 import no.tk.groove.graph.GrooveNode;
 import no.tk.groove.graph.rule.GrooveGraphRule;
 import no.tk.groove.graph.rule.GrooveRuleBuilder;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Stream;
-
-import no.tk.behavior.activity.nodes.*;
 import org.apache.commons.io.file.PathUtils;
 
 public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<ActivityDiagram> {

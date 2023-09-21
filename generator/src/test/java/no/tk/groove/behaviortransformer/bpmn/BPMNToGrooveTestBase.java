@@ -1,11 +1,10 @@
 package no.tk.groove.behaviortransformer.bpmn;
 
-import no.tk.behavior.bpmn.BPMNCollaboration;
-import no.tk.reader.BPMNFileReaderTestHelper;
 import com.google.common.collect.Sets;
-import no.tk.groove.behaviortransformer.BehaviorToGrooveTransformerTestHelper;
-
 import java.util.Set;
+import no.tk.behavior.bpmn.BPMNCollaboration;
+import no.tk.groove.behaviortransformer.BehaviorToGrooveTransformerTestHelper;
+import no.tk.reader.BPMNFileReaderTestHelper;
 
 public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTestHelper
     implements BPMNFileReaderTestHelper {

@@ -1,10 +1,9 @@
 package no.tk.behavior.fsm;
 
-import no.tk.behavior.Behavior;
-import no.tk.behavior.BehaviorVisitor;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
+import no.tk.behavior.Behavior;
+import no.tk.behavior.BehaviorVisitor;
 
 public class FiniteStateMachine implements Behavior {
   private final String name;

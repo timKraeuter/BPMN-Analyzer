@@ -4,6 +4,7 @@ import static no.tk.behavior.bpmn.events.BoundaryEventType.*;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.*;
 
+import java.util.function.Consumer;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.SequenceFlow;
@@ -13,9 +14,6 @@ import no.tk.groove.behaviortransformer.bpmn.BPMNRuleGenerator;
 import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import no.tk.groove.graph.GrooveNode;
 import no.tk.groove.graph.rule.GrooveRuleBuilder;
-import no.tk.behavior.bpmn.events.BoundaryEventType;
-
-import java.util.function.Consumer;
 
 public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenerator {
   private final BPMNRuleGenerator bpmnRuleGenerator;
@@ -29,7 +27,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
 
   @Override
   public void createCallActivityRulesForProcess(
-          AbstractBPMNProcess process, CallActivity callActivity) {
+      AbstractBPMNProcess process, CallActivity callActivity) {
     // Rules for instantiating a subprocess
     callActivity
         .getIncomingFlows()

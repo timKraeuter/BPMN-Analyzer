@@ -4,6 +4,7 @@ import static no.tk.behavior.bpmn.events.StartEventType.*;
 import static no.tk.groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
 
+import java.util.Set;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.BPMNEventSubprocess;
@@ -14,9 +15,6 @@ import no.tk.groove.behaviortransformer.bpmn.BPMNRuleGenerator;
 import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import no.tk.groove.graph.GrooveNode;
 import no.tk.groove.graph.rule.GrooveRuleBuilder;
-import no.tk.behavior.bpmn.events.StartEventType;
-
-import java.util.Set;
 
 public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocessRuleGenerator {
   private final BPMNRuleGenerator bpmnRuleGenerator;

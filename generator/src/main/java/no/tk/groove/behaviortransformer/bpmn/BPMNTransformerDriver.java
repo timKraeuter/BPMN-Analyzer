@@ -1,13 +1,12 @@
 package no.tk.groove.behaviortransformer.bpmn;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import no.tk.behavior.bpmn.reader.BPMNFileReader;
 import no.tk.groove.behaviortransformer.BehaviorToGrooveTransformer;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class BPMNTransformerDriver {
 

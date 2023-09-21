@@ -4,6 +4,7 @@ import static no.tk.behavior.bpmn.events.BoundaryEventType.*;
 import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_OTHER_TOKENS;
 import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.WHITE_SPACE;
 
+import java.util.function.Consumer;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.SequenceFlow;
@@ -12,14 +13,12 @@ import no.tk.behavior.bpmn.activities.tasks.ReceiveTask;
 import no.tk.behavior.bpmn.activities.tasks.SendTask;
 import no.tk.behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import no.tk.behavior.bpmn.events.BoundaryEvent;
-import java.util.function.Consumer;
+import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants;
 import no.tk.maude.behaviortransformer.bpmn.BPMNMaudeRuleGenerator;
 import no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
 import no.tk.maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import no.tk.maude.generation.BPMNMaudeRuleBuilder;
 import no.tk.maude.generation.MaudeObjectBuilder;
-import no.tk.behavior.bpmn.events.BoundaryEventType;
-import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants;
 
 public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper {
   private final BPMNMaudeRuleGenerator ruleGenerator;
@@ -116,7 +115,9 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
 
   private void createStartTaskRule(
       AbstractBPMNProcess process, AbstractTask task, SequenceFlow incomingFlow) {
-    ruleBuilder.startRule(getFlowNodeRuleNameWithIncFlow(task, incomingFlow.getId()) + BPMNToGrooveTransformerConstants.START);
+    ruleBuilder.startRule(
+        getFlowNodeRuleNameWithIncFlow(task, incomingFlow.getId())
+            + BPMNToGrooveTransformerConstants.START);
 
     String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
     ruleBuilder.addPreObject(

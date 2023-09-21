@@ -1,11 +1,5 @@
 package no.tk.groove.behaviortransformer;
 
-import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
-import no.tk.groove.graph.GrooveEdge;
-import no.tk.groove.graph.GrooveGraph;
-import no.tk.groove.graph.GrooveNode;
-import no.tk.groove.graph.rule.GrooveGraphRule;
-import no.tk.groove.graph.rule.GrooveRuleBuilder;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -13,8 +7,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Stream;
-
+import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import no.tk.behavior.picalculus.*;
+import no.tk.groove.graph.GrooveEdge;
+import no.tk.groove.graph.GrooveGraph;
+import no.tk.groove.graph.GrooveNode;
+import no.tk.groove.graph.rule.GrooveGraphRule;
+import no.tk.groove.graph.rule.GrooveRuleBuilder;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -97,7 +96,7 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
   }
 
   private Optional<Pair<GrooveNode, String>> convertProcess(
-          PiProcess piProcess, boolean addCoercion) {
+      PiProcess piProcess, boolean addCoercion) {
     return piProcess.accept(
         new PiProcessVisitor<>() {
 

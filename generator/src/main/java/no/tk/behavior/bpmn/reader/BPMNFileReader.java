@@ -1,5 +1,15 @@
 package no.tk.behavior.bpmn.reader;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.activities.CallActivity;
 import no.tk.behavior.bpmn.activities.tasks.ReceiveTask;
@@ -14,18 +24,6 @@ import no.tk.behavior.bpmn.events.IntermediateCatchEvent;
 import no.tk.behavior.bpmn.events.IntermediateThrowEvent;
 import no.tk.behavior.bpmn.events.StartEvent;
 import no.tk.behavior.bpmn.gateways.InclusiveGateway;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
-
 import org.apache.commons.io.FilenameUtils;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
@@ -74,7 +72,8 @@ public class BPMNFileReader {
     subprocesses.forEach(
         subProcessModelElement -> {
           SubProcess subProcess = (SubProcess) subProcessModelElement;
-          no.tk.behavior.bpmn.FlowNode mappedSubprocessIfExists = mappedFlowNodes.get(subProcess.getId());
+          no.tk.behavior.bpmn.FlowNode mappedSubprocessIfExists =
+              mappedFlowNodes.get(subProcess.getId());
           if (mappedSubprocessIfExists == null && !subProcess.triggeredByEvent()) {
             mapSubProcess(subProcess, mappedFlowNodes, mappedSequenceFlows);
           }
@@ -263,9 +262,12 @@ public class BPMNFileReader {
           "serviceTask",
           "manualTask",
           "userTask",
-          "task" -> resultingFlowNode = new no.tk.behavior.bpmn.activities.tasks.Task(flowNode.getId(), getFlowElementName(flowNode));
+          "task" -> resultingFlowNode =
+          new no.tk.behavior.bpmn.activities.tasks.Task(
+              flowNode.getId(), getFlowElementName(flowNode));
       case "sendTask" -> resultingFlowNode =
-          new no.tk.behavior.bpmn.activities.tasks.SendTask(flowNode.getId(), getFlowElementName(flowNode));
+          new no.tk.behavior.bpmn.activities.tasks.SendTask(
+              flowNode.getId(), getFlowElementName(flowNode));
       case "receiveTask" -> {
         boolean instantiate = hasInstantiateCamundaProperty(flowNode);
         resultingFlowNode =
@@ -287,9 +289,11 @@ public class BPMNFileReader {
 
         // Gateways
       case "parallelGateway" -> resultingFlowNode =
-          new no.tk.behavior.bpmn.gateways.ParallelGateway(flowNode.getId(), getFlowElementName(flowNode));
+          new no.tk.behavior.bpmn.gateways.ParallelGateway(
+              flowNode.getId(), getFlowElementName(flowNode));
       case "exclusiveGateway" -> resultingFlowNode =
-          new no.tk.behavior.bpmn.gateways.ExclusiveGateway(flowNode.getId(), getFlowElementName(flowNode));
+          new no.tk.behavior.bpmn.gateways.ExclusiveGateway(
+              flowNode.getId(), getFlowElementName(flowNode));
       case "eventBasedGateway" -> {
         boolean instantiateGateway = hasInstantiateCamundaProperty(flowNode);
         resultingFlowNode =
@@ -354,7 +358,8 @@ public class BPMNFileReader {
     EventDefinitionVisitor<no.tk.behavior.bpmn.events.BoundaryEvent> visitor =
         new EventDefinitionVisitor<>() {
           @Override
-          public no.tk.behavior.bpmn.events.BoundaryEvent handle(MessageEventDefinition evDefinition) {
+          public no.tk.behavior.bpmn.events.BoundaryEvent handle(
+              MessageEventDefinition evDefinition) {
             return new no.tk.behavior.bpmn.events.BoundaryEvent(
                 event.getId(),
                 getFlowElementName(event),
@@ -368,7 +373,8 @@ public class BPMNFileReader {
           }
 
           @Override
-          public no.tk.behavior.bpmn.events.BoundaryEvent handle(SignalEventDefinition evDefinition) {
+          public no.tk.behavior.bpmn.events.BoundaryEvent handle(
+              SignalEventDefinition evDefinition) {
             return new no.tk.behavior.bpmn.events.BoundaryEvent(
                 event.getId(),
                 getFlowElementName(event),
@@ -378,12 +384,14 @@ public class BPMNFileReader {
           }
 
           @Override
-          public no.tk.behavior.bpmn.events.BoundaryEvent handle(TerminateEventDefinition evDefinition) {
+          public no.tk.behavior.bpmn.events.BoundaryEvent handle(
+              TerminateEventDefinition evDefinition) {
             throw new BPMNRuntimeException("A boundary event cannot be a terminate event!");
           }
 
           @Override
-          public no.tk.behavior.bpmn.events.BoundaryEvent handle(TimerEventDefinition evDefinition) {
+          public no.tk.behavior.bpmn.events.BoundaryEvent handle(
+              TimerEventDefinition evDefinition) {
             return new no.tk.behavior.bpmn.events.BoundaryEvent(
                 event.getId(),
                 getFlowElementName(event),
@@ -392,7 +400,8 @@ public class BPMNFileReader {
           }
 
           @Override
-          public no.tk.behavior.bpmn.events.BoundaryEvent handle(ErrorEventDefinition evDefinition) {
+          public no.tk.behavior.bpmn.events.BoundaryEvent handle(
+              ErrorEventDefinition evDefinition) {
             return new no.tk.behavior.bpmn.events.BoundaryEvent(
                 event.getId(),
                 getFlowElementName(event),
@@ -402,7 +411,8 @@ public class BPMNFileReader {
           }
 
           @Override
-          public no.tk.behavior.bpmn.events.BoundaryEvent handle(EscalationEventDefinition evDefinition) {
+          public no.tk.behavior.bpmn.events.BoundaryEvent handle(
+              EscalationEventDefinition evDefinition) {
             return new no.tk.behavior.bpmn.events.BoundaryEvent(
                 event.getId(),
                 getFlowElementName(event),
@@ -637,7 +647,8 @@ public class BPMNFileReader {
       return new no.tk.behavior.bpmn.events.definitions.SignalEventDefinition(
           evDefinition.getSignal().getName());
     }
-    return new no.tk.behavior.bpmn.events.definitions.SignalEventDefinition(getFlowElementName(flowNode));
+    return new no.tk.behavior.bpmn.events.definitions.SignalEventDefinition(
+        getFlowElementName(flowNode));
   }
 
   private no.tk.behavior.bpmn.FlowNode mapIntermediateCatchEvent(FlowNode flowNode) {

@@ -1,13 +1,12 @@
 package no.tk.groove.graph.rule;
 
+import java.util.*;
+import java.util.stream.Stream;
 import no.tk.api.GraphRuleGenerator;
 import no.tk.api.Node;
 import no.tk.behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import no.tk.groove.graph.GrooveEdge;
 import no.tk.groove.graph.GrooveNode;
-
-import java.util.*;
-import java.util.stream.Stream;
 
 public class GrooveRuleBuilder implements GraphRuleGenerator {
   private final Map<String, GrooveGraphRule> rulenameToRule = new LinkedHashMap<>();

@@ -1,12 +1,12 @@
 package no.tk.groove;
 
+import java.util.HashMap;
+import java.util.Map;
 import no.tk.groove.gxl.Attr;
 import no.tk.groove.gxl.Edge;
 import no.tk.groove.gxl.Graph;
 import no.tk.groove.gxl.Gxl;
 import no.tk.groove.gxl.Node;
-import java.util.HashMap;
-import java.util.Map;
 import org.eclipse.elk.core.RecursiveGraphLayoutEngine;
 import org.eclipse.elk.core.util.BasicProgressMonitor;
 import org.eclipse.elk.graph.ElkNode;
@@ -48,7 +48,7 @@ public class GrooveGxlHelper {
   }
 
   public static void createEdgeWithName(
-          Graph graph, Node sourceNode, Node targetNode, String name) {
+      Graph graph, Node sourceNode, Node targetNode, String name) {
     Edge gxledge = new Edge();
     gxledge.setFrom(sourceNode);
     gxledge.setTo(targetNode);

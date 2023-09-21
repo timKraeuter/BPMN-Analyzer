@@ -5,11 +5,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import no.tk.groove.runner.GrooveJarRunner;
 import no.tk.groove.runner.checking.ModelCheckingResult;
 import no.tk.groove.runner.checking.TemporalLogic;
-import java.io.IOException;
-import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 class GrooveJarRunnerTest {

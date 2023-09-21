@@ -1,9 +1,8 @@
 package no.tk.behavior.activity.nodes;
 
-import no.tk.behavior.activity.expression.Expression;
-
 import java.util.List;
 import java.util.stream.Stream;
+import no.tk.behavior.activity.expression.Expression;
 
 /** Executable Activity Node consisting of one opaque action. */
 public class OpaqueAction extends ActivityNode {

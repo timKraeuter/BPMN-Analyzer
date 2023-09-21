@@ -3,14 +3,13 @@ package no.tk.maude.behaviortransformer;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import no.tk.behavior.fsm.FSMStateAtomicProposition;
-import no.tk.behavior.fsm.FiniteStateMachine;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Set;
-
+import no.tk.behavior.fsm.FSMStateAtomicProposition;
+import no.tk.behavior.fsm.FiniteStateMachine;
 import no.tk.util.FileTestHelper;
 
 public interface MaudeTestHelper {

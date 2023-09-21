@@ -1,5 +1,7 @@
 package no.tk.behavior.activity;
 
+import java.util.Set;
+import java.util.stream.Stream;
 import no.tk.behavior.Behavior;
 import no.tk.behavior.BehaviorVisitor;
 import no.tk.behavior.activity.edges.ControlFlow;
@@ -7,9 +9,6 @@ import no.tk.behavior.activity.nodes.ActivityNode;
 import no.tk.behavior.activity.nodes.InitialNode;
 import no.tk.behavior.activity.values.Value;
 import no.tk.behavior.activity.variables.Variable;
-
-import java.util.Set;
-import java.util.stream.Stream;
 
 /** Represents an activity diagram as described in the TTC 2015 Model Execution Case. */
 public class ActivityDiagram implements Behavior {

@@ -1,10 +1,10 @@
 package no.tk.maude.behaviortransformer.bpmn;
 
+import com.google.common.collect.Sets;
+import java.util.Set;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.BPMNProcess;
-import com.google.common.collect.Sets;
-import java.util.Set;
 import no.tk.maude.behaviortransformer.bpmn.generators.BPMNMaudeEventRuleGenerator;
 import no.tk.maude.behaviortransformer.bpmn.generators.BPMNMaudeGatewayRuleGenerator;
 import no.tk.maude.behaviortransformer.bpmn.generators.BPMNMaudeSubprocessRuleGenerator;

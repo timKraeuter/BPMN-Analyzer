@@ -2,8 +2,6 @@ package no.tk.groove.behaviortransformer;
 
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTestBase.fixedRules;
 
-import no.tk.behavior.Behavior;
-import no.tk.groove.graph.GrooveNode;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,10 +10,12 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import no.tk.behavior.Behavior;
+import no.tk.groove.graph.GrooveNode;
+import no.tk.util.FileTestHelper;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import no.tk.util.FileTestHelper;
 
 public abstract class BehaviorToGrooveTransformerTestHelper {
 

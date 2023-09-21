@@ -1,14 +1,13 @@
 package no.tk.behavior.activity;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
 import no.tk.behavior.activity.edges.ControlFlow;
 import no.tk.behavior.activity.nodes.ActivityNode;
 import no.tk.behavior.activity.nodes.InitialNode;
 import no.tk.behavior.activity.values.Value;
 import no.tk.behavior.activity.variables.BooleanVariable;
 import no.tk.behavior.activity.variables.Variable;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 public class ActivityDiagramBuilder {
   private String name;

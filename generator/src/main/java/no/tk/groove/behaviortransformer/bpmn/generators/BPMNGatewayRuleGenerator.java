@@ -12,7 +12,7 @@ public interface BPMNGatewayRuleGenerator {
   void createParallelGatewayRule(AbstractBPMNProcess process, ParallelGateway parallelGateway);
 
   void createEventBasedGatewayRule(
-          EventBasedGateway eventBasedGateway, AbstractBPMNProcess process);
+      EventBasedGateway eventBasedGateway, AbstractBPMNProcess process);
 
   void createInclusiveGatewayRules(AbstractBPMNProcess process, InclusiveGateway inclusiveGateway);
 }

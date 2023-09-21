@@ -1,11 +1,10 @@
 package no.tk.behavior.bpmn.auxiliary;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
 import no.tk.behavior.bpmn.*;
 import no.tk.behavior.bpmn.auxiliary.visitors.CallActivityFlowNodeVisitor;
 import no.tk.behavior.bpmn.events.StartEvent;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 public class BPMNCollaborationBuilder implements BPMNModelBuilder {
   private final Set<MessageFlow> messageFlows;

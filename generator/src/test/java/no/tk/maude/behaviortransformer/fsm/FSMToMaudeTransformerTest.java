@@ -1,11 +1,11 @@
 package no.tk.maude.behaviortransformer.fsm;
 
+import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 import no.tk.behavior.fsm.FSMStateAtomicProposition;
 import no.tk.behavior.fsm.FiniteStateMachine;
 import no.tk.behavior.fsm.State;
 import no.tk.behavior.fsm.Transition;
-import com.google.common.collect.ImmutableSet;
-import java.util.Set;
 import no.tk.maude.behaviortransformer.MaudeTestHelper;
 import org.junit.jupiter.api.Test;
 

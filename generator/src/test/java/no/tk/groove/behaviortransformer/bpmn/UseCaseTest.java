@@ -1,5 +1,6 @@
 package no.tk.groove.behaviortransformer.bpmn;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.BPMNProcess;
 import no.tk.behavior.bpmn.activities.CallActivity;
@@ -11,7 +12,6 @@ import no.tk.behavior.bpmn.events.definitions.EventDefinition;
 import no.tk.behavior.bpmn.events.definitions.SignalEventDefinition;
 import no.tk.behavior.bpmn.gateways.EventBasedGateway;
 import no.tk.behavior.bpmn.gateways.ExclusiveGateway;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 
 class UseCaseTest extends BPMNToGrooveTestBase {

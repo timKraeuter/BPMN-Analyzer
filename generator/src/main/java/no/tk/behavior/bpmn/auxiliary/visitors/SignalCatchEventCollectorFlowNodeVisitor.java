@@ -1,5 +1,6 @@
 package no.tk.behavior.bpmn.auxiliary.visitors;
 
+import java.util.Set;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.BPMNProcess;
 import no.tk.behavior.bpmn.activities.Activity;
@@ -9,8 +10,6 @@ import no.tk.behavior.bpmn.activities.tasks.SendTask;
 import no.tk.behavior.bpmn.activities.tasks.Task;
 import no.tk.behavior.bpmn.events.*;
 import no.tk.behavior.bpmn.events.definitions.EventDefinition;
-import java.util.Set;
-
 import org.apache.commons.lang3.tuple.Pair;
 
 /** FlowNodeVisitor used to collect all signal catch events with a certain event definition. */

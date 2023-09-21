@@ -2,10 +2,6 @@ package no.tk.groove;
 
 import static no.tk.util.FileTestHelper.getResource;
 
-import no.tk.groove.graph.GrooveNode;
-import no.tk.groove.graph.rule.GrooveGraphRule;
-import no.tk.groove.graph.rule.GrooveRuleBuilder;
-import no.tk.groove.graph.rule.GrooveRuleWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
@@ -13,9 +9,13 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
+import no.tk.groove.graph.GrooveNode;
+import no.tk.groove.graph.rule.GrooveGraphRule;
+import no.tk.groove.graph.rule.GrooveRuleBuilder;
+import no.tk.groove.graph.rule.GrooveRuleWriter;
+import no.tk.util.FileTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import no.tk.util.FileTestHelper;
 
 @SuppressWarnings("ConstantConditions")
 class RuleGenerationTest {

@@ -7,10 +7,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
 import no.tk.behavior.picalculus.*;
-import org.junit.jupiter.api.Test;
 import no.tk.util.FileTestHelper;
+import org.junit.jupiter.api.Test;
 
 class PiCalcToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
 

@@ -1,9 +1,9 @@
 package no.tk.behavior.activity.nodes;
 
-import no.tk.behavior.activity.edges.ControlFlow;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Stream;
+import no.tk.behavior.activity.edges.ControlFlow;
 
 public abstract class ActivityNode {
   private final String name;

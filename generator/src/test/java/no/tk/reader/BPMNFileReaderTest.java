@@ -5,15 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import no.tk.behavior.bpmn.*;
-import no.tk.behavior.bpmn.activities.Activity;
-import no.tk.behavior.bpmn.activities.CallActivity;
-import no.tk.behavior.bpmn.activities.tasks.ReceiveTask;
-import no.tk.behavior.bpmn.activities.tasks.Task;
-import no.tk.behavior.bpmn.events.*;
-import no.tk.behavior.bpmn.events.definitions.EventDefinition;
-import no.tk.behavior.bpmn.events.definitions.SignalEventDefinition;
-import no.tk.behavior.bpmn.gateways.EventBasedGateway;
 import com.google.common.collect.Sets;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,10 +15,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
+import no.tk.behavior.bpmn.*;
+import no.tk.behavior.bpmn.activities.Activity;
+import no.tk.behavior.bpmn.activities.CallActivity;
+import no.tk.behavior.bpmn.activities.tasks.ReceiveTask;
+import no.tk.behavior.bpmn.activities.tasks.Task;
+import no.tk.behavior.bpmn.events.*;
+import no.tk.behavior.bpmn.events.definitions.EventDefinition;
+import no.tk.behavior.bpmn.events.definitions.SignalEventDefinition;
+import no.tk.behavior.bpmn.gateways.EventBasedGateway;
 import no.tk.behavior.bpmn.reader.BPMNFileReader;
-import org.junit.jupiter.api.Test;
 import no.tk.util.FileTestHelper;
+import org.junit.jupiter.api.Test;
 
 class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
 

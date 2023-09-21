@@ -1,12 +1,12 @@
 package no.tk.maude.behaviortransformer;
 
-import no.tk.behavior.fsm.FSMStateAtomicProposition;
-import no.tk.behavior.fsm.FiniteStateMachine;
-import no.tk.behavior.fsm.Transition;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import no.tk.behavior.fsm.FSMStateAtomicProposition;
+import no.tk.behavior.fsm.FiniteStateMachine;
+import no.tk.behavior.fsm.Transition;
 import no.tk.maude.generation.MaudeObject;
 import no.tk.maude.generation.MaudeRule;
 import no.tk.maude.generation.MaudeRuleBuilder;

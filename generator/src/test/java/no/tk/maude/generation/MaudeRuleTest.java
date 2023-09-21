@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import no.tk.maude.generation.*;
 import org.junit.jupiter.api.Test;
 
 class MaudeRuleTest {

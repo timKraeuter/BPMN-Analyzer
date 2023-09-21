@@ -2,16 +2,15 @@ package no.tk.groove.behaviortransformer;
 
 import static no.tk.groove.behaviortransformer.FSMToGrooveTransformer.FSM_TYPE_GRAPH_DIR;
 
-import no.tk.behavior.fsm.FiniteStateMachine;
-import no.tk.behavior.fsm.State;
-import no.tk.behavior.fsm.Transition;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
-
-import org.apache.commons.io.file.PathUtils;
+import no.tk.behavior.fsm.FiniteStateMachine;
+import no.tk.behavior.fsm.State;
+import no.tk.behavior.fsm.Transition;
 import no.tk.util.FileTestHelper;
+import org.apache.commons.io.file.PathUtils;
 
 class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTransformerTestHelper {
   private static final String SW_TO_PHASE_2 = "switch_to_phase2";

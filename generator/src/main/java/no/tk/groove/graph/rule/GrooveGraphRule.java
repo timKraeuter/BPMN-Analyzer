@@ -1,11 +1,10 @@
 package no.tk.groove.graph.rule;
 
+import java.util.*;
 import no.tk.api.GraphRule;
 import no.tk.behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import no.tk.groove.graph.GrooveEdge;
 import no.tk.groove.graph.GrooveNode;
-
-import java.util.*;
 
 public class GrooveGraphRule implements GraphRule {
   private final String ruleName;

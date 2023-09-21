@@ -1,9 +1,8 @@
 package no.tk.groove.graph;
 
-import no.tk.behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
+import no.tk.behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 
 public class GrooveGraphBuilder {
 

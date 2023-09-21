@@ -1,8 +1,8 @@
 package no.tk.behavior.bpmn.activities.tasks;
 
+import com.google.common.base.Objects;
 import no.tk.behavior.bpmn.auxiliary.visitors.ActivityVisitor;
 import no.tk.behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
-import com.google.common.base.Objects;
 
 /** Represents a ReceiveTask. Inheritance hierarchy similar to the BPMN spec (Fig.10.10). */
 public class ReceiveTask extends AbstractTask {

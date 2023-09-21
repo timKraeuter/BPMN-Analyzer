@@ -1,5 +1,7 @@
 package no.tk.groove.behaviortransformer;
 
+import com.google.common.collect.Lists;
+import java.util.Collections;
 import no.tk.behavior.activity.ActivityDiagram;
 import no.tk.behavior.activity.ActivityDiagramBuilder;
 import no.tk.behavior.activity.expression.SetVariableExpression;
@@ -15,8 +17,6 @@ import no.tk.behavior.activity.nodes.*;
 import no.tk.behavior.activity.values.IntegerValue;
 import no.tk.behavior.activity.variables.BooleanVariable;
 import no.tk.behavior.activity.variables.IntegerVariable;
-import com.google.common.collect.Lists;
-import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
 class ActivityDiagramToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {

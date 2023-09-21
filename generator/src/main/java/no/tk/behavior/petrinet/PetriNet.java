@@ -1,10 +1,9 @@
 package no.tk.behavior.petrinet;
 
-import no.tk.behavior.Behavior;
-import no.tk.behavior.BehaviorVisitor;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
+import no.tk.behavior.Behavior;
+import no.tk.behavior.BehaviorVisitor;
 
 public class PetriNet implements Behavior {
   private final String name;

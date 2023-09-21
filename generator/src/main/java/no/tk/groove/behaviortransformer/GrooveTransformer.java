@@ -2,16 +2,15 @@ package no.tk.groove.behaviortransformer;
 
 import static no.tk.groove.behaviortransformer.BehaviorToGrooveTransformer.START_GST;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 import no.tk.behavior.Behavior;
 import no.tk.groove.GxlToXMLConverter;
 import no.tk.groove.graph.GrooveGraph;
 import no.tk.groove.graph.rule.GrooveGraphRule;
 import no.tk.groove.graph.rule.GrooveRuleWriter;
 import no.tk.groove.gxl.Gxl;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.stream.Stream;
 
 public interface GrooveTransformer<S extends Behavior> {
   // Special groove labels

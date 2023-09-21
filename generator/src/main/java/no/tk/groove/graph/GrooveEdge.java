@@ -1,8 +1,7 @@
 package no.tk.groove.graph;
 
-import no.tk.api.Edge;
-
 import java.util.concurrent.atomic.AtomicLong;
+import no.tk.api.Edge;
 
 public class GrooveEdge implements Edge {
   private static final AtomicLong idCounter = new AtomicLong(-1);

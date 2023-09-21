@@ -6,18 +6,17 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelpe
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.getSequenceFlowIdOrDescriptiveName;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.updateTokenPositionWhenRunning;
 
+import com.google.common.collect.Sets;
+import java.util.*;
+import java.util.stream.Collectors;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.FlowNode;
 import no.tk.behavior.bpmn.SequenceFlow;
 import no.tk.behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
-import com.google.common.collect.Sets;
+import no.tk.behavior.bpmn.gateways.*;
 import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import no.tk.groove.graph.GrooveNode;
 import no.tk.groove.graph.rule.GrooveRuleBuilder;
-import no.tk.behavior.bpmn.gateways.*;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
   private final GrooveRuleBuilder ruleBuilder;
@@ -28,7 +27,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
 
   @Override
   public void createExclusiveGatewayRules(
-          AbstractBPMNProcess process, ExclusiveGateway exclusiveGateway) {
+      AbstractBPMNProcess process, ExclusiveGateway exclusiveGateway) {
     exclusiveGateway
         .getIncomingFlows()
         .forEach(
@@ -89,7 +88,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
 
   @Override
   public void createEventBasedGatewayRule(
-          EventBasedGateway eventBasedGateway, AbstractBPMNProcess process) {
+      EventBasedGateway eventBasedGateway, AbstractBPMNProcess process) {
     boolean implicitExclusiveGateway = eventBasedGateway.getIncomingFlows().count() > 1;
     eventBasedGateway
         .getIncomingFlows()
@@ -275,7 +274,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
   }
 
   private String getExclusiveGatewayName(
-          Gateway exclusiveGateway, String incomingFlowId, String outFlowID) {
+      Gateway exclusiveGateway, String incomingFlowId, String outFlowID) {
     final long inCount = exclusiveGateway.getIncomingFlows().count();
     final long outCount = exclusiveGateway.getOutgoingFlows().count();
     if (inCount <= 1 && outCount == 1) {

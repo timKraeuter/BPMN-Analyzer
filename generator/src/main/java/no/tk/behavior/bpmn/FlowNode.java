@@ -1,10 +1,9 @@
 package no.tk.behavior.bpmn;
 
-import no.tk.behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Stream;
+import no.tk.behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 
 public abstract class FlowNode extends FlowElement {
   private final Set<SequenceFlow> outgoingFlows = new LinkedHashSet<>();

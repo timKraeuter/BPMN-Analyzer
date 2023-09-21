@@ -3,7 +3,6 @@ package no.tk.groove;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import no.tk.groove.GxlToXMLConverter;
 import no.tk.groove.gxl.Graph;
 import no.tk.groove.gxl.Gxl;
 import org.junit.jupiter.api.Test;

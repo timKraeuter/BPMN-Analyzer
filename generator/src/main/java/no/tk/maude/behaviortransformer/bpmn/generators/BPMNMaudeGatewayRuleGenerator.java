@@ -2,13 +2,13 @@ package no.tk.maude.behaviortransformer.bpmn.generators;
 
 import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_OTHER_TOKENS;
 
+import java.util.stream.Collectors;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.SequenceFlow;
 import no.tk.behavior.bpmn.gateways.EventBasedGateway;
 import no.tk.behavior.bpmn.gateways.ExclusiveGateway;
 import no.tk.behavior.bpmn.gateways.ParallelGateway;
-import java.util.stream.Collectors;
 import no.tk.maude.behaviortransformer.bpmn.BPMNMaudeRuleGenerator;
 import no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
 import no.tk.maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
@@ -28,7 +28,7 @@ public class BPMNMaudeGatewayRuleGenerator implements BPMNToMaudeTransformerHelp
   }
 
   public void createExclusiveGatewayRule(
-          AbstractBPMNProcess process, ExclusiveGateway exclusiveGateway) {
+      AbstractBPMNProcess process, ExclusiveGateway exclusiveGateway) {
     exclusiveGateway
         .getIncomingFlows()
         .forEach(

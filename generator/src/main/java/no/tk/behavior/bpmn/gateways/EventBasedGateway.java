@@ -1,7 +1,7 @@
 package no.tk.behavior.bpmn.gateways;
 
-import no.tk.behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 import com.google.common.base.Objects;
+import no.tk.behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 
 /** Represents and exclusive event based gateway (parallel ones are currently not supported). */
 public class EventBasedGateway extends Gateway {

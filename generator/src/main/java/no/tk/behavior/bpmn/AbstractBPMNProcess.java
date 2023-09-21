@@ -1,9 +1,8 @@
 package no.tk.behavior.bpmn;
 
-import no.tk.behavior.bpmn.auxiliary.visitors.AbstractProcessVisitor;
-
 import java.util.Set;
 import java.util.stream.Stream;
+import no.tk.behavior.bpmn.auxiliary.visitors.AbstractProcessVisitor;
 
 public abstract class AbstractBPMNProcess {
   private final String name;

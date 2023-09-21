@@ -1,5 +1,11 @@
 package no.tk.behavior.bpmn;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import no.tk.behavior.Behavior;
 import no.tk.behavior.BehaviorVisitor;
 import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
@@ -7,13 +13,6 @@ import no.tk.behavior.bpmn.auxiliary.visitors.SignalCatchEventCollectorFlowNodeV
 import no.tk.behavior.bpmn.events.BoundaryEvent;
 import no.tk.behavior.bpmn.events.Event;
 import no.tk.behavior.bpmn.events.definitions.EventDefinition;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.tuple.Pair;
 
 public class BPMNCollaboration implements Behavior {

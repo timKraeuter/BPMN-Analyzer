@@ -1,5 +1,11 @@
 package no.tk.groove.behaviortransformer;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.stream.Stream;
 import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import no.tk.behavior.fsm.FiniteStateMachine;
 import no.tk.groove.graph.GrooveGraph;
@@ -7,13 +13,6 @@ import no.tk.groove.graph.GrooveGraphBuilder;
 import no.tk.groove.graph.GrooveNode;
 import no.tk.groove.graph.rule.GrooveGraphRule;
 import no.tk.groove.graph.rule.GrooveRuleBuilder;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.stream.Stream;
-
 import org.apache.commons.io.file.PathUtils;
 
 public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMachine> {
@@ -51,9 +50,14 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
     builder.addEdge(CURRENT_STATE, stateMachineNode, startStateNode);
 
     builder.addEdge(
-        NAME, stateMachineNode, new GrooveNode(GrooveTransformerHelper.createStringNodeLabel(stateMachineName)));
+        NAME,
+        stateMachineNode,
+        new GrooveNode(GrooveTransformerHelper.createStringNodeLabel(stateMachineName)));
     final String startStateName = finiteStateMachine.getStartState().getName();
-    builder.addEdge(NAME, startStateNode, new GrooveNode(GrooveTransformerHelper.createStringNodeLabel(startStateName)));
+    builder.addEdge(
+        NAME,
+        startStateNode,
+        new GrooveNode(GrooveTransformerHelper.createStringNodeLabel(startStateName)));
 
     return builder.build();
   }
@@ -71,20 +75,25 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
               ruleBuilder.contextEdge(
                   NAME,
                   stateMachine,
-                  ruleBuilder.contextNode(GrooveTransformerHelper.createStringNodeLabel(finiteStateMachine.getName())));
+                  ruleBuilder.contextNode(
+                      GrooveTransformerHelper.createStringNodeLabel(finiteStateMachine.getName())));
 
               final GrooveNode previousState = ruleBuilder.deleteNode(TYPE_STATE);
               ruleBuilder.contextEdge(
                   NAME,
                   previousState,
-                  ruleBuilder.contextNode(GrooveTransformerHelper.createStringNodeLabel(transition.getSource().getName())));
+                  ruleBuilder.contextNode(
+                      GrooveTransformerHelper.createStringNodeLabel(
+                          transition.getSource().getName())));
               ruleBuilder.deleteEdge(CURRENT_STATE, stateMachine, previousState);
 
               final GrooveNode newState = ruleBuilder.addNode(TYPE_STATE);
               ruleBuilder.contextEdge(
                   NAME,
                   newState,
-                  ruleBuilder.contextNode(GrooveTransformerHelper.createStringNodeLabel(transition.getTarget().getName())));
+                  ruleBuilder.contextNode(
+                      GrooveTransformerHelper.createStringNodeLabel(
+                          transition.getTarget().getName())));
               ruleBuilder.addEdge(CURRENT_STATE, stateMachine, newState);
 
               ruleBuilder.buildRule();

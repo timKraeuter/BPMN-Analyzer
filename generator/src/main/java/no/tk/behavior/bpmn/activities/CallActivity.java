@@ -1,9 +1,9 @@
 package no.tk.behavior.bpmn.activities;
 
+import com.google.common.base.Objects;
 import no.tk.behavior.bpmn.BPMNProcess;
 import no.tk.behavior.bpmn.auxiliary.visitors.ActivityVisitor;
 import no.tk.behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
-import com.google.common.base.Objects;
 
 public class CallActivity extends Activity {
 

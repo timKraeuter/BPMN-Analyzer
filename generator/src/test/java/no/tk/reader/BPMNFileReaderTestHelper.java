@@ -2,11 +2,10 @@ package no.tk.reader;
 
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTestBase.BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER;
 
-import no.tk.behavior.bpmn.BPMNCollaboration;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.UnaryOperator;
-
+import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.reader.BPMNFileReader;
 import no.tk.util.FileTestHelper;
 

@@ -2,18 +2,17 @@ package no.tk.groove.behaviortransformer.bpmn;
 
 import static no.tk.groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
 
+import com.google.common.collect.Sets;
+import java.util.Set;
+import java.util.stream.Stream;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.BPMNProcess;
 import no.tk.behavior.bpmn.FlowNode;
-import com.google.common.collect.Sets;
+import no.tk.groove.behaviortransformer.bpmn.generators.*;
 import no.tk.groove.graph.GrooveNode;
 import no.tk.groove.graph.rule.GrooveGraphRule;
 import no.tk.groove.graph.rule.GrooveRuleBuilder;
-import no.tk.groove.behaviortransformer.bpmn.generators.*;
-
-import java.util.Set;
-import java.util.stream.Stream;
 
 public class BPMNRuleGenerator {
   private final GrooveRuleBuilder ruleBuilder;
@@ -103,11 +102,16 @@ public class BPMNRuleGenerator {
 
   public void deleteTerminatedSubprocess(
       GrooveRuleBuilder ruleBuilder, String eSubprocessName, GrooveNode parentProcessInstance) {
-    GrooveNode subProcessInstance = ruleBuilder.deleteNode(BPMNToGrooveTransformerConstants.TYPE_PROCESS_SNAPSHOT);
+    GrooveNode subProcessInstance =
+        ruleBuilder.deleteNode(BPMNToGrooveTransformerConstants.TYPE_PROCESS_SNAPSHOT);
     ruleBuilder.deleteEdge(
-        BPMNToGrooveTransformerConstants.NAME, subProcessInstance, ruleBuilder.contextNode(createStringNodeLabel(eSubprocessName)));
-    ruleBuilder.deleteEdge(BPMNToGrooveTransformerConstants.SUBPROCESS, parentProcessInstance, subProcessInstance);
-    GrooveNode terminated = ruleBuilder.deleteNode(BPMNToGrooveTransformerConstants.TYPE_TERMINATED);
+        BPMNToGrooveTransformerConstants.NAME,
+        subProcessInstance,
+        ruleBuilder.contextNode(createStringNodeLabel(eSubprocessName)));
+    ruleBuilder.deleteEdge(
+        BPMNToGrooveTransformerConstants.SUBPROCESS, parentProcessInstance, subProcessInstance);
+    GrooveNode terminated =
+        ruleBuilder.deleteNode(BPMNToGrooveTransformerConstants.TYPE_TERMINATED);
     ruleBuilder.deleteEdge(BPMNToGrooveTransformerConstants.STATE, subProcessInstance, terminated);
   }
 }

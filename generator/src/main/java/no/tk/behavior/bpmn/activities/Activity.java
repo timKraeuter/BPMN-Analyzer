@@ -1,10 +1,10 @@
 package no.tk.behavior.bpmn.activities;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
 import no.tk.behavior.bpmn.FlowNode;
 import no.tk.behavior.bpmn.auxiliary.visitors.ActivityVisitor;
 import no.tk.behavior.bpmn.events.BoundaryEvent;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 public abstract class Activity extends FlowNode {
   private final Set<BoundaryEvent> boundaryEvents;

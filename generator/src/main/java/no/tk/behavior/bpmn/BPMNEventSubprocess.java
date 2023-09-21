@@ -1,13 +1,12 @@
 package no.tk.behavior.bpmn;
 
-import no.tk.behavior.bpmn.auxiliary.visitors.AbstractProcessVisitor;
-import no.tk.behavior.bpmn.auxiliary.visitors.DoNothingFlowNodeVisitor;
-import no.tk.behavior.bpmn.events.StartEvent;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+import no.tk.behavior.bpmn.auxiliary.visitors.AbstractProcessVisitor;
+import no.tk.behavior.bpmn.auxiliary.visitors.DoNothingFlowNodeVisitor;
+import no.tk.behavior.bpmn.events.StartEvent;
 import no.tk.util.ValueWrapper;
 
 public class BPMNEventSubprocess extends AbstractBPMNProcess {

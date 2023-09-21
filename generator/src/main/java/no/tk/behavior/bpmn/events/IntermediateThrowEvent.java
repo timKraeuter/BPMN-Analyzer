@@ -1,9 +1,9 @@
 package no.tk.behavior.bpmn.events;
 
+import com.google.common.base.Objects;
 import no.tk.behavior.bpmn.auxiliary.visitors.EventVisitor;
 import no.tk.behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 import no.tk.behavior.bpmn.events.definitions.EventDefinition;
-import com.google.common.base.Objects;
 
 public class IntermediateThrowEvent extends ThrowEvent {
   private final IntermediateThrowEventType type;

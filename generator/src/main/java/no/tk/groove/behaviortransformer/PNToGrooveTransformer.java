@@ -1,5 +1,8 @@
 package no.tk.groove.behaviortransformer;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Stream;
 import no.tk.behavior.petrinet.PetriNet;
 import no.tk.behavior.petrinet.Place;
 import no.tk.groove.graph.GrooveEdge;
@@ -7,10 +10,6 @@ import no.tk.groove.graph.GrooveGraph;
 import no.tk.groove.graph.GrooveNode;
 import no.tk.groove.graph.rule.GrooveGraphRule;
 import no.tk.groove.graph.rule.GrooveRuleBuilder;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.stream.Stream;
 
 public class PNToGrooveTransformer implements GrooveTransformer<PetriNet> {
 

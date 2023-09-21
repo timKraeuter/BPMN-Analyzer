@@ -8,6 +8,9 @@ import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstan
 import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.TERMINATED;
 import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.WHITE_SPACE;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.SequenceFlow;
@@ -19,15 +22,12 @@ import no.tk.behavior.bpmn.events.IntermediateCatchEvent;
 import no.tk.behavior.bpmn.events.IntermediateThrowEvent;
 import no.tk.behavior.bpmn.events.StartEvent;
 import no.tk.behavior.bpmn.events.definitions.EventDefinition;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import no.tk.maude.behaviortransformer.bpmn.BPMNMaudeRuleGenerator;
 import no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerHelper;
 import no.tk.maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
 import no.tk.maude.generation.BPMNMaudeRuleBuilder;
 import no.tk.maude.generation.MaudeObjectBuilder;
-import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper {
@@ -128,7 +128,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
   }
 
   private void createSignalThrowRulePart(
-          Event signalThrowEvent, EventDefinition signalEventDefinition) {
+      Event signalThrowEvent, EventDefinition signalEventDefinition) {
     Pair<Set<Event>, Set<BoundaryEvent>> correspondingSignalCatchEvents =
         getCollaboration().findAllCorrespondingCatchEvents(signalEventDefinition);
 
@@ -298,7 +298,10 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
     return process
         .getFlowNodes()
         // Find corresponding link events (correct name and type)
-        .filter(flowNode -> BPMNToGrooveTransformerHelper.matchesLinkThrowEvent(intermediateThrowEvent, flowNode))
+        .filter(
+            flowNode ->
+                BPMNToGrooveTransformerHelper.matchesLinkThrowEvent(
+                    intermediateThrowEvent, flowNode))
         // Get outgoing tokens for corresponding link events
         .map(this::getOutgoingTokensForFlowNode)
         .collect(Collectors.joining(WHITE_SPACE));

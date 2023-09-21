@@ -1,12 +1,11 @@
 package no.tk.groove.graph;
 
-import no.tk.api.Node;
-
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
+import no.tk.api.Node;
 
 public class GrooveNode implements Node {
   public static final AtomicLong idCounter = new AtomicLong(-1);

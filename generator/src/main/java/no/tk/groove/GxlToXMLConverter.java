@@ -1,7 +1,5 @@
 package no.tk.groove;
 
-import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
-import no.tk.groove.gxl.Gxl;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -9,6 +7,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
+import no.tk.groove.gxl.Gxl;
 
 public class GxlToXMLConverter {
 

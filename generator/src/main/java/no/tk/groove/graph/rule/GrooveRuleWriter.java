@@ -1,5 +1,11 @@
 package no.tk.groove.graph.rule;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import no.tk.groove.GrooveGxlHelper;
 import no.tk.groove.GxlToXMLConverter;
 import no.tk.groove.graph.GrooveEdge;
@@ -7,13 +13,6 @@ import no.tk.groove.graph.GrooveNode;
 import no.tk.groove.gxl.Graph;
 import no.tk.groove.gxl.Gxl;
 import no.tk.groove.gxl.Node;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class GrooveRuleWriter {
 
