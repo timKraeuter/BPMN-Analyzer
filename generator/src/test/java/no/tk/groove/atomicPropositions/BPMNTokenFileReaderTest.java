@@ -81,6 +81,45 @@ class BPMNTokenFileReaderTest {
     assertFalse(snapshot3.isShouldExist());
   }
 
+  @Test
+  void readMultipleSnapshotWithTokensWithoutCollaboration() throws IOException {
+    BPMNProcessSnapshot bpmnSnapshot =
+        readBPMNSnapshotFromResource("snapshotWithTokensWithoutCollaboration.xml");
+
+    assertNotNull(bpmnSnapshot);
+    assertThat(bpmnSnapshot.getName(), is("snapshotWithTokensWithoutCollaboration"));
+
+    // Check for tokens and process snapshots
+    assertThat(bpmnSnapshot.getProcessSnapshots().size(), is(3));
+
+    // Check snapshot 1
+    ProcessSnapshot snapshot1 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_0guz4p2");
+    assertThat(snapshot1.getSnapshotID(), is("ProcessSnapshot_0guz4p2"));
+    assertThat(snapshot1.getProcessID(), is("Process_1"));
+    assertThat(snapshot1.getTokens().size(), is(2));
+    assertTrue(snapshot1.isShouldExist());
+    assertThat(
+        getElementIDsForTokens(snapshot1),
+        is(Lists.newArrayList("Activity_1j00qsl", "Flow_09mltb5")));
+    assertThat(getShouldExistListForTokens(snapshot1), is(Lists.newArrayList(false, true)));
+
+    // Check snapshot 2
+    ProcessSnapshot snapshot2 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_0soxahe");
+    assertThat(snapshot2.getSnapshotID(), is("ProcessSnapshot_0soxahe"));
+    assertThat(snapshot2.getProcessID(), is("Process_1"));
+    assertThat(snapshot2.getTokens().size(), is(1));
+    assertTrue(snapshot2.isShouldExist());
+    assertThat(getElementIDsForTokens(snapshot2), is(Lists.newArrayList("Flow_0wrsps5")));
+    assertThat(getShouldExistListForTokens(snapshot2), is(Lists.newArrayList(true)));
+
+    // Check snapshot 3
+    ProcessSnapshot snapshot3 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_1ejf247");
+    assertThat(snapshot3.getSnapshotID(), is("ProcessSnapshot_1ejf247"));
+    assertThat(snapshot3.getProcessID(), is("Process_1"));
+    assertThat(snapshot3.getTokens().size(), is(0));
+    assertFalse(snapshot3.isShouldExist());
+  }
+
   private static List<Boolean> getShouldExistListForTokens(ProcessSnapshot snapshot2) {
     return snapshot2.getTokens().stream().map(Token::isShouldExist).collect(Collectors.toList());
   }

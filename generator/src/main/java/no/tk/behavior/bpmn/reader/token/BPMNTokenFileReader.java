@@ -15,6 +15,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.*;
+import org.camunda.bpm.model.bpmn.instance.Process;
 import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 import org.camunda.bpm.model.xml.type.ModelElementType;
 
@@ -38,9 +39,13 @@ public class BPMNTokenFileReader {
       String name, BpmnModelInstance bpmnModelInstance) {
     BPMNProcessSnapshot bpmnProcessSnapshot = new BPMNProcessSnapshot(name);
 
-    Collection<ModelElementInstance> tokens = getAllTokens(bpmnModelInstance);
     Collection<ModelElementInstance> snapshots = getAllSnapshots(bpmnModelInstance);
 
+    if (hasNoBPMNCollaboration(bpmnModelInstance)) {
+      saveUnconnectedSnapshots(bpmnModelInstance, snapshots, bpmnProcessSnapshot);
+    }
+
+    Collection<ModelElementInstance> tokens = getAllTokens(bpmnModelInstance);
     Collection<ModelElementInstance> associations = getAllAssociations(bpmnModelInstance);
 
     for (ModelElementInstance association : associations) {
@@ -51,21 +56,51 @@ public class BPMNTokenFileReader {
     return bpmnProcessSnapshot;
   }
 
+  private void saveUnconnectedSnapshots(
+      BpmnModelInstance bpmnModelInstance,
+      Collection<ModelElementInstance> snapshots,
+      BPMNProcessSnapshot bpmnProcessSnapshot) {
+    String processID = getProcessID(bpmnModelInstance);
+    snapshots.forEach(
+        snapshot ->
+            saveProcessSnapshot(bpmnProcessSnapshot, (BTProcessSnapshot) snapshot, processID));
+  }
+
+  private String getProcessID(BpmnModelInstance bpmnModelInstance) {
+    Collection<ModelElementInstance> processes = getAllProcesses(bpmnModelInstance);
+    // There must be exactly one process if there are no collaborations.
+    Process process = (Process) processes.stream().findFirst().orElseThrow();
+    return process.getId();
+  }
+
+  private Collection<ModelElementInstance> getAllProcesses(BpmnModelInstance bpmnModelInstance) {
+    return getAllElementsByClassType(bpmnModelInstance, Process.class);
+  }
+
   private Collection<ModelElementInstance> getAllSnapshots(BpmnModelInstance bpmnModelInstance) {
-    ModelElementType snapshotType = bpmnModelInstance.getModel().getType(BTProcessSnapshot.class);
     // Could be indexed once for faster retrieval later.
-    return bpmnModelInstance.getModelElementsByType(snapshotType);
+    return getAllElementsByClassType(bpmnModelInstance, BTProcessSnapshot.class);
   }
 
   private Collection<ModelElementInstance> getAllAssociations(BpmnModelInstance bpmnModelInstance) {
-    ModelElementType associationType = bpmnModelInstance.getModel().getType(Association.class);
-    return bpmnModelInstance.getModelElementsByType(associationType);
+    return getAllElementsByClassType(bpmnModelInstance, Association.class);
   }
 
   private Collection<ModelElementInstance> getAllTokens(BpmnModelInstance bpmnModelInstance) {
-    ModelElementType tokenType = bpmnModelInstance.getModel().getType(BTToken.class);
     // Could be indexed once for faster retrieval later.
-    return bpmnModelInstance.getModelElementsByType(tokenType);
+    return getAllElementsByClassType(bpmnModelInstance, BTToken.class);
+  }
+
+  private Collection<ModelElementInstance> getAllElementsByClassType(
+      BpmnModelInstance bpmnModelInstance, Class<? extends ModelElementInstance> classType) {
+    ModelElementType type = bpmnModelInstance.getModel().getType(classType);
+    return bpmnModelInstance.getModelElementsByType(type);
+  }
+
+  private boolean hasNoBPMNCollaboration(BpmnModelInstance bpmnModelInstance) {
+    Collection<ModelElementInstance> collaborations =
+        getAllElementsByClassType(bpmnModelInstance, Collaboration.class);
+    return collaborations.isEmpty();
   }
 
   private void followAssociationToSaveTokenOrSnapshot(
@@ -77,7 +112,7 @@ public class BPMNTokenFileReader {
     String targetRef = association.getAttributeValue("targetRef");
     if (targetRef.startsWith("ProcessSnapshot")) {
       saveProcessSnapshot(
-          bpmnModelInstance, association, bpmnProcessSnapshot, targetRef, snapshots);
+          bpmnProcessSnapshot, bpmnModelInstance, association, snapshots, targetRef);
     }
     if (targetRef.startsWith("Token")) {
       saveToken(association, bpmnProcessSnapshot, targetRef, tokens);
@@ -105,17 +140,22 @@ public class BPMNTokenFileReader {
   }
 
   private void saveProcessSnapshot(
+      BPMNProcessSnapshot bpmnProcessSnapshot,
       BpmnModelInstance bpmnModelInstance,
       ModelElementInstance association,
-      BPMNProcessSnapshot bpmnProcessSnapshot,
-      String snapshotID,
-      Collection<ModelElementInstance> snapshots) {
-    BTProcessSnapshot snapshot =
-        (BTProcessSnapshot) getTokenOrSnapshotWithID(snapshotID, snapshots);
+      Collection<ModelElementInstance> snapshots,
+      String snapshotID) {
 
     String processID = getProcessIDForSnapshot(bpmnModelInstance, association);
+    BTProcessSnapshot snapshot =
+        (BTProcessSnapshot) getTokenOrSnapshotWithID(snapshotID, snapshots);
+    saveProcessSnapshot(bpmnProcessSnapshot, snapshot, processID);
+  }
+
+  private void saveProcessSnapshot(
+      BPMNProcessSnapshot bpmnProcessSnapshot, BTProcessSnapshot snapshot, String processID) {
     bpmnProcessSnapshot.addProcessSnapshot(
-        new ProcessSnapshot(processID, snapshotID, snapshot.shouldExist()));
+        new ProcessSnapshot(processID, snapshot.getId(), snapshot.shouldExist()));
   }
 
   private String getProcessIDForSnapshot(
