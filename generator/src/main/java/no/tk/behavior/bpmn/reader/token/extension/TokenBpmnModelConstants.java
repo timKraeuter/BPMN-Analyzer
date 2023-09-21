@@ -16,22 +16,16 @@
  */
 package no.tk.behavior.bpmn.reader.token.extension;
 
-/**
- * Constants used in the BPMN token language
- *
- */
+/** Constants used in the BPMN token language */
 public final class TokenBpmnModelConstants {
 
-  private TokenBpmnModelConstants() {
-  }
+  private TokenBpmnModelConstants() {}
 
-  /**
-   * The BPMN token namespace
-   */
+  /** The BPMN token namespace */
   public static final String TOKEN_BPMN_NS = "http://tk/schema/1.0/bt";
+
   public static final String TOKEN_BPMN_ELEMENT_PROCESS_SNAPSHOT = "processSnapshot";
   public static final String TOKEN_BPMN_ELEMENT_TOKEN = "token";
   public static final String TOKEN_BPMN_ATTRIBUTE_SHOULD_EXIST = "shouldExist";
   public static final String TOKEN_BPMN_ATTRIBUTE_PROCESS_SNAPSHOT = "processSnapshot";
-
 }

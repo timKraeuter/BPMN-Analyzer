@@ -5,6 +5,7 @@ import no.tk.behavior.bpmn.reader.token.extension.instance.BTTokenImpl;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.xml.ModelBuilder;
 
+/** BPMN extension to register the token bpmn types. */
 public class TokenBPMN extends Bpmn {
 
   @Override
