@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="66_e1" role="rule" edgeids="false" edgemode="directed">
+        <node id="n15">
+            <attr name="layout">
+                <string>62 85 0 0</string>
+            </attr>
+        </node>
+        <edge from="n15" to="n15">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n16">
+            <attr name="layout">
+                <string>392 232 0 0</string>
+            </attr>
+        </node>
+        <edge from="n16" to="n16">
+            <attr name="label">
+                <string>string:"T-Junction Controller"</string>
+            </attr>
+        </edge>
+        <node id="n17">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n17" to="n17">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n18">
+            <attr name="layout">
+                <string>592 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n18" to="n18">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n19">
+            <attr name="layout">
+                <string>862 224 0 0</string>
+            </attr>
+        </node>
+        <edge from="n19" to="n19">
+            <attr name="label">
+                <string>string:"controller_started_e1_66"</string>
+            </attr>
+        </edge>
+        <node id="n20">
+            <attr name="layout">
+                <string>862 144 0 0</string>
+            </attr>
+        </node>
+        <edge from="n20" to="n20">
+            <attr name="label">
+                <string>string:"e1_Phase_1_67"</string>
+            </attr>
+        </edge>
+        <edge from="n18" to="n20">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n18" to="n19">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n15" to="n16">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n15" to="n17">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n15" to="n18">
+            <attr name="label">
+                <string>tokens</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>
