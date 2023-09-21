@@ -17,9 +17,9 @@
 package no.tk.behavior.bpmn.reader.token.extension;
 
 /** Constants used in the BPMN token language */
-public final class TokenBpmnModelConstants {
+public final class BPMNTokenModelConstants {
 
-  private TokenBpmnModelConstants() {}
+  private BPMNTokenModelConstants() {}
 
   /** The BPMN token namespace */
   public static final String TOKEN_BPMN_NS = "http://tk/schema/1.0/bt";

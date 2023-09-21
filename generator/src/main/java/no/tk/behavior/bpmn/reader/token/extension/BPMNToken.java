@@ -6,7 +6,7 @@ import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.xml.ModelBuilder;
 
 /** BPMN extension to register the token bpmn types. */
-public class TokenBPMN extends Bpmn {
+public class BPMNToken extends Bpmn {
 
   @Override
   protected void doRegisterTypes(ModelBuilder bpmnModelBuilder) {

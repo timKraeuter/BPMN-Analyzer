@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
-import no.tk.behavior.bpmn.reader.token.extension.TokenBPMN;
+import no.tk.behavior.bpmn.reader.token.extension.BPMNToken;
 import no.tk.behavior.bpmn.reader.token.extension.instance.BTProcessSnapshot;
 import no.tk.behavior.bpmn.reader.token.extension.instance.BTToken;
 import no.tk.behavior.bpmn.reader.token.model.BPMNProcessSnapshot;
@@ -18,9 +18,10 @@ import org.camunda.bpm.model.bpmn.instance.*;
 import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 import org.camunda.bpm.model.xml.type.ModelElementType;
 
-public class TokenBPMNFileReader {
+/** Reader for BPMN token files, which silently ignores unconnected snapshots and tokens. */
+public class BPMNTokenFileReader {
   static {
-    Bpmn.INSTANCE = new TokenBPMN();
+    Bpmn.INSTANCE = new BPMNToken();
   }
 
   public BPMNProcessSnapshot readModelFromFilePath(Path file) throws IOException {

@@ -11,14 +11,14 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
-import no.tk.behavior.bpmn.reader.token.TokenBPMNFileReader;
+import no.tk.behavior.bpmn.reader.token.BPMNTokenFileReader;
 import no.tk.behavior.bpmn.reader.token.model.BPMNProcessSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.ProcessSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.Token;
 import no.tk.util.FileTestHelper;
 import org.junit.jupiter.api.Test;
 
-class TokenBPMNFileReaderTest {
+class BPMNTokenFileReaderTest {
 
   public static final String AP_TEST_PATH = "bpmn/atomicPropositions/";
 
@@ -99,7 +99,7 @@ class TokenBPMNFileReaderTest {
   BPMNProcessSnapshot readBPMNSnapshotFromResource(String resourcePath) throws IOException {
     @SuppressWarnings("ConstantConditions")
     Path model = FileTestHelper.getResource(AP_TEST_PATH + resourcePath);
-    TokenBPMNFileReader tokenBpmnFileReader = new TokenBPMNFileReader();
-    return tokenBpmnFileReader.readModelFromFilePath(model);
+    BPMNTokenFileReader bpmnTokenFileReader = new BPMNTokenFileReader();
+    return bpmnTokenFileReader.readModelFromFilePath(model);
   }
 }

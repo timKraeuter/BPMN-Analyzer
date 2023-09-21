@@ -16,10 +16,10 @@
  */
 package no.tk.behavior.bpmn.reader.token.extension.instance;
 
-import static no.tk.behavior.bpmn.reader.token.extension.TokenBpmnModelConstants.TOKEN_BPMN_ATTRIBUTE_PROCESS_SNAPSHOT;
-import static no.tk.behavior.bpmn.reader.token.extension.TokenBpmnModelConstants.TOKEN_BPMN_ATTRIBUTE_SHOULD_EXIST;
-import static no.tk.behavior.bpmn.reader.token.extension.TokenBpmnModelConstants.TOKEN_BPMN_ELEMENT_TOKEN;
-import static no.tk.behavior.bpmn.reader.token.extension.TokenBpmnModelConstants.TOKEN_BPMN_NS;
+import static no.tk.behavior.bpmn.reader.token.extension.BPMNTokenModelConstants.TOKEN_BPMN_ATTRIBUTE_PROCESS_SNAPSHOT;
+import static no.tk.behavior.bpmn.reader.token.extension.BPMNTokenModelConstants.TOKEN_BPMN_ATTRIBUTE_SHOULD_EXIST;
+import static no.tk.behavior.bpmn.reader.token.extension.BPMNTokenModelConstants.TOKEN_BPMN_ELEMENT_TOKEN;
+import static no.tk.behavior.bpmn.reader.token.extension.BPMNTokenModelConstants.TOKEN_BPMN_NS;
 import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 import org.camunda.bpm.model.bpmn.impl.instance.ArtifactImpl;
