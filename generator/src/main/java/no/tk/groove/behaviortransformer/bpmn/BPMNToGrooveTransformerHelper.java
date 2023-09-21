@@ -124,9 +124,14 @@ public class BPMNToGrooveTransformerHelper {
 
   public static GrooveNode contextProcessInstanceWithOnlyName(
       AbstractBPMNProcess process, GrooveRuleBuilder ruleBuilder) {
+    return contextProcessInstanceWithOnlyName(process.getName(), ruleBuilder);
+  }
+
+  public static GrooveNode contextProcessInstanceWithOnlyName(
+      String name, GrooveRuleBuilder ruleBuilder) {
     GrooveNode processInstance = ruleBuilder.contextNode(TYPE_PROCESS_SNAPSHOT);
     ruleBuilder.contextEdge(
-        NAME, processInstance, ruleBuilder.contextNode(createStringNodeLabel(process.getName())));
+        NAME, processInstance, ruleBuilder.contextNode(createStringNodeLabel(name)));
     return processInstance;
   }
 
@@ -163,10 +168,25 @@ public class BPMNToGrooveTransformerHelper {
   public static GrooveNode contextTokenWithPosition(
       GrooveRuleBuilder ruleBuilder, GrooveNode processInstance, String position) {
     GrooveNode token = ruleBuilder.contextNode(TYPE_TOKEN);
+    connectToProcessInstanceAndAddPosition(ruleBuilder, processInstance, position, token);
+    return token;
+  }
+
+  public static GrooveNode nacTokenWithPosition(
+      GrooveRuleBuilder ruleBuilder, GrooveNode processInstance, String position) {
+    GrooveNode token = ruleBuilder.contextNode(GrooveTransformer.NOT + TYPE_TOKEN);
+    connectToProcessInstanceAndAddPosition(ruleBuilder, processInstance, position, token);
+    return token;
+  }
+
+  private static void connectToProcessInstanceAndAddPosition(
+      GrooveRuleBuilder ruleBuilder,
+      GrooveNode processInstance,
+      String position,
+      GrooveNode token) {
     ruleBuilder.contextEdge(TOKENS, processInstance, token);
     ruleBuilder.contextEdge(
         POSITION, token, ruleBuilder.contextNode(createStringNodeLabel(position)));
-    return token;
   }
 
   public static GrooveNode deleteTokenWithPosition(

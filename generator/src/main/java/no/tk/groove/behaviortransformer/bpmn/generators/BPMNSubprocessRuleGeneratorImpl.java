@@ -1,6 +1,5 @@
 package no.tk.groove.behaviortransformer.bpmn.generators;
 
-import static no.tk.behavior.bpmn.events.BoundaryEventType.*;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.*;
 

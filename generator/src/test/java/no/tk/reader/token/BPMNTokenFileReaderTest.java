@@ -1,4 +1,4 @@
-package no.tk.groove.atomicPropositions;
+package no.tk.reader.token;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -8,19 +8,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.collect.Lists;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
-import no.tk.behavior.bpmn.reader.token.BPMNTokenFileReader;
 import no.tk.behavior.bpmn.reader.token.model.BPMNProcessSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.ProcessSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.Token;
-import no.tk.util.FileTestHelper;
 import org.junit.jupiter.api.Test;
 
-class BPMNTokenFileReaderTest {
-
-  public static final String AP_TEST_PATH = "bpmn/atomicPropositions/";
+class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
 
   @Test
   void readSnapshotWithTokens() throws IOException {
@@ -133,12 +128,5 @@ class BPMNTokenFileReaderTest {
         .filter(processSnapshot -> processSnapshot.getSnapshotID().equals(id))
         .findFirst()
         .orElseThrow();
-  }
-
-  private BPMNProcessSnapshot readBPMNSnapshotFromResource(String resourcePath) throws IOException {
-    @SuppressWarnings("ConstantConditions")
-    Path model = FileTestHelper.getResource(AP_TEST_PATH + resourcePath);
-    BPMNTokenFileReader bpmnTokenFileReader = new BPMNTokenFileReader();
-    return bpmnTokenFileReader.readModelFromFilePath(model);
   }
 }
