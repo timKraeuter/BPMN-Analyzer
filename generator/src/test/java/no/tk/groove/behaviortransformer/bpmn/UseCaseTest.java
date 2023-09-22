@@ -214,6 +214,6 @@ class UseCaseTest extends BPMNToGrooveTestBase {
   // s5328, s5921]]
 
   private String getId() {
-    return Integer.toString(counter.getAndIncrement());
+    return "ID_" + counter.getAndIncrement();
   }
 }

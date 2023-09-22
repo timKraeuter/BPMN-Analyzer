@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -76,7 +77,7 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
       throws IOException {
     try (Stream<Path> files = Files.list(grammarDir)) {
       Path expectedDir = Path.of("src/test/resources/bpmn/groove", modelName + ".gps");
-      PathUtils.cleanDirectory(expectedDir);
+      cleanDirIfNeeded(modelName, expectedDir);
       List<Path> generatedFiles =
           files
               .filter(
@@ -85,9 +86,18 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
       // Copy all remaining files.
       for (Path generatedFile : generatedFiles) {
         Files.copy(
-            generatedFile, Path.of(expectedDir.toString(), generatedFile.getFileName().toString()));
+            generatedFile,
+            Path.of(expectedDir.toString(), generatedFile.getFileName().toString()),
+            StandardCopyOption.REPLACE_EXISTING);
       }
     }
+  }
+
+  private static void cleanDirIfNeeded(String modelName, Path expectedDir) throws IOException {
+    if (modelName.startsWith("sequential-tasks")) {
+      return;
+    }
+    PathUtils.cleanDirectory(expectedDir);
   }
 
   private static boolean ignoreFixedFilesAndSystemPropertiesFile(Path path) {

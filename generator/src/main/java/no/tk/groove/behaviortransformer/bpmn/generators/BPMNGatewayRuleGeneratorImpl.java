@@ -89,14 +89,13 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
         .getIncomingFlows()
         .forEach(
             inFlow -> {
-              String inFlowID = inFlow.getDescriptiveName();
               String ruleName =
                   implicitExclusiveGateway
-                      ? (inFlowID + "_" + eventBasedGateway.getName())
+                      ? (inFlow.getNameOrIDIfEmpty() + "_" + eventBasedGateway.getName())
                       : eventBasedGateway.getName();
               ruleBuilder.startRule(ruleName);
               updateTokenPositionWhenRunning(
-                  process, inFlowID, eventBasedGateway.getName(), ruleBuilder);
+                  process, inFlow.getDescriptiveName(), eventBasedGateway.getName(), ruleBuilder);
               ruleBuilder.buildRule();
             });
     // Effects the rules of the subsequent flow nodes!
