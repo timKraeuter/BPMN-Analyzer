@@ -6,7 +6,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import com.google.common.collect.Sets;
 import java.io.IOException;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.FlowElement;
