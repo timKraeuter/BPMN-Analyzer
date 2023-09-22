@@ -13,7 +13,7 @@ public class SequenceFlow extends FlowElement {
   /** Descriptive names might not be unique! Only the id is guaranteed to be unique. */
   public String getDescriptiveName() {
     if (getName().isEmpty()) {
-      return String.format("%s_%s", source.getName(), target.getName());
+      return String.format("%s -> %s", source.getName(), target.getName());
     }
     return getName();
   }
