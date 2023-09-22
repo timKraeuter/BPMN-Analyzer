@@ -1,6 +1,5 @@
 package no.tk.maude.behaviortransformer.bpmn.generators;
 
-import static no.tk.behavior.bpmn.events.BoundaryEventType.*;
 import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.*;
 import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.NONE;
 
@@ -180,7 +179,7 @@ public class BPMNMaudeSubprocessRuleGenerator
       subProcessTokens =
           callActivity
               .getSubProcessModel()
-              .getFlowNodes()
+              .flowNodes()
               .filter(flowNode -> flowNode.isTask() || flowNode.isGateway())
               .filter(flowNode -> flowNode.getIncomingFlows().findAny().isEmpty())
               .map(this::getTokenForFlowNode)

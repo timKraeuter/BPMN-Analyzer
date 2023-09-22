@@ -45,8 +45,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     BPMNProcess participant = result.getParticipants().iterator().next();
     assertThat(participant.getName(), is(name));
 
-    assertThat(participant.getSequenceFlows().count(), is(10L));
-    assertThat(participant.getFlowNodes().count(), is(11L));
+    assertThat(participant.sequenceFlows().count(), is(10L));
+    assertThat(participant.flowNodes().count(), is(11L));
     // Sequence flows between the right flow nodes.
     Set<String> sequenceFlowIds = getSequenceFlowDescriptiveNamesForProcess(participant);
     assertThat(
@@ -81,8 +81,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     assertNotNull(result);
     assertThat(result.getParticipants().size(), is(1));
     BPMNProcess participant = result.getParticipants().iterator().next();
-    assertThat(participant.getSequenceFlows().count(), is(0L));
-    assertThat(participant.getFlowNodes().count(), is(3L));
+    assertThat(participant.sequenceFlows().count(), is(0L));
+    assertThat(participant.flowNodes().count(), is(3L));
     // Check flow nodes
     Map<String, FlowNode> flowNodes = createFlowNodeNameToFlowNodeMap(participant);
     assertThat(flowNodes.keySet(), is(Sets.newHashSet("start", "Task", "end")));
@@ -101,8 +101,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     BPMNProcess participant = result.getParticipants().iterator().next();
     assertThat(participant.getName(), is(name));
 
-    assertThat(participant.getSequenceFlows().count(), is(4L));
-    assertThat(participant.getFlowNodes().count(), is(5L));
+    assertThat(participant.sequenceFlows().count(), is(4L));
+    assertThat(participant.flowNodes().count(), is(5L));
 
     // Sequence flows between the right flow nodes.
     Set<String> sequenceFlowIds = getSequenceFlowDescriptiveNamesForProcess(participant);
@@ -137,8 +137,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     BPMNProcess participant = result.getParticipants().iterator().next();
     assertThat(participant.getName(), is(name));
 
-    assertThat(participant.getSequenceFlows().count(), is(18L));
-    assertThat(participant.getFlowNodes().count(), is(21L));
+    assertThat(participant.sequenceFlows().count(), is(18L));
+    assertThat(participant.flowNodes().count(), is(21L));
     // Sequence flows between the right flow nodes.
     Set<String> sequenceFlowIds = getSequenceFlowDescriptiveNamesForProcess(participant);
     assertThat(
@@ -309,8 +309,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     BPMNProcess participant1 = it.next();
     BPMNProcess participant2 = it.next();
     assertThat(participant2.getName(), is("Activity boundary events"));
-    assertThat(participant2.getSequenceFlows().count(), is(12L));
-    assertThat(participant2.getFlowNodes().count(), is(23L));
+    assertThat(participant2.sequenceFlows().count(), is(12L));
+    assertThat(participant2.flowNodes().count(), is(23L));
 
     // Check boundary events for activity 1 and 2.
     Map<String, FlowNode> p2flowNodes = createFlowNodeNameToFlowNodeMap(participant2);
@@ -369,8 +369,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
                 "es2 -> es2_end")));
 
     assertThat(participant1.getName(), is("Subprocess boundary events"));
-    assertThat(participant1.getSequenceFlows().count(), is(13L));
-    assertThat(participant1.getFlowNodes().count(), is(24L));
+    assertThat(participant1.sequenceFlows().count(), is(13L));
+    assertThat(participant1.flowNodes().count(), is(24L));
 
     // Check boundary events for subprocess s1 and s2.
     Map<String, FlowNode> p1FlowNodes = createFlowNodeNameToFlowNodeMap(participant1);
@@ -391,7 +391,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
 
   private Set<String> getSequenceFlowDescriptiveNamesForProcess(BPMNProcess participant) {
     return participant
-        .getSequenceFlows()
+        .sequenceFlows()
         .map(SequenceFlow::getDescriptiveName)
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
@@ -410,14 +410,14 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     // Check p1
     BPMNProcess participant1 = it.next();
     assertThat(participant1.getName(), is("p1"));
-    assertThat(participant1.getSequenceFlows().count(), is(3L));
-    assertThat(participant1.getFlowNodes().count(), is(4L));
+    assertThat(participant1.sequenceFlows().count(), is(3L));
+    assertThat(participant1.flowNodes().count(), is(4L));
 
     // Check p2
     BPMNProcess participant2 = it.next();
     assertThat(participant2.getName(), is("p2"));
-    assertThat(participant2.getSequenceFlows().count(), is(3L));
-    assertThat(participant2.getFlowNodes().count(), is(4L));
+    assertThat(participant2.sequenceFlows().count(), is(3L));
+    assertThat(participant2.flowNodes().count(), is(4L));
 
     // Check message flows
     assertThat(result.getMessageFlows().size(), is(3));
@@ -441,7 +441,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     BPMNProcess participant = result.getParticipants().iterator().next();
     assertThat(participant.getName(), is("subprocesses"));
 
-    assertThat(participant.getFlowNodes().count(), is(3L));
+    assertThat(participant.flowNodes().count(), is(3L));
     // Check sequence flows
     Set<String> sequenceFlowIds = getSequenceFlowDescriptiveNamesForProcess(participant);
     assertThat(sequenceFlowIds, is(Sets.newHashSet("start -> Sub1", "Sub1 -> end")));
@@ -486,14 +486,14 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     BPMNProcess participant = result.getParticipants().iterator().next();
     assertThat(participant.getName(), is("process"));
 
-    assertThat(participant.getFlowNodes().count(), is(0L));
-    assertThat(participant.getEventSubprocesses().count(), is(1L));
+    assertThat(participant.flowNodes().count(), is(0L));
+    assertThat(participant.eventSubprocesses().count(), is(1L));
 
     @SuppressWarnings("OptionalGetWithoutIsPresent") // Count is 1 means exactly one is present.
-    BPMNEventSubprocess eventSubprocess1 = participant.getEventSubprocesses().findFirst().get();
+    BPMNEventSubprocess eventSubprocess1 = participant.eventSubprocesses().findFirst().get();
     assertThat(eventSubprocess1.getName(), is("Event subprocess1"));
-    assertThat(eventSubprocess1.getFlowNodes().count(), is(14L));
-    assertThat(eventSubprocess1.getSequenceFlows().count(), is(7L));
+    assertThat(eventSubprocess1.flowNodes().count(), is(14L));
+    assertThat(eventSubprocess1.sequenceFlows().count(), is(7L));
 
     Set<StartEvent> startEvents = eventSubprocess1.getStartEvents();
     assertThat(startEvents.size(), is(7));
@@ -546,13 +546,12 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
                     true))));
 
     // Check event subprocess inside event subprocess
-    assertThat(eventSubprocess1.getEventSubprocesses().count(), is(1L));
+    assertThat(eventSubprocess1.eventSubprocesses().count(), is(1L));
     @SuppressWarnings("OptionalGetWithoutIsPresent") // Count is 1 means exactly one is present.
-    BPMNEventSubprocess eventSubprocess2 =
-        eventSubprocess1.getEventSubprocesses().findFirst().get();
+    BPMNEventSubprocess eventSubprocess2 = eventSubprocess1.eventSubprocesses().findFirst().get();
     assertThat(eventSubprocess2.getName(), is("Event subprocess2"));
-    assertThat(eventSubprocess2.getFlowNodes().count(), is(2L));
-    assertThat(eventSubprocess2.getSequenceFlows().count(), is(1L));
+    assertThat(eventSubprocess2.flowNodes().count(), is(2L));
+    assertThat(eventSubprocess2.sequenceFlows().count(), is(1L));
   }
 
   @Test
@@ -614,7 +613,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
 
   private Map<String, FlowNode> createFlowNodeNameToFlowNodeMap(BPMNProcess participant) {
     return participant
-        .getFlowNodes()
+        .flowNodes()
         .collect(Collectors.toMap(FlowNode::getName, Function.identity()));
   }
 }

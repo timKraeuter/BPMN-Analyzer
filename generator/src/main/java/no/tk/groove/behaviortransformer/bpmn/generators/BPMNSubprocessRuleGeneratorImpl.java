@@ -69,7 +69,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
       // All activities and gateways without incoming sequence flows get a token.
       callActivity
           .getSubProcessModel()
-          .getFlowNodes()
+          .flowNodes()
           .filter(flowNode -> flowNode.isTask() || flowNode.isGateway())
           .filter(flowNode -> flowNode.getIncomingFlows().findAny().isEmpty())
           .forEach(

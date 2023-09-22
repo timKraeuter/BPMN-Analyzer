@@ -29,7 +29,7 @@ public class BPMNEventSubprocess extends AbstractBPMNProcess {
   }
 
   public Set<StartEvent> getStartEvents() {
-    return this.getFlowNodes()
+    return this.flowNodes()
         .map(
             flowNode -> {
               ValueWrapper<StartEvent> valueWrapper = new ValueWrapper<>();

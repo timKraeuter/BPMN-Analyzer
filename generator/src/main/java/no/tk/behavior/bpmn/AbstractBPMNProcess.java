@@ -1,8 +1,10 @@
 package no.tk.behavior.bpmn;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 import no.tk.behavior.bpmn.auxiliary.visitors.AbstractProcessVisitor;
+import no.tk.behavior.bpmn.auxiliary.visitors.CallActivityFlowNodeVisitor;
 
 public abstract class AbstractBPMNProcess {
   private final String name;
@@ -21,16 +23,31 @@ public abstract class AbstractBPMNProcess {
     this.eventSubprocesses = eventSubprocesses;
   }
 
-  public Stream<BPMNEventSubprocess> getEventSubprocesses() {
+  public Stream<BPMNEventSubprocess> eventSubprocesses() {
     return eventSubprocesses.stream();
   }
 
-  public Stream<SequenceFlow> getSequenceFlows() {
+  public Stream<SequenceFlow> sequenceFlows() {
     return sequenceFlows.stream();
   }
 
-  public Stream<FlowNode> getFlowNodes() {
+  public Stream<FlowNode> flowNodes() {
     return flowNodes.stream();
+  }
+
+  public Stream<BPMNProcess> allSubProcesses() {
+    final LinkedHashSet<BPMNProcess> subProcesses = new LinkedHashSet<>();
+    flowNodes()
+        .forEach(
+            flowNode ->
+                flowNode.accept(
+                    new CallActivityFlowNodeVisitor(
+                        callAct -> {
+                          subProcesses.add(callAct.getSubProcessModel());
+                          subProcesses.addAll(
+                              callAct.getSubProcessModel().allSubProcesses().toList());
+                        })));
+    return subProcesses.stream();
   }
 
   public String getName() {

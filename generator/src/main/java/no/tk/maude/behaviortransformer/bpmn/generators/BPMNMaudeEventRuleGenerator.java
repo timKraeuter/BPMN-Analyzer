@@ -77,10 +77,10 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
         createMessageEndEventRule(process, endEvent, preTokens);
         break;
       case ERROR:
-        // TODO: Implement Error end events!
+        // TODO: Implement Error end events in Maude!
         break;
       case ESCALATION:
-        // TODO: Implement Escalation end events!
+        // TODO: Implement Escalation end events in Maude!
         break;
       case SIGNAL:
         createSignalEndEventRule(process, endEvent, preTokens);
@@ -296,7 +296,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
   private String createLinkThrowEventTokens(
       IntermediateThrowEvent intermediateThrowEvent, AbstractBPMNProcess process) {
     return process
-        .getFlowNodes()
+        .flowNodes()
         // Find corresponding link events (correct name and type)
         .filter(
             flowNode ->

@@ -306,7 +306,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
           BPMNProcess process, EndEvent endEvent) {
     List<Pair<BPMNEventSubprocess, List<StartEvent>>> startEventsPerEventSubprocess =
         process
-            .getEventSubprocesses()
+            .eventSubprocesses()
             .map(
                 bpmnEventSubprocess -> {
                   List<StartEvent> matchingStartEvents =
@@ -637,7 +637,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
   private Stream<FlowNode> findMatchingLinkCatchEvents(
       IntermediateThrowEvent intermediateThrowEvent, AbstractBPMNProcess process) {
     return process
-        .getFlowNodes()
+        .flowNodes()
         // Find corresponding link events (correct name and type)
         .filter(flowNode -> matchesLinkThrowEvent(intermediateThrowEvent, flowNode));
   }

@@ -18,6 +18,7 @@ import org.apache.commons.lang3.tuple.Pair;
 public class BPMNCollaboration implements Behavior {
   private final String name;
   private final Set<BPMNProcess> participants;
+
   /** Recursively derived from all call activities of the participants. */
   private final Set<BPMNProcess> allSubprocesses;
 
@@ -73,18 +74,18 @@ public class BPMNCollaboration implements Behavior {
       if (participant.equals(process)) {
         return process; // Process is at the top level
       }
-      if (participant.getSubProcesses().anyMatch(Predicate.isEqual(process))) {
+      if (participant.allSubProcesses().anyMatch(Predicate.isEqual(process))) {
         return participant;
       }
-      if (participant.getEventSubprocesses().anyMatch(Predicate.isEqual(process))) {
+      if (participant.eventSubprocesses().anyMatch(Predicate.isEqual(process))) {
         return participant;
       }
     }
     for (BPMNProcess subprocess : allSubprocesses) {
-      if (subprocess.getSubProcesses().anyMatch(Predicate.isEqual(process))) {
+      if (subprocess.allSubProcesses().anyMatch(Predicate.isEqual(process))) {
         return subprocess;
       }
-      if (subprocess.getEventSubprocesses().anyMatch(Predicate.isEqual(process))) {
+      if (subprocess.eventSubprocesses().anyMatch(Predicate.isEqual(process))) {
         return subprocess;
       }
     }
@@ -99,7 +100,7 @@ public class BPMNCollaboration implements Behavior {
   public AbstractBPMNProcess findProcessForFlowNode(FlowNode flowNode) {
     // Check participants and der event subprocesses first.
     for (BPMNProcess participant : this.getParticipants()) {
-      if (participant.getFlowNodes().anyMatch(Predicate.isEqual(flowNode))) {
+      if (participant.flowNodes().anyMatch(Predicate.isEqual(flowNode))) {
         return participant;
       }
       final Optional<BPMNEventSubprocess> eventSubprocess =
@@ -110,7 +111,7 @@ public class BPMNCollaboration implements Behavior {
     }
     // Check all other subprocesses and their event subprocesses.
     for (BPMNProcess subprocess : allSubprocesses) {
-      if (subprocess.getFlowNodes().anyMatch(Predicate.isEqual(flowNode))) {
+      if (subprocess.flowNodes().anyMatch(Predicate.isEqual(flowNode))) {
         return subprocess;
       }
       final Optional<BPMNEventSubprocess> eventSubprocess =
@@ -127,8 +128,8 @@ public class BPMNCollaboration implements Behavior {
   private Optional<BPMNEventSubprocess> getFromEVSubprocessIfExists(
       FlowNode flowNode, BPMNProcess participant) {
     return participant
-        .getEventSubprocesses()
-        .filter(evSubprocess -> evSubprocess.getFlowNodes().anyMatch(Predicate.isEqual(flowNode)))
+        .eventSubprocesses()
+        .filter(evSubprocess -> evSubprocess.flowNodes().anyMatch(Predicate.isEqual(flowNode)))
         .findFirst();
   }
 
@@ -158,7 +159,7 @@ public class BPMNCollaboration implements Behavior {
     seenProcesses.add(process);
 
     process
-        .getFlowNodes()
+        .flowNodes()
         .forEach(
             flowNode ->
                 flowNode.accept(
@@ -169,11 +170,11 @@ public class BPMNCollaboration implements Behavior {
                         signalBoundaryCatchEvents,
                         seenProcesses)));
     process
-        .getEventSubprocesses()
+        .eventSubprocesses()
         .forEach(
             eventSubprocess ->
                 eventSubprocess
-                    .getFlowNodes()
+                    .flowNodes()
                     .forEach(
                         flowNode ->
                             flowNode.accept(

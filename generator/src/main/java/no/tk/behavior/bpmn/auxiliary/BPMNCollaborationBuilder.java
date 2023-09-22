@@ -67,7 +67,7 @@ public class BPMNCollaborationBuilder implements BPMNModelBuilder {
                   || !participants.contains(subProcessModel)) {
                 subprocesses.add(subProcessModel);
                 subProcessModel
-                    .getFlowNodes()
+                    .flowNodes()
                     .forEach(BPMNCollaborationBuilder.this::findAndAddSubProcessIfPresent);
               }
             }));

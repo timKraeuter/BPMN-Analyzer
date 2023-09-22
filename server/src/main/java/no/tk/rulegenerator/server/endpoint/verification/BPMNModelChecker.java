@@ -168,12 +168,12 @@ public class BPMNModelChecker {
     // Get all activities from subprocesses
     final Map<String, String> allActivityNames =
         process
-            .getSubProcesses()
+            .allSubProcesses()
             .flatMap(subprocess -> getAllActivities(subprocess).entrySet().stream())
             .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
     // Get all activities from event subprocesses
     process
-        .getEventSubprocesses()
+        .eventSubprocesses()
         .flatMap(eventSubprocess -> getAllActivities(eventSubprocess).entrySet().stream())
         .forEach(
             nameToIdEntry ->
@@ -187,7 +187,7 @@ public class BPMNModelChecker {
     // Get all activities from subprocesses
     Map<String, String> nameToIdActivityMap =
         process
-            .getEventSubprocesses()
+            .eventSubprocesses()
             .flatMap(eventSubprocess -> getAllActivities(eventSubprocess).entrySet().stream())
             .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
 
@@ -198,7 +198,7 @@ public class BPMNModelChecker {
   private void addActivityNamesForProcess(
       AbstractBPMNProcess process, Map<String, String> nameToIdActivityMap) {
     process
-        .getFlowNodes()
+        .flowNodes()
         .filter(FlowNode::isTask)
         .forEach(task -> nameToIdActivityMap.put(task.getName(), task.getId()));
   }

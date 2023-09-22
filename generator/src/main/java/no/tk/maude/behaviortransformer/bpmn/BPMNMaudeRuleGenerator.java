@@ -55,7 +55,7 @@ public class BPMNMaudeRuleGenerator {
 
   public void generateRulesForProcess(AbstractBPMNProcess process) {
     process
-        .getFlowNodes()
+        .flowNodes()
         .forEach(node -> node.accept(new MaudeRuleGenerationFlowNodeVisitor(this, process)));
   }
 

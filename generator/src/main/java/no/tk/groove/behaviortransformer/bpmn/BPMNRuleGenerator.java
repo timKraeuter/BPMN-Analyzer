@@ -86,7 +86,7 @@ public class BPMNRuleGenerator {
 
   public void generateRulesForProcess(AbstractBPMNProcess process) {
     process
-        .getFlowNodes()
+        .flowNodes()
         .forEach(node -> node.accept(new GrooveRuleGenerationFlowNodeVisitor(this, process)));
 
     getEventSubprocessRuleGenerator().generateRulesForEventSubprocesses(process);

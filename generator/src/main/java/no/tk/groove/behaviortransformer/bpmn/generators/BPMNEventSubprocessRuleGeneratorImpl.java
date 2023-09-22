@@ -1,6 +1,5 @@
 package no.tk.groove.behaviortransformer.bpmn.generators;
 
-import static no.tk.behavior.bpmn.events.StartEventType.*;
 import static no.tk.groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
 
@@ -31,7 +30,7 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
   @Override
   public void generateRulesForEventSubprocesses(AbstractBPMNProcess process) {
     process
-        .getEventSubprocesses()
+        .eventSubprocesses()
         .forEach(eventSubprocess -> this.generateRulesForEventSubprocess(process, eventSubprocess));
   }
 
