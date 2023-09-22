@@ -98,12 +98,12 @@ mod BPMN-EXECUTION-timer-events is
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [timer_Event_18xqymg] :  < o0 : ProcessSnapshot | name : "timer-events", tokens : ("start_timer (Flow_0f6lljq)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "timer-events", tokens : ("timer_end (Flow_0nw006b)" T), signals : (none), subprocesses : (S), state : Running > .
-    rl [end_Event_0shqoph] :  < o0 : ProcessSnapshot | name : "timer-events", tokens : ("timer_end (Flow_0nw006b)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "timer-events", tokens : (T), signals : (none), subprocesses : (S), state : Running > .
+    rl [timer_Event_18xqymg] :  < o0 : ProcessSnapshot | name : "timer-events", tokens : ("start -> timer (Flow_0f6lljq)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "timer-events", tokens : ("timer -> end (Flow_0nw006b)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [end_Event_0shqoph] :  < o0 : ProcessSnapshot | name : "timer-events", tokens : ("timer -> end (Flow_0nw006b)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "timer-events", tokens : (T), signals : (none), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "timer-events" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "timer-events", tokens : ("start_timer (Flow_0f6lljq)"), signals : (none), subprocesses : (none), state : Running >) > .
+    eq init = < "timer-events" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "timer-events", tokens : ("start -> timer (Flow_0f6lljq)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is

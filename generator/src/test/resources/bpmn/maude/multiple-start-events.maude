@@ -98,15 +98,15 @@ mod BPMN-EXECUTION-multiple-start-events is
     vars P : Configuration . --- processes
 
     --- Generated rules
-    rl [p_p1_Gateway_0djwvv3] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("start2_p1_p_p1 (Flow_1bwtd34)" "start1_p1_p_p1 (Flow_1p3gdcm)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : ("p_p1_end_p1 (Flow_1hji70l)" T), signals : (none), subprocesses : (S), state : Running > .
-    rl [end_p1_Event_0i28wix] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("p_p1_end_p1 (Flow_1hji70l)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : (T), signals : (none), subprocesses : (S), state : Running > .
-    rl [p_p2_Gateway_09ghyqt] :  < o0 : ProcessSnapshot | name : "p2", tokens : ("start2_p2_p_p2 (Flow_1f9dgmw)" "start1_p2_p_p2 (Flow_120g9dm)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p2", tokens : ("p_p2_end_p2 (Flow_17dpz8t)" T), signals : (none), subprocesses : (S), state : Running > .
-    rl [end_p2_Event_1hg9h1w] :  < o0 : ProcessSnapshot | name : "p2", tokens : ("p_p2_end_p2 (Flow_17dpz8t)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p2", tokens : (T), signals : (none), subprocesses : (S), state : Running > .
+    rl [p_p1_Gateway_0djwvv3] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("start2_p1 -> p_p1 (Flow_1bwtd34)" "start1_p1 -> p_p1 (Flow_1p3gdcm)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : ("p_p1 -> end_p1 (Flow_1hji70l)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [end_p1_Event_0i28wix] :  < o0 : ProcessSnapshot | name : "p1", tokens : ("p_p1 -> end_p1 (Flow_1hji70l)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p1", tokens : (T), signals : (none), subprocesses : (S), state : Running > .
+    rl [p_p2_Gateway_09ghyqt] :  < o0 : ProcessSnapshot | name : "p2", tokens : ("start2_p2 -> p_p2 (Flow_1f9dgmw)" "start1_p2 -> p_p2 (Flow_120g9dm)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p2", tokens : ("p_p2 -> end_p2 (Flow_17dpz8t)" T), signals : (none), subprocesses : (S), state : Running > .
+    rl [end_p2_Event_1hg9h1w] :  < o0 : ProcessSnapshot | name : "p2", tokens : ("p_p2 -> end_p2 (Flow_17dpz8t)" T), signals : (SIG), subprocesses : (S), state : Running > => < o0 : ProcessSnapshot | name : "p2", tokens : (T), signals : (none), subprocesses : (S), state : Running > .
 
     --- Start configuration which would be generated
     op init : -> Configuration .
-    eq init = < "multiple-start-events" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "p1", tokens : ("start1_p1_p_p1 (Flow_1p3gdcm)" "start2_p1_p_p1 (Flow_1bwtd34)"), signals : (none), subprocesses : (none), state : Running >
-    < "1" : ProcessSnapshot | name : "p2", tokens : ("start1_p2_p_p2 (Flow_120g9dm)" "start2_p2_p_p2 (Flow_1f9dgmw)"), signals : (none), subprocesses : (none), state : Running >) > .
+    eq init = < "multiple-start-events" : BPMNSystem | messages : (none), processes : (< "0" : ProcessSnapshot | name : "p1", tokens : ("start1_p1 -> p_p1 (Flow_1p3gdcm)" "start2_p1 -> p_p1 (Flow_1bwtd34)"), signals : (none), subprocesses : (none), state : Running >
+    < "1" : ProcessSnapshot | name : "p2", tokens : ("start1_p2 -> p_p2 (Flow_120g9dm)" "start2_p2 -> p_p2 (Flow_1f9dgmw)"), signals : (none), subprocesses : (none), state : Running >) > .
 endm
 
 mod BPMN-PREDS is
