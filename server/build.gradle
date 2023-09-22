@@ -1,82 +1,83 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.6'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
-	// Analysis
-	id "org.sonarqube" version "3.4.0.2513"
-	id 'jacoco'
-	id ("net.ltgt.errorprone") version "3.0.1"
-	id "com.diffplug.spotless" version "6.11.0"
+    id 'org.springframework.boot' version '2.6.6'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    // Analysis
+    id "org.sonarqube" version "3.4.0.2513"
+    id 'jacoco'
+    id("net.ltgt.errorprone") version "3.0.1"
+    id "com.diffplug.spotless" version "6.11.0"
 }
 
 group = 'no.hvl.tk'
 version = '1.0.0'
 sourceCompatibility = '17'
+// TODO: Need to build a new groove version since groove is only compatible up to java 11.
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'no.hvl.tk:ruleGenerator:1'
+    implementation 'no.hvl.tk:ruleGenerator:1'
 
-	// XML-marshalling not part of jdk 11 anymore.
-	// https://mvnrepository.com/artifact/jakarta.xml.bind/jaxb-api
-	implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.0'
-	// https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-core
-	implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.2'
-	// https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api
-	implementation group: 'jakarta.activation', name: 'jakarta.activation-api', version: '2.1.1'
+    // XML-marshalling not part of jdk 11 anymore.
+    // https://mvnrepository.com/artifact/jakarta.xml.bind/jaxb-api
+    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.0'
+    // https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-core
+    implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.2'
+    // https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api
+    implementation group: 'jakarta.activation', name: 'jakarta.activation-api', version: '2.1.1'
 
-	// Add pair class
-	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
-	// https://mvnrepository.com/artifact/commons-io/commons-io
-	implementation 'commons-io:commons-io:2.11.0'
+    // Add pair class
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation 'commons-io:commons-io:2.11.0'
 
-	// Spring
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	// Form data request for testing
-	// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime
-	testImplementation 'org.apache.httpcomponents:httpmime:4.5.13'
-	// Guava
-	// https://mvnrepository.com/artifact/com.google.guava/guava
-	testImplementation 'com.google.guava:guava:31.1-jre'
-	// toString of input streams.
-	// https://mvnrepository.com/artifact/commons-io/commons-io
-	testImplementation 'commons-io:commons-io:2.11.0'
+    // Spring
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // Form data request for testing
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime
+    testImplementation 'org.apache.httpcomponents:httpmime:4.5.13'
+    // Guava
+    // https://mvnrepository.com/artifact/com.google.guava/guava
+    testImplementation 'com.google.guava:guava:31.1-jre'
+    // toString of input streams.
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    testImplementation 'commons-io:commons-io:2.11.0'
 
-	errorprone("com.google.errorprone:error_prone_core:2.16")
+    errorprone("com.google.errorprone:error_prone_core:2.16")
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 jacocoTestReport {
-	reports {
-		xml.enabled true
-		xml.destination file("${buildDir}/reports/jacoco.xml")
-	}
+    reports {
+        xml.enabled true
+        xml.destination file("${buildDir}/reports/jacoco.xml")
+    }
 }
 
 sonarqube {
-	properties {
-		property "sonar.projectKey", "timkraeuter_Groove_Rule_Generation_Server"
-		property "sonar.organization", "timkraeuter"
-		property "sonar.host.url", "https://sonarcloud.io"
-	}
+    properties {
+        property "sonar.projectKey", "timkraeuter_Groove_Rule_Generation_Server"
+        property "sonar.organization", "timkraeuter"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
 
 tasks.named('sonarqube').configure {
-	dependsOn jacocoTestReport
+    dependsOn jacocoTestReport
 }
 
 spotless {
-	java {
-		googleJavaFormat()
-		formatAnnotations()
-	}
+    java {
+        googleJavaFormat()
+        formatAnnotations()
+    }
 }
