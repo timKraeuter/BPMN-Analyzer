@@ -19,6 +19,13 @@ public abstract class FlowElement {
     return name;
   }
 
+  public String getNameOrIDIfEmpty() {
+    if (getName().isEmpty()) {
+      return getId();
+    }
+    return getName();
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {

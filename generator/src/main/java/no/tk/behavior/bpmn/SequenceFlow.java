@@ -18,13 +18,6 @@ public class SequenceFlow extends FlowElement {
     return getName();
   }
 
-  public String getNameOrIDIfEmpty() {
-    if (getName().isEmpty()) {
-      return getId();
-    }
-    return getName();
-  }
-
   public FlowNode getSource() {
     return source;
   }

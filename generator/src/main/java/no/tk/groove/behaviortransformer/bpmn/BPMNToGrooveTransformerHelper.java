@@ -297,9 +297,7 @@ public class BPMNToGrooveTransformerHelper {
     if (messageFlow.getTarget().isTask()) {
       // Instantiate tasks get a token on the task.
       addTokenWithPosition(
-          ruleBuilder,
-          newReceiverProcessInstance,
-          messageFlow.getTarget().getName());
+          ruleBuilder, newReceiverProcessInstance, messageFlow.getTarget().getName());
     } else {
       // Message start events get outgoing tokens
       addOutgoingTokensForFlowNodeToProcessInstance(
