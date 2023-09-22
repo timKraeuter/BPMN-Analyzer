@@ -48,7 +48,7 @@
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"start_Task_Flow_1f4z70z"</string>
+                <string>string:"start -&gt; Task"</string>
             </attr>
         </edge>
         <node id="n5">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n9" to="n9">
             <attr name="label">
-                <string>string:"start_trigger_signalOrMessage_Flow_0kk10m4"</string>
+                <string>string:"start_trigger -&gt; signalOrMessage"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">

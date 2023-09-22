@@ -48,7 +48,7 @@
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"start_sendEvent_Flow_1bq0iji"</string>
+                <string>string:"start -&gt; sendEvent"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">

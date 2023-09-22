@@ -68,7 +68,7 @@
         </node>
         <edge from="n60" to="n60">
             <attr name="label">
-                <string>string:"p1_a2_2_Flow_1id82hx"</string>
+                <string>string:"p1 -&gt; a2_2"</string>
             </attr>
         </edge>
         <node id="n62">
@@ -78,7 +78,7 @@
         </node>
         <edge from="n62" to="n62">
             <attr name="label">
-                <string>string:"a2_2_Activity_0v43tih"</string>
+                <string>string:"a2_2"</string>
             </attr>
         </edge>
         <edge from="n56" to="n61">

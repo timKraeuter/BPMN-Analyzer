@@ -33,7 +33,7 @@
         </edge>
         <node id="n32">
             <attr name="layout">
-                <string>1010 252 0 0</string>
+                <string>935 252 0 0</string>
             </attr>
         </node>
         <edge from="n32" to="n32">
@@ -103,7 +103,7 @@
         </node>
         <edge from="n26" to="n26">
             <attr name="label">
-                <string>string:"start_sub_esc_1_Flow_0vn41ty"</string>
+                <string>string:"start_sub -&gt; esc_1"</string>
             </attr>
         </edge>
         <node id="n28">
@@ -128,12 +128,12 @@
         </edge>
         <node id="n33">
             <attr name="layout">
-                <string>1382 252 0 0</string>
+                <string>1232 252 0 0</string>
             </attr>
         </node>
         <edge from="n33" to="n33">
             <attr name="label">
-                <string>string:"esc_1_Gateway_1h7r0ek_Flow_0i4w88p"</string>
+                <string>string:"esc_1 -&gt; Gateway_1h7r0ek"</string>
             </attr>
         </edge>
         <edge from="n29" to="n30">

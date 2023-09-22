@@ -73,7 +73,7 @@
         </node>
         <edge from="n22" to="n22">
             <attr name="label">
-                <string>string:"S2_Catch_2_S3_Throw_Flow_0njnnw5"</string>
+                <string>string:"S2_Catch_2 -&gt; S3_Throw"</string>
             </attr>
         </edge>
         <node id="n23">
@@ -133,7 +133,7 @@
         </node>
         <edge from="n29" to="n29">
             <attr name="label">
-                <string>string:"S2_Throw_S3_Catch_Flow_1e60pp7"</string>
+                <string>string:"S2_Throw -&gt; S3_Catch"</string>
             </attr>
         </edge>
         <node id="n31">
@@ -143,7 +143,7 @@
         </node>
         <edge from="n31" to="n31">
             <attr name="label">
-                <string>string:"S3_Catch_end_p2_Flow_00q9aa4"</string>
+                <string>string:"S3_Catch -&gt; end_p2"</string>
             </attr>
         </edge>
         <edge from="n25" to="n30">

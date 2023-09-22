@@ -53,7 +53,7 @@
         </node>
         <edge from="n71" to="n71">
             <attr name="label">
-                <string>string:"timer_timer_end_Flow_1rj4f8m"</string>
+                <string>string:"timer -&gt; timer_end"</string>
             </attr>
         </edge>
         <node id="n72">

@@ -43,7 +43,7 @@
         </node>
         <edge from="n59" to="n59">
             <attr name="label">
-                <string>string:"catch_esc1_end_sub2_Flow_0x6o1uw"</string>
+                <string>string:"catch_esc1 -&gt; end_sub2"</string>
             </attr>
         </edge>
         <node id="n60">

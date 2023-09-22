@@ -33,7 +33,7 @@
         </edge>
         <node id="n85">
             <attr name="layout">
-                <string>767 279 0 0</string>
+                <string>717 279 0 0</string>
             </attr>
         </node>
         <edge from="n85" to="n85">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n82" to="n82">
             <attr name="label">
-                <string>string:"catch_B_p3_end_p3_Flow_1p2rxrx"</string>
+                <string>string:"catch_B_p3 -&gt; end_p3"</string>
             </attr>
         </edge>
         <node id="n84">
@@ -108,12 +108,12 @@
         </node>
         <edge from="n84" to="n84">
             <attr name="label">
-                <string>string:"start_p3_catch_B_p3_Flow_18621tw"</string>
+                <string>string:"start_p3 -&gt; catch_B_p3"</string>
             </attr>
         </edge>
         <node id="n86">
             <attr name="layout">
-                <string>1257 279 0 0</string>
+                <string>1107 279 0 0</string>
             </attr>
         </node>
         <edge from="n86" to="n86">

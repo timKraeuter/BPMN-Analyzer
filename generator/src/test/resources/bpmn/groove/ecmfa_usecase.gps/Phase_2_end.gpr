@@ -93,7 +93,7 @@
         </node>
         <edge from="n193" to="n193">
             <attr name="label">
-                <string>string:"Phase_2_Switch_to_P1_72"</string>
+                <string>string:"Phase_2 -&gt; Switch_to_P1"</string>
             </attr>
         </edge>
         <edge from="n186" to="n192">

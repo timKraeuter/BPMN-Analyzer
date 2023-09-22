@@ -48,7 +48,7 @@
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"start_Error_Subprocess_Flow_18ztzne"</string>
+                <string>string:"start -&gt; Error_Subprocess"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">

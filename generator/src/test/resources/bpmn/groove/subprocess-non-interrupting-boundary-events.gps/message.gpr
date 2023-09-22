@@ -68,7 +68,7 @@
         </node>
         <edge from="n79" to="n79">
             <attr name="label">
-                <string>string:"message_message_end_Flow_0z1ut3g"</string>
+                <string>string:"message -&gt; message_end"</string>
             </attr>
         </edge>
         <node id="n81">

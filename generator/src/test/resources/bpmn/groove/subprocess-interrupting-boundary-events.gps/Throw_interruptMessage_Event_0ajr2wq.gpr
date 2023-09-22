@@ -83,7 +83,7 @@
         </node>
         <edge from="n167" to="n167">
             <attr name="label">
-                <string>string:"start_trigger_interruptMessage_Flow_0u2o9mg"</string>
+                <string>string:"start_trigger -&gt; interruptMessage"</string>
             </attr>
         </edge>
         <node id="n169">
@@ -93,7 +93,7 @@
         </node>
         <edge from="n169" to="n169">
             <attr name="label">
-                <string>string:"interruptMessage_interruptSignal_Flow_18eds9w"</string>
+                <string>string:"interruptMessage -&gt; interruptSignal"</string>
             </attr>
         </edge>
         <node id="n170">

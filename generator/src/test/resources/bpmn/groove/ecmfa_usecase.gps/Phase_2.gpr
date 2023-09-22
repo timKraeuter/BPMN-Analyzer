@@ -98,7 +98,7 @@
         </node>
         <edge from="n180" to="n180">
             <attr name="label">
-                <string>string:"B_is_green_t_Phase_2_71"</string>
+                <string>string:"B_is_green_t -&gt; Phase_2"</string>
             </attr>
         </edge>
         <node id="n182">
@@ -118,7 +118,7 @@
         </node>
         <edge from="n185" to="n185">
             <attr name="label">
-                <string>string:"Phase2_start_evp2_18"</string>
+                <string>string:"Phase2_start -&gt; evp2"</string>
             </attr>
         </edge>
         <edge from="n181" to="n182">

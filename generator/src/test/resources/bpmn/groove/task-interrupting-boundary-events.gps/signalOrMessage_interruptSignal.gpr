@@ -48,7 +48,7 @@
         </node>
         <edge from="n82" to="n82">
             <attr name="label">
-                <string>string:"start_trigger_signalOrMessage_Flow_0kk10m4"</string>
+                <string>string:"start_trigger -&gt; signalOrMessage"</string>
             </attr>
         </edge>
         <node id="n83">
@@ -58,7 +58,7 @@
         </node>
         <edge from="n83" to="n83">
             <attr name="label">
-                <string>string:"signalOrMessage_interruptSignal_Flow_0ldpkta"</string>
+                <string>string:"signalOrMessage -&gt; interruptSignal"</string>
             </attr>
         </edge>
         <edge from="n81" to="n83">

@@ -58,7 +58,7 @@
         </node>
         <edge from="n45" to="n45">
             <attr name="label">
-                <string>string:"start_p3_end_p3_Flow_16u01g7"</string>
+                <string>string:"start_p3 -&gt; end_p3"</string>
             </attr>
         </edge>
         <node id="n46">
@@ -138,7 +138,7 @@
         </node>
         <edge from="n54" to="n54">
             <attr name="label">
-                <string>string:"start_p2_Catch_2_Flow_0x23a3h"</string>
+                <string>string:"start_p2 -&gt; Catch_2"</string>
             </attr>
         </edge>
         <edge from="n48" to="n51">

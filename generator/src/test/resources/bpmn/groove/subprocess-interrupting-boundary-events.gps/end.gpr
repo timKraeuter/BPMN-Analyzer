@@ -43,7 +43,7 @@
         </node>
         <edge from="n156" to="n156">
             <attr name="label">
-                <string>string:"Subprocess3_end_Flow_0uhx7oz"</string>
+                <string>string:"Subprocess3 -&gt; end"</string>
             </attr>
         </edge>
         <node id="n157">

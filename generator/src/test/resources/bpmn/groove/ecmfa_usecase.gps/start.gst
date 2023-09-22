@@ -48,7 +48,7 @@
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"controller_started_e1_66"</string>
+                <string>string:"controller_started -&gt; e1"</string>
             </attr>
         </edge>
         <node id="n5">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n9" to="n9">
             <attr name="label">
-                <string>string:"Approaching_Junction_B_Request_TL_status_B_78"</string>
+                <string>string:"Approaching_Junction_B -&gt; Request_TL_status_B"</string>
             </attr>
         </edge>
         <node id="n10">
@@ -148,7 +148,7 @@
         </node>
         <edge from="n14" to="n14">
             <attr name="label">
-                <string>string:"Approaching_Junction_A_Request_TL_status_A_88"</string>
+                <string>string:"Approaching_Junction_A -&gt; Request_TL_status_A"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">

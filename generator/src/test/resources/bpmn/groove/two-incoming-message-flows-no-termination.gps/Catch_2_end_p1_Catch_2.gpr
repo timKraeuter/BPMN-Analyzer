@@ -33,7 +33,7 @@
         </edge>
         <node id="n33">
             <attr name="layout">
-                <string>752 279 0 0</string>
+                <string>702 279 0 0</string>
             </attr>
         </node>
         <edge from="n33" to="n33">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n30" to="n30">
             <attr name="label">
-                <string>string:"Catch_2_end_p2_Flow_0r4dq5g"</string>
+                <string>string:"Catch_2 -&gt; end_p2"</string>
             </attr>
         </edge>
         <node id="n32">
@@ -108,12 +108,12 @@
         </node>
         <edge from="n32" to="n32">
             <attr name="label">
-                <string>string:"start_p2_Catch_2_Flow_0x23a3h"</string>
+                <string>string:"start_p2 -&gt; Catch_2"</string>
             </attr>
         </edge>
         <node id="n34">
             <attr name="layout">
-                <string>1212 279 0 0</string>
+                <string>1062 279 0 0</string>
             </attr>
         </node>
         <edge from="n34" to="n34">

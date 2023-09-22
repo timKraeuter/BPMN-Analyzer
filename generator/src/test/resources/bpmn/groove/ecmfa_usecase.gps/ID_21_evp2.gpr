@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="ID_21_evp2" role="rule" edgeids="false" edgemode="directed">
+        <node id="n200">
+            <attr name="layout">
+                <string>62 85 0 0</string>
+            </attr>
+        </node>
+        <edge from="n200" to="n200">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n201">
+            <attr name="layout">
+                <string>392 232 0 0</string>
+            </attr>
+        </node>
+        <edge from="n201" to="n201">
+            <attr name="label">
+                <string>string:"Phase_2"</string>
+            </attr>
+        </edge>
+        <node id="n202">
+            <attr name="layout">
+                <string>392 72 0 0</string>
+            </attr>
+        </node>
+        <edge from="n202" to="n202">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n203">
+            <attr name="layout">
+                <string>452 152 0 0</string>
+            </attr>
+        </node>
+        <edge from="n203" to="n203">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n204">
+            <attr name="layout">
+                <string>652 224 0 0</string>
+            </attr>
+        </node>
+        <edge from="n204" to="n204">
+            <attr name="label">
+                <string>string:"B_green_t -&gt; evp2"</string>
+            </attr>
+        </edge>
+        <node id="n205">
+            <attr name="layout">
+                <string>652 144 0 0</string>
+            </attr>
+        </node>
+        <edge from="n205" to="n205">
+            <attr name="label">
+                <string>string:"evp2"</string>
+            </attr>
+        </edge>
+        <edge from="n203" to="n205">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n203" to="n204">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n200" to="n201">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n200" to="n202">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n200" to="n203">
+            <attr name="label">
+                <string>tokens</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

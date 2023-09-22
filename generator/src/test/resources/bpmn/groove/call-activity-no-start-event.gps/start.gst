@@ -48,7 +48,7 @@
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"start_Subprocess_Flow_1qfreid"</string>
+                <string>string:"start -&gt; Subprocess"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">

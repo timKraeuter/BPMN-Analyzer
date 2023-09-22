@@ -33,7 +33,7 @@
         </edge>
         <node id="n39">
             <attr name="layout">
-                <string>762 279 0 0</string>
+                <string>712 279 0 0</string>
             </attr>
         </node>
         <edge from="n39" to="n39">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n36" to="n36">
             <attr name="label">
-                <string>string:"EReceive_1_end_p1_Flow_1gnyidc"</string>
+                <string>string:"EReceive_1 -&gt; end_p1"</string>
             </attr>
         </edge>
         <node id="n38">
@@ -108,12 +108,12 @@
         </node>
         <edge from="n38" to="n38">
             <attr name="label">
-                <string>string:"TSend_1_EReceive_1_Flow_1gg7pzo"</string>
+                <string>string:"TSend_1 -&gt; EReceive_1"</string>
             </attr>
         </edge>
         <node id="n40">
             <attr name="layout">
-                <string>1242 279 0 0</string>
+                <string>1092 279 0 0</string>
             </attr>
         </node>
         <edge from="n40" to="n40">

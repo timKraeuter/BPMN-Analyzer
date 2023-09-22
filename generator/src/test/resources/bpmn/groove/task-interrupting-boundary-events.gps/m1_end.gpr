@@ -43,7 +43,7 @@
         </node>
         <edge from="n50" to="n50">
             <attr name="label">
-                <string>string:"m1_m1_end_Flow_0y1lybr"</string>
+                <string>string:"m1 -&gt; m1_end"</string>
             </attr>
         </edge>
         <node id="n51">

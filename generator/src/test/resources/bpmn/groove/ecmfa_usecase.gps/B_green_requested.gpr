@@ -98,7 +98,7 @@
         </node>
         <edge from="n106" to="n106">
             <attr name="label">
-                <string>string:"B_green_requested_Phase1_end_11"</string>
+                <string>string:"B_green_requested -&gt; Phase1_end"</string>
             </attr>
         </edge>
         <node id="n108">

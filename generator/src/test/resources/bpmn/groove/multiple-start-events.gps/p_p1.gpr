@@ -83,7 +83,7 @@
         </node>
         <edge from="n18" to="n18">
             <attr name="label">
-                <string>string:"start2_p1_p_p1_Flow_1bwtd34"</string>
+                <string>string:"start2_p1 -&gt; p_p1"</string>
             </attr>
         </edge>
         <node id="n20">
@@ -93,7 +93,7 @@
         </node>
         <edge from="n20" to="n20">
             <attr name="label">
-                <string>string:"start1_p1_p_p1_Flow_1p3gdcm"</string>
+                <string>string:"start1_p1 -&gt; p_p1"</string>
             </attr>
         </edge>
         <node id="n22">
@@ -103,7 +103,7 @@
         </node>
         <edge from="n22" to="n22">
             <attr name="label">
-                <string>string:"p_p1_end_p1_Flow_1hji70l"</string>
+                <string>string:"p_p1 -&gt; end_p1"</string>
             </attr>
         </edge>
         <edge from="n14" to="n21">

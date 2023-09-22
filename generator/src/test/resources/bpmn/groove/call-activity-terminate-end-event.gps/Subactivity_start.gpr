@@ -68,7 +68,7 @@
         </node>
         <edge from="n41" to="n41">
             <attr name="label">
-                <string>string:"start_sub_Subactivity_Flow_1963tcn"</string>
+                <string>string:"start_sub -&gt; Subactivity"</string>
             </attr>
         </edge>
         <node id="n43">
@@ -78,7 +78,7 @@
         </node>
         <edge from="n43" to="n43">
             <attr name="label">
-                <string>string:"Subactivity_Activity_023wdnt"</string>
+                <string>string:"Subactivity"</string>
             </attr>
         </edge>
         <edge from="n37" to="n42">

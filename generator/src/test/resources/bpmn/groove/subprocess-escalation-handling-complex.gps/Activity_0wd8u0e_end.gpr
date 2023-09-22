@@ -93,7 +93,7 @@
         </node>
         <edge from="n22" to="n22">
             <attr name="label">
-                <string>string:"Activity_0wd8u0e_end_Flow_17m7m16"</string>
+                <string>string:"Activity_0wd8u0e -&gt; end"</string>
             </attr>
         </edge>
         <edge from="n15" to="n21">

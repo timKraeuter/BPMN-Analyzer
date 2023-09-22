@@ -98,7 +98,7 @@
         </node>
         <edge from="n158" to="n158">
             <attr name="label">
-                <string>string:"start_sub_p2_S1_throw_Flow_052p2o6"</string>
+                <string>string:"start_sub_p2 -&gt; S1_throw"</string>
             </attr>
         </edge>
         <node id="n160">
@@ -108,7 +108,7 @@
         </node>
         <edge from="n160" to="n160">
             <attr name="label">
-                <string>string:"S1_throw_message_catch_Flow_0m8wslc"</string>
+                <string>string:"S1_throw -&gt; message_catch"</string>
             </attr>
         </edge>
         <node id="n161">
@@ -158,7 +158,7 @@
         </node>
         <edge from="n166" to="n166">
             <attr name="label">
-                <string>string:"start_p2_S1_catch_Flow_177pz9l"</string>
+                <string>string:"start_p2 -&gt; S1_catch"</string>
             </attr>
         </edge>
         <node id="n168">
@@ -168,7 +168,7 @@
         </node>
         <edge from="n168" to="n168">
             <attr name="label">
-                <string>string:"S1_catch_message_throw_Flow_11aeugh"</string>
+                <string>string:"S1_catch -&gt; message_throw"</string>
             </attr>
         </edge>
         <edge from="n154" to="n159">

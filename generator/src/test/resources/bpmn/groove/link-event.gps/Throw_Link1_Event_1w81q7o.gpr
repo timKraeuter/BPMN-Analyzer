@@ -83,7 +83,7 @@
         </node>
         <edge from="n60" to="n60">
             <attr name="label">
-                <string>string:"p2_pg1_Link1_Flow_0lfpdhx"</string>
+                <string>string:"p2_pg1 -&gt; Link1"</string>
             </attr>
         </edge>
         <node id="n62">
@@ -93,7 +93,7 @@
         </node>
         <edge from="n62" to="n62">
             <attr name="label">
-                <string>string:"Link1_p2_pg2_Flow_0yi349b"</string>
+                <string>string:"Link1 -&gt; p2_pg2"</string>
             </attr>
         </edge>
         <node id="n64">
@@ -103,7 +103,7 @@
         </node>
         <edge from="n64" to="n64">
             <attr name="label">
-                <string>string:"Link1_p2_pg2_Flow_0z8awck"</string>
+                <string>string:"Link1 -&gt; p2_pg2"</string>
             </attr>
         </edge>
         <edge from="n56" to="n61">

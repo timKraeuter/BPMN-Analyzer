@@ -43,7 +43,7 @@
         </node>
         <edge from="n47" to="n47">
             <attr name="label">
-                <string>string:"Handle_error_end_sub_Flow_0w3zrp0"</string>
+                <string>string:"Handle_error -&gt; end_sub"</string>
             </attr>
         </edge>
         <node id="n48">

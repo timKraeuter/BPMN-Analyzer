@@ -33,7 +33,7 @@
         </edge>
         <node id="n13">
             <attr name="layout">
-                <string>1217 252 0 0</string>
+                <string>1142 252 0 0</string>
             </attr>
         </node>
         <edge from="n13" to="n13">
@@ -48,7 +48,7 @@
         </edge>
         <node id="n15">
             <attr name="layout">
-                <string>1217 432 0 0</string>
+                <string>1142 432 0 0</string>
             </attr>
         </node>
         <edge from="n15" to="n15">
@@ -63,7 +63,7 @@
         </edge>
         <node id="n17">
             <attr name="layout">
-                <string>1217 162 0 0</string>
+                <string>1142 162 0 0</string>
             </attr>
         </node>
         <edge from="n17" to="n17">
@@ -128,7 +128,7 @@
         </node>
         <edge from="n9" to="n9">
             <attr name="label">
-                <string>string:"start_Subprocess_Flow_1qfreid"</string>
+                <string>string:"start -&gt; Subprocess"</string>
             </attr>
         </edge>
         <node id="n11">
@@ -143,32 +143,32 @@
         </edge>
         <node id="n14">
             <attr name="layout">
-                <string>1597 252 0 0</string>
+                <string>1447 252 0 0</string>
             </attr>
         </node>
         <edge from="n14" to="n14">
             <attr name="label">
-                <string>string:"A_Activity_0palugd"</string>
+                <string>string:"A"</string>
             </attr>
         </edge>
         <node id="n16">
             <attr name="layout">
-                <string>1597 432 0 0</string>
+                <string>1447 432 0 0</string>
             </attr>
         </node>
         <edge from="n16" to="n16">
             <attr name="label">
-                <string>string:"e1_Gateway_1icv858"</string>
+                <string>string:"e1"</string>
             </attr>
         </edge>
         <node id="n18">
             <attr name="layout">
-                <string>1597 162 0 0</string>
+                <string>1447 162 0 0</string>
             </attr>
         </node>
         <edge from="n18" to="n18">
             <attr name="label">
-                <string>string:"p1_Gateway_1dk047s"</string>
+                <string>string:"p1"</string>
             </attr>
         </edge>
         <edge from="n10" to="n11">

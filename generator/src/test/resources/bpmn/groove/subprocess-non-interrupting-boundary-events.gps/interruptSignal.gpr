@@ -58,7 +58,7 @@
         </node>
         <edge from="n111" to="n111">
             <attr name="label">
-                <string>string:"signalOrMessage_interruptSignal_Flow_1wwo81f"</string>
+                <string>string:"signalOrMessage -&gt; interruptSignal"</string>
             </attr>
         </edge>
         <node id="n112">
@@ -73,7 +73,7 @@
         </edge>
         <node id="n113">
             <attr name="layout">
-                <string>1357 518 0 0</string>
+                <string>1207 518 0 0</string>
             </attr>
         </node>
         <edge from="n113" to="n113">
@@ -103,7 +103,7 @@
         </edge>
         <node id="n116">
             <attr name="layout">
-                <string>945 645 0 0</string>
+                <string>870 645 0 0</string>
             </attr>
         </node>
         <edge from="n116" to="n116">
@@ -118,7 +118,7 @@
         </node>
         <edge from="n118" to="n118">
             <attr name="label">
-                <string>string:"signal_signal_end_Flow_0y8xnla"</string>
+                <string>string:"signal -&gt; signal_end"</string>
             </attr>
         </edge>
         <node id="n119">
@@ -143,7 +143,7 @@
         </edge>
         <node id="n121">
             <attr name="layout">
-                <string>945 483 0 0</string>
+                <string>870 483 0 0</string>
             </attr>
         </node>
         <edge from="n121" to="n121">

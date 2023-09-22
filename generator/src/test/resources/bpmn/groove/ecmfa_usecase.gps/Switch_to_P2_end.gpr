@@ -68,7 +68,7 @@
         </node>
         <edge from="n150" to="n150">
             <attr name="label">
-                <string>string:"Switch_to_P2_28"</string>
+                <string>string:"Switch_to_P2"</string>
             </attr>
         </edge>
         <node id="n152">
@@ -78,7 +78,7 @@
         </node>
         <edge from="n152" to="n152">
             <attr name="label">
-                <string>string:"Switch_to_P2_B_is_green_t_70"</string>
+                <string>string:"Switch_to_P2 -&gt; B_is_green_t"</string>
             </attr>
         </edge>
         <edge from="n146" to="n151">

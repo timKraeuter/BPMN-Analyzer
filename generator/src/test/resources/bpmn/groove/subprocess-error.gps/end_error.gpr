@@ -43,7 +43,7 @@
         </node>
         <edge from="n61" to="n61">
             <attr name="label">
-                <string>string:"catch_error_end_error_Flow_1pn9st2"</string>
+                <string>string:"catch_error -&gt; end_error"</string>
             </attr>
         </edge>
         <node id="n62">

@@ -53,7 +53,7 @@
         </node>
         <edge from="n28" to="n28">
             <attr name="label">
-                <string>string:"t1_t1_end_Flow_1jzbhgq"</string>
+                <string>string:"t1 -&gt; t1_end"</string>
             </attr>
         </edge>
         <node id="n29">
@@ -73,7 +73,7 @@
         </node>
         <edge from="n30" to="n30">
             <attr name="label">
-                <string>string:"Task_Activity_0l12w7i"</string>
+                <string>string:"Task"</string>
             </attr>
         </edge>
         <edge from="n24" to="n27">

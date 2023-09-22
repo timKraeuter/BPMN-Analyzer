@@ -48,7 +48,7 @@
         </node>
         <edge from="n360" to="n360">
             <attr name="label">
-                <string>string:"Request_TL_status_B_ev1_B_79"</string>
+                <string>string:"Request_TL_status_B -&gt; ev1_B"</string>
             </attr>
         </edge>
         <node id="n361">

@@ -48,7 +48,7 @@
         </node>
         <edge from="n319" to="n319">
             <attr name="label">
-                <string>string:"A_C_are_green_t_e2_75"</string>
+                <string>string:"A_C_are_green_t -&gt; e2"</string>
             </attr>
         </edge>
         <node id="n320">
@@ -58,7 +58,7 @@
         </node>
         <edge from="n320" to="n320">
             <attr name="label">
-                <string>string:"stop_77"</string>
+                <string>string:"stop"</string>
             </attr>
         </edge>
         <edge from="n318" to="n320">

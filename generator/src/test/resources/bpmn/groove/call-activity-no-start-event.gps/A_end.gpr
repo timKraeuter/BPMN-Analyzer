@@ -68,7 +68,7 @@
         </node>
         <edge from="n31" to="n31">
             <attr name="label">
-                <string>string:"A_Activity_0palugd"</string>
+                <string>string:"A"</string>
             </attr>
         </edge>
         <node id="n33">
@@ -78,7 +78,7 @@
         </node>
         <edge from="n33" to="n33">
             <attr name="label">
-                <string>string:"A_endA_Flow_020erk8"</string>
+                <string>string:"A -&gt; endA"</string>
             </attr>
         </edge>
         <edge from="n27" to="n32">

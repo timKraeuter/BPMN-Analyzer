@@ -83,7 +83,7 @@
         </node>
         <edge from="n395" to="n395">
             <attr name="label">
-                <string>string:"Request_green_tl_B_40"</string>
+                <string>string:"Request_green_tl_B"</string>
             </attr>
         </edge>
         <node id="n397">
@@ -93,7 +93,7 @@
         </node>
         <edge from="n397" to="n397">
             <attr name="label">
-                <string>string:"Request_green_tl_B_B_is_green_signal_83"</string>
+                <string>string:"Request_green_tl_B -&gt; B_is_green_signal"</string>
             </attr>
         </edge>
         <node id="n398">
