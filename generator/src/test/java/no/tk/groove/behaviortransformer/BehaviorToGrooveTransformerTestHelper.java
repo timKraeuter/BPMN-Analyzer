@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 import no.tk.behavior.Behavior;
 import no.tk.groove.graph.GrooveNode;
 import no.tk.util.FileTestHelper;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.file.PathUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

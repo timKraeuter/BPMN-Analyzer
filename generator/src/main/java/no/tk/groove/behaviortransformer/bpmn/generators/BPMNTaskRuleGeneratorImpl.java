@@ -1,5 +1,6 @@
 package no.tk.groove.behaviortransformer.bpmn.generators;
 
+import static no.tk.groove.behaviortransformer.bpmn.BPMNRuleGenerator.getTaskOrCallActivityRuleName;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.END;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.START;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.*;
@@ -7,7 +8,6 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelpe
 import java.util.function.Consumer;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
-import no.tk.behavior.bpmn.FlowNode;
 import no.tk.behavior.bpmn.SequenceFlow;
 import no.tk.behavior.bpmn.activities.tasks.AbstractTask;
 import no.tk.behavior.bpmn.activities.tasks.ReceiveTask;
@@ -86,9 +86,9 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         .getIncomingMessageFlows(receiveTask)
         .forEach(
             messageFlow -> {
-              final String incomingFlowId = incomingFlow.getDescriptiveName();
               ruleBuilder.startRule(
-                  this.getTaskOrCallActivityRuleName(receiveTask, incomingFlowId) + START);
+                  getTaskOrCallActivityRuleName(receiveTask, incomingFlow.getNameOrIDIfEmpty())
+                      + START);
               GrooveNode processInstance =
                   BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
               BPMNToGrooveTransformerHelper.deleteMessageToProcessInstanceWithPosition(
@@ -177,12 +177,12 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
       AbstractTask task,
       SequenceFlow incomingFlow,
       Consumer<GrooveNode> startTaskRuleAdditions) {
-    final String incomingFlowId = incomingFlow.getDescriptiveName();
-    ruleBuilder.startRule(this.getTaskOrCallActivityRuleName(task, incomingFlowId) + START);
+    ruleBuilder.startRule(
+        getTaskOrCallActivityRuleName(task, incomingFlow.getNameOrIDIfEmpty()) + START);
     GrooveNode processInstance =
         BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
     BPMNToGrooveTransformerHelper.deleteTokenWithPosition(
-        ruleBuilder, processInstance, incomingFlowId);
+        ruleBuilder, processInstance, incomingFlow.getDescriptiveName());
     BPMNToGrooveTransformerHelper.addTokenWithPosition(
         ruleBuilder, processInstance, task.getName());
     startTaskRuleAdditions.accept(processInstance);
@@ -208,12 +208,5 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
             });
     endTaskRuleAdditions.accept(ruleBuilder);
     ruleBuilder.buildRule();
-  }
-
-  String getTaskOrCallActivityRuleName(FlowNode taskOrCallActivity, String incomingFlowId) {
-    if (taskOrCallActivity.getIncomingFlows().count() > 1) {
-      return taskOrCallActivity.getName() + "_" + incomingFlowId;
-    }
-    return taskOrCallActivity.getName();
   }
 }

@@ -1,5 +1,6 @@
 package no.tk.groove.behaviortransformer.bpmn.generators;
 
+import static no.tk.groove.behaviortransformer.bpmn.BPMNRuleGenerator.getTaskOrCallActivityRuleName;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.*;
 
@@ -46,12 +47,11 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
 
   void createSubProcessInstantiationRule(
       AbstractBPMNProcess process, CallActivity callActivity, SequenceFlow incomingFlow) {
-    final String incomingFlowId = incomingFlow.getDescriptiveName();
     ruleBuilder.startRule(
-        bpmnRuleGenerator.getTaskOrCallActivityRuleName(callActivity, incomingFlowId));
+        getTaskOrCallActivityRuleName(callActivity, incomingFlow.getNameOrIDIfEmpty()));
     GrooveNode processInstance = contextProcessInstance(process, ruleBuilder);
     BPMNToGrooveTransformerHelper.deleteTokenWithPosition(
-        ruleBuilder, processInstance, incomingFlowId);
+        ruleBuilder, processInstance, incomingFlow.getDescriptiveName());
 
     GrooveNode subProcessInstance =
         addProcessInstance(ruleBuilder, callActivity.getSubProcessModel().getName());

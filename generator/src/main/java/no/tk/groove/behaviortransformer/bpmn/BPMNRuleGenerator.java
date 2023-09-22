@@ -93,7 +93,8 @@ public class BPMNRuleGenerator {
   }
 
   // Methods shared between the generators.
-  public String getTaskOrCallActivityRuleName(FlowNode taskOrCallActivity, String incomingFlowId) {
+  public static String getTaskOrCallActivityRuleName(
+      FlowNode taskOrCallActivity, String incomingFlowId) {
     if (taskOrCallActivity.getIncomingFlows().count() > 1) {
       return taskOrCallActivity.getName() + "_" + incomingFlowId;
     }
