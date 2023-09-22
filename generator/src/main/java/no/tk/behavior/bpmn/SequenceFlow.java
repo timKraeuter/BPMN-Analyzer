@@ -1,5 +1,7 @@
 package no.tk.behavior.bpmn;
 
+import no.tk.behavior.bpmn.auxiliary.visitors.FlowElementVisitor;
+
 public class SequenceFlow extends FlowElement {
   private final FlowNode source;
   private final FlowNode target;
@@ -8,6 +10,11 @@ public class SequenceFlow extends FlowElement {
     super(id, name);
     this.source = source;
     this.target = target;
+  }
+
+  @Override
+  public void accept(FlowElementVisitor visitor) {
+    visitor.handle(this);
   }
 
   /** Descriptive names might not be unique! Only the id is guaranteed to be unique. */

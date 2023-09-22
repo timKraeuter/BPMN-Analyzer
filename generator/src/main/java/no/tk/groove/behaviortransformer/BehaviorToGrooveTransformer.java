@@ -1,5 +1,7 @@
 package no.tk.groove.behaviortransformer;
 
+import static no.tk.util.DuplicateNameChecker.signalLinkErrorEscalationExclusion;
+
 import com.google.common.collect.Maps;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,6 +23,7 @@ import no.tk.behavior.Behavior;
 import no.tk.behavior.BehaviorVisitor;
 import no.tk.behavior.activity.ActivityDiagram;
 import no.tk.behavior.bpmn.BPMNCollaboration;
+import no.tk.behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import no.tk.behavior.fsm.FiniteStateMachine;
 import no.tk.behavior.petrinet.PetriNet;
@@ -36,6 +39,7 @@ import no.tk.groove.graph.rule.GrooveRuleWriter;
 import no.tk.groove.gxl.Graph;
 import no.tk.groove.gxl.Gxl;
 import no.tk.groove.gxl.Node;
+import no.tk.util.DuplicateNameChecker;
 import no.tk.util.ValueWrapper;
 import org.apache.commons.io.file.PathUtils;
 
@@ -306,6 +310,8 @@ public class BehaviorToGrooveTransformer {
 
   public Path generateGrooveGrammarForBPMNProcessModel(
       BPMNCollaboration collaboration, Path grooveDir) {
+    checkForDuplicateNames(collaboration);
+
     Path graphGrammarSubFolder = this.makeSubFolder(collaboration, grooveDir);
     BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer();
 
@@ -319,6 +325,24 @@ public class BehaviorToGrooveTransformer {
     this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
 
     return graphGrammarSubFolder;
+  }
+
+  private void checkForDuplicateNames(BPMNCollaboration collaboration) {
+    Set<String> warnings =
+        DuplicateNameChecker.checkForDuplicateNames(
+            collaboration, signalLinkErrorEscalationExclusion());
+    if (!warnings.isEmpty()) {
+      if (warnings.size() > 1) {
+        throw new GrooveGenerationRuntimeException(
+            String.format(
+                "Multiple bpmn elements with the names \"%s\" exists. Please use unique or empty names.",
+                String.join(", ", warnings)));
+      }
+      throw new GrooveGenerationRuntimeException(
+          String.format(
+              "Multiple bpmn elements with the name \"%s\" exist. Please use unique or empty names.",
+              String.join(", ", warnings)));
+    }
   }
 
   private Path generateGrooveGrammarForPN(PetriNet petriNet, Path grooveDir) {

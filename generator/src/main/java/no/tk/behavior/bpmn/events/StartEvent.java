@@ -2,11 +2,13 @@ package no.tk.behavior.bpmn.events;
 
 import com.google.common.base.Objects;
 import no.tk.behavior.bpmn.auxiliary.visitors.EventVisitor;
+import no.tk.behavior.bpmn.auxiliary.visitors.FlowElementVisitor;
 import no.tk.behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 import no.tk.behavior.bpmn.events.definitions.EventDefinition;
 
 public class StartEvent extends CatchEvent {
   private final StartEventType type;
+
   /** Decides if the event is interrupting or non-interrupting. */
   private final boolean interrupt;
 
@@ -31,6 +33,11 @@ public class StartEvent extends CatchEvent {
 
   public boolean isInterrupt() {
     return interrupt;
+  }
+
+  @Override
+  public void accept(FlowElementVisitor visitor) {
+    visitor.handle(this);
   }
 
   @Override

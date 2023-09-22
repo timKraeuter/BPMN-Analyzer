@@ -30,7 +30,7 @@ public class BPMNTransformerDriver {
   private static void checkBPMNFilePathIsPresent(String[] args) {
     if (args.length < 2) {
       throw new GrooveGenerationRuntimeException(
-          "Please provide to arguments. The first for the input file and the second for the output path.");
+          "Please provide two arguments. The first for the input file and the second for the output path.");
     }
   }
 

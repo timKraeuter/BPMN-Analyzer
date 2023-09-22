@@ -3,6 +3,7 @@ package no.tk.behavior.bpmn.activities;
 import com.google.common.base.Objects;
 import no.tk.behavior.bpmn.BPMNProcess;
 import no.tk.behavior.bpmn.auxiliary.visitors.ActivityVisitor;
+import no.tk.behavior.bpmn.auxiliary.visitors.FlowElementVisitor;
 import no.tk.behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 
 public class CallActivity extends Activity {
@@ -17,6 +18,11 @@ public class CallActivity extends Activity {
 
   public BPMNProcess getSubProcessModel() {
     return subProcessModel;
+  }
+
+  @Override
+  public void accept(FlowElementVisitor visitor) {
+    visitor.handle(this);
   }
 
   @Override

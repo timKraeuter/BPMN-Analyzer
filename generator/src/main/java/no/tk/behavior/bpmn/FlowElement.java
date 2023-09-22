@@ -1,6 +1,7 @@
 package no.tk.behavior.bpmn;
 
 import com.google.common.base.Objects;
+import no.tk.behavior.bpmn.auxiliary.visitors.FlowElementVisitor;
 
 public abstract class FlowElement {
   private final String id;
@@ -10,6 +11,8 @@ public abstract class FlowElement {
     this.id = id;
     this.name = name;
   }
+
+  public abstract void accept(FlowElementVisitor visitor);
 
   public String getId() {
     return id;

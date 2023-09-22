@@ -1,6 +1,7 @@
 package no.tk.behavior.bpmn.gateways;
 
 import com.google.common.base.Objects;
+import no.tk.behavior.bpmn.auxiliary.visitors.FlowElementVisitor;
 import no.tk.behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 
 /** Represents and exclusive event based gateway (parallel ones are currently not supported). */
@@ -15,6 +16,11 @@ public class EventBasedGateway extends Gateway {
   public EventBasedGateway(String id, String name, boolean instantiate) {
     super(id, name);
     this.instantiate = instantiate;
+  }
+
+  @Override
+  public void accept(FlowElementVisitor visitor) {
+    visitor.handle(this);
   }
 
   @Override

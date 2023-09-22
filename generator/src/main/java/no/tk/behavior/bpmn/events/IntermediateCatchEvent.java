@@ -2,6 +2,7 @@ package no.tk.behavior.bpmn.events;
 
 import com.google.common.base.Objects;
 import no.tk.behavior.bpmn.auxiliary.visitors.EventVisitor;
+import no.tk.behavior.bpmn.auxiliary.visitors.FlowElementVisitor;
 import no.tk.behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 import no.tk.behavior.bpmn.events.definitions.EventDefinition;
 
@@ -16,6 +17,11 @@ public class IntermediateCatchEvent extends CatchEvent {
       String id, String name, IntermediateCatchEventType type, EventDefinition eventDefinition) {
     super(id, name, eventDefinition);
     this.type = type;
+  }
+
+  @Override
+  public void accept(FlowElementVisitor visitor) {
+    visitor.handle(this);
   }
 
   @Override
