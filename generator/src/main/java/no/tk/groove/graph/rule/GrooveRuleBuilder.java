@@ -122,11 +122,11 @@ public class GrooveRuleBuilder implements GraphRuleGenerator {
   }
 
   @Override
-  public GrooveNode notNode(String nodeName) {
+  public GrooveNode nacNode(String nodeName) {
     assert this.currentRule != null;
 
     GrooveNode notNode = new GrooveNode(nodeName);
-    this.currentRule.addNotNode(notNode);
+    this.currentRule.addNacNode(notNode);
     return notNode;
   }
 

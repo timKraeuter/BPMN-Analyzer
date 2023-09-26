@@ -16,7 +16,7 @@ public interface GraphRuleGenerator {
   Node deleteNode(String nodeName);
 
   /** Define that the current rule is not applicable if a node with the given name exists (NAC). */
-  GrooveNode notNode(String nodeName);
+  GrooveNode nacNode(String nodeName);
 
   /** Define that the current rule adds an edge between the two given nodes. */
   void addEdge(String name, Node source, Node target);

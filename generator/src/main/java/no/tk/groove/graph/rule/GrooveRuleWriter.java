@@ -55,7 +55,7 @@ public class GrooveRuleWriter {
 
           // Add nodes which should be in context
           grooveGraphRule
-              .getNotNodes()
+              .getNACNodes()
               .forEach(
                   contextNode ->
                       addNodeToGxlGraph(graph, contextNode, allGxlNodes, NodeRuleAspect.NOT));
