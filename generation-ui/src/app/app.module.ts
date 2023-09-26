@@ -23,6 +23,8 @@ import { VerificationResultComponentComponent } from './verification-result-comp
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatListModule } from '@angular/material/list';
 import { ModelCheckingComponent } from './model-checking/model-checking.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @NgModule({
     declarations: [
@@ -37,22 +39,28 @@ import { ModelCheckingComponent } from './model-checking/model-checking.componen
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
+        HttpClientModule,
+        FormsModule,
         MatIconModule,
         MatButtonModule,
         MatCardModule,
-        HttpClientModule,
         MatTooltipModule,
         MatDividerModule,
         MatTabsModule,
         MatFormFieldModule,
         MatInputModule,
         MatButtonToggleModule,
-        FormsModule,
         MatSnackBarModule,
         MatProgressSpinnerModule,
         MatListModule,
+        MatStepperModule,
     ],
-    providers: [],
+    providers: [
+        {
+            provide: STEPPER_GLOBAL_OPTIONS,
+            useValue: { displayDefaultIndicatorType: false },
+        },
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

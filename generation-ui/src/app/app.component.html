@@ -1,1 +1,48 @@
-<app-generation></app-generation>
+<mat-stepper #stepper animationDuration="0">
+    <mat-step label="Model or upload your BPMN process">
+        <app-generation></app-generation>
+        <mat-divider></mat-divider>
+        <div>
+            <button mat-raised-button color="primary" matStepperNext>
+                <mat-icon iconPositionEnd>navigate_next</mat-icon>
+                Next
+            </button>
+        </div>
+    </mat-step>
+    <mat-step label="Create custom process states" optional>
+        <mat-divider></mat-divider>
+        <div>
+            <button
+                mat-raised-button
+                color="primary"
+                class="right-margin"
+                matStepperPrevious
+            >
+                <mat-icon>navigate_before</mat-icon>
+                Back
+            </button>
+            <button mat-raised-button color="primary" matStepperNext>
+                <mat-icon iconPositionEnd>navigate_next</mat-icon>
+                Next
+            </button>
+        </div>
+    </mat-step>
+    <mat-step label="Analyze your BPMN process">
+        <app-model-checking></app-model-checking>
+        <mat-divider></mat-divider>
+        <div>
+            <button
+                mat-raised-button
+                color="primary"
+                class="right-margin"
+                matStepperPrevious
+            >
+                <mat-icon>navigate_before</mat-icon>
+                Back
+            </button>
+            <button mat-raised-button color="primary" (click)="stepper.reset()">
+                Reset
+            </button>
+        </div>
+    </mat-step>
+</mat-stepper>
