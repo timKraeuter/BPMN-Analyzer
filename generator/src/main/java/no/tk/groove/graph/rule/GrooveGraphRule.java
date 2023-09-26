@@ -12,6 +12,7 @@ public class GrooveGraphRule implements GraphRule {
   private final Map<String, GrooveNode> nodesToBeAdded;
   private final Map<String, GrooveNode> contextNodes;
   private final Map<String, GrooveNode> nodesToBeDeleted;
+  private final Map<String, GrooveNode> notNodes;
   private final Map<String, GrooveEdge> edgesToBeAdded;
   private final Map<String, GrooveEdge> contextEdges;
   private final Map<String, GrooveEdge> edgesToBeDeleted;
@@ -24,12 +25,14 @@ public class GrooveGraphRule implements GraphRule {
     this.edgesToBeAdded = new LinkedHashMap<>();
     this.contextEdges = new LinkedHashMap<>();
     this.edgesToBeDeleted = new LinkedHashMap<>();
+    this.notNodes = new LinkedHashMap<>();
   }
 
-  public void addNewNode(GrooveNode node) {
-    this.checkIfNotAlreadyInContext(node);
-    this.checkIfNotAlreadyDeleted(node);
-    this.nodesToBeAdded.put(node.getId(), node);
+  public void addNewNode(GrooveNode newNode) {
+    this.checkIfNotAlreadyInContext(newNode);
+    this.checkIfNotAlreadyDeleted(newNode);
+    this.checkIfNotAlreadyInNot(newNode);
+    this.nodesToBeAdded.put(newNode.getId(), newNode);
   }
 
   private void checkIfNotAlreadyDeleted(GrooveNode node) {
@@ -46,6 +49,13 @@ public class GrooveGraphRule implements GraphRule {
     }
   }
 
+  private void checkIfNotAlreadyInNot(GrooveNode node) {
+    if (this.notNodes.get(node.getId()) != null) {
+      throw new GrooveGenerationRuntimeException(
+          String.format("Node %s already contained as a not node (NAC)!", node));
+    }
+  }
+
   private void checkIfNotAlreadyAdded(GrooveNode contextNode) {
     if (this.nodesToBeAdded.get(contextNode.getId()) != null) {
       throw new GrooveGenerationRuntimeException(
@@ -54,15 +64,24 @@ public class GrooveGraphRule implements GraphRule {
   }
 
   public void addContextNode(GrooveNode contextNode) {
-    this.checkIfNotAlreadyDeleted(contextNode);
     this.checkIfNotAlreadyAdded(contextNode);
+    this.checkIfNotAlreadyDeleted(contextNode);
+    this.checkIfNotAlreadyInNot(contextNode);
     this.contextNodes.put(contextNode.getId(), contextNode);
   }
 
   public void addDelNode(GrooveNode deleteNode) {
-    this.checkIfNotAlreadyInContext(deleteNode);
     this.checkIfNotAlreadyAdded(deleteNode);
+    this.checkIfNotAlreadyInContext(deleteNode);
+    this.checkIfNotAlreadyInNot(deleteNode);
     this.nodesToBeDeleted.put(deleteNode.getId(), deleteNode);
+  }
+
+  public void addNotNode(GrooveNode notNode) {
+    this.checkIfNotAlreadyAdded(notNode);
+    this.checkIfNotAlreadyDeleted(notNode);
+    this.checkIfNotAlreadyInContext(notNode);
+    this.notNodes.put(notNode.getId(), notNode);
   }
 
   public void addNewEdge(GrooveEdge edge) {
@@ -93,6 +112,10 @@ public class GrooveGraphRule implements GraphRule {
     return new LinkedHashSet<>(this.contextNodes.values());
   }
 
+  public Set<GrooveNode> getNotNodes() {
+    return new LinkedHashSet<>(this.notNodes.values());
+  }
+
   public Set<GrooveEdge> getEdgesToBeAdded() {
     return new LinkedHashSet<>(this.edgesToBeAdded.values());
   }
@@ -119,6 +142,7 @@ public class GrooveGraphRule implements GraphRule {
     Map<String, GrooveNode> allNodes = new LinkedHashMap<>(this.nodesToBeDeleted);
     allNodes.putAll(this.nodesToBeAdded);
     allNodes.putAll(this.contextNodes);
+    allNodes.putAll(this.notNodes);
     return allNodes;
   }
 }

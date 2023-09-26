@@ -22,6 +22,7 @@ public class GrooveRuleWriter {
 
   public static final String ASPECT_LABEL_NEW = "new:";
   public static final String ASPECT_LABEL_DEL = "del:";
+  public static final String ASPECT_LABEL_NOT = "not:";
 
   public static void writeRules(Stream<GrooveGraphRule> rules, Path dir) {
     rules.forEach(
@@ -51,6 +52,13 @@ public class GrooveRuleWriter {
               .forEach(
                   contextNode ->
                       addNodeToGxlGraph(graph, contextNode, allGxlNodes, NodeRuleAspect.CONTEXT));
+
+          // Add nodes which should be in context
+          grooveGraphRule
+              .getNotNodes()
+              .forEach(
+                  contextNode ->
+                      addNodeToGxlGraph(graph, contextNode, allGxlNodes, NodeRuleAspect.NOT));
 
           // Add edges which should be added to gxl
           grooveGraphRule
@@ -89,21 +97,21 @@ public class GrooveRuleWriter {
       Graph graph,
       GrooveEdge grooveEdge,
       Map<String, Node> createdGxlNodes,
-      NodeRuleAspect addDelOrContext) {
+      NodeRuleAspect nodeAspect) {
     Node sourceNode = createdGxlNodes.get(grooveEdge.getSourceNode().getId());
     Node targetNode = createdGxlNodes.get(grooveEdge.getTargetNode().getId());
     assert sourceNode != null;
     assert targetNode != null;
 
     GrooveGxlHelper.createEdgeWithName(
-        graph, sourceNode, targetNode, getAspectLabel(addDelOrContext) + grooveEdge.getName());
+        graph, sourceNode, targetNode, getAspectLabel(nodeAspect) + grooveEdge.getName());
   }
 
   private static void addNodeToGxlGraph(
       Graph graph,
       GrooveNode grooveNode,
       Map<String, Node> nodeRepository,
-      NodeRuleAspect addDelOrContext) {
+      NodeRuleAspect nodeAspect) {
     Node gxlNode =
         GrooveGxlHelper.createNodeWithName(grooveNode.getId(), grooveNode.getName(), graph);
     // Each flag itself could be deleted, added or just context!
@@ -111,7 +119,7 @@ public class GrooveRuleWriter {
     nodeRepository.put(gxlNode.getId(), gxlNode);
 
     // Nodes need get a "new:", "del:" or no label depending on their aspect.
-    switch (addDelOrContext) {
+    switch (nodeAspect) {
       case CONTEXT:
         // No label
         break;
@@ -121,19 +129,19 @@ public class GrooveRuleWriter {
       case DEL:
         GrooveGxlHelper.createEdgeWithName(graph, gxlNode, gxlNode, ASPECT_LABEL_DEL);
         break;
+      case NOT:
+        GrooveGxlHelper.createEdgeWithName(graph, gxlNode, gxlNode, ASPECT_LABEL_NOT);
+        break;
     }
   }
 
   private static String getAspectLabel(NodeRuleAspect addDelOrContext) {
-    switch (addDelOrContext) {
-      case ADD:
-        return ASPECT_LABEL_NEW;
-      case DEL:
-        return ASPECT_LABEL_DEL;
-      case CONTEXT:
-      default:
-        return "";
-    }
+    return switch (addDelOrContext) {
+      case ADD -> ASPECT_LABEL_NEW;
+      case DEL -> ASPECT_LABEL_DEL;
+      case CONTEXT -> "";
+      case NOT -> ASPECT_LABEL_NOT;
+    };
   }
 
   private static void writeRuleToFile(Path dir, GrooveGraphRule grooveGraphRule, Gxl gxl) {

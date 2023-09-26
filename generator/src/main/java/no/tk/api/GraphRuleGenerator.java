@@ -12,11 +12,14 @@ public interface GraphRuleGenerator {
   /** Define that the current rule adds a node with the given name. */
   Node addNode(String nodeName);
 
-  /** Define that the current rule adds an edge between the two given nodes. */
-  void addEdge(String name, Node source, Node target);
-
   /** Define that the current rule deletes a node with the given name. */
   Node deleteNode(String nodeName);
+
+  /** Define that the current rule is not applicable if a node with the given name exists (NAC). */
+  GrooveNode notNode(String nodeName);
+
+  /** Define that the current rule adds an edge between the two given nodes. */
+  void addEdge(String name, Node source, Node target);
 
   /**
    * Define that the current rule deletes an edge between two nodes (The nodes must be in context,

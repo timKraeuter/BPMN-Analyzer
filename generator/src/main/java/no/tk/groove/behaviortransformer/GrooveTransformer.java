@@ -15,7 +15,6 @@ import no.tk.groove.gxl.Gxl;
 public interface GrooveTransformer<S extends Behavior> {
   // Special groove labels
   // Special groove labels
-  String NOT = "not:\n";
   String AT = "@";
   String FORALL = "forall:";
   String EXISTS_OPTIONAL = "existsx:";
