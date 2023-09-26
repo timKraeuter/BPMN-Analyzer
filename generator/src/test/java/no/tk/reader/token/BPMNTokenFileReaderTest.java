@@ -28,12 +28,16 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
     assertThat(bpmnSnapshot.getProcessSnapshots().size(), is(1));
     ProcessSnapshot processSnapshot = bpmnSnapshot.getProcessSnapshots().iterator().next();
     assertThat(processSnapshot.getSnapshotID(), is("ProcessSnapshot_1hrwrvp"));
-    assertThat(processSnapshot.getProcessID(), is("Process_1"));
+    assertThat(processSnapshot.getProcessName(), is("AtomicPropositionTest"));
     assertThat(processSnapshot.getTokens().size(), is(3));
     assertTrue(processSnapshot.isShouldExist());
     assertThat(
         getElementIDsForTokens(processSnapshot),
-        is(Lists.newArrayList("Flow_1df3b4l", "Activity_1iduxj0", "Flow_1agdsil")));
+        is(
+            Lists.newArrayList(
+                "StartEvent_1 -> Activity_1iduxj0",
+                "Activity_1iduxj0",
+                "Activity_1iduxj0 -> Event_0v0iz0c")));
     assertThat(
         getShouldExistListForTokens(processSnapshot), is(Lists.newArrayList(true, true, false)));
   }
@@ -52,17 +56,20 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
     // Check snapshot 1
     ProcessSnapshot snapshot1 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_1hrwrvp");
     assertThat(snapshot1.getSnapshotID(), is("ProcessSnapshot_1hrwrvp"));
-    assertThat(snapshot1.getProcessID(), is("Process_1"));
+    assertThat(snapshot1.getProcessName(), is("AtomicPropositionTest"));
     assertThat(snapshot1.getTokens().size(), is(2));
     assertTrue(snapshot1.isShouldExist());
     assertThat(
-        getElementIDsForTokens(snapshot1), is(Lists.newArrayList("Flow_1df3b4l", "Flow_1agdsil")));
+        getElementIDsForTokens(snapshot1),
+        is(
+            Lists.newArrayList(
+                "StartEvent_1 -> Activity_1iduxj0", "Activity_1iduxj0 -> Event_0v0iz0c")));
     assertThat(getShouldExistListForTokens(snapshot1), is(Lists.newArrayList(true, false)));
 
     // Check snapshot 2
     ProcessSnapshot snapshot2 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_01ch00c");
     assertThat(snapshot2.getSnapshotID(), is("ProcessSnapshot_01ch00c"));
-    assertThat(snapshot2.getProcessID(), is("Process_1"));
+    assertThat(snapshot2.getProcessName(), is("AtomicPropositionTest"));
     assertThat(snapshot2.getTokens().size(), is(1));
     assertTrue(snapshot2.isShouldExist());
     assertThat(getElementIDsForTokens(snapshot2), is(Lists.newArrayList("Activity_1iduxj0")));
@@ -71,7 +78,7 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
     // Check snapshot 3
     ProcessSnapshot snapshot3 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_0jd6wrd");
     assertThat(snapshot3.getSnapshotID(), is("ProcessSnapshot_0jd6wrd"));
-    assertThat(snapshot3.getProcessID(), is("Process_1"));
+    assertThat(snapshot3.getProcessName(), is("AtomicPropositionTest"));
     assertThat(snapshot3.getTokens().size(), is(0));
     assertFalse(snapshot3.isShouldExist());
   }
@@ -90,27 +97,29 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
     // Check snapshot 1
     ProcessSnapshot snapshot1 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_0guz4p2");
     assertThat(snapshot1.getSnapshotID(), is("ProcessSnapshot_0guz4p2"));
-    assertThat(snapshot1.getProcessID(), is("Process_1"));
+    assertThat(snapshot1.getProcessName(), is("Process_1"));
     assertThat(snapshot1.getTokens().size(), is(2));
     assertTrue(snapshot1.isShouldExist());
     assertThat(
         getElementIDsForTokens(snapshot1),
-        is(Lists.newArrayList("Activity_1j00qsl", "Flow_09mltb5")));
+        is(Lists.newArrayList("Activity_1j00qsl", "StartEvent_1 -> Activity_1j00qsl")));
     assertThat(getShouldExistListForTokens(snapshot1), is(Lists.newArrayList(false, true)));
 
     // Check snapshot 2
     ProcessSnapshot snapshot2 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_0soxahe");
     assertThat(snapshot2.getSnapshotID(), is("ProcessSnapshot_0soxahe"));
-    assertThat(snapshot2.getProcessID(), is("Process_1"));
+    assertThat(snapshot2.getProcessName(), is("Process_1"));
     assertThat(snapshot2.getTokens().size(), is(1));
     assertTrue(snapshot2.isShouldExist());
-    assertThat(getElementIDsForTokens(snapshot2), is(Lists.newArrayList("Flow_0wrsps5")));
+    assertThat(
+        getElementIDsForTokens(snapshot2),
+        is(Lists.newArrayList("Activity_1j00qsl -> Event_00vrokd")));
     assertThat(getShouldExistListForTokens(snapshot2), is(Lists.newArrayList(true)));
 
     // Check snapshot 3
     ProcessSnapshot snapshot3 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_1ejf247");
     assertThat(snapshot3.getSnapshotID(), is("ProcessSnapshot_1ejf247"));
-    assertThat(snapshot3.getProcessID(), is("Process_1"));
+    assertThat(snapshot3.getProcessName(), is("Process_1"));
     assertThat(snapshot3.getTokens().size(), is(0));
     assertFalse(snapshot3.isShouldExist());
   }

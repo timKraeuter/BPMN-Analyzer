@@ -27,7 +27,7 @@ public class ProcessSnapshot {
     return shouldExist;
   }
 
-  public String getProcessID() {
+  public String getProcessName() {
     return processID;
   }
 

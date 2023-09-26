@@ -60,9 +60,7 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
   private void checkGrooveGeneration(Behavior behavior, Function<String, Boolean> fileNameFilter)
       throws IOException {
     String modelName = behavior.getName();
-    BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
-    Path outputDir = Path.of(this.getOutputPathIncludingSubFolder());
-    Path grammarDir = transformer.generateGrooveGrammar(behavior, outputDir);
+    Path grammarDir = transformToGroove(behavior);
     if (REPLACE_EXPECTED_FILES_WITH_ACTUAL) {
       replaceExpectedFilesWithActual(modelName, grammarDir);
     }
@@ -72,6 +70,13 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
 
     Path propertiesFile = Path.of(grammarDir.toString(), SYSTEM_PROPERTIES_FILE_NAME);
     this.checkPropertiesFile(propertiesFile);
+  }
+
+  Path transformToGroove(Behavior behavior) {
+    BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
+    Path outputDir = Path.of(this.getOutputPathIncludingSubFolder());
+    Path grammarDir = transformer.generateGrooveGrammar(behavior, outputDir);
+    return grammarDir;
   }
 
   private static void replaceExpectedFilesWithActual(String modelName, Path grammarDir)

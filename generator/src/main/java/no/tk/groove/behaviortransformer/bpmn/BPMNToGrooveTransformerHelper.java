@@ -168,7 +168,7 @@ public class BPMNToGrooveTransformerHelper {
 
   public static GrooveNode nacTokenWithPosition(
       GrooveRuleBuilder ruleBuilder, GrooveNode processInstance, String position) {
-    GrooveNode token = ruleBuilder.contextNode(GrooveTransformer.NOT + TYPE_TOKEN);
+    GrooveNode token = ruleBuilder.nacNode(TYPE_TOKEN);
     connectToProcessInstanceAndAddPosition(ruleBuilder, processInstance, position, token);
     return token;
   }

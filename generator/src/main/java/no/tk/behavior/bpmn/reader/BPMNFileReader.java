@@ -24,6 +24,7 @@ import no.tk.behavior.bpmn.events.IntermediateCatchEvent;
 import no.tk.behavior.bpmn.events.IntermediateThrowEvent;
 import no.tk.behavior.bpmn.events.StartEvent;
 import no.tk.behavior.bpmn.gateways.InclusiveGateway;
+import no.tk.behavior.bpmn.reader.token.extension.BPMNToken;
 import org.apache.commons.io.FilenameUtils;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
@@ -35,6 +36,10 @@ import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 import org.camunda.bpm.model.xml.type.ModelElementType;
 
 public class BPMNFileReader {
+  static {
+    Bpmn.INSTANCE = new BPMNToken();
+  }
+
   private Function<String, String> elementNameTransformer;
 
   public BPMNFileReader() {}
@@ -179,7 +184,8 @@ public class BPMNFileReader {
       Map<String, no.tk.behavior.bpmn.FlowNode> createdFlowNodes,
       Map<String, Boolean> mappedSequenceFlows,
       Participant participant) {
-    bpmnCollaborationBuilder.processName(participant.getName());
+    String name = participant.getName() == null ? participant.getId() : participant.getName();
+    bpmnCollaborationBuilder.processName(name);
     participant
         .getProcess()
         .getFlowElements()

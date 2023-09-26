@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import no.tk.behavior.bpmn.SequenceFlow;
 import no.tk.behavior.bpmn.reader.token.extension.BPMNToken;
 import no.tk.behavior.bpmn.reader.token.extension.instance.BTProcessSnapshot;
 import no.tk.behavior.bpmn.reader.token.extension.instance.BTToken;
@@ -115,19 +116,50 @@ public class BPMNTokenFileReader {
           bpmnProcessSnapshot, bpmnModelInstance, association, snapshots, targetRef);
     }
     if (targetRef.startsWith("Token")) {
-      saveToken(association, bpmnProcessSnapshot, targetRef, tokens);
+      saveToken(bpmnModelInstance, association, bpmnProcessSnapshot, targetRef, tokens);
     }
   }
 
   private void saveToken(
+      BpmnModelInstance bpmnModelInstance,
       ModelElementInstance association,
       BPMNProcessSnapshot bpmnProcessSnapshot,
       String targetRef,
       Collection<ModelElementInstance> tokens) {
     BTToken token = (BTToken) getTokenOrSnapshotWithID(targetRef, tokens);
+    String tokenID = getTokenID(bpmnModelInstance, association);
     bpmnProcessSnapshot.addToken(
-        token.processSnapshotID(),
-        new Token(association.getAttributeValue("sourceRef"), token.shouldExist()));
+        token.processSnapshotID(), new Token(tokenID, token.shouldExist()));
+  }
+
+  private String getTokenID(BpmnModelInstance bpmnModelInstance, ModelElementInstance association) {
+    ModelElementInstance tokenPosition =
+        bpmnModelInstance.getModelElementById(association.getAttributeValue("sourceRef"));
+    if (tokenPosition instanceof org.camunda.bpm.model.bpmn.instance.SequenceFlow sfPosition) {
+      return getSequenceFlowDescriptiveName(association, sfPosition);
+    }
+    return getNameOrID(tokenPosition);
+  }
+
+  private static String getSequenceFlowDescriptiveName(
+      ModelElementInstance association,
+      org.camunda.bpm.model.bpmn.instance.SequenceFlow sfPosition) {
+    String name = association.getAttributeValue("name");
+    if (name != null) {
+      return name;
+    }
+    return String.format(
+        SequenceFlow.DESCRIPTIVE_NAME_FORMAT,
+        sfPosition.getSource().getId(),
+        sfPosition.getTarget().getId());
+  }
+
+  private static String getNameOrID(ModelElementInstance element) {
+    String name = element.getAttributeValue("name");
+    if (name == null) {
+      return element.getAttributeValue("id");
+    }
+    return name;
   }
 
   private ModelElementInstance getTokenOrSnapshotWithID(
@@ -162,6 +194,6 @@ public class BPMNTokenFileReader {
       BpmnModelInstance bpmnModelInstance, ModelElementInstance association) {
     String participantID = association.getAttributeValue("sourceRef");
     ModelElementInstance participant = bpmnModelInstance.getModelElementById(participantID);
-    return participant.getAttributeValue("processRef");
+    return getNameOrID(participant);
   }
 }
