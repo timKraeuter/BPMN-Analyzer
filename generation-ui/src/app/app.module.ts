@@ -22,6 +22,7 @@ import { TemporalLogicSyntaxComponent } from './temporal-logic-syntax/temporal-l
 import { VerificationResultComponentComponent } from './verification-result-component/verification-result-component.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatListModule } from '@angular/material/list';
+import { ModelCheckingComponent } from './model-checking/model-checking.component';
 
 @NgModule({
     declarations: [
@@ -30,6 +31,7 @@ import { MatListModule } from '@angular/material/list';
         DiagramComponent,
         TemporalLogicSyntaxComponent,
         VerificationResultComponentComponent,
+        ModelCheckingComponent,
     ],
     imports: [
         BrowserModule,

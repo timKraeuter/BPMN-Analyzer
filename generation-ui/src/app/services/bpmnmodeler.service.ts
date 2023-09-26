@@ -16,10 +16,16 @@ import * as BpmnJS from 'bpmn-js/dist/bpmn-modeler.production.min.js';
 export class BPMNModelerService {
     private bpmnJS: BpmnJS;
 
-    getBPMNJs(): BpmnJS {
+    public getBPMNJs(): BpmnJS {
         if (!this.bpmnJS) {
             this.bpmnJS = new BpmnJS({ keyboard: { bindTo: document } });
         }
         return this.bpmnJS;
+    }
+
+    public async getBPMNModelXML(): Promise<Blob> {
+        const xmlResult = await this.getBPMNJs().saveXML({ format: true });
+
+        return new Blob([xmlResult.xml]);
     }
 }
