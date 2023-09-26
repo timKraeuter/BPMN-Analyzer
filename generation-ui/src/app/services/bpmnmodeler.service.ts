@@ -8,24 +8,27 @@ import { Injectable } from '@angular/core';
  * bpmn-modeler - bootstraps a full-fledged BPMN editor
  */
 // @ts-ignore
-import * as BpmnJS from 'bpmn-js/dist/bpmn-modeler.production.min.js';
+import BpmnModeler from 'bpmn-js/lib/Modeler';
 
 @Injectable({
     providedIn: 'root',
 })
 export class BPMNModelerService {
-    private bpmnJS: BpmnJS;
+    private bpmnJS: BpmnModeler = new BpmnModeler({
+        keyboard: { bindTo: document },
+    });
 
-    public getBPMNJs(): BpmnJS {
-        if (!this.bpmnJS) {
-            this.bpmnJS = new BpmnJS({ keyboard: { bindTo: document } });
-        }
+    public getBPMNJs(): BpmnModeler {
         return this.bpmnJS;
     }
 
     public async getBPMNModelXML(): Promise<Blob> {
         const xmlResult = await this.getBPMNJs().saveXML({ format: true });
-
-        return new Blob([xmlResult.xml]);
+        if (xmlResult.xml) {
+            return new Blob([xmlResult.xml], {
+                type: 'text/xml;charset=utf-8',
+            });
+        }
+        return new Blob([]);
     }
 }

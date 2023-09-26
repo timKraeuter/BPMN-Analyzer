@@ -43,16 +43,10 @@ export class GenerationComponent {
 
     downloadBPMNClicked() {
         this.bpmnModeler
-            .getBPMNJs()
-            .saveXML({ format: true })
+            .getBPMNModelXML()
             // @ts-ignore
             .then((result) => {
-                saveAs(
-                    new Blob([result.xml], {
-                        type: 'text/xml;charset=utf-8',
-                    }),
-                    this.fileName + BPMN_FILE_EXTENSION,
-                );
+                saveAs(result, this.fileName + BPMN_FILE_EXTENSION);
             });
     }
 
@@ -62,7 +56,7 @@ export class GenerationComponent {
         // Remove file extension: https://stackoverflow.com/questions/4250364/how-to-trim-a-file-extension-from-a-string-in-javascript
         this.fileName = file.name.replace(/\.[^/.]+$/, '');
         const fileText: string = await file.text();
-        this.bpmnModeler.getBPMNJs().importXML(fileText);
+        await this.bpmnModeler.getBPMNJs().importXML(fileText);
     }
 
     async downloadGGClicked() {
