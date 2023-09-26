@@ -1,17 +1,17 @@
 <mat-stepper #stepper animationDuration="0">
-    <mat-step label="Model or upload your BPMN process">
+    <mat-step label="Model your BPMN process">
         <app-generation></app-generation>
         <mat-divider></mat-divider>
-        <div>
+        <div class="step-buttons">
             <button mat-raised-button color="primary" matStepperNext>
                 <mat-icon iconPositionEnd>navigate_next</mat-icon>
-                Next
+                Next Step
             </button>
         </div>
     </mat-step>
-    <mat-step label="Create custom process states" optional>
+    <mat-step label="Add BPMN process states" optional>
         <mat-divider></mat-divider>
-        <div>
+        <div class="step-buttons">
             <button
                 mat-raised-button
                 color="primary"
@@ -19,18 +19,18 @@
                 matStepperPrevious
             >
                 <mat-icon>navigate_before</mat-icon>
-                Back
+                Previous Step
             </button>
             <button mat-raised-button color="primary" matStepperNext>
                 <mat-icon iconPositionEnd>navigate_next</mat-icon>
-                Next
+                Next Step
             </button>
         </div>
     </mat-step>
     <mat-step label="Analyze your BPMN process">
         <app-model-checking></app-model-checking>
         <mat-divider></mat-divider>
-        <div>
+        <div class="step-buttons">
             <button
                 mat-raised-button
                 color="primary"
@@ -38,10 +38,11 @@
                 matStepperPrevious
             >
                 <mat-icon>navigate_before</mat-icon>
-                Back
+                Previous Step
             </button>
             <button mat-raised-button color="primary" (click)="stepper.reset()">
-                Reset
+                <mat-icon>restart_alt</mat-icon>
+                Back to the start
             </button>
         </div>
     </mat-step>

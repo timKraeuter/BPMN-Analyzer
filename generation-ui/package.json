@@ -7,8 +7,8 @@
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
-        "format": "npx prettier --write .",
-        "check": "npx prettier --check ."
+        "check": "npx prettier --check .",
+        "format": "npx prettier --write ."
     },
     "private": true,
     "dependencies": {
