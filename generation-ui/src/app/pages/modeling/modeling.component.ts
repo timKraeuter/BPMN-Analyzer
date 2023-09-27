@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 // @ts-ignore
 import { saveAs } from 'file-saver-es';
-import { BPMNModelerService } from '../services/bpmnmodeler.service';
+import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { GrooveService } from '../services/groove.service';
+import { GrooveService } from '../../services/groove.service';
 
 const BPMN_FILE_EXTENSION = '.bpmn';
 

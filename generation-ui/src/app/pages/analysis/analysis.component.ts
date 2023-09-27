@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { BPMNProperty } from './analysis-result/analysis-result.component';
+import { BPMNProperty } from '../../components/analysis-result/analysis-result.component';
 import {
     GrooveService,
     ModelCheckingResponse,
-} from '../services/groove.service';
-import { TemporalLogicSyntaxComponent } from './temporal-logic-syntax/temporal-logic-syntax.component';
-import { BPMNModelerService } from '../services/bpmnmodeler.service';
+} from '../../services/groove.service';
+import { TemporalLogicSyntaxComponent } from '../../components/temporal-logic-syntax/temporal-logic-syntax.component';
+import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
