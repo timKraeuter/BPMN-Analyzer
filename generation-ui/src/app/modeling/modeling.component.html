@@ -1,55 +1,51 @@
-<mat-card appearance="outlined" class="card">
-    <mat-card-content>
-        <div class="diagram-parent">
-            <app-diagram></app-diagram>
-        </div>
-    </mat-card-content>
-    <mat-card-actions>
-        <button
-            class="right-margin"
-            mat-raised-button
-            color="primary"
-            matTooltip="Upload a BPMN model contained in a BPMN-file."
-            (click)="uploader.click()"
-        >
-            <mat-icon>upload</mat-icon>
-            Upload BPMN model
-        </button>
-        <button
-            class="right-margin"
-            mat-raised-button
-            matTooltip="Download the BPMN model as a BPMN-file."
-            color="primary"
-            (click)="downloadBPMNClicked()"
-        >
-            <mat-icon>download</mat-icon>
-            Download BPMN model
-        </button>
+<div class="diagram-parent">
+    <app-diagram></app-diagram>
+</div>
+<div class="modeler-buttons">
+    <button
+        class="right-margin"
+        mat-raised-button
+        color="primary"
+        matTooltip="Upload a BPMN model contained in a BPMN-file."
+        (click)="uploader.click()"
+    >
+        <mat-icon>upload</mat-icon>
+        Upload BPMN model
+    </button>
+    <button
+        class="right-margin"
+        mat-raised-button
+        matTooltip="Download the BPMN model as a BPMN-file."
+        color="primary"
+        (click)="downloadBPMNClicked()"
+    >
+        <mat-icon>download</mat-icon>
+        Download BPMN model
+    </button>
 
-        <span *ngIf="graphGrammarGenerationRunning; else generationButton">
-            Generating a graph transformation system.
-            <mat-spinner class="top-margin"></mat-spinner>
-        </span>
-        <ng-template #generationButton>
-            <button
-                mat-raised-button
-                color="primary"
-                matTooltip="Download a groove graph transformation system."
-                (click)="downloadGGClicked()"
-            >
-                <mat-icon>cloud_download</mat-icon>
-                Download graph transformation system
-            </button>
-        </ng-template>
+    <span *ngIf="graphGrammarGenerationRunning; else generationButton">
+        Generating a graph transformation system.
+        <mat-spinner class="top-margin"></mat-spinner>
+    </span>
+    <ng-template #generationButton>
         <button
-            mat-icon-button
-            aria-label="Graph transformation system download info button"
+            mat-raised-button
             color="primary"
-            (click)="ggInfoClicked()"
-            matTooltip="Further graph transformation system information."
+            matTooltip="Download a groove graph transformation system."
+            (click)="downloadGGClicked()"
         >
-            <mat-icon>info</mat-icon>
+            <mat-icon>cloud_download</mat-icon>
+            Download graph transformation system
         </button>
-    </mat-card-actions>
-</mat-card>
+    </ng-template>
+    <button
+        mat-icon-button
+        aria-label="Graph transformation system download info button"
+        color="primary"
+        (click)="ggInfoClicked()"
+        matTooltip="Further graph transformation system information."
+    >
+        <mat-icon>info</mat-icon>
+    </button>
+</div>
 <input hidden type="file" #uploader (change)="uploadFile($event)" />
