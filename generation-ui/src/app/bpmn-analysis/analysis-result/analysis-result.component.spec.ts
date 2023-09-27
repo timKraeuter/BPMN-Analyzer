@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VerificationResultComponentComponent } from './verification-result-component.component';
+import { AnalysisResultComponent } from './analysis-result.component';
 
 describe('VerificationResultComponentComponent', () => {
-    let component: VerificationResultComponentComponent;
-    let fixture: ComponentFixture<VerificationResultComponentComponent>;
+    let component: AnalysisResultComponent;
+    let fixture: ComponentFixture<AnalysisResultComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [VerificationResultComponentComponent],
+            declarations: [AnalysisResultComponent],
         }).compileComponents();
     });
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(VerificationResultComponentComponent);
+        fixture = TestBed.createComponent(AnalysisResultComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

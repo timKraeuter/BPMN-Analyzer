@@ -8,11 +8,11 @@ import { GrooveService } from '../services/groove.service';
 const BPMN_FILE_EXTENSION = '.bpmn';
 
 @Component({
-    selector: 'app-generation',
-    templateUrl: './generation.component.html',
-    styleUrls: ['./generation.component.scss'],
+    selector: 'app-modeling',
+    templateUrl: './modeling.component.html',
+    styleUrls: ['./modeling.component.scss'],
 })
-export class GenerationComponent {
+export class ModelingComponent {
     diagramUrl =
         'https://raw.githubusercontent.com/timKraeuter/Rewrite_Rule_Generation/master/generation-ui/initial.bpmn';
     importError?: Error;

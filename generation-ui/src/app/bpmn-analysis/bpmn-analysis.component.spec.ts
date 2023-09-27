@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ModelCheckingComponent } from './model-checking.component';
+import { BpmnAnalysisComponent } from './bpmn-analysis.component';
 
 describe('ModelCheckingComponent', () => {
-    let component: ModelCheckingComponent;
-    let fixture: ComponentFixture<ModelCheckingComponent>;
+    let component: BpmnAnalysisComponent;
+    let fixture: ComponentFixture<BpmnAnalysisComponent>;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [ModelCheckingComponent],
+            declarations: [BpmnAnalysisComponent],
         });
-        fixture = TestBed.createComponent(ModelCheckingComponent);
+        fixture = TestBed.createComponent(BpmnAnalysisComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

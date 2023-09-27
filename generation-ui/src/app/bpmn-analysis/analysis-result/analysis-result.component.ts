@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { ModelCheckingResponse } from '../services/groove.service';
+import { ModelCheckingResponse } from '../../services/groove.service';
 
 @Component({
     selector: 'verification-result-component',
-    templateUrl: './verification-result-component.component.html',
-    styleUrls: ['./verification-result-component.component.scss'],
+    templateUrl: './analysis-result.component.html',
+    styleUrls: ['./analysis-result.component.scss'],
 })
-export class VerificationResultComponentComponent {
+export class AnalysisResultComponent {
     @Input()
     public running!: boolean;
 

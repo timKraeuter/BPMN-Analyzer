@@ -1,19 +1,19 @@
 import { Component } from '@angular/core';
-import { BPMNProperty } from '../verification-result-component/verification-result-component.component';
+import { BPMNProperty } from './analysis-result/analysis-result.component';
 import {
     GrooveService,
     ModelCheckingResponse,
 } from '../services/groove.service';
-import { TemporalLogicSyntaxComponent } from '../temporal-logic-syntax/temporal-logic-syntax.component';
+import { TemporalLogicSyntaxComponent } from './temporal-logic-syntax/temporal-logic-syntax.component';
 import { BPMNModelerService } from '../services/bpmnmodeler.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-    selector: 'app-model-checking',
-    templateUrl: './model-checking.component.html',
-    styleUrls: ['./model-checking.component.scss'],
+    selector: 'app-analysis',
+    templateUrl: './bpmn-analysis.component.html',
+    styleUrls: ['./bpmn-analysis.component.scss'],
 })
-export class ModelCheckingComponent {
+export class BpmnAnalysisComponent {
     // General BPMN property checking.
     public bpmnSpecificPropertiesToBeChecked: string[] = [];
     public bpmnSpecificVerificationRunning: boolean = false;

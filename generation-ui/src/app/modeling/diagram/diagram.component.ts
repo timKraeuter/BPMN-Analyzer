@@ -2,13 +2,13 @@ import {
     AfterContentInit,
     Component,
     ElementRef,
+    EventEmitter,
     Input,
     OnChanges,
     OnDestroy,
     Output,
-    ViewChild,
     SimpleChanges,
-    EventEmitter,
+    ViewChild,
 } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
@@ -25,7 +25,7 @@ import { map, switchMap } from 'rxjs/operators';
 import * as BpmnJS from 'bpmn-js/dist/bpmn-modeler.production.min.js';
 
 import { from, Observable, Subscription } from 'rxjs';
-import { BPMNModelerService } from '../services/bpmnmodeler.service';
+import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 
 @Component({
     selector: 'app-diagram',
