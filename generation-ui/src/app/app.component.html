@@ -1,50 +1,50 @@
 <mat-stepper #stepper animationDuration="0">
-  <mat-step label="Model your BPMN process">
-    <app-modeling></app-modeling>
-    <mat-divider></mat-divider>
-    <div class="step-buttons">
-      <button mat-raised-button color="primary" matStepperNext>
-        <mat-icon iconPositionEnd>navigate_next</mat-icon>
-        Next Step
-      </button>
-    </div>
-  </mat-step>
-  <mat-step label="Add BPMN process states" optional>
-    <app-process-state></app-process-state>
-    <mat-divider></mat-divider>
-    <div class="step-buttons">
-      <button
-        mat-raised-button
-        color="primary"
-        class="right-margin"
-        matStepperPrevious
-      >
-        <mat-icon>navigate_before</mat-icon>
-        Previous Step
-      </button>
-      <button mat-raised-button color="primary" matStepperNext>
-        <mat-icon iconPositionEnd>navigate_next</mat-icon>
-        Next Step
-      </button>
-    </div>
-  </mat-step>
-  <mat-step label="Analyze your BPMN process">
-    <app-analysis></app-analysis>
-    <mat-divider></mat-divider>
-    <div class="step-buttons">
-      <button
-        mat-raised-button
-        color="primary"
-        class="right-margin"
-        matStepperPrevious
-      >
-        <mat-icon>navigate_before</mat-icon>
-        Previous Step
-      </button>
-      <button mat-raised-button color="primary" (click)="stepper.reset()">
-        <mat-icon>restart_alt</mat-icon>
-        Back to the start
-      </button>
-    </div>
-  </mat-step>
+    <mat-step label="Model your BPMN process">
+        <app-modeling></app-modeling>
+        <mat-divider></mat-divider>
+        <div class="step-buttons">
+            <button mat-raised-button color="primary" matStepperNext>
+                <mat-icon iconPositionEnd>navigate_next</mat-icon>
+                Next Step
+            </button>
+        </div>
+    </mat-step>
+    <mat-step label="Add BPMN process states" optional>
+        <app-process-state></app-process-state>
+        <mat-divider></mat-divider>
+        <div class="step-buttons">
+            <button
+                mat-raised-button
+                color="primary"
+                class="right-margin"
+                matStepperPrevious
+            >
+                <mat-icon>navigate_before</mat-icon>
+                Previous Step
+            </button>
+            <button mat-raised-button color="primary" matStepperNext>
+                <mat-icon iconPositionEnd>navigate_next</mat-icon>
+                Next Step
+            </button>
+        </div>
+    </mat-step>
+    <mat-step label="Analyze your BPMN process">
+        <app-analysis></app-analysis>
+        <mat-divider></mat-divider>
+        <div class="step-buttons">
+            <button
+                mat-raised-button
+                color="primary"
+                class="right-margin"
+                matStepperPrevious
+            >
+                <mat-icon>navigate_before</mat-icon>
+                Previous Step
+            </button>
+            <button mat-raised-button color="primary" (click)="stepper.reset()">
+                <mat-icon>restart_alt</mat-icon>
+                Back to the start
+            </button>
+        </div>
+    </mat-step>
 </mat-stepper>
