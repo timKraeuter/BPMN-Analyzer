@@ -2,22 +2,15 @@ import {
     AfterContentInit,
     Component,
     ElementRef,
-    EventEmitter,
     Input,
     OnDestroy,
     OnInit,
-    Output,
     ViewChild,
 } from '@angular/core';
-
-import { HttpClient } from '@angular/common/http';
-import { map, switchMap } from 'rxjs/operators';
 // @ts-ignore
 import Modeler from 'bpmn-js/Modeler';
 // @ts-ignore
 import Viewer from 'bpmn-js/Viewer';
-
-import { from, Observable, Subscription } from 'rxjs';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 
 @Component({
@@ -36,20 +29,16 @@ export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {
     private modeler: Modeler | Viewer;
 
     @ViewChild('ref', { static: true }) private el!: ElementRef;
-    @Output() private importDone: EventEmitter<any> = new EventEmitter();
     @Input() public viewer: boolean = false;
 
-    constructor(
-        private bpmnModeler: BPMNModelerService,
-        private http: HttpClient,
-    ) {}
+    constructor(private bpmnModeler: BPMNModelerService) {}
 
     ngOnInit(): void {
         if (this.viewer) {
             this.modeler = this.bpmnModeler.getViewer();
         } else {
             this.modeler = this.bpmnModeler.getModeler();
-            this.importDiagram(this.initialDiagram);
+            this.modeler.importXML(this.initialDiagram);
         }
     }
 
@@ -59,44 +48,6 @@ export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {
 
     ngOnDestroy(): void {
         this.modeler.destroy();
-    }
-
-    /**
-     * Load diagram from URL and emit completion event
-     */
-    loadUrl(url: string): Subscription {
-        return this.http
-            .get(url, { responseType: 'text' })
-            .pipe(
-                switchMap((xml: string) => this.importDiagram(xml)),
-                map((result) => result.warnings),
-            )
-            .subscribe(
-                (warnings) => {
-                    this.importDone.emit({
-                        type: 'success',
-                        warnings,
-                    });
-                },
-                (err) => {
-                    this.importDone.emit({
-                        type: 'error',
-                        error: err,
-                    });
-                },
-            );
-    }
-
-    /**
-     * Creates a Promise to import the given XML into the current
-     * BpmnJS instance, then returns it as an Observable.
-     *
-     * @see https://github.com/bpmn-io/bpmn-js-callbacks-to-promises#importxml
-     */
-    private importDiagram(xml: string): Observable<{ warnings: Array<any> }> {
-        return from(
-            this.modeler.importXML(xml) as Promise<{ warnings: Array<any> }>,
-        );
     }
 
     public initialDiagram: string =

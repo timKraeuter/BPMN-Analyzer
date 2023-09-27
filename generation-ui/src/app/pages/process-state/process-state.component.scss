@@ -1,0 +1,9 @@
+.diagram-parent {
+  height: 800px;
+  border: solid 3px #eee;
+  position: relative;
+  resize: both;
+  overflow: auto;
+  max-height: 100%;
+  max-width: 100%;
+}

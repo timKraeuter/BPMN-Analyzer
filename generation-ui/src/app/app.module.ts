@@ -26,6 +26,7 @@ import { AnalysisComponent } from './pages/analysis/analysis.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ProcessStateComponent } from './pages/process-state/process-state.component';
+import { TokenDiagramComponent } from './components/token-diagram/token-diagram.component';
 
 @NgModule({
     declarations: [
@@ -36,6 +37,7 @@ import { ProcessStateComponent } from './pages/process-state/process-state.compo
         AnalysisResultComponent,
         AnalysisComponent,
         ProcessStateComponent,
+        TokenDiagramComponent,
     ],
     imports: [
         BrowserModule,

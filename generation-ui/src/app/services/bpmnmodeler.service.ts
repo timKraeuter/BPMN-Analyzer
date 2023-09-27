@@ -9,6 +9,7 @@ import { Injectable } from '@angular/core';
  */
 // @ts-ignore
 import Modeler from 'bpmn-js/lib/Modeler';
+import TokenModeler from '../../../../../bpmn-token/lib/Modeler';
 import Viewer from 'bpmn-js/lib/Viewer';
 
 @Injectable({
@@ -16,6 +17,9 @@ import Viewer from 'bpmn-js/lib/Viewer';
 })
 export class BPMNModelerService {
     private modeler: Modeler = new Modeler({
+        keyboard: { bindTo: document },
+    });
+    private tokenModeler: TokenModeler = new TokenModeler({
         keyboard: { bindTo: document },
     });
     private viewer: Viewer = new Viewer({
@@ -28,6 +32,10 @@ export class BPMNModelerService {
 
     public getViewer(): Viewer {
         return this.viewer;
+    }
+
+    getTokenModeler(): TokenModeler {
+        return this.tokenModeler;
     }
 
     public async getBPMNModelXML(): Promise<Blob> {
@@ -46,7 +54,14 @@ export class BPMNModelerService {
     async updateViewerBPMNModel() {
         const saveXMLResult = await this.modeler.saveXML();
         if (saveXMLResult.xml) {
-            this.viewer.importXML(saveXMLResult.xml);
+            await this.viewer.importXML(saveXMLResult.xml);
+        }
+    }
+
+    async updateTokenBPMNModel() {
+        const saveXMLResult = await this.modeler.saveXML();
+        if (saveXMLResult.xml) {
+            await this.tokenModeler.importXML(saveXMLResult.xml);
         }
     }
 }

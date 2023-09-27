@@ -11,6 +11,9 @@ export class AppComponent {
     constructor(private modeler: BPMNModelerService) {}
 
     async stepChanged(event: StepperSelectionEvent) {
+        if (this.changedToProcessStateStep(event)) {
+            await this.modeler.updateTokenBPMNModel();
+        }
         if (this.changedToAnalyzeStep(event)) {
             await this.modeler.updateViewerBPMNModel();
         }
@@ -18,5 +21,9 @@ export class AppComponent {
 
     private changedToAnalyzeStep(event: StepperSelectionEvent) {
         return event.selectedIndex == 2;
+    }
+
+    private changedToProcessStateStep(event: StepperSelectionEvent) {
+        return event.selectedIndex == 1;
     }
 }
