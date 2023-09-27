@@ -10,7 +10,7 @@
         (click)="uploader.click()"
     >
         <mat-icon>upload</mat-icon>
-        Upload BPMN model
+        Upload model
     </button>
     <button
         class="right-margin"
@@ -20,7 +20,7 @@
         (click)="downloadBPMNClicked()"
     >
         <mat-icon>download</mat-icon>
-        Download BPMN model
+        Download model
     </button>
 
     <span *ngIf="graphGrammarGenerationRunning; else generationButton">
@@ -35,7 +35,7 @@
             (click)="downloadGGClicked()"
         >
             <mat-icon>cloud_download</mat-icon>
-            Download graph transformation system
+            Download GT-system
         </button>
     </ng-template>
     <button
