@@ -18,12 +18,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { TemporalLogicSyntaxComponent } from './bpmn-analysis/temporal-logic-syntax/temporal-logic-syntax.component';
-import { AnalysisResultComponent } from './bpmn-analysis/analysis-result/analysis-result.component';
+import { TemporalLogicSyntaxComponent } from './analysis/temporal-logic-syntax/temporal-logic-syntax.component';
+import { AnalysisResultComponent } from './analysis/analysis-result/analysis-result.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatListModule } from '@angular/material/list';
-import { BpmnAnalysisComponent } from './bpmn-analysis/bpmn-analysis.component';
-import { MatStepperModule } from '@angular/material/stepper';
+import { AnalysisComponent } from '."./analysis/analysis.component"import { MatStepperModule } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ProcessStateComponent } from './process-state/process-state.component';
 
@@ -34,7 +33,7 @@ import { ProcessStateComponent } from './process-state/process-state.component';
         DiagramComponent,
         TemporalLogicSyntaxComponent,
         AnalysisResultComponent,
-        BpmnAnalysisComponent,
+      AnalysisComponent,
         ProcessStateComponent,
     ],
     imports: [

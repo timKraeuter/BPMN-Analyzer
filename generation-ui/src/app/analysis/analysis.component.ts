@@ -10,10 +10,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-analysis',
-    templateUrl: './bpmn-analysis.component.html',
-    styleUrls: ['./bpmn-analysis.component.scss'],
+    templateUrl: './analysis.component.html',
+    styleUrls: ['./analysis.component.scss'],
 })
-export class BpmnAnalysisComponent {
+export class AnalysisComponent {
     // General BPMN property checking.
     public bpmnSpecificPropertiesToBeChecked: string[] = [];
     public bpmnSpecificVerificationRunning: boolean = false;
