@@ -130,7 +130,7 @@ export class AnalysisComponent {
     }
 
     private colorElementsInRed(elementsToColor: any[]) {
-        const modeling: any = this.bpmnModeler.getBPMNJs().get('modeling');
+        const modeling: any = this.bpmnModeler.getModeler().get('modeling');
         modeling.setColor(elementsToColor, {
             stroke: '#831311',
             fill: '#ffcdd2',
@@ -139,7 +139,7 @@ export class AnalysisComponent {
 
     private getElementsForIDs(ids: string[]) {
         const elementRegistry: any = this.bpmnModeler
-            .getBPMNJs()
+            .getModeler()
             .get('elementRegistry');
         return ids.map((id) => elementRegistry.get(id));
     }

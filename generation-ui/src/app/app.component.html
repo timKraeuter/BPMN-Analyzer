@@ -1,4 +1,8 @@
-<mat-stepper #stepper animationDuration="0">
+<mat-stepper
+    #stepper
+    animationDuration="0"
+    (selectionChange)="stepChanged($event)"
+>
     <mat-step label="Model your BPMN process">
         <app-modeling></app-modeling>
         <mat-divider></mat-divider>

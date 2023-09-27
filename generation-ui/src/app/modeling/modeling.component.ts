@@ -13,10 +13,6 @@ const BPMN_FILE_EXTENSION = '.bpmn';
     styleUrls: ['./modeling.component.scss'],
 })
 export class ModelingComponent {
-    diagramUrl =
-        'https://raw.githubusercontent.com/timKraeuter/Rewrite_Rule_Generation/master/generation-ui/initial.bpmn';
-    importError?: Error;
-
     public fileName: string = 'model';
 
     public graphGrammarGenerationRunning: boolean = false;
@@ -26,20 +22,6 @@ export class ModelingComponent {
         private snackBar: MatSnackBar,
         private grooveService: GrooveService,
     ) {}
-
-    handleImported(event: any) {
-        const { type, error, warnings } = event;
-
-        if (type === 'success') {
-            console.log(`Rendered diagram (%s warnings)`, warnings.length);
-        }
-
-        if (type === 'error') {
-            console.error('Failed to render diagram', error);
-        }
-
-        this.importError = error;
-    }
 
     downloadBPMNClicked() {
         this.bpmnModeler
@@ -56,7 +38,7 @@ export class ModelingComponent {
         // Remove file extension: https://stackoverflow.com/questions/4250364/how-to-trim-a-file-extension-from-a-string-in-javascript
         this.fileName = file.name.replace(/\.[^/.]+$/, '');
         const fileText: string = await file.text();
-        await this.bpmnModeler.getBPMNJs().importXML(fileText);
+        await this.bpmnModeler.getModeler().importXML(fileText);
     }
 
     async downloadGGClicked() {
