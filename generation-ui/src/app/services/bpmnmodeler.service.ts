@@ -26,6 +26,8 @@ export class BPMNModelerService {
         keyboard: { bindTo: document },
     });
 
+    private lastXMLLoadedByTokenModeler: string = '';
+
     public getModeler(): Modeler {
         return this.modeler;
     }
@@ -58,10 +60,14 @@ export class BPMNModelerService {
         }
     }
 
-    async updateTokenBPMNModel() {
+    async updateTokenBPMNModelIfNeeded() {
         const saveXMLResult = await this.modeler.saveXML();
-        if (saveXMLResult.xml) {
+        if (
+            saveXMLResult.xml &&
+            this.lastXMLLoadedByTokenModeler !== saveXMLResult.xml
+        ) {
             await this.tokenModeler.importXML(saveXMLResult.xml);
+            this.lastXMLLoadedByTokenModeler = saveXMLResult.xml;
         }
     }
 }

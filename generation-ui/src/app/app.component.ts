@@ -12,7 +12,7 @@ export class AppComponent {
 
     async stepChanged(event: StepperSelectionEvent) {
         if (this.changedToProcessStateStep(event)) {
-            await this.modeler.updateTokenBPMNModel();
+            await this.modeler.updateTokenBPMNModelIfNeeded();
         }
         if (this.changedToAnalyzeStep(event)) {
             await this.modeler.updateViewerBPMNModel();
@@ -24,6 +24,6 @@ export class AppComponent {
     }
 
     private changedToProcessStateStep(event: StepperSelectionEvent) {
-        return event.selectedIndex == 1;
+        return event.previouslySelectedIndex == 0 && event.selectedIndex == 1;
     }
 }
