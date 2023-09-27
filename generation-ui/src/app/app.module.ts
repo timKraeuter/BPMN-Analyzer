@@ -22,7 +22,8 @@ import { TemporalLogicSyntaxComponent } from './analysis/temporal-logic-syntax/t
 import { AnalysisResultComponent } from './analysis/analysis-result/analysis-result.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatListModule } from '@angular/material/list';
-import { AnalysisComponent } from '."./analysis/analysis.component"import { MatStepperModule } from '@angular/material/stepper';
+import { AnalysisComponent } from './analysis/analysis.component';
+import { MatStepperModule } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ProcessStateComponent } from './process-state/process-state.component';
 
@@ -33,7 +34,7 @@ import { ProcessStateComponent } from './process-state/process-state.component';
         DiagramComponent,
         TemporalLogicSyntaxComponent,
         AnalysisResultComponent,
-      AnalysisComponent,
+        AnalysisComponent,
         ProcessStateComponent,
     ],
     imports: [
