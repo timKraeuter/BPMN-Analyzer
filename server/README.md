@@ -43,9 +43,7 @@ This will start the application at [localhost:8080](http://localhost:8080/).
 
 # Deployment to Azure
 
-Follow
-this [tutorial](https://learn.microsoft.com/en-us/azure/container-instances/container-instances-tutorial-prepare-acr#log-in-to-container-registry)
-after building the container.
+Follow this [tutorial](https://learn.microsoft.com/en-us/azure/container-instances/container-instances-tutorial-prepare-acr#log-in-to-container-registry) after building the container.
 Important commands are listed below.
 
 Login to container registry (potentially run `az login` before):
