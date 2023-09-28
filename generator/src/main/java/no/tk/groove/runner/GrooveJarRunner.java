@@ -16,7 +16,7 @@ public class GrooveJarRunner {
   private final boolean printOutputToConsole;
 
   private static String findGrooveBinDir() {
-    List<String> possibleLocations = Lists.newArrayList("no/tk/groove/bin", "../groove/bin");
+    List<String> possibleLocations = Lists.newArrayList("/groove/bin", "../groove/bin");
     for (String possibleLocation : possibleLocations) {
       if (Files.exists(Path.of(possibleLocation))) {
         return possibleLocation;
