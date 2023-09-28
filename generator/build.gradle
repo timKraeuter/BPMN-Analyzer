@@ -1,14 +1,15 @@
 plugins {
     id 'java'
+    // Analysis
     id "org.sonarqube" version "4.4.0.3356"
     id 'jacoco'
-    id("net.ltgt.errorprone") version "3.0.1"
-    id "com.diffplug.spotless" version "6.11.0"
+    id "net.ltgt.errorprone" version "3.1.0"
+    id "com.diffplug.spotless" version "6.21.0"
 }
 
 group = 'no.hvl.tk'
 version = '1'
-sourceCompatibility = '17'
+sourceCompatibility = '20'
 
 repositories {
     mavenCentral()
