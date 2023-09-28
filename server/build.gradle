@@ -55,6 +55,12 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+}
+
 sonarqube {
     properties {
         property "sonar.projectKey", "timkraeuter_Groove_Rule_Generation_Server"
