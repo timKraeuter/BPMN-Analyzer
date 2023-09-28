@@ -16,6 +16,7 @@ public class GxlToXMLConverter {
 
   public static void toXml(final Gxl gxl, Path outputFile) {
     try {
+      Files.deleteIfExists(outputFile);
       Files.createFile(outputFile);
 
       Marshaller jaxbMarshaller = createJAXBMarshaller();

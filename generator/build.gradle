@@ -21,16 +21,16 @@ dependencies {
 
     // XML-marshalling not part of jdk 11 anymore.
     // https://mvnrepository.com/artifact/jakarta.xml.bind/jaxb-api
-    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.0'
-    // https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-core
-    implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.2'
+    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.1'
+    // https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime
+    implementation("org.glassfish.jaxb:jaxb-runtime:4.0.3")
 
     // https://mvnrepository.com/artifact/commons-io/commons-io
-    implementation 'commons-io:commons-io:2.11.0'
+    implementation 'commons-io:commons-io:2.13.0'
     // https://mvnrepository.com/artifact/com.google.guava/guava
-    implementation 'com.google.guava:guava:31.1-jre'
+    implementation 'com.google.guava:guava:32.1.1-jre'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.apache.commons:commons-lang3:3.13.0'
     // String substitution for Maude.
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     implementation 'org.apache.commons:commons-text:1.10.0'

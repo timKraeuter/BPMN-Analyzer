@@ -10,7 +10,7 @@ plugins {
 }
 
 group = 'no.hvl.tk'
-version = '1.0.0'
+version = '2.0.0'
 sourceCompatibility = '17'
 // TODO: Need to build a new groove version since groove is only compatible up to java 11.
 
@@ -23,17 +23,17 @@ dependencies {
 
     // XML-marshalling not part of jdk 11 anymore.
     // https://mvnrepository.com/artifact/jakarta.xml.bind/jaxb-api
-    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.0'
-    // https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-core
-    implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.2'
+    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.1'
+    // https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime
+    implementation("org.glassfish.jaxb:jaxb-runtime:4.0.3")
     // https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api
-    implementation group: 'jakarta.activation', name: 'jakarta.activation-api', version: '2.1.1'
+    implementation group: 'jakarta.activation', name: 'jakarta.activation-api', version: '2.1.2'
 
     // Add pair class
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0'
     // https://mvnrepository.com/artifact/commons-io/commons-io
-    implementation 'commons-io:commons-io:2.11.0'
+    implementation 'commons-io:commons-io:2.13.0'
 
     // Spring
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -41,13 +41,13 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // Form data request for testing
     // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime
-    testImplementation 'org.apache.httpcomponents:httpmime:4.5.13'
+    testImplementation 'org.apache.httpcomponents:httpmime:4.5.14'
     // Guava
     // https://mvnrepository.com/artifact/com.google.guava/guava
-    testImplementation 'com.google.guava:guava:31.1-jre'
+    testImplementation 'com.google.guava:guava:32.1.2-jre'
     // toString of input streams.
     // https://mvnrepository.com/artifact/commons-io/commons-io
-    testImplementation 'commons-io:commons-io:2.11.0'
+    testImplementation 'commons-io:commons-io:2.13.0'
 
     errorprone("com.google.errorprone:error_prone_core:2.16")
 }
