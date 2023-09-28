@@ -1,5 +1,15 @@
-<div class="diagram-parent">
-    <app-token-diagram></app-token-diagram>
+<div class="token-file-container">
+    <div class="diagram-parent">
+        <app-token-diagram></app-token-diagram>
+    </div>
+    <mat-list class="files">
+        <div mat-subheader>Propositions</div>
+        <mat-list-item *ngFor="let file of propositions">
+            <mat-icon matListItemIcon>description</mat-icon>
+            <div matListItemTitle>{{ file.name }}</div>
+            <div matListItemLine>{{ file.updated | date: 'shortTime' }}</div>
+        </mat-list-item>
+    </mat-list>
 </div>
 <div class="modeler-buttons top-margin">
     <button
@@ -25,8 +35,9 @@
         mat-raised-button
         color="primary"
         matTooltip="Save the process state."
+        (click)="newProcessState()"
     >
-        <mat-icon>save</mat-icon>
-        Save process state
+        <mat-icon>add</mat-icon>
+        New proposition
     </button>
 </div>

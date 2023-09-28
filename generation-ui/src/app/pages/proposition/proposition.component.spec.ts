@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProcessStateComponent } from './process-state.component';
+import { PropositionComponent } from './proposition.component';
 
 describe('ProcessStateComponent', () => {
-    let component: ProcessStateComponent;
-    let fixture: ComponentFixture<ProcessStateComponent>;
+    let component: PropositionComponent;
+    let fixture: ComponentFixture<PropositionComponent>;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [ProcessStateComponent],
+            declarations: [PropositionComponent],
         });
-        fixture = TestBed.createComponent(ProcessStateComponent);
+        fixture = TestBed.createComponent(PropositionComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

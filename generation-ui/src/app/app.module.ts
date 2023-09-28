@@ -25,7 +25,7 @@ import { MatListModule } from '@angular/material/list';
 import { AnalysisComponent } from './pages/analysis/analysis.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { ProcessStateComponent } from './pages/process-state/process-state.component';
+import { PropositionComponent } from './pages/proposition/proposition.component';
 import { TokenDiagramComponent } from './components/token-diagram/token-diagram.component';
 
 @NgModule({
@@ -36,7 +36,7 @@ import { TokenDiagramComponent } from './components/token-diagram/token-diagram.
         TemporalLogicSyntaxComponent,
         AnalysisResultComponent,
         AnalysisComponent,
-        ProcessStateComponent,
+        PropositionComponent,
         TokenDiagramComponent,
     ],
     imports: [

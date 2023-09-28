@@ -5,7 +5,19 @@
   resize: both;
   overflow: auto;
   max-height: 100%;
-  max-width: 100%;
+  width: 80%;
+  max-width: 90%;
+}
+
+.token-file-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.files {
+  width: 20%;
+  max-width: 20%;
 }
 
 .top-margin {
