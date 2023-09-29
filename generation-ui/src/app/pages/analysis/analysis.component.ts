@@ -89,7 +89,12 @@ export class AnalysisComponent {
         const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
         this.bpmnSpecificVerificationRunning = true;
         this.grooveService
-            .checkTemporalLogic('CTL', this.ctlProperty, xmlModel)
+            .checkTemporalLogic(
+                'CTL',
+                this.ctlProperty,
+                xmlModel,
+                this.propService.propositions,
+            )
             .subscribe({
                 error: (error) => {
                     console.error(error);

@@ -13,6 +13,5 @@ export class PropositionService {
 
 export interface Proposition {
     name: string;
-    updated: Date;
     xml: string;
 }

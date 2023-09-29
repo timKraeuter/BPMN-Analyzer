@@ -18,7 +18,6 @@ import { RenamePropositionDialogComponent } from '../../components/rename-propos
 export class PropositionComponent {
     public currentProposition: Proposition = {
         name: 'Proposition1',
-        updated: new Date(),
         xml: '',
     };
 
@@ -33,7 +32,6 @@ export class PropositionComponent {
     async createNewProposition() {
         const newProposition = {
             name: 'newProposition',
-            updated: new Date(),
             xml: await this.modeler.getBpmnXML(),
         };
         this.propositions.push(newProposition);
