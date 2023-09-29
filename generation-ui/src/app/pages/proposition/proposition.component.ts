@@ -42,9 +42,16 @@ export class PropositionComponent {
         }
     }
 
-    uploadTokenXML() {}
+    async uploadTokenModel(event: Event) {
+        // @ts-ignore
+        let file = (event.target as HTMLInputElement).files[0];
+        const fileText: string = await file.text();
 
-    downloadTokenXML() {
+        await this.modeler.getTokenModeler().importXML(fileText);
+        this.currentProposition.xml = fileText;
+    }
+
+    downloadTokenModel() {
         this.modeler
             .getTokenModelXMLBlob()
             // @ts-ignore

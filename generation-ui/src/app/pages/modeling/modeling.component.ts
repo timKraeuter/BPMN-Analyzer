@@ -23,7 +23,7 @@ export class ModelingComponent {
         private grooveService: GrooveService,
     ) {}
 
-    downloadBPMNClicked() {
+    downloadBPMN() {
         this.bpmnModeler
             .getBPMNModelXMLBlob()
             // @ts-ignore
@@ -32,7 +32,7 @@ export class ModelingComponent {
             });
     }
 
-    async uploadFile(event: Event) {
+    async uploadBPMN(event: Event) {
         // @ts-ignore
         let file = (event.target as HTMLInputElement).files[0];
         // Remove file extension: https://stackoverflow.com/questions/4250364/how-to-trim-a-file-extension-from-a-string-in-javascript

@@ -17,7 +17,7 @@
         mat-raised-button
         matTooltip="Download the BPMN model as a BPMN-file."
         color="primary"
-        (click)="downloadBPMNClicked()"
+        (click)="downloadBPMN()"
     >
         <mat-icon>download</mat-icon>
         Download model
@@ -48,4 +48,4 @@
         <mat-icon>info</mat-icon>
     </button>
 </div>
-<input hidden type="file" #uploader (change)="uploadFile($event)" />
+<input hidden type="file" #uploader (change)="uploadBPMN($event)" />
