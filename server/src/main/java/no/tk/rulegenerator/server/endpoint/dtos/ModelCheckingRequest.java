@@ -1,7 +1,50 @@
 package no.tk.rulegenerator.server.endpoint.dtos;
 
+import java.util.HashSet;
+import java.util.Set;
 import no.tk.groove.runner.checking.TemporalLogic;
 import org.springframework.web.multipart.MultipartFile;
 
-public record ModelCheckingRequest(MultipartFile file, String property, TemporalLogic logic) {
+public class ModelCheckingRequest {
+
+  private MultipartFile file;
+  private String property;
+  private TemporalLogic logic;
+  private Set<String> propositions;
+
+  public ModelCheckingRequest() {
+    propositions = new HashSet<>();
+  }
+
+  public MultipartFile getFile() {
+    return file;
+  }
+
+  public void setFile(MultipartFile file) {
+    this.file = file;
+  }
+
+  public String getProperty() {
+    return property;
+  }
+
+  public void setProperty(String property) {
+    this.property = property;
+  }
+
+  public TemporalLogic getLogic() {
+    return logic;
+  }
+
+  public void setLogic(TemporalLogic logic) {
+    this.logic = logic;
+  }
+
+  public Set<String> getPropositions() {
+    return propositions;
+  }
+
+  public void setPropositions(Set<String> propositions) {
+    this.propositions = propositions;
+  }
 }

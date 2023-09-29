@@ -1,13 +1,16 @@
 package no.tk.rulegenerator.server.endpoint;
 
+import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import no.tk.behavior.bpmn.BPMNCollaboration;
+import no.tk.rulegenerator.server.endpoint.dtos.BPMNProposition;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingRequest;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResponse;
 import no.tk.rulegenerator.server.endpoint.dtos.ModelCheckingRequest;
@@ -20,6 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class RuleGeneratorController {
+
+  // Needed for custom form data deserialization
+  private final Gson gson = new Gson();
 
   /**
    * Generate a graph grammar for a given BPMN file.
@@ -88,9 +94,18 @@ public class RuleGeneratorController {
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
     Pair<Path, BPMNCollaboration> result =
-        RuleGeneratorControllerHelper.generateGGForBPMNFile(request.file());
+        RuleGeneratorControllerHelper.generateGGForBPMNFile(request.getFile());
+
+    RuleGeneratorControllerHelper.generatePropositions(result.getLeft(), readProps(request));
 
     return new BPMNModelChecker(result.getLeft(), result.getRight())
-        .checkTemporalLogicProperty(request.logic(), request.property());
+        .checkTemporalLogicProperty(request.getLogic(), request.getProperty());
+  }
+
+  private List<BPMNProposition> readProps(ModelCheckingRequest request) {
+    return request.getPropositions().stream()
+        .map(
+            propString -> gson.fromJson(propString, BPMNProposition.class))
+        .toList();
   }
 }

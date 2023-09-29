@@ -1,5 +1,6 @@
 package no.tk.behavior.bpmn.reader.token;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -24,6 +25,11 @@ import org.camunda.bpm.model.xml.type.ModelElementType;
 public class BPMNTokenFileReader {
   static {
     Bpmn.INSTANCE = new BPMNToken();
+  }
+
+  public BPMNProcessSnapshot readModelFromString(String name, String xml) {
+    // TODO: Should be a better way than wrapping the string.
+    return readModelFromStream(name, new ByteArrayInputStream(xml.getBytes()));
   }
 
   public BPMNProcessSnapshot readModelFromFilePath(Path file) throws IOException {

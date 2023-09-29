@@ -9,12 +9,17 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.reader.BPMNFileReader;
+import no.tk.behavior.bpmn.reader.token.BPMNTokenFileReader;
+import no.tk.behavior.bpmn.reader.token.model.BPMNProcessSnapshot;
 import no.tk.groove.behaviortransformer.BehaviorToGrooveTransformer;
 import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
+import no.tk.groove.behaviortransformer.bpmn.atomic.propositions.BPMNTokenAtomicPropositionGenerator;
+import no.tk.rulegenerator.server.endpoint.dtos.BPMNProposition;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.multipart.MultipartFile;
@@ -107,5 +112,17 @@ public class RuleGeneratorControllerHelper {
   public static String getGGOrStateSpaceDirName(String modelName, Instant time) {
     String timestamp = DTF.format(time.truncatedTo(ChronoUnit.SECONDS));
     return String.format("%s_%s_%s", timestamp, UUID.randomUUID(), modelName);
+  }
+
+  public static void generatePropositions(Path ggFolder, List<BPMNProposition> props)
+      throws IOException {
+    BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator();
+    BPMNTokenFileReader bpmnTokenFileReader = new BPMNTokenFileReader();
+    for (BPMNProposition prop : props) {
+      BPMNProcessSnapshot bpmnProcessSnapshot =
+          bpmnTokenFileReader.readModelFromString(prop.name(), prop.xml());
+
+      generator.generateAndWriteAtomicProposition(bpmnProcessSnapshot, ggFolder);
+    }
   }
 }
