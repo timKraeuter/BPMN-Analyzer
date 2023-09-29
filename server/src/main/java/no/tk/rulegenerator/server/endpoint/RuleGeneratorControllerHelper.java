@@ -117,7 +117,9 @@ public class RuleGeneratorControllerHelper {
   public static void generatePropositions(Path ggFolder, List<BPMNProposition> props)
       throws IOException {
     BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator();
-    BPMNTokenFileReader bpmnTokenFileReader = new BPMNTokenFileReader(BPMNToGrooveTransformerHelper::transformToQualifiedGrooveNameIfNeeded);
+    BPMNTokenFileReader bpmnTokenFileReader =
+        new BPMNTokenFileReader(
+            BPMNToGrooveTransformerHelper::transformToQualifiedGrooveNameIfNeeded);
     for (BPMNProposition prop : props) {
       BPMNProcessSnapshot bpmnProcessSnapshot =
           bpmnTokenFileReader.readModelFromString(prop.name(), prop.xml());

@@ -104,8 +104,7 @@ public class RuleGeneratorController {
 
   private List<BPMNProposition> readProps(ModelCheckingRequest request) {
     return request.getPropositions().stream()
-        .map(
-            propString -> gson.fromJson(propString, BPMNProposition.class))
+        .map(propString -> gson.fromJson(propString, BPMNProposition.class))
         .toList();
   }
 }
