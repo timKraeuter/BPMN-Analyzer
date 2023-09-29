@@ -16,29 +16,26 @@ export class PropositionComponent {
 
     constructor(private modeler: BPMNModelerService) {}
 
-    createNewProposition() {
+    async createNewProposition() {
         const newProposition = {
             name: 'newProposition',
             updated: new Date(),
-            xml: '',
+            xml: await this.modeler.getBpmnXML(),
         };
         this.propositions.push(newProposition);
-        this.switchAndSaveAndLoadXML(newProposition);
+        await this.switchAndSaveAndLoadXML(newProposition);
     }
 
-    private switchAndSaveAndLoadXML(newProposition: {
-        xml: string;
-        name: string;
-        updated: Date;
-    }) {
-        // TODO: Save xml of old proposition
-        this.currentProposition = newProposition;
-        // TODO: Load plain xml from modeler
+    private async switchAndSaveAndLoadXML(changeTo: Proposition) {
+        this.currentProposition.xml = await this.modeler.getTokenXML();
+
+        this.currentProposition = changeTo;
+        await this.modeler.getTokenModeler().importXML(changeTo.xml);
     }
 
-    switchToProposition(proposition: Proposition) {
+    async switchToProposition(proposition: Proposition) {
         if (proposition !== this.currentProposition) {
-            this.switchAndSaveAndLoadXML(proposition);
+            await this.switchAndSaveAndLoadXML(proposition);
         }
     }
 }

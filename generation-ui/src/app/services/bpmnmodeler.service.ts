@@ -70,4 +70,20 @@ export class BPMNModelerService {
             this.lastXMLLoadedByTokenModeler = saveXMLResult.xml;
         }
     }
+
+    async getBpmnXML() {
+        return this.getXML(this.modeler);
+    }
+
+    async getTokenXML() {
+        return this.getXML(this.tokenModeler);
+    }
+
+    private async getXML(modeler: Modeler | TokenModeler) {
+        const saveXMLResult = await modeler.saveXML();
+        if (saveXMLResult.xml) {
+            return saveXMLResult.xml;
+        }
+        return '';
+    }
 }
