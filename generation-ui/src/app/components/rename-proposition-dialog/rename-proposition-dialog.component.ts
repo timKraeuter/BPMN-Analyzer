@@ -17,13 +17,13 @@ export class RenamePropositionDialogComponent {
         this.newName = data.proposition.name;
     }
 
-    cancel() {
+    closeDialog() {
         this.dialogRef.close();
     }
 
-    save() {
+    saveNameAndCloseDialog() {
         this.data.proposition.name = this.newName;
-        this.dialogRef.close();
+        this.closeDialog();
     }
 }
 

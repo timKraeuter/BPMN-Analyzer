@@ -3,9 +3,18 @@
     <mat-form-field>
         <mat-label>Proposition name</mat-label>
         <input matInput [(ngModel)]="newName" cdkFocusInitial />
+        <button
+            *ngIf="newName"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="newName = ''"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
     </mat-form-field>
 </div>
 <div mat-dialog-actions>
-    <button mat-button (click)="this.save()">Save</button>
-    <button mat-button (click)="this.cancel()">Cancel</button>
+    <button mat-button (click)="this.saveNameAndCloseDialog()">Save</button>
+    <button mat-button (click)="this.closeDialog()">Cancel</button>
 </div>
