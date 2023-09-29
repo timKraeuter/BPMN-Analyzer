@@ -65,24 +65,26 @@
                         ></textarea>
                     </mat-form-field>
                 </form>
-                <button
-                    mat-raised-button
-                    color="primary"
-                    matTooltip="Checking custom LTL properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/."
-                    (click)="checkLTLPropertyClicked()"
-                >
-                    <mat-icon>check</mat-icon>
-                    Check LTL property
-                </button>
-                <button
-                    mat-icon-button
-                    aria-label="LTL syntax info button"
-                    color="primary"
-                    (click)="temporalLogicInfoClicked()"
-                    matTooltip="Show LTL syntax."
-                >
-                    <mat-icon>info</mat-icon>
-                </button>
+                <div class="analysis-buttons">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        matTooltip="Checking custom LTL properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/."
+                        (click)="checkLTLPropertyClicked()"
+                    >
+                        <mat-icon>check</mat-icon>
+                        Check LTL property
+                    </button>
+                    <button
+                        mat-icon-button
+                        aria-label="LTL syntax info button"
+                        color="primary"
+                        (click)="temporalLogicInfoClicked()"
+                        matTooltip="Show LTL syntax."
+                    >
+                        <mat-icon>info</mat-icon>
+                    </button>
+                </div>
             </mat-card-content>
         </mat-tab>
         <mat-tab label="CTL properties">
@@ -100,24 +102,26 @@
                         ></textarea>
                     </mat-form-field>
                 </form>
-                <button
-                    mat-raised-button
-                    color="primary"
-                    matTooltip="Check the given CTL property using groove."
-                    (click)="checkCTLPropertyClicked()"
-                >
-                    <mat-icon>check</mat-icon>
-                    Check CTL property
-                </button>
-                <button
-                    mat-icon-button
-                    aria-label="CTL syntax info button"
-                    color="primary"
-                    (click)="temporalLogicInfoClicked()"
-                    matTooltip="Show CTL syntax."
-                >
-                    <mat-icon>info</mat-icon>
-                </button>
+                <div class="analysis-buttons">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        matTooltip="Check the given CTL property using groove."
+                        (click)="checkCTLPropertyClicked()"
+                    >
+                        <mat-icon>check</mat-icon>
+                        Check CTL property
+                    </button>
+                    <button
+                        mat-icon-button
+                        aria-label="CTL syntax info button"
+                        color="primary"
+                        (click)="temporalLogicInfoClicked()"
+                        matTooltip="Show CTL syntax."
+                    >
+                        <mat-icon>info</mat-icon>
+                    </button>
+                </div>
             </mat-card-content>
         </mat-tab>
     </mat-tab-group>
