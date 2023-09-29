@@ -12,6 +12,7 @@ export class AppComponent {
 
     async stepChanged(event: StepperSelectionEvent) {
         if (this.changedToProcessStateStep(event)) {
+            // TODO: Sync issue with multiple propositions
             await this.modeler.updateTokenBPMNModelIfNeeded();
         }
         if (this.changedToAnalyzeStep(event)) {

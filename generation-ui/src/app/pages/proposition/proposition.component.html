@@ -6,7 +6,10 @@
         <div mat-subheader>Propositions</div>
         <mat-list-item
             *ngFor="let proposition of propositions"
-            [ngClass]="{ highlight: proposition === currentProposition }"
+            [ngClass]="{
+                highlight: proposition === currentProposition,
+                proposition: proposition !== currentProposition
+            }"
             (click)="switchToProposition(proposition)"
         >
             <mat-icon matListItemIcon>description</mat-icon>
