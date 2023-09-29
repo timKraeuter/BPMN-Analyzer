@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -56,7 +57,8 @@ public class BPMNModelChecker {
   public BPMNSpecificPropertyCheckingResponse checkBPMNProperties(
       BPMNSpecificPropertyCheckingRequest propertyCheckingRequest)
       throws InterruptedException, IOException {
-    BPMNSpecificPropertyCheckingResponse response = new BPMNSpecificPropertyCheckingResponse();
+    BPMNSpecificPropertyCheckingResponse response =
+        new BPMNSpecificPropertyCheckingResponse(new ArrayList<>());
 
     for (BPMNSpecificProperty property : propertyCheckingRequest.getPropertiesToBeChecked()) {
       this.checkPropertyAndRecordResult(property, response);

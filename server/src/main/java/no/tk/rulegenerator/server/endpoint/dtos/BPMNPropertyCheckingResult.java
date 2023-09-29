@@ -2,33 +2,11 @@ package no.tk.rulegenerator.server.endpoint.dtos;
 
 import java.util.Objects;
 
-public class BPMNPropertyCheckingResult implements Comparable<BPMNPropertyCheckingResult> {
-  private final BPMNSpecificProperty name;
-  private final boolean valid;
-  private final String additionalInfo;
-
-  public BPMNPropertyCheckingResult(
-      BPMNSpecificProperty name, boolean valid, String additionalInfo) {
-    this.name = name;
-    this.valid = valid;
-    this.additionalInfo = additionalInfo;
-  }
-
-  public BPMNSpecificProperty getName() {
-    return name;
-  }
-
-  public boolean isValid() {
-    return valid;
-  }
-
-  public String getAdditionalInfo() {
-    return additionalInfo;
-  }
+public record BPMNPropertyCheckingResult(BPMNSpecificProperty name, boolean valid, String additionalInfo) implements Comparable<BPMNPropertyCheckingResult> {
 
   @Override
   public int compareTo(BPMNPropertyCheckingResult o) {
-    return Integer.compare(this.getName().getOrdering(), o.getName().getOrdering());
+    return Integer.compare(this.name().getOrdering(), o.name().getOrdering());
   }
 
   @Override

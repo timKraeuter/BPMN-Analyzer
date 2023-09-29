@@ -5,6 +5,7 @@ import java.util.Set;
 import org.springframework.web.multipart.MultipartFile;
 
 public class BPMNSpecificPropertyCheckingRequest {
+  // TODO: This should be able to be a record class.
   MultipartFile file;
   Set<BPMNSpecificProperty> propertiesToBeChecked;
 

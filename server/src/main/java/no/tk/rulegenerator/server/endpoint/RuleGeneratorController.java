@@ -88,9 +88,9 @@ public class RuleGeneratorController {
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
     Pair<Path, BPMNCollaboration> result =
-        RuleGeneratorControllerHelper.generateGGForBPMNFile(request.getFile());
+        RuleGeneratorControllerHelper.generateGGForBPMNFile(request.file());
 
     return new BPMNModelChecker(result.getLeft(), result.getRight())
-        .checkTemporalLogicProperty(request.getLogic(), request.getProperty());
+        .checkTemporalLogicProperty(request.logic(), request.property());
   }
 }
