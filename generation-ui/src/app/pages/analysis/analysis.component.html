@@ -1,13 +1,13 @@
 <div class="diagram-parent">
     <app-diagram [viewer]="true"></app-diagram>
 </div>
-<mat-card appearance="outlined" class="card top-margin">
+<mat-card appearance="outlined" class="top-margin">
     <mat-card-header>
         <mat-card-title>Analysis</mat-card-title>
     </mat-card-header>
     <mat-tab-group animationDuration="0ms">
         <mat-tab label="General BPMN properties">
-            <mat-card-content class="">
+            <mat-card-content>
                 Select one or more of the following properties to check for the
                 BPMN model.
                 <br />
@@ -51,7 +51,7 @@
             </mat-card-content>
         </mat-tab>
         <mat-tab label="LTL properties" *ngIf="false">
-            <mat-card-content class="top-margin">
+            <mat-card-content>
                 Specify a LTL property to check for the BPMN model.
                 <br />
                 <form class="form top-margin">
@@ -88,10 +88,13 @@
             </mat-card-content>
         </mat-tab>
         <mat-tab label="CTL properties">
-            <mat-card-content class="top-margin">
-                Specify a CTL property to check for the BPMN model.
-                <br />
-                <form class="form top-margin">
+            <mat-card-content>
+                <div>Specify a CTL property to check for the BPMN model.</div>
+                <div>
+                    Your propositions are:
+                    <span class="bold">{{ this.getPropNames() }}</span>
+                </div>
+                <form class="form">
                     <mat-form-field class="full-width" appearance="fill">
                         <mat-label>CTL Property</mat-label>
                         <textarea

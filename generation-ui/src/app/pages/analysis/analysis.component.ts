@@ -7,6 +7,7 @@ import {
 import { TemporalLogicSyntaxComponent } from '../../components/temporal-logic-syntax/temporal-logic-syntax.component';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PropositionService } from '../../services/proposition.service';
 
 @Component({
     selector: 'app-analysis',
@@ -28,6 +29,7 @@ export class AnalysisComponent {
         private bpmnModeler: BPMNModelerService,
         private snackBar: MatSnackBar,
         private grooveService: GrooveService,
+        private propService: PropositionService,
     ) {}
 
     async checkBPMNSpecificPropertiesClicked() {
@@ -142,5 +144,9 @@ export class AnalysisComponent {
             .getModeler()
             .get('elementRegistry');
         return ids.map((id) => elementRegistry.get(id));
+    }
+
+    getPropNames() {
+        return this.propService.getPropositionNames().join(', ');
     }
 }

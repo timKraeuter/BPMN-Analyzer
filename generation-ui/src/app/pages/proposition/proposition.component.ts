@@ -3,6 +3,10 @@ import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 // @ts-ignore
 import { saveAs } from 'file-saver-es';
 import { BPMN_FILE_EXTENSION } from '../modeling/modeling.component';
+import {
+    Proposition,
+    PropositionService,
+} from '../../services/proposition.service';
 
 @Component({
     selector: 'app-process-state',
@@ -11,13 +15,17 @@ import { BPMN_FILE_EXTENSION } from '../modeling/modeling.component';
 })
 export class PropositionComponent {
     public currentProposition: Proposition = {
-        name: 'First proposition',
+        name: 'Proposition1',
         updated: new Date(),
         xml: '',
     };
-    public propositions: Proposition[] = [this.currentProposition];
 
-    constructor(private modeler: BPMNModelerService) {}
+    constructor(
+        private modeler: BPMNModelerService,
+        private propService: PropositionService,
+    ) {
+        this.propositions.push(this.currentProposition);
+    }
 
     async createNewProposition() {
         const newProposition = {
@@ -62,10 +70,8 @@ export class PropositionComponent {
                 );
             });
     }
-}
 
-export interface Proposition {
-    name: string;
-    updated: Date;
-    xml: string;
+    get propositions() {
+        return this.propService.propositions;
+    }
 }
