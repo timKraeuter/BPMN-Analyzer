@@ -8,6 +8,7 @@ import { Proposition } from '../../services/proposition.service';
     styleUrls: ['./rename-proposition-dialog.component.scss'],
 })
 export class RenamePropositionDialogComponent {
+    // TODO: Check groove and make sure the name is allowed in CTL (see angular error state)
     public newName: string;
 
     constructor(
