@@ -8,19 +8,16 @@ import { Proposition } from '../../services/proposition.service';
     styleUrls: ['./rename-proposition-dialog.component.scss'],
 })
 export class RenamePropositionDialogComponent {
-    private readonly oldName: string;
     public newName: string;
 
     constructor(
         private dialogRef: MatDialogRef<RenamePropositionDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: RenamePropositionDialogData,
     ) {
-        this.oldName = data.proposition.name;
         this.newName = data.proposition.name;
     }
 
     cancel() {
-        this.data.proposition.name = this.oldName;
         this.dialogRef.close();
     }
 
