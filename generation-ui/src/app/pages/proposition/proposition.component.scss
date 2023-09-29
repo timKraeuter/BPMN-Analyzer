@@ -41,3 +41,11 @@
   justify-content: flex-start;
   align-items: center;
 }
+
+.order {
+  order: 1;
+}
+
+.editButton:hover {
+  cursor: pointer;
+}

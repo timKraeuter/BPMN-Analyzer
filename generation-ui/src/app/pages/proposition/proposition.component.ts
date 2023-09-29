@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 // @ts-ignore
 import { saveAs } from 'file-saver-es';
@@ -7,6 +7,12 @@ import {
     Proposition,
     PropositionService,
 } from '../../services/proposition.service';
+import {
+    MAT_DIALOG_DATA,
+    MatDialog,
+    MatDialogModule,
+} from '@angular/material/dialog';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-process-state',
@@ -23,6 +29,7 @@ export class PropositionComponent {
     constructor(
         private modeler: BPMNModelerService,
         private propService: PropositionService,
+        private dialog: MatDialog,
     ) {
         this.propositions.push(this.currentProposition);
     }
@@ -74,4 +81,26 @@ export class PropositionComponent {
     get propositions() {
         return this.propService.propositions;
     }
+
+    editProposition(proposition: Proposition) {
+        this.dialog.open(DialogDataExampleDialog, {
+            data: {
+                proposition,
+            },
+        });
+    }
+}
+
+export interface DialogData {
+    proposition: Proposition;
+}
+
+@Component({
+    selector: 'dialog-data-example-dialog',
+    template: '<div>{{this.data.proposition.name}}</div><div>123</div>',
+    standalone: true,
+    imports: [MatDialogModule, NgIf],
+})
+export class DialogDataExampleDialog {
+    constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 }

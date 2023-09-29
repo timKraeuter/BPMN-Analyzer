@@ -27,6 +27,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { PropositionComponent } from './pages/proposition/proposition.component';
 import { TokenDiagramComponent } from './components/token-diagram/token-diagram.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     declarations: [
@@ -58,6 +59,7 @@ import { TokenDiagramComponent } from './components/token-diagram/token-diagram.
         MatProgressSpinnerModule,
         MatListModule,
         MatStepperModule,
+        MatDialogModule,
     ],
     providers: [
         {

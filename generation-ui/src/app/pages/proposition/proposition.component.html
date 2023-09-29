@@ -13,7 +13,15 @@
             (click)="switchToProposition(proposition)"
         >
             <mat-icon matListItemIcon>description</mat-icon>
-            <div matListItemTitle>{{ proposition.name }}</div>
+            <mat-icon
+                matListItemIcon
+                class="order editButton"
+                (click)="this.editProposition(proposition)"
+                >edit</mat-icon
+            >
+            <div matListItemTitle>
+                {{ proposition.name }}
+            </div>
             <div matListItemLine>
                 {{ proposition.updated | date: 'shortTime' }}
             </div>
