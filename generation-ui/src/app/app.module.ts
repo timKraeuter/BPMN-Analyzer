@@ -28,6 +28,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { PropositionComponent } from './pages/proposition/proposition.component';
 import { TokenDiagramComponent } from './components/token-diagram/token-diagram.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { RenamePropositionDialogComponent } from './components/rename-proposition-dialog/rename-proposition-dialog.component';
 
 @NgModule({
     declarations: [
@@ -39,6 +40,7 @@ import { MatDialogModule } from '@angular/material/dialog';
         AnalysisComponent,
         PropositionComponent,
         TokenDiagramComponent,
+        RenamePropositionDialogComponent,
     ],
     imports: [
         BrowserModule,
