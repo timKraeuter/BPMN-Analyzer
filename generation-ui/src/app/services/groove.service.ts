@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
+import { Proposition } from './proposition.service';
 
 const baseURL = environment.production
     ? window.location.href
@@ -43,11 +44,15 @@ export class GrooveService {
         logic: string,
         property: string,
         xmlModel: Blob,
+        propositions: Proposition[] = [],
     ): Observable<ModelCheckingResponse> {
         const formData = new FormData();
         formData.append('logic', logic);
         formData.append('property', property);
         formData.append('file', xmlModel);
+        propositions.forEach((proposition) =>
+            formData.append('propositions[]', JSON.stringify(proposition)),
+        );
         return this.httpClient.post<ModelCheckingResponse>(
             checkTemporalLogicPropertyURL,
             formData,
