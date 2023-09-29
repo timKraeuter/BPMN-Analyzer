@@ -16,7 +16,7 @@ public class GrooveJarRunner {
   private final boolean printOutputToConsole;
 
   private static String findGrooveBinDir() {
-    List<String> possibleLocations = Lists.newArrayList("/groove/bin", "../groove/bin");
+    List<String> possibleLocations = Lists.newArrayList("./groove/bin", "../groove/bin");
     for (String possibleLocation : possibleLocations) {
       if (Files.exists(Path.of(possibleLocation))) {
         return possibleLocation;
@@ -59,7 +59,6 @@ public class GrooveJarRunner {
     ProcessBuilder builder =
         new ProcessBuilder(
             "java", "-jar", grooveBinDir + "/ModelChecker.jar", graphGrammar, "-ctl", ctlProperty);
-
     String grooveOutput = runProcessAndReturnOutput(builder);
     return readModelCheckingResultFromGrooveOutput(grooveOutput, ctlProperty);
   }
