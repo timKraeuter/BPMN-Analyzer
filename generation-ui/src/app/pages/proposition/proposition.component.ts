@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
+// @ts-ignore
+import { saveAs } from 'file-saver-es';
+import { BPMN_FILE_EXTENSION } from '../modeling/modeling.component';
 
 @Component({
     selector: 'app-process-state',
@@ -37,6 +40,20 @@ export class PropositionComponent {
         if (proposition !== this.currentProposition) {
             await this.switchAndSaveAndLoadXML(proposition);
         }
+    }
+
+    uploadTokenXML() {}
+
+    downloadTokenXML() {
+        this.modeler
+            .getTokenModelXMLBlob()
+            // @ts-ignore
+            .then((result) => {
+                saveAs(
+                    result,
+                    this.currentProposition.name + BPMN_FILE_EXTENSION,
+                );
+            });
     }
 }
 

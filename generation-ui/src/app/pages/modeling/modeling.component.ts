@@ -5,7 +5,7 @@ import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GrooveService } from '../../services/groove.service';
 
-const BPMN_FILE_EXTENSION = '.bpmn';
+export const BPMN_FILE_EXTENSION = '.bpmn';
 
 @Component({
     selector: 'app-modeling',
@@ -25,7 +25,7 @@ export class ModelingComponent {
 
     downloadBPMNClicked() {
         this.bpmnModeler
-            .getBPMNModelXML()
+            .getBPMNModelXMLBlob()
             // @ts-ignore
             .then((result) => {
                 saveAs(result, this.fileName + BPMN_FILE_EXTENSION);
@@ -43,7 +43,7 @@ export class ModelingComponent {
 
     async downloadGGClicked() {
         this.graphGrammarGenerationRunning = true;
-        const xmlModel = await this.bpmnModeler.getBPMNModelXML();
+        const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
 
         this.grooveService
             .downloadGG(xmlModel)

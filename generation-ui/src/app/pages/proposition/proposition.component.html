@@ -26,6 +26,7 @@
         mat-raised-button
         color="primary"
         matTooltip="Upload BPMN token model."
+        (click)="uploadTokenXML()"
     >
         <mat-icon>upload</mat-icon>
         Upload model
@@ -35,6 +36,7 @@
         mat-raised-button
         color="primary"
         matTooltip="Download BPMN token model."
+        (click)="downloadTokenXML()"
     >
         <mat-icon>download</mat-icon>
         Download model

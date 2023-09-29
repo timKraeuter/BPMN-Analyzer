@@ -11,6 +11,7 @@ import { Injectable } from '@angular/core';
 import Modeler from 'bpmn-js/lib/Modeler';
 import TokenModeler from '../../../../../bpmn-token/lib/Modeler';
 import Viewer from 'bpmn-js/lib/Viewer';
+import { SaveXMLResult } from 'bpmn-js/lib/BaseViewer';
 
 @Injectable({
     providedIn: 'root',
@@ -40,8 +41,19 @@ export class BPMNModelerService {
         return this.tokenModeler;
     }
 
-    public async getBPMNModelXML(): Promise<Blob> {
+    public async getBPMNModelXMLBlob(): Promise<Blob> {
         const xmlResult = await this.getModeler().saveXML({ format: true });
+        return this.returnAsBlob(xmlResult);
+    }
+
+    public async getTokenModelXMLBlob(): Promise<Blob> {
+        const xmlResult = await this.getTokenModeler().saveXML({
+            format: true,
+        });
+        return this.returnAsBlob(xmlResult);
+    }
+
+    private returnAsBlob(xmlResult: SaveXMLResult) {
         if (xmlResult.xml) {
             return new Blob([xmlResult.xml], {
                 type: 'text/xml;charset=utf-8',

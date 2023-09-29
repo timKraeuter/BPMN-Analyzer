@@ -41,7 +41,7 @@ export class AnalysisComponent {
             );
         }
         this.bpmnSpecificVerificationRunning = true;
-        const xmlModel = await this.bpmnModeler.getBPMNModelXML();
+        const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
         this.grooveService
             .checkBPMNSpecificProperties(
                 this.bpmnSpecificPropertiesToBeChecked,
@@ -84,7 +84,7 @@ export class AnalysisComponent {
     }
 
     async checkCTLPropertyClicked() {
-        const xmlModel = await this.bpmnModeler.getBPMNModelXML();
+        const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
         this.bpmnSpecificVerificationRunning = true;
         this.grooveService
             .checkTemporalLogic('CTL', this.ctlProperty, xmlModel)
