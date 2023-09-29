@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.function.UnaryOperator;
 import no.tk.behavior.bpmn.SequenceFlow;
 import no.tk.behavior.bpmn.reader.token.extension.BPMNToken;
 import no.tk.behavior.bpmn.reader.token.extension.instance.BTProcessSnapshot;
@@ -25,6 +26,16 @@ import org.camunda.bpm.model.xml.type.ModelElementType;
 public class BPMNTokenFileReader {
   static {
     Bpmn.INSTANCE = new BPMNToken();
+  }
+
+  private final UnaryOperator<String> elementNameTransformer;
+
+  public BPMNTokenFileReader() {
+    this(x -> x);
+  }
+
+  public BPMNTokenFileReader(UnaryOperator<String> elementNameTransformer) {
+    this.elementNameTransformer = elementNameTransformer;
   }
 
   public BPMNProcessSnapshot readModelFromString(String name, String xml) {
@@ -147,7 +158,7 @@ public class BPMNTokenFileReader {
     return getNameOrID(tokenPosition);
   }
 
-  private static String getSequenceFlowDescriptiveName(
+  private String getSequenceFlowDescriptiveName(
       ModelElementInstance association,
       org.camunda.bpm.model.bpmn.instance.SequenceFlow sfPosition) {
     String name = association.getAttributeValue("name");
@@ -156,16 +167,16 @@ public class BPMNTokenFileReader {
     }
     return String.format(
         SequenceFlow.DESCRIPTIVE_NAME_FORMAT,
-        sfPosition.getSource().getId(),
-        sfPosition.getTarget().getId());
+        getNameOrID(sfPosition.getSource()),
+        getNameOrID(sfPosition.getTarget()));
   }
 
-  private static String getNameOrID(ModelElementInstance element) {
+  private String getNameOrID(ModelElementInstance element) {
     String name = element.getAttributeValue("name");
     if (name == null) {
       return element.getAttributeValue("id");
     }
-    return name;
+    return this.elementNameTransformer.apply(name);
   }
 
   private ModelElementInstance getTokenOrSnapshotWithID(

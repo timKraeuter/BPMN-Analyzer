@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.activities.CallActivity;
@@ -40,7 +39,7 @@ public class BPMNFileReader {
     Bpmn.INSTANCE = new BPMNToken();
   }
 
-  private Function<String, String> elementNameTransformer;
+  private UnaryOperator<String> elementNameTransformer;
 
   public BPMNFileReader() {}
 
