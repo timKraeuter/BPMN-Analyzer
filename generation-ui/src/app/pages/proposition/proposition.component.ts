@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 // @ts-ignore
 import { saveAs } from 'file-saver-es';
@@ -9,6 +9,7 @@ import {
 } from '../../services/proposition.service';
 import { MatDialog } from '@angular/material/dialog';
 import { RenamePropositionDialogComponent } from '../../components/rename-proposition-dialog/rename-proposition-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-process-state',
@@ -25,6 +26,7 @@ export class PropositionComponent {
         private modeler: BPMNModelerService,
         private propService: PropositionService,
         private dialog: MatDialog,
+        private snackBar: MatSnackBar,
     ) {
         this.propositions.push(this.currentProposition);
     }
@@ -39,7 +41,9 @@ export class PropositionComponent {
     }
 
     private async switchAndSaveAndLoadXML(changeTo: Proposition) {
-        this.currentProposition.xml = await this.modeler.getTokenXML();
+        if (this.currentProposition) {
+            this.currentProposition.xml = await this.modeler.getTokenXML();
+        }
 
         this.currentProposition = changeTo;
         await this.modeler.getTokenModeler().importXML(changeTo.xml);
@@ -82,5 +86,32 @@ export class PropositionComponent {
                 proposition,
             },
         });
+    }
+
+    @HostListener('document:keydown.delete', ['$event'])
+    async deletePressed(event: KeyboardEvent) {
+        if (this.propositions.length === 1) {
+            return;
+        }
+        await this.deleteProposition(this.currentProposition);
+    }
+
+    public async deleteProposition(prop: Proposition) {
+        if (this.propositions.length === 1) {
+            this.snackBar.open(
+                'There has to be at least one proposition.',
+                'close',
+                {
+                    duration: 5000,
+                },
+            );
+            return;
+        }
+        const index = this.propositions.indexOf(prop);
+        // Propositions should always exist.
+        this.propositions.splice(index, 1);
+        if (prop === this.currentProposition) {
+            await this.switchToProposition(this.propositions[0]);
+        }
     }
 }
