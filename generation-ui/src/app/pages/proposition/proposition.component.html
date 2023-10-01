@@ -31,6 +31,17 @@
                 >delete
             </mat-icon>
         </mat-list-item>
+        <mat-list-item>
+            <button
+                mat-raised-button
+                color="primary"
+                matTooltip="Create a new proposition"
+                (click)="createNewProposition()"
+            >
+                <mat-icon>add</mat-icon>
+                New proposition
+            </button>
+        </mat-list-item>
     </mat-list>
 </div>
 <div class="modeler-buttons top-margin">
@@ -45,7 +56,6 @@
         Upload model
     </button>
     <button
-        class="right-margin"
         mat-raised-button
         color="primary"
         matTooltip="Download the BPMN token model."
@@ -53,16 +63,6 @@
     >
         <mat-icon>download</mat-icon>
         Download model
-    </button>
-    <button
-        class="right-margin"
-        mat-raised-button
-        color="primary"
-        matTooltip="Create a new proposition"
-        (click)="createNewProposition()"
-    >
-        <mat-icon>add</mat-icon>
-        New proposition
     </button>
 </div>
 <input hidden type="file" #uploader (change)="uploadTokenModel($event)" />
