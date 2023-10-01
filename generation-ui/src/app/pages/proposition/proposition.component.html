@@ -19,12 +19,14 @@
             <mat-icon
                 matListItemIcon
                 class="order editButton"
+                matTooltip="Edit proposition name"
                 (click)="this.editProposition(proposition)"
                 >edit
             </mat-icon>
             <mat-icon
                 matListItemIcon
                 class="order editButton"
+                matTooltip="Delete proposition."
                 (click)="this.deleteProposition(proposition)"
                 >delete
             </mat-icon>
@@ -36,7 +38,7 @@
         class="right-margin"
         mat-raised-button
         color="primary"
-        matTooltip="Upload BPMN token model."
+        matTooltip="Upload the BPMN token model."
         (click)="uploader.click()"
     >
         <mat-icon>upload</mat-icon>
@@ -46,7 +48,7 @@
         class="right-margin"
         mat-raised-button
         color="primary"
-        matTooltip="Download BPMN token model."
+        matTooltip="Download the BPMN token model."
         (click)="downloadTokenModel()"
     >
         <mat-icon>download</mat-icon>
@@ -56,7 +58,7 @@
         class="right-margin"
         mat-raised-button
         color="primary"
-        matTooltip="Save the process state."
+        matTooltip="Create a new proposition"
         (click)="createNewProposition()"
     >
         <mat-icon>add</mat-icon>
