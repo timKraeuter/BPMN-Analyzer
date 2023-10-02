@@ -88,8 +88,8 @@ export class PropositionComponent {
         });
     }
 
-    @HostListener('document:keydown.delete', ['$event'])
-    async deletePressed(event: KeyboardEvent) {
+    @HostListener('document:keydown.delete')
+    async deletePressed() {
         if (this.propositions.length === 1) {
             return;
         }

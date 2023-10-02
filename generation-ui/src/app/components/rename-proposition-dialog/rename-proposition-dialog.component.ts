@@ -21,8 +21,8 @@ export class RenamePropositionDialogComponent {
     closeDialog() {
         this.dialogRef.close();
     }
-    @HostListener('window:keyup.Enter', ['$event'])
-    onDialogClick(event: KeyboardEvent): void {
+    @HostListener('window:keyup.Enter')
+    onDialogClick(): void {
         this.saveNameAndCloseDialog();
     }
 

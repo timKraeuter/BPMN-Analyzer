@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { BPMNModelerService } from './services/bpmnmodeler.service';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
     selector: 'app-root',
@@ -8,6 +9,8 @@ import { BPMNModelerService } from './services/bpmnmodeler.service';
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+    @ViewChild('stepper') private stepper!: MatStepper;
+
     constructor(private modeler: BPMNModelerService) {}
 
     async stepChanged(event: StepperSelectionEvent) {
@@ -26,5 +29,15 @@ export class AppComponent {
 
     private changedToProcessStateStep(event: StepperSelectionEvent) {
         return event.previouslySelectedIndex == 0 && event.selectedIndex == 1;
+    }
+
+    @HostListener('document:keydown.ArrowRight')
+    async stepForward() {
+        this.stepper.next();
+    }
+
+    @HostListener('document:keydown.ArrowLeft')
+    async stepBackward() {
+        this.stepper.previous();
     }
 }
