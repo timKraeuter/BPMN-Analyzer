@@ -3,6 +3,7 @@ package no.tk.behavior.bpmn.reader.token;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -40,7 +41,8 @@ public class BPMNTokenFileReader {
 
   public BPMNProcessSnapshot readModelFromString(String name, String xml) {
     // TODO: Should be a better way than wrapping the string.
-    return readModelFromStream(name, new ByteArrayInputStream(xml.getBytes()));
+    return readModelFromStream(
+        name, new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
   }
 
   public BPMNProcessSnapshot readModelFromFilePath(Path file) throws IOException {
