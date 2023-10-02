@@ -2,6 +2,7 @@ import { Component, HostListener, ViewChild } from '@angular/core';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { BPMNModelerService } from './services/bpmnmodeler.service';
 import { MatStepper } from '@angular/material/stepper';
+import { PropositionComponent } from './pages/proposition/proposition.component';
 
 @Component({
     selector: 'app-root',
@@ -10,6 +11,7 @@ import { MatStepper } from '@angular/material/stepper';
 })
 export class AppComponent {
     @ViewChild('stepper') private stepper!: MatStepper;
+    @ViewChild('proposition') propositionComponent!: PropositionComponent;
 
     constructor(private modeler: BPMNModelerService) {}
 
@@ -19,6 +21,7 @@ export class AppComponent {
             await this.modeler.updateTokenBPMNModelIfNeeded();
         }
         if (this.changedToAnalyzeStep(event)) {
+            await this.propositionComponent.saveCurrentProposition();
             await this.modeler.updateViewerBPMNModel();
         }
     }

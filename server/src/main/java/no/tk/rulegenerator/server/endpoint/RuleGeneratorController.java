@@ -103,6 +103,7 @@ public class RuleGeneratorController {
   }
 
   private List<BPMNProposition> readProps(ModelCheckingRequest request) {
+    // TODO: Seems to be problematic if there is only one prop.
     return request.getPropositions().stream()
         .map(propString -> gson.fromJson(propString, BPMNProposition.class))
         .toList();

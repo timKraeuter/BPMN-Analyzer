@@ -12,7 +12,7 @@ import { RenamePropositionDialogComponent } from '../../components/rename-propos
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-    selector: 'app-process-state',
+    selector: 'app-proposition',
     templateUrl: './proposition.component.html',
     styleUrls: ['./proposition.component.scss'],
 })
@@ -113,5 +113,9 @@ export class PropositionComponent {
         if (prop === this.currentProposition) {
             await this.switchToProposition(this.propositions[0]);
         }
+    }
+
+    async saveCurrentProposition() {
+        this.currentProposition.xml = await this.modeler.getTokenXML();
     }
 }
