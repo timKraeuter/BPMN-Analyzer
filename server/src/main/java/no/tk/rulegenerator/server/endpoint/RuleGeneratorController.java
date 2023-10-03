@@ -1,16 +1,13 @@
 package no.tk.rulegenerator.server.endpoint;
 
-import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import no.tk.behavior.bpmn.BPMNCollaboration;
-import no.tk.rulegenerator.server.endpoint.dtos.BPMNProposition;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingRequest;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResponse;
 import no.tk.rulegenerator.server.endpoint.dtos.ModelCheckingRequest;
@@ -23,9 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class RuleGeneratorController {
-
-  // Needed for custom form data deserialization
-  private final Gson gson = new Gson();
 
   /**
    * Generate a graph grammar for a given BPMN file.
@@ -83,7 +77,7 @@ public class RuleGeneratorController {
   }
 
   /**
-   * Run model-checking of certain BPMN-specific properties for a BPMN collaboration.
+   * Run model-checking for a temporal logic query for a BPMN collaboration and propositions.
    *
    * @param request contains the BPMN file and properties to be checked.
    * @return model-checking results for the requested properties.
@@ -96,16 +90,9 @@ public class RuleGeneratorController {
     Pair<Path, BPMNCollaboration> result =
         RuleGeneratorControllerHelper.generateGGForBPMNFile(request.getFile());
 
-    RuleGeneratorControllerHelper.generatePropositions(result.getLeft(), readProps(request));
+    RuleGeneratorControllerHelper.generatePropositions(result.getLeft(), request.getPropositions());
 
     return new BPMNModelChecker(result.getLeft(), result.getRight())
         .checkTemporalLogicProperty(request.getLogic(), request.getProperty());
-  }
-
-  private List<BPMNProposition> readProps(ModelCheckingRequest request) {
-    // TODO: Seems to be problematic if there is only one prop.
-    return request.getPropositions().stream()
-        .map(propString -> gson.fromJson(propString, BPMNProposition.class))
-        .toList();
   }
 }

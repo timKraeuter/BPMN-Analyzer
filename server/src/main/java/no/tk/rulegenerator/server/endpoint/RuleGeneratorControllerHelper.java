@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
 import no.tk.behavior.bpmn.BPMNCollaboration;
@@ -114,7 +114,7 @@ public class RuleGeneratorControllerHelper {
     return String.format("%s_%s_%s", timestamp, UUID.randomUUID(), modelName);
   }
 
-  public static void generatePropositions(Path ggFolder, List<BPMNProposition> props)
+  public static void generatePropositions(Path ggFolder, Set<BPMNProposition> props)
       throws IOException {
     BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator();
     BPMNTokenFileReader bpmnTokenFileReader =

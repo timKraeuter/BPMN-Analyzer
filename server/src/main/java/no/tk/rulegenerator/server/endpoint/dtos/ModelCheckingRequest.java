@@ -3,6 +3,7 @@ package no.tk.rulegenerator.server.endpoint.dtos;
 import java.util.HashSet;
 import java.util.Set;
 import no.tk.groove.runner.checking.TemporalLogic;
+import no.tk.rulegenerator.server.endpoint.converter.RequiresConversion;
 import org.springframework.web.multipart.MultipartFile;
 
 public class ModelCheckingRequest {
@@ -10,7 +11,8 @@ public class ModelCheckingRequest {
   private MultipartFile file;
   private String property;
   private TemporalLogic logic;
-  private Set<String> propositions;
+  @RequiresConversion
+  private Set<BPMNProposition> propositions;
 
   public ModelCheckingRequest() {
     propositions = new HashSet<>();
@@ -40,11 +42,11 @@ public class ModelCheckingRequest {
     this.logic = logic;
   }
 
-  public Set<String> getPropositions() {
+  public Set<BPMNProposition> getPropositions() {
     return propositions;
   }
 
-  public void setPropositions(Set<String> propositions) {
+  public void setPropositions(Set<BPMNProposition> propositions) {
     this.propositions = propositions;
   }
 }
