@@ -45,11 +45,10 @@ This will start the application at [localhost:8080](http://localhost:8080/).
 
 Follow this [tutorial](https://learn.microsoft.com/en-us/azure/container-instances/container-instances-tutorial-prepare-acr#log-in-to-container-registry) after building the container.
 Important commands are listed below.
-
-Login to container registry (potentially run `az login` before):
+Environment variables `APP_ID` and `AZURE_PW` are expected to be set.
 
 ```bash
-az acr login --name tg2022.azurecr.io
+docker login tg2022.azurecr.io --username $APP_ID --password $AZURE_PW
 ```
 
 Tag container image
