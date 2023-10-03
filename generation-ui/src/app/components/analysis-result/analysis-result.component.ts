@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ModelCheckingResponse } from '../../services/groove.service';
+import { ModelCheckingResponse } from '../../services/model-checking.service';
 
 @Component({
     selector: 'verification-result-component',

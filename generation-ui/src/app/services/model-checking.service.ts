@@ -14,7 +14,7 @@ const checkTemporalLogicPropertyURL = baseURL + 'checkTemporalLogic';
 @Injectable({
     providedIn: 'root',
 })
-export class GrooveService {
+export class ModelCheckingService {
     constructor(private httpClient: HttpClient) {}
 
     downloadGG(xmlModel: Blob): Observable<ArrayBuffer> {

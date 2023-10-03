@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GrooveService } from './groove.service';
+import { ModelCheckingService } from './model-checking.service';
 
 describe('GrooveService', () => {
-    let service: GrooveService;
+    let service: ModelCheckingService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
-        service = TestBed.inject(GrooveService);
+        service = TestBed.inject(ModelCheckingService);
     });
 
     it('should be created', () => {

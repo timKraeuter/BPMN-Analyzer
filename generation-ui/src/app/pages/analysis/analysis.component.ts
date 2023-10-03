@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { BPMNProperty } from '../../components/analysis-result/analysis-result.component';
 import {
-    GrooveService,
+    ModelCheckingService,
     ModelCheckingResponse,
-} from '../../services/groove.service';
+} from '../../services/model-checking.service';
 import { TemporalLogicSyntaxComponent } from '../../components/temporal-logic-syntax/temporal-logic-syntax.component';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -28,7 +28,7 @@ export class AnalysisComponent {
     constructor(
         private bpmnModeler: BPMNModelerService,
         private snackBar: MatSnackBar,
-        private grooveService: GrooveService,
+        private grooveService: ModelCheckingService,
         private propService: PropositionService,
     ) {}
 

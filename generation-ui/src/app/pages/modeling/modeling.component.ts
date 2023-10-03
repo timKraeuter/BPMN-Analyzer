@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { saveAs } from 'file-saver-es';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { GrooveService } from '../../services/groove.service';
+import { ModelCheckingService } from '../../services/model-checking.service';
 
 export const BPMN_FILE_EXTENSION = '.bpmn';
 
@@ -20,7 +20,7 @@ export class ModelingComponent {
     constructor(
         private bpmnModeler: BPMNModelerService,
         private snackBar: MatSnackBar,
-        private grooveService: GrooveService,
+        private grooveService: ModelCheckingService,
     ) {}
 
     downloadBPMN() {
