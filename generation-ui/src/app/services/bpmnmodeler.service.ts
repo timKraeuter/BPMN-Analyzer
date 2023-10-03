@@ -7,11 +7,17 @@ import { Injectable } from '@angular/core';
  *                to navigate them
  * bpmn-modeler - bootstraps a full-fledged BPMN editor
  */
-// @ts-ignore
 import Modeler from 'bpmn-js/lib/Modeler';
-import TokenModeler from '../../../../../bpmn-token/lib/Modeler';
+import TokenModeler from 'bpmn-token/lib/Modeler';
 import Viewer from 'bpmn-js/lib/Viewer';
 import { SaveXMLResult } from 'bpmn-js/lib/BaseViewer';
+import TokenContextPadProvider from 'bpmn-token/lib/features/token-context-pad/TokenContextPadProvider';
+import TokenPaletteProvider from 'bpmn-token/lib/features/token-palette/TokenPaletteProvider';
+
+const tokenOverrideModule = {
+    contextPadProvider: ['type', TokenContextPadProvider],
+    paletteProvider: ['type', TokenPaletteProvider],
+};
 
 @Injectable({
     providedIn: 'root',
@@ -21,7 +27,10 @@ export class BPMNModelerService {
         keyboard: { bindTo: document },
     });
     private tokenModeler: TokenModeler = new TokenModeler({
-        keyboard: { bindTo: document },
+        keyboard: {
+            bindTo: document,
+        },
+        additionalModules: [tokenOverrideModule],
     });
     private viewer: Viewer = new Viewer({
         keyboard: { bindTo: document },
