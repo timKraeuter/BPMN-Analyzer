@@ -43,24 +43,24 @@ This will start the application at [localhost:8080](http://localhost:8080/).
 
 # Deployment to Azure
 
-Follow this [tutorial](https://learn.microsoft.com/en-us/azure/container-instances/container-instances-tutorial-prepare-acr#log-in-to-container-registry) after building the container.
-Important commands are listed below.
-Environment variables `APP_ID` and `AZURE_PW` are expected to be set.
+1. Build the container (see Docker section).
 
-```bash
-docker login tg2022.azurecr.io --username $APP_ID --password $AZURE_PW
-```
-
-Tag container image
+2. Tag container image
 
 ```bash
 docker tag bpmnanalyzer tg2022.azurecr.io/bpmnanalyzer:v1
 ```
 
-Push image to Azure Container Registry
+3. Login to the Container Registry. Environment variables `APP_ID` and `AZURE_PW` are expected to be set.
+
+```bash
+docker login tg2022.azurecr.io --username $APP_ID --password $AZURE_PW
+```
+
+4. Push image to Container Registry
 
 ```bash
 docker push tg2022.azurecr.io/bpmnanalyzer:v1
 ```
 
-Create new container app revision.
+5. Create new container app revision in the GUI.
