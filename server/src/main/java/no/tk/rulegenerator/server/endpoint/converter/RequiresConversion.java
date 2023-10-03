@@ -9,5 +9,4 @@ import java.lang.annotation.Target;
 // to annotate an attribute as "convertable"
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RequiresConversion {
-}
+public @interface RequiresConversion {}

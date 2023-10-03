@@ -11,8 +11,7 @@ public class ModelCheckingRequest {
   private MultipartFile file;
   private String property;
   private TemporalLogic logic;
-  @RequiresConversion
-  private Set<BPMNProposition> propositions;
+  @RequiresConversion private Set<BPMNProposition> propositions;
 
   public ModelCheckingRequest() {
     propositions = new HashSet<>();
