@@ -50,7 +50,7 @@ class RuleGeneratorControllerTests {
   public static final String BPMN_FILE_ERROR = "/ruleGeneratorController/errorModel.bpmn";
   public static final String BPMN_FILE_DEAD = "/ruleGeneratorController/dead.bpmn";
   public static final String LOCALHOST = "http://localhost:%s/%s";
-  public static final String PROPERTIES_TO_BE_CHECKED = "propertiesToBeChecked[]";
+  public static final String PROPERTIES_TO_BE_CHECKED = "propertiesToBeChecked";
   public static final String CHECK_BPMN_SPECIFIC_PROPERTIES = "checkBPMNSpecificProperties";
   public static final String CHECK_TEMPORAL_LOGIC = "checkTemporalLogic";
   @LocalServerPort private int port;
