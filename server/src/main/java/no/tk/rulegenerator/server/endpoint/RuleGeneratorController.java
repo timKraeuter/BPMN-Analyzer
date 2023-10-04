@@ -43,7 +43,7 @@ public class RuleGeneratorController {
       @RequestParam("file") MultipartFile file, HttpServletResponse response) throws IOException {
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
-    Path resultDir = RuleGeneratorControllerHelper.generateGGForBPMNFile(file).getLeft();
+    Path resultDir = RuleGeneratorControllerHelper.generateGGForBPMNFile(file, true).getLeft();
 
     // Zip all files
     try (DirectoryStream<Path> graphGrammarFiles = Files.newDirectoryStream(resultDir)) {
@@ -82,7 +82,7 @@ public class RuleGeneratorController {
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
     Pair<Path, BPMNCollaboration> result =
-        RuleGeneratorControllerHelper.generateGGForBPMNFile(request.file());
+        RuleGeneratorControllerHelper.generateGGForBPMNFile(request.file(), false);
 
     return new BPMNModelChecker(result.getLeft(), result.getRight()).checkBPMNProperties(request);
   }
@@ -99,10 +99,10 @@ public class RuleGeneratorController {
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
     Pair<Path, BPMNCollaboration> result =
-        RuleGeneratorControllerHelper.generateGGForBPMNFile(request.file());
+        RuleGeneratorControllerHelper.generateGGForBPMNFile(request.file(), false);
 
     RuleGeneratorControllerHelper.generatePropositions(
-        result.getLeft(), readPropositionsFromJSON(request.propositions()));
+        result.getLeft(), readPropositionsFromJSON(request.propositions()), false);
 
     return new BPMNModelChecker(result.getLeft(), result.getRight())
         .checkTemporalLogicProperty(request.logic(), request.property());
