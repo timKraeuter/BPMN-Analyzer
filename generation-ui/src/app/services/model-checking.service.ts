@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { Proposition } from './proposition.service';
+import { Proposition } from './shared-state.service';
 
 const baseURL = environment.production
     ? window.location.href

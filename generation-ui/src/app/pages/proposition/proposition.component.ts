@@ -5,8 +5,8 @@ import { saveAs } from 'file-saver-es';
 import { BPMN_FILE_EXTENSION } from '../modeling/modeling.component';
 import {
     Proposition,
-    PropositionService,
-} from '../../services/proposition.service';
+    SharedStateService,
+} from '../../services/shared-state.service';
 import { MatDialog } from '@angular/material/dialog';
 import { RenamePropositionDialogComponent } from '../../components/rename-proposition-dialog/rename-proposition-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -24,7 +24,7 @@ export class PropositionComponent {
 
     constructor(
         private modeler: BPMNModelerService,
-        private propService: PropositionService,
+        private propService: SharedStateService,
         private dialog: MatDialog,
         private snackBar: MatSnackBar,
     ) {

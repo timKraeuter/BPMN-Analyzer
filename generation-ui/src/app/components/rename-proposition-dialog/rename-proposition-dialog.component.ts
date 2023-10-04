@@ -1,6 +1,6 @@
 import { Component, HostListener, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Proposition } from '../../services/proposition.service';
+import { Proposition } from '../../services/shared-state.service';
 
 @Component({
     selector: 'app-rename-proposition-dialog',
@@ -21,6 +21,7 @@ export class RenamePropositionDialogComponent {
     closeDialog() {
         this.dialogRef.close();
     }
+
     @HostListener('window:keyup.Enter')
     onDialogClick(): void {
         this.saveNameAndCloseDialog();

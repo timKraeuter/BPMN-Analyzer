@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
 import { BPMNProperty } from '../../components/analysis-result/analysis-result.component';
 import {
-    ModelCheckingService,
     ModelCheckingResponse,
+    ModelCheckingService,
 } from '../../services/model-checking.service';
 import { TemporalLogicSyntaxComponent } from '../../components/temporal-logic-syntax/temporal-logic-syntax.component';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PropositionService } from '../../services/proposition.service';
+import { SharedStateService } from '../../services/shared-state.service';
+// @ts-ignore
+import { saveAs } from 'file-saver-es';
 
 @Component({
     selector: 'app-analysis',
@@ -15,6 +17,9 @@ import { PropositionService } from '../../services/proposition.service';
     styleUrls: ['./analysis.component.scss'],
 })
 export class AnalysisComponent {
+    // GG generation
+    public graphGrammarGenerationRunning: boolean = false;
+
     // General BPMN property checking.
     public bpmnSpecificPropertiesToBeChecked: string[] = [];
     public bpmnSpecificVerificationRunning: boolean = false;
@@ -28,9 +33,44 @@ export class AnalysisComponent {
     constructor(
         private bpmnModeler: BPMNModelerService,
         private snackBar: MatSnackBar,
-        private grooveService: ModelCheckingService,
-        private propService: PropositionService,
+        private modelCheckingService: ModelCheckingService,
+        private sharedStateService: SharedStateService,
     ) {}
+
+    async downloadGGClicked() {
+        this.graphGrammarGenerationRunning = true;
+        const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
+
+        this.modelCheckingService
+            .downloadGG(xmlModel)
+            .subscribe({
+                error: (error) => {
+                    const errorObject = JSON.parse(
+                        new TextDecoder().decode(error.error),
+                    );
+                    console.log(errorObject);
+                    this.snackBar.open(errorObject.message, 'close');
+                },
+                next: (data: ArrayBuffer) => {
+                    // Receive and save as zip.
+                    const blob = new Blob([data], {
+                        type: 'application/zip',
+                    });
+                    saveAs(
+                        blob,
+                        this.sharedStateService.modelFileName + '.gps.zip',
+                    );
+                },
+            })
+            .add(() => (this.graphGrammarGenerationRunning = false));
+    }
+
+    ggInfoClicked() {
+        this.snackBar.open(
+            'Graph transformation systems are generated for the graph transformation tool Groove. You can find Groove at https://groove.ewi.utwente.nl/.',
+            'close',
+        );
+    }
 
     async checkBPMNSpecificPropertiesClicked() {
         if (this.bpmnSpecificPropertiesToBeChecked.length == 0) {
@@ -44,7 +84,7 @@ export class AnalysisComponent {
         }
         this.bpmnSpecificVerificationRunning = true;
         const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
-        this.grooveService
+        this.modelCheckingService
             .checkBPMNSpecificProperties(
                 this.bpmnSpecificPropertiesToBeChecked,
                 xmlModel,
@@ -88,12 +128,12 @@ export class AnalysisComponent {
     async checkCTLPropertyClicked() {
         const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
         this.bpmnSpecificVerificationRunning = true;
-        this.grooveService
+        this.modelCheckingService
             .checkTemporalLogic(
                 'CTL',
                 this.ctlProperty,
                 xmlModel,
-                this.propService.propositions,
+                this.sharedStateService.propositions,
             )
             .subscribe({
                 error: (error) => {
@@ -152,6 +192,6 @@ export class AnalysisComponent {
     }
 
     getPropNames() {
-        return this.propService.getPropositionNames().join(', ');
+        return this.sharedStateService.getPropositionNames().join(', ');
     }
 }
