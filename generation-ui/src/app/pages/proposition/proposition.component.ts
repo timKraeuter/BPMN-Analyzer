@@ -116,6 +116,9 @@ export class PropositionComponent {
     }
 
     async saveCurrentProposition() {
+        if (this.currentProposition.xml === '') {
+            await this.modeler.updateTokenBPMNModelIfNeeded();
+        }
         this.currentProposition.xml = await this.modeler.getTokenXML();
     }
 }
