@@ -36,9 +36,7 @@ dependencies {
 
     // Spring
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    implementation 'com.google.code.gson:gson:2.10.1'
+    developmentOnly 'org.springframework.boot:spring-boot-starter-actuator'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // Form data request for testing

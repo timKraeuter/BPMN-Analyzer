@@ -1,13 +1,18 @@
 package no.tk.rulegenerator.server.endpoint;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import no.tk.behavior.bpmn.BPMNCollaboration;
+import no.tk.rulegenerator.server.endpoint.dtos.BPMNProposition;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingRequest;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResponse;
 import no.tk.rulegenerator.server.endpoint.dtos.ModelCheckingRequest;
@@ -20,6 +25,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class RuleGeneratorController {
+
+  // Needed for custom form data deserialization
+  ObjectMapper jsonMapper = new ObjectMapper();
+  CollectionType setTypeJackson =
+      jsonMapper.getTypeFactory().constructCollectionType(Set.class, BPMNProposition.class);
 
   /**
    * Generate a graph grammar for a given BPMN file.
@@ -90,9 +100,15 @@ public class RuleGeneratorController {
     Pair<Path, BPMNCollaboration> result =
         RuleGeneratorControllerHelper.generateGGForBPMNFile(request.getFile());
 
-    RuleGeneratorControllerHelper.generatePropositions(result.getLeft(), request.getPropositions());
+    RuleGeneratorControllerHelper.generatePropositions(
+        result.getLeft(), readPropositionsFromJSON(request.getPropositions()));
 
     return new BPMNModelChecker(result.getLeft(), result.getRight())
         .checkTemporalLogicProperty(request.getLogic(), request.getProperty());
+  }
+
+  private Set<BPMNProposition> readPropositionsFromJSON(String propositions)
+      throws JsonProcessingException {
+    return jsonMapper.readValue(String.format("[%s]", propositions), setTypeJackson);
   }
 }
