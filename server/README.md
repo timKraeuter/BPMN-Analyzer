@@ -51,7 +51,8 @@ This will start the application at [localhost:8080](http://localhost:8080/).
 docker tag bpmnanalyzer tg2022.azurecr.io/bpmnanalyzer:v1
 ```
 
-3. Login to the Container Registry. Environment variables `APP_ID` and `AZURE_PW` are expected to be set.
+3. Login to the Container Registry. Environment variables `APP_ID` and `AZURE_PW` are expected to be
+   set (export APP_ID=<app-id> etc.).
 
 ```bash
 docker login tg2022.azurecr.io --username $APP_ID --password $AZURE_PW
