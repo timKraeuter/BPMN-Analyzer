@@ -50,9 +50,7 @@ export class ModelCheckingService {
         formData.append('logic', logic);
         formData.append('property', property);
         formData.append('file', xmlModel);
-        propositions.forEach((proposition) =>
-            formData.append('propositions[]', JSON.stringify(proposition)),
-        );
+        formData.append('propositions', JSON.stringify(propositions));
         return this.httpClient.post<ModelCheckingResponse>(
             checkTemporalLogicPropertyURL,
             formData,

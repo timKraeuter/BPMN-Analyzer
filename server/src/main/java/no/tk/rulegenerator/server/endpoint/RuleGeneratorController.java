@@ -99,13 +99,13 @@ public class RuleGeneratorController {
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
     Pair<Path, BPMNCollaboration> result =
-        RuleGeneratorControllerHelper.generateGGForBPMNFile(request.getFile());
+        RuleGeneratorControllerHelper.generateGGForBPMNFile(request.file());
 
     RuleGeneratorControllerHelper.generatePropositions(
-        result.getLeft(), readPropositionsFromJSON(request.getPropositions()));
+        result.getLeft(), readPropositionsFromJSON(request.propositions()));
 
     return new BPMNModelChecker(result.getLeft(), result.getRight())
-        .checkTemporalLogicProperty(request.getLogic(), request.getProperty());
+        .checkTemporalLogicProperty(request.logic(), request.property());
   }
 
   private Set<BPMNProposition> readPropositionsFromJSON(String propositions)
@@ -113,6 +113,6 @@ public class RuleGeneratorController {
     if (propositions == null) {
       return Collections.emptySet();
     }
-    return jsonMapper.readValue(String.format("[%s]", propositions), setTypeJackson);
+    return jsonMapper.readValue(propositions, setTypeJackson);
   }
 }
