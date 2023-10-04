@@ -34,7 +34,7 @@ export class AnalysisComponent {
         private bpmnModeler: BPMNModelerService,
         private snackBar: MatSnackBar,
         private modelCheckingService: ModelCheckingService,
-        private sharedStateService: SharedStateService,
+        private sharedState: SharedStateService,
     ) {}
 
     async downloadGGClicked() {
@@ -42,7 +42,7 @@ export class AnalysisComponent {
         const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
 
         this.modelCheckingService
-            .downloadGG(xmlModel)
+            .downloadGG(xmlModel, this.sharedState.propositions)
             .subscribe({
                 error: (error) => {
                     const errorObject = JSON.parse(
@@ -56,10 +56,7 @@ export class AnalysisComponent {
                     const blob = new Blob([data], {
                         type: 'application/zip',
                     });
-                    saveAs(
-                        blob,
-                        this.sharedStateService.modelFileName + '.gps.zip',
-                    );
+                    saveAs(blob, this.sharedState.modelFileName + '.gps.zip');
                 },
             })
             .add(() => (this.graphGrammarGenerationRunning = false));
@@ -133,7 +130,7 @@ export class AnalysisComponent {
                 'CTL',
                 this.ctlProperty,
                 xmlModel,
-                this.sharedStateService.propositions,
+                this.sharedState.propositions,
             )
             .subscribe({
                 error: (error) => {
@@ -192,6 +189,6 @@ export class AnalysisComponent {
     }
 
     getPropNames() {
-        return this.sharedStateService.getPropositionNames().join(', ');
+        return this.sharedState.getPropositionNames().join(', ');
     }
 }

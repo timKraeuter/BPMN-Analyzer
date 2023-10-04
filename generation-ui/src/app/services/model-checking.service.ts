@@ -17,12 +17,16 @@ const checkTemporalLogicPropertyURL = baseURL + 'checkTemporalLogic';
 export class ModelCheckingService {
     constructor(private httpClient: HttpClient) {}
 
-    downloadGG(xmlModel: Blob): Observable<ArrayBuffer> {
+    downloadGG(
+        xmlModel: Blob,
+        propositions: Proposition[],
+    ): Observable<ArrayBuffer> {
         const options = {
             responseType: 'arraybuffer',
         } as any; // Expect a zip/file response type.
         const formData = new FormData();
         formData.append('file', xmlModel);
+        formData.append('propositions', JSON.stringify(propositions));
 
         return this.httpClient.post(generateGGAndZipURL, formData, options);
     }

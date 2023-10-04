@@ -40,13 +40,19 @@ public class RuleGeneratorController {
    */
   @PostMapping(value = "/generateGGAndZip", produces = "application/zip")
   public void generateGGAndZip(
-      @RequestParam("file") MultipartFile file, HttpServletResponse response) throws IOException {
+      @RequestParam("file") MultipartFile file,
+      @RequestParam(value = "propositions", defaultValue = "[]") String propositions,
+      HttpServletResponse response)
+      throws IOException {
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
-    Path resultDir = RuleGeneratorControllerHelper.generateGGForBPMNFile(file, true).getLeft();
+    Path ggDir = RuleGeneratorControllerHelper.generateGGForBPMNFile(file, true).getLeft();
+
+    RuleGeneratorControllerHelper.generatePropositions(
+        ggDir, readPropositionsFromJSON(propositions), true);
 
     // Zip all files
-    try (DirectoryStream<Path> graphGrammarFiles = Files.newDirectoryStream(resultDir)) {
+    try (DirectoryStream<Path> graphGrammarFiles = Files.newDirectoryStream(ggDir)) {
       zipAndReturnFiles(response, graphGrammarFiles);
     }
   }
@@ -98,13 +104,13 @@ public class RuleGeneratorController {
       @ModelAttribute ModelCheckingRequest request) throws IOException, InterruptedException {
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
-    Pair<Path, BPMNCollaboration> result =
+    Pair<Path, BPMNCollaboration> dirAndCollaboration =
         RuleGeneratorControllerHelper.generateGGForBPMNFile(request.file(), false);
 
     RuleGeneratorControllerHelper.generatePropositions(
-        result.getLeft(), readPropositionsFromJSON(request.propositions()), false);
+        dirAndCollaboration.getLeft(), readPropositionsFromJSON(request.propositions()), false);
 
-    return new BPMNModelChecker(result.getLeft(), result.getRight())
+    return new BPMNModelChecker(dirAndCollaboration.getLeft(), dirAndCollaboration.getRight())
         .checkTemporalLogicProperty(request.logic(), request.property());
   }
 
