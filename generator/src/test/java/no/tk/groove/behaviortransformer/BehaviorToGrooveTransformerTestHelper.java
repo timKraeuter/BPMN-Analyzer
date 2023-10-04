@@ -73,7 +73,7 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
   }
 
   Path transformToGroove(Behavior behavior) {
-    BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
+    BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer(true);
     Path outputDir = Path.of(this.getOutputPathIncludingSubFolder());
     Path grammarDir = transformer.generateGrooveGrammar(behavior, outputDir);
     return grammarDir;

@@ -24,15 +24,15 @@ class GrooveJarRunnerTest {
     String tempOutputFile =
         System.getProperty("java.io.tmpdir") + "/grooveJarRunner/statespace.txt";
     Path stateSpace =
-        grooveJarRunner.generateStateSpace(getCircularGraphGrammar(), tempOutputFile, true);
+        grooveJarRunner.generateStateSpace(getCyclicNoLayoutGraphGrammar(), tempOutputFile, true);
 
     // Check state space files
     Path expected = FileTestHelper.getResource("grooveJarRunner/statespace.txt");
     FileTestHelper.testFileEquals(expected, stateSpace);
   }
 
-  private String getCircularGraphGrammar() {
-    return FileTestHelper.getResource("grooveJarRunner/circular.gps").toString();
+  private String getCyclicNoLayoutGraphGrammar() {
+    return FileTestHelper.getResource("bpmn/groove/cyclicNoLayout.gps").toString();
   }
 
   /**
@@ -46,7 +46,7 @@ class GrooveJarRunnerTest {
     String wrongCTLProperty = "AG(false)";
 
     ModelCheckingResult result1 =
-        grooveJarRunner.checkCTL(getCircularGraphGrammar(), trueCTLProperty);
+        grooveJarRunner.checkCTL(getCyclicNoLayoutGraphGrammar(), trueCTLProperty);
 
     assertThat(result1.getUsedLogic(), is(TemporalLogic.CTL));
     assertThat(result1.getProperty(), is(trueCTLProperty));
@@ -54,7 +54,7 @@ class GrooveJarRunnerTest {
     assertFalse(result1.hasError());
 
     ModelCheckingResult result2 =
-        grooveJarRunner.checkCTL(getCircularGraphGrammar(), wrongCTLProperty);
+        grooveJarRunner.checkCTL(getCyclicNoLayoutGraphGrammar(), wrongCTLProperty);
 
     assertThat(result2.getUsedLogic(), is(TemporalLogic.CTL));
     assertThat(result2.getProperty(), is(wrongCTLProperty));
@@ -71,7 +71,8 @@ class GrooveJarRunnerTest {
     GrooveJarRunner grooveJarRunner = new GrooveJarRunner(false);
     String property = "G(!false)";
 
-    ModelCheckingResult result = grooveJarRunner.checkCTL(getCircularGraphGrammar(), property);
+    ModelCheckingResult result =
+        grooveJarRunner.checkCTL(getCyclicNoLayoutGraphGrammar(), property);
 
     assertThat(result.getUsedLogic(), is(TemporalLogic.CTL));
     assertThat(result.getProperty(), is(property));

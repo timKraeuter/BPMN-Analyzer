@@ -42,10 +42,15 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
   private static final String ARG_1 = "arg1";
   private static final String ARG_2 = "arg2";
   private static final String NAME = "name";
+  private final boolean layout;
 
   private Set<GrooveNode> nodes;
   private Set<GrooveEdge> edges;
   private Map<String, GrooveNode> nameToNode;
+
+  public PiCalcToGrooveTransformer(boolean layout) {
+    this.layout = layout;
+  }
 
   @Override
   public Stream<GrooveGraphRule> generateRules(NamedPiProcess namedPiProcess) {
@@ -60,7 +65,7 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
 
   @Override
   public boolean isLayoutActivated() {
-    return true; // TODO: implement layout as parameter!
+    return layout;
   }
 
   void copyPiRulesAndTypeGraph(Path targetFolder) {
@@ -220,13 +225,10 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
           }
 
           private String getPrefixTypeString(PrefixType prefixType) {
-            switch (prefixType) {
-              case OUT:
-                return TYPE_OUT;
-              case IN:
-                return TYPE_IN;
-            }
-            throw new ShouldNotHappenRuntimeException("Unknown PrefixType: " + prefixType);
+            return switch (prefixType) {
+              case OUT -> TYPE_OUT;
+              case IN -> TYPE_IN;
+            };
           }
 
           @Override

@@ -94,7 +94,7 @@ public class RuleGeneratorControllerHelper {
   }
 
   private static Path generateGG(BPMNCollaboration bpmnCollaboration) {
-    BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
+    BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer(true);
     String subFolderName =
         RuleGeneratorControllerHelper.getGGOrStateSpaceDirName(bpmnCollaboration.getName());
     return transformer.generateGrooveGrammarForBPMNProcessModel(
@@ -116,7 +116,7 @@ public class RuleGeneratorControllerHelper {
 
   public static void generatePropositions(Path ggFolder, Set<BPMNProposition> props)
       throws IOException {
-    BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator();
+    BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator(true);
     BPMNTokenFileReader bpmnTokenFileReader =
         new BPMNTokenFileReader(
             BPMNToGrooveTransformerHelper::transformToQualifiedGrooveNameIfNeeded);

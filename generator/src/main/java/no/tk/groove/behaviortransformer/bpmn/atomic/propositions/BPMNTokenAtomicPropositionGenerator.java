@@ -18,11 +18,17 @@ import no.tk.groove.graph.rule.GrooveRuleWriter;
 
 public class BPMNTokenAtomicPropositionGenerator {
 
+  private final boolean layout;
+
+  public BPMNTokenAtomicPropositionGenerator(boolean layout) {
+    this.layout = layout;
+  }
+
   public void generateAndWriteAtomicProposition(
       BPMNProcessSnapshot bpmnProcessSnapshot, Path outputFolder) throws IOException {
     GrooveGraphRule graphRule = generateAtomicProposition(bpmnProcessSnapshot);
     Files.createDirectories(outputFolder);
-    GrooveRuleWriter.writeRules(Stream.of(graphRule), outputFolder);
+    GrooveRuleWriter.writeRules(outputFolder, Stream.of(graphRule), layout);
   }
 
   public GrooveGraphRule generateAtomicProposition(BPMNProcessSnapshot bpmnProcessSnapshot) {

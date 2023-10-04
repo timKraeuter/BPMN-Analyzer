@@ -15,6 +15,11 @@ public class PNToGrooveTransformer implements GrooveTransformer<PetriNet> {
 
   private static final String TOKEN_NODE_NAME = "Token";
   private static final String TOKEN_EDGE_NAME = "token";
+  private final boolean layout;
+
+  public PNToGrooveTransformer(boolean layout) {
+    this.layout = layout;
+  }
 
   @Override
   public GrooveGraph generateStartGraph(PetriNet petriNet) {
@@ -82,6 +87,6 @@ public class PNToGrooveTransformer implements GrooveTransformer<PetriNet> {
 
   @Override
   public boolean isLayoutActivated() {
-    return true; // TODO: implement layout as parameter!
+    return layout;
   }
 }

@@ -26,6 +26,11 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
   // Edge names/attribute names
   private static final String NAME = "name";
   private static final String CURRENT_STATE = "currentState";
+  private final boolean layout;
+
+  public FSMToGrooveTransformer(boolean layout) {
+    this.layout = layout;
+  }
 
   @Override
   public void generateAndWriteRulesFurther(FiniteStateMachine fsm, Path targetFolder) {
@@ -103,6 +108,6 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
 
   @Override
   public boolean isLayoutActivated() {
-    return true; // TODO: implement layout as parameter!
+    return layout;
   }
 }

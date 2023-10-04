@@ -30,11 +30,29 @@ class BPMNTransformerDriverTest extends BPMNToGrooveTestBase {
 
     Path tempDirectoryPath = Path.of(FileUtils.getTempDirectoryPath(), "bpmn");
 
-    String[] args = {pathToBPMNModel.toString(), tempDirectoryPath.toString()};
+    String[] args = {pathToBPMNModel.toString(), tempDirectoryPath.toString(), "true"};
 
     BPMNTransformerDriver.main(args);
 
     checkGenerationEqualToExpected(
         fixedRules::contains, "cyclic", Path.of(tempDirectoryPath.toString(), "cyclic.gps"));
+  }
+
+  @Test
+  void mainTestNoLayout() throws Exception {
+    String bpmnFileName = "cyclicNoLayout.bpmn";
+    String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + bpmnFileName;
+    Path pathToBPMNModel = FileTestHelper.getResource(resourcePath);
+
+    Path tempDirectoryPath = Path.of(FileUtils.getTempDirectoryPath(), "bpmn");
+
+    String[] args = {pathToBPMNModel.toString(), tempDirectoryPath.toString()};
+
+    BPMNTransformerDriver.main(args);
+
+    checkGenerationEqualToExpected(
+        fixedRules::contains,
+        "cyclicNoLayout",
+        Path.of(tempDirectoryPath.toString(), "cyclicNoLayout.gps"));
   }
 }

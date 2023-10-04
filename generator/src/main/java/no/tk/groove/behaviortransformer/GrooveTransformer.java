@@ -44,8 +44,8 @@ public interface GrooveTransformer<S extends Behavior> {
   String TYPE = "type:";
   String STRING = "string:";
 
-  static void writeStartGraph(Path targetFolder, GrooveGraph startGraph, boolean layoutActivated) {
-    Gxl gxl = BehaviorToGrooveTransformer.createGxlFromGrooveGraph(startGraph, layoutActivated);
+  static void writeStartGraph(Path targetFolder, GrooveGraph startGraph, boolean layout) {
+    Gxl gxl = BehaviorToGrooveTransformer.createGxlFromGrooveGraph(startGraph, layout);
     Path startGraphFile = Paths.get(targetFolder.toString(), START_GST);
 
     GxlToXMLConverter.toXml(gxl, startGraphFile);
@@ -62,7 +62,7 @@ public interface GrooveTransformer<S extends Behavior> {
 
   default void generateAndWriteRules(S source, Path targetFolder) {
     Stream<GrooveGraphRule> rules = this.generateRules(source);
-    GrooveRuleWriter.writeRules(rules, targetFolder);
+    GrooveRuleWriter.writeRules(targetFolder, rules, isLayoutActivated());
     this.generateAndWriteRulesFurther(source, targetFolder);
   }
 

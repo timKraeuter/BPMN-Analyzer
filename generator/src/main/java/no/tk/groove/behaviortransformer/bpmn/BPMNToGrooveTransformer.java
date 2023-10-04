@@ -26,6 +26,11 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
   // Graph conditions for model-checking
   public static final String ALL_TERMINATED_FILE_NAME = "AllTerminated.gpr";
   public static final String UNSAFE_FILE_NAME = "Unsafe.gpr";
+  private final boolean layout;
+
+  public BPMNToGrooveTransformer(boolean layout) {
+    this.layout = layout;
+  }
 
   @Override
   public GrooveGraph generateStartGraph(BPMNCollaboration collaboration) {
@@ -126,6 +131,6 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
 
   @Override
   public boolean isLayoutActivated() {
-    return true; // TODO: implement layout as parameter!
+    return layout;
   }
 }

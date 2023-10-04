@@ -45,7 +45,7 @@ class GenerateGrammarForMultipleBehaviorsTest extends BehaviorToGrooveTransforme
     phases.addTransition(new Transition(SW_TO_PHASE_2, phase1, phase2));
     phases.addTransition(new Transition(SW_TO_PHASE_1, phase2, phase1));
 
-    BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
+    BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer(true);
     Path outputDir = Path.of(this.getOutputPathIncludingSubFolder());
 
     Map<String, Set<String>> nameToToBeSynchedRules = new LinkedHashMap<>();

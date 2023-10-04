@@ -52,8 +52,13 @@ public class BehaviorToGrooveTransformer {
   private static final String BPMN_DIAGRAM_TYPE_GRAPH_FILE_NAME = "bpmn_e_model";
   private static final String FSM_TYPE_GRAPH_FILE_NAME = "fsm_e_model";
   public static final String TYPE_GRAPH = "typeGraph";
+  private final boolean layout;
 
-  static Gxl createGxlFromGrooveGraph(GrooveGraph graph, boolean doLayout) {
+  public BehaviorToGrooveTransformer(boolean layout) {
+    this.layout = layout;
+  }
+
+  static Gxl createGxlFromGrooveGraph(GrooveGraph graph, boolean layout) {
     String gxlGraphName = String.format("%s_%s", graph.getName(), START);
     Gxl gxl = new Gxl();
     Graph gxlGraph = GrooveGxlHelper.createStandardGxlGraph(gxlGraphName, gxl);
@@ -89,7 +94,7 @@ public class BehaviorToGrooveTransformer {
                     grooveNodeIdToGxlNode.get(edge.getTargetNode().getId()),
                     edge.getName()));
 
-    if (doLayout) {
+    if (layout) {
       GrooveGxlHelper.layoutGraph(gxlGraph, idToNodeLabel);
     }
     return gxl;
@@ -129,7 +134,7 @@ public class BehaviorToGrooveTransformer {
                     new BehaviorVisitor() {
                       @Override
                       public void handle(FiniteStateMachine finiteStateMachine) {
-                        FSMToGrooveTransformer transformer = new FSMToGrooveTransformer();
+                        FSMToGrooveTransformer transformer = new FSMToGrooveTransformer(layout);
 
                         startGraphs.add(transformer.generateStartGraph(finiteStateMachine));
                         transformer
@@ -143,7 +148,7 @@ public class BehaviorToGrooveTransformer {
 
                       @Override
                       public void handle(PetriNet petriNet) {
-                        PNToGrooveTransformer transformer = new PNToGrooveTransformer();
+                        PNToGrooveTransformer transformer = new PNToGrooveTransformer(layout);
 
                         startGraphs.add(transformer.generateStartGraph(petriNet));
                         transformer
@@ -154,7 +159,7 @@ public class BehaviorToGrooveTransformer {
 
                       @Override
                       public void handle(BPMNCollaboration collaboration) {
-                        BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer();
+                        BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer(layout);
 
                         startGraphs.add(transformer.generateStartGraph(collaboration));
                         transformer
@@ -170,7 +175,8 @@ public class BehaviorToGrooveTransformer {
                       public void handle(NamedPiProcess piProcess) {
                         piProcessIncluded[0] = true;
 
-                        PiCalcToGrooveTransformer transformer = new PiCalcToGrooveTransformer();
+                        PiCalcToGrooveTransformer transformer =
+                            new PiCalcToGrooveTransformer(layout);
 
                         startGraphs.add(transformer.generateStartGraph(piProcess));
                         transformer
@@ -183,7 +189,6 @@ public class BehaviorToGrooveTransformer {
 
                       @Override
                       public void handle(ActivityDiagram activityDiagram) {
-                        // TODO: implement ActivityDiagram
                         typeGraphs.add(ACTIVITY_DIAGRAM_TYPE_GRAPH_FILE_NAME);
                         throw new UnsupportedOperationException();
                       }
@@ -222,8 +227,8 @@ public class BehaviorToGrooveTransformer {
     Stream<GrooveGraphRule> synchedRules =
         GrooveRuleBuilder.createSynchedRules(nameToToBeSynchedRules);
 
-    GrooveRuleWriter.writeRules(synchedRules, targetFolder);
-    GrooveRuleWriter.writeRules(unsynchedRules.stream(), targetFolder);
+    GrooveRuleWriter.writeRules(targetFolder, synchedRules, layout);
+    GrooveRuleWriter.writeRules(targetFolder, unsynchedRules.stream(), layout);
   }
 
   private void mergeAndWriteStartGraphs(Path graphGrammarSubFolder, Set<GrooveGraph> startGraphs) {
@@ -231,7 +236,7 @@ public class BehaviorToGrooveTransformer {
         startGraphs.stream()
             .reduce((graph, graph2) -> graph.union(graph2, (name1, name2) -> name1));
     startGraph.ifPresent(
-        graph -> GrooveTransformer.writeStartGraph(graphGrammarSubFolder, graph, true));
+        graph -> GrooveTransformer.writeStartGraph(graphGrammarSubFolder, graph, layout));
   }
 
   public Path generateGrooveGrammar(Behavior behavior, Path targetFolder) {
@@ -294,7 +299,7 @@ public class BehaviorToGrooveTransformer {
 
   private Path generateGrooveGrammarForPiProcess(NamedPiProcess piProcess, Path grooveDir) {
     Path graphGrammarSubFolder = this.makeSubFolder(piProcess, grooveDir);
-    PiCalcToGrooveTransformer transformer = new PiCalcToGrooveTransformer();
+    PiCalcToGrooveTransformer transformer = new PiCalcToGrooveTransformer(layout);
 
     transformer.generateAndWriteStartGraph(piProcess, graphGrammarSubFolder);
 
@@ -313,7 +318,7 @@ public class BehaviorToGrooveTransformer {
     checkForDuplicateNames(collaboration);
 
     Path graphGrammarSubFolder = this.makeSubFolder(collaboration, grooveDir);
-    BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer();
+    BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer(layout);
 
     // Generate start graph
     transformer.generateAndWriteStartGraph(collaboration, graphGrammarSubFolder);
@@ -347,7 +352,7 @@ public class BehaviorToGrooveTransformer {
 
   private Path generateGrooveGrammarForPN(PetriNet petriNet, Path grooveDir) {
     Path graphGrammarSubFolder = this.makeSubFolder(petriNet, grooveDir);
-    PNToGrooveTransformer transformer = new PNToGrooveTransformer();
+    PNToGrooveTransformer transformer = new PNToGrooveTransformer(layout);
 
     // Generate start graph
     transformer.generateAndWriteStartGraph(petriNet, graphGrammarSubFolder);
@@ -362,7 +367,7 @@ public class BehaviorToGrooveTransformer {
 
   private Path generateGrooveGrammarForFSM(FiniteStateMachine finiteStateMachine, Path grooveDir) {
     Path graphGrammarSubFolder = this.makeSubFolder(finiteStateMachine, grooveDir);
-    FSMToGrooveTransformer transformer = new FSMToGrooveTransformer();
+    FSMToGrooveTransformer transformer = new FSMToGrooveTransformer(layout);
 
     // Generate start graph
     transformer.generateAndWriteStartGraph(finiteStateMachine, graphGrammarSubFolder);

@@ -17,11 +17,19 @@ public class BPMNTransformerDriver {
     BPMNCollaboration bpmnCollaboration = readBPMNFileFromPath(pathToBPMNFile);
 
     String outputPath = args[1];
-    generateGraphGrammar(bpmnCollaboration, outputPath);
+    generateGraphGrammar(bpmnCollaboration, outputPath, getLayout(args));
   }
 
-  private static void generateGraphGrammar(BPMNCollaboration bpmnCollaboration, String outputPath) {
-    BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer();
+  private static boolean getLayout(String[] args) {
+    if (args.length == 3) {
+      return Boolean.parseBoolean(args[2]);
+    }
+    return false;
+  }
+
+  private static void generateGraphGrammar(
+      BPMNCollaboration bpmnCollaboration, String outputPath, boolean layout) {
+    BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer(layout);
     Path outputDir = Path.of(outputPath);
     Path file = transformer.generateGrooveGrammar(bpmnCollaboration, outputDir);
     System.out.println("Generation finished see " + file.toString());

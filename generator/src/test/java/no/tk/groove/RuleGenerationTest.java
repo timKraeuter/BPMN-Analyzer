@@ -27,14 +27,13 @@ class RuleGenerationTest {
 
   @Test
   void generateAddNodeRuleTest() throws Exception {
-    // TODO: Could use a virtual file system here now!
     Path tempDir = Files.createTempDirectory("");
 
     GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder();
     ruleBuilder.startRule("addSingleNode");
     ruleBuilder.addNode("node");
     ruleBuilder.buildRule();
-    GrooveRuleWriter.writeRules(ruleBuilder.getRules(), tempDir);
+    GrooveRuleWriter.writeRules(tempDir, ruleBuilder.getRules(), true);
 
     Path expected_rule = getResource("addSingleNode.gpr");
     Path generated_rule = Path.of(tempDir.toString(), "addSingleNode.gpr");
@@ -49,7 +48,7 @@ class RuleGenerationTest {
     ruleBuilder.startRule("deleteSingleNode");
     ruleBuilder.deleteNode("node");
     ruleBuilder.buildRule();
-    GrooveRuleWriter.writeRules(ruleBuilder.getRules(), tempDir);
+    GrooveRuleWriter.writeRules(tempDir, ruleBuilder.getRules(), true);
 
     Path expected_rule = getResource("deleteSingleNode.gpr");
     Path generated_rule = Path.of(tempDir.toString(), "deleteSingleNode.gpr");
@@ -66,7 +65,7 @@ class RuleGenerationTest {
     GrooveNode target = ruleBuilder.addNode("target");
     ruleBuilder.addEdge("edge", source, target);
     ruleBuilder.buildRule();
-    GrooveRuleWriter.writeRules(ruleBuilder.getRules(), tempDir);
+    GrooveRuleWriter.writeRules(tempDir, ruleBuilder.getRules(), true);
 
     Path expected_rule = getResource("addNodesWithEdge.gpr");
     Path generated_rule = Path.of(tempDir.toString(), "addNodesWithEdge.gpr");
@@ -83,7 +82,7 @@ class RuleGenerationTest {
     GrooveNode target = ruleBuilder.contextNode("target");
     ruleBuilder.contextEdge("edge", source, target);
     ruleBuilder.buildRule();
-    GrooveRuleWriter.writeRules(ruleBuilder.getRules(), tempDir);
+    GrooveRuleWriter.writeRules(tempDir, ruleBuilder.getRules(), true);
 
     Path expected_rule = getResource("contextEdge.gpr");
     Path generated_rule = Path.of(tempDir.toString(), "contextEdge.gpr");
@@ -99,7 +98,7 @@ class RuleGenerationTest {
     GrooveNode node = ruleBuilder.addNode("node");
     node.addFlag("root");
     ruleBuilder.buildRule();
-    GrooveRuleWriter.writeRules(ruleBuilder.getRules(), tempDir);
+    GrooveRuleWriter.writeRules(tempDir, ruleBuilder.getRules(), true);
 
     Path expected_rule = getResource("nodeWithFlag.gpr");
     Path generated_rule = Path.of(tempDir.toString(), "nodeWithFlag.gpr");
@@ -134,7 +133,7 @@ class RuleGenerationTest {
     Stream<GrooveGraphRule> synchedRules =
         GrooveRuleBuilder.createSynchedRules(nameToToBeSynchedRules);
 
-    GrooveRuleWriter.writeRules(synchedRules, tempDir);
+    GrooveRuleWriter.writeRules(tempDir, synchedRules, true);
 
     Path expected_rule = getResource("twoRuleSynch.gpr");
     Path generated_rule = Path.of(tempDir.toString(), "twoRuleSynch.gpr");
@@ -177,7 +176,7 @@ class RuleGenerationTest {
     Stream<GrooveGraphRule> synchedRules =
         GrooveRuleBuilder.createSynchedRules(nameToToBeSynchedRules);
 
-    GrooveRuleWriter.writeRules(synchedRules, tempDir);
+    GrooveRuleWriter.writeRules(tempDir, synchedRules, true);
 
     Path expected_rule = getResource("threeRuleSynch.gpr");
     Path generated_rule = Path.of(tempDir.toString(), "threeRuleSynch.gpr");

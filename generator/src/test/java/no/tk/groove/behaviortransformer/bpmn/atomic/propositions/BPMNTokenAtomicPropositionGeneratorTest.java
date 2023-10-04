@@ -21,7 +21,7 @@ class BPMNTokenAtomicPropositionGeneratorTest extends BPMNToGrooveTestBase
     BPMNProcessSnapshot bpmnProcessSnapshot =
         readBPMNSnapshotFromResource("snapshotWithTokens.xml");
 
-    BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator();
+    BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator(true);
 
     GrooveGraphRule graphRule = generator.generateAtomicProposition(bpmnProcessSnapshot);
 
@@ -39,7 +39,7 @@ class BPMNTokenAtomicPropositionGeneratorTest extends BPMNToGrooveTestBase
     BPMNProcessSnapshot bpmnProcessSnapshot =
         readBPMNSnapshotFromResource("multipleSnapshotsWithTokens.xml");
 
-    BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator();
+    BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator(true);
 
     GrooveGraphRule graphRule = generator.generateAtomicProposition(bpmnProcessSnapshot);
 
@@ -57,7 +57,7 @@ class BPMNTokenAtomicPropositionGeneratorTest extends BPMNToGrooveTestBase
     BPMNProcessSnapshot bpmnProcessSnapshot =
         readBPMNSnapshotFromResource("snapshotWithTokens.xml");
 
-    BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator();
+    BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator(true);
 
     Path targetFolder = Paths.get(this.getOutputPathIncludingSubFolder(), "snapshotWithTokens.gps");
     generator.generateAndWriteAtomicProposition(bpmnProcessSnapshot, targetFolder);

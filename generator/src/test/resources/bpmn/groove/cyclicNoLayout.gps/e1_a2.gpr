@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
+    <graph id="e1_a2" role="rule" edgeids="false" edgemode="directed">
+        <node id="n25"/>
+        <edge from="n25" to="n25">
+            <attr name="label">
+                <string>type:ProcessSnapshot</string>
+            </attr>
+        </edge>
+        <node id="n26"/>
+        <edge from="n26" to="n26">
+            <attr name="label">
+                <string>string:"cyclicNoLayout"</string>
+            </attr>
+        </edge>
+        <node id="n27"/>
+        <edge from="n27" to="n27">
+            <attr name="label">
+                <string>type:Running</string>
+            </attr>
+        </edge>
+        <node id="n28"/>
+        <edge from="n28" to="n28">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <node id="n29"/>
+        <edge from="n29" to="n29">
+            <attr name="label">
+                <string>string:"a0 -&gt; e1"</string>
+            </attr>
+        </edge>
+        <node id="n30"/>
+        <edge from="n30" to="n30">
+            <attr name="label">
+                <string>string:"e1 -&gt; a2"</string>
+            </attr>
+        </edge>
+        <edge from="n28" to="n30">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n28" to="n29">
+            <attr name="label">
+                <string>del:position</string>
+            </attr>
+        </edge>
+        <edge from="n25" to="n26">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n25" to="n27">
+            <attr name="label">
+                <string>state</string>
+            </attr>
+        </edge>
+        <edge from="n25" to="n28">
+            <attr name="label">
+                <string>tokens</string>
+            </attr>
+        </edge>
+    </graph>
+</gxl>

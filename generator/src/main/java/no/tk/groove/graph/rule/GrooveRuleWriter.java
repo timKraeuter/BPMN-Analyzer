@@ -24,7 +24,7 @@ public class GrooveRuleWriter {
   public static final String ASPECT_LABEL_DEL = "del:";
   public static final String ASPECT_LABEL_NOT = "not:";
 
-  public static void writeRules(Stream<GrooveGraphRule> rules, Path dir) {
+  public static void writeRules(Path dir, Stream<GrooveGraphRule> rules, boolean layout) {
     rules.forEach(
         grooveGraphRule -> {
           // Create gxl with a graph for each rule
@@ -53,7 +53,7 @@ public class GrooveRuleWriter {
                   contextNode ->
                       addNodeToGxlGraph(graph, contextNode, allGxlNodes, NodeRuleAspect.CONTEXT));
 
-          // Add nodes which should be in context
+          // Add NAC nodes
           grooveGraphRule
               .getNACNodes()
               .forEach(
@@ -74,23 +74,29 @@ public class GrooveRuleWriter {
                   toBeDeletedEdge ->
                       addEdgeToGxlGraph(graph, toBeDeletedEdge, allGxlNodes, NodeRuleAspect.DEL));
 
-          // Add edges which should be deleted to gxl
+          // Add context edges to gxl
           grooveGraphRule
               .getContextEdges()
               .forEach(
                   toBeDeletedEdge ->
                       addEdgeToGxlGraph(
                           graph, toBeDeletedEdge, allGxlNodes, NodeRuleAspect.CONTEXT));
-
-          GrooveGxlHelper.layoutGraph(
-              graph,
-              grooveGraphRule.getAllNodes().entrySet().stream()
-                  .collect(
-                      Collectors.toMap(
-                          Map.Entry::getKey, idNodePair -> idNodePair.getValue().getName())));
+          layoutRuleIfConfigured(layout, grooveGraphRule, graph);
           // Write each rule to a file
           writeRuleToFile(dir, grooveGraphRule, gxl);
         });
+  }
+
+  private static void layoutRuleIfConfigured(
+      boolean layout, GrooveGraphRule grooveGraphRule, Graph graph) {
+    if (layout) {
+      GrooveGxlHelper.layoutGraph(
+          graph,
+          grooveGraphRule.getAllNodes().entrySet().stream()
+              .collect(
+                  Collectors.toMap(
+                      Map.Entry::getKey, idNodePair -> idNodePair.getValue().getName())));
+    }
   }
 
   private static void addEdgeToGxlGraph(
