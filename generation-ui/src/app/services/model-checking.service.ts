@@ -33,7 +33,7 @@ export class ModelCheckingService {
     ) {
         const formData = new FormData();
         bpmnSpecificPropertiesToBeChecked.forEach((property) =>
-            formData.append('propertiesToBeChecked[]', property),
+            formData.append('propertiesToBeChecked', property),
         );
         formData.append('file', xmlModel);
 

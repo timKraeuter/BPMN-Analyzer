@@ -60,7 +60,7 @@ public class BPMNModelChecker {
     BPMNSpecificPropertyCheckingResponse response =
         new BPMNSpecificPropertyCheckingResponse(new ArrayList<>());
 
-    for (BPMNSpecificProperty property : propertyCheckingRequest.getPropertiesToBeChecked()) {
+    for (BPMNSpecificProperty property : propertyCheckingRequest.propertiesToBeChecked()) {
       this.checkPropertyAndRecordResult(property, response);
     }
     response.sortResults();
