@@ -27,14 +27,9 @@ export class BPMNModelerService {
         keyboard: { bindTo: document },
     });
     private tokenModeler: TokenModeler = new TokenModeler({
-        keyboard: {
-            bindTo: document,
-        },
         additionalModules: [tokenOverrideModule],
     });
-    private viewer: Viewer = new Viewer({
-        keyboard: { bindTo: document },
-    });
+    private viewer: Viewer = new Viewer();
 
     private lastXMLLoadedByTokenModeler: string = '';
 
@@ -106,5 +101,24 @@ export class BPMNModelerService {
             return saveXMLResult.xml;
         }
         return '';
+    }
+
+    public unbindKeyboards() {
+        // @ts-ignore
+        this.modeler.get('keyboard').unbind();
+        // @ts-ignore
+        this.tokenModeler.get('keyboard').unbind();
+    }
+
+    public bindModelerKeyboard() {
+        this.unbindKeyboards();
+        // @ts-ignore
+        this.modeler.get('keyboard').bind(document);
+    }
+
+    public bindTokenModelerKeyboard() {
+        this.unbindKeyboards();
+        // @ts-ignore
+        this.tokenModeler.get('keyboard').bind(document);
     }
 }

@@ -16,11 +16,16 @@ export class AppComponent {
     constructor(private modeler: BPMNModelerService) {}
 
     async stepChanged(event: StepperSelectionEvent) {
-        if (this.changedToProcessStateStep(event)) {
+        if (this.changedToModelStep(event)) {
+            this.modeler.bindModelerKeyboard();
+        }
+        if (this.changedToPropositionStep(event)) {
             // TODO: Sync issue with multiple propositions
             await this.modeler.updateTokenBPMNModelIfNeeded();
+            this.modeler.bindTokenModelerKeyboard();
         }
         if (this.changedToAnalyzeStep(event)) {
+            this.modeler.unbindKeyboards();
             await this.propositionComponent.saveCurrentProposition();
             await this.modeler.updateViewerBPMNModel();
         }
@@ -30,8 +35,8 @@ export class AppComponent {
         return event.selectedIndex == 2;
     }
 
-    private changedToProcessStateStep(event: StepperSelectionEvent) {
-        return event.previouslySelectedIndex == 0 && event.selectedIndex == 1;
+    private changedToPropositionStep(event: StepperSelectionEvent) {
+        return event.selectedIndex == 1;
     }
 
     @HostListener('document:keydown.ArrowRight')
@@ -42,5 +47,9 @@ export class AppComponent {
     @HostListener('document:keydown.ArrowLeft')
     async stepBackward() {
         this.stepper.previous();
+    }
+
+    private changedToModelStep(event: StepperSelectionEvent) {
+        return event.selectedIndex == 0;
     }
 }
