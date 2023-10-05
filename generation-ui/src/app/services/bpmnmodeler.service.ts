@@ -13,10 +13,14 @@ import Viewer from 'bpmn-js/lib/Viewer';
 import { SaveXMLResult } from 'bpmn-js/lib/BaseViewer';
 import TokenContextPadProvider from 'bpmn-token/lib/features/token-context-pad/TokenContextPadProvider';
 import TokenPaletteProvider from 'bpmn-token/lib/features/token-palette/TokenPaletteProvider';
+import TokenKeyboardBindings from 'bpmn-token/lib/features/token-keyboard/TokenKeyboardBindings';
+import TokenRules from 'bpmn-token/lib/features/token-rules/TokenRules';
 
 const tokenOverrideModule = {
     contextPadProvider: ['type', TokenContextPadProvider],
     paletteProvider: ['type', TokenPaletteProvider],
+    keyboardBindings: ['type', TokenKeyboardBindings],
+    bpmnRules: ['type', TokenRules],
 };
 
 @Injectable({
