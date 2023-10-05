@@ -11,10 +11,17 @@ import Modeler from 'bpmn-js/lib/Modeler';
 import TokenModeler from 'bpmn-token/lib/Modeler';
 import Viewer from 'bpmn-js/lib/Viewer';
 import { SaveXMLResult } from 'bpmn-js/lib/BaseViewer';
+
 import TokenContextPadProvider from 'bpmn-token/lib/features/token-context-pad/TokenContextPadProvider';
 import TokenPaletteProvider from 'bpmn-token/lib/features/token-palette/TokenPaletteProvider';
 import TokenKeyboardBindings from 'bpmn-token/lib/features/token-keyboard/TokenKeyboardBindings';
 import TokenRules from 'bpmn-token/lib/features/token-rules/TokenRules';
+
+import {
+    BpmnPropertiesPanelModule,
+    BpmnPropertiesProviderModule,
+    // @ts-ignore
+} from 'bpmn-js-properties-panel';
 
 const tokenOverrideModule = {
     contextPadProvider: ['type', TokenContextPadProvider],
@@ -29,6 +36,10 @@ const tokenOverrideModule = {
 export class BPMNModelerService {
     private modeler: Modeler = new Modeler({
         keyboard: { bindTo: document },
+        additionalModules: [
+            BpmnPropertiesPanelModule,
+            BpmnPropertiesProviderModule,
+        ],
     });
     private tokenModeler: TokenModeler = new TokenModeler({
         additionalModules: [tokenOverrideModule],
