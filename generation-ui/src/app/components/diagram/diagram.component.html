@@ -1,4 +1,9 @@
 <div class="diagram-parent content with-diagram">
     <div #ref class="diagram-container canvas"></div>
-    <div #properties id="properties" class="properties-panel-parent"></div>
+    <div
+        #properties
+        id="properties"
+        class="properties-panel-parent"
+        [hidden]="!this.propertiesPanel"
+    ></div>
 </div>
