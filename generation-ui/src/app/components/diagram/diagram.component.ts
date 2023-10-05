@@ -53,7 +53,7 @@ export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {
     public initialDiagram: string =
         '<?xml version="1.0" encoding="UTF-8"?>\n' +
         '<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">\n' +
-        '  <collaboration id="sid-c0e745ff-361e-4afb-8c8d-2a1fc32b1424">\n' +
+        '  <collaboration id="Collaboration">\n' +
         '    <participant id="Customer" name="Customer" processRef="Customer_1" />\n' +
         '  </collaboration>\n' +
         '  <process id="Customer_1" name="Customer" processType="None" isClosed="false" isExecutable="false">\n' +
