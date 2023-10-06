@@ -86,6 +86,7 @@
                             [(ngModel)]="ltlProperty"
                             placeholder="G(F(AllTerminated))"
                             name="ltlProperty"
+                            (keydown)="this.stopEventPropagation($event)"
                         ></textarea>
                     </mat-form-field>
                 </form>
@@ -126,6 +127,7 @@
                             [(ngModel)]="ctlProperty"
                             placeholder="AG(!Unsafe)"
                             name="ctlProperty"
+                            (keydown)="this.stopEventPropagation($event)"
                         ></textarea>
                     </mat-form-field>
                 </form>

@@ -22,7 +22,7 @@ export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {
     private modeler: Modeler | Viewer;
 
     @ViewChild('properties', { static: true }) private properties!: ElementRef;
-    @ViewChild('ref', { static: true }) private el!: ElementRef;
+    @ViewChild('diagram', { static: true }) private el!: ElementRef;
     @Input() public viewer: boolean = false;
     @Input() public propertiesPanel: boolean = false;
 
@@ -48,6 +48,10 @@ export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {
 
     ngOnDestroy(): void {
         this.modeler.destroy();
+    }
+
+    keyDown($event: KeyboardEvent) {
+        console.log($event);
     }
 
     public initialDiagram: string =

@@ -191,4 +191,9 @@ export class AnalysisComponent {
     getPropNames() {
         return this.sharedState.getPropositionNames().join(', ');
     }
+
+    stopEventPropagation($event: KeyboardEvent) {
+        // Stops event propagation so steps are not changed while inputting.
+        $event.stopPropagation();
+    }
 }

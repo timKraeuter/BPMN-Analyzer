@@ -39,13 +39,19 @@ export class AppComponent {
         return event.selectedIndex == 1;
     }
 
-    @HostListener('document:keydown.ArrowRight')
-    async stepForward() {
-        this.stepper.next();
+    @HostListener('document:keydown.ArrowRight', ['$event'])
+    async stepForward(event: KeyboardEvent) {
+        if (
+            event.target &&
+            // @ts-ignore Do not step forward when inputting something in the panel.
+            event.target.className !== 'bio-properties-panel-input'
+        ) {
+            this.stepper.next();
+        }
     }
 
-    @HostListener('document:keydown.ArrowLeft')
-    async stepBackward() {
+    @HostListener('document:keydown.ArrowLeft', ['$event'])
+    async stepBackward(event: KeyboardEvent) {
         this.stepper.previous();
     }
 

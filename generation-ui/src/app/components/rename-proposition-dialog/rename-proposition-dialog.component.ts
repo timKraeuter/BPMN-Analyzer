@@ -22,7 +22,7 @@ export class RenamePropositionDialogComponent {
         this.dialogRef.close();
     }
 
-    @HostListener('window:keyup.Enter')
+    @HostListener('document:keyup.Enter')
     onDialogClick(): void {
         this.saveNameAndCloseDialog();
     }
@@ -30,6 +30,11 @@ export class RenamePropositionDialogComponent {
     saveNameAndCloseDialog() {
         this.data.proposition.name = this.newName;
         this.closeDialog();
+    }
+
+    stopEventPropagation($event: KeyboardEvent) {
+        // Stops event propagation so steps are not changed while inputting.
+        $event.stopPropagation();
     }
 }
 
