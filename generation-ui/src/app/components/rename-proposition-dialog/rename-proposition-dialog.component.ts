@@ -34,7 +34,9 @@ export class RenamePropositionDialogComponent {
 
     stopEventPropagation($event: KeyboardEvent) {
         // Stops event propagation so steps are not changed while inputting.
-        $event.stopPropagation();
+        if ($event.key === 'ArrowLeft' || $event.key === 'ArrowRight') {
+            $event.stopPropagation();
+        }
     }
 }
 
