@@ -153,6 +153,7 @@ export class AnalysisComponent {
                 );
                 this.colorElementsInRed(deadActivities);
                 this.setActivityNamesAsInfo(value, deadActivities);
+                this.bpmnModeler.updateViewerBPMNModel();
             }
         });
     }
