@@ -1,5 +1,9 @@
 <div class="diagram-parent content with-diagram">
-    <div #diagram class="diagram-container canvas"></div>
+    <div
+        #diagram
+        class="diagram-container canvas"
+        [style.height.px]="height"
+    ></div>
     <div
         #properties
         id="properties"

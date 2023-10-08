@@ -25,6 +25,7 @@ export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {
     @ViewChild('diagram', { static: true }) private el!: ElementRef;
     @Input() public viewer: boolean = false;
     @Input() public propertiesPanel: boolean = false;
+    @Input() public height: string = '750';
 
     constructor(private bpmnModeler: BPMNModelerService) {}
 
