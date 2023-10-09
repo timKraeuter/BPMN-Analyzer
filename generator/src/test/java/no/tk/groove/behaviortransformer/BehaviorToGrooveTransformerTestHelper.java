@@ -132,6 +132,6 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
         Files.readString(propertiesFile)
             .replaceAll("\r?\n", "\r\n")
             // force identical line separators
-            .endsWith("grooveVersion=5.8.1\r\n" + "grammarVersion=3.7"));
+            .endsWith("grooveVersion=6.0.2\r\n" + "grammarVersion=3.7"));
   }
 }
