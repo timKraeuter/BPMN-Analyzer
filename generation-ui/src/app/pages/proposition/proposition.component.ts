@@ -62,6 +62,10 @@ export class PropositionComponent {
 
         await this.modeler.getTokenModeler().importXML(fileText);
         this.currentProposition.xml = fileText;
+        if (file.name) {
+            // Remove file extension: https://stackoverflow.com/questions/4250364/how-to-trim-a-file-extension-from-a-string-in-javascript
+            this.currentProposition.name = file.name.replace(/\.[^/.]+$/, '');
+        }
     }
 
     downloadTokenModel() {
