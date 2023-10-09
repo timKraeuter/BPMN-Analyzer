@@ -39,9 +39,11 @@ public class BPMNFileReader {
     Bpmn.INSTANCE = new BPMNToken();
   }
 
-  private UnaryOperator<String> elementNameTransformer;
+  private final UnaryOperator<String> elementNameTransformer;
 
-  public BPMNFileReader() {}
+  public BPMNFileReader() {
+    this(x -> x);
+  }
 
   public BPMNFileReader(UnaryOperator<String> elementNameTransformer) {
     this.elementNameTransformer = elementNameTransformer;
@@ -183,7 +185,10 @@ public class BPMNFileReader {
       Map<String, no.tk.behavior.bpmn.FlowNode> createdFlowNodes,
       Map<String, Boolean> mappedSequenceFlows,
       Participant participant) {
-    String name = participant.getName() == null ? participant.getId() : participant.getName();
+    String name =
+        participant.getName() == null
+            ? participant.getId()
+            : this.elementNameTransformer.apply(participant.getName());
     bpmnCollaborationBuilder.processName(name);
     participant
         .getProcess()
@@ -323,10 +328,7 @@ public class BPMNFileReader {
     if (flowElement.getName() == null) {
       return flowElement.getId();
     }
-    if (this.elementNameTransformer != null) {
-      return elementNameTransformer.apply(flowElement.getName());
-    }
-    return flowElement.getName();
+    return elementNameTransformer.apply(flowElement.getName());
   }
 
   private no.tk.behavior.bpmn.FlowNode handleBoundaryEvent(

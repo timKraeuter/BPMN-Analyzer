@@ -66,6 +66,19 @@ class BPMNTokenAtomicPropositionGeneratorTest extends BPMNToGrooveTestBase
     FileTestHelper.testDirEquals(getExpectedFolder(ruleName), targetFolder, x -> false);
   }
 
+  @Test
+  void generateAtomicPropositionToFilesWithWhitespaceNames() throws Exception {
+    BPMNProcessSnapshot bpmnProcessSnapshot = readBPMNSnapshotFromResource("orderHandling.xml");
+
+    BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator(true);
+
+    Path targetFolder = Paths.get(this.getOutputPathIncludingSubFolder(), "orderHandling.gps");
+    generator.generateAndWriteAtomicProposition(bpmnProcessSnapshot, targetFolder);
+
+    String ruleName = "orderHandling";
+    FileTestHelper.testDirEquals(getExpectedFolder(ruleName), targetFolder, x -> false);
+  }
+
   private Path getExpectedFolder(String ruleName) {
     String path = String.format("%s/%s.gps", getTestResourcePathSubFolderName(), ruleName);
     return FileTestHelper.getResource(path);
