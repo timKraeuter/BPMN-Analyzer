@@ -122,10 +122,10 @@ public class BehaviorToGrooveTransformer {
       Behavior... behaviors) {
     Path graphGrammarSubFolder = this.makeSubFolder(graphGrammarName, grooveFolder);
 
-    final boolean[] piProcessIncluded = {false};
     Set<String> typeGraphs = new LinkedHashSet<>();
     Set<GrooveGraph> startGraphs = new LinkedHashSet<>();
     Map<String, GrooveGraphRule> allRules = new LinkedHashMap<>();
+    final Map<String, String> additionalProperties = Maps.newHashMap();
 
     Arrays.stream(behaviors)
         .forEach(
@@ -160,6 +160,7 @@ public class BehaviorToGrooveTransformer {
                       @Override
                       public void handle(BPMNCollaboration collaboration) {
                         BPMNToGrooveTransformer transformer = new BPMNToGrooveTransformer(layout);
+                        additionalProperties.put("matchInjective", "true");
 
                         startGraphs.add(transformer.generateStartGraph(collaboration));
                         transformer
@@ -173,7 +174,7 @@ public class BehaviorToGrooveTransformer {
 
                       @Override
                       public void handle(NamedPiProcess piProcess) {
-                        piProcessIncluded[0] = true;
+                        additionalProperties.put("checkDangling", "true");
 
                         PiCalcToGrooveTransformer transformer =
                             new PiCalcToGrooveTransformer(layout);
@@ -193,11 +194,6 @@ public class BehaviorToGrooveTransformer {
                         throw new UnsupportedOperationException();
                       }
                     }));
-
-    final Map<String, String> additionalProperties = Maps.newHashMap();
-    if (piProcessIncluded[0]) {
-      additionalProperties.put("checkDangling", "true");
-    }
     if (!typeGraphs.isEmpty()) {
       additionalProperties.put(TYPE_GRAPH, String.join(" ", typeGraphs));
     }
@@ -326,6 +322,7 @@ public class BehaviorToGrooveTransformer {
     transformer.generateAndWriteRules(collaboration, graphGrammarSubFolder);
 
     final Map<String, String> additionalProperties = Maps.newHashMap();
+    additionalProperties.put("matchInjective", "true");
     additionalProperties.put(TYPE_GRAPH, BPMN_DIAGRAM_TYPE_GRAPH_FILE_NAME);
     this.generatePropertiesFile(graphGrammarSubFolder, START, additionalProperties);
 
@@ -413,7 +410,7 @@ public class BehaviorToGrooveTransformer {
 
     String propertiesContent =
         String.format(
-            "# %s (Groove rule generator)%nlocation=%s%nstartGraph=%s%n%sgrooveVersion=5.8.1%ngrammarVersion=3.7",
+            "# %s (Groove rule generator)%nlocation=%s%nstartGraph=%s%n%sgrooveVersion=6.0.2%ngrammarVersion=3.7",
             dtf.format(now),
             subFolder,
             startGraph,
