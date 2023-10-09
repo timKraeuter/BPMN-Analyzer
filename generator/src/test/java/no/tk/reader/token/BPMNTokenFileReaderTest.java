@@ -124,6 +124,28 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
     assertFalse(snapshot3.isShouldExist());
   }
 
+  @Test
+  void readWhitespacesInNames() throws IOException {
+    BPMNProcessSnapshot bpmnSnapshot = readBPMNSnapshotFromResource("orderHandling.xml");
+
+    assertNotNull(bpmnSnapshot);
+    assertThat(bpmnSnapshot.getName(), is("orderHandling"));
+
+    // Check for tokens and process snapshots
+    assertThat(bpmnSnapshot.getProcessSnapshots().size(), is(1));
+
+    // Check snapshot 1
+    ProcessSnapshot snapshot1 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_0lx4wgn");
+    assertThat(snapshot1.getSnapshotID(), is("ProcessSnapshot_0lx4wgn"));
+    assertThat(snapshot1.getProcessName(), is("Order handling"));
+    assertThat(snapshot1.getTokens().size(), is(2));
+    assertTrue(snapshot1.isShouldExist());
+    assertThat(
+        getElementIDsForTokens(snapshot1),
+        is(Lists.newArrayList("Retrieve payment", "Ship goods")));
+    assertThat(getShouldExistListForTokens(snapshot1), is(Lists.newArrayList(false, false)));
+  }
+
   private List<Boolean> getShouldExistListForTokens(ProcessSnapshot snapshot2) {
     return snapshot2.getTokens().stream().map(Token::isShouldExist).collect(Collectors.toList());
   }
