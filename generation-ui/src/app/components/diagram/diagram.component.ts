@@ -59,141 +59,123 @@ export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {
         '<?xml version="1.0" encoding="UTF-8"?>\n' +
         '<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">\n' +
         '  <collaboration id="Collaboration">\n' +
-        '    <participant id="Customer" name="Customer" processRef="Customer_1" />\n' +
+        '    <participant id="Customer" name="Order handling" processRef="Customer_1" />\n' +
         '  </collaboration>\n' +
         '  <process id="Customer_1" name="Customer" processType="None" isClosed="false" isExecutable="false">\n' +
         '    <extensionElements />\n' +
         '    <laneSet id="sid-b167d0d7-e761-4636-9200-76b7f0e8e83a">\n' +
         '      <lane id="lane">\n' +
-        '        <flowNodeRef>Scan_QR_code</flowNodeRef>\n' +
-        '        <flowNodeRef>Open_Product</flowNodeRef>\n' +
         '        <flowNodeRef>start-event</flowNodeRef>\n' +
-        '        <flowNodeRef>end_event</flowNodeRef>\n' +
-        '        <flowNodeRef>gateway_1</flowNodeRef>\n' +
-        '        <flowNodeRef>SCAN_OK</flowNodeRef>\n' +
+        '        <flowNodeRef>Event_0qcvv2g</flowNodeRef>\n' +
+        '        <flowNodeRef>Activity_0lgvp3u</flowNodeRef>\n' +
+        '        <flowNodeRef>Gateway_1x8m4ws</flowNodeRef>\n' +
+        '        <flowNodeRef>Activity_1up8xq1</flowNodeRef>\n' +
+        '        <flowNodeRef>Activity_1jgyh05</flowNodeRef>\n' +
+        '        <flowNodeRef>Gateway_0eef44j</flowNodeRef>\n' +
         '      </lane>\n' +
         '    </laneSet>\n' +
-        '    <task id="Scan_QR_code" name="Scan QR code">\n' +
-        '      <incoming>scan_flow_in</incoming>\n' +
-        '      <outgoing>scan_flow_out</outgoing>\n' +
-        '    </task>\n' +
-        '    <task id="Open_Product" name="Open product information in mobile  app">\n' +
-        '      <incoming>No</incoming>\n' +
-        '      <outgoing>end_flow</outgoing>\n' +
-        '    </task>\n' +
-        '    <startEvent id="start-event" name="Notices&#10;QR code">\n' +
-        '      <outgoing>gateway_in</outgoing>\n' +
+        '    <startEvent id="start-event" name="Order placed">\n' +
+        '      <outgoing>Flow_0wq8dog</outgoing>\n' +
         '    </startEvent>\n' +
-        '    <endEvent id="end_event" name="Is informed">\n' +
-        '      <incoming>end_flow</incoming>\n' +
+        '    <sequenceFlow id="Flow_0wq8dog" sourceRef="start-event" targetRef="Gateway_0eef44j" />\n' +
+        '    <sequenceFlow id="Flow_0u9a0g3" sourceRef="Gateway_0eef44j" targetRef="Activity_1jgyh05" />\n' +
+        '    <sequenceFlow id="Flow_1mtm8jg" sourceRef="Gateway_0eef44j" targetRef="Activity_1up8xq1" />\n' +
+        '    <sequenceFlow id="Flow_1flhoxp" sourceRef="Activity_1jgyh05" targetRef="Gateway_1x8m4ws" />\n' +
+        '    <sequenceFlow id="Flow_1n9ng49" sourceRef="Activity_1up8xq1" targetRef="Gateway_1x8m4ws" />\n' +
+        '    <sequenceFlow id="Flow_14i9c18" sourceRef="Gateway_1x8m4ws" targetRef="Activity_0lgvp3u" />\n' +
+        '    <sequenceFlow id="Flow_14fhivy" sourceRef="Activity_0lgvp3u" targetRef="Event_0qcvv2g" />\n' +
+        '    <endEvent id="Event_0qcvv2g" name="Order delivered">\n' +
+        '      <incoming>Flow_14fhivy</incoming>\n' +
         '    </endEvent>\n' +
-        '    <exclusiveGateway id="gateway_1">\n' +
-        '      <incoming>gateway_in</incoming>\n' +
-        '      <incoming>Yes</incoming>\n' +
-        '      <outgoing>scan_flow_in</outgoing>\n' +
-        '    </exclusiveGateway>\n' +
-        '    <exclusiveGateway id="SCAN_OK" name="Scan successful?&#10;">\n' +
-        '      <incoming>scan_flow_out</incoming>\n' +
-        '      <outgoing>No</outgoing>\n' +
-        '      <outgoing>Yes</outgoing>\n' +
-        '    </exclusiveGateway>\n' +
-        '    <sequenceFlow id="gateway_in" sourceRef="start-event" targetRef="gateway_1" />\n' +
-        '    <sequenceFlow id="scan_flow_out" sourceRef="Scan_QR_code" targetRef="SCAN_OK" />\n' +
-        '    <sequenceFlow id="end_flow" sourceRef="Open_Product" targetRef="end_event" />\n' +
-        '    <sequenceFlow id="No" name="No" sourceRef="SCAN_OK" targetRef="Open_Product" />\n' +
-        '    <sequenceFlow id="scan_flow_in" sourceRef="gateway_1" targetRef="Scan_QR_code" />\n' +
-        '    <sequenceFlow id="Yes" name="Yes" sourceRef="SCAN_OK" targetRef="gateway_1" />\n' +
+        '    <userTask id="Activity_0lgvp3u" name="Ship goods">\n' +
+        '      <incoming>Flow_14i9c18</incoming>\n' +
+        '      <outgoing>Flow_14fhivy</outgoing>\n' +
+        '    </userTask>\n' +
+        '    <parallelGateway id="Gateway_1x8m4ws">\n' +
+        '      <incoming>Flow_1flhoxp</incoming>\n' +
+        '      <incoming>Flow_1n9ng49</incoming>\n' +
+        '      <outgoing>Flow_14i9c18</outgoing>\n' +
+        '    </parallelGateway>\n' +
+        '    <userTask id="Activity_1up8xq1" name="Fetch goods">\n' +
+        '      <incoming>Flow_1mtm8jg</incoming>\n' +
+        '      <outgoing>Flow_1n9ng49</outgoing>\n' +
+        '    </userTask>\n' +
+        '    <serviceTask id="Activity_1jgyh05" name="Retrieve payment">\n' +
+        '      <incoming>Flow_0u9a0g3</incoming>\n' +
+        '      <outgoing>Flow_1flhoxp</outgoing>\n' +
+        '    </serviceTask>\n' +
+        '    <parallelGateway id="Gateway_0eef44j">\n' +
+        '      <incoming>Flow_0wq8dog</incoming>\n' +
+        '      <outgoing>Flow_0u9a0g3</outgoing>\n' +
+        '      <outgoing>Flow_1mtm8jg</outgoing>\n' +
+        '    </parallelGateway>\n' +
         '  </process>\n' +
         '  <bpmndi:BPMNDiagram id="sid-74620812-92c4-44e5-949c-aa47393d3830">\n' +
-        '    <bpmndi:BPMNPlane id="sid-cdcae759-2af7-4a6d-bd02-53f3352a731d" bpmnElement="sid-c0e745ff-361e-4afb-8c8d-2a1fc32b1424">\n' +
+        '    <bpmndi:BPMNPlane id="sid-cdcae759-2af7-4a6d-bd02-53f3352a731d" bpmnElement="Collaboration">\n' +
         '      <bpmndi:BPMNShape id="sid-87F4C1D6-25E1-4A45-9DA7-AD945993D06F_gui" bpmnElement="Customer" isHorizontal="true">\n' +
-        '        <omgdc:Bounds x="158" y="55" width="933" height="250" />\n' +
-        '        <bpmndi:BPMNLabel labelStyle="sid-84cb49fd-2f7c-44fb-8950-83c3fa153d3b">\n' +
-        '          <omgdc:Bounds x="47.49999999999999" y="170.42857360839844" width="12.000000000000014" height="59.142852783203125" />\n' +
-        '        </bpmndi:BPMNLabel>\n' +
+        '        <omgdc:Bounds x="170" y="30" width="720" height="260" />\n' +
+        '        <bpmndi:BPMNLabel labelStyle="sid-84cb49fd-2f7c-44fb-8950-83c3fa153d3b" />\n' +
         '      </bpmndi:BPMNShape>\n' +
         '      <bpmndi:BPMNShape id="sid-57E4FE0D-18E4-478D-BC5D-B15164E93254_gui" bpmnElement="lane" isHorizontal="true">\n' +
-        '        <omgdc:Bounds x="188" y="55" width="903" height="250" />\n' +
-        '      </bpmndi:BPMNShape>\n' +
-        '      <bpmndi:BPMNShape id="sid-52EB1772-F36E-433E-8F5B-D5DFD26E6F26_gui" bpmnElement="Scan_QR_code">\n' +
-        '        <omgdc:Bounds x="468" y="120" width="100" height="80" />\n' +
-        '        <bpmndi:BPMNLabel labelStyle="sid-84cb49fd-2f7c-44fb-8950-83c3fa153d3b">\n' +
-        '          <omgdc:Bounds x="435.5" y="122" width="84" height="12" />\n' +
-        '        </bpmndi:BPMNLabel>\n' +
-        '      </bpmndi:BPMNShape>\n' +
-        '      <bpmndi:BPMNShape id="sid-E49425CF-8287-4798-B622-D2A7D78EF00B_gui" bpmnElement="Open_Product">\n' +
-        '        <omgdc:Bounds x="803" y="120" width="100" height="80" />\n' +
-        '        <bpmndi:BPMNLabel labelStyle="sid-84cb49fd-2f7c-44fb-8950-83c3fa153d3b">\n' +
-        '          <omgdc:Bounds x="770.9285736083984" y="112" width="83.14285278320312" height="36" />\n' +
-        '        </bpmndi:BPMNLabel>\n' +
+        '        <omgdc:Bounds x="200" y="30" width="690" height="260" />\n' +
         '      </bpmndi:BPMNShape>\n' +
         '      <bpmndi:BPMNShape id="StartEvent_0l6sgn0_di" bpmnElement="start-event">\n' +
-        '        <omgdc:Bounds x="262" y="142" width="36" height="36" />\n' +
+        '        <omgdc:Bounds x="221" y="102" width="36" height="36" />\n' +
         '        <bpmndi:BPMNLabel>\n' +
-        '          <omgdc:Bounds x="259" y="179" width="43" height="27" />\n' +
+        '          <omgdc:Bounds x="208" y="139" width="64" height="14" />\n' +
         '        </bpmndi:BPMNLabel>\n' +
         '      </bpmndi:BPMNShape>\n' +
-        '      <bpmndi:BPMNShape id="EndEvent_0xwuvv5_di" bpmnElement="end_event">\n' +
-        '        <omgdc:Bounds x="976" y="142" width="36" height="36" />\n' +
+        '      <bpmndi:BPMNShape id="Event_0qcvv2g_di" bpmnElement="Event_0qcvv2g">\n' +
+        '        <omgdc:Bounds x="772" y="102" width="36" height="36" />\n' +
         '        <bpmndi:BPMNLabel>\n' +
-        '          <omgdc:Bounds x="968" y="181" width="54" height="14" />\n' +
+        '          <omgdc:Bounds x="752" y="145" width="76" height="14" />\n' +
         '        </bpmndi:BPMNLabel>\n' +
         '      </bpmndi:BPMNShape>\n' +
-        '      <bpmndi:BPMNShape id="ExclusiveGateway_1g0eih2_di" bpmnElement="gateway_1" isMarkerVisible="true">\n' +
-        '        <omgdc:Bounds x="350" y="135" width="50" height="50" />\n' +
-        '        <bpmndi:BPMNLabel>\n' +
-        '          <omgdc:Bounds x="210" y="160" width="90" height="12" />\n' +
-        '        </bpmndi:BPMNLabel>\n' +
+        '      <bpmndi:BPMNShape id="Activity_1w8qyby_di" bpmnElement="Activity_0lgvp3u">\n' +
+        '        <omgdc:Bounds x="630" y="80" width="100" height="80" />\n' +
         '      </bpmndi:BPMNShape>\n' +
-        '      <bpmndi:BPMNShape id="ExclusiveGateway_0vci1x5_di" bpmnElement="SCAN_OK" isMarkerVisible="true">\n' +
-        '        <omgdc:Bounds x="660" y="135" width="50" height="50" />\n' +
-        '        <bpmndi:BPMNLabel>\n' +
-        '          <omgdc:Bounds x="643" y="107" width="89" height="27" />\n' +
-        '        </bpmndi:BPMNLabel>\n' +
+        '      <bpmndi:BPMNShape id="Gateway_0j0fumn_di" bpmnElement="Gateway_1x8m4ws">\n' +
+        '        <omgdc:Bounds x="545" y="95" width="50" height="50" />\n' +
         '      </bpmndi:BPMNShape>\n' +
-        '      <bpmndi:BPMNEdge id="sid-7B791A11-2F2E-4D80-AFB3-91A02CF2B4FD_gui" bpmnElement="gateway_in">\n' +
-        '        <omgdi:waypoint x="298" y="160" />\n' +
-        '        <omgdi:waypoint x="350" y="160" />\n' +
-        '        <bpmndi:BPMNLabel>\n' +
-        '          <omgdc:Bounds x="204" y="185" width="90" height="20" />\n' +
-        '        </bpmndi:BPMNLabel>\n' +
+        '      <bpmndi:BPMNShape id="Activity_11kif52_di" bpmnElement="Activity_1up8xq1">\n' +
+        '        <omgdc:Bounds x="380" y="190" width="100" height="80" />\n' +
+        '      </bpmndi:BPMNShape>\n' +
+        '      <bpmndi:BPMNShape id="Activity_1oob6z8_di" bpmnElement="Activity_1jgyh05">\n' +
+        '        <omgdc:Bounds x="380" y="80" width="100" height="80" />\n' +
+        '        <bpmndi:BPMNLabel />\n' +
+        '      </bpmndi:BPMNShape>\n' +
+        '      <bpmndi:BPMNShape id="Gateway_1iluv37_di" bpmnElement="Gateway_0eef44j">\n' +
+        '        <omgdc:Bounds x="295" y="95" width="50" height="50" />\n' +
+        '      </bpmndi:BPMNShape>\n' +
+        '      <bpmndi:BPMNEdge id="Flow_0wq8dog_di" bpmnElement="Flow_0wq8dog">\n' +
+        '        <omgdi:waypoint x="257" y="120" />\n' +
+        '        <omgdi:waypoint x="295" y="120" />\n' +
         '      </bpmndi:BPMNEdge>\n' +
-        '      <bpmndi:BPMNEdge id="sid-EE8A7BA0-5D66-4F8B-80E3-CC2751B3856A_gui" bpmnElement="scan_flow_out">\n' +
-        '        <omgdi:waypoint x="568" y="160" />\n' +
-        '        <omgdi:waypoint x="660" y="160" />\n' +
-        '        <bpmndi:BPMNLabel>\n' +
-        '          <omgdc:Bounds x="494" y="185" width="90" height="20" />\n' +
-        '        </bpmndi:BPMNLabel>\n' +
+        '      <bpmndi:BPMNEdge id="Flow_0u9a0g3_di" bpmnElement="Flow_0u9a0g3">\n' +
+        '        <omgdi:waypoint x="345" y="120" />\n' +
+        '        <omgdi:waypoint x="380" y="120" />\n' +
         '      </bpmndi:BPMNEdge>\n' +
-        '      <bpmndi:BPMNEdge id="sid-57EB1F24-BD94-479A-BF1F-57F1EAA19C6C_gui" bpmnElement="end_flow">\n' +
-        '        <omgdi:waypoint x="903" y="160" />\n' +
-        '        <omgdi:waypoint x="976" y="160" />\n' +
-        '        <bpmndi:BPMNLabel>\n' +
-        '          <omgdc:Bounds x="820" y="185" width="90" height="20" />\n' +
-        '        </bpmndi:BPMNLabel>\n' +
+        '      <bpmndi:BPMNEdge id="Flow_1mtm8jg_di" bpmnElement="Flow_1mtm8jg">\n' +
+        '        <omgdi:waypoint x="320" y="145" />\n' +
+        '        <omgdi:waypoint x="320" y="230" />\n' +
+        '        <omgdi:waypoint x="380" y="230" />\n' +
         '      </bpmndi:BPMNEdge>\n' +
-        '      <bpmndi:BPMNEdge id="sid-8B820AF5-DC5C-4618-B854-E08B71FB55CB_gui" bpmnElement="No">\n' +
-        '        <omgdi:waypoint x="710" y="160" />\n' +
-        '        <omgdi:waypoint x="803" y="160" />\n' +
-        '        <bpmndi:BPMNLabel labelStyle="sid-e0502d32-f8d1-41cf-9c4a-cbb49fecf581">\n' +
-        '          <omgdc:Bounds x="718" y="135" width="14" height="14" />\n' +
-        '        </bpmndi:BPMNLabel>\n' +
+        '      <bpmndi:BPMNEdge id="Flow_1flhoxp_di" bpmnElement="Flow_1flhoxp">\n' +
+        '        <omgdi:waypoint x="480" y="120" />\n' +
+        '        <omgdi:waypoint x="545" y="120" />\n' +
         '      </bpmndi:BPMNEdge>\n' +
-        '      <bpmndi:BPMNEdge id="sid-4DC479E5-5C20-4948-BCFC-9EC5E2F66D8D_gui" bpmnElement="scan_flow_in">\n' +
-        '        <omgdi:waypoint x="400" y="160" />\n' +
-        '        <omgdi:waypoint x="468" y="160" />\n' +
-        '        <bpmndi:BPMNLabel>\n' +
-        '          <omgdc:Bounds x="314" y="185" width="90" height="20" />\n' +
-        '        </bpmndi:BPMNLabel>\n' +
+        '      <bpmndi:BPMNEdge id="Flow_1n9ng49_di" bpmnElement="Flow_1n9ng49">\n' +
+        '        <omgdi:waypoint x="480" y="230" />\n' +
+        '        <omgdi:waypoint x="570" y="230" />\n' +
+        '        <omgdi:waypoint x="570" y="145" />\n' +
         '      </bpmndi:BPMNEdge>\n' +
-        '      <bpmndi:BPMNEdge id="sid-337A23B9-A923-4CCE-B613-3E247B773CCE_gui" bpmnElement="Yes">\n' +
-        '        <omgdi:waypoint x="686" y="184" />\n' +
-        '        <omgdi:waypoint x="685.5" y="249" />\n' +
-        '        <omgdi:waypoint x="375.5" y="249" />\n' +
-        '        <omgdi:waypoint x="376" y="184" />\n' +
-        '        <bpmndi:BPMNLabel labelStyle="sid-e0502d32-f8d1-41cf-9c4a-cbb49fecf581">\n' +
-        '          <omgdc:Bounds x="661" y="186" width="20" height="14" />\n' +
-        '        </bpmndi:BPMNLabel>\n' +
+        '      <bpmndi:BPMNEdge id="Flow_14i9c18_di" bpmnElement="Flow_14i9c18">\n' +
+        '        <omgdi:waypoint x="595" y="120" />\n' +
+        '        <omgdi:waypoint x="630" y="120" />\n' +
+        '      </bpmndi:BPMNEdge>\n' +
+        '      <bpmndi:BPMNEdge id="Flow_14fhivy_di" bpmnElement="Flow_14fhivy">\n' +
+        '        <omgdi:waypoint x="730" y="120" />\n' +
+        '        <omgdi:waypoint x="772" y="120" />\n' +
         '      </bpmndi:BPMNEdge>\n' +
         '    </bpmndi:BPMNPlane>\n' +
         '    <bpmndi:BPMNLabelStyle id="sid-e0502d32-f8d1-41cf-9c4a-cbb49fecf581">\n' +
