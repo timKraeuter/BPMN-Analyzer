@@ -45,18 +45,21 @@
                     <mat-button-toggle
                         value="SAFENESS"
                         matTooltip="Safeness means that during process execution no more than one token occurs along the same sequence flow."
+                        matTooltipPosition="above"
                     >
                         Safeness
                     </mat-button-toggle>
                     <mat-button-toggle
                         value="OPTION_TO_COMPLETE"
                         matTooltip="Option to complete means that any running process instance must eventually complete."
+                        matTooltipPosition="above"
                     >
                         Option to complete
                     </mat-button-toggle>
                     <mat-button-toggle
                         value="NO_DEAD_ACTIVITIES"
                         matTooltip="Check if any activities will never be executed."
+                        matTooltipPosition="above"
                     >
                         No dead activities
                     </mat-button-toggle>
@@ -150,11 +153,11 @@
                     class="margin-left"
                     mat-raised-button
                     color="primary"
-                    matTooltip="Check the given CTL property using groove."
+                    matTooltip="Create a CTL from the chosen template and proposition."
                     (click)="createCTLProperty()"
                     *ngIf="this.selectedTemplate && this.selectedProposition"
                 >
-                    <mat-icon>check</mat-icon>
+                    <mat-icon>autorenew</mat-icon>
                     Create CTL property
                 </button>
                 <mat-divider></mat-divider>
