@@ -2,7 +2,7 @@
 <div class="analysis-buttons">
     <span *ngIf="graphGrammarGenerationRunning; else generationButton">
         Generating a graph transformation system.
-        <mat-spinner class="top-margin"></mat-spinner>
+        <mat-spinner class="margin-top"></mat-spinner>
     </span>
     <ng-template #generationButton>
         <button
@@ -40,7 +40,7 @@
                     [(ngModel)]="bpmnSpecificPropertiesToBeChecked"
                     aria-label="general BPMN Properties"
                     multiple
-                    class="top-margin"
+                    class="margin-top"
                 >
                     <mat-button-toggle
                         value="SAFENESS"
@@ -66,7 +66,7 @@
                     mat-raised-button
                     color="primary"
                     matTooltip="Check the selected general BPMN properties using groove."
-                    class="top-margin"
+                    class="margin-top"
                     (click)="checkBPMNSpecificPropertiesClicked()"
                 >
                     <mat-icon>done_all</mat-icon>
@@ -78,7 +78,7 @@
             <mat-card-content>
                 Specify a LTL property to check for the BPMN model.
                 <br />
-                <form class="form top-margin">
+                <form class="form margin-top">
                     <mat-form-field class="full-width" appearance="fill">
                         <mat-label>LTL Property</mat-label>
                         <textarea
@@ -114,10 +114,56 @@
         </mat-tab>
         <mat-tab label="CTL properties">
             <mat-card-content>
-                <div>Specify a CTL property to check for the BPMN model.</div>
+                <div>Create a CTL property from a template.</div>
+                <mat-form-field class="margin-top">
+                    <mat-label>CTL Template</mat-label>
+                    <mat-select
+                        [(ngModel)]="selectedTemplate"
+                        name="ctlTemplate"
+                    >
+                        <mat-option
+                            *ngFor="let template of ctlTemplates"
+                            [value]="template"
+                        >
+                            {{ template.description }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field
+                    class="margin-left"
+                    *ngIf="this.selectedTemplate"
+                >
+                    <mat-label>Proposition</mat-label>
+                    <mat-select
+                        [(ngModel)]="selectedProposition"
+                        name="propositionForTemplate"
+                    >
+                        <mat-option
+                            *ngFor="let proposition of this.getPropositions()"
+                            [value]="proposition"
+                        >
+                            {{ proposition }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <button
+                    class="margin-left"
+                    mat-raised-button
+                    color="primary"
+                    matTooltip="Check the given CTL property using groove."
+                    (click)="createCTLProperty()"
+                    *ngIf="this.selectedTemplate && this.selectedProposition"
+                >
+                    <mat-icon>check</mat-icon>
+                    Create CTL property
+                </button>
+                <mat-divider></mat-divider>
+                <div class="margin-top">
+                    Specify a CTL property to check for the BPMN model.
+                </div>
                 <div>
                     Your propositions are:
-                    <span class="bold">{{ this.getPropNames() }}</span>
+                    <span class="bold">{{ this.getPropositionsNames() }}</span>
                 </div>
                 <form class="form">
                     <mat-form-field class="full-width" appearance="fill">

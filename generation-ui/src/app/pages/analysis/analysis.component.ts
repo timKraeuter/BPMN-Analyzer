@@ -25,6 +25,21 @@ export class AnalysisComponent {
     public bpmnSpecificVerificationRunning: boolean = false;
     public bpmnPropertyCheckingResults: BPMNProperty[] = [];
 
+    // CTL property checking with templates
+    public selectedTemplate: any;
+    public selectedProposition: string = '';
+
+    ctlTemplates: any[] = [
+        {
+            template: (proposition: string) => `AG(!${proposition})`,
+            description: 'Never reaches',
+        },
+        {
+            template: (proposition: string) => `EF(${proposition})`,
+            description: 'Can reach',
+        },
+    ];
+
     // CTL property checking
     public ctlProperty: string = '';
     public ctlPropertyResult: ModelCheckingResponse | undefined;
@@ -189,14 +204,26 @@ export class AnalysisComponent {
         return ids.map((id) => elementRegistry.get(id));
     }
 
-    getPropNames() {
-        return this.sharedState.getPropositionNames().join(', ');
+    getPropositions(): string[] {
+        return this.sharedState.getPropositionNames();
+    }
+
+    getPropositionsNames(): string {
+        return this.getPropositions().join(', ');
     }
 
     stopEventPropagation($event: KeyboardEvent) {
         // Stops event propagation so steps are not changed while inputting.
         if ($event.key === 'ArrowLeft' || $event.key === 'ArrowRight') {
             $event.stopPropagation();
+        }
+    }
+
+    createCTLProperty() {
+        if (this.selectedTemplate && this.selectedProposition) {
+            this.ctlProperty = this.selectedTemplate.template(
+                this.selectedProposition,
+            );
         }
     }
 }

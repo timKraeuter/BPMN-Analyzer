@@ -29,6 +29,7 @@ import { PropositionComponent } from './pages/proposition/proposition.component'
 import { TokenDiagramComponent } from './components/token-diagram/token-diagram.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { RenamePropositionDialogComponent } from './components/rename-proposition-dialog/rename-proposition-dialog.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
     declarations: [
@@ -62,6 +63,7 @@ import { RenamePropositionDialogComponent } from './components/rename-propositio
         MatListModule,
         MatStepperModule,
         MatDialogModule,
+        MatSelectModule,
     ],
     providers: [
         {
