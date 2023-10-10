@@ -1,51 +1,51 @@
 .proposition:hover {
-  background: rgba(0, 0, 0, 0.04);
+    background: rgba(0, 0, 0, 0.04);
 }
 
 .highlight {
-  background: #dddddd;
+    background: #dddddd;
 }
 
 .diagram-parent {
-  height: 750px;
-  border: solid 3px #eee;
-  position: relative;
-  resize: both;
-  overflow: auto;
-  max-height: 100%;
-  width: 80%;
-  max-width: 90%;
+    height: 750px;
+    border: solid 3px #eee;
+    position: relative;
+    resize: both;
+    overflow: auto;
+    max-height: 100%;
+    width: 80%;
+    max-width: 90%;
 }
 
 .token-file-container {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
 .files {
-  width: 20%;
-  max-width: 20%;
+    width: 20%;
+    max-width: 20%;
 }
 
 .margin-top {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 .right-margin {
-  margin-right: 0.25%;
+    margin-right: 0.25%;
 }
 
 .modeler-buttons {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .order {
-  order: 1;
+    order: 1;
 }
 
 .editButton:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
