@@ -63,17 +63,10 @@ public interface BPMNToMaudeTransformerHelper {
   }
 
   default String getSignalOccurrenceForSequenceFlow(SequenceFlow sequenceFlow) {
-    return getTokenOrSignalOccurrenceForSequenceFlow(
-        sequenceFlow, BPMNToMaudeTransformerConstants.SIGNAL_OCCURRENCE_FORMAT);
-  }
-
-  private String getTokenOrSignalOccurrenceForSequenceFlow(
-      SequenceFlow sequenceFlow, String signalOccurenceFormat) {
-    String nameOrDescriptiveName =
-        sequenceFlow.getName() == null || sequenceFlow.getName().isBlank()
-            ? sequenceFlow.getDescriptiveName()
-            : sequenceFlow.getName();
-    return String.format(signalOccurenceFormat, nameOrDescriptiveName, sequenceFlow.getId());
+    return String.format(
+        BPMNToMaudeTransformerConstants.SIGNAL_OCCURRENCE_FORMAT,
+        sequenceFlow.getDescriptiveNameWithoutID(),
+        sequenceFlow.getId());
   }
 
   default String getOutgoingTokensForFlowNode(FlowNode flowNode) {
@@ -84,8 +77,10 @@ public interface BPMNToMaudeTransformerHelper {
   }
 
   default String getTokenForSequenceFlow(SequenceFlow sequenceFlow) {
-    return getTokenOrSignalOccurrenceForSequenceFlow(
-        sequenceFlow, BPMNToMaudeTransformerConstants.TOKEN_FORMAT);
+    return String.format(
+        BPMNToMaudeTransformerConstants.TOKEN_FORMAT,
+        sequenceFlow.getDescriptiveNameWithoutID(),
+        sequenceFlow.getId());
   }
 
   default MaudeObject createTerminatedProcessSnapshot(AbstractBPMNProcess process) {

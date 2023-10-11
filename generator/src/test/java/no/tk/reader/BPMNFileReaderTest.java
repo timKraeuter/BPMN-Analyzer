@@ -49,21 +49,21 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     assertThat(participant.sequenceFlows().count(), is(10L));
     assertThat(participant.flowNodes().count(), is(11L));
     // Sequence flows between the right flow nodes.
-    Set<String> sequenceFlowIds = getSequenceFlowDescriptiveNamesForProcess(participant);
+    Set<String> sfDescriptiveNames = getSequenceFlowDescriptiveNamesForProcess(participant);
     assertThat(
-        sequenceFlowIds,
+        sfDescriptiveNames,
         is(
             Sets.newHashSet(
-                "start -> task",
-                "task -> sendTask",
-                "sendTask -> receiveTask",
-                "receiveTask -> userTask",
-                "userTask -> manualTask",
-                "manualTask -> businessRTask",
-                "businessRTask -> serviceTask",
-                "serviceTask -> scriptTask",
-                "scriptTask -> subprocess",
-                "subprocess -> end")));
+                "start -> task (Flow_08k9gv1)",
+                "task -> sendTask (Flow_1a1i07n)",
+                "sendTask -> receiveTask (Flow_0zbc6ny)",
+                "receiveTask -> userTask (Flow_1p412ok)",
+                "userTask -> manualTask (Flow_0u1hqoj)",
+                "manualTask -> businessRTask (Flow_1my2hks)",
+                "businessRTask -> serviceTask (Flow_1favftk)",
+                "serviceTask -> scriptTask (Flow_1d05hhp)",
+                "scriptTask -> subprocess (Flow_16xvne2)",
+                "subprocess -> end (Flow_1kb5ejz)")));
 
     // Check instantiate receive task
     Map<String, FlowNode> flowNodes = createFlowNodeNameToFlowNodeMap(participant);
@@ -106,15 +106,15 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     assertThat(participant.flowNodes().count(), is(5L));
 
     // Sequence flows between the right flow nodes.
-    Set<String> sequenceFlowIds = getSequenceFlowDescriptiveNamesForProcess(participant);
+    Set<String> sFDescriptiveNames = getSequenceFlowDescriptiveNamesForProcess(participant);
     assertThat(
-        sequenceFlowIds,
+        sFDescriptiveNames,
         is(
             Sets.newHashSet(
-                "inclusive gateway -> parallel gateway",
-                "parallel gateway -> exclusive gateway",
-                "exclusive gateway -> event gateway",
-                "exclusive gateway -> instantiate event gateway")));
+                "inclusive gateway -> parallel gateway (Flow_1u29twe)",
+                "parallel gateway -> exclusive gateway (Flow_0a74e3j)",
+                "exclusive gateway -> event gateway (Flow_16wjsu0)",
+                "exclusive gateway -> instantiate event gateway (Flow_0kw6o9f)")));
 
     // Check if instantiate was read correctly for the event gateway.
     Map<String, FlowNode> flowNodes = createFlowNodeNameToFlowNodeMap(participant);
@@ -146,24 +146,24 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         sequenceFlowIds,
         is(
             Sets.newHashSet(
-                "start -> e1",
-                "messageStart -> e1",
-                "signalStart -> e1",
-                "e3 -> messageEnd",
-                "e3 -> signalEnd",
-                "e3 -> terminateEnd",
-                "e3 -> end",
-                "e3 -> errorEnd",
-                "e3 -> escalationEnd",
-                "linkCEvent -> e2",
-                "timerCEvent -> e2",
-                "intermediateEvent -> e2",
-                "messageCEvent -> e2",
-                "messageTEvent -> e2",
-                "e2 -> linkTEvent",
-                "signalCEvent -> e2",
-                "signalTEvent -> e2",
-                "escalationTEvent -> e2")));
+                "start -> e1 (Flow_0xvlhi9)",
+                "messageStart -> e1 (Flow_06phty5)",
+                "signalStart -> e1 (Flow_0pbgilo)",
+                "e3 -> messageEnd (Flow_15dm2o2)",
+                "e3 -> signalEnd (Flow_07caac4)",
+                "e3 -> terminateEnd (Flow_0lr34nm)",
+                "e3 -> end (Flow_0pujm76)",
+                "e3 -> errorEnd (Flow_1tsjahm)",
+                "e3 -> escalationEnd (Flow_1jay14p)",
+                "linkCEvent -> e2 (Flow_0e537m9)",
+                "timerCEvent -> e2 (Flow_1a8axf3)",
+                "intermediateEvent -> e2 (Flow_0tkjq4a)",
+                "messageCEvent -> e2 (Flow_0ec0gml)",
+                "messageTEvent -> e2 (Flow_1vt0ayl)",
+                "e2 -> linkTEvent (Flow_0u4h2kh)",
+                "signalCEvent -> e2 (Flow_03b2k4q)",
+                "signalTEvent -> e2 (Flow_1gn5e8b)",
+                "escalationTEvent -> e2 (Flow_0ba6hnc)")));
 
     Map<String, FlowNode> flowNodes = createFlowNodeNameToFlowNodeMap(participant);
     // Check start events
@@ -357,23 +357,23 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     assertThat(
         ((Activity) activity2).getBoundaryEvents(), is(activity2Expected.getBoundaryEvents()));
 
-    Set<String> sequenceFlowIdsForProcess = getSequenceFlowDescriptiveNamesForProcess(participant2);
+    Set<String> sFDescriptiveNames = getSequenceFlowDescriptiveNamesForProcess(participant2);
     assertThat(
-        sequenceFlowIdsForProcess,
+        sFDescriptiveNames,
         is(
             Sets.newHashSet(
-                "start -> Activity1",
-                "s1 -> s1_end",
-                "n1 -> n1_end",
-                "t1 -> t1_end",
-                "m1 -> m1_end",
-                "er1 -> er1_end",
-                "es1 -> es1_end",
-                "Activity1 -> Activity2",
-                "m2 -> m2_end",
-                "t2 -> t2_end",
-                "s2 -> s2_end",
-                "es2 -> es2_end")));
+                "start -> Activity1 (Flow_1f4z70z)",
+                "s1 -> s1_end (Flow_1udtcnz)",
+                "n1 -> n1_end (Flow_1h5llv5)",
+                "t1 -> t1_end (Flow_1jzbhgq)",
+                "m1 -> m1_end (Flow_0y1lybr)",
+                "er1 -> er1_end (Flow_062pd7r)",
+                "es1 -> es1_end (Flow_1iwa9a3)",
+                "Activity1 -> Activity2 (Flow_1aehxox)",
+                "m2 -> m2_end (Flow_08bu3t7)",
+                "t2 -> t2_end (Flow_11gyf74)",
+                "s2 -> s2_end (Flow_11orhgw)",
+                "es2 -> es2_end (Flow_0ce9j37)")));
 
     assertThat(participant1.getName(), is("Subprocess boundary events"));
     assertThat(participant1.sequenceFlows().count(), is(13L));
@@ -450,8 +450,10 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
 
     assertThat(participant.flowNodes().count(), is(3L));
     // Check sequence flows
-    Set<String> sequenceFlowIds = getSequenceFlowDescriptiveNamesForProcess(participant);
-    assertThat(sequenceFlowIds, is(Sets.newHashSet("start -> Sub1", "Sub1 -> end")));
+    Set<String> sFDescriptiveNames = getSequenceFlowDescriptiveNamesForProcess(participant);
+    assertThat(
+        sFDescriptiveNames,
+        is(Sets.newHashSet("start -> Sub1 (Flow_03uttu8)", "Sub1 -> end (Flow_0owdnmu)")));
 
     // Check Sub1 subprocess
     Map<String, FlowNode> flowNodesSub1 = createFlowNodeNameToFlowNodeMap(participant);
@@ -460,7 +462,10 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     Set<String> sequenceFlowNamesSub1 =
         getSequenceFlowDescriptiveNamesForProcess(sub1.getSubProcessModel());
     assertThat(
-        sequenceFlowNamesSub1, is(Sets.newHashSet("start_sub1 -> Sub2", "Sub2 -> end_sub1")));
+        sequenceFlowNamesSub1,
+        is(
+            Sets.newHashSet(
+                "start_sub1 -> Sub2 (Flow_1mo7qyz)", "Sub2 -> end_sub1 (Flow_1kq2gg6)")));
 
     // Check Sub2 subprocess
     Map<String, FlowNode> flowNodesSub2 =
@@ -470,7 +475,10 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     Set<String> sequenceFlowNamesSub2 =
         getSequenceFlowDescriptiveNamesForProcess(sub2.getSubProcessModel());
     assertThat(
-        sequenceFlowNamesSub2, is(Sets.newHashSet("start_sub2 -> Sub3", "Sub3 -> end_sub2")));
+        sequenceFlowNamesSub2,
+        is(
+            Sets.newHashSet(
+                "start_sub2 -> Sub3 (Flow_0f00dmj)", "Sub3 -> end_sub2 (Flow_1hxg3hk)")));
 
     // Check Sub3 subprocess
     Map<String, FlowNode> flowNodesSub3 =
@@ -479,7 +487,7 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     // Check sequence flows for Sub3
     Set<String> sequenceFlowNamesSub3 =
         getSequenceFlowDescriptiveNamesForProcess(sub3.getSubProcessModel());
-    assertThat(sequenceFlowNamesSub3, is(Sets.newHashSet("start_sub3 -> end_sub3")));
+    assertThat(sequenceFlowNamesSub3, is(Sets.newHashSet("start_sub3 -> end_sub3 (Flow_1qc94ba)")));
   }
 
   @Test
@@ -590,21 +598,21 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
     // Expect the model shown here: https://cawemo.com/share/882d7c5b-bff0-4244-a39f-a234795035e5
     BPMNProcess participant = result.getParticipants().iterator().next();
     // Sequence flows between the right flow nodes. Now with an updated name!
-    Set<String> sequenceFlowIds = getSequenceFlowDescriptiveNamesForProcess(participant);
+    Set<String> sFDescriptiveNames = getSequenceFlowDescriptiveNamesForProcess(participant);
     assertThat(
-        sequenceFlowIds,
+        sFDescriptiveNames,
         is(
             Sets.newHashSet(
-                "startNameChanged -> task",
-                "task -> sendTask",
-                "sendTask -> receiveTask",
-                "receiveTask -> userTask",
-                "userTask -> manualTask",
-                "manualTask -> businessRTask",
-                "businessRTask -> serviceTask",
-                "serviceTask -> scriptTask",
-                "scriptTask -> subprocess",
-                "subprocess -> end")));
+                "startNameChanged -> task (Flow_08k9gv1)",
+                "task -> sendTask (Flow_1a1i07n)",
+                "sendTask -> receiveTask (Flow_0zbc6ny)",
+                "receiveTask -> userTask (Flow_1p412ok)",
+                "userTask -> manualTask (Flow_0u1hqoj)",
+                "manualTask -> businessRTask (Flow_1my2hks)",
+                "businessRTask -> serviceTask (Flow_1favftk)",
+                "serviceTask -> scriptTask (Flow_1d05hhp)",
+                "scriptTask -> subprocess (Flow_16xvne2)",
+                "subprocess -> end (Flow_1kb5ejz)")));
   }
 
   private CallActivity getCallActivityForName(Map<String, FlowNode> flowNodes, String name) {
