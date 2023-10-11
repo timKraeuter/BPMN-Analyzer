@@ -1,5 +1,6 @@
 package no.tk.groove.behaviortransformer.bpmn.atomic.propositions;
 
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_PROCESS_SNAPSHOT;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.contextProcessInstanceWithOnlyName;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.contextTokenWithPosition;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.nacTokenWithPosition;
@@ -61,6 +62,10 @@ public class BPMNTokenAtomicPropositionGenerator {
 
   private GrooveNode generateNodeForSnapshot(
       ProcessSnapshot processSnapshot, GrooveRuleBuilder ruleBuilder) {
-    return contextProcessInstanceWithOnlyName(processSnapshot.getProcessName(), ruleBuilder);
+    String snapshotName = processSnapshot.getSnapshotNameIfExists();
+    if (snapshotName == null) {
+      return ruleBuilder.contextNode(TYPE_PROCESS_SNAPSHOT);
+    }
+    return contextProcessInstanceWithOnlyName(snapshotName, ruleBuilder);
   }
 }

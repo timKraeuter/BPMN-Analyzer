@@ -67,6 +67,24 @@ class BPMNTokenAtomicPropositionGeneratorTest extends BPMNToGrooveTestBase
   }
 
   @Test
+  void generateAtomicPropositionNoParticipants() throws IOException {
+    CollaborationSnapshot collaborationSnapshot =
+        readBPMNSnapshotFromResource("snapshotWithTokensWithoutParticipants.xml");
+
+    BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator(true);
+
+    GrooveGraphRule graphRule = generator.generateAtomicProposition(collaborationSnapshot);
+
+    assertThat(graphRule.getRuleName(), is("snapshotWithTokensWithoutParticipants"));
+    assertThat(graphRule.getContextNodes().size(), is(8));
+    assertThat(graphRule.getNACNodes().size(), is(1));
+    assertThat(graphRule.getContextEdges().size(), is(6));
+    assertThat(graphRule.getAllNodes().size(), is(9));
+    assertThat(graphRule.getEdgesToBeAdded().size(), is(0));
+    assertThat(graphRule.getEdgesToBeDeleted().size(), is(0));
+  }
+
+  @Test
   void generateAtomicPropositionToFilesWithWhitespaceNames() throws Exception {
     CollaborationSnapshot collaborationSnapshot = readBPMNSnapshotFromResource("orderHandling.xml");
 

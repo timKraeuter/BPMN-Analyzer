@@ -4,13 +4,19 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ProcessSnapshot {
-  private final String processID;
   private final String snapshotID;
+
+  /**
+   * The snapshot name is derived from the participant name in BPMN. Might be null if the snapshot
+   * is not attached to a participant.
+   */
+  private final String snapshotName;
+
   private final Set<Token> tokens = new LinkedHashSet<>();
   private final boolean shouldExist;
 
-  public ProcessSnapshot(String processID, String snapshotID, boolean shouldExist) {
-    this.processID = processID;
+  public ProcessSnapshot(String snapshotName, String snapshotID, boolean shouldExist) {
+    this.snapshotName = snapshotName;
     this.snapshotID = snapshotID;
     this.shouldExist = shouldExist;
   }
@@ -27,8 +33,8 @@ public class ProcessSnapshot {
     return shouldExist;
   }
 
-  public String getProcessName() {
-    return processID;
+  public String getSnapshotNameIfExists() {
+    return snapshotName;
   }
 
   public String getSnapshotID() {
