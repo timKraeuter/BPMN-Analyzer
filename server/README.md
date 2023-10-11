@@ -7,7 +7,7 @@ This will start the application at [localhost:8080](http://localhost:8080/).
 
 ## Jar File
 
-Run the application (execute in the **Groove_Rule_Generation**, i.e., root directory):
+Run the application (execute in the root directory of the repository):
 
 ```bash
 java -jar build/libs/ruleGeneratorServer-2.0.0.jar
