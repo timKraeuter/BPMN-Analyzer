@@ -3,7 +3,7 @@
     <graph id="terminate_end" role="rule" edgeids="false" edgemode="directed">
         <node id="n47">
             <attr name="layout">
-                <string>422 252 0 0</string>
+                <string>422 82 0 0</string>
             </attr>
         </node>
         <edge from="n47" to="n47">
@@ -18,7 +18,7 @@
         </edge>
         <node id="n44">
             <attr name="layout">
-                <string>557 342 0 0</string>
+                <string>557 262 0 0</string>
             </attr>
         </node>
         <edge from="n44" to="n44">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n46">
             <attr name="layout">
-                <string>422 82 0 0</string>
+                <string>422 172 0 0</string>
             </attr>
         </node>
         <edge from="n46" to="n46">
@@ -63,7 +63,7 @@
         </edge>
         <node id="n51">
             <attr name="layout">
-                <string>518 537 0 0</string>
+                <string>522 776 0 0</string>
             </attr>
         </node>
         <edge from="n51" to="n51">
@@ -78,7 +78,7 @@
         </edge>
         <node id="n52">
             <attr name="layout">
-                <string>1657 647 0 0</string>
+                <string>1117 703 0 0</string>
             </attr>
         </node>
         <edge from="n52" to="n52">
@@ -91,39 +91,54 @@
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n55">
+        <node id="n54">
             <attr name="layout">
-                <string>1122 612 0 0</string>
+                <string>1095 613 0 0</string>
             </attr>
         </node>
-        <edge from="n55" to="n55">
+        <edge from="n54" to="n54">
             <attr name="label">
-                <string>type:Token</string>
+                <string>type:Terminated</string>
             </attr>
         </edge>
-        <edge from="n55" to="n55">
+        <edge from="n54" to="n54">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n57">
+        <node id="n58">
             <attr name="layout">
-                <string>1107 522 0 0</string>
+                <string>1132 793 0 0</string>
             </attr>
         </node>
-        <edge from="n57" to="n57">
+        <edge from="n58" to="n58">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n58" to="n58">
+            <attr name="label">
+                <string>del:</string>
+            </attr>
+        </edge>
+        <node id="n60">
+            <attr name="layout">
+                <string>1117 523 0 0</string>
+            </attr>
+        </node>
+        <edge from="n60" to="n60">
             <attr name="label">
                 <string>type:Message</string>
             </attr>
         </edge>
-        <edge from="n57" to="n57">
+        <edge from="n60" to="n60">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
         <node id="n42">
             <attr name="layout">
-                <string>62 100 0 0</string>
+                <string>62 758 0 0</string>
             </attr>
         </node>
         <edge from="n42" to="n42">
@@ -133,7 +148,7 @@
         </edge>
         <node id="n43">
             <attr name="layout">
-                <string>422 162 0 0</string>
+                <string>422 342 0 0</string>
             </attr>
         </node>
         <edge from="n43" to="n43">
@@ -143,7 +158,7 @@
         </edge>
         <node id="n45">
             <attr name="layout">
-                <string>882 342 0 0</string>
+                <string>892 262 0 0</string>
             </attr>
         </node>
         <edge from="n45" to="n45">
@@ -153,7 +168,7 @@
         </edge>
         <node id="n49">
             <attr name="layout">
-                <string>882 432 0 0</string>
+                <string>892 432 0 0</string>
             </attr>
         </node>
         <edge from="n49" to="n49">
@@ -163,7 +178,7 @@
         </edge>
         <node id="n50">
             <attr name="layout">
-                <string>1857 647 0 0</string>
+                <string>1817 690 0 0</string>
             </attr>
         </node>
         <edge from="n50" to="n50">
@@ -173,7 +188,7 @@
         </edge>
         <node id="n53">
             <attr name="layout">
-                <string>1682 530 0 0</string>
+                <string>1692 698 0 0</string>
             </attr>
         </node>
         <edge from="n53" to="n53">
@@ -181,22 +196,42 @@
                 <string>exists:</string>
             </attr>
         </edge>
-        <node id="n54">
+        <node id="n55">
             <attr name="layout">
-                <string>1532 612 0 0</string>
+                <string>1542 613 0 0</string>
             </attr>
         </node>
-        <edge from="n54" to="n54">
+        <edge from="n55" to="n55">
             <attr name="label">
-                <string>forall:</string>
+                <string>existsx:</string>
             </attr>
         </edge>
         <node id="n56">
             <attr name="layout">
-                <string>1532 522 0 0</string>
+                <string>1542 703 0 0</string>
             </attr>
         </node>
         <edge from="n56" to="n56">
+            <attr name="label">
+                <string>existsx:</string>
+            </attr>
+        </edge>
+        <node id="n57">
+            <attr name="layout">
+                <string>1550 793 0 0</string>
+            </attr>
+        </node>
+        <edge from="n57" to="n57">
+            <attr name="label">
+                <string>forall:</string>
+            </attr>
+        </edge>
+        <node id="n59">
+            <attr name="layout">
+                <string>1550 523 0 0</string>
+            </attr>
+        </node>
+        <edge from="n59" to="n59">
             <attr name="label">
                 <string>forall:</string>
             </attr>
@@ -236,12 +271,17 @@
                 <string>del:state</string>
             </attr>
         </edge>
-        <edge from="n51" to="n55">
+        <edge from="n51" to="n54">
+            <attr name="label">
+                <string>del:state</string>
+            </attr>
+        </edge>
+        <edge from="n51" to="n58">
             <attr name="label">
                 <string>del:tokens</string>
             </attr>
         </edge>
-        <edge from="n51" to="n57">
+        <edge from="n51" to="n60">
             <attr name="label">
                 <string>del:messages</string>
             </attr>
@@ -256,37 +296,52 @@
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n51" to="n50">
-            <attr name="label">
-                <string>@</string>
-            </attr>
-        </edge>
-        <edge from="n52" to="n50">
-            <attr name="label">
-                <string>@</string>
-            </attr>
-        </edge>
         <edge from="n53" to="n50">
             <attr name="label">
                 <string>in</string>
             </attr>
         </edge>
-        <edge from="n55" to="n54">
+        <edge from="n51" to="n50">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
-        <edge from="n54" to="n53">
+        <edge from="n54" to="n55">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n55" to="n53">
             <attr name="label">
                 <string>in</string>
             </attr>
         </edge>
-        <edge from="n57" to="n56">
+        <edge from="n52" to="n56">
             <attr name="label">
                 <string>@</string>
             </attr>
         </edge>
         <edge from="n56" to="n53">
+            <attr name="label">
+                <string>in</string>
+            </attr>
+        </edge>
+        <edge from="n58" to="n57">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n57" to="n53">
+            <attr name="label">
+                <string>in</string>
+            </attr>
+        </edge>
+        <edge from="n60" to="n59">
+            <attr name="label">
+                <string>@</string>
+            </attr>
+        </edge>
+        <edge from="n59" to="n53">
             <attr name="label">
                 <string>in</string>
             </attr>
