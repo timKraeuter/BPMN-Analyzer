@@ -25,21 +25,11 @@ import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.FlowNode;
 import no.tk.behavior.bpmn.MessageFlow;
-import no.tk.behavior.bpmn.activities.CallActivity;
-import no.tk.behavior.bpmn.activities.tasks.ReceiveTask;
-import no.tk.behavior.bpmn.activities.tasks.SendTask;
-import no.tk.behavior.bpmn.activities.tasks.Task;
 import no.tk.behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
-import no.tk.behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
-import no.tk.behavior.bpmn.events.EndEvent;
+import no.tk.behavior.bpmn.auxiliary.visitors.DoNothingFlowNodeVisitor;
 import no.tk.behavior.bpmn.events.IntermediateCatchEvent;
 import no.tk.behavior.bpmn.events.IntermediateCatchEventType;
 import no.tk.behavior.bpmn.events.IntermediateThrowEvent;
-import no.tk.behavior.bpmn.events.StartEvent;
-import no.tk.behavior.bpmn.gateways.EventBasedGateway;
-import no.tk.behavior.bpmn.gateways.ExclusiveGateway;
-import no.tk.behavior.bpmn.gateways.InclusiveGateway;
-import no.tk.behavior.bpmn.gateways.ParallelGateway;
 import no.tk.groove.behaviortransformer.GrooveTransformer;
 import no.tk.groove.graph.GrooveNode;
 import no.tk.groove.graph.rule.GrooveRuleBuilder;
@@ -403,75 +393,18 @@ public class BPMNToGrooveTransformerHelper {
 
   public static boolean matchesLinkThrowEvent(
       IntermediateThrowEvent intermediateThrowEvent, FlowNode flowNode) {
-    return flowNode.getName().equals(intermediateThrowEvent.getName())
-        && isLinkCatchEvent(flowNode);
-  }
-
-  private static boolean isLinkCatchEvent(FlowNode flowNode) {
     ValueWrapper<Boolean> resultWrapper = new ValueWrapper<>();
     resultWrapper.setValue(false);
     flowNode.accept(
-        new FlowNodeVisitor() {
-          @Override
-          public void handle(ExclusiveGateway exclusiveGateway) {
-            // default is false
-          }
-
-          @Override
-          public void handle(ParallelGateway parallelGateway) {
-            // default is false
-          }
-
-          @Override
-          public void handle(InclusiveGateway inclusiveGateway) {
-            // default is false
-          }
-
-          @Override
-          public void handle(EventBasedGateway eventBasedGateway) {
-            // default is false
-          }
-
-          @Override
-          public void handle(Task task) {
-            // default is false
-          }
-
-          @Override
-          public void handle(SendTask task) {
-            // default is false
-          }
-
-          @Override
-          public void handle(ReceiveTask task) {
-            // default is false
-          }
-
-          @Override
-          public void handle(CallActivity callActivity) {
-            // default is false
-          }
-
-          @Override
-          public void handle(StartEvent startEvent) {
-            // default is false
-          }
-
-          @Override
-          public void handle(IntermediateThrowEvent intermediateThrowEvent) {
-            // default is false
-          }
-
+        new DoNothingFlowNodeVisitor() {
           @Override
           public void handle(IntermediateCatchEvent intermediateCatchEvent) {
-            if (intermediateCatchEvent.getType() == IntermediateCatchEventType.LINK) {
+            if (intermediateCatchEvent.getType() == IntermediateCatchEventType.LINK
+                && intermediateThrowEvent
+                    .getEventDefinition()
+                    .equals(intermediateCatchEvent.getEventDefinition())) {
               resultWrapper.setValue(true);
             }
-          }
-
-          @Override
-          public void handle(EndEvent endEvent) {
-            // default is false
           }
         });
     return resultWrapper.getValueIfExists();

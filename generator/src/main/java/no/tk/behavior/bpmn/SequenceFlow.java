@@ -4,7 +4,7 @@ import no.tk.behavior.bpmn.auxiliary.visitors.FlowElementVisitor;
 
 public class SequenceFlow extends FlowElement {
 
-  public static final String DESCRIPTIVE_NAME_FORMAT = "%s -> %s";
+  public static final String DESCRIPTIVE_NAME_FORMAT = "%s -> %s (%s)";
   private final FlowNode source;
   private final FlowNode target;
 
@@ -19,10 +19,10 @@ public class SequenceFlow extends FlowElement {
     visitor.handle(this);
   }
 
-  /** Descriptive names might not be unique! Only the id is guaranteed to be unique. */
   public String getDescriptiveName() {
     if (getName().isEmpty()) {
-      return String.format(DESCRIPTIVE_NAME_FORMAT, source.getName(), target.getName());
+      return String.format(
+          DESCRIPTIVE_NAME_FORMAT, source.getName(), target.getName(), this.getId());
     }
     return getName();
   }

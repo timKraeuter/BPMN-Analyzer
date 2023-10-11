@@ -162,15 +162,16 @@ public class BPMNTokenFileReader {
 
   private String getSequenceFlowDescriptiveName(
       ModelElementInstance association,
-      org.camunda.bpm.model.bpmn.instance.SequenceFlow sfPosition) {
+      org.camunda.bpm.model.bpmn.instance.SequenceFlow sequenceFlow) {
     String name = association.getAttributeValue("name");
     if (name != null) {
       return name;
     }
     return String.format(
         SequenceFlow.DESCRIPTIVE_NAME_FORMAT,
-        getNameOrID(sfPosition.getSource()),
-        getNameOrID(sfPosition.getTarget()));
+        getNameOrID(sequenceFlow.getSource()),
+        getNameOrID(sequenceFlow.getTarget()),
+        sequenceFlow.getId());
   }
 
   private String getNameOrID(ModelElementInstance element) {

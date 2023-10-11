@@ -75,6 +75,15 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
   }
 
   /**
+   * See test case <a href="https://cawemo.com/share/897e2113-34ff-4954-b7b6-f8a42f87a614">"Link
+   * Event with Definition"</a> in cawemo.
+   */
+  @Test
+  void testLinkEventWithDefinition() throws Exception {
+    testGrooveGenerationWithIDsForBPMNResourceFile("link-event-with-definition.bpmn");
+  }
+
+  /**
    * See test case <a href="https://cawemo.com/share/e13f777e-dca2-45e9-8018-0b9d0c4b34cc">"Signal
    * Events"</a> in cawemo.
    */

@@ -23,7 +23,7 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
   public static final String SYSTEM_PROPERTIES_FILE_NAME = "system.properties";
   private final String outputPath = FileUtils.getTempDirectoryPath();
   //  private final String outputPath = "C:/Source/groove/bin";
-  boolean REPLACE_EXPECTED_FILES_WITH_ACTUAL = false;
+  boolean REPLACE_EXPECTED_FILES_WITH_ACTUAL = true;
 
   private Function<String, Boolean> fileNameFilter = x -> false;
 
