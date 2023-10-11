@@ -78,7 +78,7 @@
         </node>
         <edge from="n25" to="n25">
             <attr name="label">
-                <string>string:"SendTask -&gt; end"</string>
+                <string>string:"SendTask -&gt; end (Flow_02ze5uh)"</string>
             </attr>
         </edge>
         <edge from="n19" to="n24">

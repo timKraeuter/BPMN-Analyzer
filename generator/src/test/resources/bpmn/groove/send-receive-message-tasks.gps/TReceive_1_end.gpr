@@ -78,7 +78,7 @@
         </node>
         <edge from="n71" to="n71">
             <attr name="label">
-                <string>string:"TReceive_1 -&gt; TSend_2"</string>
+                <string>string:"TReceive_1 -&gt; TSend_2 (Flow_1m7cc47)"</string>
             </attr>
         </edge>
         <edge from="n65" to="n70">

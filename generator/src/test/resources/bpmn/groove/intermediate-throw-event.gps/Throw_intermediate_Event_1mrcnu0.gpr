@@ -68,7 +68,7 @@
         </node>
         <edge from="n14" to="n14">
             <attr name="label">
-                <string>string:"start -&gt; intermediate"</string>
+                <string>string:"start -&gt; intermediate (Flow_0i4cd7b)"</string>
             </attr>
         </edge>
         <node id="n16">
@@ -78,7 +78,7 @@
         </node>
         <edge from="n16" to="n16">
             <attr name="label">
-                <string>string:"intermediate -&gt; end"</string>
+                <string>string:"intermediate -&gt; end (Flow_04utr3x)"</string>
             </attr>
         </edge>
         <edge from="n10" to="n15">

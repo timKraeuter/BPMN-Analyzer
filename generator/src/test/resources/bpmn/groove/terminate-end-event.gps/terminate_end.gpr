@@ -78,7 +78,7 @@
         </edge>
         <node id="n52">
             <attr name="layout">
-                <string>1432 647 0 0</string>
+                <string>1657 647 0 0</string>
             </attr>
         </node>
         <edge from="n52" to="n52">
@@ -93,7 +93,7 @@
         </edge>
         <node id="n55">
             <attr name="layout">
-                <string>1010 612 0 0</string>
+                <string>1122 612 0 0</string>
             </attr>
         </node>
         <edge from="n55" to="n55">
@@ -108,7 +108,7 @@
         </edge>
         <node id="n57">
             <attr name="layout">
-                <string>995 522 0 0</string>
+                <string>1107 522 0 0</string>
             </attr>
         </node>
         <edge from="n57" to="n57">
@@ -148,7 +148,7 @@
         </node>
         <edge from="n45" to="n45">
             <attr name="label">
-                <string>string:"B -&gt; terminate_end"</string>
+                <string>string:"B -&gt; terminate_end (Flow_178sut1)"</string>
             </attr>
         </edge>
         <node id="n49">
@@ -163,7 +163,7 @@
         </edge>
         <node id="n50">
             <attr name="layout">
-                <string>1632 647 0 0</string>
+                <string>1857 647 0 0</string>
             </attr>
         </node>
         <edge from="n50" to="n50">
@@ -173,7 +173,7 @@
         </edge>
         <node id="n53">
             <attr name="layout">
-                <string>1457 530 0 0</string>
+                <string>1682 530 0 0</string>
             </attr>
         </node>
         <edge from="n53" to="n53">
@@ -183,7 +183,7 @@
         </edge>
         <node id="n54">
             <attr name="layout">
-                <string>1307 612 0 0</string>
+                <string>1532 612 0 0</string>
             </attr>
         </node>
         <edge from="n54" to="n54">
@@ -193,7 +193,7 @@
         </edge>
         <node id="n56">
             <attr name="layout">
-                <string>1307 522 0 0</string>
+                <string>1532 522 0 0</string>
             </attr>
         </node>
         <edge from="n56" to="n56">

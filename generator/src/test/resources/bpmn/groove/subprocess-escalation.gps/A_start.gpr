@@ -68,7 +68,7 @@
         </node>
         <edge from="n41" to="n41">
             <attr name="label">
-                <string>string:"start_sub -&gt; A"</string>
+                <string>string:"start_sub -&gt; A (Flow_1lkuy3b)"</string>
             </attr>
         </edge>
         <node id="n43">

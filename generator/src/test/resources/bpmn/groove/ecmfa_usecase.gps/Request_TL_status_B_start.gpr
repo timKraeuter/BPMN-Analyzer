@@ -68,7 +68,7 @@
         </node>
         <edge from="n330" to="n330">
             <attr name="label">
-                <string>string:"Approaching_Junction_B -&gt; Request_TL_status_B"</string>
+                <string>string:"Approaching_Junction_B -&gt; Request_TL_status_B (ID_78)"</string>
             </attr>
         </edge>
         <node id="n332">

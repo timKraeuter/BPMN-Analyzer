@@ -68,7 +68,7 @@
         </node>
         <edge from="n9" to="n9">
             <attr name="label">
-                <string>string:"start -&gt; timer"</string>
+                <string>string:"start -&gt; timer (Flow_0f6lljq)"</string>
             </attr>
         </edge>
         <node id="n11">
@@ -78,7 +78,7 @@
         </node>
         <edge from="n11" to="n11">
             <attr name="label">
-                <string>string:"timer -&gt; end"</string>
+                <string>string:"timer -&gt; end (Flow_0nw006b)"</string>
             </attr>
         </edge>
         <edge from="n5" to="n10">

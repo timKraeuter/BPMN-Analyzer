@@ -38,7 +38,7 @@
         </node>
         <edge from="n3" to="n3">
             <attr name="label">
-                <string>string:"StartEvent_1 -&gt; Activity_1iduxj0"</string>
+                <string>string:"StartEvent_1 -&gt; Activity_1iduxj0 (Flow_1df3b4l)"</string>
             </attr>
         </edge>
         <node id="n4">
@@ -68,7 +68,7 @@
         </node>
         <edge from="n7" to="n7">
             <attr name="label">
-                <string>string:"Activity_1iduxj0 -&gt; Event_0v0iz0c"</string>
+                <string>string:"Activity_1iduxj0 -&gt; Event_0v0iz0c (Flow_1agdsil)"</string>
             </attr>
         </edge>
         <node id="n6">

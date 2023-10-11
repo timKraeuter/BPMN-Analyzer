@@ -58,7 +58,7 @@
         </node>
         <edge from="n100" to="n100">
             <attr name="label">
-                <string>string:"signalOrMessage -&gt; interruptMessage"</string>
+                <string>string:"signalOrMessage -&gt; interruptMessage (Flow_171ay5a)"</string>
             </attr>
         </edge>
         <node id="n101">

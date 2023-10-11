@@ -48,7 +48,7 @@
         </node>
         <edge from="n19" to="n19">
             <attr name="label">
-                <string>string:"controller_started -&gt; e1"</string>
+                <string>string:"controller_started -&gt; e1 (ID_66)"</string>
             </attr>
         </edge>
         <node id="n20">
@@ -58,7 +58,7 @@
         </node>
         <edge from="n20" to="n20">
             <attr name="label">
-                <string>string:"e1 -&gt; Phase_1"</string>
+                <string>string:"e1 -&gt; Phase_1 (ID_67)"</string>
             </attr>
         </edge>
         <edge from="n18" to="n20">

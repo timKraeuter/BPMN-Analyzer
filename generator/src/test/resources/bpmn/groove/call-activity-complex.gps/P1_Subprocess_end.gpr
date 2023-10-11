@@ -93,7 +93,7 @@
         </node>
         <edge from="n41" to="n41">
             <attr name="label">
-                <string>string:"P1_Subprocess -&gt; end_p1"</string>
+                <string>string:"P1_Subprocess -&gt; end_p1 (Flow_1lsia9d)"</string>
             </attr>
         </edge>
         <edge from="n34" to="n40">

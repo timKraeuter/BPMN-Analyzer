@@ -33,7 +33,7 @@
         </edge>
         <node id="n150">
             <attr name="layout">
-                <string>892 279 0 0</string>
+                <string>967 279 0 0</string>
             </attr>
         </node>
         <edge from="n150" to="n150">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n147" to="n147">
             <attr name="label">
-                <string>string:"message_catch -&gt; end_sub_p2"</string>
+                <string>string:"message_catch -&gt; end_sub_p2 (Flow_05mx2n3)"</string>
             </attr>
         </edge>
         <node id="n149">
@@ -108,12 +108,12 @@
         </node>
         <edge from="n149" to="n149">
             <attr name="label">
-                <string>string:"S1_throw -&gt; message_catch"</string>
+                <string>string:"S1_throw -&gt; message_catch (Flow_0m8wslc)"</string>
             </attr>
         </edge>
         <node id="n151">
             <attr name="layout">
-                <string>1332 279 0 0</string>
+                <string>1557 279 0 0</string>
             </attr>
         </node>
         <edge from="n151" to="n151">

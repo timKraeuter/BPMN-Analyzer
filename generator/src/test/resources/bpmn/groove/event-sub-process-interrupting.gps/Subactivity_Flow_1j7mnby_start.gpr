@@ -68,7 +68,7 @@
         </node>
         <edge from="n38" to="n38">
             <attr name="label">
-                <string>string:"messageStartSub -&gt; Subactivity"</string>
+                <string>string:"messageStartSub -&gt; Subactivity (Flow_1j7mnby)"</string>
             </attr>
         </edge>
         <node id="n40">

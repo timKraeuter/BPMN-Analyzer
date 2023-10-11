@@ -73,7 +73,7 @@
         </node>
         <edge from="n119" to="n119">
             <attr name="label">
-                <string>string:"e1 -&gt; signalEnd_p2"</string>
+                <string>string:"e1 -&gt; signalEnd_p2 (Flow_1qro642)"</string>
             </attr>
         </edge>
         <node id="n120">
@@ -143,7 +143,7 @@
         </node>
         <edge from="n128" to="n128">
             <attr name="label">
-                <string>string:"signal -&gt; end3_p1"</string>
+                <string>string:"signal -&gt; end3_p1 (Flow_0r7wbno)"</string>
             </attr>
         </edge>
         <edge from="n122" to="n127">

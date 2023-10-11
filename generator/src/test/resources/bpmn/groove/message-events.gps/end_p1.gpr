@@ -73,7 +73,7 @@
         </node>
         <edge from="n24" to="n24">
             <attr name="label">
-                <string>string:"catch_A -&gt; end_p1"</string>
+                <string>string:"catch_A -&gt; end_p1 (Flow_0ed0ztm)"</string>
             </attr>
         </edge>
         <node id="n25">
@@ -153,7 +153,7 @@
         </node>
         <edge from="n33" to="n33">
             <attr name="label">
-                <string>string:"throw_A -&gt; catch_B_p2"</string>
+                <string>string:"throw_A -&gt; catch_B_p2 (Flow_1k62gnk)"</string>
             </attr>
         </edge>
         <node id="n34">
@@ -223,7 +223,7 @@
         </node>
         <edge from="n41" to="n41">
             <attr name="label">
-                <string>string:"start_p3 -&gt; catch_B_p3"</string>
+                <string>string:"start_p3 -&gt; catch_B_p3 (Flow_18621tw)"</string>
             </attr>
         </edge>
         <edge from="n27" to="n30">

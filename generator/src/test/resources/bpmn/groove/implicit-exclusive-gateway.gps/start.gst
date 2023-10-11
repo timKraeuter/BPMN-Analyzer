@@ -48,7 +48,7 @@
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"start -&gt; e1"</string>
+                <string>string:"start -&gt; e1 (Flow_10t9zap)"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">

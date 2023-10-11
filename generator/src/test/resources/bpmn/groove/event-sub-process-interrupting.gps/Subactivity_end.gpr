@@ -78,7 +78,7 @@
         </node>
         <edge from="n47" to="n47">
             <attr name="label">
-                <string>string:"Subactivity -&gt; endSub"</string>
+                <string>string:"Subactivity -&gt; endSub (Flow_1rmc567)"</string>
             </attr>
         </edge>
         <edge from="n41" to="n46">

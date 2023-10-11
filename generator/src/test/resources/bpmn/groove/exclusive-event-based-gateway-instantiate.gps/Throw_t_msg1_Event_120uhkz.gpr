@@ -113,7 +113,7 @@
         </node>
         <edge from="n54" to="n54">
             <attr name="label">
-                <string>string:"e1 -&gt; t_msg1"</string>
+                <string>string:"e1 -&gt; t_msg1 (Flow_1ef2vkv)"</string>
             </attr>
         </edge>
         <node id="n56">
@@ -123,7 +123,7 @@
         </node>
         <edge from="n56" to="n56">
             <attr name="label">
-                <string>string:"t_msg1 -&gt; end1_p2"</string>
+                <string>string:"t_msg1 -&gt; end1_p2 (Flow_1477wmb)"</string>
             </attr>
         </edge>
         <node id="n58">
@@ -143,7 +143,7 @@
         </node>
         <edge from="n61" to="n61">
             <attr name="label">
-                <string>string:"r_msg1 -&gt; end1_p1"</string>
+                <string>string:"r_msg1 -&gt; end1_p1 (Flow_19bavl8)"</string>
             </attr>
         </edge>
         <edge from="n50" to="n55">

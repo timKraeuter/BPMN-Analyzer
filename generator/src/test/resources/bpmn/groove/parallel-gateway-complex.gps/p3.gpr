@@ -98,7 +98,7 @@
         </node>
         <edge from="n97" to="n97">
             <attr name="label">
-                <string>string:"a2_1 -&gt; p3"</string>
+                <string>string:"a2_1 -&gt; p3 (Flow_1wn50cm)"</string>
             </attr>
         </edge>
         <node id="n99">
@@ -108,7 +108,7 @@
         </node>
         <edge from="n99" to="n99">
             <attr name="label">
-                <string>string:"a3 -&gt; p3"</string>
+                <string>string:"a3 -&gt; p3 (Flow_0bcwlse)"</string>
             </attr>
         </edge>
         <node id="n101">
@@ -118,7 +118,7 @@
         </node>
         <edge from="n101" to="n101">
             <attr name="label">
-                <string>string:"p2 -&gt; p3"</string>
+                <string>string:"p2 -&gt; p3 (Flow_1u69p9j)"</string>
             </attr>
         </edge>
         <node id="n103">
@@ -128,7 +128,7 @@
         </node>
         <edge from="n103" to="n103">
             <attr name="label">
-                <string>string:"p3 -&gt; end"</string>
+                <string>string:"p3 -&gt; end (Flow_0qpajeq)"</string>
             </attr>
         </edge>
         <edge from="n93" to="n102">

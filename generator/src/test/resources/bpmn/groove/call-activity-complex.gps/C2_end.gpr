@@ -78,7 +78,7 @@
         </node>
         <edge from="n78" to="n78">
             <attr name="label">
-                <string>string:"C2 -&gt; p2"</string>
+                <string>string:"C2 -&gt; p2 (Flow_0f9ur9m)"</string>
             </attr>
         </edge>
         <edge from="n72" to="n77">

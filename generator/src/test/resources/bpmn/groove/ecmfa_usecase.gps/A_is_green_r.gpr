@@ -33,7 +33,7 @@
         </edge>
         <node id="n491">
             <attr name="layout">
-                <string>932 279 0 0</string>
+                <string>972 279 0 0</string>
             </attr>
         </node>
         <edge from="n491" to="n491">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n488" to="n488">
             <attr name="label">
-                <string>string:"A_is_green_r -&gt; e3_A"</string>
+                <string>string:"A_is_green_r -&gt; e3_A (ID_97)"</string>
             </attr>
         </edge>
         <node id="n490">
@@ -113,7 +113,7 @@
         </edge>
         <node id="n492">
             <attr name="layout">
-                <string>1302 279 0 0</string>
+                <string>1422 279 0 0</string>
             </attr>
         </node>
         <edge from="n492" to="n492">

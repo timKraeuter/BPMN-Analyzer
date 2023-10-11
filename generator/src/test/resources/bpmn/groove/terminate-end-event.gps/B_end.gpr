@@ -78,7 +78,7 @@
         </node>
         <edge from="n41" to="n41">
             <attr name="label">
-                <string>string:"B -&gt; terminate_end"</string>
+                <string>string:"B -&gt; terminate_end (Flow_178sut1)"</string>
             </attr>
         </edge>
         <edge from="n35" to="n40">

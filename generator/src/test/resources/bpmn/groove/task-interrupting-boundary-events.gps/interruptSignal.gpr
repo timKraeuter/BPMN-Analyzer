@@ -73,7 +73,7 @@
         </node>
         <edge from="n98" to="n98">
             <attr name="label">
-                <string>string:"signalOrMessage -&gt; interruptSignal"</string>
+                <string>string:"signalOrMessage -&gt; interruptSignal (Flow_0ldpkta)"</string>
             </attr>
         </edge>
         <node id="n99">
@@ -133,7 +133,7 @@
         </node>
         <edge from="n105" to="n105">
             <attr name="label">
-                <string>string:"s1 -&gt; s1_end"</string>
+                <string>string:"s1 -&gt; s1_end (Flow_1udtcnz)"</string>
             </attr>
         </edge>
         <node id="n107">

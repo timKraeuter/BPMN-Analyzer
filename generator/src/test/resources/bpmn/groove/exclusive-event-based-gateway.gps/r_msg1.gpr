@@ -33,7 +33,7 @@
         </edge>
         <node id="n28">
             <attr name="layout">
-                <string>692 279 0 0</string>
+                <string>767 279 0 0</string>
             </attr>
         </node>
         <edge from="n28" to="n28">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n25" to="n25">
             <attr name="label">
-                <string>string:"r_msg1 -&gt; end1_p1"</string>
+                <string>string:"r_msg1 -&gt; end1_p1 (Flow_19bavl8)"</string>
             </attr>
         </edge>
         <node id="n27">
@@ -113,7 +113,7 @@
         </edge>
         <node id="n29">
             <attr name="layout">
-                <string>1032 279 0 0</string>
+                <string>1257 279 0 0</string>
             </attr>
         </node>
         <edge from="n29" to="n29">

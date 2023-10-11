@@ -48,7 +48,7 @@
         </node>
         <edge from="n95" to="n95">
             <attr name="label">
-                <string>string:"a2 -&gt; e3"</string>
+                <string>string:"a2 -&gt; e3 (Flow_1rsvi08)"</string>
             </attr>
         </edge>
         <node id="n96">
@@ -58,7 +58,7 @@
         </node>
         <edge from="n96" to="n96">
             <attr name="label">
-                <string>string:"e3 -&gt; e4"</string>
+                <string>string:"e3 -&gt; e4 (Flow_0zxo4fd)"</string>
             </attr>
         </edge>
         <edge from="n94" to="n96">

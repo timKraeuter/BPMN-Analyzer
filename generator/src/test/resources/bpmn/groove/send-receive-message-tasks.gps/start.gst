@@ -48,7 +48,7 @@
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"start_p1 -&gt; TSend_1"</string>
+                <string>string:"start_p1 -&gt; TSend_1 (Flow_1kebatm)"</string>
             </attr>
         </edge>
         <node id="n5">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n9" to="n9">
             <attr name="label">
-                <string>string:"start_p2 -&gt; TReceive_1"</string>
+                <string>string:"start_p2 -&gt; TReceive_1 (Flow_0ryj8bj)"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">

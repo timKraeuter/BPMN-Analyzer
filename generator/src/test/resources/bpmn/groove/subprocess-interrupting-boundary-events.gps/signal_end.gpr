@@ -43,7 +43,7 @@
         </node>
         <edge from="n161" to="n161">
             <attr name="label">
-                <string>string:"signal -&gt; signal_end"</string>
+                <string>string:"signal -&gt; signal_end (Flow_1m0lzvc)"</string>
             </attr>
         </edge>
         <node id="n162">

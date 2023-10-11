@@ -103,7 +103,7 @@
         </node>
         <edge from="n30" to="n30">
             <attr name="label">
-                <string>string:"S1_Catch -&gt; S2_Throw"</string>
+                <string>string:"S1_Catch -&gt; S2_Throw (Flow_0ra23g1)"</string>
             </attr>
         </edge>
         <node id="n31">
@@ -163,7 +163,7 @@
         </node>
         <edge from="n37" to="n37">
             <attr name="label">
-                <string>string:"S1_Throw -&gt; S2_Catch"</string>
+                <string>string:"S1_Throw -&gt; S2_Catch (Flow_0leshl2)"</string>
             </attr>
         </edge>
         <node id="n39">
@@ -173,7 +173,7 @@
         </node>
         <edge from="n39" to="n39">
             <attr name="label">
-                <string>string:"S2_Catch -&gt; end_p1"</string>
+                <string>string:"S2_Catch -&gt; end_p1 (Flow_07uqhhm)"</string>
             </attr>
         </edge>
         <node id="n40">
@@ -233,7 +233,7 @@
         </node>
         <edge from="n47" to="n47">
             <attr name="label">
-                <string>string:"S2_Catch -&gt; end_p3"</string>
+                <string>string:"S2_Catch -&gt; end_p3 (Flow_0yzxakb)"</string>
             </attr>
         </edge>
         <edge from="n33" to="n38">

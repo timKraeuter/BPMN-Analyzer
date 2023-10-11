@@ -27,7 +27,7 @@
         <node id="n112"/>
         <edge from="n112" to="n112">
             <attr name="label">
-                <string>string:"e4 -&gt; end"</string>
+                <string>string:"e4 -&gt; end (Flow_0sq6ly1)"</string>
             </attr>
         </edge>
         <node id="n113"/>

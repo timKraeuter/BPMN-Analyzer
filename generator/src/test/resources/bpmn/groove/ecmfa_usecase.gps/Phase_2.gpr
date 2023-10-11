@@ -33,7 +33,7 @@
         </edge>
         <node id="n184">
             <attr name="layout">
-                <string>1027 252 0 0</string>
+                <string>1087 252 0 0</string>
             </attr>
         </node>
         <edge from="n184" to="n184">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n180" to="n180">
             <attr name="label">
-                <string>string:"B_is_green_t -&gt; Phase_2"</string>
+                <string>string:"B_is_green_t -&gt; Phase_2 (ID_71)"</string>
             </attr>
         </edge>
         <node id="n182">
@@ -113,12 +113,12 @@
         </edge>
         <node id="n185">
             <attr name="layout">
-                <string>1362 252 0 0</string>
+                <string>1482 252 0 0</string>
             </attr>
         </node>
         <edge from="n185" to="n185">
             <attr name="label">
-                <string>string:"Phase2_start -&gt; evp2"</string>
+                <string>string:"Phase2_start -&gt; evp2 (ID_18)"</string>
             </attr>
         </edge>
         <edge from="n181" to="n182">

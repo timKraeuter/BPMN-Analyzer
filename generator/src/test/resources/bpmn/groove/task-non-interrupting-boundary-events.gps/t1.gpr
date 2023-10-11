@@ -53,7 +53,7 @@
         </node>
         <edge from="n28" to="n28">
             <attr name="label">
-                <string>string:"t1 -&gt; t1_end"</string>
+                <string>string:"t1 -&gt; t1_end (Flow_1jzbhgq)"</string>
             </attr>
         </edge>
         <node id="n29">

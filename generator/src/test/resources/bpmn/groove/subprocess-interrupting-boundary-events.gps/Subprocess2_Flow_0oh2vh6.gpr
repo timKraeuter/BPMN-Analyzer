@@ -33,7 +33,7 @@
         </edge>
         <node id="n69">
             <attr name="layout">
-                <string>900 252 0 0</string>
+                <string>1012 252 0 0</string>
             </attr>
         </node>
         <edge from="n69" to="n69">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n65" to="n65">
             <attr name="label">
-                <string>string:"Subprocess1 -&gt; Subprocess2"</string>
+                <string>string:"Subprocess1 -&gt; Subprocess2 (Flow_0oh2vh6)"</string>
             </attr>
         </edge>
         <node id="n67">
@@ -113,12 +113,12 @@
         </edge>
         <node id="n70">
             <attr name="layout">
-                <string>1257 252 0 0</string>
+                <string>1482 252 0 0</string>
             </attr>
         </node>
         <edge from="n70" to="n70">
             <attr name="label">
-                <string>string:"start_sub2 -&gt; end_sub2"</string>
+                <string>string:"start_sub2 -&gt; end_sub2 (Flow_153aslt)"</string>
             </attr>
         </edge>
         <edge from="n66" to="n67">

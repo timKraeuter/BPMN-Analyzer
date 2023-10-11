@@ -68,7 +68,7 @@
         </node>
         <edge from="n118" to="n118">
             <attr name="label">
-                <string>string:"p1 -&gt; C"</string>
+                <string>string:"p1 -&gt; C (Flow_11nhia6)"</string>
             </attr>
         </edge>
         <node id="n120">

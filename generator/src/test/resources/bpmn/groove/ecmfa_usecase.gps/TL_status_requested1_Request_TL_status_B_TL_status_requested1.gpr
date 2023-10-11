@@ -33,7 +33,7 @@
         </edge>
         <node id="n64">
             <attr name="layout">
-                <string>842 279 0 0</string>
+                <string>877 279 0 0</string>
             </attr>
         </node>
         <edge from="n64" to="n64">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n61" to="n61">
             <attr name="label">
-                <string>string:"TL_status_requested1 -&gt; A_C_green_t"</string>
+                <string>string:"TL_status_requested1 -&gt; A_C_green_t (ID_8)"</string>
             </attr>
         </edge>
         <node id="n63">
@@ -113,7 +113,7 @@
         </edge>
         <node id="n65">
             <attr name="layout">
-                <string>1362 279 0 0</string>
+                <string>1467 279 0 0</string>
             </attr>
         </node>
         <edge from="n65" to="n65">

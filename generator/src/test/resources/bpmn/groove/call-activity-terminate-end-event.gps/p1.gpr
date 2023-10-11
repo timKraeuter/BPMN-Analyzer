@@ -83,7 +83,7 @@
         </node>
         <edge from="n9" to="n9">
             <attr name="label">
-                <string>string:"start -&gt; p1"</string>
+                <string>string:"start -&gt; p1 (Flow_1lwnvn2)"</string>
             </attr>
         </edge>
         <node id="n11">
@@ -93,7 +93,7 @@
         </node>
         <edge from="n11" to="n11">
             <attr name="label">
-                <string>string:"p1 -&gt; Subprocess"</string>
+                <string>string:"p1 -&gt; Subprocess (Flow_05a75mt)"</string>
             </attr>
         </edge>
         <node id="n13">
@@ -103,7 +103,7 @@
         </node>
         <edge from="n13" to="n13">
             <attr name="label">
-                <string>string:"p1 -&gt; terminate_end"</string>
+                <string>string:"p1 -&gt; terminate_end (Flow_0osmb7q)"</string>
             </attr>
         </edge>
         <edge from="n5" to="n10">

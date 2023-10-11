@@ -123,7 +123,7 @@
         </node>
         <edge from="n80" to="n80">
             <attr name="label">
-                <string>string:"t_msg2 -&gt; end2_p2"</string>
+                <string>string:"t_msg2 -&gt; end2_p2 (Flow_0up8qhv)"</string>
             </attr>
         </edge>
         <node id="n82">

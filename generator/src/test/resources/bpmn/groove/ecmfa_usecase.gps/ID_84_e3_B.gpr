@@ -48,7 +48,7 @@
         </node>
         <edge from="n410" to="n410">
             <attr name="label">
-                <string>string:"B_is_green_signal -&gt; e3_B"</string>
+                <string>string:"B_is_green_signal -&gt; e3_B (ID_84)"</string>
             </attr>
         </edge>
         <node id="n411">
@@ -58,7 +58,7 @@
         </node>
         <edge from="n411" to="n411">
             <attr name="label">
-                <string>string:"e3_B -&gt; Pass_Junction_B"</string>
+                <string>string:"e3_B -&gt; Pass_Junction_B (ID_85)"</string>
             </attr>
         </edge>
         <edge from="n409" to="n411">

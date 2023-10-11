@@ -93,7 +93,7 @@
         </node>
         <edge from="n18" to="n18">
             <attr name="label">
-                <string>string:"A -&gt; B"</string>
+                <string>string:"A -&gt; B (Flow_0ck3822)"</string>
             </attr>
         </edge>
         <node id="n20">
@@ -103,7 +103,7 @@
         </node>
         <edge from="n20" to="n20">
             <attr name="label">
-                <string>string:"A -&gt; C"</string>
+                <string>string:"A -&gt; C (Flow_0e4dh5d)"</string>
             </attr>
         </edge>
         <edge from="n12" to="n17">

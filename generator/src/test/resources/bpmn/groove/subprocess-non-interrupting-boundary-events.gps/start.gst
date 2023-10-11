@@ -48,7 +48,7 @@
         </node>
         <edge from="n4" to="n4">
             <attr name="label">
-                <string>string:"start -&gt; Subprocess"</string>
+                <string>string:"start -&gt; Subprocess (Flow_0rt92qb)"</string>
             </attr>
         </edge>
         <node id="n5">
@@ -98,7 +98,7 @@
         </node>
         <edge from="n9" to="n9">
             <attr name="label">
-                <string>string:"start_trigger -&gt; signalOrMessage"</string>
+                <string>string:"start_trigger -&gt; signalOrMessage (Flow_0eyi3rv)"</string>
             </attr>
         </edge>
         <edge from="n0" to="n1">
