@@ -15,6 +15,7 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConst
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_MESSAGE;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_PROCESS_SNAPSHOT;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_RUNNING;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_TERMINATED;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_TOKEN;
 
 import java.util.Set;
@@ -343,7 +344,7 @@ public class BPMNToGrooveTransformerHelper {
       GrooveRuleBuilder ruleBuilder,
       AbstractBPMNProcess specificSubprocessIfExists,
       GrooveNode processInstance,
-      boolean forAllDeleteSubProcess,
+      boolean interruptAllSubprocesses,
       GrooveNode forAllRoot) {
     // Delete/Terminate subprocess
     GrooveNode subprocessInstance = ruleBuilder.deleteNode(TYPE_PROCESS_SNAPSHOT);
@@ -355,14 +356,24 @@ public class BPMNToGrooveTransformerHelper {
       ruleBuilder.deleteEdge(
           NAME, subprocessInstance, ruleBuilder.contextNode(createStringNodeLabel(subprocessName)));
     }
-    if (forAllDeleteSubProcess) { // for terminate and signal
-      ruleBuilder.contextEdge(AT, subprocessInstance, forAllRoot);
-      ruleBuilder.contextEdge(AT, subprocessRunning, forAllRoot);
-    }
 
     // Delete all tokens or messages if any exist
     GrooveNode exists = ruleBuilder.contextNode(EXISTS);
     ruleBuilder.contextEdge(IN, exists, forAllRoot);
+
+    if (interruptAllSubprocesses) { // for terminate and signal
+      ruleBuilder.contextEdge(AT, subprocessInstance, forAllRoot);
+
+      GrooveNode subprocessTerminated = ruleBuilder.deleteNode(TYPE_TERMINATED);
+      ruleBuilder.deleteEdge(STATE, subprocessInstance, subprocessTerminated);
+      GrooveNode existsOptionalTerminated = ruleBuilder.contextNode(EXISTS_OPTIONAL);
+      ruleBuilder.contextEdge(AT, subprocessTerminated, existsOptionalTerminated);
+      ruleBuilder.contextEdge(IN, existsOptionalTerminated, exists);
+
+      GrooveNode existsOptionalRunning = ruleBuilder.contextNode(EXISTS_OPTIONAL);
+      ruleBuilder.contextEdge(AT, subprocessRunning, existsOptionalRunning);
+      ruleBuilder.contextEdge(IN, existsOptionalRunning, exists);
+    }
 
     // Delete all tokens
     GrooveNode forAllTokens = ruleBuilder.contextNode(FORALL);
