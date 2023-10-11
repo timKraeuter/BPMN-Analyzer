@@ -67,13 +67,12 @@ public class StartEvent extends CatchEvent {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof StartEvent)) {
+    if (!(o instanceof StartEvent that)) {
       return false;
     }
     if (!super.equals(o)) {
       return false;
     }
-    StartEvent that = (StartEvent) o;
     return type == that.type;
   }
 

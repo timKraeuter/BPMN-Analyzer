@@ -48,18 +48,17 @@ public class IntermediateCatchEvent extends CatchEvent {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof IntermediateCatchEvent)) {
+    if (!(o instanceof IntermediateCatchEvent that)) {
       return false;
     }
     if (!super.equals(o)) {
       return false;
     }
-    IntermediateCatchEvent that = (IntermediateCatchEvent) o;
-    return type == that.type;
+    return type == that.type && this.getEventDefinition().equals(that.getEventDefinition());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(super.hashCode(), type);
+    return Objects.hashCode(super.hashCode(), type, getEventDefinition().hashCode());
   }
 }

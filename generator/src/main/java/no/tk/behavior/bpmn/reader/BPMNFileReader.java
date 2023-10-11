@@ -680,7 +680,10 @@ public class BPMNFileReader {
             @Override
             public IntermediateCatchEvent handle(LinkEventDefinition evDefinition) {
               return new IntermediateCatchEvent(
-                  flowNode.getId(), getFlowElementName(flowNode), IntermediateCatchEventType.LINK);
+                  flowNode.getId(),
+                  getFlowElementName(flowNode),
+                  IntermediateCatchEventType.LINK,
+                  mapLinkEventDefinition(evDefinition, flowNode));
             }
 
             @Override
@@ -721,6 +724,15 @@ public class BPMNFileReader {
     throw new BPMNRuntimeException("Intermediate catch event has more than one event definition!");
   }
 
+  private no.tk.behavior.bpmn.events.definitions.LinkEventDefinition mapLinkEventDefinition(
+      LinkEventDefinition evDefinition, FlowNode flowNode) {
+    if (evDefinition.getName() != null && !evDefinition.getName().isBlank()) {
+      return new no.tk.behavior.bpmn.events.definitions.LinkEventDefinition(evDefinition.getName());
+    }
+    return new no.tk.behavior.bpmn.events.definitions.LinkEventDefinition(
+        getFlowElementName(flowNode));
+  }
+
   private no.tk.behavior.bpmn.FlowNode mapIntermediateThrowEvent(FlowNode flowNode) {
     org.camunda.bpm.model.bpmn.instance.IntermediateThrowEvent intermediateThrowEvent =
         (org.camunda.bpm.model.bpmn.instance.IntermediateThrowEvent) flowNode;
@@ -744,7 +756,10 @@ public class BPMNFileReader {
             @Override
             public IntermediateThrowEvent handle(LinkEventDefinition evDefinition) {
               return new IntermediateThrowEvent(
-                  flowNode.getId(), getFlowElementName(flowNode), IntermediateThrowEventType.LINK);
+                  flowNode.getId(),
+                  getFlowElementName(flowNode),
+                  IntermediateThrowEventType.LINK,
+                  mapLinkEventDefinition(evDefinition, flowNode));
             }
 
             @Override

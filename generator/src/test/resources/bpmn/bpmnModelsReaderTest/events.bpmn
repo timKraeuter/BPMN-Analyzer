@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.7.0" camunda:diagramRelationId="a6b753b8-0c0b-4c84-9078-f1689b75e715">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.16.0" camunda:diagramRelationId="a6b753b8-0c0b-4c84-9078-f1689b75e715">
   <bpmn:process id="Process_1386938f-6e7a-433a-ba36-14048e9f6a46" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1" name="start">
       <bpmn:outgoing>Flow_0xvlhi9</bpmn:outgoing>
@@ -72,11 +72,11 @@
     </bpmn:intermediateThrowEvent>
     <bpmn:intermediateCatchEvent id="Event_1hyuou3" name="linkCEvent">
       <bpmn:outgoing>Flow_0e537m9</bpmn:outgoing>
-      <bpmn:linkEventDefinition id="LinkEventDefinition_0sx8cn4" name="" />
+      <bpmn:linkEventDefinition id="LinkEventDefinition_0sx8cn4" name="123" />
     </bpmn:intermediateCatchEvent>
     <bpmn:intermediateThrowEvent id="Event_19lxekp" name="linkTEvent">
       <bpmn:incoming>Flow_0u4h2kh</bpmn:incoming>
-      <bpmn:linkEventDefinition id="LinkEventDefinition_0aspjoi" name="" />
+      <bpmn:linkEventDefinition id="LinkEventDefinition_0aspjoi" name="123" />
     </bpmn:intermediateThrowEvent>
     <bpmn:intermediateCatchEvent id="Event_1o98kg9" name="signalCEvent">
       <bpmn:outgoing>Flow_03b2k4q</bpmn:outgoing>
@@ -116,6 +116,10 @@
       <bpmn:text>Has the same event definition as the signal start event</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_05pljw5" sourceRef="Event_047kslv" targetRef="TextAnnotation_082y1hx" />
+    <bpmn:textAnnotation id="TextAnnotation_1c7fwg8">
+      <bpmn:text>Has the same event definition as the link catch event</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1shu3sc" sourceRef="Event_19lxekp" targetRef="TextAnnotation_1c7fwg8" />
   </bpmn:process>
   <bpmn:signal id="Signal_0yf8nh1" name="Signal_113rm6n" />
   <bpmn:signal id="Signal_0i5emnl" name="Signal_1ni52ju" />
@@ -123,6 +127,10 @@
   <bpmn:escalation id="Escalation_241b720" name="Escalation_241b720" escalationCode="Nobody reads this" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1386938f-6e7a-433a-ba36-14048e9f6a46">
+      <bpmndi:BPMNShape id="TextAnnotation_1c7fwg8_di" bpmnElement="TextAnnotation_1c7fwg8">
+        <dc:Bounds x="660" y="20" width="100" height="70" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="170" y="102" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -252,6 +260,10 @@
       <bpmndi:BPMNShape id="TextAnnotation_082y1hx_di" bpmnElement="TextAnnotation_082y1hx">
         <dc:Bounds x="1030" y="240" width="100" height="70" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1shu3sc_di" bpmnElement="Association_1shu3sc">
+        <di:waypoint x="651" y="106" />
+        <di:waypoint x="665" y="90" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0xvlhi9_di" bpmnElement="Flow_0xvlhi9">
         <di:waypoint x="206" y="120" />
         <di:waypoint x="320" y="120" />

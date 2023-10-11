@@ -50,13 +50,12 @@ public class EndEvent extends ThrowEvent {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof EndEvent)) {
+    if (!(o instanceof EndEvent endEvent)) {
       return false;
     }
     if (!super.equals(o)) {
       return false;
     }
-    EndEvent endEvent = (EndEvent) o;
     return type == endEvent.type;
   }
 

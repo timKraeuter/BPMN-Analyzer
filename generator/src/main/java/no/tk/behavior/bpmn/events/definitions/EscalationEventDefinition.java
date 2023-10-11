@@ -15,10 +15,9 @@ public class EscalationEventDefinition implements EventDefinition {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof EscalationEventDefinition)) {
+    if (!(o instanceof EscalationEventDefinition that)) {
       return false;
     }
-    EscalationEventDefinition that = (EscalationEventDefinition) o;
     return Objects.equals(escalationCode, that.escalationCode);
   }
 

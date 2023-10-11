@@ -15,10 +15,9 @@ public class ErrorEventDefinition implements EventDefinition {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof ErrorEventDefinition)) {
+    if (!(o instanceof ErrorEventDefinition that)) {
       return false;
     }
-    ErrorEventDefinition that = (ErrorEventDefinition) o;
     return Objects.equals(errorCode, that.errorCode);
   }
 

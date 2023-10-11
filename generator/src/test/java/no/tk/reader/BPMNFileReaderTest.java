@@ -22,6 +22,7 @@ import no.tk.behavior.bpmn.activities.tasks.ReceiveTask;
 import no.tk.behavior.bpmn.activities.tasks.Task;
 import no.tk.behavior.bpmn.events.*;
 import no.tk.behavior.bpmn.events.definitions.EventDefinition;
+import no.tk.behavior.bpmn.events.definitions.LinkEventDefinition;
 import no.tk.behavior.bpmn.events.definitions.SignalEventDefinition;
 import no.tk.behavior.bpmn.gateways.EventBasedGateway;
 import no.tk.behavior.bpmn.reader.BPMNFileReader;
@@ -219,7 +220,10 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         linkCEvent,
         is(
             new IntermediateCatchEvent(
-                linkCEvent.getId(), linkCEventName, IntermediateCatchEventType.LINK)));
+                linkCEvent.getId(),
+                linkCEventName,
+                IntermediateCatchEventType.LINK,
+                new LinkEventDefinition("123"))));
     String signalCEventName = "signalCEvent";
     String intermediateSignalEventDefinition = "Signal_1ni52ju";
     FlowNode signalCEvent = flowNodes.get(signalCEventName);
@@ -247,7 +251,10 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
         linkTEvent,
         is(
             new IntermediateThrowEvent(
-                linkTEvent.getId(), linkTEventName, IntermediateThrowEventType.LINK)));
+                linkTEvent.getId(),
+                linkTEventName,
+                IntermediateThrowEventType.LINK,
+                new LinkEventDefinition("123"))));
     String timerCEventName = "timerCEvent";
     FlowNode timerCEvent = flowNodes.get(timerCEventName);
     assertThat(

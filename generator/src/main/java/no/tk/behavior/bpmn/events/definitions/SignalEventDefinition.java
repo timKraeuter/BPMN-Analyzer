@@ -13,8 +13,7 @@ public class SignalEventDefinition implements EventDefinition {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof SignalEventDefinition)) return false;
-    SignalEventDefinition that = (SignalEventDefinition) o;
+    if (!(o instanceof SignalEventDefinition that)) return false;
     return Objects.equal(globalSignalName, that.globalSignalName);
   }
 

@@ -71,13 +71,12 @@ public class BoundaryEvent extends CatchEvent {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof BoundaryEvent)) {
+    if (!(o instanceof BoundaryEvent that)) {
       return false;
     }
     if (!super.equals(o)) {
       return false;
     }
-    BoundaryEvent that = (BoundaryEvent) o;
     return interrupt == that.interrupt && type == that.type;
   }
 

@@ -44,18 +44,17 @@ public class IntermediateThrowEvent extends ThrowEvent {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof IntermediateThrowEvent)) {
+    if (!(o instanceof IntermediateThrowEvent that)) {
       return false;
     }
     if (!super.equals(o)) {
       return false;
     }
-    IntermediateThrowEvent that = (IntermediateThrowEvent) o;
-    return type == that.type;
+    return type == that.type && this.getEventDefinition().equals(that.getEventDefinition());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(super.hashCode(), type);
+    return Objects.hashCode(super.hashCode(), type, this.getEventDefinition().hashCode());
   }
 }
