@@ -15,8 +15,7 @@ java -jar build/libs/ruleGeneratorServer-2.0.0.jar
 
 This will start the application at [localhost:8080](http://localhost:8080/).
 
-Run the application on a specific port, for example 4300 (execute in the **Groove_Rule_Generation**,
-i.e., root directory):
+Run the application on a specific port, for example, 4300 (execute in the root directory of the repository):
 
 ```bash
 java -jar build/libs/ruleGeneratorServer-2.0.0.jar --server.port=4300
@@ -58,10 +57,10 @@ docker tag bpmnanalyzer tg2022.azurecr.io/bpmnanalyzer:v1
 docker login tg2022.azurecr.io --username $APP_ID --password $AZURE_PW
 ```
 
-4. Push image to Container Registry
+4. Push the image to the Container Registry
 
 ```bash
 docker push tg2022.azurecr.io/bpmnanalyzer:v1
 ```
 
-5. Create new container app revision in the GUI.
+5. Create a new container app revision in the GUI.
