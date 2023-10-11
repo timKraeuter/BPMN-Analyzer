@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.reader.BPMNFileReader;
 import no.tk.behavior.bpmn.reader.token.BPMNTokenFileReader;
-import no.tk.behavior.bpmn.reader.token.model.BPMNProcessSnapshot;
+import no.tk.behavior.bpmn.reader.token.model.CollaborationSnapshot;
 import no.tk.groove.behaviortransformer.BehaviorToGrooveTransformer;
 import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import no.tk.groove.behaviortransformer.bpmn.atomic.propositions.BPMNTokenAtomicPropositionGenerator;
@@ -121,10 +121,10 @@ public class RuleGeneratorControllerHelper {
         new BPMNTokenFileReader(
             BPMNToGrooveTransformerHelper::transformToQualifiedGrooveNameIfNeeded);
     for (BPMNProposition prop : props) {
-      BPMNProcessSnapshot bpmnProcessSnapshot =
+      CollaborationSnapshot collaborationSnapshot =
           bpmnTokenFileReader.readModelFromString(prop.name(), prop.xml());
 
-      generator.generateAndWriteAtomicProposition(bpmnProcessSnapshot, ggFolder);
+      generator.generateAndWriteAtomicProposition(collaborationSnapshot, ggFolder);
     }
   }
 }

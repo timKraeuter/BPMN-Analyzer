@@ -1,6 +1,5 @@
 package no.tk.maude.behaviortransformer.bpmn.generators;
 
-import static no.tk.behavior.bpmn.events.BoundaryEventType.*;
 import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_OTHER_TOKENS;
 import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.WHITE_SPACE;
 

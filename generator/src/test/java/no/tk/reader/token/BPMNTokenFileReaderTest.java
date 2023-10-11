@@ -10,7 +10,7 @@ import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-import no.tk.behavior.bpmn.reader.token.model.BPMNProcessSnapshot;
+import no.tk.behavior.bpmn.reader.token.model.CollaborationSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.ProcessSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.Token;
 import org.junit.jupiter.api.Test;
@@ -19,14 +19,15 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
 
   @Test
   void readSnapshotWithTokens() throws IOException {
-    BPMNProcessSnapshot bpmnSnapshot = readBPMNSnapshotFromResource("snapshotWithTokens.xml");
+    CollaborationSnapshot collaborationSnapshot =
+        readBPMNSnapshotFromResource("snapshotWithTokens.xml");
 
-    assertNotNull(bpmnSnapshot);
-    assertThat(bpmnSnapshot.getName(), is("snapshotWithTokens"));
+    assertNotNull(collaborationSnapshot);
+    assertThat(collaborationSnapshot.getName(), is("snapshotWithTokens"));
 
     // Check for tokens and process snapshots
-    assertThat(bpmnSnapshot.getProcessSnapshots().size(), is(1));
-    ProcessSnapshot processSnapshot = bpmnSnapshot.getProcessSnapshots().iterator().next();
+    assertThat(collaborationSnapshot.getProcessSnapshots().size(), is(1));
+    ProcessSnapshot processSnapshot = collaborationSnapshot.getProcessSnapshots().iterator().next();
     assertThat(processSnapshot.getSnapshotID(), is("ProcessSnapshot_1hrwrvp"));
     assertThat(processSnapshot.getProcessName(), is("AtomicPropositionTest"));
     assertThat(processSnapshot.getTokens().size(), is(3));
@@ -44,17 +45,17 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
 
   @Test
   void readMultipleSnapshotWithTokens() throws IOException {
-    BPMNProcessSnapshot bpmnSnapshot =
+    CollaborationSnapshot collaborationSnapshot =
         readBPMNSnapshotFromResource("multipleSnapshotsWithTokens.xml");
 
-    assertNotNull(bpmnSnapshot);
-    assertThat(bpmnSnapshot.getName(), is("multipleSnapshotsWithTokens"));
+    assertNotNull(collaborationSnapshot);
+    assertThat(collaborationSnapshot.getName(), is("multipleSnapshotsWithTokens"));
 
     // Check for tokens and process snapshots
-    assertThat(bpmnSnapshot.getProcessSnapshots().size(), is(3));
+    assertThat(collaborationSnapshot.getProcessSnapshots().size(), is(3));
 
     // Check snapshot 1
-    ProcessSnapshot snapshot1 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_1hrwrvp");
+    ProcessSnapshot snapshot1 = getSnapshotWithID(collaborationSnapshot, "ProcessSnapshot_1hrwrvp");
     assertThat(snapshot1.getSnapshotID(), is("ProcessSnapshot_1hrwrvp"));
     assertThat(snapshot1.getProcessName(), is("AtomicPropositionTest"));
     assertThat(snapshot1.getTokens().size(), is(2));
@@ -68,7 +69,7 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
     assertThat(getShouldExistListForTokens(snapshot1), is(Lists.newArrayList(true, false)));
 
     // Check snapshot 2
-    ProcessSnapshot snapshot2 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_01ch00c");
+    ProcessSnapshot snapshot2 = getSnapshotWithID(collaborationSnapshot, "ProcessSnapshot_01ch00c");
     assertThat(snapshot2.getSnapshotID(), is("ProcessSnapshot_01ch00c"));
     assertThat(snapshot2.getProcessName(), is("AtomicPropositionTest"));
     assertThat(snapshot2.getTokens().size(), is(1));
@@ -77,7 +78,7 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
     assertThat(getShouldExistListForTokens(snapshot2), is(Lists.newArrayList(true)));
 
     // Check snapshot 3
-    ProcessSnapshot snapshot3 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_0jd6wrd");
+    ProcessSnapshot snapshot3 = getSnapshotWithID(collaborationSnapshot, "ProcessSnapshot_0jd6wrd");
     assertThat(snapshot3.getSnapshotID(), is("ProcessSnapshot_0jd6wrd"));
     assertThat(snapshot3.getProcessName(), is("AtomicPropositionTest"));
     assertThat(snapshot3.getTokens().size(), is(0));
@@ -86,17 +87,17 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
 
   @Test
   void readMultipleSnapshotWithTokensWithoutCollaboration() throws IOException {
-    BPMNProcessSnapshot bpmnSnapshot =
+    CollaborationSnapshot collaborationSnapshot =
         readBPMNSnapshotFromResource("snapshotWithTokensWithoutCollaboration.xml");
 
-    assertNotNull(bpmnSnapshot);
-    assertThat(bpmnSnapshot.getName(), is("snapshotWithTokensWithoutCollaboration"));
+    assertNotNull(collaborationSnapshot);
+    assertThat(collaborationSnapshot.getName(), is("snapshotWithTokensWithoutCollaboration"));
 
     // Check for tokens and process snapshots
-    assertThat(bpmnSnapshot.getProcessSnapshots().size(), is(3));
+    assertThat(collaborationSnapshot.getProcessSnapshots().size(), is(3));
 
     // Check snapshot 1
-    ProcessSnapshot snapshot1 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_0guz4p2");
+    ProcessSnapshot snapshot1 = getSnapshotWithID(collaborationSnapshot, "ProcessSnapshot_0guz4p2");
     assertThat(snapshot1.getSnapshotID(), is("ProcessSnapshot_0guz4p2"));
     assertThat(snapshot1.getProcessName(), is("Process_1"));
     assertThat(snapshot1.getTokens().size(), is(2));
@@ -109,7 +110,7 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
     assertThat(getShouldExistListForTokens(snapshot1), is(Lists.newArrayList(false, true)));
 
     // Check snapshot 2
-    ProcessSnapshot snapshot2 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_0soxahe");
+    ProcessSnapshot snapshot2 = getSnapshotWithID(collaborationSnapshot, "ProcessSnapshot_0soxahe");
     assertThat(snapshot2.getSnapshotID(), is("ProcessSnapshot_0soxahe"));
     assertThat(snapshot2.getProcessName(), is("Process_1"));
     assertThat(snapshot2.getTokens().size(), is(1));
@@ -120,7 +121,7 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
     assertThat(getShouldExistListForTokens(snapshot2), is(Lists.newArrayList(true)));
 
     // Check snapshot 3
-    ProcessSnapshot snapshot3 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_1ejf247");
+    ProcessSnapshot snapshot3 = getSnapshotWithID(collaborationSnapshot, "ProcessSnapshot_1ejf247");
     assertThat(snapshot3.getSnapshotID(), is("ProcessSnapshot_1ejf247"));
     assertThat(snapshot3.getProcessName(), is("Process_1"));
     assertThat(snapshot3.getTokens().size(), is(0));
@@ -129,16 +130,16 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
 
   @Test
   void readWhitespacesInNames() throws IOException {
-    BPMNProcessSnapshot bpmnSnapshot = readBPMNSnapshotFromResource("orderHandling.xml");
+    CollaborationSnapshot collaborationSnapshot = readBPMNSnapshotFromResource("orderHandling.xml");
 
-    assertNotNull(bpmnSnapshot);
-    assertThat(bpmnSnapshot.getName(), is("orderHandling"));
+    assertNotNull(collaborationSnapshot);
+    assertThat(collaborationSnapshot.getName(), is("orderHandling"));
 
     // Check for tokens and process snapshots
-    assertThat(bpmnSnapshot.getProcessSnapshots().size(), is(1));
+    assertThat(collaborationSnapshot.getProcessSnapshots().size(), is(1));
 
     // Check snapshot 1
-    ProcessSnapshot snapshot1 = getSnapshotWithID(bpmnSnapshot, "ProcessSnapshot_0lx4wgn");
+    ProcessSnapshot snapshot1 = getSnapshotWithID(collaborationSnapshot, "ProcessSnapshot_0lx4wgn");
     assertThat(snapshot1.getSnapshotID(), is("ProcessSnapshot_0lx4wgn"));
     assertThat(snapshot1.getProcessName(), is("Order handling"));
     assertThat(snapshot1.getTokens().size(), is(2));
@@ -157,7 +158,7 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
     return snapshot1.getTokens().stream().map(Token::getElementID).collect(Collectors.toList());
   }
 
-  private ProcessSnapshot getSnapshotWithID(BPMNProcessSnapshot bpmnSnapshot, String id) {
+  private ProcessSnapshot getSnapshotWithID(CollaborationSnapshot bpmnSnapshot, String id) {
     return bpmnSnapshot.getProcessSnapshots().stream()
         .filter(processSnapshot -> processSnapshot.getSnapshotID().equals(id))
         .findFirst()

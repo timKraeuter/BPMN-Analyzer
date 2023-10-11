@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
-import no.tk.behavior.bpmn.reader.token.model.BPMNProcessSnapshot;
+import no.tk.behavior.bpmn.reader.token.model.CollaborationSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.ProcessSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.Token;
 import no.tk.groove.graph.GrooveNode;
@@ -25,16 +25,16 @@ public class BPMNTokenAtomicPropositionGenerator {
   }
 
   public void generateAndWriteAtomicProposition(
-      BPMNProcessSnapshot bpmnProcessSnapshot, Path outputFolder) throws IOException {
-    GrooveGraphRule graphRule = generateAtomicProposition(bpmnProcessSnapshot);
+      CollaborationSnapshot collaborationSnapshot, Path outputFolder) throws IOException {
+    GrooveGraphRule graphRule = generateAtomicProposition(collaborationSnapshot);
     Files.createDirectories(outputFolder);
     GrooveRuleWriter.writeRules(outputFolder, Stream.of(graphRule), layout);
   }
 
-  public GrooveGraphRule generateAtomicProposition(BPMNProcessSnapshot bpmnProcessSnapshot) {
+  public GrooveGraphRule generateAtomicProposition(CollaborationSnapshot collaborationSnapshot) {
     GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder();
-    ruleBuilder.startRule(bpmnProcessSnapshot.getName());
-    bpmnProcessSnapshot
+    ruleBuilder.startRule(collaborationSnapshot.getName());
+    collaborationSnapshot
         .getProcessSnapshots()
         .forEach(processSnapshot -> generateNodesForSnapshot(processSnapshot, ruleBuilder));
 

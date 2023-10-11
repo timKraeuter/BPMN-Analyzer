@@ -12,7 +12,7 @@ import no.tk.behavior.bpmn.SequenceFlow;
 import no.tk.behavior.bpmn.reader.token.extension.BPMNToken;
 import no.tk.behavior.bpmn.reader.token.extension.instance.BTProcessSnapshot;
 import no.tk.behavior.bpmn.reader.token.extension.instance.BTToken;
-import no.tk.behavior.bpmn.reader.token.model.BPMNProcessSnapshot;
+import no.tk.behavior.bpmn.reader.token.model.CollaborationSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.ProcessSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.Token;
 import org.apache.commons.io.FilenameUtils;
@@ -39,30 +39,30 @@ public class BPMNTokenFileReader {
     this.elementNameTransformer = elementNameTransformer;
   }
 
-  public BPMNProcessSnapshot readModelFromString(String name, String xml) {
+  public CollaborationSnapshot readModelFromString(String name, String xml) {
     // TODO: Should be a better way than wrapping the string.
     return readModelFromStream(
         name, new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
   }
 
-  public BPMNProcessSnapshot readModelFromFilePath(Path file) throws IOException {
+  public CollaborationSnapshot readModelFromFilePath(Path file) throws IOException {
     String modelName = FilenameUtils.removeExtension(file.getFileName().toString());
     return readModelFromStream(modelName, Files.newInputStream(file));
   }
 
-  public BPMNProcessSnapshot readModelFromStream(String modelName, InputStream stream) {
+  public CollaborationSnapshot readModelFromStream(String modelName, InputStream stream) {
     BpmnModelInstance bpmnModelInstance = Bpmn.readModelFromStream(stream);
     return readBPMNProcessSnapshot(modelName, bpmnModelInstance);
   }
 
-  private BPMNProcessSnapshot readBPMNProcessSnapshot(
+  private CollaborationSnapshot readBPMNProcessSnapshot(
       String name, BpmnModelInstance bpmnModelInstance) {
-    BPMNProcessSnapshot bpmnProcessSnapshot = new BPMNProcessSnapshot(name);
+    CollaborationSnapshot collaborationSnapshot = new CollaborationSnapshot(name);
 
     Collection<ModelElementInstance> snapshots = getAllSnapshots(bpmnModelInstance);
 
     if (hasNoBPMNCollaboration(bpmnModelInstance)) {
-      saveUnconnectedSnapshots(bpmnModelInstance, snapshots, bpmnProcessSnapshot);
+      saveUnconnectedSnapshots(bpmnModelInstance, snapshots, collaborationSnapshot);
     }
 
     Collection<ModelElementInstance> tokens = getAllTokens(bpmnModelInstance);
@@ -70,20 +70,20 @@ public class BPMNTokenFileReader {
 
     for (ModelElementInstance association : associations) {
       followAssociationToSaveTokenOrSnapshot(
-          bpmnModelInstance, association, bpmnProcessSnapshot, tokens, snapshots);
+          bpmnModelInstance, association, collaborationSnapshot, tokens, snapshots);
     }
 
-    return bpmnProcessSnapshot;
+    return collaborationSnapshot;
   }
 
   private void saveUnconnectedSnapshots(
       BpmnModelInstance bpmnModelInstance,
       Collection<ModelElementInstance> snapshots,
-      BPMNProcessSnapshot bpmnProcessSnapshot) {
+      CollaborationSnapshot collaborationSnapshot) {
     String processID = getProcessID(bpmnModelInstance);
     snapshots.forEach(
         snapshot ->
-            saveProcessSnapshot(bpmnProcessSnapshot, (BTProcessSnapshot) snapshot, processID));
+            saveProcessSnapshot(collaborationSnapshot, (BTProcessSnapshot) snapshot, processID));
   }
 
   private String getProcessID(BpmnModelInstance bpmnModelInstance) {
@@ -126,28 +126,28 @@ public class BPMNTokenFileReader {
   private void followAssociationToSaveTokenOrSnapshot(
       BpmnModelInstance bpmnModelInstance,
       ModelElementInstance association,
-      BPMNProcessSnapshot bpmnProcessSnapshot,
+      CollaborationSnapshot collaborationSnapshot,
       Collection<ModelElementInstance> tokens,
       Collection<ModelElementInstance> snapshots) {
     String targetRef = association.getAttributeValue("targetRef");
     if (targetRef.startsWith("ProcessSnapshot")) {
       saveProcessSnapshot(
-          bpmnProcessSnapshot, bpmnModelInstance, association, snapshots, targetRef);
+          collaborationSnapshot, bpmnModelInstance, association, snapshots, targetRef);
     }
     if (targetRef.startsWith("Token")) {
-      saveToken(bpmnModelInstance, association, bpmnProcessSnapshot, targetRef, tokens);
+      saveToken(bpmnModelInstance, association, collaborationSnapshot, targetRef, tokens);
     }
   }
 
   private void saveToken(
       BpmnModelInstance bpmnModelInstance,
       ModelElementInstance association,
-      BPMNProcessSnapshot bpmnProcessSnapshot,
+      CollaborationSnapshot collaborationSnapshot,
       String targetRef,
       Collection<ModelElementInstance> tokens) {
     BTToken token = (BTToken) getTokenOrSnapshotWithID(targetRef, tokens);
     String tokenID = getTokenID(bpmnModelInstance, association);
-    bpmnProcessSnapshot.addToken(
+    collaborationSnapshot.addToken(
         token.processSnapshotID(), new Token(tokenID, token.shouldExist()));
   }
 
@@ -192,7 +192,7 @@ public class BPMNTokenFileReader {
   }
 
   private void saveProcessSnapshot(
-      BPMNProcessSnapshot bpmnProcessSnapshot,
+      CollaborationSnapshot collaborationSnapshot,
       BpmnModelInstance bpmnModelInstance,
       ModelElementInstance association,
       Collection<ModelElementInstance> snapshots,
@@ -201,12 +201,12 @@ public class BPMNTokenFileReader {
     String processID = getProcessIDForSnapshot(bpmnModelInstance, association);
     BTProcessSnapshot snapshot =
         (BTProcessSnapshot) getTokenOrSnapshotWithID(snapshotID, snapshots);
-    saveProcessSnapshot(bpmnProcessSnapshot, snapshot, processID);
+    saveProcessSnapshot(collaborationSnapshot, snapshot, processID);
   }
 
   private void saveProcessSnapshot(
-      BPMNProcessSnapshot bpmnProcessSnapshot, BTProcessSnapshot snapshot, String processID) {
-    bpmnProcessSnapshot.addProcessSnapshot(
+      CollaborationSnapshot collaborationSnapshot, BTProcessSnapshot snapshot, String processID) {
+    collaborationSnapshot.addProcessSnapshot(
         new ProcessSnapshot(processID, snapshot.getId(), snapshot.shouldExist()));
   }
 

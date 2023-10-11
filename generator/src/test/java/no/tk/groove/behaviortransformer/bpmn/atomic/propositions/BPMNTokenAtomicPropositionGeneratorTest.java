@@ -6,7 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import no.tk.behavior.bpmn.reader.token.model.BPMNProcessSnapshot;
+import no.tk.behavior.bpmn.reader.token.model.CollaborationSnapshot;
 import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTestBase;
 import no.tk.groove.graph.rule.GrooveGraphRule;
 import no.tk.reader.token.BPMNTokenFileReaderTestHelper;
@@ -18,12 +18,12 @@ class BPMNTokenAtomicPropositionGeneratorTest extends BPMNToGrooveTestBase
 
   @Test
   void generateAtomicPropositionOneSnapshot() throws IOException {
-    BPMNProcessSnapshot bpmnProcessSnapshot =
+    CollaborationSnapshot collaborationSnapshot =
         readBPMNSnapshotFromResource("snapshotWithTokens.xml");
 
     BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator(true);
 
-    GrooveGraphRule graphRule = generator.generateAtomicProposition(bpmnProcessSnapshot);
+    GrooveGraphRule graphRule = generator.generateAtomicProposition(collaborationSnapshot);
 
     assertThat(graphRule.getRuleName(), is("snapshotWithTokens"));
     assertThat(graphRule.getContextNodes().size(), is(7));
@@ -36,12 +36,12 @@ class BPMNTokenAtomicPropositionGeneratorTest extends BPMNToGrooveTestBase
 
   @Test
   void generateAtomicPropositionMultipleSnapshot() throws IOException {
-    BPMNProcessSnapshot bpmnProcessSnapshot =
+    CollaborationSnapshot collaborationSnapshot =
         readBPMNSnapshotFromResource("multipleSnapshotsWithTokens.xml");
 
     BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator(true);
 
-    GrooveGraphRule graphRule = generator.generateAtomicProposition(bpmnProcessSnapshot);
+    GrooveGraphRule graphRule = generator.generateAtomicProposition(collaborationSnapshot);
 
     assertThat(graphRule.getRuleName(), is("multipleSnapshotsWithTokens"));
     assertThat(graphRule.getContextNodes().size(), is(11));
@@ -54,13 +54,13 @@ class BPMNTokenAtomicPropositionGeneratorTest extends BPMNToGrooveTestBase
 
   @Test
   void generateAtomicPropositionToFiles() throws Exception {
-    BPMNProcessSnapshot bpmnProcessSnapshot =
+    CollaborationSnapshot collaborationSnapshot =
         readBPMNSnapshotFromResource("snapshotWithTokens.xml");
 
     BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator(true);
 
     Path targetFolder = Paths.get(this.getOutputPathIncludingSubFolder(), "snapshotWithTokens.gps");
-    generator.generateAndWriteAtomicProposition(bpmnProcessSnapshot, targetFolder);
+    generator.generateAndWriteAtomicProposition(collaborationSnapshot, targetFolder);
 
     String ruleName = "snapshotWithTokens";
     FileTestHelper.testDirEquals(getExpectedFolder(ruleName), targetFolder, x -> false);
@@ -68,12 +68,12 @@ class BPMNTokenAtomicPropositionGeneratorTest extends BPMNToGrooveTestBase
 
   @Test
   void generateAtomicPropositionToFilesWithWhitespaceNames() throws Exception {
-    BPMNProcessSnapshot bpmnProcessSnapshot = readBPMNSnapshotFromResource("orderHandling.xml");
+    CollaborationSnapshot collaborationSnapshot = readBPMNSnapshotFromResource("orderHandling.xml");
 
     BPMNTokenAtomicPropositionGenerator generator = new BPMNTokenAtomicPropositionGenerator(true);
 
     Path targetFolder = Paths.get(this.getOutputPathIncludingSubFolder(), "orderHandling.gps");
-    generator.generateAndWriteAtomicProposition(bpmnProcessSnapshot, targetFolder);
+    generator.generateAndWriteAtomicProposition(collaborationSnapshot, targetFolder);
 
     String ruleName = "orderHandling";
     FileTestHelper.testDirEquals(getExpectedFolder(ruleName), targetFolder, x -> false);

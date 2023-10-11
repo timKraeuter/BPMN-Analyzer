@@ -4,12 +4,16 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class BPMNProcessSnapshot {
+/**
+ * A collaboration snapshot represents a set of process snapshots containing tokens for one BPMN
+ * collaboration.
+ */
+public class CollaborationSnapshot {
 
   private final String name;
   private final Map<String, ProcessSnapshot> idToProcessSnapshot = new LinkedHashMap<>();
 
-  public BPMNProcessSnapshot(String name) {
+  public CollaborationSnapshot(String name) {
     this.name = name;
   }
 
@@ -24,7 +28,7 @@ public class BPMNProcessSnapshot {
   public void addToken(String pSnapshotID, Token token) {
     ProcessSnapshot processSnapshot = idToProcessSnapshot.get(pSnapshotID);
     if (processSnapshot == null) {
-      throw new RuntimeException(
+      throw new CollaborationSnapshotRuntimeException(
           String.format("Process snapshot with ID %s not found", pSnapshotID));
     }
     processSnapshot.addToken(token);
