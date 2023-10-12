@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+  <collaboration id="Collaboration">
+    <participant id="Customer" name="Terminate End Event" processRef="Customer_1" />
+  </collaboration>
+  <process id="Customer_1" name="Customer" processType="None" isClosed="false" isExecutable="false">
+    <extensionElements />
+    <laneSet id="sid-b167d0d7-e761-4636-9200-76b7f0e8e83a">
+      <lane id="lane">
+        <flowNodeRef>Activity_1yd6qt3</flowNodeRef>
+        <flowNodeRef>Activity_0r2epf3</flowNodeRef>
+        <flowNodeRef>Gateway_0uff8cf</flowNodeRef>
+        <flowNodeRef>Event_148uv7b</flowNodeRef>
+        <flowNodeRef>Event_1oa46y6</flowNodeRef>
+        <flowNodeRef>Event_0gm2qa8</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="Event_1oa46y6" name="start">
+      <outgoing>Flow_0fey487</outgoing>
+    </startEvent>
+    <sequenceFlow id="Flow_0fey487" sourceRef="Event_1oa46y6" targetRef="Gateway_0uff8cf" />
+    <task id="Activity_1yd6qt3" name="A">
+      <incoming>Flow_19g2dy5</incoming>
+      <outgoing>Flow_098ae1d</outgoing>
+    </task>
+    <sequenceFlow id="Flow_19g2dy5" sourceRef="Gateway_0uff8cf" targetRef="Activity_1yd6qt3" />
+    <endEvent id="Event_148uv7b" name="end">
+      <incoming>Flow_098ae1d</incoming>
+    </endEvent>
+    <sequenceFlow id="Flow_098ae1d" sourceRef="Activity_1yd6qt3" targetRef="Event_148uv7b" />
+    <task id="Activity_0r2epf3" name="B">
+      <incoming>Flow_0by4owy</incoming>
+      <outgoing>Flow_0z497z8</outgoing>
+    </task>
+    <sequenceFlow id="Flow_0by4owy" sourceRef="Gateway_0uff8cf" targetRef="Activity_0r2epf3" />
+    <endEvent id="Event_0gm2qa8" name="terminate_end">
+      <incoming>Flow_0z497z8</incoming>
+    </endEvent>
+    <sequenceFlow id="Flow_0z497z8" sourceRef="Activity_0r2epf3" targetRef="Event_0gm2qa8" />
+    <parallelGateway id="Gateway_0uff8cf" name="p1">
+      <incoming>Flow_0fey487</incoming>
+      <outgoing>Flow_19g2dy5</outgoing>
+      <outgoing>Flow_0by4owy</outgoing>
+    </parallelGateway>
+  </process>
+  <bpmndi:BPMNDiagram id="sid-74620812-92c4-44e5-949c-aa47393d3830">
+    <bpmndi:BPMNPlane id="sid-cdcae759-2af7-4a6d-bd02-53f3352a731d" bpmnElement="Collaboration">
+      <bpmndi:BPMNShape id="sid-87F4C1D6-25E1-4A45-9DA7-AD945993D06F_gui" bpmnElement="Customer" isHorizontal="true">
+        <omgdc:Bounds x="170" y="30" width="520" height="260" />
+        <bpmndi:BPMNLabel labelStyle="sid-84cb49fd-2f7c-44fb-8950-83c3fa153d3b" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sid-57E4FE0D-18E4-478D-BC5D-B15164E93254_gui" bpmnElement="lane" isHorizontal="true">
+        <omgdc:Bounds x="200" y="30" width="490" height="260" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1oa46y6_di" bpmnElement="Event_1oa46y6">
+        <omgdc:Bounds x="232" y="92" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="239" y="135" width="23" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1yd6qt3_di" bpmnElement="Activity_1yd6qt3">
+        <omgdc:Bounds x="440" y="70" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_148uv7b_di" bpmnElement="Event_148uv7b">
+        <omgdc:Bounds x="612" y="92" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="621" y="135" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0r2epf3_di" bpmnElement="Activity_0r2epf3">
+        <omgdc:Bounds x="440" y="180" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0gm2qa8_di" bpmnElement="Event_0gm2qa8">
+        <omgdc:Bounds x="612" y="202" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="596" y="245" width="69" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0js81u6_di" bpmnElement="Gateway_0uff8cf">
+        <omgdc:Bounds x="325" y="85" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="344" y="63" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0fey487_di" bpmnElement="Flow_0fey487">
+        <omgdi:waypoint x="268" y="110" />
+        <omgdi:waypoint x="325" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19g2dy5_di" bpmnElement="Flow_19g2dy5">
+        <omgdi:waypoint x="375" y="110" />
+        <omgdi:waypoint x="440" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_098ae1d_di" bpmnElement="Flow_098ae1d">
+        <omgdi:waypoint x="540" y="110" />
+        <omgdi:waypoint x="612" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0by4owy_di" bpmnElement="Flow_0by4owy">
+        <omgdi:waypoint x="350" y="135" />
+        <omgdi:waypoint x="350" y="220" />
+        <omgdi:waypoint x="440" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0z497z8_di" bpmnElement="Flow_0z497z8">
+        <omgdi:waypoint x="540" y="220" />
+        <omgdi:waypoint x="612" y="220" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+    <bpmndi:BPMNLabelStyle id="sid-e0502d32-f8d1-41cf-9c4a-cbb49fecf581">
+      <omgdc:Font name="Arial" size="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" />
+    </bpmndi:BPMNLabelStyle>
+    <bpmndi:BPMNLabelStyle id="sid-84cb49fd-2f7c-44fb-8950-83c3fa153d3b">
+      <omgdc:Font name="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" />
+    </bpmndi:BPMNLabelStyle>
+  </bpmndi:BPMNDiagram>
+</definitions>
