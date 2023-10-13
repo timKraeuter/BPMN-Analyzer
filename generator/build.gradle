@@ -89,7 +89,7 @@ spotless {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'groove.behaviortransformer.bpmn.BPMNTransformerDriver'
+        attributes 'Main-Class': 'no.tk.groove.behaviortransformer.bpmn.BPMNTransformerDriver'
     }
     exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
     // Builds a fat jar.
