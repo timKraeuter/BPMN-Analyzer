@@ -119,9 +119,6 @@ export class AnalysisComponent {
     }
 
     checkLTLPropertyClicked() {
-        console.log(
-            'Check LTL property clicked with input: ' + this.ltlProperty,
-        );
         this.snackBar.open(
             'Checking LTL properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/.',
             'close',
@@ -153,7 +150,6 @@ export class AnalysisComponent {
                     this.snackBar.open(error.error.message, 'close');
                 },
                 next: (response: ModelCheckingResponse) => {
-                    console.log(response);
                     this.ctlPropertyResult = response;
                 },
             })

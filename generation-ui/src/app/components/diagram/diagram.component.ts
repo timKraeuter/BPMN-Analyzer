@@ -51,10 +51,6 @@ export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {
         this.modeler.destroy();
     }
 
-    keyDown($event: KeyboardEvent) {
-        console.log($event);
-    }
-
     public initialDiagram: string =
         '<?xml version="1.0" encoding="UTF-8"?>\n' +
         '<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">\n' +
