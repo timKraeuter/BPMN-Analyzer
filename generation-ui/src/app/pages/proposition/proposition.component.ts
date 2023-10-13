@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 // @ts-ignore
 import { saveAs } from 'file-saver-es';
@@ -90,14 +90,6 @@ export class PropositionComponent {
                 proposition,
             },
         });
-    }
-
-    @HostListener('document:keydown.delete')
-    async deletePressed() {
-        if (this.propositions.length === 1) {
-            return;
-        }
-        await this.deleteProposition(this.currentProposition);
     }
 
     public async deleteProposition(prop: Proposition) {
