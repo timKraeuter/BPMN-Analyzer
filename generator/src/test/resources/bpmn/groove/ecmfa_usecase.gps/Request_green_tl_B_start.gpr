@@ -78,7 +78,7 @@
         </node>
         <edge from="n390" to="n390">
             <attr name="label">
-                <string>string:"Request_green_tl_B"</string>
+                <string>string:"Request_green_tl_B (ID_40)"</string>
             </attr>
         </edge>
         <edge from="n384" to="n389">

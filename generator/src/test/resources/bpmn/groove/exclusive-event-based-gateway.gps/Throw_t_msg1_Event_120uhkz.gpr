@@ -163,7 +163,7 @@
         </node>
         <edge from="n95" to="n95">
             <attr name="label">
-                <string>string:"eventG"</string>
+                <string>string:"eventG (Gateway_0xg98fy)"</string>
             </attr>
         </edge>
         <edge from="n81" to="n86">

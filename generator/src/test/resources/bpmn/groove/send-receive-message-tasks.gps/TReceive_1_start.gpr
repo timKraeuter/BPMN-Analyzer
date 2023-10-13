@@ -93,7 +93,7 @@
         </node>
         <edge from="n62" to="n62">
             <attr name="label">
-                <string>string:"TReceive_1"</string>
+                <string>string:"TReceive_1 (Activity_080al3m)"</string>
             </attr>
         </edge>
         <node id="n64">

@@ -78,7 +78,7 @@
         </node>
         <edge from="n78" to="n78">
             <attr name="label">
-                <string>string:"TSend_2"</string>
+                <string>string:"TSend_2 (Activity_1p2iyoi)"</string>
             </attr>
         </edge>
         <edge from="n72" to="n77">

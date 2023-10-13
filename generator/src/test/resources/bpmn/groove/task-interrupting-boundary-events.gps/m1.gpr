@@ -103,7 +103,7 @@
         </node>
         <edge from="n39" to="n39">
             <attr name="label">
-                <string>string:"Task"</string>
+                <string>string:"Task (Activity_0l12w7i)"</string>
             </attr>
         </edge>
         <edge from="n31" to="n34">

@@ -78,7 +78,7 @@
         </node>
         <edge from="n294" to="n294">
             <attr name="label">
-                <string>string:"Switch_to_P1"</string>
+                <string>string:"Switch_to_P1 (ID_32)"</string>
             </attr>
         </edge>
         <edge from="n288" to="n293">

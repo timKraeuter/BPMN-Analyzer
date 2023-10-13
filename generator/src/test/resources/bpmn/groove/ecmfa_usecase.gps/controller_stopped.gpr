@@ -43,7 +43,7 @@
         </node>
         <edge from="n324" to="n324">
             <attr name="label">
-                <string>string:"stop"</string>
+                <string>string:"stop (ID_77)"</string>
             </attr>
         </edge>
         <node id="n325">

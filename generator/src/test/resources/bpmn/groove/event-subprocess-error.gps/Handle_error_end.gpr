@@ -68,7 +68,7 @@
         </node>
         <edge from="n41" to="n41">
             <attr name="label">
-                <string>string:"Handle_error"</string>
+                <string>string:"Handle_error (Activity_0m15omr)"</string>
             </attr>
         </edge>
         <node id="n43">

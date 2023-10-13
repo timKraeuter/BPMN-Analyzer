@@ -78,7 +78,7 @@
         </node>
         <edge from="n47" to="n47">
             <attr name="label">
-                <string>string:"A"</string>
+                <string>string:"A (Activity_0mhzb52)"</string>
             </attr>
         </edge>
         <edge from="n41" to="n46">

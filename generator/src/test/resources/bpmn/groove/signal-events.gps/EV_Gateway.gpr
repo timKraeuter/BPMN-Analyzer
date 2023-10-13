@@ -58,7 +58,7 @@
         </node>
         <edge from="n53" to="n53">
             <attr name="label">
-                <string>string:"EV_Gateway"</string>
+                <string>string:"EV_Gateway (Gateway_1ion030)"</string>
             </attr>
         </edge>
         <edge from="n51" to="n53">

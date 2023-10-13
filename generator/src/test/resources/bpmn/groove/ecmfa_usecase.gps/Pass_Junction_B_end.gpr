@@ -68,7 +68,7 @@
         </node>
         <edge from="n429" to="n429">
             <attr name="label">
-                <string>string:"Pass_Junction_B"</string>
+                <string>string:"Pass_Junction_B (ID_43)"</string>
             </attr>
         </edge>
         <node id="n431">

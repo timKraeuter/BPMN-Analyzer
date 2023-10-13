@@ -108,7 +108,7 @@
         </node>
         <edge from="n27" to="n27">
             <attr name="label">
-                <string>string:"eventG"</string>
+                <string>string:"eventG (Gateway_0xg98fy)"</string>
             </attr>
         </edge>
         <node id="n29">

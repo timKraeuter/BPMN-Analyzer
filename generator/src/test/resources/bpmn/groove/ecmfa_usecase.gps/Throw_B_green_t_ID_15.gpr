@@ -178,7 +178,7 @@
         </node>
         <edge from="n242" to="n242">
             <attr name="label">
-                <string>string:"ev1_B"</string>
+                <string>string:"ev1_B (ID_38)"</string>
             </attr>
         </edge>
         <node id="n243">
@@ -248,7 +248,7 @@
         </node>
         <edge from="n250" to="n250">
             <attr name="label">
-                <string>string:"ev1_A"</string>
+                <string>string:"ev1_A (ID_48)"</string>
             </attr>
         </edge>
         <edge from="n228" to="n233">

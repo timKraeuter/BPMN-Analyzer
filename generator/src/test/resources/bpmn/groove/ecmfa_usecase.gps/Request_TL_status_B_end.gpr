@@ -98,7 +98,7 @@
         </node>
         <edge from="n337" to="n337">
             <attr name="label">
-                <string>string:"Request_TL_status_B"</string>
+                <string>string:"Request_TL_status_B (ID_37)"</string>
             </attr>
         </edge>
         <node id="n339">
@@ -178,7 +178,7 @@
         </node>
         <edge from="n347" to="n347">
             <attr name="label">
-                <string>string:"evp1"</string>
+                <string>string:"evp1 (ID_1)"</string>
             </attr>
         </edge>
         <node id="n348">
@@ -248,7 +248,7 @@
         </node>
         <edge from="n355" to="n355">
             <attr name="label">
-                <string>string:"evp2"</string>
+                <string>string:"evp2 (ID_13)"</string>
             </attr>
         </edge>
         <edge from="n333" to="n338">

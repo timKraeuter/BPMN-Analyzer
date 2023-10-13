@@ -50,7 +50,7 @@
         <node id="n11"/>
         <edge from="n11" to="n11">
             <attr name="label">
-                <string>string:"a0"</string>
+                <string>string:"a0 (Activity_1ityifb)"</string>
             </attr>
         </edge>
         <edge from="n5" to="n10">

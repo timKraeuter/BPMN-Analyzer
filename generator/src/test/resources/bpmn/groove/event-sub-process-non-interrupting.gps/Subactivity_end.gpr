@@ -68,7 +68,7 @@
         </node>
         <edge from="n43" to="n43">
             <attr name="label">
-                <string>string:"Subactivity"</string>
+                <string>string:"Subactivity (Activity_1foo2u4)"</string>
             </attr>
         </edge>
         <node id="n45">

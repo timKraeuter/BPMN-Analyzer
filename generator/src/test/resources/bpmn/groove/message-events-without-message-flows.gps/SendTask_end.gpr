@@ -68,7 +68,7 @@
         </node>
         <edge from="n23" to="n23">
             <attr name="label">
-                <string>string:"SendTask"</string>
+                <string>string:"SendTask (Activity_0xxxw3w)"</string>
             </attr>
         </edge>
         <node id="n25">

@@ -113,7 +113,7 @@
         </node>
         <edge from="n78" to="n78">
             <attr name="label">
-                <string>string:"t_msg2"</string>
+                <string>string:"t_msg2 (Activity_1msfii0)"</string>
             </attr>
         </edge>
         <node id="n80">
@@ -143,7 +143,7 @@
         </node>
         <edge from="n85" to="n85">
             <attr name="label">
-                <string>string:"r_msg2"</string>
+                <string>string:"r_msg2 (Activity_1up3t2i)"</string>
             </attr>
         </edge>
         <edge from="n74" to="n79">

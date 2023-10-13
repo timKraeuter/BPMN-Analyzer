@@ -58,7 +58,7 @@
         </node>
         <edge from="n50" to="n50">
             <attr name="label">
-                <string>string:"evp1"</string>
+                <string>string:"evp1 (ID_1)"</string>
             </attr>
         </edge>
         <edge from="n48" to="n50">

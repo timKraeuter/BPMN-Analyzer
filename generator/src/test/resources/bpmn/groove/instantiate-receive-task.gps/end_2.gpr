@@ -118,7 +118,7 @@
         </node>
         <edge from="n40" to="n40">
             <attr name="label">
-                <string>string:"A"</string>
+                <string>string:"A (Activity_1vcu0jp)"</string>
             </attr>
         </edge>
         <edge from="n36" to="n37">

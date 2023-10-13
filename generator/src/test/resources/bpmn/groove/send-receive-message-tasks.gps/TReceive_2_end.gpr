@@ -68,7 +68,7 @@
         </node>
         <edge from="n107" to="n107">
             <attr name="label">
-                <string>string:"TReceive_2"</string>
+                <string>string:"TReceive_2 (Activity_0paqxj7)"</string>
             </attr>
         </edge>
         <node id="n109">
