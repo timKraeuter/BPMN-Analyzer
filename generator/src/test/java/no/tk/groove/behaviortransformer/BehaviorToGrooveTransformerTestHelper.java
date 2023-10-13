@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import no.tk.behavior.Behavior;
 import no.tk.groove.graph.GrooveNode;
@@ -25,7 +26,7 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
   //  private final String outputPath = "C:/Source/groove/bin";
   boolean REPLACE_EXPECTED_FILES_WITH_ACTUAL = false;
 
-  private Function<String, Boolean> fileNameFilter = x -> false;
+  private Predicate<String> fileNameFilter = x -> false;
 
   @BeforeEach
   void setUp() {
@@ -44,7 +45,7 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
     return this.outputPath + File.separator + this.getOutputPathSubFolderName();
   }
 
-  public void setFileNameFilter(Function<String, Boolean> fileNameFilter) {
+  public void setFileNameFilter(Predicate<String> fileNameFilter) {
     this.fileNameFilter = fileNameFilter;
   }
 
@@ -57,7 +58,7 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
   }
 
   @SuppressWarnings("ConstantConditions")
-  private void checkGrooveGeneration(Behavior behavior, Function<String, Boolean> fileNameFilter)
+  private void checkGrooveGeneration(Behavior behavior, Predicate<String> fileNameFilter)
       throws IOException {
     String modelName = behavior.getName();
     Path grammarDir = transformToGroove(behavior);
@@ -112,14 +113,13 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
   }
 
   protected void checkGenerationEqualToExpected(
-      Function<String, Boolean> fileNameFilter, String modelName, Path grammarDir)
-      throws IOException {
+      Predicate<String> fileNameFilter, String modelName, Path grammarDir) throws IOException {
     Path expectedDir = getExpectedFilePathForModel(modelName);
     FileTestHelper.testDirEquals(
         expectedDir,
         grammarDir,
         // Ignore the system.properties file because it contains a timestamp and a dir.
-        fileName -> fileName.equals(SYSTEM_PROPERTIES_FILE_NAME) || fileNameFilter.apply(fileName));
+        fileName -> fileName.equals(SYSTEM_PROPERTIES_FILE_NAME) || fileNameFilter.test(fileName));
   }
 
   private Path getExpectedFilePathForModel(String modelName) {

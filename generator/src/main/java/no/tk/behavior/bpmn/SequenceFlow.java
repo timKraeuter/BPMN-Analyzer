@@ -21,11 +21,7 @@ public class SequenceFlow extends FlowElement {
   }
 
   public String getDescriptiveName() {
-    if (getName().isEmpty() || getName().isBlank()) {
-      return String.format(
-          DESCRIPTIVE_NAME_FORMAT, source.getName(), target.getName(), this.getId());
-    }
-    return getName();
+    return getDescriptiveName(getName(), getId(), source.getName(), target.getName());
   }
 
   public String getDescriptiveNameWithoutID() {
@@ -41,5 +37,13 @@ public class SequenceFlow extends FlowElement {
 
   public FlowNode getTarget() {
     return target;
+  }
+
+  public static String getDescriptiveName(
+      String sfName, String sfID, String sourceName, String targetName) {
+    if (sfName.isEmpty() || sfName.isBlank()) {
+      return String.format(DESCRIPTIVE_NAME_FORMAT, sourceName, targetName, sfID);
+    }
+    return String.format("%s (%s)", sfName, sfID);
   }
 }

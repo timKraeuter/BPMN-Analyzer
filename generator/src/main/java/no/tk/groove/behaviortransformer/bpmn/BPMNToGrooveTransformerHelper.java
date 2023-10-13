@@ -26,6 +26,7 @@ import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.FlowNode;
 import no.tk.behavior.bpmn.MessageFlow;
+import no.tk.behavior.bpmn.SequenceFlow;
 import no.tk.behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import no.tk.behavior.bpmn.auxiliary.visitors.DoNothingFlowNodeVisitor;
 import no.tk.behavior.bpmn.events.IntermediateCatchEvent;
@@ -40,6 +41,10 @@ public class BPMNToGrooveTransformerHelper {
 
   private BPMNToGrooveTransformerHelper() {
     // Only helper class with static methods.
+  }
+
+  public static String getFlowNodePosition(FlowNode flowNode) {
+    return String.format("%s (%s)", flowNode.getName(), flowNode.getId());
   }
 
   static void updateTokenPositionForProcessInstance(
@@ -128,10 +133,7 @@ public class BPMNToGrooveTransformerHelper {
       FlowNode flowNode, GrooveRuleBuilder ruleBuilder, GrooveNode processInstance) {
     flowNode
         .getOutgoingFlows()
-        .forEach(
-            sequenceFlow ->
-                addTokenWithPosition(
-                    ruleBuilder, processInstance, sequenceFlow.getDescriptiveName()));
+        .forEach(sf -> addSequenceFlowToken(ruleBuilder, processInstance, sf));
   }
 
   public static void addOutgoingTokensForFlowNodeToProcessInstanceWithQuantifier(
@@ -142,12 +144,15 @@ public class BPMNToGrooveTransformerHelper {
     flowNode
         .getOutgoingFlows()
         .forEach(
-            sequenceFlow -> {
-              GrooveNode addedToken =
-                  addTokenWithPosition(
-                      ruleBuilder, processInstance, sequenceFlow.getDescriptiveName());
+            sf -> {
+              GrooveNode addedToken = addSequenceFlowToken(ruleBuilder, processInstance, sf);
               ruleBuilder.contextEdge(AT, addedToken, quantifier);
             });
+  }
+
+  public static GrooveNode contextFlowNodeToken(
+      GrooveRuleBuilder ruleBuilder, GrooveNode processInstance, FlowNode flowNode) {
+    return contextTokenWithPosition(ruleBuilder, processInstance, getFlowNodePosition(flowNode));
   }
 
   public static GrooveNode contextTokenWithPosition(
@@ -174,7 +179,17 @@ public class BPMNToGrooveTransformerHelper {
         POSITION, token, ruleBuilder.contextNode(createStringNodeLabel(position)));
   }
 
-  public static GrooveNode deleteTokenWithPosition(
+  public static GrooveNode deleteSequenceFlowToken(
+      GrooveRuleBuilder ruleBuilder, GrooveNode processInstance, SequenceFlow sf) {
+    return deleteTokenWithPosition(ruleBuilder, processInstance, sf.getDescriptiveName());
+  }
+
+  public static GrooveNode deleteFlowNodeToken(
+      GrooveRuleBuilder ruleBuilder, GrooveNode processInstance, FlowNode flowNode) {
+    return deleteTokenWithPosition(ruleBuilder, processInstance, getFlowNodePosition(flowNode));
+  }
+
+  static GrooveNode deleteTokenWithPosition(
       GrooveRuleBuilder ruleBuilder, GrooveNode processInstance, String position) {
     GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
     ruleBuilder.deleteEdge(TOKENS, processInstance, token);
@@ -184,7 +199,17 @@ public class BPMNToGrooveTransformerHelper {
     return token;
   }
 
-  public static GrooveNode addTokenWithPosition(
+  public static GrooveNode addSequenceFlowToken(
+      GrooveRuleBuilder ruleBuilder, GrooveNode processInstance, SequenceFlow sf) {
+    return addTokenWithPosition(ruleBuilder, processInstance, sf.getDescriptiveName());
+  }
+
+  public static GrooveNode addFlowNodeToken(
+      GrooveRuleBuilder ruleBuilder, GrooveNode processInstance, FlowNode flowNode) {
+    return addTokenWithPosition(ruleBuilder, processInstance, getFlowNodePosition(flowNode));
+  }
+
+  static GrooveNode addTokenWithPosition(
       GrooveRuleBuilder ruleBuilder, GrooveNode processInstance, String position) {
     GrooveNode newToken = ruleBuilder.addNode(TYPE_TOKEN);
     ruleBuilder.addEdge(TOKENS, processInstance, newToken);
@@ -252,7 +277,7 @@ public class BPMNToGrooveTransformerHelper {
               ruleBuilder.contextEdge(TOKENS, receiverInstance, token);
               String tokenPosition;
               if (sequenceFlow.getSource().isExclusiveEventBasedGateway()) {
-                tokenPosition = sequenceFlow.getSource().getName();
+                tokenPosition = getFlowNodePosition(sequenceFlow.getSource());
               } else {
                 tokenPosition = sequenceFlow.getDescriptiveName();
               }
@@ -287,8 +312,7 @@ public class BPMNToGrooveTransformerHelper {
         addProcessInstance(ruleBuilder, receiverProcess.getName());
     if (messageFlow.getTarget().isTask()) {
       // Instantiate tasks get a token on the task.
-      addTokenWithPosition(
-          ruleBuilder, newReceiverProcessInstance, messageFlow.getTarget().getName());
+      addFlowNodeToken(ruleBuilder, newReceiverProcessInstance, messageFlow.getTarget());
     } else {
       // Message start events get outgoing tokens
       addOutgoingTokensForFlowNodeToProcessInstance(

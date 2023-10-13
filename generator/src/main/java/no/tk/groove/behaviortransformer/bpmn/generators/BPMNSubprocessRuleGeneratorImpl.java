@@ -46,12 +46,10 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
   }
 
   void createSubProcessInstantiationRule(
-      AbstractBPMNProcess process, CallActivity callActivity, SequenceFlow incomingFlow) {
-    ruleBuilder.startRule(
-        getTaskOrCallActivityRuleName(callActivity, incomingFlow.getNameOrIDIfEmpty()));
+      AbstractBPMNProcess process, CallActivity callActivity, SequenceFlow inFlow) {
+    ruleBuilder.startRule(getTaskOrCallActivityRuleName(callActivity, inFlow.getNameOrIDIfEmpty()));
     GrooveNode processInstance = contextProcessInstance(process, ruleBuilder);
-    BPMNToGrooveTransformerHelper.deleteTokenWithPosition(
-        ruleBuilder, processInstance, incomingFlow.getDescriptiveName());
+    deleteSequenceFlowToken(ruleBuilder, processInstance, inFlow);
 
     GrooveNode subProcessInstance =
         addProcessInstance(ruleBuilder, callActivity.getSubProcessModel().getName());
@@ -72,10 +70,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
           .flowNodes()
           .filter(flowNode -> flowNode.isTask() || flowNode.isGateway())
           .filter(flowNode -> flowNode.getIncomingFlows().findAny().isEmpty())
-          .forEach(
-              flowNode ->
-                  BPMNToGrooveTransformerHelper.addTokenWithPosition(
-                      ruleBuilder, subProcessInstance, flowNode.getName()));
+          .forEach(flowNode -> addFlowNodeToken(ruleBuilder, subProcessInstance, flowNode));
     }
 
     ruleBuilder.buildRule();
@@ -94,12 +89,7 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
     // Add outgoing tokens
     callActivity
         .getOutgoingFlows()
-        .forEach(
-            outgoingFlow -> {
-              final String outgoingFlowID = outgoingFlow.getDescriptiveName();
-              BPMNToGrooveTransformerHelper.addTokenWithPosition(
-                  ruleBuilder, parentProcess, outgoingFlowID);
-            });
+        .forEach(outgoingFlow -> addSequenceFlowToken(ruleBuilder, parentProcess, outgoingFlow));
 
     ruleBuilder.buildRule();
   }

@@ -38,7 +38,7 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
         is(
             Lists.newArrayList(
                 "StartEvent_1 -> Activity_1iduxj0 (Flow_1df3b4l)",
-                "Activity_1iduxj0",
+                "Activity_1iduxj0 (Activity_1iduxj0)",
                 "Activity_1iduxj0 -> Event_0v0iz0c (Flow_1agdsil)")));
     assertThat(
         getShouldExistListForTokens(processSnapshot), is(Lists.newArrayList(true, true, false)));
@@ -75,7 +75,9 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
     assertThat(snapshot2.getSnapshotNameIfExists(), is("AtomicPropositionTest"));
     assertThat(snapshot2.getTokens().size(), is(1));
     assertTrue(snapshot2.isShouldExist());
-    assertThat(getElementIDsForTokens(snapshot2), is(Lists.newArrayList("Activity_1iduxj0")));
+    assertThat(
+        getElementIDsForTokens(snapshot2),
+        is(Lists.newArrayList("Activity_1iduxj0 (Activity_1iduxj0)")));
     assertThat(getShouldExistListForTokens(snapshot2), is(Lists.newArrayList(true)));
 
     // Check snapshot 3
@@ -107,7 +109,8 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
         getElementIDsForTokens(snapshot1),
         is(
             Lists.newArrayList(
-                "Activity_1j00qsl", "StartEvent_1 -> Activity_1j00qsl (Flow_09mltb5)")));
+                "Activity_1j00qsl (Activity_1j00qsl)",
+                "StartEvent_1 -> Activity_1j00qsl (Flow_09mltb5)")));
     assertThat(getShouldExistListForTokens(snapshot1), is(Lists.newArrayList(false, true)));
 
     // Check snapshot 2
@@ -147,7 +150,9 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
     assertTrue(snapshot1.isShouldExist());
     assertThat(
         getElementIDsForTokens(snapshot1),
-        is(Lists.newArrayList("Retrieve payment", "Ship goods")));
+        is(
+            Lists.newArrayList(
+                "Retrieve payment (Activity_1jgyh05)", "Ship goods (Activity_0lgvp3u)")));
     assertThat(getShouldExistListForTokens(snapshot1), is(Lists.newArrayList(false, false)));
   }
 

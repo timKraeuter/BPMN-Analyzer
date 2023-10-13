@@ -22,13 +22,14 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelpe
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.addSendMessageBehaviorForFlowNode;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.addTokensForOutgoingFlowsToRunningInstance;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.addTokensForOutgoingFlowsToRunningInstanceWithQuantifier;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.contextFlowNodeToken;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.contextProcessInstance;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.contextProcessInstanceWithOnlyName;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.contextProcessInstanceWithQuantifier;
-import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.contextTokenWithPosition;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteAllTokensForProcess;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteFlowNodeToken;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteMessageToProcessInstanceWithPosition;
-import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteTokenWithPosition;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteSequenceFlowToken;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.distinctByKey;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.interruptSubprocess;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.isAfterInstantiateEventBasedGateway;
@@ -480,9 +481,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     }
     intermediateCatchEvent
         .getIncomingFlows()
-        .forEach(
-            inFlow ->
-                deleteTokenWithPosition(ruleBuilder, processInstance, inFlow.getDescriptiveName()));
+        .forEach(inFlow -> deleteSequenceFlowToken(ruleBuilder, processInstance, inFlow));
 
     // Add tokens on outgoing flows.
     addOutgoingTokensForFlowNodeToProcessInstance(
@@ -521,10 +520,9 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
               SequenceFlow incFlow = intermediateCatchEvent.getIncomingFlows().findFirst().get();
               // Consume incoming token
               if (incFlow.getSource().isExclusiveEventBasedGateway()) {
-                deleteTokenWithPosition(
-                    ruleBuilder, processInstance, incFlow.getSource().getName());
+                deleteFlowNodeToken(ruleBuilder, processInstance, incFlow.getSource());
               } else {
-                deleteTokenWithPosition(ruleBuilder, processInstance, incFlow.getDescriptiveName());
+                deleteSequenceFlowToken(ruleBuilder, processInstance, incFlow);
               }
               // Consume incoming message.
               final GrooveNode deletedMessage =
@@ -565,9 +563,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     intermediateThrowEvent
         .getIncomingFlows()
         .forEach(
-            sequenceFlow ->
-                deleteTokenWithPosition(
-                    ruleBuilder, processInstance, sequenceFlow.getDescriptiveName()));
+            sequenceFlow -> deleteSequenceFlowToken(ruleBuilder, processInstance, sequenceFlow));
     addOutgoingTokensForFlowNodeToProcessInstance(
         intermediateThrowEvent, ruleBuilder, processInstance);
 
@@ -583,9 +579,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     intermediateThrowEvent
         .getIncomingFlows()
         .forEach(
-            sequenceFlow ->
-                deleteTokenWithPosition(
-                    ruleBuilder, processInstance, sequenceFlow.getDescriptiveName()));
+            sequenceFlow -> deleteSequenceFlowToken(ruleBuilder, processInstance, sequenceFlow));
     addOutgoingTokensForFlowNodeToProcessInstance(
         intermediateThrowEvent, ruleBuilder, processInstance);
 
@@ -599,10 +593,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     GrooveNode processInstance = contextProcessInstance(process, ruleBuilder);
     intermediateThrowEvent
         .getIncomingFlows()
-        .forEach(
-            sequenceFlow ->
-                deleteTokenWithPosition(
-                    ruleBuilder, processInstance, sequenceFlow.getDescriptiveName()));
+        .forEach(sf -> deleteSequenceFlowToken(ruleBuilder, processInstance, sf));
     addOutgoingTokensForFlowNodeToProcessInstance(
         intermediateThrowEvent, ruleBuilder, processInstance);
     addSendMessageBehaviorForFlowNode(collaboration, ruleBuilder, intermediateThrowEvent);
@@ -620,9 +611,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     intermediateThrowEvent
         .getIncomingFlows()
         .forEach(
-            sequenceFlow -> {
-              deleteTokenWithPosition(
-                  ruleBuilder, processInstance, sequenceFlow.getDescriptiveName());
+            sf -> {
+              deleteSequenceFlowToken(ruleBuilder, processInstance, sf);
               // Add outgoing flows for corresponding link events.
               findMatchingLinkCatchEvents(intermediateThrowEvent, process)
                   .forEach(
@@ -679,12 +669,10 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
             // Delete token in task if interrupt.
             if (boundarySignalEvent.isInterrupt()) {
-              GrooveNode deletedToken =
-                  deleteTokenWithPosition(ruleBuilder, processInstance, task.getName());
+              GrooveNode deletedToken = deleteFlowNodeToken(ruleBuilder, processInstance, task);
               ruleBuilder.contextEdge(AT, deletedToken, forAll);
             } else {
-              GrooveNode contextToken =
-                  contextTokenWithPosition(ruleBuilder, processInstance, task.getName());
+              GrooveNode contextToken = contextFlowNodeToken(ruleBuilder, processInstance, task);
               ruleBuilder.contextEdge(AT, contextToken, forAll);
             }
           }
@@ -795,7 +783,9 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                   createSignalNonInterruptingStartRulePart(eventSubprocess, event);
                 }
               }
-              case NONE, MESSAGE -> {}
+              case NONE, MESSAGE -> {
+                // No rules needed
+              }
               default -> throw new IllegalStateException(
                   "Unexpected value: " + startEvent.getType());
             }

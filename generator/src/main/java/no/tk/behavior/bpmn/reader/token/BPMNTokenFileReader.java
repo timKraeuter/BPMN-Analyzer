@@ -139,23 +139,27 @@ public class BPMNTokenFileReader {
     ModelElementInstance tokenPosition =
         bpmnModelInstance.getModelElementById(association.getAttributeValue("sourceRef"));
     if (tokenPosition instanceof org.camunda.bpm.model.bpmn.instance.SequenceFlow sfPosition) {
-      return getSequenceFlowDescriptiveName(association, sfPosition);
+      return getSequenceFlowDescriptiveName(sfPosition);
     }
-    return getNameOrID(tokenPosition);
+    return getFlowNodePosition(tokenPosition);
+  }
+
+  private String getFlowNodePosition(ModelElementInstance tokenPosition) {
+    return String.format(
+        "%s (%s)", getNameOrID(tokenPosition), tokenPosition.getAttributeValue("id"));
   }
 
   private String getSequenceFlowDescriptiveName(
-      ModelElementInstance association,
       org.camunda.bpm.model.bpmn.instance.SequenceFlow sequenceFlow) {
-    String name = association.getAttributeValue("name");
-    if (name != null) {
-      return name;
+    String name = sequenceFlow.getAttributeValue("name");
+    if (name == null) {
+      name = "";
     }
-    return String.format(
-        SequenceFlow.DESCRIPTIVE_NAME_FORMAT,
+    return SequenceFlow.getDescriptiveName(
+        name,
+        sequenceFlow.getId(),
         getNameOrID(sequenceFlow.getSource()),
-        getNameOrID(sequenceFlow.getTarget()),
-        sequenceFlow.getId());
+        getNameOrID(sequenceFlow.getTarget()));
   }
 
   private String getNameOrID(ModelElementInstance element) {
@@ -163,7 +167,7 @@ public class BPMNTokenFileReader {
     if (name == null) {
       return element.getAttributeValue("id");
     }
-    return this.elementNameTransformer.apply(name);
+    return elementNameTransformer.apply(name);
   }
 
   private ModelElementInstance getTokenOrSnapshotWithID(

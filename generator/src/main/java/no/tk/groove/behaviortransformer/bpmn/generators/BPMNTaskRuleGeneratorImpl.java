@@ -89,15 +89,12 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
               ruleBuilder.startRule(
                   getTaskOrCallActivityRuleName(receiveTask, incomingFlow.getNameOrIDIfEmpty())
                       + START);
-              GrooveNode processInstance =
-                  BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
-              BPMNToGrooveTransformerHelper.deleteMessageToProcessInstanceWithPosition(
+              GrooveNode processInstance = contextProcessInstance(process, ruleBuilder);
+              deleteMessageToProcessInstanceWithPosition(
                   ruleBuilder, processInstance, messageFlow.getNameOrDescriptiveName());
-              BPMNToGrooveTransformerHelper.addTokenWithPosition(
-                  ruleBuilder, processInstance, receiveTask.getName());
+              addFlowNodeToken(ruleBuilder, processInstance, receiveTask);
               // Consume the token at the event-based gateway.
-              BPMNToGrooveTransformerHelper.deleteTokenWithPosition(
-                  ruleBuilder, processInstance, incomingFlow.getSource().getName());
+              deleteFlowNodeToken(ruleBuilder, processInstance, incomingFlow.getSource());
               ruleBuilder.buildRule();
             });
   }
@@ -162,11 +159,9 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
 
     // Delete token in task if interrupt.
     if (boundaryEvent.isInterrupt()) {
-      BPMNToGrooveTransformerHelper.deleteTokenWithPosition(
-          ruleBuilder, processInstance, task.getName());
+      deleteFlowNodeToken(ruleBuilder, processInstance, task);
     } else {
-      BPMNToGrooveTransformerHelper.contextTokenWithPosition(
-          ruleBuilder, processInstance, task.getName());
+      contextFlowNodeToken(ruleBuilder, processInstance, task);
     }
     // WARNING: If not interrupt the state space grows indefinitely!
     ruleBuilder.buildRule();
@@ -179,12 +174,9 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
       Consumer<GrooveNode> startTaskRuleAdditions) {
     ruleBuilder.startRule(
         getTaskOrCallActivityRuleName(task, incomingFlow.getNameOrIDIfEmpty()) + START);
-    GrooveNode processInstance =
-        BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
-    BPMNToGrooveTransformerHelper.deleteTokenWithPosition(
-        ruleBuilder, processInstance, incomingFlow.getDescriptiveName());
-    BPMNToGrooveTransformerHelper.addTokenWithPosition(
-        ruleBuilder, processInstance, task.getName());
+    GrooveNode processInstance = contextProcessInstance(process, ruleBuilder);
+    deleteSequenceFlowToken(ruleBuilder, processInstance, incomingFlow);
+    BPMNToGrooveTransformerHelper.addFlowNodeToken(ruleBuilder, processInstance, task);
     startTaskRuleAdditions.accept(processInstance);
     ruleBuilder.buildRule();
   }
@@ -194,18 +186,11 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
       AbstractTask task,
       Consumer<GrooveRuleBuilder> endTaskRuleAdditions) {
     ruleBuilder.startRule(task.getName() + END);
-    GrooveNode processInstance =
-        BPMNToGrooveTransformerHelper.contextProcessInstance(process, ruleBuilder);
-    BPMNToGrooveTransformerHelper.deleteTokenWithPosition(
-        ruleBuilder, processInstance, task.getName());
+    GrooveNode processInstance = contextProcessInstance(process, ruleBuilder);
+    BPMNToGrooveTransformerHelper.deleteFlowNodeToken(ruleBuilder, processInstance, task);
 
     task.getOutgoingFlows()
-        .forEach(
-            outgoingFlow -> {
-              final String outgoingFlowID = outgoingFlow.getDescriptiveName();
-              BPMNToGrooveTransformerHelper.addTokenWithPosition(
-                  ruleBuilder, processInstance, outgoingFlowID);
-            });
+        .forEach(outFlow -> addSequenceFlowToken(ruleBuilder, processInstance, outFlow));
     endTaskRuleAdditions.accept(ruleBuilder);
     ruleBuilder.buildRule();
   }
