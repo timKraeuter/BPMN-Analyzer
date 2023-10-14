@@ -27,7 +27,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 public class RuleGeneratorControllerHelper {
-  protected static final Logger logger = LoggerFactory.getLogger(RuleGeneratorControllerHelper.class);
+  protected static final Logger logger =
+      LoggerFactory.getLogger(RuleGeneratorControllerHelper.class);
 
   public static final String GRAPH_GRAMMAR_TEMP_DIR = getTempDir() + "bpmnAnalyzerGraphGrammars/";
   public static final String STATE_SPACE_TEMP_DIR = getTempDir() + "bpmnAnalyzerStateSpaces/";
