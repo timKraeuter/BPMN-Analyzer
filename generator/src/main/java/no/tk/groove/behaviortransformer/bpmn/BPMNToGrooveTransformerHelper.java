@@ -463,8 +463,7 @@ public class BPMNToGrooveTransformerHelper {
     return t -> seen.add(keyExtractor.apply(t));
   }
 
-  public static String getFlowNodeRuleName(
-      FlowNode flowNode, String incomingFlowId) {
+  public static String getFlowNodeRuleName(FlowNode flowNode, String incomingFlowId) {
     if (flowNode.getIncomingFlows().count() > 1) {
       return flowNode.getName() + "_" + incomingFlowId;
     }
