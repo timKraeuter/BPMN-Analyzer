@@ -3,7 +3,7 @@
     <graph id="p1" role="rule" edgeids="false" edgemode="directed">
         <node id="n10">
             <attr name="layout">
-                <string>510 162 0 0</string>
+                <string>490 252 0 0</string>
             </attr>
         </node>
         <edge from="n10" to="n10">
@@ -18,7 +18,7 @@
         </edge>
         <node id="n12">
             <attr name="layout">
-                <string>510 252 0 0</string>
+                <string>490 422 0 0</string>
             </attr>
         </node>
         <edge from="n12" to="n12">
@@ -31,9 +31,24 @@
                 <string>new:</string>
             </attr>
         </edge>
+        <node id="n14">
+            <attr name="layout">
+                <string>490 512 0 0</string>
+            </attr>
+        </node>
+        <edge from="n14" to="n14">
+            <attr name="label">
+                <string>type:Token</string>
+            </attr>
+        </edge>
+        <edge from="n14" to="n14">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
         <node id="n8">
             <attr name="layout">
-                <string>510 422 0 0</string>
+                <string>490 162 0 0</string>
             </attr>
         </node>
         <edge from="n8" to="n8">
@@ -48,7 +63,7 @@
         </edge>
         <node id="n5">
             <attr name="layout">
-                <string>62 89 0 0</string>
+                <string>62 90 0 0</string>
             </attr>
         </node>
         <edge from="n5" to="n5">
@@ -58,17 +73,17 @@
         </edge>
         <node id="n6">
             <attr name="layout">
-                <string>412 72 0 0</string>
+                <string>422 332 0 0</string>
             </attr>
         </node>
         <edge from="n6" to="n6">
             <attr name="label">
-                <string>string:"two-end-events"</string>
+                <string>string:"end-events"</string>
             </attr>
         </edge>
         <node id="n7">
             <attr name="layout">
-                <string>412 332 0 0</string>
+                <string>422 72 0 0</string>
             </attr>
         </node>
         <edge from="n7" to="n7">
@@ -78,7 +93,7 @@
         </edge>
         <node id="n9">
             <attr name="layout">
-                <string>777 422 0 0</string>
+                <string>727 162 0 0</string>
             </attr>
         </node>
         <edge from="n9" to="n9">
@@ -88,7 +103,7 @@
         </edge>
         <node id="n11">
             <attr name="layout">
-                <string>777 162 0 0</string>
+                <string>727 252 0 0</string>
             </attr>
         </node>
         <edge from="n11" to="n11">
@@ -98,12 +113,22 @@
         </edge>
         <node id="n13">
             <attr name="layout">
-                <string>777 252 0 0</string>
+                <string>727 422 0 0</string>
             </attr>
         </node>
         <edge from="n13" to="n13">
             <attr name="label">
                 <string>string:"p1 -&gt; a2 (Flow_0pjzntx)"</string>
+            </attr>
+        </edge>
+        <node id="n15">
+            <attr name="layout">
+                <string>727 512 0 0</string>
+            </attr>
+        </node>
+        <edge from="n15" to="n15">
+            <attr name="label">
+                <string>string:"p1 -&gt; end2 (Flow_0mqlrme)"</string>
             </attr>
         </edge>
         <edge from="n5" to="n10">
@@ -122,6 +147,16 @@
             </attr>
         </edge>
         <edge from="n12" to="n13">
+            <attr name="label">
+                <string>new:position</string>
+            </attr>
+        </edge>
+        <edge from="n5" to="n14">
+            <attr name="label">
+                <string>new:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n14" to="n15">
             <attr name="label">
                 <string>new:position</string>
             </attr>

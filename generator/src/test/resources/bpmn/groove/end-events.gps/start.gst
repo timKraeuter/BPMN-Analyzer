@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph id="two-end-events_start" role="rule" edgeids="false" edgemode="directed">
+    <graph id="end-events_start" role="rule" edgeids="false" edgemode="directed">
         <node id="n0">
             <attr name="layout">
                 <string>62 85 0 0</string>
@@ -18,7 +18,7 @@
         </node>
         <edge from="n1" to="n1">
             <attr name="label">
-                <string>string:"two-end-events"</string>
+                <string>string:"end-events"</string>
             </attr>
         </edge>
         <node id="n2">
@@ -33,7 +33,7 @@
         </edge>
         <node id="n3">
             <attr name="layout">
-                <string>490 232 0 0</string>
+                <string>460 232 0 0</string>
             </attr>
         </node>
         <edge from="n3" to="n3">
@@ -43,7 +43,7 @@
         </edge>
         <node id="n4">
             <attr name="layout">
-                <string>757 232 0 0</string>
+                <string>697 232 0 0</string>
             </attr>
         </node>
         <edge from="n4" to="n4">

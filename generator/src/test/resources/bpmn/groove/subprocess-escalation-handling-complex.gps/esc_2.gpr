@@ -361,14 +361,14 @@
                 <string>del:messages</string>
             </attr>
         </edge>
-        <edge from="n69" to="n70">
-            <attr name="label">
-                <string>del:position</string>
-            </attr>
-        </edge>
         <edge from="n61" to="n69">
             <attr name="label">
                 <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n69" to="n70">
+            <attr name="label">
+                <string>del:position</string>
             </attr>
         </edge>
         <edge from="n46" to="n47">

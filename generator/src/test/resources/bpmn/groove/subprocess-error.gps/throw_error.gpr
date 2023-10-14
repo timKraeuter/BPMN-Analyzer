@@ -226,14 +226,14 @@
                 <string>del:messages</string>
             </attr>
         </edge>
-        <edge from="n39" to="n40">
-            <attr name="label">
-                <string>del:position</string>
-            </attr>
-        </edge>
         <edge from="n31" to="n39">
             <attr name="label">
                 <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n39" to="n40">
+            <attr name="label">
+                <string>del:position</string>
             </attr>
         </edge>
         <edge from="n25" to="n26">

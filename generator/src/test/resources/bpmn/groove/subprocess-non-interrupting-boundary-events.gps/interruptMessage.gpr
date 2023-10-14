@@ -131,14 +131,14 @@
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n99" to="n100">
-            <attr name="label">
-                <string>del:position</string>
-            </attr>
-        </edge>
         <edge from="n97" to="n99">
             <attr name="label">
                 <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n99" to="n100">
+            <attr name="label">
+                <string>del:position</string>
             </attr>
         </edge>
         <edge from="n97" to="n98">

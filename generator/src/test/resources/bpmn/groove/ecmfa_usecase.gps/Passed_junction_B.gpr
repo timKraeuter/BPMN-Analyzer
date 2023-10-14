@@ -56,14 +56,14 @@
                 <string>type:Running</string>
             </attr>
         </edge>
-        <edge from="n434" to="n435">
-            <attr name="label">
-                <string>del:position</string>
-            </attr>
-        </edge>
         <edge from="n432" to="n434">
             <attr name="label">
                 <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n434" to="n435">
+            <attr name="label">
+                <string>del:position</string>
             </attr>
         </edge>
         <edge from="n432" to="n433">

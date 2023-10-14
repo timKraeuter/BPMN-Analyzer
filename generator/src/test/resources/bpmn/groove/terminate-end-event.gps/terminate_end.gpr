@@ -241,14 +241,14 @@
                 <string>new:state</string>
             </attr>
         </edge>
-        <edge from="n44" to="n45">
-            <attr name="label">
-                <string>del:position</string>
-            </attr>
-        </edge>
         <edge from="n42" to="n44">
             <attr name="label">
                 <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n44" to="n45">
+            <attr name="label">
+                <string>del:position</string>
             </attr>
         </edge>
         <edge from="n42" to="n46">

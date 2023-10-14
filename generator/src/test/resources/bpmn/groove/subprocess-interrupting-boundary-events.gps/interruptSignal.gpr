@@ -266,14 +266,14 @@
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n178" to="n179">
-            <attr name="label">
-                <string>del:position</string>
-            </attr>
-        </edge>
         <edge from="n176" to="n178">
             <attr name="label">
                 <string>del:tokens</string>
+            </attr>
+        </edge>
+        <edge from="n178" to="n179">
+            <attr name="label">
+                <string>del:position</string>
             </attr>
         </edge>
         <edge from="n182" to="n187">
