@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
-import no.tk.behavior.bpmn.SequenceFlow;
 import no.tk.behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import no.tk.behavior.bpmn.events.BoundaryEvent;
 import no.tk.behavior.bpmn.events.EndEvent;
@@ -57,36 +56,35 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
   }
 
   public void createEndEventRule(AbstractBPMNProcess process, EndEvent endEvent) {
-    if (endEvent.getIncomingFlows().count() != 1) {
-      throw new BPMNRuntimeException("End events should have exactly one incoming flow!");
-    }
-    // Throw never reached due to check before.
-    SequenceFlow incomingFlow = endEvent.getIncomingFlows().findFirst().orElseThrow();
-    String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
+    endEvent
+        .getIncomingFlows()
+        .forEach(
+            incomingFlow -> {
+              String preTokens = getTokenForSequenceFlow(incomingFlow) + ANY_OTHER_TOKENS;
+              ruleBuilder.startRule(getFlowNodeRuleName(endEvent));
 
-    ruleBuilder.startRule(getFlowNodeRuleName(endEvent));
-
-    switch (endEvent.getType()) {
-      case NONE:
-        createPreAndPostObjectInRuleForProcess(process, preTokens, ANY_TOKENS);
-        break;
-      case TERMINATION:
-        createTerminationEndEventRule(process, preTokens);
-        break;
-      case MESSAGE:
-        createMessageEndEventRule(process, endEvent, preTokens);
-        break;
-      case ERROR:
-        // TODO: Implement Error end events in Maude!
-        break;
-      case ESCALATION:
-        // TODO: Implement Escalation end events in Maude!
-        break;
-      case SIGNAL:
-        createSignalEndEventRule(process, endEvent, preTokens);
-        break;
-    }
-    ruleBuilder.buildRule();
+              switch (endEvent.getType()) {
+                case NONE:
+                  createPreAndPostObjectInRuleForProcess(process, preTokens, ANY_TOKENS);
+                  break;
+                case TERMINATION:
+                  createTerminationEndEventRule(process, preTokens);
+                  break;
+                case MESSAGE:
+                  createMessageEndEventRule(process, endEvent, preTokens);
+                  break;
+                case ERROR:
+                  // TODO: Implement Error end events in Maude!
+                  break;
+                case ESCALATION:
+                  // TODO: Implement Escalation end events in Maude!
+                  break;
+                case SIGNAL:
+                  createSignalEndEventRule(process, endEvent, preTokens);
+                  break;
+              }
+              ruleBuilder.buildRule();
+            });
   }
 
   private void createSignalEndEventRule(

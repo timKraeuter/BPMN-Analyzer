@@ -46,8 +46,8 @@ class BPMNToMaudeEventsTest implements BPMNMaudeTestHelper {
    * Events"</a> in cawemo.
    */
   @Test
-  void testTwoEndEvents() throws IOException {
-    testBPMNMaudeGeneration("two-end-events");
+  void testEndEvents() throws IOException {
+    testBPMNMaudeGeneration("end-events");
   }
 
   /**
