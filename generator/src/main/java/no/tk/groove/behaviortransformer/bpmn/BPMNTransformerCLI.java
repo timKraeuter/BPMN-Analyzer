@@ -10,7 +10,7 @@ import no.tk.groove.behaviortransformer.BehaviorToGrooveTransformer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class BPMNTransformerDriver {
+public class BPMNTransformerCLI {
 
   protected static final Logger logger = LogManager.getLogger();
 

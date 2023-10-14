@@ -22,9 +22,12 @@ import no.tk.groove.behaviortransformer.bpmn.atomic.propositions.BPMNTokenAtomic
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNProposition;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 public class RuleGeneratorControllerHelper {
+  protected static final Logger logger = LoggerFactory.getLogger(RuleGeneratorControllerHelper.class);
 
   public static final String GRAPH_GRAMMAR_TEMP_DIR = getTempDir() + "bpmnAnalyzerGraphGrammars/";
   public static final String STATE_SPACE_TEMP_DIR = getTempDir() + "bpmnAnalyzerStateSpaces/";
@@ -78,6 +81,7 @@ public class RuleGeneratorControllerHelper {
     Instant fileTimeStamp = DTF.parse(timeStampString, Instant::from);
 
     if (fileTimeStamp.isBefore(oneHourBefore)) {
+      logger.info("Deleting old generated files at {}", timestampedFile);
       PathUtils.delete(timestampedFile);
     }
   }

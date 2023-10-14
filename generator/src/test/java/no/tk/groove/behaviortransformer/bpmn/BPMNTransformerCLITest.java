@@ -8,18 +8,18 @@ import no.tk.util.FileTestHelper;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 
-class BPMNTransformerDriverTest extends BPMNToGrooveTestBase {
+class BPMNTransformerCLITest extends BPMNToGrooveTestBase {
 
   @Test
   void onlyOneArgTest() {
     String[] args = {"123"};
-    assertThrows(GrooveGenerationRuntimeException.class, () -> BPMNTransformerDriver.main(args));
+    assertThrows(GrooveGenerationRuntimeException.class, () -> BPMNTransformerCLI.main(args));
   }
 
   @Test
   void noFileExistsTest() {
     String[] args = {"notAFile", "./"};
-    assertThrows(GrooveGenerationRuntimeException.class, () -> BPMNTransformerDriver.main(args));
+    assertThrows(GrooveGenerationRuntimeException.class, () -> BPMNTransformerCLI.main(args));
   }
 
   @Test
@@ -32,7 +32,7 @@ class BPMNTransformerDriverTest extends BPMNToGrooveTestBase {
 
     String[] args = {pathToBPMNModel.toString(), tempDirectoryPath.toString(), "true"};
 
-    BPMNTransformerDriver.main(args);
+    BPMNTransformerCLI.main(args);
 
     checkGenerationEqualToExpected(
         fixedRules::contains, "cyclic", Path.of(tempDirectoryPath.toString(), "cyclic.gps"));
@@ -48,7 +48,7 @@ class BPMNTransformerDriverTest extends BPMNToGrooveTestBase {
 
     String[] args = {pathToBPMNModel.toString(), tempDirectoryPath.toString()};
 
-    BPMNTransformerDriver.main(args);
+    BPMNTransformerCLI.main(args);
 
     checkGenerationEqualToExpected(
         fixedRules::contains,
