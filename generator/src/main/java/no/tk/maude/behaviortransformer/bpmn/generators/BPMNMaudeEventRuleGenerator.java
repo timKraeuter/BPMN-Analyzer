@@ -74,11 +74,11 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                   createMessageEndEventRule(process, endEvent, preTokens);
                   break;
                 case ERROR:
-                  // TODO: Implement Error end events in Maude!
-                  break;
+                  throw new UnsupportedOperationException(
+                      "Error events not implemented yet for Maude!");
                 case ESCALATION:
-                  // TODO: Implement Escalation end events in Maude!
-                  break;
+                  throw new UnsupportedOperationException(
+                      "Escalation events not implemented yet for Maude!");
                 case SIGNAL:
                   createSignalEndEventRule(process, endEvent, preTokens);
                   break;
