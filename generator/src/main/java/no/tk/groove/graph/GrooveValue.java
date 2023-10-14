@@ -1,13 +1,20 @@
 package no.tk.groove.graph;
 
-public abstract class GrooveValue<T> {
-  protected final T value;
+public class GrooveValue {
 
-  protected GrooveValue(T value) {
+  private final String typeName;
+  protected final String value;
+
+  protected GrooveValue(String typeName, String value) {
+    this.typeName = typeName;
     this.value = value;
   }
 
-  public abstract String getTypeName();
+  public String getTypeName() {
+    return typeName;
+  }
 
-  public abstract String getValue();
+  public String getValue() {
+    return value;
+  }
 }

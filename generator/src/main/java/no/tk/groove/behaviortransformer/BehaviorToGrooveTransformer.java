@@ -101,7 +101,7 @@ public class BehaviorToGrooveTransformer {
       Map<String, String> idToNodeLabel,
       Node attributeHolder,
       String attributeName,
-      GrooveValue<?> attributeValue) {
+      GrooveValue attributeValue) {
     String attributeNodeName =
         String.format("%s:%s", attributeValue.getTypeName(), attributeValue.getValue());
     Node dataNode =

@@ -9,11 +9,10 @@ import no.tk.api.Node;
 
 public class GrooveNode implements Node {
   public static final AtomicLong idCounter = new AtomicLong(-1);
-
   private final String id;
   private final String name;
   private final Set<String> flags;
-  private final Map<String, GrooveValue<?>> attributes;
+  private final Map<String, GrooveValue> attributes;
 
   public GrooveNode(String name) {
     this.id = getNextNodeId();
@@ -43,20 +42,20 @@ public class GrooveNode implements Node {
     this.flags.add(flag);
   }
 
-  public Map<String, GrooveValue<?>> getAttributes() {
+  public Map<String, GrooveValue> getAttributes() {
     return this.attributes;
   }
 
   public void addAttribute(String name, String value) {
-    this.attributes.put(name, new StringGrooveValue(value));
+    this.attributes.put(name, new GrooveValue("string", String.format("\"%s\"", value)));
   }
 
   public void addAttribute(String name, int value) {
-    this.attributes.put(name, new IntGrooveValue(value));
+    this.attributes.put(name, new GrooveValue("int", String.valueOf(value)));
   }
 
   public void addAttribute(String name, boolean value) {
-    this.attributes.put(name, new BooleanGrooveValue(value));
+    this.attributes.put(name, new GrooveValue("bool", String.valueOf(value)));
   }
 
   @Override
