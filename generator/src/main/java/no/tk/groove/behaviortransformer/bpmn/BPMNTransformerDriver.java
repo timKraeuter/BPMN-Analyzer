@@ -7,8 +7,12 @@ import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import no.tk.behavior.bpmn.reader.BPMNFileReader;
 import no.tk.groove.behaviortransformer.BehaviorToGrooveTransformer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class BPMNTransformerDriver {
+
+  protected static final Logger logger = LogManager.getLogger();
 
   public static void main(String[] args) throws IOException {
     checkBPMNFilePathIsPresent(args);
@@ -32,7 +36,7 @@ public class BPMNTransformerDriver {
     BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer(layout);
     Path outputDir = Path.of(outputPath);
     Path file = transformer.generateGrooveGrammar(bpmnCollaboration, outputDir);
-    System.out.println("Generation finished see " + file.toString());
+    logger.info("Generation finished see {}", file);
   }
 
   private static void checkBPMNFilePathIsPresent(String[] args) {
