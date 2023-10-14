@@ -31,6 +31,7 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelpe
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteMessageToProcessInstanceWithPosition;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteSequenceFlowToken;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.distinctByKey;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.getFlowNodeRuleName;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.interruptSubprocess;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.isAfterInstantiateEventBasedGateway;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.matchesLinkThrowEvent;
@@ -98,68 +99,73 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
   @Override
   public void createEndEventRule(AbstractBPMNProcess process, EndEvent endEvent) {
-    if (endEvent.getIncomingFlows().count() != 1) {
-      throw new BPMNRuntimeException("End events should have exactly one incoming flow!");
-    }
-    ruleBuilder.startRule(endEvent.getName());
-    switch (endEvent.getType()) {
-      case NONE -> {
-        GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
-        GrooveNode noneRunning = ruleBuilder.contextNode(TYPE_RUNNING);
-        ruleBuilder.contextEdge(STATE, processInstance, noneRunning);
-      }
-      case TERMINATION -> {
-        GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
-        GrooveNode running = ruleBuilder.deleteNode(TYPE_RUNNING);
-        ruleBuilder.deleteEdge(STATE, processInstance, running);
+    endEvent
+        .getIncomingFlows()
+        .forEach(
+            inFlow -> {
+              ruleBuilder.startRule(getFlowNodeRuleName(endEvent, inFlow.getNameOrIDIfEmpty()));
+              switch (endEvent.getType()) {
+                case NONE -> {
+                  GrooveNode processInstance = deleteIncomingEndEventToken(process, inFlow);
+                  GrooveNode noneRunning = ruleBuilder.contextNode(TYPE_RUNNING);
+                  ruleBuilder.contextEdge(STATE, processInstance, noneRunning);
+                }
+                case TERMINATION -> {
+                  GrooveNode processInstance = deleteIncomingEndEventToken(process, inFlow);
+                  GrooveNode running = ruleBuilder.deleteNode(TYPE_RUNNING);
+                  ruleBuilder.deleteEdge(STATE, processInstance, running);
 
-        GrooveNode terminated = ruleBuilder.addNode(TYPE_TERMINATED);
-        ruleBuilder.addEdge(STATE, processInstance, terminated);
+                  GrooveNode terminated = ruleBuilder.addNode(TYPE_TERMINATED);
+                  ruleBuilder.addEdge(STATE, processInstance, terminated);
 
-        GrooveNode anyToken = ruleBuilder.deleteNode(TYPE_TOKEN);
-        ruleBuilder.deleteEdge(TOKENS, processInstance, anyToken);
-        GrooveNode forAll = ruleBuilder.contextNode(FORALL);
-        ruleBuilder.contextEdge(AT, anyToken, forAll);
+                  GrooveNode anyToken = ruleBuilder.deleteNode(TYPE_TOKEN);
+                  ruleBuilder.deleteEdge(TOKENS, processInstance, anyToken);
+                  GrooveNode forAll = ruleBuilder.contextNode(FORALL);
+                  ruleBuilder.contextEdge(AT, anyToken, forAll);
 
-        interruptSubprocess(ruleBuilder, null, processInstance, true);
-      }
-      case MESSAGE -> {
-        GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
-        GrooveNode messageRunning = ruleBuilder.contextNode(TYPE_RUNNING);
-        ruleBuilder.contextEdge(STATE, processInstance, messageRunning);
-        addSendMessageBehaviorForFlowNode(collaboration, ruleBuilder, endEvent);
-      }
-      case ERROR, ESCALATION -> createErrorOrEscalationEndEventRule(endEvent);
-      case SIGNAL -> {
-        GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
-        GrooveNode signalRunning = ruleBuilder.contextNode(TYPE_RUNNING);
-        ruleBuilder.contextEdge(STATE, processInstance, signalRunning);
-        createSignalThrowRulePart(endEvent.getEventDefinition());
-      }
-    }
+                  interruptSubprocess(ruleBuilder, null, processInstance, true);
+                }
+                case MESSAGE -> {
+                  GrooveNode processInstance = deleteIncomingEndEventToken(process, inFlow);
+                  GrooveNode messageRunning = ruleBuilder.contextNode(TYPE_RUNNING);
+                  ruleBuilder.contextEdge(STATE, processInstance, messageRunning);
+                  addSendMessageBehaviorForFlowNode(collaboration, ruleBuilder, endEvent);
+                }
+                case ERROR, ESCALATION -> createErrorOrEscalationEndEventRule(endEvent, inFlow);
+                case SIGNAL -> {
+                  GrooveNode processInstance = deleteIncomingEndEventToken(process, inFlow);
+                  GrooveNode signalRunning = ruleBuilder.contextNode(TYPE_RUNNING);
+                  ruleBuilder.contextEdge(STATE, processInstance, signalRunning);
+                  createSignalThrowRulePart(endEvent.getEventDefinition());
+                }
+              }
 
-    ruleBuilder.buildRule();
+              ruleBuilder.buildRule();
+            });
   }
 
-  private void createErrorOrEscalationEndEventRule(EndEvent endEvent) {
+  private void createErrorOrEscalationEndEventRule(EndEvent endEvent, SequenceFlow inFlow) {
     // Find container process and see if a matching error/escalation catch event can be found.
     AbstractBPMNProcess endEventProcess = this.collaboration.findProcessForFlowNode(endEvent);
     endEventProcess.accept(
         new AbstractProcessVisitor() {
           @Override
           public void handle(BPMNEventSubprocess eventSubprocess) {
-            createErrorOrEscalationEndEventRuleForEventSubprocess(eventSubprocess, endEvent);
+            createErrorOrEscalationEndEventRuleForEventSubprocess(
+                eventSubprocess, endEvent, inFlow);
           }
 
           @Override
           public void handle(BPMNProcess process) {
-            createErrorOrEscalationEndEventRule(process, endEvent);
+            createErrorOrEscalationEndEventRule(process, endEvent, inFlow);
           }
         });
   }
 
   private void createErrorOrEscalationEndEventRuleForEventSubprocess(
-      BPMNEventSubprocess eventSubprocess, EndEvent errorOrEscalationEndEvent) {
+      BPMNEventSubprocess eventSubprocess,
+      EndEvent errorOrEscalationEndEvent,
+      SequenceFlow inFlow) {
     AbstractBPMNProcess parentProcess = collaboration.getParentProcess(eventSubprocess);
     parentProcess.accept(
         new AbstractProcessVisitor() {
@@ -188,7 +194,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
                     interruptIfNeeded(
                         parentProcess, boundaryEvent, parentParentProcessInstance, eventSubprocess);
 
-                deleteIncomingEndEventToken(errorOrEscalationEndEvent, evProcessInstance);
+                deleteSequenceFlowToken(ruleBuilder, evProcessInstance, inFlow);
                 return;
               }
             }
@@ -219,17 +225,18 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     return evProcessInstance;
   }
 
-  private void createErrorOrEscalationEndEventRule(BPMNProcess process, EndEvent errorEndEvent) {
+  private void createErrorOrEscalationEndEventRule(
+      BPMNProcess process, EndEvent errorEndEvent, SequenceFlow inFlow) {
     CallActivity callActivity = process.getCallActivityIfExists();
     if (callActivity != null) {
-      createErrorOrEscalationEndEventInSubprocessRule(process, errorEndEvent, callActivity);
+      createErrorOrEscalationEndEventInSubprocessRule(process, errorEndEvent, inFlow, callActivity);
       return;
     }
     Optional<Pair<BPMNEventSubprocess, StartEvent>> eSubProcessAndMatchingStartEvent =
         findMatchingEventSubprocessWithErrorOrEscalationStartEvent(process, errorEndEvent);
     if (eSubProcessAndMatchingStartEvent.isPresent()) {
       createErrorOrEscalationStartEventSubprocessRule(
-          process, errorEndEvent, eSubProcessAndMatchingStartEvent.get());
+          process, inFlow, eSubProcessAndMatchingStartEvent.get());
       return;
     }
     throw new GrooveGenerationRuntimeException(
@@ -237,7 +244,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
   }
 
   private void createErrorOrEscalationEndEventInSubprocessRule(
-      BPMNProcess process, EndEvent errorEndEvent, CallActivity callActivity) {
+      BPMNProcess process, EndEvent errorEndEvent, SequenceFlow inFlow, CallActivity callActivity) {
     Optional<Pair<BPMNEventSubprocess, StartEvent>> eSubProcessAndMatchingStartEvent =
         findMatchingEventSubprocessWithErrorOrEscalationStartEvent(process, errorEndEvent);
     Optional<BoundaryEvent> matchingBoundaryEvent =
@@ -255,12 +262,11 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     }
     // Only one can be present.
     matchingBoundaryEvent.ifPresent(
-        boundaryEvent ->
-            createErrorOrEscalationBoundaryEventRule(process, errorEndEvent, boundaryEvent));
+        boundaryEvent -> createErrorOrEscalationBoundaryEventRule(process, inFlow, boundaryEvent));
     eSubProcessAndMatchingStartEvent.ifPresent(
         bpmnEventSubprocessStartEventPair ->
             createErrorOrEscalationStartEventSubprocessRule(
-                process, errorEndEvent, bpmnEventSubprocessStartEventPair));
+                process, inFlow, bpmnEventSubprocessStartEventPair));
   }
 
   private static String noMatchingErrorOrEscalationCatchEventFoundFor(EndEvent errorEndEvent) {
@@ -279,10 +285,10 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
 
   private void createErrorOrEscalationStartEventSubprocessRule(
       BPMNProcess process,
-      EndEvent endEvent,
+      SequenceFlow inFlow,
       Pair<BPMNEventSubprocess, StartEvent> matchingStartEventAndProcess) {
 
-    GrooveNode processInstance = deleteIncomingEndEventToken(process, endEvent);
+    GrooveNode processInstance = deleteIncomingEndEventToken(process, inFlow);
 
     StartEvent startEvent = matchingStartEventAndProcess.getValue();
     // Remove all tokens from the current process instance if interrupting
@@ -360,7 +366,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
   }
 
   private void createErrorOrEscalationBoundaryEventRule(
-      AbstractBPMNProcess process, EndEvent endEvent, BoundaryEvent matchingBoundaryEvent) {
+      AbstractBPMNProcess process, SequenceFlow inFlow, BoundaryEvent matchingBoundaryEvent) {
 
     // Add outgoing tokens to the boundary event for the father process instance.
     GrooveNode fatherProcessInstance =
@@ -376,22 +382,13 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
       subprocess = contextProcessInstance(process, ruleBuilder);
       ruleBuilder.contextEdge(SUBPROCESS, fatherProcessInstance, subprocess);
     }
-    deleteIncomingEndEventToken(endEvent, subprocess);
+    deleteSequenceFlowToken(ruleBuilder, subprocess, inFlow);
   }
 
-  private GrooveNode deleteIncomingEndEventToken(AbstractBPMNProcess process, EndEvent endEvent) {
+  private GrooveNode deleteIncomingEndEventToken(AbstractBPMNProcess process, SequenceFlow inFlow) {
     GrooveNode processInstance = contextProcessInstanceWithOnlyName(process, ruleBuilder);
-    deleteIncomingEndEventToken(endEvent, processInstance);
+    deleteSequenceFlowToken(ruleBuilder, processInstance, inFlow);
     return processInstance;
-  }
-
-  private void deleteIncomingEndEventToken(EndEvent endEvent, GrooveNode processInstance) {
-    GrooveNode token = ruleBuilder.deleteNode(TYPE_TOKEN);
-    SequenceFlow incomingFlow = endEvent.getIncomingFlows().findFirst().orElseThrow();
-    final String incomingFlowId = incomingFlow.getDescriptiveName();
-    GrooveNode position = ruleBuilder.contextNode(createStringNodeLabel(incomingFlowId));
-    ruleBuilder.deleteEdge(POSITION, token, position);
-    ruleBuilder.deleteEdge(TOKENS, processInstance, token);
   }
 
   private static Optional<BoundaryEvent> findMatchingErrorOrEscalationBoundaryEvent(

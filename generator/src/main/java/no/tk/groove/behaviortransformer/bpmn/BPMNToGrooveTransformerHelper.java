@@ -204,9 +204,9 @@ public class BPMNToGrooveTransformerHelper {
     return addTokenWithPosition(ruleBuilder, processInstance, sf.getDescriptiveName());
   }
 
-  public static GrooveNode addFlowNodeToken(
+  public static void addFlowNodeToken(
       GrooveRuleBuilder ruleBuilder, GrooveNode processInstance, FlowNode flowNode) {
-    return addTokenWithPosition(ruleBuilder, processInstance, getFlowNodePosition(flowNode));
+    addTokenWithPosition(ruleBuilder, processInstance, getFlowNodePosition(flowNode));
   }
 
   static GrooveNode addTokenWithPosition(
@@ -461,5 +461,13 @@ public class BPMNToGrooveTransformerHelper {
   public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
     Set<Object> seen = ConcurrentHashMap.newKeySet();
     return t -> seen.add(keyExtractor.apply(t));
+  }
+
+  public static String getFlowNodeRuleName(
+      FlowNode flowNode, String incomingFlowId) {
+    if (flowNode.getIncomingFlows().count() > 1) {
+      return flowNode.getName() + "_" + incomingFlowId;
+    }
+    return flowNode.getName();
   }
 }

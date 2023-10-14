@@ -47,12 +47,12 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
   }
 
   /**
-   * See test case <a href="https://cawemo.com/share/e1777355-d0cc-45d0-8f01-87d08ba2b5ef">"Two End
+   * See test case <a href="https://cawemo.com/share/e1777355-d0cc-45d0-8f01-87d08ba2b5ef">"End
    * Events"</a> in cawemo.
    */
   @Test
-  void testTwoEndEvents() throws Exception {
-    testGrooveGenerationForBPMNResourceFile("two-end-events.bpmn");
+  void testEndEvents() throws Exception {
+    testGrooveGenerationForBPMNResourceFile("end-events.bpmn");
   }
 
   /**

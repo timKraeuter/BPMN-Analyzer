@@ -8,7 +8,6 @@ import java.util.stream.Stream;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.BPMNProcess;
-import no.tk.behavior.bpmn.FlowNode;
 import no.tk.groove.behaviortransformer.bpmn.generators.*;
 import no.tk.groove.graph.GrooveNode;
 import no.tk.groove.graph.rule.GrooveGraphRule;
@@ -90,15 +89,6 @@ public class BPMNRuleGenerator {
         .forEach(node -> node.accept(new GrooveRuleGenerationFlowNodeVisitor(this, process)));
 
     getEventSubprocessRuleGenerator().generateRulesForEventSubprocesses(process);
-  }
-
-  // Methods shared between the generators.
-  public static String getTaskOrCallActivityRuleName(
-      FlowNode taskOrCallActivity, String incomingFlowId) {
-    if (taskOrCallActivity.getIncomingFlows().count() > 1) {
-      return taskOrCallActivity.getName() + "_" + incomingFlowId;
-    }
-    return taskOrCallActivity.getName();
   }
 
   public void deleteTerminatedSubprocess(
