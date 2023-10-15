@@ -2,8 +2,16 @@ package no.tk.scalability;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import org.apache.commons.lang3.ObjectUtils.Null;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.FlowElement;
@@ -35,12 +43,7 @@ class ScalabilityTest {
 
   @Test
   void blockChainingTest() {
-    BpmnModelInstance modelInstance =
-        new BPMNModelBuilder()
-            .block1()
-            .block2()
-            .block3()
-            .build();
+    BpmnModelInstance modelInstance = new BPMNModelBuilder().block1().block2().block3().build();
 
     assertThat(modelInstance.getModelElementsByType(FlowElement.class).size(), is(27));
   }
@@ -54,13 +57,24 @@ class ScalabilityTest {
     assertThat(modelInstance2.getModelElementsByType(FlowElement.class).size(), is(81));
   }
 
-  @Test
-  void generateScalabilityInputModels() {
-    for(int i = 0; i <= 300; i++) {
-      BpmnModelInstance instance = BPMNModelBuilder.createModelWithXBlocks(i);
-      File file = new File(String.format("C:\\Source\\scalability/%s.bpmn", i));
-      Bpmn.writeModelToFile(file, instance);
+  //  @Test
+  void generateScalabilityInputModels() throws Exception {
+    try (ForkJoinPool forkJoinPool = ForkJoinPool.commonPool()) {
+      Set<Callable<Null>> tasks =
+          IntStream.rangeClosed(0, 10)
+              .mapToObj(
+                  i ->
+                      (Callable<Null>)
+                          () -> {
+                            BpmnModelInstance instance = BPMNModelBuilder.createModelWithXBlocks(i);
+                            File file =
+                                new File(String.format("C:\\Source\\scalability/%s.bpmn", i));
+                            Bpmn.writeModelToFile(file, instance);
+                            return null;
+                          })
+              .collect(Collectors.toSet());
+      forkJoinPool.invokeAll(tasks);
+      assertTrue(forkJoinPool.awaitQuiescence(24, TimeUnit.HOURS));
     }
-    assertThat(true,is(true));
   }
 }
