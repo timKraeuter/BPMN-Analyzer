@@ -44,4 +44,13 @@ class ScalabilityTest {
 
     assertThat(modelInstance.getModelElementsByType(FlowElement.class).size(), is(27));
   }
+
+  @Test
+  void numberOfBlocksTest() {
+    BpmnModelInstance modelInstance1 = BPMNModelBuilder.createModelWithXBlocks(3);
+    assertThat(modelInstance1.getModelElementsByType(FlowElement.class).size(), is(27));
+
+    BpmnModelInstance modelInstance2 = BPMNModelBuilder.createModelWithXBlocks(10);
+    assertThat(modelInstance2.getModelElementsByType(FlowElement.class).size(), is(81));
+  }
 }

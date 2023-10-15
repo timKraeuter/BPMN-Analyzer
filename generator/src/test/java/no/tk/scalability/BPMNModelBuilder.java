@@ -10,6 +10,26 @@ public class BPMNModelBuilder {
   private AbstractFlowNodeBuilder flowNodeBuilder;
   private final AtomicLong idSequencer = new AtomicLong(0);
 
+  public static BpmnModelInstance createModelWithXBlocks(long numberOfBlocks) {
+    BPMNModelBuilder bpmnModelBuilder = new BPMNModelBuilder();
+    while (numberOfBlocks > 0) {
+      bpmnModelBuilder.block1();
+      numberOfBlocks--;
+      if (numberOfBlocks <= 0) {
+        break;
+      }
+      bpmnModelBuilder.block2();
+      numberOfBlocks--;
+      if (numberOfBlocks <= 0) {
+        break;
+      }
+      bpmnModelBuilder.block3();
+      numberOfBlocks--;
+    }
+
+    return bpmnModelBuilder.build();
+  }
+
   public BPMNModelBuilder() {
     flowNodeBuilder = Bpmn.createProcess().startEvent(getNextId());
   }
