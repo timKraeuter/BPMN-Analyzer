@@ -54,7 +54,7 @@ public class BPMNModelBuilder {
         flowNodeBuilder
             .exclusiveGateway(gateway1)
             .serviceTask(task1)
-            .moveToLastGateway()
+            .moveToNode(gateway1)
             .serviceTask(task2)
             .moveToNode(task1)
             .exclusiveGateway(gateway2)
@@ -78,7 +78,7 @@ public class BPMNModelBuilder {
         flowNodeBuilder
             .parallelGateway(gateway1)
             .scriptTask(task1)
-            .moveToLastGateway()
+            .moveToNode(gateway1)
             .scriptTask(task2)
             .moveToNode(task1)
             .parallelGateway(gateway2)

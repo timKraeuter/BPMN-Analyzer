@@ -53,4 +53,14 @@ class ScalabilityTest {
     BpmnModelInstance modelInstance2 = BPMNModelBuilder.createModelWithXBlocks(10);
     assertThat(modelInstance2.getModelElementsByType(FlowElement.class).size(), is(81));
   }
+
+  @Test
+  void generateScalabilityInputModels() {
+    for(int i = 0; i <= 300; i++) {
+      BpmnModelInstance instance = BPMNModelBuilder.createModelWithXBlocks(i);
+      File file = new File(String.format("C:\\Source\\scalability/%s.bpmn", i));
+      Bpmn.writeModelToFile(file, instance);
+    }
+    assertThat(true,is(true));
+  }
 }
