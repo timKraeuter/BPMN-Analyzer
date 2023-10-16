@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 public class BPMNToMaudeTransformerCLI {
 
-  protected static final Logger logger = LogManager.getLogger();
+  protected static final Logger logger = LogManager.getLogger(BPMNToMaudeTransformerCLI.class);
 
   public static void main(String[] args) throws IOException {
     checkBPMNFilePathIsPresent(args);
