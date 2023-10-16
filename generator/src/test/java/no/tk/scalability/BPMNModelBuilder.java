@@ -69,7 +69,7 @@ public class BPMNModelBuilder {
         () -> {
           FlowNode lastElement = clone.getModelElementById(currentId);
           BpmnModelInstance instanceWithEndEvent = lastElement.builder().endEvent().done();
-          File file = new File(String.format("C:\\Source\\scalability/%s.bpmn", blocks));
+          File file = new File(String.format("C:\\Source\\scalability/%03d.bpmn", blocks));
           Bpmn.writeModelToFile(file, instanceWithEndEvent);
         });
   }

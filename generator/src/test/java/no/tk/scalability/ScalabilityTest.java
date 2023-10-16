@@ -5,6 +5,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.base.Joiner;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -52,15 +54,23 @@ class ScalabilityTest {
     assertThat(modelInstance2.getModelElementsByType(FlowElement.class).size(), is(81));
   }
 
-  @Test
+  //  @Test
   void upToNumberOfBlocksTest() {
-    //    BPMNModelBuilder.createModelsWithUpToXBlocks(1000);
-    // Runtime 1h28min on old desktop machine.
+    BPMNModelBuilder.createModelsWithUpToXBlocks(300);
+    assertTrue(true);
+  }
+
+  //  @Test
+  void print() {
     List<String> models =
-        IntStream.rangeClosed(1, 1000)
-            .mapToObj(i -> String.format("models/scalability/%s.bpmn", i))
+        IntStream.rangeClosed(1, 300)
+            .mapToObj(i -> String.format("models/scalability/%03d.bpmn", i))
             .collect(Collectors.toList());
     System.out.println(Joiner.on(",").join(models));
-    assertTrue(true);
+  }
+
+  //  @Test
+  void printStats() throws IOException {
+    BPMNStatPrinter.printStats(Path.of("C:/Source/scalability/"));
   }
 }
