@@ -5,13 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
-import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import org.apache.commons.lang3.ObjectUtils.Null;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.FlowElement;
@@ -57,23 +50,9 @@ class ScalabilityTest {
   }
 
   //  @Test
-  void generateScalabilityInputModels() throws Exception {
-    try (ForkJoinPool forkJoinPool = ForkJoinPool.commonPool()) {
-      Set<Callable<Null>> tasks =
-          IntStream.rangeClosed(0, 10)
-              .mapToObj(
-                  i ->
-                      (Callable<Null>)
-                          () -> {
-                            BpmnModelInstance instance = BPMNModelBuilder.createModelWithXBlocks(i);
-                            File file =
-                                new File(String.format("C:\\Source\\scalability/%s.bpmn", i));
-                            Bpmn.writeModelToFile(file, instance);
-                            return null;
-                          })
-              .collect(Collectors.toSet());
-      forkJoinPool.invokeAll(tasks);
-      assertTrue(forkJoinPool.awaitQuiescence(24, TimeUnit.HOURS));
-    }
+  void upToNumberOfBlocksTest() {
+    BPMNModelBuilder.createModelsWithUpToXBlocks(1000);
+    // Runtime 1h28min on old desktop machine.
+    assertTrue(true);
   }
 }

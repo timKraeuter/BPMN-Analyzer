@@ -1,14 +1,45 @@
 package no.tk.scalability;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.File;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.builder.AbstractFlowNodeBuilder;
+import org.camunda.bpm.model.bpmn.instance.FlowNode;
 
 public class BPMNModelBuilder {
 
   private AbstractFlowNodeBuilder flowNodeBuilder;
   private final AtomicLong idSequencer = new AtomicLong(0);
+
+  public static void createModelsWithUpToXBlocks(long numberOfBlocks) {
+    try (ForkJoinPool forkJoinPool = ForkJoinPool.commonPool()) {
+      BPMNModelBuilder bpmnModelBuilder = new BPMNModelBuilder();
+      int blocks = 0;
+      while (blocks <= numberOfBlocks) {
+        bpmnModelBuilder.block1();
+        blocks++;
+        addEndEventAndSaveInstance(bpmnModelBuilder, blocks, forkJoinPool);
+        if (blocks >= numberOfBlocks) {
+          break;
+        }
+        bpmnModelBuilder.block2();
+        blocks++;
+        addEndEventAndSaveInstance(bpmnModelBuilder, blocks, forkJoinPool);
+        if (blocks >= numberOfBlocks) {
+          break;
+        }
+        bpmnModelBuilder.block3();
+        blocks++;
+        addEndEventAndSaveInstance(bpmnModelBuilder, blocks, forkJoinPool);
+      }
+      assertTrue(forkJoinPool.awaitQuiescence(24, TimeUnit.HOURS));
+    }
+  }
 
   public static BpmnModelInstance createModelWithXBlocks(long numberOfBlocks) {
     BPMNModelBuilder bpmnModelBuilder = new BPMNModelBuilder();
@@ -28,6 +59,19 @@ public class BPMNModelBuilder {
     }
 
     return bpmnModelBuilder.build();
+  }
+
+  private static void addEndEventAndSaveInstance(
+      BPMNModelBuilder bpmnModelBuilder, int blocks, ForkJoinPool forkJoinPool) {
+    BpmnModelInstance clone = bpmnModelBuilder.build().clone();
+    String currentId = bpmnModelBuilder.getCurrentId();
+    forkJoinPool.execute(
+        () -> {
+          FlowNode lastElement = clone.getModelElementById(currentId);
+          BpmnModelInstance instanceWithEndEvent = lastElement.builder().endEvent().done();
+          File file = new File(String.format("C:\\Source\\scalability/%s.bpmn", blocks));
+          Bpmn.writeModelToFile(file, instanceWithEndEvent);
+        });
   }
 
   public BPMNModelBuilder() {
@@ -64,7 +108,11 @@ public class BPMNModelBuilder {
   }
 
   private String getNextId() {
-    return String.format("FlowNode_%s", idSequencer.getAndIncrement());
+    return String.format("FlowNode_%s", idSequencer.incrementAndGet());
+  }
+
+  private String getCurrentId() {
+    return String.format("FlowNode_%s", idSequencer.get());
   }
 
   /** Block 3 adds two parallel gateways and two tasks as a block to the process. */
@@ -88,6 +136,6 @@ public class BPMNModelBuilder {
   }
 
   public BpmnModelInstance build() {
-    return this.flowNodeBuilder.endEvent(getNextId()).done();
+    return this.flowNodeBuilder.done();
   }
 }
