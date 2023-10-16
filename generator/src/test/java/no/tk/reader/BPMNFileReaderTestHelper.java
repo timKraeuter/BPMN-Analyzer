@@ -1,6 +1,6 @@
 package no.tk.reader;
 
-import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTestBase.BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTestBase.BPMN_MODELS_SEMANTICS_TEST_FOLDER;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -13,13 +13,13 @@ public interface BPMNFileReaderTestHelper {
 
   default BPMNCollaboration readModelFromResourceFolder(String resourceFileName)
       throws IOException {
-    String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + resourceFileName;
+    String resourcePath = BPMN_MODELS_SEMANTICS_TEST_FOLDER + resourceFileName;
     return readModelFromResource(resourcePath);
   }
 
   default BPMNCollaboration readModelFromResourceFolder(
       String resourceFileName, UnaryOperator<String> elementNameTransformer) throws IOException {
-    String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + resourceFileName;
+    String resourcePath = BPMN_MODELS_SEMANTICS_TEST_FOLDER + resourceFileName;
     return readModelFromResource(resourcePath, elementNameTransformer);
   }
 

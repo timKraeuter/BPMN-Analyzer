@@ -8,31 +8,33 @@ import no.tk.util.FileTestHelper;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 
-class BPMNTransformerCLITest extends BPMNToGrooveTestBase {
+class BPMNToGrooveTransformerCLITest extends BPMNToGrooveTestBase {
 
   @Test
   void onlyOneArgTest() {
     String[] args = {"123"};
-    assertThrows(GrooveGenerationRuntimeException.class, () -> BPMNTransformerCLI.main(args));
+    assertThrows(
+        GrooveGenerationRuntimeException.class, () -> BPMNToGrooveTransformerCLI.main(args));
   }
 
   @Test
   void noFileExistsTest() {
     String[] args = {"notAFile", "./"};
-    assertThrows(GrooveGenerationRuntimeException.class, () -> BPMNTransformerCLI.main(args));
+    assertThrows(
+        GrooveGenerationRuntimeException.class, () -> BPMNToGrooveTransformerCLI.main(args));
   }
 
   @Test
   void mainTest() throws Exception {
     String bpmnFileName = "cyclic.bpmn";
-    String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + bpmnFileName;
+    String resourcePath = BPMN_MODELS_SEMANTICS_TEST_FOLDER + bpmnFileName;
     Path pathToBPMNModel = FileTestHelper.getResource(resourcePath);
 
     Path tempDirectoryPath = Path.of(FileUtils.getTempDirectoryPath(), "bpmn");
 
     String[] args = {pathToBPMNModel.toString(), tempDirectoryPath.toString(), "true"};
 
-    BPMNTransformerCLI.main(args);
+    BPMNToGrooveTransformerCLI.main(args);
 
     checkGenerationEqualToExpected(
         fixedRules::contains, "cyclic", Path.of(tempDirectoryPath.toString(), "cyclic.gps"));
@@ -41,14 +43,14 @@ class BPMNTransformerCLITest extends BPMNToGrooveTestBase {
   @Test
   void mainTestNoLayout() throws Exception {
     String bpmnFileName = "cyclicNoLayout.bpmn";
-    String resourcePath = BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER + bpmnFileName;
+    String resourcePath = BPMN_MODELS_SEMANTICS_TEST_FOLDER + bpmnFileName;
     Path pathToBPMNModel = FileTestHelper.getResource(resourcePath);
 
     Path tempDirectoryPath = Path.of(FileUtils.getTempDirectoryPath(), "bpmn");
 
     String[] args = {pathToBPMNModel.toString(), tempDirectoryPath.toString()};
 
-    BPMNTransformerCLI.main(args);
+    BPMNToGrooveTransformerCLI.main(args);
 
     checkGenerationEqualToExpected(
         fixedRules::contains,

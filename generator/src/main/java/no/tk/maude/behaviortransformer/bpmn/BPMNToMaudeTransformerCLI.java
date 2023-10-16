@@ -1,4 +1,4 @@
-package no.tk.groove.behaviortransformer.bpmn;
+package no.tk.maude.behaviortransformer.bpmn;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -6,11 +6,13 @@ import java.nio.file.Path;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import no.tk.behavior.bpmn.reader.BPMNFileReader;
-import no.tk.groove.behaviortransformer.BehaviorToGrooveTransformer;
+import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
+import no.tk.maude.behaviortransformer.bpmn.settings.MaudeBPMNGenerationSettings;
+import no.tk.maude.behaviortransformer.bpmn.settings.MessagePersistence;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class BPMNTransformerCLI {
+public class BPMNToMaudeTransformerCLI {
 
   protected static final Logger logger = LogManager.getLogger();
 
@@ -21,22 +23,19 @@ public class BPMNTransformerCLI {
     BPMNCollaboration bpmnCollaboration = readBPMNFileFromPath(pathToBPMNFile);
 
     String outputPath = args[1];
-    generateGraphGrammar(bpmnCollaboration, outputPath, getLayout(args));
+    generateMaudeFile(bpmnCollaboration, outputPath);
   }
 
-  private static boolean getLayout(String[] args) {
-    if (args.length == 3) {
-      return Boolean.parseBoolean(args[2]);
-    }
-    return false;
-  }
-
-  private static void generateGraphGrammar(
-      BPMNCollaboration bpmnCollaboration, String outputPath, boolean layout) {
-    BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer(layout);
-    Path outputDir = Path.of(outputPath);
-    Path file = transformer.generateGrooveGrammar(bpmnCollaboration, outputDir);
-    logger.info("Generation finished see {}", file);
+  private static void generateMaudeFile(BPMNCollaboration bpmnCollaboration, String outputPath)
+      throws IOException {
+    BPMNToMaudeTransformer transformer =
+        new BPMNToMaudeTransformer(
+            bpmnCollaboration, new MaudeBPMNGenerationSettings(MessagePersistence.PERSISTENT));
+    Path outputDir = Path.of(outputPath, bpmnCollaboration.getName() + ".maude");
+    String maudeFileContent =
+        transformer.generate("search init =>! X such that X |= allTerminated = true");
+    Files.writeString(outputDir, maudeFileContent);
+    logger.info("Generation finished see {}", outputDir);
   }
 
   private static void checkBPMNFilePathIsPresent(String[] args) {

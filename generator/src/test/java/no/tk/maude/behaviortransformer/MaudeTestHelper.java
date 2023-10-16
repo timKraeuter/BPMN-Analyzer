@@ -14,6 +14,7 @@ import no.tk.util.FileTestHelper;
 
 public interface MaudeTestHelper {
   String MAUDE_FSM_MODULE_FOLDER = "fsm/maude/";
+  String DOT_MAUDE = ".maude";
 
   default void testFSMMaudeGeneration(
       FiniteStateMachine fsm, Set<FSMStateAtomicProposition> props, String finalQuery)
@@ -30,19 +31,23 @@ public interface MaudeTestHelper {
   default String readExpectedMaudeModule(String folder, String resourceFileName)
       throws IOException {
     Path maudeModel = getMaudeModuleFile(folder, resourceFileName);
-    return Files.readString(maudeModel).replaceAll("\r?\n", "\r\n");
+    return readMaudeFileAndSanitize(maudeModel);
     // force identical line separators;
   }
 
+  default String readMaudeFileAndSanitize(Path maudeModel) throws IOException {
+    return Files.readString(maudeModel).replaceAll("\r?\n", "\r\n");
+  }
+
   private Path getMaudeModuleFile(String folder, String resourceFileName) {
-    String resourcePath = folder + resourceFileName + ".maude";
+    String resourcePath = folder + resourceFileName + DOT_MAUDE;
     return FileTestHelper.getResource(resourcePath);
   }
 
   default void replaceWithActualIfNeeded(
       String folder, String resourceFileName, String actualMaudeModule, String expectedMaudeModule)
       throws IOException {
-    String expectedFilePath = "src/test/resources/" + folder + resourceFileName + ".maude";
+    String expectedFilePath = "src/test/resources/" + folder + resourceFileName + DOT_MAUDE;
     if (!actualMaudeModule.equals(expectedMaudeModule)) {
       // Only replace if reduced to true. Run model in the future!
       Files.writeString(Path.of(expectedFilePath), actualMaudeModule, Charset.defaultCharset());

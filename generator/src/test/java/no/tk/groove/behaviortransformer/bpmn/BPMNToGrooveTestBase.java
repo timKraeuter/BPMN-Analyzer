@@ -8,8 +8,7 @@ import no.tk.reader.BPMNFileReaderTestHelper;
 
 public abstract class BPMNToGrooveTestBase extends BehaviorToGrooveTransformerTestHelper
     implements BPMNFileReaderTestHelper {
-  public static final String BPMN_BPMN_MODELS_SEMANTICS_TEST_FOLDER =
-      "bpmn/bpmnModelsSemanticsTest/";
+  public static final String BPMN_MODELS_SEMANTICS_TEST_FOLDER = "bpmn/bpmnModelsSemanticsTest/";
   public static final Set<String> fixedRules =
       Sets.newHashSet(
           BPMNToGrooveTransformer.ALL_TERMINATED_FILE_NAME,
