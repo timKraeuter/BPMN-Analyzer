@@ -4,8 +4,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
-import org.camunda.bpm.model.bpmn.Bpmn;
+import com.google.common.base.Joiner;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.FlowElement;
 import org.junit.jupiter.api.Test;
@@ -49,10 +51,15 @@ class ScalabilityTest {
     assertThat(modelInstance2.getModelElementsByType(FlowElement.class).size(), is(81));
   }
 
-  //  @Test
+  @Test
   void upToNumberOfBlocksTest() {
-    BPMNModelBuilder.createModelsWithUpToXBlocks(1000);
+    //    BPMNModelBuilder.createModelsWithUpToXBlocks(1000);
     // Runtime 1h28min on old desktop machine.
+    List<String> models =
+        IntStream.rangeClosed(1, 1000)
+            .mapToObj(i -> String.format("models/scalability/%s.bpmn", i))
+            .collect(Collectors.toList());
+    System.out.println(Joiner.on(",").join(models));
     assertTrue(true);
   }
 }
