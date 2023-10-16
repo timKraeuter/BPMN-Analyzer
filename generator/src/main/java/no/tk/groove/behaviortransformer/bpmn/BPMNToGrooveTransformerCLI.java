@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 public class BPMNToGrooveTransformerCLI {
 
-  protected static final Logger logger = LogManager.getLogger();
+  protected static final Logger logger = LogManager.getLogger(BPMNToGrooveTransformerCLI.class);
 
   public static void main(String[] args) throws IOException {
     checkBPMNFilePathIsPresent(args);

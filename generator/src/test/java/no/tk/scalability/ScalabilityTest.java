@@ -64,9 +64,9 @@ class ScalabilityTest {
   void print() {
     List<String> models =
         IntStream.rangeClosed(1, 300)
-            .mapToObj(i -> String.format("models/scalability/%03d.bpmn", i))
+            .mapToObj(i -> String.format("grammars/%03d.gps", i))
             .collect(Collectors.toList());
-    System.out.println(Joiner.on(",").join(models));
+    System.out.print(Joiner.on(",").join(models));
   }
 
   //  @Test

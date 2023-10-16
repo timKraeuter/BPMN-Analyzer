@@ -15,6 +15,7 @@ public class BPMNStatPrinter {
 
   /** Print statistics for the BPMN files in the given folder. */
   public static void printStats(Path folder) throws IOException {
+    System.out.println("modelName;gateways;flowNodes;sequenceFlows;flowElements");
     try (Stream<Path> files = Files.walk(folder)) {
       files.forEach(
           bpmnFile -> {
