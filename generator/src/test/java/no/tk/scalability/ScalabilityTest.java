@@ -16,28 +16,29 @@ class ScalabilityTest {
 
   @Test
   void block1Test() {
-    BpmnModelInstance modelInstance = new BPMNModelBuilder().block1().build();
+    BpmnModelInstance modelInstance = new BPMNModelBuilder().block1().buildWithEndEvent();
 
     assertThat(modelInstance.getModelElementsByType(FlowElement.class).size(), is(9));
   }
 
   @Test
   void block2Test() {
-    BpmnModelInstance modelInstance = new BPMNModelBuilder().block2().build();
+    BpmnModelInstance modelInstance = new BPMNModelBuilder().block2().buildWithEndEvent();
 
     assertThat(modelInstance.getModelElementsByType(FlowElement.class).size(), is(12));
   }
 
   @Test
   void block3Test() {
-    BpmnModelInstance modelInstance = new BPMNModelBuilder().block3().build();
+    BpmnModelInstance modelInstance = new BPMNModelBuilder().block3().buildWithEndEvent();
 
     assertThat(modelInstance.getModelElementsByType(FlowElement.class).size(), is(12));
   }
 
   @Test
   void blockChainingTest() {
-    BpmnModelInstance modelInstance = new BPMNModelBuilder().block1().block2().block3().build();
+    BpmnModelInstance modelInstance =
+        new BPMNModelBuilder().block1().block2().block3().buildWithEndEvent();
 
     assertThat(modelInstance.getModelElementsByType(FlowElement.class).size(), is(27));
   }

@@ -58,7 +58,7 @@ public class BPMNModelBuilder {
       numberOfBlocks--;
     }
 
-    return bpmnModelBuilder.build();
+    return bpmnModelBuilder.buildWithEndEvent();
   }
 
   private static void addEndEventAndSaveInstance(
@@ -133,6 +133,10 @@ public class BPMNModelBuilder {
             .moveToNode(task2)
             .connectTo(gateway2);
     return this;
+  }
+
+  public BpmnModelInstance buildWithEndEvent() {
+    return this.flowNodeBuilder.endEvent().done();
   }
 
   public BpmnModelInstance build() {
