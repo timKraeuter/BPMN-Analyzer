@@ -4,12 +4,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.google.common.base.Joiner;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.FlowElement;
 import org.junit.jupiter.api.Test;
@@ -58,15 +54,6 @@ class ScalabilityTest {
   void upToNumberOfBlocksTest() {
     BPMNModelBuilder.createModelsWithUpToXBlocks(300);
     assertTrue(true);
-  }
-
-  //  @Test
-  void print() {
-    List<String> models =
-        IntStream.rangeClosed(1, 300)
-            .mapToObj(i -> String.format("grammars/%03d.gps", i))
-            .collect(Collectors.toList());
-    System.out.print(Joiner.on(",").join(models));
   }
 
   //  @Test
