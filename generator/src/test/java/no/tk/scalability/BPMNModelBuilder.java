@@ -125,9 +125,9 @@ public class BPMNModelBuilder {
     flowNodeBuilder =
         flowNodeBuilder
             .parallelGateway(gateway1)
-            .scriptTask(task1)
+            .serviceTask(task1)
             .moveToNode(gateway1)
-            .scriptTask(task2)
+            .serviceTask(task2)
             .moveToNode(task1)
             .parallelGateway(gateway2)
             .moveToNode(task2)
