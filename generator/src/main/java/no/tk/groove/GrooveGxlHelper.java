@@ -7,7 +7,9 @@ import no.tk.groove.gxl.Edge;
 import no.tk.groove.gxl.Graph;
 import no.tk.groove.gxl.Gxl;
 import no.tk.groove.gxl.Node;
+import org.eclipse.elk.alg.layered.options.LayeredMetaDataProvider;
 import org.eclipse.elk.core.RecursiveGraphLayoutEngine;
+import org.eclipse.elk.core.data.LayoutMetaDataService;
 import org.eclipse.elk.core.util.BasicProgressMonitor;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
@@ -16,6 +18,12 @@ public class GrooveGxlHelper {
   private static final int XY_SHIFT_GROOVE_LAYOUT = 50;
   private static final String LABEL = "label";
   private static final String FLAG = "flag:";
+
+  static {
+    // Needed when using ELK 0.8.1
+    LayoutMetaDataService.getInstance()
+        .registerLayoutMetaDataProviders(new LayeredMetaDataProvider());
+  }
 
   private GrooveGxlHelper() {
     // Helper methods.
