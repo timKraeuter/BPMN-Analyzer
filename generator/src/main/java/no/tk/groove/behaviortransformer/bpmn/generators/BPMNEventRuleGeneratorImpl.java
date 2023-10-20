@@ -36,6 +36,8 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelpe
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.isAfterInstantiateEventBasedGateway;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.matchesLinkThrowEvent;
 
+import io.github.timKraeuter.groove.graph.GrooveNode;
+import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -72,8 +74,6 @@ import no.tk.behavior.bpmn.events.StartEvent;
 import no.tk.behavior.bpmn.events.StartEventType;
 import no.tk.behavior.bpmn.events.definitions.EventDefinition;
 import no.tk.groove.behaviortransformer.bpmn.BPMNRuleGenerator;
-import no.tk.groove.graph.GrooveNode;
-import no.tk.groove.graph.rule.GrooveRuleBuilder;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {

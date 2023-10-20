@@ -1,5 +1,10 @@
 package no.tk.groove.behaviortransformer;
 
+import io.github.timKraeuter.groove.graph.GrooveEdge;
+import io.github.timKraeuter.groove.graph.GrooveGraph;
+import io.github.timKraeuter.groove.graph.GrooveNode;
+import io.github.timKraeuter.groove.rule.GrooveGraphRule;
+import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -9,11 +14,6 @@ import java.util.*;
 import java.util.stream.Stream;
 import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import no.tk.behavior.picalculus.*;
-import no.tk.groove.graph.GrooveEdge;
-import no.tk.groove.graph.GrooveGraph;
-import no.tk.groove.graph.GrooveNode;
-import no.tk.groove.graph.rule.GrooveGraphRule;
-import no.tk.groove.graph.rule.GrooveRuleBuilder;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.lang3.tuple.Pair;
 

@@ -1,6 +1,16 @@
 package no.tk.groove.behaviortransformer;
 
 import com.google.common.collect.Maps;
+import io.github.timKraeuter.groove.GrooveGxlHelper;
+import io.github.timKraeuter.groove.graph.GrooveGraph;
+import io.github.timKraeuter.groove.graph.GrooveNode;
+import io.github.timKraeuter.groove.graph.GrooveValue;
+import io.github.timKraeuter.groove.gxl.Graph;
+import io.github.timKraeuter.groove.gxl.Gxl;
+import io.github.timKraeuter.groove.gxl.Node;
+import io.github.timKraeuter.groove.rule.GrooveGraphRule;
+import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
+import io.github.timKraeuter.groove.rule.GrooveRuleWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,17 +35,7 @@ import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import no.tk.behavior.fsm.FiniteStateMachine;
 import no.tk.behavior.petrinet.PetriNet;
 import no.tk.behavior.picalculus.NamedPiProcess;
-import no.tk.groove.GrooveGxlHelper;
 import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformer;
-import no.tk.groove.graph.GrooveGraph;
-import no.tk.groove.graph.GrooveNode;
-import no.tk.groove.graph.GrooveValue;
-import no.tk.groove.graph.rule.GrooveGraphRule;
-import no.tk.groove.graph.rule.GrooveRuleBuilder;
-import no.tk.groove.graph.rule.GrooveRuleWriter;
-import no.tk.groove.gxl.Graph;
-import no.tk.groove.gxl.Gxl;
-import no.tk.groove.gxl.Node;
 import no.tk.util.ValueWrapper;
 import org.apache.commons.io.file.PathUtils;
 

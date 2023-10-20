@@ -16,41 +16,30 @@ repositories {
 }
 
 dependencies {
+    // Rule generation
+    implementation 'io.github.timKraeuter:graph-rule-generation:1.0'
+
     // Use the camunda API to read BPMN models.
-    // https://mvnrepository.com/artifact/org.camunda.bpm.model/camunda-bpmn-model
     implementation group: 'org.camunda.bpm.model', name: 'camunda-bpmn-model', version: '7.20.0'
 
     // XML-marshalling not part of jdk 11 anymore.
-    // https://mvnrepository.com/artifact/jakarta.xml.bind/jaxb-api
     implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.1'
-    // https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime
     implementation("org.glassfish.jaxb:jaxb-runtime:4.0.3")
 
-    // https://mvnrepository.com/artifact/commons-io/commons-io
     implementation 'commons-io:commons-io:2.13.0'
-    // https://mvnrepository.com/artifact/com.google.guava/guava
     implementation 'com.google.guava:guava:32.1.2-jre'
-    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation 'org.apache.commons:commons-lang3:3.13.0'
     // String substitution for Maude.
-    // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     implementation 'org.apache.commons:commons-text:1.10.0'
 
-    // https://mvnrepository.com/artifact/org.eclipse.elk/org.eclipse.elk.core
-    implementation 'org.eclipse.elk:org.eclipse.elk.core:0.8.1'
-    // https://mvnrepository.com/artifact/org.eclipse.elk/org.eclipse.elk.alg.layered
-    implementation 'org.eclipse.elk:org.eclipse.elk.alg.layered:0.8.1'
+    // Logging
+    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
 
-    // https://mvnrepository.com/artifact/org.hamcrest/hamcrest
+    // Test
     testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
-
-    // Logging
-    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
-    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
-    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
-    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
 
     errorprone("com.google.errorprone:error_prone_core:2.18.0")
 }

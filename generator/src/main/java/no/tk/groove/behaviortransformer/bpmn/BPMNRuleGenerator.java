@@ -3,15 +3,15 @@ package no.tk.groove.behaviortransformer.bpmn;
 import static no.tk.groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
 
 import com.google.common.collect.Sets;
+import io.github.timKraeuter.groove.graph.GrooveNode;
+import io.github.timKraeuter.groove.rule.GrooveGraphRule;
+import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
 import java.util.Set;
 import java.util.stream.Stream;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.BPMNProcess;
 import no.tk.groove.behaviortransformer.bpmn.generators.*;
-import no.tk.groove.graph.GrooveNode;
-import no.tk.groove.graph.rule.GrooveGraphRule;
-import no.tk.groove.graph.rule.GrooveRuleBuilder;
 
 public class BPMNRuleGenerator {
   private final GrooveRuleBuilder ruleBuilder;

@@ -5,6 +5,8 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConst
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.*;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.getFlowNodeRuleName;
 
+import io.github.timKraeuter.groove.graph.GrooveNode;
+import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
 import java.util.function.Consumer;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
@@ -15,8 +17,6 @@ import no.tk.behavior.bpmn.activities.tasks.SendTask;
 import no.tk.behavior.bpmn.activities.tasks.Task;
 import no.tk.behavior.bpmn.events.BoundaryEvent;
 import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
-import no.tk.groove.graph.GrooveNode;
-import no.tk.groove.graph.rule.GrooveRuleBuilder;
 
 public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
 

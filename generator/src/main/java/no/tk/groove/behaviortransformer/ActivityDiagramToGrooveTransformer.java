@@ -1,5 +1,10 @@
 package no.tk.groove.behaviortransformer;
 
+import io.github.timKraeuter.groove.graph.GrooveGraph;
+import io.github.timKraeuter.groove.graph.GrooveGraphBuilder;
+import io.github.timKraeuter.groove.graph.GrooveNode;
+import io.github.timKraeuter.groove.rule.GrooveGraphRule;
+import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -24,11 +29,6 @@ import no.tk.behavior.activity.variables.BooleanVariable;
 import no.tk.behavior.activity.variables.Variable;
 import no.tk.behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
-import no.tk.groove.graph.GrooveGraph;
-import no.tk.groove.graph.GrooveGraphBuilder;
-import no.tk.groove.graph.GrooveNode;
-import no.tk.groove.graph.rule.GrooveGraphRule;
-import no.tk.groove.graph.rule.GrooveRuleBuilder;
 import org.apache.commons.io.file.PathUtils;
 
 public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<ActivityDiagram> {

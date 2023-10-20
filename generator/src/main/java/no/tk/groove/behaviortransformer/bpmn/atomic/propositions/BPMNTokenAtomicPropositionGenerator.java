@@ -5,6 +5,10 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelpe
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.contextTokenWithPosition;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.nacTokenWithPosition;
 
+import io.github.timKraeuter.groove.graph.GrooveNode;
+import io.github.timKraeuter.groove.rule.GrooveGraphRule;
+import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
+import io.github.timKraeuter.groove.rule.GrooveRuleWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,10 +16,6 @@ import java.util.stream.Stream;
 import no.tk.behavior.bpmn.reader.token.model.CollaborationSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.ProcessSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.Token;
-import no.tk.groove.graph.GrooveNode;
-import no.tk.groove.graph.rule.GrooveGraphRule;
-import no.tk.groove.graph.rule.GrooveRuleBuilder;
-import no.tk.groove.graph.rule.GrooveRuleWriter;
 
 public class BPMNTokenAtomicPropositionGenerator {
 

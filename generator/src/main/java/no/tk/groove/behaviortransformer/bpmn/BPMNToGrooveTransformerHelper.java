@@ -18,6 +18,8 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConst
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_TERMINATED;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_TOKEN;
 
+import io.github.timKraeuter.groove.graph.GrooveNode;
+import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -33,8 +35,6 @@ import no.tk.behavior.bpmn.events.IntermediateCatchEvent;
 import no.tk.behavior.bpmn.events.IntermediateCatchEventType;
 import no.tk.behavior.bpmn.events.IntermediateThrowEvent;
 import no.tk.groove.behaviortransformer.GrooveTransformer;
-import no.tk.groove.graph.GrooveNode;
-import no.tk.groove.graph.rule.GrooveRuleBuilder;
 import no.tk.util.ValueWrapper;
 
 public class BPMNToGrooveTransformerHelper {

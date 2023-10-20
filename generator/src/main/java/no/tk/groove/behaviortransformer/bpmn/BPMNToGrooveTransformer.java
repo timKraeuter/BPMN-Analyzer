@@ -2,6 +2,11 @@ package no.tk.groove.behaviortransformer.bpmn;
 
 import static no.tk.groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
 
+import io.github.timKraeuter.groove.graph.GrooveGraph;
+import io.github.timKraeuter.groove.graph.GrooveGraphBuilder;
+import io.github.timKraeuter.groove.graph.GrooveNode;
+import io.github.timKraeuter.groove.rule.GrooveGraphRule;
+import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -13,11 +18,6 @@ import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import no.tk.behavior.bpmn.events.StartEvent;
 import no.tk.behavior.bpmn.events.StartEventType;
 import no.tk.groove.behaviortransformer.GrooveTransformer;
-import no.tk.groove.graph.GrooveGraph;
-import no.tk.groove.graph.GrooveGraphBuilder;
-import no.tk.groove.graph.GrooveNode;
-import no.tk.groove.graph.rule.GrooveGraphRule;
-import no.tk.groove.graph.rule.GrooveRuleBuilder;
 
 public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaboration> {
 
