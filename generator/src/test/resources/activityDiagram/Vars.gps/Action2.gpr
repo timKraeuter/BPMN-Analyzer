@@ -1,39 +1,119 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="Action2" role="rule" edgeids="false" edgemode="directed">
-        <node id="n37">
+        <node id="n29">
             <attr name="layout">
                 <string>62 80 0 0</string>
             </attr>
         </node>
-        <edge from="n37" to="n37">
+        <edge from="n29" to="n29">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n38">
+        <node id="n30">
             <attr name="layout">
                 <string>232 152 0 0</string>
             </attr>
         </node>
-        <edge from="n38" to="n38">
+        <edge from="n30" to="n30">
             <attr name="label">
                 <string>string:"Action2"</string>
             </attr>
         </edge>
-        <node id="n39">
+        <node id="n31">
             <attr name="layout">
                 <string>232 72 0 0</string>
             </attr>
         </node>
-        <edge from="n39" to="n39">
+        <edge from="n31" to="n31">
             <attr name="label">
                 <string>string:"final"</string>
             </attr>
         </edge>
-        <node id="n40">
+        <node id="n32">
             <attr name="layout">
                 <string>62 640 0 0</string>
+            </attr>
+        </node>
+        <edge from="n32" to="n32">
+            <attr name="label">
+                <string>type:Variable</string>
+            </attr>
+        </edge>
+        <node id="n33">
+            <attr name="layout">
+                <string>277 632 0 0</string>
+            </attr>
+        </node>
+        <edge from="n33" to="n33">
+            <attr name="label">
+                <string>string:"x"</string>
+            </attr>
+        </edge>
+        <node id="n34">
+            <attr name="layout">
+                <string>277 712 0 0</string>
+            </attr>
+        </node>
+        <edge from="n34" to="n34">
+            <attr name="label">
+                <string>type:IntegerValue</string>
+            </attr>
+        </edge>
+        <node id="n35">
+            <attr name="layout">
+                <string>582 704 0 0</string>
+            </attr>
+        </node>
+        <edge from="n35" to="n35">
+            <attr name="label">
+                <string>int:</string>
+            </attr>
+        </edge>
+        <node id="n36">
+            <attr name="layout">
+                <string>62 400 0 0</string>
+            </attr>
+        </node>
+        <edge from="n36" to="n36">
+            <attr name="label">
+                <string>type:Variable</string>
+            </attr>
+        </edge>
+        <node id="n37">
+            <attr name="layout">
+                <string>277 392 0 0</string>
+            </attr>
+        </node>
+        <edge from="n37" to="n37">
+            <attr name="label">
+                <string>string:"y"</string>
+            </attr>
+        </edge>
+        <node id="n38">
+            <attr name="layout">
+                <string>277 472 0 0</string>
+            </attr>
+        </node>
+        <edge from="n38" to="n38">
+            <attr name="label">
+                <string>type:IntegerValue</string>
+            </attr>
+        </edge>
+        <node id="n39">
+            <attr name="layout">
+                <string>582 611 0 0</string>
+            </attr>
+        </node>
+        <edge from="n39" to="n39">
+            <attr name="label">
+                <string>int:</string>
+            </attr>
+        </edge>
+        <node id="n40">
+            <attr name="layout">
+                <string>62 240 0 0</string>
             </attr>
         </node>
         <edge from="n40" to="n40">
@@ -43,17 +123,17 @@
         </edge>
         <node id="n41">
             <attr name="layout">
-                <string>277 632 0 0</string>
+                <string>277 232 0 0</string>
             </attr>
         </node>
         <edge from="n41" to="n41">
             <attr name="label">
-                <string>string:"x"</string>
+                <string>string:"sum"</string>
             </attr>
         </edge>
         <node id="n42">
             <attr name="layout">
-                <string>277 712 0 0</string>
+                <string>277 312 0 0</string>
             </attr>
         </node>
         <edge from="n42" to="n42">
@@ -63,7 +143,7 @@
         </edge>
         <node id="n43">
             <attr name="layout">
-                <string>582 704 0 0</string>
+                <string>582 304 0 0</string>
             </attr>
         </node>
         <edge from="n43" to="n43">
@@ -73,122 +153,72 @@
         </edge>
         <node id="n44">
             <attr name="layout">
-                <string>62 400 0 0</string>
+                <string>582 531 0 0</string>
             </attr>
         </node>
         <edge from="n44" to="n44">
             <attr name="label">
-                <string>type:Variable</string>
+                <string>int:</string>
             </attr>
         </edge>
         <node id="n45">
             <attr name="layout">
-                <string>277 392 0 0</string>
+                <string>457 552 0 0</string>
             </attr>
         </node>
         <edge from="n45" to="n45">
             <attr name="label">
-                <string>string:"y"</string>
-            </attr>
-        </edge>
-        <node id="n46">
-            <attr name="layout">
-                <string>277 472 0 0</string>
-            </attr>
-        </node>
-        <edge from="n46" to="n46">
-            <attr name="label">
-                <string>type:IntegerValue</string>
-            </attr>
-        </edge>
-        <node id="n47">
-            <attr name="layout">
-                <string>582 611 0 0</string>
-            </attr>
-        </node>
-        <edge from="n47" to="n47">
-            <attr name="label">
-                <string>int:</string>
-            </attr>
-        </edge>
-        <node id="n48">
-            <attr name="layout">
-                <string>62 240 0 0</string>
-            </attr>
-        </node>
-        <edge from="n48" to="n48">
-            <attr name="label">
-                <string>type:Variable</string>
-            </attr>
-        </edge>
-        <node id="n49">
-            <attr name="layout">
-                <string>277 232 0 0</string>
-            </attr>
-        </node>
-        <edge from="n49" to="n49">
-            <attr name="label">
-                <string>string:"sum"</string>
-            </attr>
-        </edge>
-        <node id="n50">
-            <attr name="layout">
-                <string>277 312 0 0</string>
-            </attr>
-        </node>
-        <edge from="n50" to="n50">
-            <attr name="label">
-                <string>type:IntegerValue</string>
-            </attr>
-        </edge>
-        <node id="n51">
-            <attr name="layout">
-                <string>582 304 0 0</string>
-            </attr>
-        </node>
-        <edge from="n51" to="n51">
-            <attr name="label">
-                <string>int:</string>
-            </attr>
-        </edge>
-        <node id="n52">
-            <attr name="layout">
-                <string>582 531 0 0</string>
-            </attr>
-        </node>
-        <edge from="n52" to="n52">
-            <attr name="label">
-                <string>int:</string>
-            </attr>
-        </edge>
-        <node id="n53">
-            <attr name="layout">
-                <string>457 552 0 0</string>
-            </attr>
-        </node>
-        <edge from="n53" to="n53">
-            <attr name="label">
                 <string>prod:</string>
             </attr>
         </edge>
-        <edge from="n37" to="n39">
+        <edge from="n29" to="n31">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n50" to="n52">
+        <edge from="n42" to="n44">
             <attr name="label">
                 <string>new:value</string>
             </attr>
         </edge>
-        <edge from="n37" to="n38">
+        <edge from="n29" to="n30">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n50" to="n51">
+        <edge from="n42" to="n43">
             <attr name="label">
                 <string>del:value</string>
+            </attr>
+        </edge>
+        <edge from="n32" to="n33">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n32" to="n34">
+            <attr name="label">
+                <string>value</string>
+            </attr>
+        </edge>
+        <edge from="n34" to="n35">
+            <attr name="label">
+                <string>value</string>
+            </attr>
+        </edge>
+        <edge from="n36" to="n37">
+            <attr name="label">
+                <string>name</string>
+            </attr>
+        </edge>
+        <edge from="n36" to="n38">
+            <attr name="label">
+                <string>value</string>
+            </attr>
+        </edge>
+        <edge from="n38" to="n39">
+            <attr name="label">
+                <string>value</string>
             </attr>
         </edge>
         <edge from="n40" to="n41">
@@ -201,47 +231,17 @@
                 <string>value</string>
             </attr>
         </edge>
-        <edge from="n42" to="n43">
-            <attr name="label">
-                <string>value</string>
-            </attr>
-        </edge>
-        <edge from="n44" to="n45">
-            <attr name="label">
-                <string>name</string>
-            </attr>
-        </edge>
-        <edge from="n44" to="n46">
-            <attr name="label">
-                <string>value</string>
-            </attr>
-        </edge>
-        <edge from="n46" to="n47">
-            <attr name="label">
-                <string>value</string>
-            </attr>
-        </edge>
-        <edge from="n48" to="n49">
-            <attr name="label">
-                <string>name</string>
-            </attr>
-        </edge>
-        <edge from="n48" to="n50">
-            <attr name="label">
-                <string>value</string>
-            </attr>
-        </edge>
-        <edge from="n53" to="n43">
+        <edge from="n45" to="n35">
             <attr name="label">
                 <string>arg:0</string>
             </attr>
         </edge>
-        <edge from="n53" to="n47">
+        <edge from="n45" to="n39">
             <attr name="label">
                 <string>arg:1</string>
             </attr>
         </edge>
-        <edge from="n53" to="n52">
+        <edge from="n45" to="n44">
             <attr name="label">
                 <string>int:add</string>
             </attr>

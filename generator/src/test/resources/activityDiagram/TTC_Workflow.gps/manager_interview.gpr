@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="manager_interview" role="rule" edgeids="false" edgemode="directed">
-        <node id="n74">
+        <node id="n68">
             <attr name="layout">
                 <string>62 80 0 0</string>
             </attr>
         </node>
-        <edge from="n74" to="n74">
+        <edge from="n68" to="n68">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n75">
+        <node id="n69">
             <attr name="layout">
                 <string>232 152 0 0</string>
             </attr>
         </node>
-        <edge from="n75" to="n75">
+        <edge from="n69" to="n69">
             <attr name="label">
                 <string>string:"manager_interview"</string>
             </attr>
         </edge>
-        <node id="n76">
+        <node id="n70">
             <attr name="layout">
                 <string>232 72 0 0</string>
             </attr>
         </node>
-        <edge from="n76" to="n76">
+        <edge from="n70" to="n70">
             <attr name="label">
                 <string>string:"manager_report"</string>
             </attr>
         </edge>
-        <edge from="n74" to="n76">
+        <edge from="n68" to="n70">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n74" to="n75">
+        <edge from="n68" to="n69">
             <attr name="label">
                 <string>del:position</string>
             </attr>

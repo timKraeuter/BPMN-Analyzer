@@ -1,102 +1,102 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="join" role="rule" edgeids="false" edgemode="directed">
-        <node id="n70">
+        <node id="n64">
             <attr name="layout">
                 <string>62 230 0 0</string>
             </attr>
         </node>
-        <edge from="n70" to="n70">
+        <edge from="n64" to="n64">
             <attr name="label">
                 <string>type:ForkedToken</string>
             </attr>
         </edge>
-        <edge from="n70" to="n70">
+        <edge from="n64" to="n64">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n72">
+        <node id="n66">
             <attr name="layout">
                 <string>332 162 0 0</string>
             </attr>
         </node>
-        <edge from="n72" to="n72">
+        <edge from="n66" to="n66">
             <attr name="label">
                 <string>type:ForkedToken</string>
             </attr>
         </edge>
-        <edge from="n72" to="n72">
+        <edge from="n66" to="n66">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n68">
+        <node id="n62">
             <attr name="layout">
                 <string>607 234 0 0</string>
             </attr>
         </node>
-        <edge from="n68" to="n68">
+        <edge from="n62" to="n62">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n69">
+        <node id="n63">
             <attr name="layout">
                 <string>807 234 0 0</string>
             </attr>
         </node>
-        <edge from="n69" to="n69">
+        <edge from="n63" to="n63">
             <attr name="label">
                 <string>string:"manager_interview"</string>
             </attr>
         </edge>
-        <node id="n71">
+        <node id="n65">
             <attr name="layout">
                 <string>332 72 0 0</string>
             </attr>
         </node>
-        <edge from="n71" to="n71">
+        <edge from="n65" to="n65">
             <attr name="label">
                 <string>string:"join"</string>
             </attr>
         </edge>
-        <node id="n73">
+        <node id="n67">
             <attr name="layout">
                 <string>592 154 0 0</string>
             </attr>
         </node>
-        <edge from="n73" to="n73">
+        <edge from="n67" to="n67">
             <attr name="label">
                 <string>string:"join"</string>
             </attr>
         </edge>
-        <edge from="n68" to="n69">
+        <edge from="n62" to="n63">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n70" to="n68">
+        <edge from="n64" to="n62">
             <attr name="label">
                 <string>del:baseToken</string>
             </attr>
         </edge>
-        <edge from="n72" to="n68">
+        <edge from="n66" to="n62">
             <attr name="label">
                 <string>del:baseToken</string>
             </attr>
         </edge>
-        <edge from="n70" to="n71">
+        <edge from="n64" to="n65">
             <attr name="label">
                 <string>position</string>
             </attr>
         </edge>
-        <edge from="n70" to="n72">
+        <edge from="n64" to="n66">
             <attr name="label">
                 <string>!=</string>
             </attr>
         </edge>
-        <edge from="n72" to="n73">
+        <edge from="n66" to="n67">
             <attr name="label">
                 <string>position</string>
             </attr>

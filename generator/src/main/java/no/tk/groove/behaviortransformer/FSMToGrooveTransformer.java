@@ -1,21 +1,18 @@
 package no.tk.groove.behaviortransformer;
 
-import io.github.timkraeuter.groove.graph.GrooveGraph;
 import io.github.timkraeuter.groove.graph.GrooveGraphBuilder;
 import io.github.timkraeuter.groove.graph.GrooveNode;
-import io.github.timkraeuter.groove.rule.GrooveGraphRule;
 import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.stream.Stream;
 import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import no.tk.behavior.fsm.FiniteStateMachine;
 import org.apache.commons.io.file.PathUtils;
 
-public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMachine> {
+public class FSMToGrooveTransformer extends GrooveTransformer<FiniteStateMachine> {
 
   public static final String FSM_TYPE_GRAPH_DIR = "/StateMachineTypeGraph";
 
@@ -26,10 +23,9 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
   // Edge names/attribute names
   private static final String NAME = "name";
   private static final String CURRENT_STATE = "currentState";
-  private final boolean layout;
 
   public FSMToGrooveTransformer(boolean layout) {
-    this.layout = layout;
+    super(layout);
   }
 
   @Override
@@ -47,9 +43,10 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
   }
 
   @Override
-  public GrooveGraph generateStartGraph(FiniteStateMachine finiteStateMachine) {
+  public void generateStartGraph(
+      FiniteStateMachine finiteStateMachine, GrooveGraphBuilder builder) {
     final String stateMachineName = finiteStateMachine.getName();
-    final GrooveGraphBuilder builder = new GrooveGraphBuilder().setName(stateMachineName);
+    builder.name(stateMachineName);
     GrooveNode startStateNode = new GrooveNode(TYPE_STATE);
     GrooveNode stateMachineNode = new GrooveNode(TYPE_STATE_MACHINE_SNAPSHOT);
     builder.addEdge(CURRENT_STATE, stateMachineNode, startStateNode);
@@ -63,13 +60,10 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
         NAME,
         startStateNode,
         new GrooveNode(GrooveTransformerHelper.createStringNodeLabel(startStateName)));
-
-    return builder.build();
   }
 
   @Override
-  public Stream<GrooveGraphRule> generateRules(FiniteStateMachine finiteStateMachine) {
-    GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder();
+  public void generateRules(FiniteStateMachine finiteStateMachine, GrooveRuleBuilder ruleBuilder) {
     finiteStateMachine
         .getTransitions()
         .forEach(
@@ -103,11 +97,5 @@ public class FSMToGrooveTransformer implements GrooveTransformer<FiniteStateMach
 
               ruleBuilder.buildRule();
             });
-    return ruleBuilder.getRules();
-  }
-
-  @Override
-  public boolean isLayoutActivated() {
-    return layout;
   }
 }

@@ -11,32 +11,32 @@
                 <string>type:ActivityDiagram</string>
             </attr>
         </edge>
-        <node id="n1">
+        <node id="n22">
             <attr name="layout">
                 <string>382 72 0 0</string>
             </attr>
         </node>
-        <edge from="n1" to="n1">
+        <edge from="n22" to="n22">
             <attr name="label">
                 <string>bool:false</string>
             </attr>
         </edge>
-        <edge from="n0" to="n1">
+        <edge from="n0" to="n22">
             <attr name="label">
                 <string>running</string>
             </attr>
         </edge>
-        <node id="n2">
+        <node id="n23">
             <attr name="layout">
                 <string>382 152 0 0</string>
             </attr>
         </node>
-        <edge from="n2" to="n2">
+        <edge from="n23" to="n23">
             <attr name="label">
                 <string>string:"Activity"</string>
             </attr>
         </edge>
-        <edge from="n0" to="n2">
+        <edge from="n0" to="n23">
             <attr name="label">
                 <string>name</string>
             </attr>

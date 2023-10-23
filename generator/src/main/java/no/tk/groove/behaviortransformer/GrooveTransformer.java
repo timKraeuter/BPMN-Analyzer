@@ -1,68 +1,63 @@
 package no.tk.groove.behaviortransformer;
 
-import static no.tk.groove.behaviortransformer.BehaviorToGrooveTransformer.START_GST;
-
-import io.github.timkraeuter.groove.graph.GrooveGraph;
-import io.github.timkraeuter.groove.rule.GrooveGraphRule;
-import io.github.timkraeuter.groove.rule.GrooveRuleWriter;
+import io.github.timkraeuter.groove.GrooveGTSBuilder;
+import io.github.timkraeuter.groove.graph.GrooveGraphBuilder;
+import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
 import java.nio.file.Path;
-import java.util.stream.Stream;
 import no.tk.behavior.Behavior;
 
-public interface GrooveTransformer<S extends Behavior> {
+public abstract class GrooveTransformer<S extends Behavior> {
   // Special groove labels
-  // Special groove labels
-  String AT = "@";
-  String FORALL = "forall:";
-  String EXISTS_OPTIONAL = "existsx:";
-  String EXISTS = "exists:";
+  public static final String AT = "@";
+  public static final String FORALL = "forall:";
+  public static final String EXISTS_OPTIONAL = "existsx:";
+  public static final String EXISTS = "exists:";
   // Nesting of quantifiers
-  String IN = "in";
+  public static final String IN = "in";
+  public static final String BOOL = "bool:";
+  public static final String FALSE = BOOL + "false";
+  public static final String TRUE = BOOL + "true";
+  public static final String BOOL_NOT = "bool:not";
+  public static final String BOOL_AND = "bool:and";
+  public static final String BOOL_OR = "bool:or";
+  public static final String UNEQUALS = "!=";
+  public static final String INT = "int:";
+  public static final String ARG_0 = "arg:0";
+  public static final String ARG_1 = "arg:1";
+  public static final String INT_ADD = "int:add";
+  public static final String INT_SUB = "int:sub";
+  public static final String PROD = "prod:";
+  public static final String INT_LT = "int:lt";
+  public static final String INT_LE = "int:le";
+  public static final String INT_EQ = "int:eq";
+  public static final String INT_GE = "int:ge";
+  public static final String INT_GT = "int:gt";
 
-  String BOOL = "bool:";
-  String FALSE = BOOL + "false";
-  String TRUE = BOOL + "true";
-  String BOOL_NOT = "bool:not";
-  String BOOL_AND = "bool:and";
-  String BOOL_OR = "bool:or";
-  String UNEQUALS = "!=";
-  String INT = "int:";
-  String ARG_0 = "arg:0";
-  String ARG_1 = "arg:1";
-  String INT_ADD = "int:add";
-  String INT_SUB = "int:sub";
-  String PROD = "prod:";
-  String INT_LT = "int:lt";
-  String INT_LE = "int:le";
-  String INT_EQ = "int:eq";
-  String INT_GE = "int:ge";
-  String INT_GT = "int:gt";
+  public static final String TYPE = "type:";
+  public static final String STRING = "string:";
 
-  String TYPE = "type:";
-  String STRING = "string:";
+  protected final GrooveGTSBuilder builder;
 
-  static void writeStartGraph(Path targetFolder, GrooveGraph startGraph, boolean layout) {
-    startGraph.write(targetFolder, START_GST, layout);
+  public GrooveTransformer(boolean layout) {
+    this.builder = new GrooveGTSBuilder().layout(layout);
   }
 
-  GrooveGraph generateStartGraph(S source);
+  public Path buildAndWriteGTS(S source, Path targetFolder) {
+    this.generateStartGraph(source, this.builder.startGraph());
+    this.generateRules(source, this.builder.rules());
 
-  default void generateAndWriteStartGraph(S source, Path targetFolder) {
-    GrooveGraph startGraph = this.generateStartGraph(source);
-    writeStartGraph(targetFolder, startGraph, this.isLayoutActivated());
+    Path path = this.builder.buildAndWrite(targetFolder);
+    this.generateAndWriteRulesFurther(source, path);
+
+    return path;
   }
 
-  Stream<GrooveGraphRule> generateRules(S source);
+  public abstract void generateStartGraph(S source, GrooveGraphBuilder builder);
 
-  default void generateAndWriteRules(S source, Path targetFolder) {
-    Stream<GrooveGraphRule> rules = this.generateRules(source);
-    GrooveRuleWriter.writeRules(targetFolder, rules, isLayoutActivated());
-    this.generateAndWriteRulesFurther(source, targetFolder);
-  }
+  public abstract void generateRules(S source, GrooveRuleBuilder rules);
 
-  default void generateAndWriteRulesFurther(S source, Path targetFolder) {
+  public void generateAndWriteRulesFurther(S source, Path targetFolder) {
     // to be overridden if needed
+    // TODO: fix
   }
-
-  boolean isLayoutActivated();
 }

@@ -1,87 +1,87 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="final" role="rule" edgeids="false" edgemode="directed">
-        <node id="n37">
+        <node id="n35">
             <attr name="layout">
                 <string>62 82 0 0</string>
             </attr>
         </node>
-        <edge from="n37" to="n37">
+        <edge from="n35" to="n35">
             <attr name="label">
                 <string>type:ControlToken</string>
             </attr>
         </edge>
-        <edge from="n37" to="n37">
+        <edge from="n35" to="n35">
             <attr name="label">
                 <string>del:</string>
             </attr>
         </edge>
-        <node id="n33">
+        <node id="n31">
             <attr name="layout">
                 <string>62 175 0 0</string>
             </attr>
         </node>
-        <edge from="n33" to="n33">
+        <edge from="n31" to="n31">
             <attr name="label">
                 <string>type:ActivityDiagram</string>
             </attr>
         </edge>
-        <node id="n34">
+        <node id="n32">
             <attr name="layout">
                 <string>392 322 0 0</string>
             </attr>
         </node>
-        <edge from="n34" to="n34">
+        <edge from="n32" to="n32">
             <attr name="label">
                 <string>string:"Decision"</string>
             </attr>
         </edge>
-        <node id="n35">
+        <node id="n33">
             <attr name="layout">
                 <string>392 162 0 0</string>
             </attr>
         </node>
-        <edge from="n35" to="n35">
+        <edge from="n33" to="n33">
             <attr name="label">
                 <string>bool:false</string>
             </attr>
         </edge>
-        <node id="n36">
+        <node id="n34">
             <attr name="layout">
                 <string>392 242 0 0</string>
             </attr>
         </node>
-        <edge from="n36" to="n36">
+        <edge from="n34" to="n34">
             <attr name="label">
                 <string>bool:true</string>
             </attr>
         </edge>
-        <node id="n38">
+        <node id="n36">
             <attr name="layout">
                 <string>337 82 0 0</string>
             </attr>
         </node>
-        <edge from="n38" to="n38">
+        <edge from="n36" to="n36">
             <attr name="label">
                 <string>string:"final"</string>
             </attr>
         </edge>
-        <edge from="n33" to="n35">
+        <edge from="n31" to="n33">
             <attr name="label">
                 <string>new:running</string>
             </attr>
         </edge>
-        <edge from="n33" to="n36">
+        <edge from="n31" to="n34">
             <attr name="label">
                 <string>del:running</string>
             </attr>
         </edge>
-        <edge from="n37" to="n38">
+        <edge from="n35" to="n36">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n33" to="n34">
+        <edge from="n31" to="n32">
             <attr name="label">
                 <string>name</string>
             </attr>

@@ -13,7 +13,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import no.tk.behavior.Behavior;
 import no.tk.util.FileTestHelper;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.file.PathUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +20,8 @@ import org.junit.jupiter.api.BeforeEach;
 public abstract class BehaviorToGrooveTransformerTestHelper {
 
   public static final String SYSTEM_PROPERTIES_FILE_NAME = "system.properties";
-  private final String outputPath = FileUtils.getTempDirectoryPath();
-  //  private final String outputPath = "C:/Source/groove/bin";
+  //  private final String outputPath = FileUtils.getTempDirectoryPath();
+  private final String outputPath = "C:/Source/groove/bin";
   boolean REPLACE_EXPECTED_FILES_WITH_ACTUAL = false;
 
   private Predicate<String> fileNameFilter = x -> false;

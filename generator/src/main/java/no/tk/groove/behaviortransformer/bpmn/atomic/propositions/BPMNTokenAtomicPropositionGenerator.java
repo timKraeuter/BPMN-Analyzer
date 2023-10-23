@@ -7,8 +7,8 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelpe
 
 import io.github.timkraeuter.groove.graph.GrooveNode;
 import io.github.timkraeuter.groove.rule.GrooveGraphRule;
+import io.github.timkraeuter.groove.rule.GrooveRuleAndGraphWriter;
 import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
-import io.github.timkraeuter.groove.rule.GrooveRuleWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,7 +29,7 @@ public class BPMNTokenAtomicPropositionGenerator {
       CollaborationSnapshot collaborationSnapshot, Path outputFolder) throws IOException {
     GrooveGraphRule graphRule = generateAtomicProposition(collaborationSnapshot);
     Files.createDirectories(outputFolder);
-    GrooveRuleWriter.writeRules(outputFolder, Stream.of(graphRule), layout);
+    GrooveRuleAndGraphWriter.writeRules(outputFolder, Stream.of(graphRule), layout);
   }
 
   public GrooveGraphRule generateAtomicProposition(CollaborationSnapshot collaborationSnapshot) {

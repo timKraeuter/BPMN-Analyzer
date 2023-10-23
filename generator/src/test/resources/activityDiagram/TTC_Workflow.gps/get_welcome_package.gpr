@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="get_welcome_package" role="rule" edgeids="false" edgemode="directed">
-        <node id="n53">
+        <node id="n47">
             <attr name="layout">
                 <string>62 80 0 0</string>
             </attr>
         </node>
-        <edge from="n53" to="n53">
+        <edge from="n47" to="n47">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n54">
+        <node id="n48">
             <attr name="layout">
                 <string>232 152 0 0</string>
             </attr>
         </node>
-        <edge from="n54" to="n54">
+        <edge from="n48" to="n48">
             <attr name="label">
                 <string>string:"get_welcome_package"</string>
             </attr>
         </edge>
-        <node id="n55">
+        <node id="n49">
             <attr name="layout">
                 <string>232 72 0 0</string>
             </attr>
         </node>
-        <edge from="n55" to="n55">
+        <edge from="n49" to="n49">
             <attr name="label">
                 <string>string:"fork"</string>
             </attr>
         </edge>
-        <edge from="n53" to="n55">
+        <edge from="n47" to="n49">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n53" to="n54">
+        <edge from="n47" to="n48">
             <attr name="label">
                 <string>del:position</string>
             </attr>

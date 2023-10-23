@@ -1,97 +1,97 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
     <graph id="decision_to_get_welcome_package" role="rule" edgeids="false" edgemode="directed">
-        <node id="n40">
+        <node id="n34">
             <attr name="layout">
                 <string>62 80 0 0</string>
             </attr>
         </node>
-        <edge from="n40" to="n40">
+        <edge from="n34" to="n34">
             <attr name="label">
                 <string>type:Token</string>
             </attr>
         </edge>
-        <node id="n41">
+        <node id="n35">
             <attr name="layout">
                 <string>232 152 0 0</string>
             </attr>
         </node>
-        <edge from="n41" to="n41">
+        <edge from="n35" to="n35">
             <attr name="label">
                 <string>string:"decision"</string>
             </attr>
         </edge>
-        <node id="n42">
+        <node id="n36">
             <attr name="layout">
                 <string>232 72 0 0</string>
             </attr>
         </node>
-        <edge from="n42" to="n42">
+        <edge from="n36" to="n36">
             <attr name="label">
                 <string>string:"get_welcome_package"</string>
             </attr>
         </edge>
-        <node id="n43">
+        <node id="n37">
             <attr name="layout">
                 <string>62 240 0 0</string>
             </attr>
         </node>
-        <edge from="n43" to="n43">
+        <edge from="n37" to="n37">
             <attr name="label">
                 <string>type:Variable</string>
             </attr>
         </edge>
-        <node id="n44">
+        <node id="n38">
             <attr name="layout">
                 <string>277 232 0 0</string>
             </attr>
         </node>
-        <edge from="n44" to="n44">
+        <edge from="n38" to="n38">
             <attr name="label">
                 <string>string:"internal"</string>
             </attr>
         </edge>
-        <node id="n45">
+        <node id="n39">
             <attr name="layout">
                 <string>277 312 0 0</string>
             </attr>
         </node>
-        <edge from="n45" to="n45">
+        <edge from="n39" to="n39">
             <attr name="label">
                 <string>type:BooleanValue</string>
             </attr>
         </edge>
-        <node id="n46">
+        <node id="n40">
             <attr name="layout">
                 <string>552 312 0 0</string>
             </attr>
         </node>
-        <edge from="n46" to="n46">
+        <edge from="n40" to="n40">
             <attr name="label">
                 <string>bool:true</string>
             </attr>
         </edge>
-        <edge from="n40" to="n42">
+        <edge from="n34" to="n36">
             <attr name="label">
                 <string>new:position</string>
             </attr>
         </edge>
-        <edge from="n40" to="n41">
+        <edge from="n34" to="n35">
             <attr name="label">
                 <string>del:position</string>
             </attr>
         </edge>
-        <edge from="n43" to="n44">
+        <edge from="n37" to="n38">
             <attr name="label">
                 <string>name</string>
             </attr>
         </edge>
-        <edge from="n43" to="n45">
+        <edge from="n37" to="n39">
             <attr name="label">
                 <string>value</string>
             </attr>
         </edge>
-        <edge from="n45" to="n46">
+        <edge from="n39" to="n40">
             <attr name="label">
                 <string>value</string>
             </attr>

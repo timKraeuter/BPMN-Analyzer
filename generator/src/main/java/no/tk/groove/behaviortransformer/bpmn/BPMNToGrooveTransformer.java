@@ -2,16 +2,13 @@ package no.tk.groove.behaviortransformer.bpmn;
 
 import static no.tk.groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
 
-import io.github.timkraeuter.groove.graph.GrooveGraph;
 import io.github.timkraeuter.groove.graph.GrooveGraphBuilder;
 import io.github.timkraeuter.groove.graph.GrooveNode;
-import io.github.timkraeuter.groove.rule.GrooveGraphRule;
 import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.stream.Stream;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.BPMNProcess;
 import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
@@ -19,23 +16,22 @@ import no.tk.behavior.bpmn.events.StartEvent;
 import no.tk.behavior.bpmn.events.StartEventType;
 import no.tk.groove.behaviortransformer.GrooveTransformer;
 
-public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaboration> {
+public class BPMNToGrooveTransformer extends GrooveTransformer<BPMNCollaboration> {
 
   public static final String TYPE_GRAPH_FILE_NAME = "bpmn_e_model.gty";
   public static final String TERMINATE_RULE_FILE_NAME = "Terminate.gpr";
   // Graph conditions for model-checking
   public static final String ALL_TERMINATED_FILE_NAME = "AllTerminated.gpr";
   public static final String UNSAFE_FILE_NAME = "Unsafe.gpr";
-  private final boolean layout;
 
   public BPMNToGrooveTransformer(boolean layout) {
-    this.layout = layout;
+    super(layout);
   }
 
   @Override
-  public GrooveGraph generateStartGraph(BPMNCollaboration collaboration) {
-    GrooveGraphBuilder startGraphBuilder =
-        new GrooveGraphBuilder().setName(collaboration.getName());
+  public void generateStartGraph(
+      BPMNCollaboration collaboration, GrooveGraphBuilder startGraphBuilder) {
+    startGraphBuilder.name(collaboration.getName());
 
     collaboration.getParticipants().stream()
         .filter(
@@ -54,8 +50,6 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
                   BPMNToGrooveTransformerConstants.STATE, processInstance, running);
               addStartTokens(startGraphBuilder, process, processInstance);
             });
-
-    return startGraphBuilder.build();
   }
 
   private void addStartTokens(
@@ -87,11 +81,9 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
   }
 
   @Override
-  public Stream<GrooveGraphRule> generateRules(BPMNCollaboration collaboration) {
-    GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder();
-    BPMNRuleGenerator bpmnRuleGenerator = new BPMNRuleGenerator(ruleBuilder, collaboration);
-
-    return bpmnRuleGenerator.getRules();
+  public void generateRules(BPMNCollaboration collaboration, GrooveRuleBuilder ruleBuilder) {
+    // TODO: fix: generate called in constructor.
+    new BPMNRuleGenerator(ruleBuilder, collaboration);
   }
 
   @Override
@@ -127,10 +119,5 @@ public class BPMNToGrooveTransformer implements GrooveTransformer<BPMNCollaborat
     } catch (IOException e) {
       throw new ShouldNotHappenRuntimeException(e);
     }
-  }
-
-  @Override
-  public boolean isLayoutActivated() {
-    return layout;
   }
 }

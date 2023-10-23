@@ -1,9 +1,7 @@
 package no.tk.groove.behaviortransformer;
 
-import io.github.timkraeuter.groove.graph.GrooveEdge;
-import io.github.timkraeuter.groove.graph.GrooveGraph;
+import io.github.timkraeuter.groove.graph.GrooveGraphBuilder;
 import io.github.timkraeuter.groove.graph.GrooveNode;
-import io.github.timkraeuter.groove.rule.GrooveGraphRule;
 import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -11,13 +9,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
-import java.util.stream.Stream;
 import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import no.tk.behavior.picalculus.*;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProcess> {
+public class PiCalcToGrooveTransformer extends GrooveTransformer<NamedPiProcess> {
 
   // Possible node labels.
   private static final String TYPE_PROCESS = TYPE + "Process";
@@ -42,30 +39,22 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
   private static final String ARG_1 = "arg1";
   private static final String ARG_2 = "arg2";
   private static final String NAME = "name";
-  private final boolean layout;
 
-  private Set<GrooveNode> nodes;
-  private Set<GrooveEdge> edges;
+  private GrooveGraphBuilder graphBuilder;
   private Map<String, GrooveNode> nameToNode;
 
   public PiCalcToGrooveTransformer(boolean layout) {
-    this.layout = layout;
+    super(layout);
   }
 
   @Override
-  public Stream<GrooveGraphRule> generateRules(NamedPiProcess namedPiProcess) {
+  public void generateRules(NamedPiProcess namedPiProcess, GrooveRuleBuilder rules) {
     // Fixed set of rules for Pi. We do not think about synchronisation yet.
-    return new GrooveRuleBuilder().getRules();
   }
 
   @Override
-  public void generateAndWriteRules(NamedPiProcess namedPiProcess, Path targetFolder) {
+  public void generateAndWriteRulesFurther(NamedPiProcess namedPiProcess, Path targetFolder) {
     this.copyPiRulesAndTypeGraph(targetFolder);
-  }
-
-  @Override
-  public boolean isLayoutActivated() {
-    return layout;
   }
 
   void copyPiRulesAndTypeGraph(Path targetFolder) {
@@ -78,13 +67,11 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
   }
 
   @Override
-  public GrooveGraph generateStartGraph(NamedPiProcess piProcess) {
+  public void generateStartGraph(NamedPiProcess piProcess, GrooveGraphBuilder builder) {
     // Prefixing is not needed for the pi-calculus since a shared set of rules is used for
     // everything.
 
-    this.nodes = new LinkedHashSet<>();
-    this.edges = new LinkedHashSet<>();
-
+    this.graphBuilder = builder.name(piProcess.getName());
     this.nameToNode = new LinkedHashMap<>();
 
     // Create root process with flag go.
@@ -96,8 +83,6 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
         nodeEdgelabelPair ->
             this.createAndSaveEdgeWithName(
                 nodeEdgelabelPair.getRight(), rootNode, nodeEdgelabelPair.getLeft()));
-
-    return new GrooveGraph(piProcess.getName(), this.nodes, this.edges);
   }
 
   private Optional<Pair<GrooveNode, String>> convertProcess(
@@ -279,13 +264,12 @@ public class PiCalcToGrooveTransformer implements GrooveTransformer<NamedPiProce
 
   private void createAndSaveEdgeWithName(
       String name, GrooveNode sourceNode, GrooveNode targetNode) {
-    GrooveEdge arg1Edge = new GrooveEdge(name, sourceNode, targetNode);
-    this.edges.add(arg1Edge);
+    this.graphBuilder.addEdge(name, sourceNode, targetNode);
   }
 
   private GrooveNode createAndSaveNodeWithName(String name) {
     GrooveNode grooveNode = new GrooveNode(name);
-    this.nodes.add(grooveNode);
+    this.graphBuilder.addNode(grooveNode);
     return grooveNode;
   }
 }

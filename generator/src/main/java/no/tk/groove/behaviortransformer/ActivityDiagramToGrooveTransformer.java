@@ -1,9 +1,7 @@
 package no.tk.groove.behaviortransformer;
 
-import io.github.timkraeuter.groove.graph.GrooveGraph;
 import io.github.timkraeuter.groove.graph.GrooveGraphBuilder;
 import io.github.timkraeuter.groove.graph.GrooveNode;
-import io.github.timkraeuter.groove.rule.GrooveGraphRule;
 import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -11,7 +9,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Stream;
 import no.tk.behavior.activity.ActivityDiagram;
 import no.tk.behavior.activity.expression.Expression;
 import no.tk.behavior.activity.expression.SetVariableExpression;
@@ -31,7 +28,7 @@ import no.tk.behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException
 import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import org.apache.commons.io.file.PathUtils;
 
-public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<ActivityDiagram> {
+public class ActivityDiagramToGrooveTransformer extends GrooveTransformer<ActivityDiagram> {
   private static final String TYPE_GRAPH_DIR = "/ActivityDiagramTypeGraph";
 
   // Possible node labels.
@@ -52,15 +49,13 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
   private static final String POSITION = "position";
   private static final String RUNNING = "running";
 
-  private final boolean doLayout;
-
-  public ActivityDiagramToGrooveTransformer(boolean doLayout) {
-    this.doLayout = doLayout;
+  public ActivityDiagramToGrooveTransformer(boolean layout) {
+    super(layout);
   }
 
   @Override
-  public GrooveGraph generateStartGraph(ActivityDiagram activityDiagram) {
-    GrooveGraphBuilder builder = new GrooveGraphBuilder().setName(activityDiagram.getName());
+  public void generateStartGraph(ActivityDiagram activityDiagram, GrooveGraphBuilder builder) {
+    builder.name(activityDiagram.getName());
 
     GrooveNode activityDiagramNode = new GrooveNode(TYPE_ACTIVITY_DIAGRAM);
     activityDiagramNode.addAttribute(RUNNING, false);
@@ -68,8 +63,6 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
     builder.addNode(activityDiagramNode);
 
     this.createNodesForLocalAndInputVariables(activityDiagram, builder);
-
-    return builder.build();
   }
 
   private void createNodesForLocalAndInputVariables(
@@ -114,8 +107,7 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
   }
 
   @Override
-  public Stream<GrooveGraphRule> generateRules(ActivityDiagram activityDiagram) {
-    GrooveRuleBuilder ruleBuilder = new GrooveRuleBuilder();
+  public void generateRules(ActivityDiagram activityDiagram, GrooveRuleBuilder ruleBuilder) {
 
     this.addStartRule(activityDiagram, ruleBuilder);
 
@@ -161,8 +153,6 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
                             activityFinalNode, ruleBuilder, activityDiagram);
                       }
                     }));
-
-    return ruleBuilder.getRules();
   }
 
   private void createDecisionNodeRules(DecisionNode decisionNode, GrooveRuleBuilder ruleBuilder) {
@@ -650,11 +640,6 @@ public class ActivityDiagramToGrooveTransformer implements GrooveTransformer<Act
   @Override
   public void generateAndWriteRulesFurther(ActivityDiagram activityDiagram, Path targetFolder) {
     this.copyTypeGraph(targetFolder);
-  }
-
-  @Override
-  public boolean isLayoutActivated() {
-    return this.doLayout;
   }
 
   private void copyTypeGraph(Path targetFolder) {

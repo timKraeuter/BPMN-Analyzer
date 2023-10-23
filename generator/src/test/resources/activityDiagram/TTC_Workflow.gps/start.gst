@@ -11,32 +11,32 @@
                 <string>type:ActivityDiagram</string>
             </attr>
         </edge>
-        <node id="n5">
+        <node id="n83">
             <attr name="layout">
                 <string>382 72 0 0</string>
             </attr>
         </node>
-        <edge from="n5" to="n5">
+        <edge from="n83" to="n83">
             <attr name="label">
                 <string>bool:false</string>
             </attr>
         </edge>
-        <edge from="n0" to="n5">
+        <edge from="n0" to="n83">
             <attr name="label">
                 <string>running</string>
             </attr>
         </edge>
-        <node id="n6">
+        <node id="n84">
             <attr name="layout">
                 <string>382 152 0 0</string>
             </attr>
         </node>
-        <edge from="n6" to="n6">
+        <edge from="n84" to="n84">
             <attr name="label">
                 <string>string:"TTC_Workflow"</string>
             </attr>
         </edge>
-        <edge from="n0" to="n6">
+        <edge from="n0" to="n84">
             <attr name="label">
                 <string>name</string>
             </attr>
@@ -51,17 +51,17 @@
                 <string>type:Variable</string>
             </attr>
         </edge>
-        <node id="n7">
+        <node id="n85">
             <attr name="layout">
                 <string>277 392 0 0</string>
             </attr>
         </node>
-        <edge from="n7" to="n7">
+        <edge from="n85" to="n85">
             <attr name="label">
                 <string>string:"not internal"</string>
             </attr>
         </edge>
-        <edge from="n1" to="n7">
+        <edge from="n1" to="n85">
             <attr name="label">
                 <string>name</string>
             </attr>
@@ -76,17 +76,17 @@
                 <string>type:BooleanValue</string>
             </attr>
         </edge>
-        <node id="n8">
+        <node id="n86">
             <attr name="layout">
                 <string>612 472 0 0</string>
             </attr>
         </node>
-        <edge from="n8" to="n8">
+        <edge from="n86" to="n86">
             <attr name="label">
                 <string>bool:false</string>
             </attr>
         </edge>
-        <edge from="n2" to="n8">
+        <edge from="n2" to="n86">
             <attr name="label">
                 <string>value</string>
             </attr>
@@ -101,17 +101,17 @@
                 <string>type:Variable</string>
             </attr>
         </edge>
-        <node id="n9">
+        <node id="n87">
             <attr name="layout">
                 <string>277 312 0 0</string>
             </attr>
         </node>
-        <edge from="n9" to="n9">
+        <edge from="n87" to="n87">
             <attr name="label">
                 <string>string:"internal"</string>
             </attr>
         </edge>
-        <edge from="n3" to="n9">
+        <edge from="n3" to="n87">
             <attr name="label">
                 <string>name</string>
             </attr>
@@ -126,17 +126,17 @@
                 <string>type:BooleanValue</string>
             </attr>
         </edge>
-        <node id="n10">
+        <node id="n88">
             <attr name="layout">
                 <string>552 232 0 0</string>
             </attr>
         </node>
-        <edge from="n10" to="n10">
+        <edge from="n88" to="n88">
             <attr name="label">
                 <string>bool:false</string>
             </attr>
         </edge>
-        <edge from="n4" to="n10">
+        <edge from="n4" to="n88">
             <attr name="label">
                 <string>value</string>
             </attr>
