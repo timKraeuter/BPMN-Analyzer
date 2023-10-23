@@ -38,7 +38,7 @@ public abstract class GrooveTransformer<S extends Behavior> {
 
   protected final GrooveGTSBuilder builder;
 
-  public GrooveTransformer(boolean layout) {
+  protected GrooveTransformer(boolean layout) {
     this.builder = new GrooveGTSBuilder().layout(layout);
   }
 
