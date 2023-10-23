@@ -13,8 +13,6 @@ import no.tk.util.ValueWrapper;
 
 public class BehaviorToGrooveTransformer {
 
-  static final String START_GST = "start.gst";
-  static final String START = "start";
   private static final String ACTIVITY_DIAGRAM_TYPE_GRAPH_FILE_NAME = "type";
   private static final String PI_TYPE_GRAPH_FILE_NAME = "Type";
   private static final String BPMN_DIAGRAM_TYPE_GRAPH_FILE_NAME = "bpmn_e_model";

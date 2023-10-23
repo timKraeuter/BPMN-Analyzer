@@ -388,15 +388,11 @@ public class ActivityDiagramToGrooveTransformer extends GrooveTransformer<Activi
 
           @Override
           public void handle(IntegerCalculationExpression integerCalculationExpression) {
-            String grooveOperator = "";
-            switch (integerCalculationExpression.getOperator()) {
-              case ADD:
-                grooveOperator = INT_ADD;
-                break;
-              case SUBTRACT:
-                grooveOperator = INT_SUB;
-                break;
-            }
+            String grooveOperator =
+                switch (integerCalculationExpression.getOperator()) {
+                  case ADD -> INT_ADD;
+                  case SUBTRACT -> INT_SUB;
+                };
 
             // Operand 1
             GrooveNode operand1ValueInt =
@@ -429,24 +425,14 @@ public class ActivityDiagramToGrooveTransformer extends GrooveTransformer<Activi
 
           @Override
           public void handle(IntegerComparisonExpression integerComparisonExpression) {
-            String grooveOperator = "";
-            switch (integerComparisonExpression.getOperator()) {
-              case SMALLER:
-                grooveOperator = INT_LT;
-                break;
-              case SMALLER_EQUALS:
-                grooveOperator = INT_LE;
-                break;
-              case EQUALS:
-                grooveOperator = INT_EQ;
-                break;
-              case GREATER_EQUALS:
-                grooveOperator = INT_GE;
-                break;
-              case GREATER:
-                grooveOperator = INT_GT;
-                break;
-            }
+            String grooveOperator =
+                switch (integerComparisonExpression.getOperator()) {
+                  case SMALLER -> INT_LT;
+                  case SMALLER_EQUALS -> INT_LE;
+                  case EQUALS -> INT_EQ;
+                  case GREATER_EQUALS -> INT_GE;
+                  case GREATER -> INT_GT;
+                };
 
             // Operand 1
             GrooveNode operand1ValueInt =
@@ -479,15 +465,11 @@ public class ActivityDiagramToGrooveTransformer extends GrooveTransformer<Activi
 
           @Override
           public void handle(BooleanBinaryExpression booleanBinaryExpression) {
-            String grooveOperator = "";
-            switch (booleanBinaryExpression.getOperator()) {
-              case AND:
-                grooveOperator = BOOL_AND;
-                break;
-              case OR:
-                grooveOperator = BOOL_OR;
-                break;
-            }
+            String grooveOperator =
+                switch (booleanBinaryExpression.getOperator()) {
+                  case AND -> BOOL_AND;
+                  case OR -> BOOL_OR;
+                };
 
             // Operand 1
             GrooveNode operand1ValueBool =
