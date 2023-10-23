@@ -12,12 +12,13 @@ version = '1'
 sourceCompatibility = '20'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
     // Rule generation
-    implementation 'io.github.timKraeuter:graph-rule-generation:1.0'
+    implementation 'io.github.timKraeuter:graph-rule-generation:1.2'
 
     // Use the camunda API to read BPMN models.
     implementation group: 'org.camunda.bpm.model', name: 'camunda-bpmn-model', version: '7.20.0'

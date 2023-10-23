@@ -5,10 +5,10 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelpe
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.contextTokenWithPosition;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.nacTokenWithPosition;
 
-import io.github.timKraeuter.groove.graph.GrooveNode;
-import io.github.timKraeuter.groove.rule.GrooveGraphRule;
-import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
-import io.github.timKraeuter.groove.rule.GrooveRuleWriter;
+import io.github.timkraeuter.groove.graph.GrooveNode;
+import io.github.timkraeuter.groove.rule.GrooveGraphRule;
+import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
+import io.github.timkraeuter.groove.rule.GrooveRuleWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

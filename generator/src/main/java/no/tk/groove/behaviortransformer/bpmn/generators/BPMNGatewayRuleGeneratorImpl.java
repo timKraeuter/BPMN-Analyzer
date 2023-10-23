@@ -9,8 +9,8 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelpe
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.updateTokenPositionWhenRunning;
 
 import com.google.common.collect.Sets;
-import io.github.timKraeuter.groove.graph.GrooveNode;
-import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
+import io.github.timkraeuter.groove.graph.GrooveNode;
+import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
 import java.util.*;
 import java.util.stream.Collectors;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;

@@ -3,8 +3,8 @@ package no.tk.groove.behaviortransformer.bpmn.generators;
 import static no.tk.groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
 
-import io.github.timKraeuter.groove.graph.GrooveNode;
-import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
+import io.github.timkraeuter.groove.graph.GrooveNode;
+import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
 import java.util.Set;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;

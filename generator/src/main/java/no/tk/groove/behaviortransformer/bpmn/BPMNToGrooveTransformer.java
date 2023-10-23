@@ -2,11 +2,11 @@ package no.tk.groove.behaviortransformer.bpmn;
 
 import static no.tk.groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
 
-import io.github.timKraeuter.groove.graph.GrooveGraph;
-import io.github.timKraeuter.groove.graph.GrooveGraphBuilder;
-import io.github.timKraeuter.groove.graph.GrooveNode;
-import io.github.timKraeuter.groove.rule.GrooveGraphRule;
-import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
+import io.github.timkraeuter.groove.graph.GrooveGraph;
+import io.github.timkraeuter.groove.graph.GrooveGraphBuilder;
+import io.github.timkraeuter.groove.graph.GrooveNode;
+import io.github.timkraeuter.groove.rule.GrooveGraphRule;
+import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;

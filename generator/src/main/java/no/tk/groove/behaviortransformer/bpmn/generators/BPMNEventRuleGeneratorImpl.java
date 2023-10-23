@@ -36,8 +36,8 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelpe
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.isAfterInstantiateEventBasedGateway;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.matchesLinkThrowEvent;
 
-import io.github.timKraeuter.groove.graph.GrooveNode;
-import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
+import io.github.timkraeuter.groove.graph.GrooveNode;
+import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;

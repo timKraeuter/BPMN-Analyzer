@@ -2,7 +2,7 @@ package no.tk.groove.behaviortransformer;
 
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTestBase.fixedRules;
 
-import io.github.timKraeuter.groove.graph.GrooveNode;
+import io.github.timkraeuter.groove.graph.GrooveNode;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,14 +22,14 @@ public abstract class BehaviorToGrooveTransformerTestHelper {
 
   public static final String SYSTEM_PROPERTIES_FILE_NAME = "system.properties";
   private final String outputPath = FileUtils.getTempDirectoryPath();
-  //    private final String outputPath = "C:/Source/groove/bin";
+  //  private final String outputPath = "C:/Source/groove/bin";
   boolean REPLACE_EXPECTED_FILES_WITH_ACTUAL = false;
 
   private Predicate<String> fileNameFilter = x -> false;
 
   @BeforeEach
   void setUp() {
-    GrooveNode.idCounter.set(-1);
+    GrooveNode.setIDCounter(-1);
     this.fileNameFilter = x -> false;
     this.setUpFurther();
   }

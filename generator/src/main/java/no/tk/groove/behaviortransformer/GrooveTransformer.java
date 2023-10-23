@@ -2,13 +2,10 @@ package no.tk.groove.behaviortransformer;
 
 import static no.tk.groove.behaviortransformer.BehaviorToGrooveTransformer.START_GST;
 
-import io.github.timKraeuter.groove.GxlToXMLConverter;
-import io.github.timKraeuter.groove.graph.GrooveGraph;
-import io.github.timKraeuter.groove.gxl.Gxl;
-import io.github.timKraeuter.groove.rule.GrooveGraphRule;
-import io.github.timKraeuter.groove.rule.GrooveRuleWriter;
+import io.github.timkraeuter.groove.graph.GrooveGraph;
+import io.github.timkraeuter.groove.rule.GrooveGraphRule;
+import io.github.timkraeuter.groove.rule.GrooveRuleWriter;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.stream.Stream;
 import no.tk.behavior.Behavior;
 
@@ -45,10 +42,7 @@ public interface GrooveTransformer<S extends Behavior> {
   String STRING = "string:";
 
   static void writeStartGraph(Path targetFolder, GrooveGraph startGraph, boolean layout) {
-    Gxl gxl = BehaviorToGrooveTransformer.createGxlFromGrooveGraph(startGraph, layout);
-    Path startGraphFile = Paths.get(targetFolder.toString(), START_GST);
-
-    GxlToXMLConverter.toXml(gxl, startGraphFile);
+    startGraph.write(targetFolder, START_GST, layout);
   }
 
   GrooveGraph generateStartGraph(S source);

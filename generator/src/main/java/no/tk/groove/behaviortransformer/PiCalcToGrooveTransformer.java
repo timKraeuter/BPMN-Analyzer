@@ -1,10 +1,10 @@
 package no.tk.groove.behaviortransformer;
 
-import io.github.timKraeuter.groove.graph.GrooveEdge;
-import io.github.timKraeuter.groove.graph.GrooveGraph;
-import io.github.timKraeuter.groove.graph.GrooveNode;
-import io.github.timKraeuter.groove.rule.GrooveGraphRule;
-import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
+import io.github.timkraeuter.groove.graph.GrooveEdge;
+import io.github.timkraeuter.groove.graph.GrooveGraph;
+import io.github.timkraeuter.groove.graph.GrooveNode;
+import io.github.timkraeuter.groove.rule.GrooveGraphRule;
+import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;

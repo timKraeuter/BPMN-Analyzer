@@ -18,8 +18,8 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConst
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_TERMINATED;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_TOKEN;
 
-import io.github.timKraeuter.groove.graph.GrooveNode;
-import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
+import io.github.timkraeuter.groove.graph.GrooveNode;
+import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;

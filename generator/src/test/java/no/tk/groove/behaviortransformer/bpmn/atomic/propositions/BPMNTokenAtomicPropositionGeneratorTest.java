@@ -3,7 +3,7 @@ package no.tk.groove.behaviortransformer.bpmn.atomic.propositions;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import io.github.timKraeuter.groove.rule.GrooveGraphRule;
+import io.github.timkraeuter.groove.rule.GrooveGraphRule;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;

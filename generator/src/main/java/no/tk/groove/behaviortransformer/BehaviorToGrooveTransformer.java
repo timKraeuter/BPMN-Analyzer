@@ -1,16 +1,10 @@
 package no.tk.groove.behaviortransformer;
 
 import com.google.common.collect.Maps;
-import io.github.timKraeuter.groove.GrooveGxlHelper;
-import io.github.timKraeuter.groove.graph.GrooveGraph;
-import io.github.timKraeuter.groove.graph.GrooveNode;
-import io.github.timKraeuter.groove.graph.GrooveValue;
-import io.github.timKraeuter.groove.gxl.Graph;
-import io.github.timKraeuter.groove.gxl.Gxl;
-import io.github.timKraeuter.groove.gxl.Node;
-import io.github.timKraeuter.groove.rule.GrooveGraphRule;
-import io.github.timKraeuter.groove.rule.GrooveRuleBuilder;
-import io.github.timKraeuter.groove.rule.GrooveRuleWriter;
+import io.github.timkraeuter.groove.graph.GrooveGraph;
+import io.github.timkraeuter.groove.rule.GrooveGraphRule;
+import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
+import io.github.timkraeuter.groove.rule.GrooveRuleWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,7 +13,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -52,63 +45,6 @@ public class BehaviorToGrooveTransformer {
 
   public BehaviorToGrooveTransformer(boolean layout) {
     this.layout = layout;
-  }
-
-  static Gxl createGxlFromGrooveGraph(GrooveGraph graph, boolean layout) {
-    String gxlGraphName = String.format("%s_%s", graph.getName(), START);
-    Gxl gxl = new Gxl();
-    Graph gxlGraph = GrooveGxlHelper.createStandardGxlGraph(gxlGraphName, gxl);
-
-    Map<String, String> idToNodeLabel = new HashMap<>();
-    Map<String, Node> grooveNodeIdToGxlNode = new HashMap<>();
-
-    graph
-        .nodes()
-        .forEach(
-            node -> {
-              Node gxlNode =
-                  GrooveGxlHelper.createNodeWithName(node.getId(), node.getName(), gxlGraph);
-              // Add flags
-              node.getFlags()
-                  .forEach(flag -> GrooveGxlHelper.addFlagToNode(gxlGraph, gxlNode, flag));
-              // Add data nodes/attributes
-              node.getAttributes()
-                  .forEach(
-                      (name, value) ->
-                          addNodeAttribute(gxlGraph, idToNodeLabel, gxlNode, name, value));
-
-              idToNodeLabel.put(node.getId(), node.getName());
-              grooveNodeIdToGxlNode.put(node.getId(), gxlNode);
-            });
-    graph
-        .edges()
-        .forEach(
-            edge ->
-                GrooveGxlHelper.createEdgeWithName(
-                    gxlGraph,
-                    grooveNodeIdToGxlNode.get(edge.getSourceNode().getId()),
-                    grooveNodeIdToGxlNode.get(edge.getTargetNode().getId()),
-                    edge.getName()));
-
-    if (layout) {
-      GrooveGxlHelper.layoutGraph(gxlGraph, idToNodeLabel);
-    }
-    return gxl;
-  }
-
-  private static void addNodeAttribute(
-      Graph graph,
-      Map<String, String> idToNodeLabel,
-      Node attributeHolder,
-      String attributeName,
-      GrooveValue attributeValue) {
-    String attributeNodeName =
-        String.format("%s:%s", attributeValue.getTypeName(), attributeValue.getValue());
-    Node dataNode =
-        GrooveGxlHelper.createNodeWithName(GrooveNode.getNextNodeId(), attributeNodeName, graph);
-    GrooveGxlHelper.createEdgeWithName(graph, attributeHolder, dataNode, attributeName);
-
-    idToNodeLabel.put(dataNode.getId(), attributeNodeName);
   }
 
   void generateGrooveGrammar(
@@ -217,7 +153,7 @@ public class BehaviorToGrooveTransformer {
         });
 
     Stream<GrooveGraphRule> synchedRules =
-        GrooveRuleBuilder.createSynchedRules(nameToToBeSynchedRules);
+        GrooveRuleBuilder.createSyncedRules(nameToToBeSynchedRules);
 
     GrooveRuleWriter.writeRules(targetFolder, synchedRules, layout);
     GrooveRuleWriter.writeRules(targetFolder, unsynchedRules.stream(), layout);
