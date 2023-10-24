@@ -3,6 +3,7 @@ package no.tk.groove.behaviortransformer;
 import io.github.timkraeuter.groove.graph.GrooveGraphBuilder;
 import io.github.timkraeuter.groove.graph.GrooveNode;
 import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
+import java.nio.file.Path;
 import no.tk.behavior.petrinet.PetriNet;
 import no.tk.behavior.petrinet.Place;
 
@@ -72,5 +73,10 @@ public class PNToGrooveTransformer extends GrooveTransformer<PetriNet> {
 
               ruleBuilder.buildRule();
             });
+  }
+
+  @Override
+  public void generateAndWriteRulesFurther(PetriNet source, Path targetFolder) {
+    // NO OP
   }
 }

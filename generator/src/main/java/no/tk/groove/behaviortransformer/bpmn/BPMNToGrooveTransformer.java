@@ -82,8 +82,7 @@ public class BPMNToGrooveTransformer extends GrooveTransformer<BPMNCollaboration
 
   @Override
   public void generateRules(BPMNCollaboration collaboration, GrooveRuleBuilder ruleBuilder) {
-    // TODO: fix: generate called in constructor.
-    new BPMNRuleGenerator(ruleBuilder, collaboration);
+    new BPMNRuleGenerator(ruleBuilder, collaboration).generateRules();
   }
 
   @Override

@@ -56,8 +56,5 @@ public abstract class GrooveTransformer<S extends Behavior> {
 
   public abstract void generateRules(S source, GrooveRuleBuilder rules);
 
-  public void generateAndWriteRulesFurther(S source, Path targetFolder) {
-    // to be overridden if needed
-    // TODO: fix
-  }
+  public abstract void generateAndWriteRulesFurther(S source, Path targetFolder);
 }

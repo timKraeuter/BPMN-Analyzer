@@ -35,8 +35,6 @@ public class BPMNRuleGenerator {
     gatewayRuleGenerator = new BPMNGatewayRuleGeneratorImpl(ruleBuilder);
     eventSubprocessRuleGenerator = new BPMNEventSubprocessRuleGeneratorImpl(this, ruleBuilder);
     subprocessRuleGenerator = new BPMNSubprocessRuleGeneratorImpl(this, ruleBuilder);
-
-    generateRules();
   }
 
   public Stream<GrooveGraphRule> getRules() {
@@ -71,7 +69,7 @@ public class BPMNRuleGenerator {
     return eventRuleGenerator;
   }
 
-  private void generateRules() {
+  public void generateRules() {
     collaboration
         .getParticipants()
         .forEach(
