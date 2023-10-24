@@ -46,7 +46,7 @@ public abstract class GrooveTransformer<S extends Behavior> {
     this.generateStartGraph(source, this.builder.startGraph());
     this.generateRules(source, this.builder.rules());
 
-    Path path = this.builder.buildAndWrite(targetFolder);
+    Path path = this.builder.writeGTS(targetFolder);
     this.generateAndWriteRulesFurther(source, path);
 
     return path;
