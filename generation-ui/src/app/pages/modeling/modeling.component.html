@@ -20,5 +20,14 @@
         <mat-icon>download</mat-icon>
         Download model
     </button>
+    <button
+        mat-raised-button
+        color="primary"
+        matTooltip="Download an SVG of the BPMN token model."
+        (click)="downloadSVG()"
+    >
+        <mat-icon>download</mat-icon>
+        Download SVG
+    </button>
 </div>
 <input hidden type="file" #uploader (change)="uploadBPMN($event)" />

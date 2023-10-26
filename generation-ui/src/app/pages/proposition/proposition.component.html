@@ -56,6 +56,7 @@
         Upload model
     </button>
     <button
+        class="right-margin"
         mat-raised-button
         color="primary"
         matTooltip="Download the BPMN token model."
@@ -63,6 +64,15 @@
     >
         <mat-icon>download</mat-icon>
         Download model
+    </button>
+    <button
+        mat-raised-button
+        color="primary"
+        matTooltip="Download an SVG of the BPMN token model."
+        (click)="downloadTokenModelSVG()"
+    >
+        <mat-icon>download</mat-icon>
+        Download SVG
     </button>
 </div>
 <input hidden type="file" #uploader (change)="uploadTokenModel($event)" />

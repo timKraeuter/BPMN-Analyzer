@@ -11,6 +11,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { RenamePropositionDialogComponent } from '../../components/rename-proposition-dialog/rename-proposition-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+export const SVG_FILE_EXTENSION = '.svg';
+
 @Component({
     selector: 'app-proposition',
     templateUrl: './proposition.component.html',
@@ -116,5 +118,20 @@ export class PropositionComponent {
             await this.modeler.updateTokenBPMNModelIfNeeded();
         }
         this.currentProposition.xml = await this.modeler.getTokenXML();
+    }
+
+    downloadTokenModelSVG() {
+        this.modeler
+            .getTokenModeler()
+            .saveSVG()
+            .then((result) => {
+                const svgBlob = new Blob([result.svg], {
+                    type: 'text/plain;charset=utf-8',
+                });
+                saveAs(
+                    svgBlob,
+                    this.currentProposition.name + SVG_FILE_EXTENSION,
+                );
+            });
     }
 }

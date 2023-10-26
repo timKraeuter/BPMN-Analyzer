@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { saveAs } from 'file-saver-es';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 import { SharedStateService } from '../../services/shared-state.service';
+import { SVG_FILE_EXTENSION } from '../proposition/proposition.component';
 
 export const BPMN_FILE_EXTENSION = '.bpmn';
 
@@ -36,5 +37,20 @@ export class ModelingComponent {
         this.sharedState.modelFileName = file.name.replace(/\.[^/.]+$/, '');
         const fileText: string = await file.text();
         await this.bpmnModeler.getModeler().importXML(fileText);
+    }
+
+    downloadSVG() {
+        this.bpmnModeler
+            .getModeler()
+            .saveSVG()
+            .then((result) => {
+                const svgBlob = new Blob([result.svg], {
+                    type: 'text/plain;charset=utf-8',
+                });
+                saveAs(
+                    svgBlob,
+                    this.sharedState.modelFileName + SVG_FILE_EXTENSION,
+                );
+            });
     }
 }
