@@ -13,6 +13,7 @@ import org.camunda.bpm.model.bpmn.instance.FlowNode;
 
 public class BPMNModelBuilder {
 
+  private static final String ID_FORMAT = "FlowNode_%s";
   private AbstractFlowNodeBuilder flowNodeBuilder;
   private final AtomicLong idSequencer = new AtomicLong(0);
 
@@ -64,11 +65,13 @@ public class BPMNModelBuilder {
   private static void addEndEventAndSaveInstance(
       BPMNModelBuilder bpmnModelBuilder, int blocks, ForkJoinPool forkJoinPool) {
     BpmnModelInstance clone = bpmnModelBuilder.build().clone();
-    String currentId = bpmnModelBuilder.getCurrentId();
+    String lastStringId = bpmnModelBuilder.getCurrentId();
+    long lastId = bpmnModelBuilder.idSequencer.get();
     forkJoinPool.execute(
         () -> {
-          FlowNode lastElement = clone.getModelElementById(currentId);
-          BpmnModelInstance instanceWithEndEvent = lastElement.builder().endEvent().done();
+          FlowNode lastElement = clone.getModelElementById(lastStringId);
+          BpmnModelInstance instanceWithEndEvent =
+              lastElement.builder().endEvent(createID(lastId + 1)).done();
           File file = new File(String.format("C:\\Source\\scalability/%03d.bpmn", blocks));
           Bpmn.writeModelToFile(file, instanceWithEndEvent);
         });
@@ -108,11 +111,15 @@ public class BPMNModelBuilder {
   }
 
   private String getNextId() {
-    return String.format("FlowNode_%s", idSequencer.incrementAndGet());
+    return createID(idSequencer.incrementAndGet());
   }
 
   private String getCurrentId() {
-    return String.format("FlowNode_%s", idSequencer.get());
+    return createID(idSequencer.get());
+  }
+
+  private static String createID(long id) {
+    return String.format(ID_FORMAT, id);
   }
 
   /** Block 3 adds two parallel gateways and two tasks as a block to the process. */
@@ -136,7 +143,7 @@ public class BPMNModelBuilder {
   }
 
   public BpmnModelInstance buildWithEndEvent() {
-    return this.flowNodeBuilder.endEvent().done();
+    return this.flowNodeBuilder.endEvent(getNextId()).done();
   }
 
   public BpmnModelInstance build() {
