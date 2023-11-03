@@ -1,8 +1,8 @@
-<div class="token-file-container">
+<div class="propositions-container">
     <div class="diagram-parent">
         <app-token-diagram></app-token-diagram>
     </div>
-    <mat-list class="files">
+    <mat-list class="propositions">
         <div mat-subheader>Propositions</div>
         <mat-list-item
             *ngFor="let proposition of propositions"
@@ -18,15 +18,17 @@
             </div>
             <mat-icon
                 matListItemIcon
-                class="order editButton"
+                class="order editButton less-margin"
+                style="margin-right: -0.5px"
                 matTooltip="Edit proposition name"
                 (click)="this.editProposition(proposition)"
                 >edit
             </mat-icon>
             <mat-icon
                 matListItemIcon
-                class="order editButton"
-                matTooltip="Delete proposition."
+                class="order editButton less-margin"
+                style="margin-right: -1px"
+                matTooltip="Delete proposition"
                 (click)="this.deleteProposition(proposition)"
                 >delete
             </mat-icon>
