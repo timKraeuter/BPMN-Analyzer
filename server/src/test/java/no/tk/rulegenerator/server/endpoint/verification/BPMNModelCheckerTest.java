@@ -13,7 +13,6 @@ import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.reader.BPMNFileReader;
 import no.tk.groove.behaviortransformer.BehaviorToGrooveTransformer;
 import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
-import no.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNPropertyCheckingResult;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
 import static org.hamcrest.MatcherAssert.assertThat;
