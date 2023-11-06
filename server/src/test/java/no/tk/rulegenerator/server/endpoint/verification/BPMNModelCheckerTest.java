@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Set;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.reader.BPMNFileReader;
+import no.tk.groove.behaviortransformer.BehaviorToGrooveTransformer;
 import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
+import no.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNPropertyCheckingResult;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,11 +32,14 @@ class BPMNModelCheckerTest {
         "no-proper-completion-3-unsafe"
       })
   void checkProperCompletionNotFulfilled(String fileName) throws Exception {
+    // Given
     BPMNCollaboration bpmnCollaboration = readProperCompletionBPMNFile(fileName);
+    Path ggDir = generateGG(bpmnCollaboration);
 
-    Path dir = Path.of(FileUtils.getTempDirectoryPath());
-    BPMNModelChecker bpmnModelChecker = new BPMNModelChecker(dir, bpmnCollaboration);
+    // When
+    BPMNModelChecker bpmnModelChecker = new BPMNModelChecker(ggDir, bpmnCollaboration);
 
+    // Then
     BPMNSpecificPropertyCheckingResponse result =
         bpmnModelChecker.checkBPMNProperties(Set.of(BPMNSpecificProperty.PROPER_COMPLETION));
 
@@ -49,11 +54,14 @@ class BPMNModelCheckerTest {
   @ParameterizedTest
   @ValueSource(strings = {"proper-completion-1", "proper-completion-2"})
   void checkProperCompletionFulfilled(String fileName) throws Exception {
+    // Given
     BPMNCollaboration bpmnCollaboration = readProperCompletionBPMNFile(fileName);
+    Path ggDir = generateGG(bpmnCollaboration);
 
-    Path dir = Path.of(FileUtils.getTempDirectoryPath());
-    BPMNModelChecker bpmnModelChecker = new BPMNModelChecker(dir, bpmnCollaboration);
+    // When
+    BPMNModelChecker bpmnModelChecker = new BPMNModelChecker(ggDir, bpmnCollaboration);
 
+    // Then
     BPMNSpecificPropertyCheckingResponse result =
         bpmnModelChecker.checkBPMNProperties(Set.of(BPMNSpecificProperty.PROPER_COMPLETION));
 
@@ -62,6 +70,12 @@ class BPMNModelCheckerTest {
         is(
             List.of(
                 new BPMNPropertyCheckingResult(BPMNSpecificProperty.PROPER_COMPLETION, true, ""))));
+  }
+
+  private static Path generateGG(BPMNCollaboration bpmnCollaboration) {
+    Path tempDir = Path.of(FileUtils.getTempDirectoryPath());
+    BehaviorToGrooveTransformer transformer = new BehaviorToGrooveTransformer(false);
+    return transformer.generateGrooveGrammarForBPMNProcessModel(bpmnCollaboration, tempDir);
   }
 
   private static BPMNCollaboration readProperCompletionBPMNFile(String fileName)
