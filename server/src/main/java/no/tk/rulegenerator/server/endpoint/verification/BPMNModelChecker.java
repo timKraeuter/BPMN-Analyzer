@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -19,16 +20,18 @@ import no.tk.behavior.bpmn.BPMNEventSubprocess;
 import no.tk.behavior.bpmn.BPMNProcess;
 import no.tk.behavior.bpmn.FlowNode;
 import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
+import no.tk.behavior.bpmn.auxiliary.visitors.DoNothingFlowNodeVisitor;
+import no.tk.behavior.bpmn.events.EndEvent;
 import no.tk.groove.runner.GrooveJarRunner;
 import no.tk.groove.runner.checking.ModelCheckingResult;
 import no.tk.groove.runner.checking.TemporalLogic;
 import no.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNPropertyCheckingResult;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
-import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingRequest;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResponse;
 import no.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import no.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
+import no.tk.util.ValueWrapper;
 
 public class BPMNModelChecker {
 
@@ -55,12 +58,11 @@ public class BPMNModelChecker {
   }
 
   public BPMNSpecificPropertyCheckingResponse checkBPMNProperties(
-      BPMNSpecificPropertyCheckingRequest propertyCheckingRequest)
-      throws InterruptedException, IOException {
+      Set<BPMNSpecificProperty> propertiesToBeChecked) throws InterruptedException, IOException {
     BPMNSpecificPropertyCheckingResponse response =
         new BPMNSpecificPropertyCheckingResponse(new ArrayList<>());
 
-    for (BPMNSpecificProperty property : propertyCheckingRequest.propertiesToBeChecked()) {
+    for (BPMNSpecificProperty property : propertiesToBeChecked) {
       this.checkPropertyAndRecordResult(property, response);
     }
     response.sortResults();
@@ -71,10 +73,42 @@ public class BPMNModelChecker {
       BPMNSpecificProperty property, BPMNSpecificPropertyCheckingResponse response)
       throws InterruptedException, IOException {
     switch (property) {
+      case PROPER_COMPLETION -> this.checkProperCompletion(response);
       case NO_DEAD_ACTIVITIES -> this.checkNoDeadActivities(response);
       case SAFENESS -> this.checkSafeness(response);
       case OPTION_TO_COMPLETE -> this.checkOptionToComplete(response);
       default -> throw new IllegalStateException("Unexpected value: " + property);
+    }
+  }
+
+  private void checkProperCompletion(BPMNSpecificPropertyCheckingResponse response)
+      throws IOException, InterruptedException {
+    // Find all end events
+    Map<String, String> nameToIDEndEvents =
+        getFlowNodesMatchingFilter(
+            flowNode -> {
+              ValueWrapper<Boolean> wrapper = new ValueWrapper<>(false);
+              flowNode.accept(
+                  new DoNothingFlowNodeVisitor() {
+                    @Override
+                    public void handle(EndEvent endEvent) {
+                      wrapper.setValue(true);
+                    }
+                  });
+              return wrapper.getValueIfExists();
+            });
+
+    // Generate state space for graph grammar.
+    final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
+    final String stateSpaceTempFile =
+        String.format("%s%s.txt", this.getStateSpaceDirPath(), bpmnModel.getName() + "_StateSpace");
+    grooveJarRunner.generateStateSpace(graphGrammarDir.toString(), stateSpaceTempFile, true);
+
+    // Check if any end event was executed twice in the same path of the state space leading to
+    // AllTerminated!
+
+    for (Entry<String, String> nameAndID : nameToIDEndEvents.entrySet()) {
+      System.out.printf("TODO check end event %s (%s)\n", nameAndID.getKey(), nameAndID.getValue());
     }
   }
 
@@ -128,7 +162,7 @@ public class BPMNModelChecker {
       final Set<String> executedActivities = findExecutedActivitiesInStateSpace(stateSpaceTempFile);
 
       // Compare to all activities
-      final Map<String, String> nameToIdActivityMap = getAllActivities();
+      final Map<String, String> nameToIdActivityMap = getFlowNodesMatchingFilter(FlowNode::isTask);
       Set<String> deadActivities = nameToIdActivityMap.keySet();
       deadActivities.removeAll(executedActivities);
 
@@ -160,49 +194,58 @@ public class BPMNModelChecker {
     return deadActivities.stream().map(nameToIdActivityMap::get).collect(Collectors.toSet());
   }
 
-  private Map<String, String> getAllActivities() {
+  private Map<String, String> getFlowNodesMatchingFilter(Predicate<FlowNode> filter) {
     return this.bpmnModel.getParticipants().stream()
-        .flatMap(process -> getAllActivities(process).entrySet().stream())
+        .flatMap(process -> getFlowNodesMatchingFilter(process, filter).entrySet().stream())
         .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
   }
 
-  private Map<String, String> getAllActivities(BPMNProcess process) {
+  private Map<String, String> getFlowNodesMatchingFilter(
+      BPMNProcess process, Predicate<FlowNode> filter) {
     // Get all activities from subprocesses
-    final Map<String, String> allActivityNames =
+    final Map<String, String> nameToIdFlowNodeMap =
         process
             .allSubProcesses()
-            .flatMap(subprocess -> getAllActivities(subprocess).entrySet().stream())
+            .flatMap(
+                subprocess -> getFlowNodesMatchingFilter(subprocess, filter).entrySet().stream())
             .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
     // Get all activities from event subprocesses
     process
         .eventSubprocesses()
-        .flatMap(eventSubprocess -> getAllActivities(eventSubprocess).entrySet().stream())
+        .flatMap(
+            eventSubprocess ->
+                getFlowNodesMatchingFilter(eventSubprocess, filter).entrySet().stream())
         .forEach(
             nameToIdEntry ->
-                allActivityNames.put(nameToIdEntry.getKey(), nameToIdEntry.getValue()));
+                nameToIdFlowNodeMap.put(nameToIdEntry.getKey(), nameToIdEntry.getValue()));
 
-    addActivityNamesForProcess(process, allActivityNames);
-    return allActivityNames;
+    addFlowNodeNamesForProcess(process, nameToIdFlowNodeMap, filter);
+    return nameToIdFlowNodeMap;
   }
 
-  private Map<String, String> getAllActivities(BPMNEventSubprocess process) {
+  private Map<String, String> getFlowNodesMatchingFilter(
+      BPMNEventSubprocess process, Predicate<FlowNode> filter) {
     // Get all activities from subprocesses
-    Map<String, String> nameToIdActivityMap =
+    Map<String, String> nameToIdFlowNodeMap =
         process
             .eventSubprocesses()
-            .flatMap(eventSubprocess -> getAllActivities(eventSubprocess).entrySet().stream())
+            .flatMap(
+                eventSubprocess ->
+                    getFlowNodesMatchingFilter(eventSubprocess, filter).entrySet().stream())
             .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
 
-    addActivityNamesForProcess(process, nameToIdActivityMap);
-    return nameToIdActivityMap;
+    addFlowNodeNamesForProcess(process, nameToIdFlowNodeMap, filter);
+    return nameToIdFlowNodeMap;
   }
 
-  private void addActivityNamesForProcess(
-      AbstractBPMNProcess process, Map<String, String> nameToIdActivityMap) {
+  private void addFlowNodeNamesForProcess(
+      AbstractBPMNProcess process,
+      Map<String, String> nameToIdFlowNodeMap,
+      Predicate<FlowNode> filter) {
     process
         .flowNodes()
-        .filter(FlowNode::isTask)
-        .forEach(task -> nameToIdActivityMap.put(task.getName(), task.getId()));
+        .filter(filter)
+        .forEach(task -> nameToIdFlowNodeMap.put(task.getName(), task.getId()));
   }
 
   private Set<String> findExecutedActivitiesInStateSpace(String stateSpaceTempFile)

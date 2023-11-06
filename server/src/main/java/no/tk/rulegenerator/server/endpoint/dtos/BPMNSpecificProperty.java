@@ -1,11 +1,11 @@
 package no.tk.rulegenerator.server.endpoint.dtos;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 
 public enum BPMNSpecificProperty {
   SAFENESS("Safeness"),
   OPTION_TO_COMPLETE("Option to complete"),
+  PROPER_COMPLETION("Proper completion"),
   NO_DEAD_ACTIVITIES("No dead activities"),
   ;
 
@@ -21,14 +21,11 @@ public enum BPMNSpecificProperty {
   }
 
   public int getOrdering() {
-    switch (this) {
-      case SAFENESS:
-        return 1;
-      case OPTION_TO_COMPLETE:
-        return 2;
-      case NO_DEAD_ACTIVITIES:
-        return 3;
-    }
-    throw new ShouldNotHappenRuntimeException("Unknown BPMN specific property!");
+    return switch (this) {
+      case SAFENESS -> 0;
+      case OPTION_TO_COMPLETE -> 1;
+      case PROPER_COMPLETION -> 2;
+      case NO_DEAD_ACTIVITIES -> 3;
+    };
   }
 }
