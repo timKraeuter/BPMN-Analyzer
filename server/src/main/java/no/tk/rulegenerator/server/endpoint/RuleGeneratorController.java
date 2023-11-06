@@ -90,7 +90,8 @@ public class RuleGeneratorController {
     Pair<Path, BPMNCollaboration> result =
         RuleGeneratorControllerHelper.generateGGForBPMNFile(request.file(), false);
 
-    return new BPMNModelChecker(result.getLeft(), result.getRight()).checkBPMNProperties(request);
+    return new BPMNModelChecker(result.getLeft(), result.getRight())
+        .checkBPMNProperties(request.propertiesToBeChecked());
   }
 
   /**
