@@ -135,21 +135,11 @@ public class BPMNModelChecker {
       String terminatedStateId, Set<String> endEventNames, String stateSpace) {
     String startState = getStartState(stateSpace);
 
-    Set<Pair<String, String>> incomingTransitions =
-        getIncomingTransitions(terminatedStateId, stateSpace);
-
-    for (Pair<String, String> incomingTransition : incomingTransitions) {
-      Optional<String> endEventName =
-          checkPathForEndEvents(
-              startState, stateSpace, endEventNames, new HashMap<>(), incomingTransition);
-      if (endEventName.isPresent()) {
-        return endEventName;
-      }
-    }
-    return Optional.empty();
+    return checkIncomingTransitionsForNode(
+        startState, stateSpace, endEventNames, new HashMap<>(), terminatedStateId);
   }
 
-  private Optional<String> checkPathForEndEvents(
+  private Optional<String> checkTransitionAndItsSource(
       String startState,
       String stateSpace,
       Set<String> endEventNames,
@@ -173,11 +163,20 @@ public class BPMNModelChecker {
     }
 
     // Search further
-    Set<Pair<String, String>> incomingTransitions =
-        getIncomingTransitions(transitionSource, stateSpace);
+    return checkIncomingTransitionsForNode(
+        startState, stateSpace, endEventNames, seenEndEvents, transitionSource);
+  }
+
+  private Optional<String> checkIncomingTransitionsForNode(
+      String startState,
+      String stateSpace,
+      Set<String> endEventNames,
+      Map<String, Boolean> seenEndEvents,
+      String node) {
+    Set<Pair<String, String>> incomingTransitions = getIncomingTransitions(node, stateSpace);
     for (Pair<String, String> incomingTransition : incomingTransitions) {
       Optional<String> endEventName =
-          checkPathForEndEvents(
+          checkTransitionAndItsSource(
               startState,
               stateSpace,
               endEventNames,
