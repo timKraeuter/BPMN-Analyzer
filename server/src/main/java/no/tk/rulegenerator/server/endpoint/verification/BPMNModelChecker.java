@@ -6,9 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
@@ -32,6 +34,7 @@ import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResp
 import no.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import no.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
 import no.tk.util.ValueWrapper;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class BPMNModelChecker {
 
@@ -102,14 +105,142 @@ public class BPMNModelChecker {
     final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
     final String stateSpaceTempFile =
         String.format("%s%s.txt", this.getStateSpaceDirPath(), bpmnModel.getName() + "_StateSpace");
-    grooveJarRunner.generateStateSpace(graphGrammarDir.toString(), stateSpaceTempFile, true);
+    Path stateSpaceFile =
+        grooveJarRunner.generateStateSpace(graphGrammarDir.toString(), stateSpaceTempFile, true);
+
+    final String stateSpace = Files.readString(stateSpaceFile);
+
+    // Find all terminated states
+    Set<String> terminatedStateIds = findAllTerminatedStates(stateSpace);
 
     // Check if any end event was executed twice in the same path of the state space leading to
     // AllTerminated!
 
-    for (Entry<String, String> nameAndID : nameToIDEndEvents.entrySet()) {
-      System.out.printf("TODO check end event %s (%s)\n", nameAndID.getKey(), nameAndID.getValue());
+    for (String terminatedStateId : terminatedStateIds) {
+      Optional<String> endEventName =
+          checkIfAnyEndEventExecutedTwice(
+              terminatedStateId, nameToIDEndEvents.keySet(), stateSpace);
+      if (endEventName.isPresent()) {
+        response.addPropertyCheckingResult(
+            new BPMNPropertyCheckingResult(
+                BPMNSpecificProperty.PROPER_COMPLETION, false, endEventName.get()));
+        return;
+      }
     }
+    response.addPropertyCheckingResult(
+        new BPMNPropertyCheckingResult(BPMNSpecificProperty.PROPER_COMPLETION, true, ""));
+  }
+
+  private Optional<String> checkIfAnyEndEventExecutedTwice(
+      String terminatedStateId, Set<String> endEventNames, String stateSpace) {
+    String startState = getStartState(stateSpace);
+
+    Set<Pair<String, String>> incomingTransitions =
+        getIncomingTransitions(terminatedStateId, stateSpace);
+
+    for (Pair<String, String> incomingTransition : incomingTransitions) {
+      Optional<String> endEventName =
+          checkPathForEndEvents(
+              startState, stateSpace, endEventNames, new HashMap<>(), incomingTransition);
+      if (endEventName.isPresent()) {
+        return endEventName;
+      }
+    }
+    return Optional.empty();
+  }
+
+  private Optional<String> checkPathForEndEvents(
+      String startState,
+      String stateSpace,
+      Set<String> endEventNames,
+      HashMap<String, Boolean> seenEndEvents,
+      Pair<String, String> currentTransition) {
+    String transitionLabel = currentTransition.getRight();
+    // Check the label
+    for (String endEventName : endEventNames) {
+      if (transitionLabel.equals(endEventName) || transitionLabel.startsWith(endEventName + "_")) {
+        Boolean seen = seenEndEvents.get(endEventName);
+        if (seen != null) {
+          return Optional.of(endEventName);
+        }
+        seenEndEvents.put(endEventName, true);
+      }
+    }
+
+    String transitionSource = currentTransition.getKey();
+    if (transitionSource.equals(startState)) {
+      return Optional.empty();
+    }
+
+    // Search further
+    Set<Pair<String, String>> incomingTransitions =
+        getIncomingTransitions(transitionSource, stateSpace);
+    for (Pair<String, String> incomingTransition : incomingTransitions) {
+      Optional<String> endEventName =
+          checkPathForEndEvents(
+              startState,
+              stateSpace,
+              endEventNames,
+              new HashMap<>(seenEndEvents),
+              incomingTransition);
+      if (endEventName.isPresent()) {
+        return endEventName;
+      }
+    }
+    return Optional.empty();
+  }
+
+  private Set<Pair<String, String>> getIncomingTransitions(String nodeId, String stateSpace) {
+    Pattern regEx =
+        Pattern.compile(
+            String.format(
+                """
+            <edge from="(.*)" to="%s">
+            \\s*<attr name="label">
+            \\s*<string>(.*)</string>
+            """,
+                nodeId));
+    final Matcher matcher = regEx.matcher(stateSpace);
+    Set<Pair<String, String>> transitionSourceAndLabel = new HashSet<>();
+    while (matcher.find()) {
+      String edgeSource = matcher.group(1);
+      String edgeName = matcher.group(2);
+      if (!edgeSource.equals(nodeId)) {
+        transitionSourceAndLabel.add(Pair.of(edgeSource, edgeName));
+      }
+    }
+    return transitionSourceAndLabel;
+  }
+
+  private String getStartState(String stateSpace) {
+    Pattern regEx =
+        Pattern.compile(
+            """
+            <edge from="(.*)" to=".*">
+            \\s*<attr name="label">
+            \\s*<string>start</string>
+            """);
+    Matcher matcher = regEx.matcher(stateSpace);
+    if (!matcher.find()) {
+      throw new ShouldNotHappenRuntimeException("Start state in state space could not be found!");
+    }
+    return matcher.group(1);
+  }
+
+  private static Set<String> findAllTerminatedStates(String stateSpace) {
+    Pattern regEx =
+        Pattern.compile(
+            """
+            <edge from="(.*)" to=".*">
+            \\s*<attr name="label">
+            \\s*<string>AllTerminated</string>
+            """);
+    final Matcher matcher = regEx.matcher(stateSpace);
+    Set<String> terminatedStateIds = new HashSet<>();
+    while (matcher.find()) {
+      terminatedStateIds.add(matcher.group(1));
+    }
+    return terminatedStateIds;
   }
 
   private void checkOptionToComplete(BPMNSpecificPropertyCheckingResponse response)
