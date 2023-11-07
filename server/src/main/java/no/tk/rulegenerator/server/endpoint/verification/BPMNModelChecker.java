@@ -123,7 +123,9 @@ public class BPMNModelChecker {
       if (endEventName.isPresent()) {
         response.addPropertyCheckingResult(
             new BPMNPropertyCheckingResult(
-                BPMNSpecificProperty.PROPER_COMPLETION, false, endEventName.get()));
+                BPMNSpecificProperty.PROPER_COMPLETION,
+                false,
+                nameToIDEndEvents.get(endEventName.get())));
         return;
       }
     }

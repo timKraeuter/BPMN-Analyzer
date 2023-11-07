@@ -47,7 +47,7 @@ class BPMNModelCheckerTest {
         is(
             List.of(
                 new BPMNPropertyCheckingResult(
-                    BPMNSpecificProperty.PROPER_COMPLETION, false, "end"))));
+                    BPMNSpecificProperty.PROPER_COMPLETION, false, "EndEvent_1"))));
   }
 
   @ParameterizedTest
