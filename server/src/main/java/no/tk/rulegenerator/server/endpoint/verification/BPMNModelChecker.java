@@ -252,13 +252,22 @@ public class BPMNModelChecker {
 
   private void checkSafeness(BPMNSpecificPropertyCheckingResponse response)
       throws IOException, InterruptedException {
-    final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
-    ModelCheckingResult safenessResult =
-        grooveJarRunner.checkCTL(graphGrammarDir.toString(), UNSAFE_CTL);
+    String stateSpace = getOrGenerateStateSpace();
 
     response.addPropertyCheckingResult(
         new BPMNPropertyCheckingResult(
-            BPMNSpecificProperty.SAFENESS, safenessResult.isValid(), "CTL: " + UNSAFE_CTL));
+            BPMNSpecificProperty.SAFENESS, isSafe(stateSpace), "CTL: " + UNSAFE_CTL));
+  }
+
+  private static boolean isSafe(String stateSpace) {
+    Pattern regEx =
+        Pattern.compile(
+            """
+            <edge from=".*" to=".*">
+            \\s*<attr name="label">
+            \\s*<string>Unsafe</string>
+            """);
+    return !regEx.matcher(stateSpace).find();
   }
 
   private String getOrGenerateStateSpace() throws IOException, InterruptedException {
@@ -302,7 +311,7 @@ public class BPMNModelChecker {
   }
 
   private void readStateSpaceAndCheckActivities(
-      BPMNSpecificPropertyCheckingResponse response, String stateSpace) throws IOException {
+      BPMNSpecificPropertyCheckingResponse response, String stateSpace) {
     // Read the state space file and find the executed activities
     final Set<String> executedActivities = findExecutedActivitiesInStateSpace(stateSpace);
 
