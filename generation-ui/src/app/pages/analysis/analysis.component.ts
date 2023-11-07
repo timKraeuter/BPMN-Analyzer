@@ -112,6 +112,7 @@ export class AnalysisComponent {
                     this.bpmnPropertyCheckingResults = JSON.parse(
                         JSON.stringify(data['propertyCheckingResults']),
                     );
+                    this.setProperCompletionHintsIfNeeded();
                     this.colorDeadActivitiesAndSetNamesIfNeeded();
                 },
             })
@@ -156,6 +157,25 @@ export class AnalysisComponent {
             .add(() => (this.bpmnSpecificVerificationRunning = false));
     }
 
+    private setProperCompletionHintsIfNeeded(): void {
+        this.bpmnPropertyCheckingResults.forEach((value) => {
+            if (value.name === 'Proper completion' && value.additionalInfo) {
+                const unproperEndEvents = this.getElementsForIDs([
+                    value.additionalInfo,
+                ]);
+                this.colorElementsInRed(unproperEndEvents);
+                this.setEndNameAsInfo(value, unproperEndEvents);
+                this.bpmnModeler.updateViewerBPMNModel();
+            }
+        });
+    }
+
+    private setEndNameAsInfo(value: BPMNProperty, unproperEndEvents: any) {
+        const flowNodeNameOrIdList =
+            this.getFlowNodeNameOrIdList(unproperEndEvents);
+        value.additionalInfo = `The end event ${flowNodeNameOrIdList} consumed more than one token.`;
+    }
+
     private colorDeadActivitiesAndSetNamesIfNeeded(): void {
         this.bpmnPropertyCheckingResults.forEach((value) => {
             if (value.name === 'No dead activities' && value.additionalInfo) {
@@ -170,11 +190,15 @@ export class AnalysisComponent {
     }
 
     private setActivityNamesAsInfo(value: BPMNProperty, deadActivities: any[]) {
-        value.additionalInfo =
-            'Dead activities: ' + this.getActivityNameOrIdList(deadActivities);
+        const deadActivityNames = this.getFlowNodeNameOrIdList(deadActivities);
+        if (deadActivities.length > 1) {
+            value.additionalInfo = `The dead activities are ${deadActivityNames}.`;
+        } else {
+            value.additionalInfo = `The dead activity is ${deadActivityNames}.`;
+        }
     }
 
-    private getActivityNameOrIdList(deadActivities: any[]): string {
+    private getFlowNodeNameOrIdList(deadActivities: any[]): string {
         return deadActivities
             .map((value1) => {
                 if (!value1.businessObject.name) {
@@ -182,6 +206,7 @@ export class AnalysisComponent {
                 }
                 return value1.businessObject.name;
             })
+            .map((value) => `"${value}"`)
             .join(', ');
     }
 
