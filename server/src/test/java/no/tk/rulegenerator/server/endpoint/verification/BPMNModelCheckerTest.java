@@ -1,6 +1,7 @@
 package no.tk.rulegenerator.server.endpoint.verification;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -15,7 +16,6 @@ import no.tk.groove.behaviortransformer.BehaviorToGrooveTransformer;
 import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNPropertyCheckingResult;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
-import static org.hamcrest.MatcherAssert.assertThat;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResponse;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.params.ParameterizedTest;
