@@ -41,6 +41,7 @@ public class BPMNModelChecker {
   public static final String OPTION_TO_COMPLETE_CTL = "AF(AllTerminated)";
   public static final String UNSAFE_CTL = "AG(!Unsafe)";
   private final Path graphGrammarDir;
+  private String stateSpace = "";
   private final BPMNCollaboration bpmnModel;
 
   public BPMNModelChecker(Path graphGrammarDir, BPMNCollaboration bpmnModel) {
@@ -272,23 +273,21 @@ public class BPMNModelChecker {
 
   private String getOrGenerateStateSpace() throws IOException, InterruptedException {
     // Generate state space for graph grammar.
-    final String stateSpaceTempFile = getStateSpaceTempFile();
-    Path stateSpaceFile = Path.of(stateSpaceTempFile);
-    if (Files.exists(stateSpaceFile)) {
-      return Files.readString(stateSpaceFile);
-
-    } else {
+    if (stateSpace.isEmpty()) {
       // Generate new state space
       final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
+      final String stateSpaceTempFile = getStateSpaceTempFile();
       try {
-        return Files.readString(
-            grooveJarRunner.generateStateSpace(
-                graphGrammarDir.toString(), stateSpaceTempFile, true));
+        stateSpace =
+            Files.readString(
+                grooveJarRunner.generateStateSpace(
+                    graphGrammarDir.toString(), stateSpaceTempFile, true));
       } catch (NoSuchFileException exception) {
         throw new ModelCheckingException(
             "The state space could not be generated or generation timed out after 60 seconds.");
       }
     }
+    return stateSpace;
   }
 
   private String getStateSpaceTempFile() {
