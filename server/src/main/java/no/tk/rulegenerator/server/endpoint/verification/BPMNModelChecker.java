@@ -101,7 +101,7 @@ public class BPMNModelChecker {
                   });
               return wrapper.getValueIfExists();
             });
-    String stateSpace = getOrGenerateStateSpace();
+    generateStateSpaceIfNeeded();
 
     // Find all terminated states
     Set<String> terminatedStateIds = findAllTerminatedStates(stateSpace);
@@ -253,7 +253,7 @@ public class BPMNModelChecker {
 
   private void checkSafeness(BPMNSpecificPropertyCheckingResponse response)
       throws IOException, InterruptedException {
-    String stateSpace = getOrGenerateStateSpace();
+    generateStateSpaceIfNeeded();
 
     response.addPropertyCheckingResult(
         new BPMNPropertyCheckingResult(
@@ -271,7 +271,7 @@ public class BPMNModelChecker {
     return !regEx.matcher(stateSpace).find();
   }
 
-  private String getOrGenerateStateSpace() throws IOException, InterruptedException {
+  private void generateStateSpaceIfNeeded() throws IOException, InterruptedException {
     // Generate state space for graph grammar.
     if (stateSpace.isEmpty()) {
       // Generate new state space
@@ -287,7 +287,6 @@ public class BPMNModelChecker {
             "The state space could not be generated or generation timed out after 60 seconds.");
       }
     }
-    return stateSpace;
   }
 
   private String getStateSpaceTempFile() {
@@ -297,7 +296,7 @@ public class BPMNModelChecker {
 
   private void checkNoDeadActivities(BPMNSpecificPropertyCheckingResponse response)
       throws InterruptedException, IOException {
-    String stateSpace = getOrGenerateStateSpace();
+    generateStateSpaceIfNeeded();
 
     readStateSpaceAndCheckActivities(response, stateSpace);
   }
