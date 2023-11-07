@@ -37,11 +37,10 @@ class BPMNModelCheckerTest {
 
     // When
     BPMNModelChecker bpmnModelChecker = new BPMNModelChecker(ggDir, bpmnCollaboration);
-
-    // Then
     BPMNSpecificPropertyCheckingResponse result =
         bpmnModelChecker.checkBPMNProperties(Set.of(BPMNSpecificProperty.PROPER_COMPLETION));
 
+    // Then
     assertThat(
         result.propertyCheckingResults(),
         is(
@@ -59,11 +58,10 @@ class BPMNModelCheckerTest {
 
     // When
     BPMNModelChecker bpmnModelChecker = new BPMNModelChecker(ggDir, bpmnCollaboration);
-
-    // Then
     BPMNSpecificPropertyCheckingResponse result =
         bpmnModelChecker.checkBPMNProperties(Set.of(BPMNSpecificProperty.PROPER_COMPLETION));
 
+    // Then
     assertThat(
         result.propertyCheckingResults(),
         is(

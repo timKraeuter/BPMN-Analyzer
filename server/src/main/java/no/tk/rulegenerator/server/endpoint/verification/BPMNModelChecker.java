@@ -100,15 +100,7 @@ public class BPMNModelChecker {
                   });
               return wrapper.getValueIfExists();
             });
-
-    // Generate state space for graph grammar.
-    final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
-    final String stateSpaceTempFile =
-        String.format("%s%s.txt", this.getStateSpaceDirPath(), bpmnModel.getName() + "_StateSpace");
-    Path stateSpaceFile =
-        grooveJarRunner.generateStateSpace(graphGrammarDir.toString(), stateSpaceTempFile, true);
-
-    final String stateSpace = Files.readString(stateSpaceFile);
+    String stateSpace = getOrGenerateStateSpace();
 
     // Find all terminated states
     Set<String> terminatedStateIds = findAllTerminatedStates(stateSpace);
@@ -269,15 +261,37 @@ public class BPMNModelChecker {
             BPMNSpecificProperty.SAFENESS, safenessResult.isValid(), "CTL: " + UNSAFE_CTL));
   }
 
+  private String getOrGenerateStateSpace() throws IOException, InterruptedException {
+    // Generate state space for graph grammar.
+    final String stateSpaceTempFile = getStateSpaceTempFile();
+    Path stateSpaceFile = Path.of(stateSpaceTempFile);
+    if (Files.exists(stateSpaceFile)) {
+      return Files.readString(stateSpaceFile);
+
+    } else {
+      // Generate new state space
+      final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
+      try {
+        return Files.readString(
+            grooveJarRunner.generateStateSpace(
+                graphGrammarDir.toString(), stateSpaceTempFile, true));
+      } catch (NoSuchFileException exception) {
+        throw new ModelCheckingException(
+            "The state space could not be generated or generation timed out after 60 seconds.");
+      }
+    }
+  }
+
+  private String getStateSpaceTempFile() {
+    return String.format(
+        "%s%s.txt", this.getStateSpaceDirPath(), bpmnModel.getName() + "_StateSpace");
+  }
+
   private void checkNoDeadActivities(BPMNSpecificPropertyCheckingResponse response)
       throws InterruptedException, IOException {
-    // Generate state space for graph grammar.
-    final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
-    final String stateSpaceTempFile =
-        String.format("%s%s.txt", this.getStateSpaceDirPath(), bpmnModel.getName() + "_StateSpace");
-    grooveJarRunner.generateStateSpace(graphGrammarDir.toString(), stateSpaceTempFile, true);
+    String stateSpace = getOrGenerateStateSpace();
 
-    readStateSpaceAndCheckActivities(response, stateSpaceTempFile);
+    readStateSpaceAndCheckActivities(response, stateSpace);
   }
 
   private String getStateSpaceDirPath() {
@@ -288,21 +302,16 @@ public class BPMNModelChecker {
   }
 
   private void readStateSpaceAndCheckActivities(
-      BPMNSpecificPropertyCheckingResponse response, String stateSpaceTempFile) throws IOException {
-    try {
-      // Read the state space file and find the executed activities
-      final Set<String> executedActivities = findExecutedActivitiesInStateSpace(stateSpaceTempFile);
+      BPMNSpecificPropertyCheckingResponse response, String stateSpace) throws IOException {
+    // Read the state space file and find the executed activities
+    final Set<String> executedActivities = findExecutedActivitiesInStateSpace(stateSpace);
 
-      // Compare to all activities
-      final Map<String, String> nameToIdActivityMap = getFlowNodesMatchingFilter(FlowNode::isTask);
-      Set<String> deadActivities = nameToIdActivityMap.keySet();
-      deadActivities.removeAll(executedActivities);
+    // Compare to all activities
+    final Map<String, String> nameToIdActivityMap = getFlowNodesMatchingFilter(FlowNode::isTask);
+    Set<String> deadActivities = nameToIdActivityMap.keySet();
+    deadActivities.removeAll(executedActivities);
 
-      recordNoDeadActivitiesResult(response, nameToIdActivityMap, deadActivities);
-    } catch (NoSuchFileException exception) {
-      throw new ModelCheckingException(
-          "The state space could not be generated or generation timed out after 60 seconds.");
-    }
+    recordNoDeadActivitiesResult(response, nameToIdActivityMap, deadActivities);
   }
 
   private void recordNoDeadActivitiesResult(
@@ -380,14 +389,10 @@ public class BPMNModelChecker {
         .forEach(task -> nameToIdFlowNodeMap.put(task.getName(), task.getId()));
   }
 
-  private Set<String> findExecutedActivitiesInStateSpace(String stateSpaceTempFile)
-      throws IOException {
+  private Set<String> findExecutedActivitiesInStateSpace(String stateSpace) {
     final Pattern regEx = Pattern.compile("<string>(.*)_end</string>");
 
-    // Read the file in chunks if needed in the future!
-    final String stateSpaceString = Files.readString(Path.of(stateSpaceTempFile));
-
-    final Matcher matcher = regEx.matcher(stateSpaceString);
+    final Matcher matcher = regEx.matcher(stateSpace);
     final Set<String> executedActivities = new HashSet<>();
     while (matcher.find()) {
       executedActivities.add(matcher.group(1));
