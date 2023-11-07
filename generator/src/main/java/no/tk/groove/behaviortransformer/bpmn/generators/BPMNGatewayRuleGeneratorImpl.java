@@ -12,7 +12,9 @@ import com.google.common.collect.Sets;
 import io.github.timkraeuter.groove.graph.GrooveNode;
 import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.FlowNode;
 import no.tk.behavior.bpmn.SequenceFlow;
@@ -21,6 +23,9 @@ import no.tk.behavior.bpmn.gateways.*;
 import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 
 public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
+
+  private static final String EXG_RULE_NAME_FORMAT_COMPLEX_CHOICE_AND_MERGE = "%s__%s_%s";
+  private static final String EXG_RULE_NAME_FORMAT_CHOICE_OR_MERGE = "%s_%s";
   private final GrooveRuleBuilder ruleBuilder;
 
   public BPMNGatewayRuleGeneratorImpl(GrooveRuleBuilder ruleBuilder) {
@@ -270,19 +275,36 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
       Gateway exclusiveGateway, SequenceFlow inFlow, SequenceFlow outFlow) {
     final long inCount = exclusiveGateway.getIncomingFlows().count();
     final long outCount = exclusiveGateway.getOutgoingFlows().count();
+
     if (inCount <= 1 && outCount == 1) {
       return exclusiveGateway.getName();
     }
+    boolean duplicateTargetOfOutFlows = hasDuplicateTargets(exclusiveGateway.getOutgoingFlows());
     if (inCount <= 1) {
-      return exclusiveGateway.getName() + "_" + outFlow.getTarget().getName();
+      return String.format(
+          EXG_RULE_NAME_FORMAT_CHOICE_OR_MERGE,
+          exclusiveGateway.getName(),
+          duplicateTargetOfOutFlows ? outFlow.getNameOrIDIfEmpty() : outFlow.getTarget().getName());
     }
     if (outCount == 1) {
-      return inFlow.getNameOrIDIfEmpty() + "_" + exclusiveGateway.getName();
+      return String.format(
+          EXG_RULE_NAME_FORMAT_CHOICE_OR_MERGE,
+          inFlow.getNameOrIDIfEmpty(),
+          exclusiveGateway.getName());
     }
-    return exclusiveGateway.getName()
-        + "__"
-        + inFlow.getNameOrIDIfEmpty()
-        + "_"
-        + outFlow.getTarget().getName();
+    return String.format(
+        EXG_RULE_NAME_FORMAT_COMPLEX_CHOICE_AND_MERGE,
+        exclusiveGateway.getName(),
+        inFlow.getNameOrIDIfEmpty(),
+        duplicateTargetOfOutFlows ? outFlow.getNameOrIDIfEmpty() : outFlow.getTarget().getName());
+  }
+
+  private boolean hasDuplicateTargets(Stream<SequenceFlow> outgoingFlows) {
+    return outgoingFlows
+        .map(SequenceFlow::getTarget)
+        .collect(Collectors.groupingBy(Function.identity()))
+        .entrySet()
+        .stream()
+        .anyMatch(flowNodeListEntry -> flowNodeListEntry.getValue().size() > 1);
   }
 }
