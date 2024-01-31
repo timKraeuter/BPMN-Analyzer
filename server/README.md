@@ -1,5 +1,19 @@
 # Running the application locally
 
+## Docker (using docker hub)
+
+The image is available through [docker hub](https://hub.docker.com/r/tkra/bpmn-analyzer).
+
+Run the following script on your machine (docker installation required):
+
+```bash
+docker pull tkra/bpmn-analyzer
+docker run -p 8080:8080 tkra/bpmn-analyzer
+```
+
+This will start the application at [localhost:8080](http://localhost:8080/).
+If the image is outdated, you can follow one of the other methods listed below.
+
 ## IDE
 
 Start the main method in the class **Application**.
@@ -23,7 +37,7 @@ java -jar build/libs/ruleGeneratorServer-2.0.0.jar --server.port=4300
 
 This will start the application with the specified port.
 
-## Docker
+## Docker (building the image)
 
 Build the application image:
 
