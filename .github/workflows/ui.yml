@@ -1,4 +1,4 @@
-name: Build, test & analyze ui
+name: Analyze ui
 on:
   push:
     paths:
@@ -8,10 +8,10 @@ on:
   workflow_dispatch:
 jobs:
   sonarcloud:
-    name: Build, test & analyze ui
+    name: Analyze ui
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: SonarCloud Scan
