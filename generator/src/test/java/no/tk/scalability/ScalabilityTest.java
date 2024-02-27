@@ -6,9 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.IntStream;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.FlowElement;
 import org.junit.jupiter.api.Test;
@@ -62,25 +59,5 @@ class ScalabilityTest {
   //  @Test
   void printStats() throws IOException {
     BPMNStatPrinter.printStats(Path.of("C:/Source/scalability/"));
-  }
-
-  //    @Test
-  void parallelismDegreesTest() {
-    try (ForkJoinPool forkJoinPool = ForkJoinPool.commonPool()) {
-      IntStream.rangeClosed(1, 20)
-          .forEach(
-              numberOfBranches ->
-                  IntStream.rangeClosed(1, 20)
-                      .forEach(
-                          branchLength ->
-                              forkJoinPool.execute(
-                                  () -> {
-                                    ParallelBranchModelGenerator parallelBranchModelGenerator =
-                                        new ParallelBranchModelGenerator();
-                                    parallelBranchModelGenerator.generateParallelBranchModel(
-                                        numberOfBranches, branchLength);
-                                  })));
-      assertTrue(forkJoinPool.awaitQuiescence(10, TimeUnit.MINUTES));
-    }
   }
 }
