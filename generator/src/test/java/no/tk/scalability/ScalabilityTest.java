@@ -62,7 +62,7 @@ class ScalabilityTest {
     BPMNStatPrinter.printStats(Path.of("C:/Source/scalability/"));
   }
 
-  @Test
+  //  @Test
   void parallelismDegreesTest() {
     ParallelismDegreeGenerator parallelismDegreeGenerator = new ParallelismDegreeGenerator();
     IntStream.rangeClosed(1, 30).forEach(parallelismDegreeGenerator::generateParallelModel);
