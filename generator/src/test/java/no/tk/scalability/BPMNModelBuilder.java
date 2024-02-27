@@ -13,7 +13,7 @@ import org.camunda.bpm.model.bpmn.instance.FlowNode;
 
 public class BPMNModelBuilder {
 
-  private static final String ID_FORMAT = "FlowNode_%s";
+  public static final String ID_FORMAT = "FlowNode_%s";
   private AbstractFlowNodeBuilder flowNodeBuilder;
   private final AtomicLong idSequencer = new AtomicLong(0);
 

@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.stream.IntStream;
+
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.FlowElement;
 import org.junit.jupiter.api.Test;
@@ -59,5 +61,11 @@ class ScalabilityTest {
   //  @Test
   void printStats() throws IOException {
     BPMNStatPrinter.printStats(Path.of("C:/Source/scalability/"));
+  }
+
+  @Test
+  void parallelismDegreesTest() {
+    ParallelismDegreeGenerator parallelismDegreeGenerator = new ParallelismDegreeGenerator();
+    IntStream.rangeClosed(1, 30).forEach(parallelismDegreeGenerator::generateParallelModel);
   }
 }
