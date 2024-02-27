@@ -68,10 +68,16 @@ class ScalabilityTest {
     //    @Test
     void parallelismDegreesTest() {
         try (ForkJoinPool forkJoinPool = ForkJoinPool.commonPool()) {
-            IntStream.rangeClosed(1, 20).forEach(i -> IntStream.rangeClosed(1, 20).forEach(j -> forkJoinPool.execute(() -> {
-                ParallelBranchModelGenerator parallelBranchModelGenerator = new ParallelBranchModelGenerator();
-                parallelBranchModelGenerator.generateParallelBranchModel(i, j);
-            })));
+            IntStream.rangeClosed(1, 20)
+                     .forEach(numberOfBranches -> IntStream.rangeClosed(1, 20)
+                                                           .forEach(branchLength -> forkJoinPool.execute(
+                                                                   () -> {
+                                                                       ParallelBranchModelGenerator parallelBranchModelGenerator =
+                                                                               new ParallelBranchModelGenerator();
+                                                                       parallelBranchModelGenerator.generateParallelBranchModel(
+                                                                               numberOfBranches,
+                                                                               branchLength);
+                                                                   })));
             assertTrue(forkJoinPool.awaitQuiescence(10, TimeUnit.MINUTES));
         }
     }
