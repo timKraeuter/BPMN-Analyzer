@@ -93,6 +93,7 @@ export class AnalysisComponent {
                     duration: 5000,
                 },
             );
+            return;
         }
         this.bpmnSpecificVerificationRunning = true;
         const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
