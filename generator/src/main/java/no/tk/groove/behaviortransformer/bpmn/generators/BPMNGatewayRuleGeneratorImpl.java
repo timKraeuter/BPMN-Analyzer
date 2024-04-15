@@ -24,7 +24,6 @@ import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 
 public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
 
-  private static final String EXG_RULE_NAME_FORMAT_COMPLEX_CHOICE_AND_MERGE = "%s__%s_%s";
   private static final String EXG_RULE_NAME_FORMAT_CHOICE_OR_MERGE = "%s_%s";
   private final GrooveRuleBuilder ruleBuilder;
 
@@ -293,7 +292,7 @@ public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {
           exclusiveGateway.getName());
     }
     return String.format(
-        EXG_RULE_NAME_FORMAT_COMPLEX_CHOICE_AND_MERGE,
+        "%s__%s_%s",
         exclusiveGateway.getName(),
         inFlow.getNameOrIDIfEmpty(),
         duplicateTargetOfOutFlows ? outFlow.getNameOrIDIfEmpty() : outFlow.getTarget().getName());

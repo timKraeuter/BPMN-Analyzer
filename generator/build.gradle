@@ -9,7 +9,7 @@ plugins {
 
 group = 'no.hvl.tk'
 version = '1'
-sourceCompatibility = '20'
+sourceCompatibility = '21'
 
 repositories {
     mavenLocal()

@@ -1,4 +1,4 @@
-FROM amazoncorretto:20.0.2
+FROM amazoncorretto:21-al2023-headless
 ARG JAR_FILE=server/build/libs/ruleGeneratorServer-2.0.0.jar
 COPY ${JAR_FILE} app.jar
 ADD /groove/ /groove/
