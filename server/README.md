@@ -54,6 +54,13 @@ docker run -p 8080:8080 bpmnanalyzer
 
 This will start the application at [localhost:8080](http://localhost:8080/).
 
+Push to dockerhub:
+
+```bash
+docker tag bpmnanalyzer tkra/bpmn-analyzer
+docker push tkra/bpmn-analyzer
+```
+
 # Deployment to Azure
 
 1. Build the container (see Docker section).
