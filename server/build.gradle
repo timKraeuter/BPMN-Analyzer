@@ -11,7 +11,7 @@ plugins {
 
 group = 'no.hvl.tk'
 version = '2.0.0'
-sourceCompatibility = '20'
+sourceCompatibility = '21'
 
 repositories {
     mavenLocal()
