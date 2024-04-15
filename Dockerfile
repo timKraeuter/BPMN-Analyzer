@@ -1,4 +1,4 @@
-FROM amazoncorretto:21-al2023-headless
+FROM gcr.io/distroless/java21-debian12
 ARG JAR_FILE=server/build/libs/ruleGeneratorServer-2.0.0.jar
 COPY ${JAR_FILE} app.jar
 ADD /groove/ /groove/
