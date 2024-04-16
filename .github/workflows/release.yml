@@ -15,14 +15,12 @@ jobs:
           distribution: 'temurin'
           java-version: 21
           cache: 'gradle'
-      - name: Go to server
-        run: cd server
       - name: Grant execute permission for gradlew
         run: chmod +x /gradlew
+        working-directory: server
       - name: Build Jar
         run: ./gradlew bootJar
-      - name: Go to root
-        run: cd ..
+        working-directory: server
       - name: Build docker image
         run: docker build -t tg2022.azurecr.io/bpmnanalyzer:v1 .
 
