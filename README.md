@@ -1,3 +1,5 @@
+[![Docker Hub](https://img.shields.io/docker/pulls/tkra/bpmn-analyzer)](https://hub.docker.com/r/tkra/bpmn-analyzer)
+
 # BPMN Analazyer
 Generates graph-transformation rules for the graph transformation toolset [Groove](https://groove.ewi.utwente.nl/about) and rewrite rules for the [Maude system](https://maude.cs.illinois.edu/w/index.php/The_Maude_System) from different BPMN models.
 
