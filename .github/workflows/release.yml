@@ -1,7 +1,6 @@
 name: Build & Push to Azure and Dockerhub
 
 on:
-  push:
   workflow_dispatch:
 
 jobs:
@@ -16,11 +15,14 @@ jobs:
           distribution: 'temurin'
           java-version: 21
           cache: 'gradle'
-
+      - name: Go to server
+        run: cd server
       - name: Grant execute permission for gradlew
-        run: chmod +x ./server/gradlew
+        run: chmod +x /gradlew
       - name: Build Jar
-        run: ./server/gradlew bootJar
+        run: ./gradlew bootJar
+      - name: Go to root
+        run: cd ..
       - name: Build docker image
         run: docker build -t tg2022.azurecr.io/bpmnanalyzer:v1 .
 
