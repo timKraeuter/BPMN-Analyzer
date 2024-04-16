@@ -39,6 +39,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Tag image
-        run: docker tag tg2022.azurecr.io/rust_bpmn_analyzer:v1 tkra/bpmn-analyzer
+        run: docker tag tg2022.azurecr.io/bpmnanalyzer:v1 tkra/bpmn-analyzer
       - name: Push to Dockerhub
         run: docker push tkra/bpmn-analyzer
