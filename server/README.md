@@ -12,7 +12,7 @@ docker run -p 8080:8080 tkra/bpmn-analyzer
 ```
 
 This will start the application at [localhost:8080](http://localhost:8080/).
-If the image is outdated, you can follow one of the other methods listed below.
+The image is updated using a GitHub action, which builds and pushes the image to docker hub (see release.yml).
 
 ## IDE
 
@@ -36,52 +36,3 @@ java -jar build/libs/ruleGeneratorServer-2.0.0.jar --server.port=4300
 ```
 
 This will start the application with the specified port.
-
-## Docker (building the image)
-
-Build the application image:
-
-```bash
-cd ..
-docker build -t bpmnanalyzer .
-```
-
-Run the application image:
-
-```bash
-docker run -p 8080:8080 bpmnanalyzer
-```
-
-This will start the application at [localhost:8080](http://localhost:8080/).
-
-Push to dockerhub:
-
-```bash
-docker tag bpmnanalyzer tkra/bpmn-analyzer
-docker push tkra/bpmn-analyzer
-```
-
-# Deployment to Azure
-
-1. Build the container (see Docker section).
-
-2. Tag container image
-
-```bash
-docker tag bpmnanalyzer tg2022.azurecr.io/bpmnanalyzer:v1
-```
-
-3. Login to the Container Registry. Environment variables `APP_ID` and `AZURE_PW` are expected to be
-   set (export APP_ID=<app-id> etc.).
-
-```bash
-docker login tg2022.azurecr.io --username $APP_ID --password $AZURE_PW
-```
-
-4. Push the image to the Container Registry
-
-```bash
-docker push tg2022.azurecr.io/bpmnanalyzer:v1
-```
-
-5. Create a new container app revision in the GUI.
