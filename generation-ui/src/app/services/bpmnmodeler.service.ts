@@ -1,12 +1,5 @@
 import { Injectable } from '@angular/core';
 
-/**
- * You may include a different variant of BpmnJS:
- *
- * bpmn-viewer  - displays BPMN diagrams without the ability
- *                to navigate them
- * bpmn-modeler - bootstraps a full-fledged BPMN editor
- */
 import Modeler from 'bpmn-js/lib/Modeler';
 import TokenModeler from 'bpmn-token/lib/Modeler';
 import Viewer from 'bpmn-js/lib/Viewer';
@@ -19,7 +12,6 @@ import TokenRules from 'bpmn-token/lib/features/token-rules/TokenRules';
 
 import KeyboardMoveModule from 'diagram-js/lib/navigation/keyboard-move';
 import MoveCanvasModule from 'diagram-js/lib/navigation/movecanvas';
-import TouchModule from 'diagram-js/lib/navigation/touch';
 import ZoomScrollModule from 'diagram-js/lib/navigation/zoomscroll';
 
 import {
@@ -53,7 +45,6 @@ export class BPMNModelerService {
         additionalModules: [
             KeyboardMoveModule,
             MoveCanvasModule,
-            TouchModule,
             ZoomScrollModule,
         ],
     });
