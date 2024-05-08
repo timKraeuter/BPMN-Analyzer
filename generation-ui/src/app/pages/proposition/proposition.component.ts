@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 // @ts-ignore
 import { saveAs } from 'file-saver-es';
@@ -133,5 +133,39 @@ export class PropositionComponent {
                     this.currentProposition.name + SVG_FILE_EXTENSION,
                 );
             });
+    }
+
+    @HostListener('document:keydown.ArrowDown', ['$event'])
+    async propositionDown(event: KeyboardEvent) {
+        if (
+            event.target &&
+            // @ts-ignore Do not step forward when inputting something in the panel.
+            event.target.className !== 'bio-properties-panel-input'
+        ) {
+            const currentIndex = this.propositions.findIndex(
+                (proposition) => proposition == this.currentProposition,
+            );
+            const nextProposition = this.propositions[currentIndex + 1];
+            if (nextProposition) {
+                await this.switchToProposition(nextProposition);
+            }
+        }
+    }
+
+    @HostListener('document:keydown.ArrowUp', ['$event'])
+    async propositionUp(event: KeyboardEvent) {
+        if (
+            event.target &&
+            // @ts-ignore Do not step forward when inputting something in the panel.
+            event.target.className !== 'bio-properties-panel-input'
+        ) {
+            const currentIndex = this.propositions.findIndex(
+                (proposition) => proposition == this.currentProposition,
+            );
+            const nextProposition = this.propositions[currentIndex - 1];
+            if (nextProposition) {
+                await this.switchToProposition(nextProposition);
+            }
+        }
     }
 }
