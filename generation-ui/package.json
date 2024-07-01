@@ -22,7 +22,7 @@
         "@angular/platform-browser": "^17.3.6",
         "@angular/platform-browser-dynamic": "^17.3.6",
         "@angular/router": "^17.3.6",
-        "bpmn-js": "^17.3.0",
+        "bpmn-js": "^17.9.0",
         "bpmn-js-properties-panel": "^5.17.1",
         "bpmn-token": "^1.0.3",
         "file-saver-es": "^2.0.5",
