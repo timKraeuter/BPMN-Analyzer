@@ -8,7 +8,7 @@
             *ngFor="let proposition of propositions"
             [ngClass]="{
                 highlight: proposition === currentProposition,
-                proposition: proposition !== currentProposition
+                proposition: proposition !== currentProposition,
             }"
             (click)="switchToProposition(proposition)"
         >
