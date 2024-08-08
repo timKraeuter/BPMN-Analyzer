@@ -333,12 +333,13 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
     if (startEventsPerEventSubprocess.isEmpty()) {
       return Optional.empty();
     }
-    Pair<BPMNEventSubprocess, List<StartEvent>> matchingPair = startEventsPerEventSubprocess.get(0);
+    Pair<BPMNEventSubprocess, List<StartEvent>> matchingPair =
+        startEventsPerEventSubprocess.getFirst();
     if (matchingPair.getRight().size() > 1) {
       throw new GrooveGenerationRuntimeException(
           multipleErrorOrEscalationCatchEventsFoundMessage(endEvent, matchingPair.getRight()));
     }
-    return Optional.of(Pair.of(matchingPair.getLeft(), matchingPair.getRight().get(0)));
+    return Optional.of(Pair.of(matchingPair.getLeft(), matchingPair.getRight().getFirst()));
   }
 
   private static String multipleEventSubprocessesFoundErrorMessage(
@@ -406,7 +407,7 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
               "Multiple boundary error events \"%s\" found matching the error end event \"%s\"!",
               matchingBoundaryEvents.stream().map(FlowElement::getId).toList(), endEvent.getId()));
     }
-    return Optional.of(matchingBoundaryEvents.get(0));
+    return Optional.of(matchingBoundaryEvents.getFirst());
   }
 
   private static boolean errorOrEscalationEventsMatch(
