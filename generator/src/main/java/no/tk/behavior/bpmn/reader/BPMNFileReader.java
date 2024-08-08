@@ -267,17 +267,14 @@ public class BPMNFileReader {
       case "endEvent" -> resultingFlowNode = mapEndEvent(flowNode);
 
         // Tasks
-      case "businessRuleTask",
-          "scriptTask",
-          "serviceTask",
-          "manualTask",
-          "userTask",
-          "task" -> resultingFlowNode =
-          new no.tk.behavior.bpmn.activities.tasks.Task(
-              flowNode.getId(), getFlowElementName(flowNode));
-      case "sendTask" -> resultingFlowNode =
-          new no.tk.behavior.bpmn.activities.tasks.SendTask(
-              flowNode.getId(), getFlowElementName(flowNode));
+      case "businessRuleTask", "scriptTask", "serviceTask", "manualTask", "userTask", "task" ->
+          resultingFlowNode =
+              new no.tk.behavior.bpmn.activities.tasks.Task(
+                  flowNode.getId(), getFlowElementName(flowNode));
+      case "sendTask" ->
+          resultingFlowNode =
+              new no.tk.behavior.bpmn.activities.tasks.SendTask(
+                  flowNode.getId(), getFlowElementName(flowNode));
       case "receiveTask" -> {
         boolean instantiate = hasInstantiateCamundaProperty(flowNode);
         resultingFlowNode =
@@ -294,28 +291,32 @@ public class BPMNFileReader {
         }
       }
       case "callActivity" ->
-      // Call Activity = Reusable sub-processes (external).
-      throw new BPMNRuntimeException("External subprocesses currently not supported!");
+          // Call Activity = Reusable sub-processes (external).
+          throw new BPMNRuntimeException("External subprocesses currently not supported!");
 
         // Gateways
-      case "parallelGateway" -> resultingFlowNode =
-          new no.tk.behavior.bpmn.gateways.ParallelGateway(
-              flowNode.getId(), getFlowElementName(flowNode));
-      case "exclusiveGateway" -> resultingFlowNode =
-          new no.tk.behavior.bpmn.gateways.ExclusiveGateway(
-              flowNode.getId(), getFlowElementName(flowNode));
+      case "parallelGateway" ->
+          resultingFlowNode =
+              new no.tk.behavior.bpmn.gateways.ParallelGateway(
+                  flowNode.getId(), getFlowElementName(flowNode));
+      case "exclusiveGateway" ->
+          resultingFlowNode =
+              new no.tk.behavior.bpmn.gateways.ExclusiveGateway(
+                  flowNode.getId(), getFlowElementName(flowNode));
       case "eventBasedGateway" -> {
         boolean instantiateGateway = hasInstantiateCamundaProperty(flowNode);
         resultingFlowNode =
             new no.tk.behavior.bpmn.gateways.EventBasedGateway(
                 flowNode.getId(), getFlowElementName(flowNode), instantiateGateway);
       }
-      case "inclusiveGateway" -> resultingFlowNode =
-          new InclusiveGateway(flowNode.getId(), getFlowElementName(flowNode));
-      case "boundaryEvent" -> resultingFlowNode =
-          handleBoundaryEvent(flowNode, mappedFlowNodes, mappedSequenceFlows, bpmnModelBuilder);
-      default -> throw new BPMNRuntimeException(
-          String.format("Unknown task type \"%s\" found!", taskTypeName));
+      case "inclusiveGateway" ->
+          resultingFlowNode = new InclusiveGateway(flowNode.getId(), getFlowElementName(flowNode));
+      case "boundaryEvent" ->
+          resultingFlowNode =
+              handleBoundaryEvent(flowNode, mappedFlowNodes, mappedSequenceFlows, bpmnModelBuilder);
+      default ->
+          throw new BPMNRuntimeException(
+              String.format("Unknown task type \"%s\" found!", taskTypeName));
     }
     if (resultingFlowNode != null) {
       bpmnModelBuilder.flowNode(resultingFlowNode);

@@ -432,16 +432,19 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
           "Intermediate throw events should have exactly one incoming sequence flow!");
     }
     switch (intermediateThrowEvent.getType()) {
-      case NONE -> createIntermediateThrowNoneEventRule(
-          intermediateThrowEvent, ruleName, ruleBuilder, process);
-      case LINK -> createIntermediateThrowLinkEventRule(
-          intermediateThrowEvent, ruleName, ruleBuilder, process);
-      case MESSAGE -> createIntermediateThrowMessageEventRule(
-          intermediateThrowEvent, ruleName, process);
-      case SIGNAL -> createIntermediateThrowSignalEventRule(
-          intermediateThrowEvent, ruleName, process);
-      default -> throw new BPMNRuntimeException(
-          "Unexpected throw event type: " + intermediateThrowEvent.getType());
+      case NONE ->
+          createIntermediateThrowNoneEventRule(
+              intermediateThrowEvent, ruleName, ruleBuilder, process);
+      case LINK ->
+          createIntermediateThrowLinkEventRule(
+              intermediateThrowEvent, ruleName, ruleBuilder, process);
+      case MESSAGE ->
+          createIntermediateThrowMessageEventRule(intermediateThrowEvent, ruleName, process);
+      case SIGNAL ->
+          createIntermediateThrowSignalEventRule(intermediateThrowEvent, ruleName, process);
+      default ->
+          throw new BPMNRuntimeException(
+              "Unexpected throw event type: " + intermediateThrowEvent.getType());
     }
   }
 
@@ -783,8 +786,8 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
               case NONE, MESSAGE -> {
                 // No rules needed
               }
-              default -> throw new IllegalStateException(
-                  "Unexpected value: " + startEvent.getType());
+              default ->
+                  throw new IllegalStateException("Unexpected value: " + startEvent.getType());
             }
           }
 

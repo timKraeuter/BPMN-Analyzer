@@ -240,8 +240,9 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
       case LINK -> createIntermediateThrowLinkEventRule(intermediateThrowEvent, process);
       case MESSAGE -> createIntermediateThrowMessageEventRule(intermediateThrowEvent, process);
       case SIGNAL -> createIntermediateThrowSignalEventRule(intermediateThrowEvent, process);
-      default -> throw new BPMNRuntimeException(
-          "Unexpected throw event type: " + intermediateThrowEvent.getType());
+      default ->
+          throw new BPMNRuntimeException(
+              "Unexpected throw event type: " + intermediateThrowEvent.getType());
     }
   }
 
