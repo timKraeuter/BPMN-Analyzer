@@ -1,10 +1,10 @@
 plugins {
-    id 'java'
+    id "java"
     // Analysis
-    id "org.sonarqube" version "4.4.0.3356"
-    id 'jacoco'
+    id "org.sonarqube" version "5.1.0.4882"
+    id "jacoco"
     id "net.ltgt.errorprone" version "3.1.0"
-    id "com.diffplug.spotless" version "6.21.0"
+    id "com.diffplug.spotless" version "6.25.0"
 }
 
 group = 'no.hvl.tk'

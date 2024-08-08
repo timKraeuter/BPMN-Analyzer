@@ -3,10 +3,10 @@ plugins {
     id 'org.springframework.boot' version '3.1.4'
     id 'io.spring.dependency-management' version '1.1.3'
     // Analysis
-    id "org.sonarqube" version "4.4.0.3356"
+    id 'org.sonarqube' version '5.1.0.4882'
     id 'jacoco'
-    id "net.ltgt.errorprone" version "3.1.0"
-    id "com.diffplug.spotless" version "6.21.0"
+    id 'net.ltgt.errorprone' version '3.1.0'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 group = 'no.hvl.tk'
@@ -28,7 +28,7 @@ dependencies {
     // https://mvnrepository.com/artifact/jakarta.xml.bind/jaxb-api
     implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.1'
     // https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime
-    implementation("org.glassfish.jaxb:jaxb-runtime:4.0.3")
+    implementation('org.glassfish.jaxb:jaxb-runtime:4.0.3')
     // https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api
     implementation group: 'jakarta.activation', name: 'jakarta.activation-api', version: '2.1.2'
 
@@ -53,7 +53,7 @@ dependencies {
     // https://mvnrepository.com/artifact/commons-io/commons-io
     testImplementation 'commons-io:commons-io:2.13.0'
 
-    errorprone("com.google.errorprone:error_prone_core:2.16")
+    errorprone('com.google.errorprone:error_prone_core:2.16')
 }
 
 tasks.named('test') {
@@ -68,9 +68,9 @@ jacocoTestReport {
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "timkraeuter_Groove_Rule_Generation_Server"
-        property "sonar.organization", "timkraeuter"
-        property "sonar.host.url", "https://sonarcloud.io"
+        property 'sonar.projectKey', 'timkraeuter_Groove_Rule_Generation_Server'
+        property 'sonar.organization', 'timkraeuter'
+        property 'sonar.host.url', 'https://sonarcloud.io'
     }
 }
 
