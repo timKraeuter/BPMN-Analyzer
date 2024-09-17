@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 class PNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
 
   @Override
-  protected void setUpFurther() {}
+  protected void setUpFurther() {
+    // Not needed
+  }
 
   @Override
   public String getTestResourcePathSubFolderName() {

@@ -62,7 +62,10 @@ class PiCalcToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelpe
     final String propertiesContent = Files.readString(propertiesFile).replaceAll("\r?\n", "\r\n");
 
     assertThat(
-        propertiesContent.contains("typeGraph=Type\r\n" + "checkDangling=true\r\n"), is(true));
+        propertiesContent.contains("""
+            typeGraph=Type\r
+            checkDangling=true\r
+            """), is(true));
   }
 
   @Test
