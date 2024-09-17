@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
     // Rule generation
-    implementation 'io.github.timKraeuter:graph-rule-generation:1.4'
+    implementation 'io.github.timKraeuter:graph-rule-generation:1.5'
 
     // Use the camunda API to read BPMN models.
     implementation group: 'org.camunda.bpm.model', name: 'camunda-bpmn-model', version: '7.20.0'
@@ -30,20 +30,20 @@ dependencies {
     implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.1'
     implementation('org.glassfish.jaxb:jaxb-runtime:4.0.3')
 
-    implementation 'commons-io:commons-io:2.13.0'
-    implementation 'com.google.guava:guava:32.1.2-jre'
-    implementation 'org.apache.commons:commons-lang3:3.13.0'
+    implementation 'commons-io:commons-io:2.16.1'
+    implementation 'com.google.guava:guava:33.2.1-jre'
+    implementation 'org.apache.commons:commons-lang3:3.15.0'
     // String substitution for Maude.
-    implementation 'org.apache.commons:commons-text:1.10.0'
+    implementation 'org.apache.commons:commons-text:1.11.0'
 
     // Logging
-    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
-    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
+    implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
 
     // Test
     testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.3'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.3'
 
     errorprone('com.google.errorprone:error_prone_core:2.18.0')
 }
