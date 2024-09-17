@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 import no.tk.behavior.bpmn.reader.token.model.CollaborationSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.ProcessSnapshot;
 import no.tk.behavior.bpmn.reader.token.model.Token;
@@ -157,11 +156,11 @@ class BPMNTokenFileReaderTest implements BPMNTokenFileReaderTestHelper {
   }
 
   private List<Boolean> getShouldExistListForTokens(ProcessSnapshot snapshot2) {
-    return snapshot2.getTokens().stream().map(Token::isShouldExist).collect(Collectors.toList());
+    return snapshot2.getTokens().stream().map(Token::isShouldExist).toList();
   }
 
   private List<String> getElementIDsForTokens(ProcessSnapshot snapshot1) {
-    return snapshot1.getTokens().stream().map(Token::getElementID).collect(Collectors.toList());
+    return snapshot1.getTokens().stream().map(Token::getElementID).toList();
   }
 
   private ProcessSnapshot getSnapshotWithID(CollaborationSnapshot bpmnSnapshot, String id) {
