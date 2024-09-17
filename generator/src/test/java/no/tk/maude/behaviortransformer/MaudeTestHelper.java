@@ -32,7 +32,7 @@ public interface MaudeTestHelper {
       throws IOException {
     Path maudeModel = getMaudeModuleFile(folder, resourceFileName);
     return readMaudeFileAndSanitize(maudeModel);
-    // force identical line separators;
+    // force identical line separators
   }
 
   default String readMaudeFileAndSanitize(Path maudeModel) throws IOException {
