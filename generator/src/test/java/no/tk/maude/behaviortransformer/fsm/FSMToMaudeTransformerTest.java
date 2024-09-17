@@ -1,6 +1,5 @@
 package no.tk.maude.behaviortransformer.fsm;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import no.tk.behavior.fsm.FSMStateAtomicProposition;
 import no.tk.behavior.fsm.FiniteStateMachine;
@@ -21,7 +20,7 @@ class FSMToMaudeTransformerTest implements MaudeTestHelper {
     fsm.addTransition(new Transition("turnRed", green, red));
 
     Set<FSMStateAtomicProposition> props =
-        ImmutableSet.of(new FSMStateAtomicProposition(red), new FSMStateAtomicProposition(green));
+        Set.of(new FSMStateAtomicProposition(red), new FSMStateAtomicProposition(green));
     testFSMMaudeGeneration(fsm, props, "<> green(\"1\")");
     // Maude output:
     // reduce in FSM-CHECK : modelCheck(initial, <> green("X")) .
@@ -44,8 +43,7 @@ class FSMToMaudeTransformerTest implements MaudeTestHelper {
     fsm.addTransition(new Transition("turn_red", amber, red));
 
     Set<FSMStateAtomicProposition> props =
-        ImmutableSet.of(
-            new FSMStateAtomicProposition("red", red), new FSMStateAtomicProposition(green));
+        Set.of(new FSMStateAtomicProposition("red", red), new FSMStateAtomicProposition(green));
 
     testFSMMaudeGeneration(fsm, props, "<> red(\"1\")");
     // Maude output:
