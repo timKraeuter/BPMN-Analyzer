@@ -39,7 +39,6 @@ public class BPMNTokenFileReader {
   }
 
   public CollaborationSnapshot readModelFromString(String name, String xml) {
-    // TODO: Should be a better way than wrapping the string.
     return readModelFromStream(
         name, new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
   }
