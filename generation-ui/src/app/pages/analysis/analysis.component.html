@@ -143,10 +143,39 @@
                     class="margin-left"
                     *ngIf="this.selectedTemplate"
                 >
-                    <mat-label>Proposition</mat-label>
+                    <mat-label
+                        *ngIf="
+                            !this.selectedTemplate.twoPropositions;
+                            else twoProp
+                        "
+                        >Proposition
+                    </mat-label>
+                    <ng-template #twoProp>
+                        <mat-label>Proposition 1</mat-label>
+                    </ng-template>
                     <mat-select
-                        [(ngModel)]="selectedProposition"
-                        name="propositionForTemplate"
+                        [(ngModel)]="selectedProposition1"
+                        name="propositionForTemplate1"
+                    >
+                        <mat-option
+                            *ngFor="let proposition of this.getPropositions()"
+                            [value]="proposition"
+                        >
+                            {{ proposition }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field
+                    class="margin-left"
+                    *ngIf="
+                        this.selectedTemplate &&
+                        this.selectedTemplate.twoPropositions
+                    "
+                >
+                    <mat-label>Proposition 2</mat-label>
+                    <mat-select
+                        [(ngModel)]="selectedProposition2"
+                        name="propositionForTemplate2"
                     >
                         <mat-option
                             *ngFor="let proposition of this.getPropositions()"
@@ -162,7 +191,7 @@
                     color="primary"
                     matTooltip="Create a CTL from the chosen template and proposition."
                     (click)="createCTLProperty()"
-                    *ngIf="this.selectedTemplate && this.selectedProposition"
+                    *ngIf="this.selectedTemplate && this.selectedProposition1"
                 >
                     <mat-icon>autorenew</mat-icon>
                     Create CTL property

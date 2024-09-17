@@ -27,16 +27,25 @@ export class AnalysisComponent {
 
     // CTL property checking with templates
     public selectedTemplate: any;
-    public selectedProposition: string = '';
+    public selectedProposition1: string = ''; // We only support one or two propositions.
+    public selectedProposition2: string = '';
 
     ctlTemplates: any[] = [
         {
             template: (proposition: string) => `AG(!${proposition})`,
             description: 'Never reaches',
+            twoPropositions: false,
         },
         {
             template: (proposition: string) => `EF(${proposition})`,
             description: 'Can reach',
+            twoPropositions: false,
+        },
+        {
+            template: (proposition1: string, proposition2: string) =>
+                `AG(${proposition1} -> AF(${proposition2}))`,
+            description: 'Response',
+            twoPropositions: true,
         },
     ];
 
@@ -242,9 +251,10 @@ export class AnalysisComponent {
     }
 
     createCTLProperty() {
-        if (this.selectedTemplate && this.selectedProposition) {
+        if (this.selectedTemplate && this.selectedProposition1) {
             this.ctlProperty = this.selectedTemplate.template(
-                this.selectedProposition,
+                this.selectedProposition1,
+                this.selectedProposition2,
             );
         }
     }
