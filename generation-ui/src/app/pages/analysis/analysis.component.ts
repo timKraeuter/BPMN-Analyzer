@@ -42,6 +42,11 @@ export class AnalysisComponent {
             twoPropositions: false,
         },
         {
+            template: (proposition: string) => `AF(${proposition})`,
+            description: 'Always reaches',
+            twoPropositions: false,
+        },
+        {
             template: (proposition1: string, proposition2: string) =>
                 `AG(${proposition1} -> AF(${proposition2}))`,
             description: 'Response',
