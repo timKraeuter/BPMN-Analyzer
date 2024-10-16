@@ -263,4 +263,14 @@ export class AnalysisComponent {
             );
         }
     }
+
+    showCreateCTLPropertyButton(): boolean {
+        if (this.selectedTemplate && this.selectedTemplate.twoPropositions) {
+            return (
+                this.selectedProposition1.length > 0 &&
+                this.selectedProposition2.length > 0
+            );
+        }
+        return this.selectedTemplate && this.selectedProposition1;
+    }
 }

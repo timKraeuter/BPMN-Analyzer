@@ -191,7 +191,7 @@
                     color="primary"
                     matTooltip="Create a CTL from the chosen template and proposition."
                     (click)="createCTLProperty()"
-                    *ngIf="this.selectedTemplate && this.selectedProposition1"
+                    *ngIf="this.showCreateCTLPropertyButton()"
                 >
                     <mat-icon>autorenew</mat-icon>
                     Create CTL property
