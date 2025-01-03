@@ -5,6 +5,7 @@ import { ModelCheckingResponse } from '../../services/model-checking.service';
     selector: 'verification-result-component',
     templateUrl: './analysis-result.component.html',
     styleUrls: ['./analysis-result.component.scss'],
+    standalone: false,
 })
 export class AnalysisResultComponent {
     @Input()

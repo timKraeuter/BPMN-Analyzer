@@ -15,6 +15,7 @@ import { saveAs } from 'file-saver-es';
     selector: 'app-analysis',
     templateUrl: './analysis.component.html',
     styleUrls: ['./analysis.component.scss'],
+    standalone: false,
 })
 export class AnalysisComponent {
     // GG generation

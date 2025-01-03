@@ -6,6 +6,7 @@ import { Proposition } from '../../services/shared-state.service';
     selector: 'app-rename-proposition-dialog',
     templateUrl: './rename-proposition-dialog.component.html',
     styleUrls: ['./rename-proposition-dialog.component.scss'],
+    standalone: false,
 })
 export class RenamePropositionDialogComponent {
     // TODO: Check groove and make sure the name is allowed in CTL (see angular error state)

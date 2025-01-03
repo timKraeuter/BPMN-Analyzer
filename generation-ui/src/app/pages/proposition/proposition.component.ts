@@ -17,6 +17,7 @@ export const SVG_FILE_EXTENSION = '.svg';
     selector: 'app-proposition',
     templateUrl: './proposition.component.html',
     styleUrls: ['./proposition.component.scss'],
+    standalone: false,
 })
 export class PropositionComponent {
     public currentProposition: Proposition = {

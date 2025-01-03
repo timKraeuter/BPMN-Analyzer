@@ -17,6 +17,7 @@ import { BPMNModelerService } from '../../services/bpmnmodeler.service';
     selector: 'app-diagram',
     templateUrl: './diagram.component.html',
     styleUrls: ['./diagram.component.scss'],
+    standalone: false,
 })
 export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {
     private modeler: Modeler | Viewer;

@@ -11,6 +11,7 @@ export const BPMN_FILE_EXTENSION = '.bpmn';
     selector: 'app-modeling',
     templateUrl: './modeling.component.html',
     styleUrls: ['./modeling.component.scss'],
+    standalone: false,
 })
 export class ModelingComponent {
     constructor(
