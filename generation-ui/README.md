@@ -1,7 +1,6 @@
 # GenerationUi
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.3.
-[BPMN-Token](https://github.com/timkraeuter/bpmn-token) has to be cloned in the same directory (currently a local npm dependency).
 
 ## Development server
 
