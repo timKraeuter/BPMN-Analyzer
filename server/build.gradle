@@ -48,10 +48,10 @@ dependencies {
     testImplementation 'org.apache.httpcomponents:httpmime:4.5.14'
     // Guava
     // https://mvnrepository.com/artifact/com.google.guava/guava
-    testImplementation 'com.google.guava:guava:33.2.1-jre'
+    testImplementation 'com.google.guava:guava:33.4.8-jre'
     // toString of input streams.
     // https://mvnrepository.com/artifact/commons-io/commons-io
-    testImplementation 'commons-io:commons-io:2.16.1'
+    testImplementation 'commons-io:commons-io:2.19.0'
 
     errorprone('com.google.errorprone:error_prone_core:2.16')
 }
