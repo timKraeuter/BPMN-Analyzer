@@ -17,16 +17,11 @@ export class AppComponent {
     constructor(private modeler: BPMNModelerService) {}
 
     async stepChanged(event: StepperSelectionEvent) {
-        if (this.changedToModelStep(event)) {
-            this.modeler.bindModelerKeyboard();
-        }
         if (this.changedToPropositionStep(event)) {
             // TODO: Sync issue with multiple propositions
             await this.modeler.updateTokenBPMNModelIfNeeded();
-            this.modeler.bindTokenModelerKeyboard();
         }
         if (this.changedToAnalyzeStep(event)) {
-            this.modeler.unbindKeyboards();
             await this.propositionComponent.saveCurrentProposition();
             await this.modeler.updateViewerBPMNModel();
         }
@@ -42,21 +37,20 @@ export class AppComponent {
 
     @HostListener('document:keydown.ArrowRight', ['$event'])
     async stepForward(event: KeyboardEvent) {
+        console.log(event);
+        console.log(event.target);
         if (
             event.target &&
             // @ts-ignore Do not step forward when inputting something in the panel.
-            event.target.className !== 'bio-properties-panel-input'
+            event.target.className.contains('bio-properties-panel-input')
         ) {
-            this.stepper.next();
+          return;
         }
+        this.stepper.next();
     }
 
     @HostListener('document:keydown.ArrowLeft', ['$event'])
-    async stepBackward(event: KeyboardEvent) {
+    async stepBackward() {
         this.stepper.previous();
-    }
-
-    private changedToModelStep(event: StepperSelectionEvent) {
-        return event.selectedIndex == 0;
     }
 }
