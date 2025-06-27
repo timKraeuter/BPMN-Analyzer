@@ -1,28 +1,29 @@
 <h1 mat-dialog-title>Rename proposition</h1>
 <div mat-dialog-content>
-    <mat-form-field>
-        <mat-label>Proposition name</mat-label>
-        <input
-            matInput
-            [(ngModel)]="newName"
-            (keydown)="this.stopEventPropagation($event)"
-        />
+  <mat-form-field>
+    <mat-label>Proposition name</mat-label>
+    <input
+      matInput
+      [(ngModel)]="newName"
+      (keydown)="this.stopEventPropagation($event)"
+      />
+      @if (newName) {
         <button
-            *ngIf="newName"
-            matSuffix
-            mat-icon-button
-            aria-label="Clear"
-            (click)="newName = ''"
-        >
-            <mat-icon>close</mat-icon>
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="newName = ''"
+          >
+          <mat-icon>close</mat-icon>
         </button>
+      }
     </mat-form-field>
-</div>
-<div mat-dialog-actions>
+  </div>
+  <div mat-dialog-actions>
     <button mat-button color="primary" (click)="this.saveNameAndCloseDialog()">
-        Save
+      Save
     </button>
     <button mat-button color="primary" (click)="this.closeDialog()">
-        Cancel
+      Cancel
     </button>
-</div>
+  </div>

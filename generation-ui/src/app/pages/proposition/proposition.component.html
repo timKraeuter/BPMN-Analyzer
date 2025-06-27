@@ -1,80 +1,81 @@
 <div class="propositions-container">
-    <div class="diagram-parent">
-        <app-token-diagram></app-token-diagram>
-    </div>
-    <mat-list class="propositions">
-        <div mat-subheader>Propositions</div>
-        <mat-list-item
-            *ngFor="let proposition of propositions"
+  <div class="diagram-parent">
+    <app-token-diagram></app-token-diagram>
+  </div>
+  <mat-list class="propositions">
+    <div mat-subheader>Propositions</div>
+    @for (proposition of propositions; track proposition) {
+      <mat-list-item
             [ngClass]="{
                 highlight: proposition === currentProposition,
                 proposition: proposition !== currentProposition,
             }"
-            (click)="switchToProposition(proposition)"
+        (click)="switchToProposition(proposition)"
         >
-            <mat-icon matListItemIcon>description</mat-icon>
-            <div matListItemTitle>
-                {{ proposition.name }}
-            </div>
-            <mat-icon
-                matListItemIcon
-                class="order editButton"
-                style="margin-right: -0.5px"
-                matTooltip="Edit proposition name"
-                (click)="this.editProposition(proposition)"
-                >edit
-            </mat-icon>
-            <mat-icon
-                matListItemIcon
-                class="order editButton"
-                style="margin-right: -1px"
-                matTooltip="Delete proposition"
-                (click)="this.deleteProposition(proposition)"
-                >delete
-            </mat-icon>
-        </mat-list-item>
-        <mat-list-item>
-            <button
-                mat-raised-button
-                color="primary"
-                matTooltip="Create a new proposition"
-                (click)="createNewProposition()"
-            >
-                <mat-icon>add</mat-icon>
-                New proposition
-            </button>
-        </mat-list-item>
-    </mat-list>
+        <mat-icon matListItemIcon>description</mat-icon>
+        <div matListItemTitle>
+          {{ proposition.name }}
+        </div>
+        <mat-icon
+          matListItemIcon
+          class="order editButton"
+          style="margin-right: -0.5px"
+          matTooltip="Edit proposition name"
+          (click)="this.editProposition(proposition)"
+          >edit
+        </mat-icon>
+        <mat-icon
+          matListItemIcon
+          class="order editButton"
+          style="margin-right: -1px"
+          matTooltip="Delete proposition"
+          (click)="this.deleteProposition(proposition)"
+          >delete
+        </mat-icon>
+      </mat-list-item>
+    }
+    <mat-list-item>
+      <button
+        mat-raised-button
+        color="primary"
+        matTooltip="Create a new proposition"
+        (click)="createNewProposition()"
+        >
+        <mat-icon>add</mat-icon>
+        New proposition
+      </button>
+    </mat-list-item>
+  </mat-list>
 </div>
 <div class="modeler-buttons margin-top">
-    <button
-        class="right-margin"
-        mat-raised-button
-        color="primary"
-        matTooltip="Upload the BPMN token model."
-        (click)="uploader.click()"
+  <button
+    class="right-margin"
+    mat-raised-button
+    color="primary"
+    matTooltip="Upload the BPMN token model."
+    (click)="uploader.click()"
     >
-        <mat-icon>upload</mat-icon>
-        Upload model
-    </button>
-    <button
-        class="right-margin"
-        mat-raised-button
-        color="primary"
-        matTooltip="Download the BPMN token model."
-        (click)="downloadTokenModel()"
+    <mat-icon>upload</mat-icon>
+    Upload model
+  </button>
+  <button
+    class="right-margin"
+    mat-raised-button
+    color="primary"
+    matTooltip="Download the BPMN token model."
+    (click)="downloadTokenModel()"
     >
-        <mat-icon>download</mat-icon>
-        Download model
-    </button>
-    <button
-        mat-raised-button
-        color="primary"
-        matTooltip="Download an SVG of the BPMN token model."
-        (click)="downloadTokenModelSVG()"
+    <mat-icon>download</mat-icon>
+    Download model
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    matTooltip="Download an SVG of the BPMN token model."
+    (click)="downloadTokenModelSVG()"
     >
-        <mat-icon>download</mat-icon>
-        Download SVG
-    </button>
+    <mat-icon>download</mat-icon>
+    Download SVG
+  </button>
 </div>
 <input hidden type="file" #uploader (change)="uploadTokenModel($event)" />
