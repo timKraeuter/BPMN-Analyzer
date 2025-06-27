@@ -256,7 +256,7 @@ public class BPMNFileReader {
     String taskTypeName = flowNode.getElementType().getTypeName();
     no.tk.behavior.bpmn.FlowNode resultingFlowNode;
     switch (taskTypeName) {
-        // Events
+      // Events
       case "startEvent" -> {
         StartEvent startEvent = mapStartEvent(flowNode);
         bpmnModelBuilder.startEvent(startEvent);
@@ -266,7 +266,7 @@ public class BPMNFileReader {
       case "intermediateCatchEvent" -> resultingFlowNode = this.mapIntermediateCatchEvent(flowNode);
       case "endEvent" -> resultingFlowNode = mapEndEvent(flowNode);
 
-        // Tasks
+      // Tasks
       case "businessRuleTask", "scriptTask", "serviceTask", "manualTask", "userTask", "task" ->
           resultingFlowNode =
               new no.tk.behavior.bpmn.activities.tasks.Task(
@@ -294,7 +294,7 @@ public class BPMNFileReader {
           // Call Activity = Reusable sub-processes (external).
           throw new BPMNRuntimeException("External subprocesses currently not supported!");
 
-        // Gateways
+      // Gateways
       case "parallelGateway" ->
           resultingFlowNode =
               new no.tk.behavior.bpmn.gateways.ParallelGateway(
