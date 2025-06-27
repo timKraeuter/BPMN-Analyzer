@@ -1,254 +1,247 @@
 <app-diagram [viewer]="true" [height]="'350'"></app-diagram>
 <div class="analysis-buttons">
-  @if (graphGrammarGenerationRunning) {
-    <span>
-      Generating a graph transformation system.
-      <mat-spinner class="margin-top"></mat-spinner>
-    </span>
-  } @else {
+    @if (graphGrammarGenerationRunning) {
+        <span>
+            Generating a graph transformation system.
+            <mat-spinner class="margin-top"></mat-spinner>
+        </span>
+    } @else {
+        <button
+            mat-raised-button
+            color="primary"
+            matTooltip="Download a groove graph transformation system."
+            (click)="downloadGGClicked()"
+        >
+            <mat-icon>cloud_download</mat-icon>
+            Download GT-system
+        </button>
+    }
     <button
-      mat-raised-button
-      color="primary"
-      matTooltip="Download a groove graph transformation system."
-      (click)="downloadGGClicked()"
-      >
-      <mat-icon>cloud_download</mat-icon>
-      Download GT-system
-    </button>
-  }
-  <button
-    mat-icon-button
-    aria-label="Graph transformation system download info button"
-    color="primary"
-    (click)="ggInfoClicked()"
-    matTooltip="Further graph transformation system information."
+        mat-icon-button
+        aria-label="Graph transformation system download info button"
+        color="primary"
+        (click)="ggInfoClicked()"
+        matTooltip="Further graph transformation system information."
     >
-    <mat-icon>info</mat-icon>
-  </button>
+        <mat-icon>info</mat-icon>
+    </button>
 </div>
 <mat-card appearance="outlined">
-  <mat-card-header>
-    <mat-card-title>Analysis</mat-card-title>
-  </mat-card-header>
-  <mat-tab-group animationDuration="0ms">
-    <mat-tab label="General BPMN properties">
-      <mat-card-content>
-        Select one or more of the following properties to check for the
-        BPMN model.
-        <br />
-        <mat-button-toggle-group
-          name="bpmnProperties"
-          [(ngModel)]="bpmnSpecificPropertiesToBeChecked"
-          aria-label="general BPMN Properties"
-          multiple
-          class="margin-top"
-          >
-          <mat-button-toggle
-            value="SAFENESS"
-            matTooltip="Safeness means that during process execution no more than one token occurs along the same sequence flow."
-            matTooltipPosition="above"
-            >
-            Safeness
-          </mat-button-toggle>
-          <mat-button-toggle
-            value="OPTION_TO_COMPLETE"
-            matTooltip="Option to complete means that any running process instance must eventually complete."
-            matTooltipPosition="above"
-            >
-            Option to complete
-          </mat-button-toggle>
-          <mat-button-toggle
-            value="PROPER_COMPLETION"
-            matTooltip="Proper completion means each end event consumes at most one token."
-            matTooltipPosition="above"
-            >
-            Proper completion
-          </mat-button-toggle>
-          <mat-button-toggle
-            value="NO_DEAD_ACTIVITIES"
-            matTooltip="Check if any activities will never be executed."
-            matTooltipPosition="above"
-            >
-            No dead activities
-          </mat-button-toggle>
-        </mat-button-toggle-group>
-        <br />
-        <button
-          mat-raised-button
-          color="primary"
-          matTooltip="Check the selected general BPMN properties using groove."
-          class="margin-top"
-          (click)="checkBPMNSpecificPropertiesClicked()"
-          >
-          <mat-icon>done_all</mat-icon>
-          Check selected properties
-        </button>
-      </mat-card-content>
-    </mat-tab>
-    @if (false) {
-      <mat-tab label="LTL properties">
-        <mat-card-content>
-          Specify a LTL property to check for the BPMN model.
-          <br />
-          <form class="form margin-top">
-            <mat-form-field class="full-width" appearance="fill">
-              <mat-label>LTL Property</mat-label>
-              <textarea
-                matInput
-                [(ngModel)]="ltlProperty"
-                placeholder="G(F(AllTerminated))"
-                name="ltlProperty"
-                (keydown)="this.stopEventPropagation($event)"
-              ></textarea>
-            </mat-form-field>
-          </form>
-          <div class="analysis-buttons">
-            <button
-              mat-raised-button
-              color="primary"
-              matTooltip="Checking custom LTL properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/."
-              (click)="checkLTLPropertyClicked()"
-              >
-              <mat-icon>check</mat-icon>
-              Check LTL property
-            </button>
-            <button
-              mat-icon-button
-              aria-label="LTL syntax info button"
-              color="primary"
-              (click)="temporalLogicInfoClicked()"
-              matTooltip="Show LTL syntax."
-              >
-              <mat-icon>info</mat-icon>
-            </button>
-          </div>
-        </mat-card-content>
-      </mat-tab>
-    }
-    <mat-tab label="CTL properties">
-      <mat-card-content>
-        <div>Create a CTL property from a template.</div>
-        <mat-form-field class="margin-top">
-          <mat-label>CTL Template</mat-label>
-          <mat-select
-            [(ngModel)]="selectedTemplate"
-            name="ctlTemplate"
-            >
-            @for (template of ctlTemplates; track template) {
-              <mat-option
-                [value]="template"
+    <mat-card-header>
+        <mat-card-title>Analysis</mat-card-title>
+    </mat-card-header>
+    <mat-tab-group animationDuration="0ms">
+        <mat-tab label="General BPMN properties">
+            <mat-card-content>
+                Select one or more of the following properties to check for the
+                BPMN model.
+                <br />
+                <mat-button-toggle-group
+                    name="bpmnProperties"
+                    [(ngModel)]="bpmnSpecificPropertiesToBeChecked"
+                    aria-label="general BPMN Properties"
+                    multiple
+                    class="margin-top"
                 >
-                {{ template.description }}
-              </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-        @if (this.selectedTemplate) {
-          <mat-form-field
-            class="margin-left"
-            >
-            @if (
-              !this.selectedTemplate.twoPropositions) {
-              <mat-label
-                >Proposition
-              </mat-label>
-            } @else {
-              <mat-label>Proposition 1</mat-label>
-            }
-            <mat-select
-              [(ngModel)]="selectedProposition1"
-              name="propositionForTemplate1"
-              >
-              @for (proposition of this.getPropositions(); track proposition) {
-                <mat-option
-                  [value]="proposition"
-                  >
-                  {{ proposition }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
+                    <mat-button-toggle
+                        value="SAFENESS"
+                        matTooltip="Safeness means that during process execution no more than one token occurs along the same sequence flow."
+                        matTooltipPosition="above"
+                    >
+                        Safeness
+                    </mat-button-toggle>
+                    <mat-button-toggle
+                        value="OPTION_TO_COMPLETE"
+                        matTooltip="Option to complete means that any running process instance must eventually complete."
+                        matTooltipPosition="above"
+                    >
+                        Option to complete
+                    </mat-button-toggle>
+                    <mat-button-toggle
+                        value="PROPER_COMPLETION"
+                        matTooltip="Proper completion means each end event consumes at most one token."
+                        matTooltipPosition="above"
+                    >
+                        Proper completion
+                    </mat-button-toggle>
+                    <mat-button-toggle
+                        value="NO_DEAD_ACTIVITIES"
+                        matTooltip="Check if any activities will never be executed."
+                        matTooltipPosition="above"
+                    >
+                        No dead activities
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+                <br />
+                <button
+                    mat-raised-button
+                    color="primary"
+                    matTooltip="Check the selected general BPMN properties using groove."
+                    class="margin-top"
+                    (click)="checkBPMNSpecificPropertiesClicked()"
+                >
+                    <mat-icon>done_all</mat-icon>
+                    Check selected properties
+                </button>
+            </mat-card-content>
+        </mat-tab>
+        @if (false) {
+            <mat-tab label="LTL properties">
+                <mat-card-content>
+                    Specify a LTL property to check for the BPMN model.
+                    <br />
+                    <form class="form margin-top">
+                        <mat-form-field class="full-width" appearance="fill">
+                            <mat-label>LTL Property</mat-label>
+                            <textarea
+                                matInput
+                                [(ngModel)]="ltlProperty"
+                                placeholder="G(F(AllTerminated))"
+                                name="ltlProperty"
+                                (keydown)="this.stopEventPropagation($event)"
+                            ></textarea>
+                        </mat-form-field>
+                    </form>
+                    <div class="analysis-buttons">
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            matTooltip="Checking custom LTL properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/."
+                            (click)="checkLTLPropertyClicked()"
+                        >
+                            <mat-icon>check</mat-icon>
+                            Check LTL property
+                        </button>
+                        <button
+                            mat-icon-button
+                            aria-label="LTL syntax info button"
+                            color="primary"
+                            (click)="temporalLogicInfoClicked()"
+                            matTooltip="Show LTL syntax."
+                        >
+                            <mat-icon>info</mat-icon>
+                        </button>
+                    </div>
+                </mat-card-content>
+            </mat-tab>
         }
-        @if (
-          this.selectedTemplate &&
-          this.selectedTemplate.twoPropositions
-          ) {
-          <mat-form-field
-            class="margin-left"
-            >
-            <mat-label>Proposition 2</mat-label>
-            <mat-select
-              [(ngModel)]="selectedProposition2"
-              name="propositionForTemplate2"
-              >
-              @for (proposition of this.getPropositions(); track proposition) {
-                <mat-option
-                  [value]="proposition"
-                  >
-                  {{ proposition }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        }
-        @if (this.showCreateCTLPropertyButton()) {
-          <button
-            class="margin-left"
-            mat-raised-button
-            color="primary"
-            matTooltip="Create a CTL from the chosen template and proposition."
-            (click)="createCTLProperty()"
-            >
-            <mat-icon>autorenew</mat-icon>
-            Create CTL property
-          </button>
-        }
-        <mat-divider></mat-divider>
-        <div class="margin-top">
-          Specify a CTL property to check for the BPMN model.
-        </div>
-        <div>
-          Your propositions are:
-          <span class="bold">{{ this.getPropositionsNames() }}</span>
-        </div>
-        <form class="form">
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>CTL Property</mat-label>
-            <textarea
-              matInput
-              [(ngModel)]="ctlProperty"
-              placeholder="AG(!Unsafe)"
-              name="ctlProperty"
-              (keydown)="this.stopEventPropagation($event)"
-            ></textarea>
-          </mat-form-field>
-        </form>
-        <div class="analysis-buttons">
-          <button
-            mat-raised-button
-            color="primary"
-            matTooltip="Check the given CTL property using groove."
-            (click)="checkCTLPropertyClicked()"
-            >
-            <mat-icon>check</mat-icon>
-            Check CTL property
-          </button>
-          <button
-            mat-icon-button
-            aria-label="CTL syntax info button"
-            color="primary"
-            (click)="temporalLogicInfoClicked()"
-            matTooltip="Show CTL syntax."
-            >
-            <mat-icon>info</mat-icon>
-          </button>
-        </div>
-      </mat-card-content>
-    </mat-tab>
-  </mat-tab-group>
+        <mat-tab label="CTL properties">
+            <mat-card-content>
+                <div>Create a CTL property from a template.</div>
+                <mat-form-field class="margin-top">
+                    <mat-label>CTL Template</mat-label>
+                    <mat-select
+                        [(ngModel)]="selectedTemplate"
+                        name="ctlTemplate"
+                    >
+                        @for (template of ctlTemplates; track template) {
+                            <mat-option [value]="template">
+                                {{ template.description }}
+                            </mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                @if (this.selectedTemplate) {
+                    <mat-form-field class="margin-left">
+                        @if (!this.selectedTemplate.twoPropositions) {
+                            <mat-label>Proposition </mat-label>
+                        } @else {
+                            <mat-label>Proposition 1</mat-label>
+                        }
+                        <mat-select
+                            [(ngModel)]="selectedProposition1"
+                            name="propositionForTemplate1"
+                        >
+                            @for (
+                                proposition of this.getPropositions();
+                                track proposition
+                            ) {
+                                <mat-option [value]="proposition">
+                                    {{ proposition }}
+                                </mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                }
+                @if (
+                    this.selectedTemplate &&
+                    this.selectedTemplate.twoPropositions
+                ) {
+                    <mat-form-field class="margin-left">
+                        <mat-label>Proposition 2</mat-label>
+                        <mat-select
+                            [(ngModel)]="selectedProposition2"
+                            name="propositionForTemplate2"
+                        >
+                            @for (
+                                proposition of this.getPropositions();
+                                track proposition
+                            ) {
+                                <mat-option [value]="proposition">
+                                    {{ proposition }}
+                                </mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                }
+                @if (this.showCreateCTLPropertyButton()) {
+                    <button
+                        class="margin-left"
+                        mat-raised-button
+                        color="primary"
+                        matTooltip="Create a CTL from the chosen template and proposition."
+                        (click)="createCTLProperty()"
+                    >
+                        <mat-icon>autorenew</mat-icon>
+                        Create CTL property
+                    </button>
+                }
+                <mat-divider></mat-divider>
+                <div class="margin-top">
+                    Specify a CTL property to check for the BPMN model.
+                </div>
+                <div>
+                    Your propositions are:
+                    <span class="bold">{{ this.getPropositionsNames() }}</span>
+                </div>
+                <form class="form">
+                    <mat-form-field class="full-width" appearance="fill">
+                        <mat-label>CTL Property</mat-label>
+                        <textarea
+                            matInput
+                            [(ngModel)]="ctlProperty"
+                            placeholder="AG(!Unsafe)"
+                            name="ctlProperty"
+                            (keydown)="this.stopEventPropagation($event)"
+                        ></textarea>
+                    </mat-form-field>
+                </form>
+                <div class="analysis-buttons">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        matTooltip="Check the given CTL property using groove."
+                        (click)="checkCTLPropertyClicked()"
+                    >
+                        <mat-icon>check</mat-icon>
+                        Check CTL property
+                    </button>
+                    <button
+                        mat-icon-button
+                        aria-label="CTL syntax info button"
+                        color="primary"
+                        (click)="temporalLogicInfoClicked()"
+                        matTooltip="Show CTL syntax."
+                    >
+                        <mat-icon>info</mat-icon>
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-tab>
+    </mat-tab-group>
 </mat-card>
 <verification-result-component
-  [running]="bpmnSpecificVerificationRunning"
-  [properties]="bpmnPropertyCheckingResults"
-  [ctlPropertyResult]="ctlPropertyResult"
+    [running]="bpmnSpecificVerificationRunning"
+    [properties]="bpmnPropertyCheckingResults"
+    [ctlPropertyResult]="ctlPropertyResult"
 ></verification-result-component>
