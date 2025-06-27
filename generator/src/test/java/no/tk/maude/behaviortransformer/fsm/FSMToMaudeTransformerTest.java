@@ -1,5 +1,6 @@
 package no.tk.maude.behaviortransformer.fsm;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 import no.tk.behavior.fsm.FSMStateAtomicProposition;
 import no.tk.behavior.fsm.FiniteStateMachine;
@@ -19,8 +20,10 @@ class FSMToMaudeTransformerTest implements MaudeTestHelper {
     fsm.addTransition(new Transition("turnGreen", red, green));
     fsm.addTransition(new Transition("turnRed", green, red));
 
-    Set<FSMStateAtomicProposition> props =
-        Set.of(new FSMStateAtomicProposition(red), new FSMStateAtomicProposition(green));
+    Set<FSMStateAtomicProposition> props = new LinkedHashSet<>();
+    props.add(new FSMStateAtomicProposition(red));
+    props.add(new FSMStateAtomicProposition(green));
+
     testFSMMaudeGeneration(fsm, props, "<> green(\"1\")");
     // Maude output:
     // reduce in FSM-CHECK : modelCheck(initial, <> green("X")) .
@@ -42,8 +45,9 @@ class FSMToMaudeTransformerTest implements MaudeTestHelper {
     fsm.addTransition(new Transition("turn_amber", green, amber));
     fsm.addTransition(new Transition("turn_red", amber, red));
 
-    Set<FSMStateAtomicProposition> props =
-        Set.of(new FSMStateAtomicProposition("red", red), new FSMStateAtomicProposition(green));
+    Set<FSMStateAtomicProposition> props = new LinkedHashSet<>();
+    props.add(new FSMStateAtomicProposition("red", red));
+    props.add(new FSMStateAtomicProposition(green));
 
     testFSMMaudeGeneration(fsm, props, "<> red(\"1\")");
     // Maude output:

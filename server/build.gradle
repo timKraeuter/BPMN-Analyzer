@@ -25,7 +25,7 @@ dependencies {
     implementation 'no.hvl.tk:ruleGenerator:1'
 
     // XML-marshalling not part of jdk 11 anymore.
-    // https://mvnrepository.com/artifact/jakarta.xml.bind/jaxb-api
+    // https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api
     implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.2'
     // https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime
     implementation('org.glassfish.jaxb:jaxb-runtime:4.0.5')
