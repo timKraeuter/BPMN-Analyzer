@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     // Analysis
-    id 'org.sonarqube' version '5.1.0.4882'
+    id 'org.sonarqube' version '6.1.0.5360'
     id 'jacoco'
     id 'net.ltgt.errorprone' version '4.3.0'
     id 'com.diffplug.spotless' version '7.0.4'
