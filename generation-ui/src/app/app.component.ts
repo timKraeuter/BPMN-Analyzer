@@ -37,14 +37,13 @@ export class AppComponent {
 
     @HostListener('document:keydown.ArrowRight', ['$event'])
     async stepForward(event: KeyboardEvent) {
-        console.log(event);
-        console.log(event.target);
         if (
             event.target &&
-            // @ts-ignore Do not step forward when inputting something in the panel.
-            event.target.className.contains('bio-properties-panel-input')
+            (event.target as HTMLElement).classList.contains(
+                'bio-properties-panel-input',
+            )
         ) {
-          return;
+            return;
         }
         this.stepper.next();
     }
