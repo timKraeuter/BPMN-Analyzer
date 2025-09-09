@@ -51,7 +51,7 @@ dependencies {
     testImplementation 'com.google.guava:guava:33.4.8-jre'
     // toString of input streams.
     // https://mvnrepository.com/artifact/commons-io/commons-io
-    testImplementation 'commons-io:commons-io:2.19.0'
+    testImplementation 'commons-io:commons-io:2.20.0'
 
     errorprone('com.google.errorprone:error_prone_core:2.16')
 }
