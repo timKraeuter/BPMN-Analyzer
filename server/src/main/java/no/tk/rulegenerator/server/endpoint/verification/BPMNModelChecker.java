@@ -35,6 +35,8 @@ import no.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import no.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
 import no.tk.util.ValueWrapper;
 import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BPMNModelChecker {
 
@@ -43,6 +45,8 @@ public class BPMNModelChecker {
   private final Path graphGrammarDir;
   private String stateSpace = "";
   private final BPMNCollaboration bpmnModel;
+  protected static final Logger logger =
+      LoggerFactory.getLogger(BPMNModelChecker.class);
 
   public BPMNModelChecker(Path graphGrammarDir, BPMNCollaboration bpmnModel) {
     this.graphGrammarDir = graphGrammarDir;
@@ -283,6 +287,7 @@ public class BPMNModelChecker {
                 grooveJarRunner.generateStateSpace(
                     graphGrammarDir.toString(), stateSpaceTempFile, true));
       } catch (NoSuchFileException exception) {
+        logger.error("State space file generation failed", exception);
         throw new ModelCheckingException(
             "The state space could not be generated or generation timed out after 60 seconds.");
       }
