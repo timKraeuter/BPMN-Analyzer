@@ -88,11 +88,11 @@ export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {
         '      <incoming>Flow_14i9c18</incoming>\n' +
         '      <outgoing>Flow_14fhivy</outgoing>\n' +
         '    </userTask>\n' +
-        '    <parallelGateway id="Gateway_1x8m4ws">\n' +
+        '    <exclusiveGateway id="Gateway_1x8m4ws">\n' +
         '      <incoming>Flow_1flhoxp</incoming>\n' +
         '      <incoming>Flow_1n9ng49</incoming>\n' +
         '      <outgoing>Flow_14i9c18</outgoing>\n' +
-        '    </parallelGateway>\n' +
+        '    </exclusiveGateway>\n' +
         '    <userTask id="Activity_1up8xq1" name="Fetch goods">\n' +
         '      <incoming>Flow_1mtm8jg</incoming>\n' +
         '      <outgoing>Flow_1n9ng49</outgoing>\n' +
