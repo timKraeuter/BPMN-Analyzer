@@ -1,12 +1,12 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.5.3'
+    id 'org.springframework.boot' version '3.5.5'
     id 'io.spring.dependency-management' version '1.1.7'
     // Analysis
     id 'org.sonarqube' version '6.1.0.5360'
     id 'jacoco'
     id 'net.ltgt.errorprone' version '4.3.0'
-    id 'com.diffplug.spotless' version '7.0.4'
+    id 'com.diffplug.spotless' version '7.2.1'
 }
 
 group = 'no.hvl.tk'
@@ -34,9 +34,9 @@ dependencies {
 
     // Add pair class
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.17.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.18.0'
     // https://mvnrepository.com/artifact/commons-io/commons-io
-    implementation 'commons-io:commons-io:2.19.0'
+    implementation 'commons-io:commons-io:2.20.0'
 
     // Spring
     implementation 'org.springframework.boot:spring-boot-starter-web'

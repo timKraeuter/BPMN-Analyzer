@@ -45,8 +45,7 @@ public class BPMNModelChecker {
   private final Path graphGrammarDir;
   private String stateSpace = "";
   private final BPMNCollaboration bpmnModel;
-  protected static final Logger logger =
-      LoggerFactory.getLogger(BPMNModelChecker.class);
+  protected static final Logger logger = LoggerFactory.getLogger(BPMNModelChecker.class);
 
   public BPMNModelChecker(Path graphGrammarDir, BPMNCollaboration bpmnModel) {
     this.graphGrammarDir = graphGrammarDir;
