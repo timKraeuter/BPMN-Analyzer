@@ -234,7 +234,7 @@ class RuleGeneratorControllerTests {
     assertThat(
         response,
         is(
-            "{\"property\":\"G(!Unsafe)\",\"valid\":false,\"error\":\"Error: nl.utwente.groove.util.parse.FormatException: Temporal operator 'G' should be nested inside path quantifier in CTL formula\"}"));
+            "{\"property\":\"G(!Unsafe)\",\"valid\":false,\"error\":\"Error: Error while parsing 'G(!Unsafe)': Temporal operator 'G' should be nested inside path quantifier in CTL formula\"}"));
   }
 
   @Test
