@@ -81,6 +81,6 @@ class GrooveJarRunnerTest {
     assertThat(
         result.getError(),
         is(
-            "Error: nl.utwente.groove.util.parse.FormatException: Temporal operator 'G' should be nested inside path quantifier in CTL formula"));
+            "Error: Error while parsing 'G(!false)': Temporal operator 'G' should be nested inside path quantifier in CTL formula"));
   }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <gxl xmlns="http://www.gupro.de/GXL/gxl-1.0.dtd">
-    <graph role="lts" edgeids="false" edgemode="directed" id="-gts">
+    <graph role="lts" edgeids="false" edgemode="directed" id="-gts-fragment">
         <node id="n0"/>
         <node id="n1"/>
         <node id="n2"/>

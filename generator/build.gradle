@@ -4,7 +4,7 @@ plugins {
     id 'org.sonarqube' version '6.1.0.5360'
     id 'jacoco'
     id 'net.ltgt.errorprone' version '4.3.0'
-    id 'com.diffplug.spotless' version '7.0.4'
+    id 'com.diffplug.spotless' version '7.2.1'
 }
 
 group = 'no.hvl.tk'
@@ -30,15 +30,15 @@ dependencies {
     implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.2'
     implementation('org.glassfish.jaxb:jaxb-runtime:4.0.5')
 
-    implementation 'commons-io:commons-io:2.19.0'
+    implementation 'commons-io:commons-io:2.20.0'
     implementation 'com.google.guava:guava:33.4.8-jre'
-    implementation 'org.apache.commons:commons-lang3:3.17.0'
+    implementation 'org.apache.commons:commons-lang3:3.18.0'
     // String substitution for Maude.
-    implementation 'org.apache.commons:commons-text:1.13.1'
+    implementation 'org.apache.commons:commons-text:1.14.0'
 
     // Logging
-    implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
-    implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
+    implementation 'org.apache.logging.log4j:log4j-api:2.25.1'
+    implementation 'org.apache.logging.log4j:log4j-core:2.25.1'
 
     // Test
     testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '3.0'
