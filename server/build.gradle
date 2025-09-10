@@ -66,7 +66,7 @@ jacocoTestReport {
     }
 }
 
-sonarqube {
+sonar {
     properties {
         property 'sonar.projectKey', 'timkraeuter_Groove_Rule_Generation_Server'
         property 'sonar.organization', 'timkraeuter'
