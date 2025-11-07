@@ -5,6 +5,9 @@ Generates graph-transformation rules for the graph transformation toolset [Groov
 
 The generation of graph transformation rules for BPMN models is described in the [wiki](https://github.com/timkraeuter/Rewrite_Rule_Generation/wiki).
 
+[Here](https://timkraeuter.com/bpmn-analyzer/) is my blog post about the tool.
+You might also be interested in my [other tool the BPMN-Analyzer 2.0](https://timkraeuter.com/rust-bpmn-analyzer/) with real-time analysis, quick-fixes and counter example visulization.
+
 ## Contained projects
 This repository contains multiple related projects.
 ### Generator
@@ -31,7 +34,7 @@ The project **Generation-ui** contains the ui code for the generation of Groove 
 
 The project **server** contains the webservices used by the generation-ui for BPMN rule generation and model-checking.
 
-## BPMN analyzer based on GT-Rules
+## BPMN analysis based on GT-Rules
 A demo version of the tool is hosted [here](https://bpmn-analyzer.wittyrock-9d6a3c00.northeurope.azurecontainerapps.io/).
 
 [![Tool screenshot](./documentation/impl.png)](https://bpmn-analyzer.wittyrock-9d6a3c00.northeurope.azurecontainerapps.io/)
