@@ -2,11 +2,11 @@
 
 # BPMN Analazyer
 Generates graph-transformation rules for the graph transformation toolset [Groove](https://groove.ewi.utwente.nl/about) and rewrite rules for the [Maude system](https://maude.cs.illinois.edu/w/index.php/The_Maude_System) from different BPMN models.
-
 The generation of graph transformation rules for BPMN models is described in the [wiki](https://github.com/timkraeuter/Rewrite_Rule_Generation/wiki).
 
-[Here](https://timkraeuter.com/bpmn-analyzer/) is my blog post about the tool.
-You might also be interested in my [other tool the BPMN-Analyzer 2.0](https://timkraeuter.com/rust-bpmn-analyzer/) with real-time analysis, quick-fixes and counter example visulization.
+[Here](https://timkraeuter.com/bpmn-analyzer/) is my blog post about the BPMN Analyzer and you can try it yourself [here](https://bpmn-analyzer.wittyrock-9d6a3c00.northeurope.azurecontainerapps.io/).
+
+You might also be interested in my [BPMN-Analyzer 2.0](https://timkraeuter.com/rust-bpmn-analyzer/) with real-time analysis, quick-fixes and counter example visulization. You can try it online [here](https://timkraeuter.com/bpmn-analyzer-js/).
 
 ## Contained projects
 This repository contains multiple related projects.
