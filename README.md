@@ -6,7 +6,7 @@ The generation of graph transformation rules for BPMN models is described in the
 
 [Here](https://timkraeuter.com/bpmn-analyzer/) is my blog post about the BPMN Analyzer and you can try it yourself [here](https://bpmn-analyzer.wittyrock-9d6a3c00.northeurope.azurecontainerapps.io/).
 
-You might also be interested in my [BPMN-Analyzer 2.0](https://timkraeuter.com/rust-bpmn-analyzer/) with real-time analysis, quick-fixes and counter example visulization. You can try it online [here](https://timkraeuter.com/bpmn-analyzer-js/).
+You might also be interested in my [BPMN-Analyzer 2.0](https://timkraeuter.com/rust-bpmn-analyzer/) with real-time analysis, quick-fixes and counter example visualization. You can try it online [here](https://timkraeuter.com/bpmn-analyzer-js/).
 
 ## Contained projects
 This repository contains multiple related projects.
