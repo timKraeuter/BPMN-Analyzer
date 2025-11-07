@@ -31,7 +31,7 @@ The project **Generation-ui** contains the ui code for the generation of Groove 
 
 The project **server** contains the webservices used by the generation-ui for BPMN rule generation and model-checking.
 
-## BPMN generation
+## BPMN analyzer based on GT-Rules
 A demo version of the tool is hosted [here](https://bpmn-analyzer.wittyrock-9d6a3c00.northeurope.azurecontainerapps.io/).
 
 [![Tool screenshot](./documentation/impl.png)](https://bpmn-analyzer.wittyrock-9d6a3c00.northeurope.azurecontainerapps.io/)
