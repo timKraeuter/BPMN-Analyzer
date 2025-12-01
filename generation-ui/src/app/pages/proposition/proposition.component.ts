@@ -137,7 +137,7 @@ export class PropositionComponent {
     }
 
     @HostListener('document:keydown.ArrowDown', ['$event'])
-    async propositionDown(event: KeyboardEvent) {
+    async propositionDown(event: Event) {
         if (
             event.target &&
             // @ts-ignore Do not step forward when inputting something in the panel.
@@ -154,7 +154,7 @@ export class PropositionComponent {
     }
 
     @HostListener('document:keydown.ArrowUp', ['$event'])
-    async propositionUp(event: KeyboardEvent) {
+    async propositionUp(event: Event) {
         if (
             event.target &&
             // @ts-ignore Do not step forward when inputting something in the panel.

@@ -36,7 +36,7 @@ export class AppComponent {
     }
 
     @HostListener('document:keydown.ArrowRight', ['$event'])
-    async stepForward(event: KeyboardEvent) {
+    async stepForward(event: Event) {
         if (
             event.target &&
             (event.target as HTMLElement).classList.contains(
@@ -49,7 +49,7 @@ export class AppComponent {
     }
 
     @HostListener('document:keydown.ArrowLeft', ['$event'])
-    async stepBackward() {
+    async stepBackward(_: Event) {
         this.stepper.previous();
     }
 }
