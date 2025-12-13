@@ -44,12 +44,10 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
 
   public void createStartEventRulesForProcess(AbstractBPMNProcess process, StartEvent startEvent) {
     switch (startEvent.getType()) {
-      case NONE -> {
-      }
+      case NONE -> {}
       case MESSAGE -> createEndInteractionNodeRule(startEvent, process);
-      case SIGNAL, ERROR, ESCALATION -> {
-      }
-      // Done in the corresponding throw rule.
+      case SIGNAL, ERROR, ESCALATION -> {}
+        // Done in the corresponding throw rule.
     }
   }
 
@@ -65,10 +63,12 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
                 case NONE -> createPreAndPostObjectInRuleForProcess(process, preTokens, ANY_TOKENS);
                 case TERMINATION -> createTerminationEndEventRule(process, preTokens);
                 case MESSAGE -> createMessageEndEventRule(process, endEvent, preTokens);
-                case ERROR -> throw new UnsupportedOperationException(
-                    "Error events not implemented yet for Maude!");
-                case ESCALATION -> throw new UnsupportedOperationException(
-                    "Escalation events not implemented yet for Maude!");
+                case ERROR ->
+                    throw new UnsupportedOperationException(
+                        "Error events not implemented yet for Maude!");
+                case ESCALATION ->
+                    throw new UnsupportedOperationException(
+                        "Escalation events not implemented yet for Maude!");
                 case SIGNAL -> createSignalEndEventRule(process, endEvent, preTokens);
               }
               ruleBuilder.buildRule();
@@ -161,7 +161,7 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
       case MESSAGE -> createIntermediateCatchMessageEventRule(intermediateCatchEvent, process);
       case SIGNAL -> createIntermediateSignalCatchEventRule(intermediateCatchEvent, process);
       case TIMER ->
-        // Same behavior as a none event so far. No timings implemented.
+          // Same behavior as a none event so far. No timings implemented.
           createIntermediateThrowNoneEventRule(intermediateCatchEvent, process);
     }
   }

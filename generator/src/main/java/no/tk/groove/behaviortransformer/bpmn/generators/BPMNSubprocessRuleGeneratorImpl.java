@@ -110,21 +110,22 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
             boundaryEvent -> {
               switch (boundaryEvent.getType()) {
                 case NONE, TIMER ->
-                    createSubProcessBoundaryEventRule(process, callActivity, boundaryEvent, _ -> {
-                    });
-                case MESSAGE -> collaboration
-                    .getIncomingMessageFlows(boundaryEvent)
-                    .forEach(
-                        messageFlow ->
-                            createSubProcessBoundaryEventRule(
-                                process,
-                                callActivity,
-                                boundaryEvent,
-                                processInstance ->
-                                    deleteMessageToProcessInstanceWithPosition(
-                                        ruleBuilder,
-                                        processInstance,
-                                        messageFlow.getNameOrDescriptiveName())));
+                    createSubProcessBoundaryEventRule(
+                        process, callActivity, boundaryEvent, _ -> {});
+                case MESSAGE ->
+                    collaboration
+                        .getIncomingMessageFlows(boundaryEvent)
+                        .forEach(
+                            messageFlow ->
+                                createSubProcessBoundaryEventRule(
+                                    process,
+                                    callActivity,
+                                    boundaryEvent,
+                                    processInstance ->
+                                        deleteMessageToProcessInstanceWithPosition(
+                                            ruleBuilder,
+                                            processInstance,
+                                            messageFlow.getNameOrDescriptiveName())));
                 case SIGNAL, ERROR, ESCALATION -> {
                   // Handled in the throw rule part.
                 }

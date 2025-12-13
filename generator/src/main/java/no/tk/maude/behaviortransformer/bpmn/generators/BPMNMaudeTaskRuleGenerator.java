@@ -51,8 +51,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
             boundaryEvent -> {
               switch (boundaryEvent.getType()) {
                 case NONE, TIMER ->
-                    createTaskBoundaryEventRule(process, task, boundaryEvent, _ -> {
-                    }); // NOOP
+                    createTaskBoundaryEventRule(process, task, boundaryEvent, _ -> {}); // NOOP
                 case MESSAGE -> createTaskMessageBoundaryEventRule(process, task, boundaryEvent);
                 case SIGNAL -> {
                   // Handled in the throw rule part.
@@ -70,10 +69,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
         .forEach(
             messageFlow ->
                 createTaskBoundaryEventRule(
-                    process,
-                    task,
-                    boundaryEvent,
-                    _ -> addMessageConsumption(messageFlow)));
+                    process, task, boundaryEvent, _ -> addMessageConsumption(messageFlow)));
   }
 
   private void createTaskBoundaryEventRule(
@@ -146,8 +142,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
   }
 
   public void createSendTaskRulesForProcess(AbstractBPMNProcess process, SendTask sendTask) {
-    createTaskRulesForProcess(
-        process, sendTask, _ -> addSendMessageBehaviorForFlowNode(sendTask));
+    createTaskRulesForProcess(process, sendTask, _ -> addSendMessageBehaviorForFlowNode(sendTask));
   }
 
   public void createReceiveTaskRulesForProcess(

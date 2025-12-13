@@ -67,8 +67,9 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
         .forEach(
             startEvent -> {
               switch (startEvent.getType()) {
-                case NONE -> throw new BPMNRuntimeException(
-                    "None start events in event subprocesses are useless!");
+                case NONE ->
+                    throw new BPMNRuntimeException(
+                        "None start events in event subprocesses are useless!");
                 case MESSAGE -> {
                   if (startEvent.isInterrupt()) {
                     createStartInterruptingEvenSubprocessFromMessageRules(
@@ -78,10 +79,10 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
                         process, eventSubprocess, collaboration, ruleBuilder, startEvent);
                   }
                 }
-                case SIGNAL, ERROR, ESCALATION -> {
-                }
-                default -> throw new BPMNRuntimeException(
-                    "Unexpected start event type encountered: " + startEvent.getType());
+                case SIGNAL, ERROR, ESCALATION -> {}
+                default ->
+                    throw new BPMNRuntimeException(
+                        "Unexpected start event type encountered: " + startEvent.getType());
               }
             });
   }

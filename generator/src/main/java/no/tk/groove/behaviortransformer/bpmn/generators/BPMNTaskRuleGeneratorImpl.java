@@ -104,8 +104,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
       Consumer<GrooveRuleBuilder> endTaskRuleAdditions) {
     // Rules for starting the task
     task.getIncomingFlows()
-        .forEach(
-            incomingFlow -> createStartTaskRule(process, task, incomingFlow, _ -> {}));
+        .forEach(incomingFlow -> createStartTaskRule(process, task, incomingFlow, _ -> {}));
     // Rule for ending the task
     createEndTaskRule(process, task, endTaskRuleAdditions);
 
@@ -118,21 +117,21 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         .forEach(
             boundaryEvent -> {
               switch (boundaryEvent.getType()) {
-                case NONE, TIMER -> createBoundaryEventRule(process, boundaryEvent, task, _ -> {
-                });
-                case MESSAGE -> collaboration
-                    .getIncomingMessageFlows(boundaryEvent)
-                    .forEach(
-                        messageFlow ->
-                            createBoundaryEventRule(
-                                process,
-                                boundaryEvent,
-                                task,
-                                processInstance ->
-                                    deleteMessageToProcessInstanceWithPosition(
-                                        ruleBuilder,
-                                        processInstance,
-                                        messageFlow.getNameOrDescriptiveName())));
+                case NONE, TIMER -> createBoundaryEventRule(process, boundaryEvent, task, _ -> {});
+                case MESSAGE ->
+                    collaboration
+                        .getIncomingMessageFlows(boundaryEvent)
+                        .forEach(
+                            messageFlow ->
+                                createBoundaryEventRule(
+                                    process,
+                                    boundaryEvent,
+                                    task,
+                                    processInstance ->
+                                        deleteMessageToProcessInstanceWithPosition(
+                                            ruleBuilder,
+                                            processInstance,
+                                            messageFlow.getNameOrDescriptiveName())));
                 case SIGNAL -> {
                   // Handled in the throw rule part.
                 }

@@ -60,11 +60,12 @@ public class BPMNMaudeSubprocessRuleGenerator
         .forEach(
             boundaryEvent -> {
               switch (boundaryEvent.getType()) {
-                case NONE, TIMER -> createSubProcessBoundaryEventRule(
-                    process, callActivity, boundaryEvent, _ -> {
-                    }); // NOOP
-                case MESSAGE -> createSubProcessMessageBoundaryEventRule(
-                    process, callActivity, boundaryEvent, collaboration);
+                case NONE, TIMER ->
+                    createSubProcessBoundaryEventRule(
+                        process, callActivity, boundaryEvent, _ -> {}); // NOOP
+                case MESSAGE ->
+                    createSubProcessMessageBoundaryEventRule(
+                        process, callActivity, boundaryEvent, collaboration);
                 case SIGNAL -> {
                   // Handled in the throw rule part.
                 }
@@ -84,10 +85,7 @@ public class BPMNMaudeSubprocessRuleGenerator
         .forEach(
             messageFlow ->
                 createSubProcessBoundaryEventRule(
-                    process,
-                    callActivity,
-                    boundaryEvent,
-                    _ -> addMessageConsumption(messageFlow)));
+                    process, callActivity, boundaryEvent, _ -> addMessageConsumption(messageFlow)));
   }
 
   private void createSubProcessBoundaryEventRule(
