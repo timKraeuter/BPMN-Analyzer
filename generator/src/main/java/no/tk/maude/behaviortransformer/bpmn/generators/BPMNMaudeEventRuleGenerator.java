@@ -44,14 +44,12 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
 
   public void createStartEventRulesForProcess(AbstractBPMNProcess process, StartEvent startEvent) {
     switch (startEvent.getType()) {
-      case NONE:
-        break;
-      case MESSAGE:
-        createEndInteractionNodeRule(startEvent, process);
-        break;
-      case SIGNAL, ERROR, ESCALATION:
-        // Done in the corresponding throw rule.
-        break;
+      case NONE -> {
+      }
+      case MESSAGE -> createEndInteractionNodeRule(startEvent, process);
+      case SIGNAL, ERROR, ESCALATION -> {
+      }
+      // Done in the corresponding throw rule.
     }
   }
 
@@ -64,24 +62,14 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
               ruleBuilder.startRule(getFlowNodeRuleName(endEvent));
 
               switch (endEvent.getType()) {
-                case NONE:
-                  createPreAndPostObjectInRuleForProcess(process, preTokens, ANY_TOKENS);
-                  break;
-                case TERMINATION:
-                  createTerminationEndEventRule(process, preTokens);
-                  break;
-                case MESSAGE:
-                  createMessageEndEventRule(process, endEvent, preTokens);
-                  break;
-                case ERROR:
-                  throw new UnsupportedOperationException(
-                      "Error events not implemented yet for Maude!");
-                case ESCALATION:
-                  throw new UnsupportedOperationException(
-                      "Escalation events not implemented yet for Maude!");
-                case SIGNAL:
-                  createSignalEndEventRule(process, endEvent, preTokens);
-                  break;
+                case NONE -> createPreAndPostObjectInRuleForProcess(process, preTokens, ANY_TOKENS);
+                case TERMINATION -> createTerminationEndEventRule(process, preTokens);
+                case MESSAGE -> createMessageEndEventRule(process, endEvent, preTokens);
+                case ERROR -> throw new UnsupportedOperationException(
+                    "Error events not implemented yet for Maude!");
+                case ESCALATION -> throw new UnsupportedOperationException(
+                    "Escalation events not implemented yet for Maude!");
+                case SIGNAL -> createSignalEndEventRule(process, endEvent, preTokens);
               }
               ruleBuilder.buildRule();
             });
@@ -167,19 +155,14 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
   public void createIntermediateCatchEventRule(
       AbstractBPMNProcess process, IntermediateCatchEvent intermediateCatchEvent) {
     switch (intermediateCatchEvent.getType()) {
-      case LINK:
+      case LINK -> {
         // No catch rule needed since tokens are teleported when the link event happens.
-        break;
-      case MESSAGE:
-        createIntermediateCatchMessageEventRule(intermediateCatchEvent, process);
-        break;
-      case SIGNAL:
-        createIntermediateSignalCatchEventRule(intermediateCatchEvent, process);
-        break;
-      case TIMER:
+      }
+      case MESSAGE -> createIntermediateCatchMessageEventRule(intermediateCatchEvent, process);
+      case SIGNAL -> createIntermediateSignalCatchEventRule(intermediateCatchEvent, process);
+      case TIMER ->
         // Same behavior as a none event so far. No timings implemented.
-        createIntermediateThrowNoneEventRule(intermediateCatchEvent, process);
-        break;
+          createIntermediateThrowNoneEventRule(intermediateCatchEvent, process);
     }
   }
 

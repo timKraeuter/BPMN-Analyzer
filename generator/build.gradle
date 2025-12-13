@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     // Analysis
-    id 'org.sonarqube' version '6.3.1.5724'
+    id 'org.sonarqube' version '7.2.1.6560'
     id 'jacoco'
     id 'net.ltgt.errorprone' version '4.3.0'
     id 'com.diffplug.spotless' version '7.2.1'
@@ -11,7 +11,7 @@ group = 'no.hvl.tk'
 version = '1'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_23
 }
 
 repositories {
@@ -24,19 +24,22 @@ dependencies {
     implementation 'io.github.timKraeuter:graph-rule-generation:1.5'
 
     // Use the camunda API to read BPMN models.
-    implementation group: 'org.camunda.bpm.model', name: 'camunda-bpmn-model', version: '7.23.0'
+    implementation group: 'org.camunda.bpm.model', name: 'camunda-bpmn-model', version: '7.24.0'
 
     // https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api
-    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.2'
-    implementation('org.glassfish.jaxb:jaxb-runtime:4.0.5')
+    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.4'
+    // https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime
+    implementation('org.glassfish.jaxb:jaxb-runtime:4.0.6')
 
     // https://mvnrepository.com/artifact/commons-io/commons-io
-    implementation 'commons-io:commons-io:2.20.0'
-    implementation 'com.google.guava:guava:33.4.8-jre'
-    implementation 'org.apache.commons:commons-lang3:3.18.0'
+    implementation 'commons-io:commons-io:2.21.0'
+    // https://mvnrepository.com/artifact/com.google.guava/guava
+    implementation 'com.google.guava:guava:33.5.0-jre'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation 'org.apache.commons:commons-lang3:3.20.0'
     // String substitution for Maude.
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
-    implementation 'org.apache.commons:commons-text:1.14.0'
+    implementation 'org.apache.commons:commons-text:1.15.0'
 
     // Logging
     implementation 'org.apache.logging.log4j:log4j-api:2.25.1'
@@ -47,7 +50,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.3'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.3'
 
-    errorprone('com.google.errorprone:error_prone_core:2.18.0')
+    errorprone('com.google.errorprone:error_prone_core:2.45.0')
 }
 
 test {

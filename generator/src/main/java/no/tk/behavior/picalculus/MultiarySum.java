@@ -34,8 +34,7 @@ public class MultiarySum implements Sum {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof MultiarySum)) return false;
-    MultiarySum that = (MultiarySum) o;
+    if (!(o instanceof MultiarySum that)) return false;
     return Objects.equals(sums, that.sums);
   }
 

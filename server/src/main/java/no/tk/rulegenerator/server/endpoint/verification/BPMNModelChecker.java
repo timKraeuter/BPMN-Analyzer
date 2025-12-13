@@ -141,7 +141,7 @@ public class BPMNModelChecker {
       String startState,
       String stateSpace,
       Set<String> endEventNames,
-      HashMap<String, Boolean> seenEndEvents,
+      Map<String, Boolean> seenEndEvents,
       Pair<String, String> currentTransition) {
     String transitionLabel = currentTransition.getRight();
     // Check the label

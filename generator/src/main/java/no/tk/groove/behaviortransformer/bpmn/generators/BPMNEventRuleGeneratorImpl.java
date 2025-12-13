@@ -453,16 +453,13 @@ public class BPMNEventRuleGeneratorImpl implements BPMNEventRuleGenerator {
   public void createIntermediateCatchEventRule(
       AbstractBPMNProcess process, IntermediateCatchEvent intermediateCatchEvent) {
     switch (intermediateCatchEvent.getType()) {
-      case MESSAGE:
-        createIntermediateCatchMessageEventRule(
-            intermediateCatchEvent, process, ruleBuilder, collaboration);
-        break;
-      case LINK, SIGNAL:
+      case MESSAGE -> createIntermediateCatchMessageEventRule(
+          intermediateCatchEvent, process, ruleBuilder, collaboration);
+      case LINK, SIGNAL -> {
         // Done in the corresponding throw rule.
-        break;
-      case TIMER:
-        createIntermediateCatchTimerEventRule(intermediateCatchEvent, process, ruleBuilder);
-        break;
+      }
+      case TIMER ->
+          createIntermediateCatchTimerEventRule(intermediateCatchEvent, process, ruleBuilder);
     }
   }
 

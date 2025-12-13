@@ -47,13 +47,12 @@ public class ReceiveTask extends AbstractTask {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof ReceiveTask)) {
+    if (!(o instanceof ReceiveTask that)) {
       return false;
     }
     if (!super.equals(o)) {
       return false;
     }
-    ReceiveTask that = (ReceiveTask) o;
     return instantiate == that.instantiate;
   }
 

@@ -45,8 +45,7 @@ public class PrefixedProcess implements Sum {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof PrefixedProcess)) return false;
-    PrefixedProcess that = (PrefixedProcess) o;
+    if (!(o instanceof PrefixedProcess that)) return false;
     return Objects.equals(prefix, that.prefix) && Objects.equals(process, that.process);
   }
 

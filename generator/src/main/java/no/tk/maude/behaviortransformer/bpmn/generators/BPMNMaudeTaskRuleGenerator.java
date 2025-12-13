@@ -50,17 +50,15 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
         .forEach(
             boundaryEvent -> {
               switch (boundaryEvent.getType()) {
-                case NONE, TIMER:
-                  createTaskBoundaryEventRule(process, task, boundaryEvent, rb -> {}); // NOOP
-                  break;
-                case MESSAGE:
-                  createTaskMessageBoundaryEventRule(process, task, boundaryEvent);
-                  break;
-                case SIGNAL:
+                case NONE, TIMER ->
+                    createTaskBoundaryEventRule(process, task, boundaryEvent, _ -> {
+                    }); // NOOP
+                case MESSAGE -> createTaskMessageBoundaryEventRule(process, task, boundaryEvent);
+                case SIGNAL -> {
                   // Handled in the throw rule part.
-                  break;
-                default:
-                  throw new IllegalStateException("Unexpected value: " + boundaryEvent.getType());
+                }
+                default ->
+                    throw new IllegalStateException("Unexpected value: " + boundaryEvent.getType());
               }
             });
   }
@@ -75,7 +73,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
                     process,
                     task,
                     boundaryEvent,
-                    maudeRuleBuilder -> addMessageConsumption(messageFlow)));
+                    _ -> addMessageConsumption(messageFlow)));
   }
 
   private void createTaskBoundaryEventRule(
@@ -107,7 +105,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
     createTaskRulesForProcess(
         process,
         task,
-        x -> {
+        _ -> {
           // NOOP
         });
   }
@@ -149,7 +147,7 @@ public class BPMNMaudeTaskRuleGenerator implements BPMNToMaudeTransformerHelper 
 
   public void createSendTaskRulesForProcess(AbstractBPMNProcess process, SendTask sendTask) {
     createTaskRulesForProcess(
-        process, sendTask, maudeRuleBuilder -> addSendMessageBehaviorForFlowNode(sendTask));
+        process, sendTask, _ -> addSendMessageBehaviorForFlowNode(sendTask));
   }
 
   public void createReceiveTaskRulesForProcess(

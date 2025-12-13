@@ -60,19 +60,16 @@ public class BPMNMaudeSubprocessRuleGenerator
         .forEach(
             boundaryEvent -> {
               switch (boundaryEvent.getType()) {
-                case NONE, TIMER:
-                  createSubProcessBoundaryEventRule(
-                      process, callActivity, boundaryEvent, rb -> {}); // NOOP
-                  break;
-                case MESSAGE:
-                  createSubProcessMessageBoundaryEventRule(
-                      process, callActivity, boundaryEvent, collaboration);
-                  break;
-                case SIGNAL:
+                case NONE, TIMER -> createSubProcessBoundaryEventRule(
+                    process, callActivity, boundaryEvent, _ -> {
+                    }); // NOOP
+                case MESSAGE -> createSubProcessMessageBoundaryEventRule(
+                    process, callActivity, boundaryEvent, collaboration);
+                case SIGNAL -> {
                   // Handled in the throw rule part.
-                  break;
-                default:
-                  throw new IllegalStateException("Unexpected value: " + boundaryEvent.getType());
+                }
+                default ->
+                    throw new IllegalStateException("Unexpected value: " + boundaryEvent.getType());
               }
             });
   }
@@ -90,7 +87,7 @@ public class BPMNMaudeSubprocessRuleGenerator
                     process,
                     callActivity,
                     boundaryEvent,
-                    maudeRuleBuilder -> addMessageConsumption(messageFlow)));
+                    _ -> addMessageConsumption(messageFlow)));
   }
 
   private void createSubProcessBoundaryEventRule(

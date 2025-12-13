@@ -30,7 +30,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
 
   @Override
   public void createTaskRulesForProcess(AbstractBPMNProcess process, Task task) {
-    createTaskRulesForProcess(process, task, noop -> {});
+    createTaskRulesForProcess(process, task, _ -> {});
   }
 
   @Override
@@ -55,7 +55,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
               incomingFlow -> this.createReceiveTaskStartRule(process, receiveTask, incomingFlow));
     }
     // End task rule is standard.
-    this.createEndTaskRule(process, receiveTask, noop -> {});
+    this.createEndTaskRule(process, receiveTask, _ -> {});
   }
 
   void createReceiveTaskStartRule(
@@ -105,7 +105,7 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
     // Rules for starting the task
     task.getIncomingFlows()
         .forEach(
-            incomingFlow -> createStartTaskRule(process, task, incomingFlow, grooveNode -> {}));
+            incomingFlow -> createStartTaskRule(process, task, incomingFlow, _ -> {}));
     // Rule for ending the task
     createEndTaskRule(process, task, endTaskRuleAdditions);
 
@@ -118,29 +118,26 @@ public class BPMNTaskRuleGeneratorImpl implements BPMNTaskRuleGenerator {
         .forEach(
             boundaryEvent -> {
               switch (boundaryEvent.getType()) {
-                case NONE, TIMER:
-                  createBoundaryEventRule(process, boundaryEvent, task, x -> {});
-                  break;
-                case MESSAGE:
-                  collaboration
-                      .getIncomingMessageFlows(boundaryEvent)
-                      .forEach(
-                          messageFlow ->
-                              createBoundaryEventRule(
-                                  process,
-                                  boundaryEvent,
-                                  task,
-                                  processInstance ->
-                                      deleteMessageToProcessInstanceWithPosition(
-                                          ruleBuilder,
-                                          processInstance,
-                                          messageFlow.getNameOrDescriptiveName())));
-                  break;
-                case SIGNAL:
+                case NONE, TIMER -> createBoundaryEventRule(process, boundaryEvent, task, _ -> {
+                });
+                case MESSAGE -> collaboration
+                    .getIncomingMessageFlows(boundaryEvent)
+                    .forEach(
+                        messageFlow ->
+                            createBoundaryEventRule(
+                                process,
+                                boundaryEvent,
+                                task,
+                                processInstance ->
+                                    deleteMessageToProcessInstanceWithPosition(
+                                        ruleBuilder,
+                                        processInstance,
+                                        messageFlow.getNameOrDescriptiveName())));
+                case SIGNAL -> {
                   // Handled in the throw rule part.
-                  break;
-                default:
-                  throw new IllegalStateException("Unexpected value: " + boundaryEvent.getType());
+                }
+                default ->
+                    throw new IllegalStateException("Unexpected value: " + boundaryEvent.getType());
               }
             });
   }

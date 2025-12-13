@@ -50,13 +50,12 @@ public class CallActivity extends Activity {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof CallActivity)) {
+    if (!(o instanceof CallActivity that)) {
       return false;
     }
     if (!super.equals(o)) {
       return false;
     }
-    CallActivity that = (CallActivity) o;
     return Objects.equal(subProcessModel, that.subProcessModel);
   }
 

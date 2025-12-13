@@ -109,30 +109,27 @@ public class BPMNSubprocessRuleGeneratorImpl implements BPMNSubprocessRuleGenera
         .forEach(
             boundaryEvent -> {
               switch (boundaryEvent.getType()) {
-                case NONE, TIMER:
-                  createSubProcessBoundaryEventRule(process, callActivity, boundaryEvent, x -> {});
-                  break;
-                case MESSAGE:
-                  collaboration
-                      .getIncomingMessageFlows(boundaryEvent)
-                      .forEach(
-                          messageFlow ->
-                              createSubProcessBoundaryEventRule(
-                                  process,
-                                  callActivity,
-                                  boundaryEvent,
-                                  processInstance ->
-                                      deleteMessageToProcessInstanceWithPosition(
-                                          ruleBuilder,
-                                          processInstance,
-                                          messageFlow.getNameOrDescriptiveName())));
-
-                  break;
-                case SIGNAL, ERROR, ESCALATION:
+                case NONE, TIMER ->
+                    createSubProcessBoundaryEventRule(process, callActivity, boundaryEvent, _ -> {
+                    });
+                case MESSAGE -> collaboration
+                    .getIncomingMessageFlows(boundaryEvent)
+                    .forEach(
+                        messageFlow ->
+                            createSubProcessBoundaryEventRule(
+                                process,
+                                callActivity,
+                                boundaryEvent,
+                                processInstance ->
+                                    deleteMessageToProcessInstanceWithPosition(
+                                        ruleBuilder,
+                                        processInstance,
+                                        messageFlow.getNameOrDescriptiveName())));
+                case SIGNAL, ERROR, ESCALATION -> {
                   // Handled in the throw rule part.
-                  break;
-                default:
-                  throw new IllegalStateException("Unexpected value: " + boundaryEvent.getType());
+                }
+                default ->
+                    throw new IllegalStateException("Unexpected value: " + boundaryEvent.getType());
               }
             });
   }

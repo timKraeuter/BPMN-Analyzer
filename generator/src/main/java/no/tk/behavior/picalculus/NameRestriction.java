@@ -32,8 +32,7 @@ public class NameRestriction implements PiProcess {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof NameRestriction)) return false;
-    NameRestriction that = (NameRestriction) o;
+    if (!(o instanceof NameRestriction that)) return false;
     return Objects.equals(restrictedName, that.restrictedName)
         && Objects.equals(restrictedProcess, that.restrictedProcess);
   }
