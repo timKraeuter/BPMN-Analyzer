@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { BPMNProperty } from '../../components/analysis-result/analysis-result.component';
 import {
     ModelCheckingResponse,
@@ -65,6 +65,7 @@ export class AnalysisComponent {
         private snackBar: MatSnackBar,
         private modelCheckingService: ModelCheckingService,
         private sharedState: SharedStateService,
+        private cdr: ChangeDetectorRef,
     ) {}
 
     async downloadGGClicked() {
@@ -110,7 +111,7 @@ export class AnalysisComponent {
             );
             return;
         }
-        this.bpmnSpecificVerificationRunning = true;
+        this.setVerificationRunning(true);
         const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
         this.modelCheckingService
             .checkBPMNSpecificProperties(
@@ -132,7 +133,7 @@ export class AnalysisComponent {
                     this.colorDeadActivitiesAndSetNamesIfNeeded();
                 },
             })
-            .add(() => (this.bpmnSpecificVerificationRunning = false));
+            .add(() => this.setVerificationRunning(false));
     }
 
     checkLTLPropertyClicked() {
@@ -153,7 +154,7 @@ export class AnalysisComponent {
 
     async checkCTLPropertyClicked() {
         const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
-        this.bpmnSpecificVerificationRunning = true;
+        this.setVerificationRunning(true);
         this.modelCheckingService
             .checkTemporalLogic(
                 'CTL',
@@ -170,7 +171,7 @@ export class AnalysisComponent {
                     this.ctlPropertyResult = response;
                 },
             })
-            .add(() => (this.bpmnSpecificVerificationRunning = false));
+            .add(() => this.setVerificationRunning(false));
     }
 
     private setProperCompletionHintsIfNeeded(): void {
@@ -239,6 +240,11 @@ export class AnalysisComponent {
             .getModeler()
             .get('elementRegistry');
         return ids.map((id) => elementRegistry.get(id));
+    }
+
+    private setVerificationRunning(isRunning: boolean): void {
+        this.bpmnSpecificVerificationRunning = isRunning;
+        this.cdr.detectChanges();
     }
 
     getPropositions(): string[] {

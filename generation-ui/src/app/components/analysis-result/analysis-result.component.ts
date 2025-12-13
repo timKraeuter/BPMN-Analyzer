@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectorRef } from '@angular/core';
 import { ModelCheckingResponse } from '../../services/model-checking.service';
 
 @Component({
@@ -8,14 +8,25 @@ import { ModelCheckingResponse } from '../../services/model-checking.service';
     standalone: false,
 })
 export class AnalysisResultComponent {
+    private _running: boolean = false;
+
     @Input()
-    public running!: boolean;
+    public set running(value: boolean) {
+        this._running = value;
+        this.cdr.detectChanges();
+    }
+
+    public get running(): boolean {
+        return this._running;
+    }
 
     @Input()
     public properties!: BPMNProperty[];
 
     @Input()
     public ctlPropertyResult: ModelCheckingResponse | undefined = undefined;
+
+    constructor(private cdr: ChangeDetectorRef) {}
 }
 
 export class BPMNProperty {
