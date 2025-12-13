@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ModelCheckingResponse } from '../../services/model-checking.service';
 
 @Component({
-    selector: 'verification-result-component',
+    selector: 'analysis-result-component',
     templateUrl: './analysis-result.component.html',
     styleUrls: ['./analysis-result.component.scss'],
     standalone: false,
