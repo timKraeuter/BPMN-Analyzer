@@ -5,6 +5,7 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConst
 
 import io.github.timkraeuter.groove.graph.GrooveNode;
 import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
+import java.util.Objects;
 import java.util.Set;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
@@ -12,6 +13,7 @@ import no.tk.behavior.bpmn.BPMNEventSubprocess;
 import no.tk.behavior.bpmn.MessageFlow;
 import no.tk.behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import no.tk.behavior.bpmn.events.StartEvent;
+import no.tk.behavior.bpmn.events.StartEventType;
 import no.tk.groove.behaviortransformer.bpmn.BPMNRuleGenerator;
 import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 
@@ -66,18 +68,17 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
         .getStartEvents()
         .forEach(
             startEvent -> {
-              switch (startEvent.getType()) {
-                case NONE ->
-                    throw new BPMNRuntimeException(
-                        "None start events in event subprocesses are useless!");
-                case MESSAGE -> {
-                  if (startEvent.isInterrupt()) {
-                    createStartInterruptingEvenSubprocessFromMessageRules(
-                        process, eventSubprocess, collaboration, ruleBuilder, startEvent);
-                  } else {
-                    createStartNonInterruptingEvenSubprocessFromMessageRules(
-                        process, eventSubprocess, collaboration, ruleBuilder, startEvent);
-                  }
+              if (Objects.requireNonNull(startEvent.getType()) == StartEventType.NONE) {
+                throw new BPMNRuntimeException(
+                    "None start events in event subprocesses are useless!");
+              }
+              if (startEvent.getType() == StartEventType.MESSAGE) {
+                if (startEvent.isInterrupt()) {
+                  createStartInterruptingEvenSubprocessFromMessageRules(
+                      process, eventSubprocess, collaboration, ruleBuilder, startEvent);
+                } else {
+                  createStartNonInterruptingEvenSubprocessFromMessageRules(
+                      process, eventSubprocess, collaboration, ruleBuilder, startEvent);
                 }
               }
             });
