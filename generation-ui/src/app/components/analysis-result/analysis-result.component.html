@@ -1,64 +1,71 @@
-<mat-card
-    appearance="outlined"
-    *ngIf="running || properties.length > 0 || ctlPropertyResult"
->
-    <mat-card-header>
-        <mat-card-title>Analysis results</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <span *ngIf="running; else results">
-            The verification will at most take 60 seconds.
-            <mat-spinner class="margin-top"></mat-spinner>
-        </span>
-        <ng-template #results>
-            <mat-list *ngIf="ctlPropertyResult">
-                <div mat-subheader>CTL property</div>
-                <mat-list-item>
-                    <mat-icon
-                        matListItemIcon
-                        class="material-icons color_green"
-                        *ngIf="ctlPropertyResult.valid; else notValid"
-                        >check
-                    </mat-icon>
-                    <ng-template #notValid>
-                        <mat-icon
-                            matListItemIcon
-                            class="material-icons color_red"
-                            >close
-                        </mat-icon>
-                    </ng-template>
-                    <div matListItemTitle>
-                        {{ ctlPropertyResult.property }}
-                        <span *ngIf="ctlPropertyResult.error"
-                            >: {{ ctlPropertyResult.error }}</span
-                        >
-                    </div>
-                </mat-list-item>
-            </mat-list>
-            <mat-list *ngIf="properties.length > 0">
-                <div mat-subheader>General BPMN properties</div>
-                <mat-list-item *ngFor="let property of properties">
-                    <mat-icon
-                        matListItemIcon
-                        class="material-icons color_green"
-                        *ngIf="property.valid; else notValid"
-                        >check
-                    </mat-icon>
-                    <ng-template #notValid>
-                        <mat-icon
-                            matListItemIcon
-                            class="material-icons color_red"
-                            >close
-                        </mat-icon>
-                    </ng-template>
-                    <div matListItemTitle>
-                        {{ property.name }}
-                        <span *ngIf="property.additionalInfo"
-                            >({{ property.additionalInfo }})</span
-                        >
-                    </div>
-                </mat-list-item>
-            </mat-list>
-        </ng-template>
-    </mat-card-content>
-</mat-card>
+@if (running || properties.length > 0 || ctlPropertyResult) {
+    <mat-card appearance="outlined">
+        <mat-card-header>
+            <mat-card-title>Analysis results</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            @if (running) {
+                <span>
+                    The verification will at most take 60 seconds.
+                    <mat-spinner class="margin-top"></mat-spinner>
+                </span>
+            } @else {
+                @if (ctlPropertyResult) {
+                    <mat-list>
+                        <div mat-subheader>CTL property</div>
+                        <mat-list-item>
+                            @if (ctlPropertyResult.valid) {
+                                <mat-icon
+                                    matListItemIcon
+                                    class="material-icons color_green"
+                                    >check
+                                </mat-icon>
+                            } @else {
+                                <mat-icon
+                                    matListItemIcon
+                                    class="material-icons color_red"
+                                    >close
+                                </mat-icon>
+                            }
+                            <div matListItemTitle>
+                                {{ ctlPropertyResult.property }}
+                                @if (ctlPropertyResult.error) {
+                                    <span>: {{ ctlPropertyResult.error }}</span>
+                                }
+                            </div>
+                        </mat-list-item>
+                    </mat-list>
+                }
+                @if (properties.length > 0) {
+                    <mat-list>
+                        <div mat-subheader>General BPMN properties</div>
+                        @for (property of properties; track property) {
+                            <mat-list-item>
+                                @if (property.valid) {
+                                    <mat-icon
+                                        matListItemIcon
+                                        class="material-icons color_green"
+                                        >check
+                                    </mat-icon>
+                                } @else {
+                                    <mat-icon
+                                        matListItemIcon
+                                        class="material-icons color_red"
+                                        >close
+                                    </mat-icon>
+                                }
+                                <div matListItemTitle>
+                                    {{ property.name }}
+                                    @if (property.additionalInfo) {
+                                        <span>({{ property.additionalInfo }})</span>
+                                    }
+                                </div>
+                            </mat-list-item>
+                        }
+                    </mat-list>
+                }
+            }
+        </mat-card-content>
+    </mat-card>
+}
+
