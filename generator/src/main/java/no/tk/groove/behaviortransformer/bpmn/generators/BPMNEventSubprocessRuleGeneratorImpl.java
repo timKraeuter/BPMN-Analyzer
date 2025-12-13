@@ -79,10 +79,6 @@ public class BPMNEventSubprocessRuleGeneratorImpl implements BPMNEventSubprocess
                         process, eventSubprocess, collaboration, ruleBuilder, startEvent);
                   }
                 }
-                case SIGNAL, ERROR, ESCALATION -> {}
-                default ->
-                    throw new BPMNRuntimeException(
-                        "Unexpected start event type encountered: " + startEvent.getType());
               }
             });
   }

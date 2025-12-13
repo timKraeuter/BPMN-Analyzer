@@ -20,6 +20,7 @@ import no.tk.behavior.bpmn.events.Event;
 import no.tk.behavior.bpmn.events.IntermediateCatchEvent;
 import no.tk.behavior.bpmn.events.IntermediateThrowEvent;
 import no.tk.behavior.bpmn.events.StartEvent;
+import no.tk.behavior.bpmn.events.StartEventType;
 import no.tk.behavior.bpmn.events.definitions.EventDefinition;
 import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 import no.tk.maude.behaviortransformer.bpmn.BPMNMaudeRuleGenerator;
@@ -43,11 +44,8 @@ public class BPMNMaudeEventRuleGenerator implements BPMNToMaudeTransformerHelper
   }
 
   public void createStartEventRulesForProcess(AbstractBPMNProcess process, StartEvent startEvent) {
-    switch (startEvent.getType()) {
-      case NONE -> {}
-      case MESSAGE -> createEndInteractionNodeRule(startEvent, process);
-      case SIGNAL, ERROR, ESCALATION -> {}
-        // Done in the corresponding throw rule.
+    if (startEvent.getType() == StartEventType.MESSAGE) {
+      createEndInteractionNodeRule(startEvent, process);
     }
   }
 
