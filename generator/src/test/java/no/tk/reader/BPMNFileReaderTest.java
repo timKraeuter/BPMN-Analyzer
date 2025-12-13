@@ -617,8 +617,8 @@ class BPMNFileReaderTest implements BPMNFileReaderTestHelper {
 
   private CallActivity getCallActivityForName(Map<String, FlowNode> flowNodes, String name) {
     FlowNode subprocess = flowNodes.get(name);
-    if (subprocess instanceof CallActivity) {
-      return (CallActivity) subprocess;
+    if (subprocess instanceof CallActivity callActivity) {
+      return callActivity;
     }
     throw new RuntimeException(
         String.format(

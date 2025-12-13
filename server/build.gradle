@@ -13,7 +13,7 @@ group = 'no.hvl.tk'
 version = '2.0.1'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_23
+    sourceCompatibility = JavaVersion.VERSION_24
 }
 
 repositories {
@@ -26,15 +26,15 @@ dependencies {
 
     // XML-marshalling not part of jdk 11 anymore.
     // https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api
-    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.4'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.4'
     // https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime
-    implementation('org.glassfish.jaxb:jaxb-runtime:4.0.6')
+    implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.6'
     // https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api
     implementation group: 'jakarta.activation', name: 'jakarta.activation-api', version: '2.1.4'
 
     // Add pair class
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
+    implementation 'org.apache.commons:commons-lang3:3.20.0'
     // https://mvnrepository.com/artifact/commons-io/commons-io
     implementation 'commons-io:commons-io:2.21.0'
 
@@ -43,15 +43,12 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-starter-actuator'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    // Form data request for testing
     // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime
     testImplementation 'org.apache.httpcomponents:httpmime:4.5.14'
-    // Guava
     // https://mvnrepository.com/artifact/com.google.guava/guava
-    testImplementation 'com.google.guava:guava:33.4.8-jre'
-    // toString of input streams.
+    testImplementation 'com.google.guava:guava:33.5.0-jre'
     // https://mvnrepository.com/artifact/commons-io/commons-io
-    testImplementation 'commons-io:commons-io:2.20.0'
+    testImplementation 'commons-io:commons-io:2.21.0'
 
     errorprone('com.google.errorprone:error_prone_core:2.45.0')
 }

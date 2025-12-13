@@ -11,7 +11,7 @@ group = 'no.hvl.tk'
 version = '1'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_23
+    sourceCompatibility = JavaVersion.VERSION_24
 }
 
 repositories {
@@ -27,9 +27,9 @@ dependencies {
     implementation group: 'org.camunda.bpm.model', name: 'camunda-bpmn-model', version: '7.24.0'
 
     // https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api
-    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.4'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.4'
     // https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime
-    implementation('org.glassfish.jaxb:jaxb-runtime:4.0.6')
+    implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.6'
 
     // https://mvnrepository.com/artifact/commons-io/commons-io
     implementation 'commons-io:commons-io:2.21.0'
@@ -46,9 +46,14 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-core:2.25.1'
 
     // Test
-    testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '3.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.3'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.3'
+    // https://mvnrepository.com/artifact/org.hamcrest/hamcrest
+    testImplementation 'org.hamcrest:hamcrest:3.0'
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.1'
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.0.1'
+    // https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
+    testImplementation 'org.junit.platform:junit-platform-launcher:6.0.1'
 
     errorprone('com.google.errorprone:error_prone_core:2.45.0')
 }
