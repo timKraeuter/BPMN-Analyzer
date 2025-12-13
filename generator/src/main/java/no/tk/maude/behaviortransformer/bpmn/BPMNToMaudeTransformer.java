@@ -22,7 +22,7 @@ public class BPMNToMaudeTransformer implements BPMNToMaudeTransformerHelper {
   private final MaudeObjectBuilder objectBuilder;
 
   private static final String MODULE_TEMPLATE =
-      """
+"""
 load model-checker.maude .\r
 \r
 --- Multiset implementation could be extracted as well.\r

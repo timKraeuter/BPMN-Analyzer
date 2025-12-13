@@ -18,7 +18,7 @@ public class FSMToMaudeTransformer {
   private final Set<FSMStateAtomicProposition> atomicPropositions;
 
   private static final String MODULE_TEMPLATE =
-      """
+"""
 load model-checker.maude .\r
 \r
 mod FSM-BEHAVIOR is\r
