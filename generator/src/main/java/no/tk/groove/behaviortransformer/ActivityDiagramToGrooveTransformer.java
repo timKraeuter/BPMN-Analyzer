@@ -70,7 +70,7 @@ public class ActivityDiagramToGrooveTransformer extends GrooveTransformer<Activi
     activityDiagram
         .localVariables()
         .forEach(localVar -> this.createAndInitVariable(builder, localVar));
-    // TODO: This should be done according to given parameters of the input variables NOT the
+    // This should be done according to given parameters of the input variables NOT the
     // initial values.
     activityDiagram
         .inputVariables()

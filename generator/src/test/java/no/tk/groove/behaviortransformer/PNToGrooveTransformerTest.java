@@ -61,7 +61,7 @@ class PNToGrooveTransformerTest extends BehaviorToGrooveTransformerTestHelper {
     pn.addTransition(release_r1);
     pn.addTransition(release_r2);
 
-    // TODO weird object things in the visual debugger when explorings pairs. (depth 2)
+    // Weird object things in the visual debugger when exploring pairs. (depth 2)
     this.checkGrooveGeneration(pn);
   }
 }

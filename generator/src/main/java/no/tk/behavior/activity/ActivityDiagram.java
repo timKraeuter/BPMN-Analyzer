@@ -53,10 +53,12 @@ public class ActivityDiagram implements Behavior {
     visitor.handle(this);
   }
 
+  @SuppressWarnings("java:S1452") // Wildcard needed for Variable with different Value types
   public Stream<Variable<?>> inputVariables() {
     return this.inputVariables.stream();
   }
 
+  @SuppressWarnings("java:S1452") // Wildcard needed for Variable with different Value types
   public Stream<Variable<?>> localVariables() {
     return this.localVariables.stream();
   }

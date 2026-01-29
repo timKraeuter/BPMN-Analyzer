@@ -131,7 +131,7 @@ public class PiCalcToGrooveTransformer extends GrooveTransformer<NamedPiProcess>
 
           @Override
           public Optional<Pair<GrooveNode, String>> handle(NameRestriction restriction) {
-            // TODO: Add picking a free name and renaming!
+            // Add picking a free name and renaming!
             final GrooveNode resNode =
                 PiCalcToGrooveTransformer.this.createAndSaveNodeWithName(TYPE_RESTRICTION);
 
@@ -158,7 +158,7 @@ public class PiCalcToGrooveTransformer extends GrooveTransformer<NamedPiProcess>
 
           @Override
           public Optional<Pair<GrooveNode, String>> handle(PrefixedProcess prefixedProcess) {
-            // TODO: Add picking a free name and renaming!
+            // Add picking a free name and renaming!
             GrooveNode topLevelNode;
 
             GrooveNode summationNode =
@@ -203,7 +203,7 @@ public class PiCalcToGrooveTransformer extends GrooveTransformer<NamedPiProcess>
             GrooveNode nameNode = PiCalcToGrooveTransformer.this.nameToNode.get(name);
             if (nameNode == null) {
               nameNode = PiCalcToGrooveTransformer.this.createAndSaveNodeWithName(TYPE_NAME);
-              // TODO: add pi-name to the node somehow!
+              // Add pi-name to the node somehow!
               PiCalcToGrooveTransformer.this.nameToNode.put(name, nameNode);
             }
             return nameNode;

@@ -42,7 +42,7 @@ class BPMNToGrooveEventsTest extends BPMNToGrooveTestBase {
    */
   @Test
   void testTwoIncomingMessageFlows() throws Exception {
-    // TODO: Implement the terminating example which supersedes this one.
+    // Implement the terminating example which supersedes this one.
     testGrooveGenerationForBPMNResourceFile("two-incoming-message-flows-no-termination.bpmn");
   }
 
