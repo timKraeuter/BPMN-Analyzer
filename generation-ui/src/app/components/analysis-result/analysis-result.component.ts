@@ -1,11 +1,22 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ModelCheckingResponse } from '../../services/model-checking.service';
 
 @Component({
     selector: 'analysis-result-component',
     templateUrl: './analysis-result.component.html',
     styleUrls: ['./analysis-result.component.scss'],
-    standalone: false,
+    imports: [
+        CommonModule,
+        MatListModule,
+        MatIconModule,
+        MatCardModule,
+        MatProgressSpinnerModule,
+    ],
 })
 export class AnalysisResultComponent {
     private _running: boolean = false;

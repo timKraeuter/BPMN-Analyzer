@@ -20,7 +20,6 @@ import TokenModeler from 'bpmn-token/lib/Modeler';
             }
         `,
     ],
-    standalone: false,
 })
 export class TokenDiagramComponent implements AfterContentInit, OnDestroy {
     private readonly modeler: TokenModeler;

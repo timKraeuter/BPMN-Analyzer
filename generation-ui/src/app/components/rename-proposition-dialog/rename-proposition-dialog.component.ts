@@ -1,12 +1,28 @@
 import { Component, HostListener, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FormsModule } from '@angular/forms';
+import {
+    MAT_DIALOG_DATA,
+    MatDialogRef,
+    MatDialogModule,
+} from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { Proposition } from '../../services/shared-state.service';
 
 @Component({
     selector: 'app-rename-proposition-dialog',
     templateUrl: './rename-proposition-dialog.component.html',
     styleUrls: ['./rename-proposition-dialog.component.scss'],
-    standalone: false,
+    imports: [
+        FormsModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatIconModule,
+    ],
 })
 export class RenamePropositionDialogComponent {
     public newName: string;

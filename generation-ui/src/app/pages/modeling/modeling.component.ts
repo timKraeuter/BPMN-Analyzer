@@ -4,6 +4,11 @@ import { saveAs } from 'file-saver-es';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 import { SharedStateService } from '../../services/shared-state.service';
 import { SVG_FILE_EXTENSION } from '../proposition/proposition.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { DiagramComponent } from '../../components/diagram/diagram.component';
 
 export const BPMN_FILE_EXTENSION = '.bpmn';
 
@@ -11,7 +16,13 @@ export const BPMN_FILE_EXTENSION = '.bpmn';
     selector: 'app-modeling',
     templateUrl: './modeling.component.html',
     styleUrls: ['./modeling.component.scss'],
-    standalone: false,
+    imports: [
+        MatCardModule,
+        MatButtonModule,
+        MatIconModule,
+        MatTooltipModule,
+        DiagramComponent,
+    ],
 })
 export class ModelingComponent {
     constructor(

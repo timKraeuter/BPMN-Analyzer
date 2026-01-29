@@ -1,4 +1,5 @@
 import { Component, HostListener } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 // @ts-ignore
 import { saveAs } from 'file-saver-es';
@@ -7,9 +8,15 @@ import {
     Proposition,
     SharedStateService,
 } from '../../services/shared-state.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RenamePropositionDialogComponent } from '../../components/rename-proposition-dialog/rename-proposition-dialog.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatListModule } from '@angular/material/list';
+import { TokenDiagramComponent } from '../../components/token-diagram/token-diagram.component';
 
 export const SVG_FILE_EXTENSION = '.svg';
 
@@ -17,7 +24,17 @@ export const SVG_FILE_EXTENSION = '.svg';
     selector: 'app-proposition',
     templateUrl: './proposition.component.html',
     styleUrls: ['./proposition.component.scss'],
-    standalone: false,
+    imports: [
+        CommonModule,
+        MatCardModule,
+        MatButtonModule,
+        MatIconModule,
+        MatTooltipModule,
+        MatListModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        TokenDiagramComponent,
+    ],
 })
 export class PropositionComponent {
     public currentProposition: Proposition = {

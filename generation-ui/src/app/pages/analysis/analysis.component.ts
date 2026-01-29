@@ -1,13 +1,30 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { BPMNProperty } from '../../components/analysis-result/analysis-result.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import {
+    BPMNProperty,
+    AnalysisResultComponent,
+} from '../../components/analysis-result/analysis-result.component';
 import {
     ModelCheckingResponse,
     ModelCheckingService,
 } from '../../services/model-checking.service';
 import { TemporalLogicSyntaxComponent } from '../../components/temporal-logic-syntax/temporal-logic-syntax.component';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SharedStateService } from '../../services/shared-state.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { DiagramComponent } from '../../components/diagram/diagram.component';
 // @ts-ignore
 import { saveAs } from 'file-saver-es';
 
@@ -15,7 +32,24 @@ import { saveAs } from 'file-saver-es';
     selector: 'app-analysis',
     templateUrl: './analysis.component.html',
     styleUrls: ['./analysis.component.scss'],
-    standalone: false,
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatCardModule,
+        MatButtonModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatTooltipModule,
+        MatButtonToggleModule,
+        MatDividerModule,
+        MatTabsModule,
+        MatProgressSpinnerModule,
+        MatSnackBarModule,
+        AnalysisResultComponent,
+        DiagramComponent,
+    ],
 })
 export class AnalysisComponent {
     // GG generation
