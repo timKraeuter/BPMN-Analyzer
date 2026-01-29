@@ -21,7 +21,7 @@ export class AnalysisResultComponent {
     }
 
     @Input()
-    public properties!: BPMNProperty[];
+    public properties: BPMNProperty[] = [];
 
     @Input()
     public ctlPropertyResult: ModelCheckingResponse | undefined = undefined;

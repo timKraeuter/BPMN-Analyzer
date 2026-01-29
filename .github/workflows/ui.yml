@@ -7,17 +7,55 @@ on:
     types: [opened, synchronize, reopened]
   workflow_dispatch:
 jobs:
+  prettier:
+    name: Prettier check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./generation-ui
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: "./generation-ui/package-lock.json"
+      - name: Install dependencies
+        run: npm ci
+      - name: Prettier check
+        run: npm run check
+
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./generation-ui
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: "./generation-ui/package-lock.json"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run tests
+        run: npm run test -- --watch=false --browsers=ChromeHeadless
+
   sonarcloud:
     name: Analyze ui
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@master
         with:
           projectBaseDir: ./generation-ui
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
