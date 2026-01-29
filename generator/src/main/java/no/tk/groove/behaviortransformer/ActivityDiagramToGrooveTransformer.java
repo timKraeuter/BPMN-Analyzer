@@ -77,8 +77,7 @@ public class ActivityDiagramToGrooveTransformer extends GrooveTransformer<Activi
         .forEach(inputVariable -> this.createAndInitVariable(builder, inputVariable));
   }
 
-  private void createAndInitVariable(
-      GrooveGraphBuilder builder, Variable<? extends Value> variable) {
+  private void createAndInitVariable(GrooveGraphBuilder builder, Variable<?> variable) {
     GrooveNode variableNode = new GrooveNode(TYPE_VARIABLE);
     variableNode.addAttribute(NAME, variable.getName());
 
@@ -251,7 +250,7 @@ public class ActivityDiagramToGrooveTransformer extends GrooveTransformer<Activi
               joinNode
                   .getIncomingFlows()
                   .forEach(
-                      controlFlow -> {
+                      _ -> {
                         GrooveNode forkedToken = ruleBuilder.deleteNode(TYPE_FORKED_TOKEN);
                         if (previousToken.get() != null) {
                           ruleBuilder.contextEdge(UNEQUALS, previousToken.get(), forkedToken);

@@ -5,14 +5,13 @@ import java.util.Set;
 import no.tk.behavior.activity.edges.ControlFlow;
 import no.tk.behavior.activity.nodes.ActivityNode;
 import no.tk.behavior.activity.nodes.InitialNode;
-import no.tk.behavior.activity.values.Value;
 import no.tk.behavior.activity.variables.BooleanVariable;
 import no.tk.behavior.activity.variables.Variable;
 
 public class ActivityDiagramBuilder {
   private String name;
-  private final Set<Variable<? extends Value>> inputVariables = new LinkedHashSet<>();
-  private final Set<Variable<? extends Value>> localVariables = new LinkedHashSet<>();
+  private final Set<Variable<?>> inputVariables = new LinkedHashSet<>();
+  private final Set<Variable<?>> localVariables = new LinkedHashSet<>();
   private final Set<ActivityNode> nodes = new LinkedHashSet<>();
   private final Set<ControlFlow> edges = new LinkedHashSet<>();
   private InitialNode initialNode;
@@ -32,12 +31,12 @@ public class ActivityDiagramBuilder {
     return this;
   }
 
-  public ActivityDiagramBuilder addInputVariable(Variable<? extends Value> inputVar) {
+  public ActivityDiagramBuilder addInputVariable(Variable<?> inputVar) {
     this.inputVariables.add(inputVar);
     return this;
   }
 
-  public ActivityDiagramBuilder addLocalVariable(Variable<? extends Value> localVar) {
+  public ActivityDiagramBuilder addLocalVariable(Variable<?> localVar) {
     this.localVariables.add(localVar);
     return this;
   }

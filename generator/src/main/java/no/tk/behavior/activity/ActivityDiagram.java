@@ -7,7 +7,6 @@ import no.tk.behavior.BehaviorVisitor;
 import no.tk.behavior.activity.edges.ControlFlow;
 import no.tk.behavior.activity.nodes.ActivityNode;
 import no.tk.behavior.activity.nodes.InitialNode;
-import no.tk.behavior.activity.values.Value;
 import no.tk.behavior.activity.variables.Variable;
 
 /** Represents an activity diagram as described in the TTC 2015 Model Execution Case. */
@@ -18,14 +17,14 @@ public class ActivityDiagram implements Behavior {
   private final Set<ActivityNode> nodes;
   private final Set<ControlFlow> edges;
 
-  private final Set<Variable<? extends Value>> inputVariables;
-  private final Set<Variable<? extends Value>> localVariables;
+  private final Set<Variable<?>> inputVariables;
+  private final Set<Variable<?>> localVariables;
 
   public ActivityDiagram(
       String name,
       InitialNode initialNode,
-      Set<Variable<? extends Value>> inputVariables,
-      Set<Variable<? extends Value>> localVariables,
+      Set<Variable<?>> inputVariables,
+      Set<Variable<?>> localVariables,
       Set<ActivityNode> nodes,
       Set<ControlFlow> edges) {
     this.name = name;
@@ -44,10 +43,6 @@ public class ActivityDiagram implements Behavior {
     return this.nodes.stream();
   }
 
-  public Stream<ControlFlow> getEdges() {
-    return this.edges.stream();
-  }
-
   @Override
   public String getName() {
     return this.name;
@@ -58,11 +53,11 @@ public class ActivityDiagram implements Behavior {
     visitor.handle(this);
   }
 
-  public Stream<Variable<? extends Value>> inputVariables() {
+  public Stream<Variable<?>> inputVariables() {
     return this.inputVariables.stream();
   }
 
-  public Stream<Variable<? extends Value>> localVariables() {
+  public Stream<Variable<?>> localVariables() {
     return this.localVariables.stream();
   }
 }
