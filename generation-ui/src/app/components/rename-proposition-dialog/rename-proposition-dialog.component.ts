@@ -9,11 +9,10 @@ import { Proposition } from '../../services/shared-state.service';
     standalone: false,
 })
 export class RenamePropositionDialogComponent {
-    // TODO: Check groove and make sure the name is allowed in CTL (see angular error state)
     public newName: string;
 
     constructor(
-        private dialogRef: MatDialogRef<RenamePropositionDialogComponent>,
+        private readonly dialogRef: MatDialogRef<RenamePropositionDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: RenamePropositionDialogData,
     ) {
         this.newName = data.proposition.name;

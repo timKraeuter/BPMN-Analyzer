@@ -31,16 +31,16 @@ const tokenOverrideModule = {
     providedIn: 'root',
 })
 export class BPMNModelerService {
-    private modeler: Modeler = new Modeler({
+    private readonly modeler: Modeler = new Modeler({
         additionalModules: [
             BpmnPropertiesPanelModule,
             BpmnPropertiesProviderModule,
         ],
     });
-    private tokenModeler: TokenModeler = new TokenModeler({
+    private readonly tokenModeler: TokenModeler = new TokenModeler({
         additionalModules: [tokenOverrideModule],
     });
-    private viewer: Viewer = new Viewer({
+    private readonly viewer: Viewer = new Viewer({
         additionalModules: [
             KeyboardMoveModule,
             MoveCanvasModule,

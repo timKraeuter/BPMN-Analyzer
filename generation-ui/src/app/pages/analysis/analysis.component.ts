@@ -61,11 +61,11 @@ export class AnalysisComponent {
     public ltlProperty: string = '';
 
     constructor(
-        private bpmnModeler: BPMNModelerService,
-        private snackBar: MatSnackBar,
-        private modelCheckingService: ModelCheckingService,
-        private sharedState: SharedStateService,
-        private cdr: ChangeDetectorRef,
+        private readonly bpmnModeler: BPMNModelerService,
+        private readonly snackBar: MatSnackBar,
+        private readonly modelCheckingService: ModelCheckingService,
+        private readonly sharedState: SharedStateService,
+        private readonly cdr: ChangeDetectorRef,
     ) {}
 
     async downloadGGClicked() {
@@ -125,9 +125,8 @@ export class AnalysisComponent {
                     this.bpmnPropertyCheckingResults = [];
                 },
                 next: (data: any) => {
-                    // @ts-ignore
-                    this.bpmnPropertyCheckingResults = JSON.parse(
-                        JSON.stringify(data['propertyCheckingResults']),
+                    this.bpmnPropertyCheckingResults = structuredClone(
+                        data['propertyCheckingResults'],
                     );
                     this.setProperCompletionHintsIfNeeded();
                     this.colorDeadActivitiesAndSetNamesIfNeeded();
@@ -272,7 +271,7 @@ export class AnalysisComponent {
     }
 
     showCreateCTLPropertyButton(): boolean {
-        if (this.selectedTemplate && this.selectedTemplate.twoPropositions) {
+        if (this.selectedTemplate?.twoPropositions) {
             return (
                 this.selectedProposition1.length > 0 &&
                 this.selectedProposition2.length > 0

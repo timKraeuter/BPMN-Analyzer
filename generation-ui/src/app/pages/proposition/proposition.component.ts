@@ -26,10 +26,10 @@ export class PropositionComponent {
     };
 
     constructor(
-        private modeler: BPMNModelerService,
-        private propService: SharedStateService,
-        private dialog: MatDialog,
-        private snackBar: MatSnackBar,
+        private readonly modeler: BPMNModelerService,
+        private readonly propService: SharedStateService,
+        private readonly dialog: MatDialog,
+        private readonly snackBar: MatSnackBar,
     ) {
         this.propositions.push(this.currentProposition);
     }

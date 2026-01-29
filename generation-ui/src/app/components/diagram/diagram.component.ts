@@ -22,13 +22,14 @@ import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {
     private modeler: Modeler | Viewer;
 
-    @ViewChild('properties', { static: true }) private properties!: ElementRef;
-    @ViewChild('diagram', { static: true }) private el!: ElementRef;
+    @ViewChild('properties', { static: true })
+    private readonly properties!: ElementRef;
+    @ViewChild('diagram', { static: true }) private readonly el!: ElementRef;
     @Input() public viewer: boolean = false;
     @Input() public propertiesPanel: boolean = false;
     @Input() public height: string = '750';
 
-    constructor(private bpmnModeler: BPMNModelerService) {}
+    constructor(private readonly bpmnModeler: BPMNModelerService) {}
 
     ngOnInit(): void {
         if (this.viewer) {
