@@ -23,12 +23,12 @@ import TokenModeler from 'bpmn-token/lib/Modeler';
     standalone: false,
 })
 export class TokenDiagramComponent implements AfterContentInit, OnDestroy {
-    private modeler: TokenModeler;
+    private readonly modeler: TokenModeler;
 
-    @ViewChild('ref', { static: true }) private el!: ElementRef;
+    @ViewChild('ref', { static: true }) private readonly el!: ElementRef;
     @Input() public viewer: boolean = false;
 
-    constructor(private bpmnModeler: BPMNModelerService) {
+    constructor(private readonly bpmnModeler: BPMNModelerService) {
         this.modeler = bpmnModeler.getTokenModeler();
     }
 

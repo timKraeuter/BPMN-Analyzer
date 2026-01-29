@@ -15,8 +15,8 @@ export const BPMN_FILE_EXTENSION = '.bpmn';
 })
 export class ModelingComponent {
     constructor(
-        private bpmnModeler: BPMNModelerService,
-        private sharedState: SharedStateService,
+        private readonly bpmnModeler: BPMNModelerService,
+        private readonly sharedState: SharedStateService,
     ) {}
 
     downloadBPMN() {

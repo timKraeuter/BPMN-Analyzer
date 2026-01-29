@@ -57,7 +57,11 @@
                                 <div matListItemTitle>
                                     {{ property.name }}
                                     @if (property.additionalInfo) {
-                                        <span>({{ property.additionalInfo }})</span>
+                                        <span
+                                            >({{
+                                                property.additionalInfo
+                                            }})</span
+                                        >
                                     }
                                 </div>
                             </mat-list-item>
@@ -68,4 +72,3 @@
         </mat-card-content>
     </mat-card>
 }
-

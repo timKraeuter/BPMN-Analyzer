@@ -26,7 +26,7 @@ export class AnalysisResultComponent {
     @Input()
     public ctlPropertyResult: ModelCheckingResponse | undefined = undefined;
 
-    constructor(private cdr: ChangeDetectorRef) {}
+    constructor(private readonly cdr: ChangeDetectorRef) {}
 }
 
 export class BPMNProperty {

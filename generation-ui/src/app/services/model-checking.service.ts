@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { Proposition } from './shared-state.service';
 
 const baseURL = environment.production
-    ? window.location.href
+    ? globalThis.location.href
     : environment.apiURL;
 const generateGGAndZipURL = baseURL + 'generateGGAndZip';
 const checkBPMNSpecificPropertiesURL = baseURL + 'checkBPMNSpecificProperties';
@@ -15,7 +15,7 @@ const checkTemporalLogicPropertyURL = baseURL + 'checkTemporalLogic';
     providedIn: 'root',
 })
 export class ModelCheckingService {
-    constructor(private httpClient: HttpClient) {}
+    constructor(private readonly httpClient: HttpClient) {}
 
     downloadGG(
         xmlModel: Blob,

@@ -11,14 +11,13 @@ import { PropositionComponent } from './pages/proposition/proposition.component'
     standalone: false,
 })
 export class AppComponent {
-    @ViewChild('stepper') private stepper!: MatStepper;
+    @ViewChild('stepper') private readonly stepper!: MatStepper;
     @ViewChild('proposition') propositionComponent!: PropositionComponent;
 
-    constructor(private modeler: BPMNModelerService) {}
+    constructor(private readonly modeler: BPMNModelerService) {}
 
     async stepChanged(event: StepperSelectionEvent) {
         if (this.changedToPropositionStep(event)) {
-            // TODO: Sync issue with multiple propositions
             await this.modeler.updateTokenBPMNModelIfNeeded();
         }
         if (this.changedToAnalyzeStep(event)) {
