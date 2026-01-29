@@ -14,7 +14,7 @@ describe('RenamePropositionDialogComponent', () => {
         mockDialogRef = jasmine.createSpyObj('MatDialogRef', ['close']);
 
         TestBed.configureTestingModule({
-            declarations: [RenamePropositionDialogComponent],
+            imports: [RenamePropositionDialogComponent],
             providers: [
                 { provide: MatDialogRef, useValue: mockDialogRef },
                 {

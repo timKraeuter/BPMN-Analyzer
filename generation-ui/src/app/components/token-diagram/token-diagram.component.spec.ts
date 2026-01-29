@@ -8,7 +8,7 @@ describe('TokenDiagramComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TokenDiagramComponent],
+            imports: [TokenDiagramComponent],
         });
         fixture = TestBed.createComponent(TokenDiagramComponent);
         component = fixture.componentInstance;

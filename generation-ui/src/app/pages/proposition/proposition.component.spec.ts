@@ -8,7 +8,7 @@ describe('ProcessStateComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [PropositionComponent],
+            imports: [PropositionComponent],
         });
         fixture = TestBed.createComponent(PropositionComponent);
         component = fixture.componentInstance;

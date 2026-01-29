@@ -49,7 +49,7 @@ export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {
     }
 
     ngOnDestroy(): void {
-        this.modeler.destroy();
+        this.modeler?.destroy();
     }
 
     public initialDiagram: string =

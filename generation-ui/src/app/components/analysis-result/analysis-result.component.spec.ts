@@ -8,7 +8,7 @@ describe('VerificationResultComponentComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [AnalysisResultComponent],
+            imports: [AnalysisResultComponent],
         }).compileComponents();
     });
 

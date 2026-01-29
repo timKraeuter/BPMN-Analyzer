@@ -8,7 +8,7 @@ describe('LTlSyntaxComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TemporalLogicSyntaxComponent],
+            imports: [TemporalLogicSyntaxComponent],
         }).compileComponents();
     });
 

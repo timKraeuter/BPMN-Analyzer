@@ -26,7 +26,7 @@ describe('DiagramComponent', () => {
         mockModelerService.getViewer.and.returnValue(mockModeler);
 
         await TestBed.configureTestingModule({
-            declarations: [DiagramComponent],
+            imports: [DiagramComponent],
             providers: [
                 { provide: BPMNModelerService, useValue: mockModelerService },
             ],
