@@ -47,29 +47,6 @@ export async function setupApiMocks(
 }
 
 /**
- * Navigate to a specific step (0-indexed) by clicking the step header.
- * Waits for the step content to become visible.
- */
-export async function navigateToStep(page: Page, stepIndex: number) {
-    const stepHeaders = page.locator('.mat-step-header');
-    await stepHeaders.nth(stepIndex).click();
-    // Wait for the step content to be visible
-    await page
-        .locator(`.mat-horizontal-stepper-content`)
-        .nth(stepIndex)
-        .waitFor({ state: 'visible' });
-}
-
-/**
- * Navigate to Step 3 (Analysis) by clicking through "Next Step" buttons.
- * This ensures all step-change side effects fire properly.
- */
-export async function navigateToAnalysisStep(page: Page) {
-    await page.getByTestId('step1-next-btn').click();
-    await page.getByTestId('step2-next-btn').click();
-}
-
-/**
  * Wait for the BPMN modeler canvas to be ready.
  * The app loads a default BPMN model on startup; wait for the canvas to appear.
  */

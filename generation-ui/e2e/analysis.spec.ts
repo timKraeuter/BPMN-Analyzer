@@ -1,28 +1,24 @@
 import { test, expect } from '@playwright/test';
-import {
-    setupApiMocks,
-    navigateToAnalysisStep,
-    waitForAppReady,
-} from './fixtures/helpers';
-import {
-    bpmnPropertiesAllValid,
-    bpmnPropertiesMixed,
-    ctlPropertyValid,
-    ctlPropertyInvalid,
-    ctlPropertyError,
-} from './fixtures/mock-responses';
+import { setupApiMocks, waitForAppReady } from './fixtures/helpers';
+import { StepperPage } from './page-objects/stepper.page';
+import { AnalysisPage } from './page-objects/analysis.page';
 
 test.describe('Step 3 - Analysis', () => {
+    let stepper: StepperPage;
+    let analysis: AnalysisPage;
+
     test.beforeEach(async ({ page }) => {
+        stepper = new StepperPage(page);
+        analysis = new AnalysisPage(page);
         await setupApiMocks(page);
         await page.goto('/');
         await waitForAppReady(page);
-        await navigateToAnalysisStep(page);
+        await stepper.goToAnalysisStep();
     });
 
     test.describe('General BPMN property checking', () => {
         test('shows snackbar when no properties selected', async ({ page }) => {
-            await page.getByTestId('check-properties-btn').click();
+            await analysis.checkPropertiesBtn.click();
 
             // Snackbar should show the validation message
             await expect(
@@ -32,103 +28,46 @@ test.describe('Step 3 - Analysis', () => {
             ).toBeVisible();
         });
 
-        test('check all properties - all valid', async ({ page }) => {
-            // Select all 4 property toggles (use getByRole to avoid tooltip text ambiguity)
-            await page
-                .getByRole('button', { name: 'Safeness', exact: true })
-                .click();
-            await page
-                .getByRole('button', { name: 'Option to complete' })
-                .click();
-            await page
-                .getByRole('button', { name: 'Proper completion' })
-                .click();
-            await page
-                .getByRole('button', { name: 'No dead activities' })
-                .click();
+        test('check all properties - all valid', async () => {
+            await analysis.selectAllProperties();
+            await analysis.checkPropertiesBtn.click();
 
-            await page.getByTestId('check-properties-btn').click();
-
-            // Wait for results to appear
-            const resultsList = page.getByTestId('bpmn-property-results');
-            await expect(resultsList).toBeVisible();
-
-            // All 4 properties should show green check icons
-            const checkIcons = resultsList.locator('.color_green');
-            await expect(checkIcons).toHaveCount(4);
-
-            // Verify property names are shown
-            await expect(resultsList.getByText('Safeness')).toBeVisible();
-            await expect(
-                resultsList.getByText('Option to complete'),
-            ).toBeVisible();
-            await expect(
-                resultsList.getByText('Proper completion'),
-            ).toBeVisible();
-            await expect(
-                resultsList.getByText('No dead activities'),
-            ).toBeVisible();
+            await analysis.expectBpmnResults(4, 0);
+            await analysis.expectBpmnPropertyNames([
+                'Safeness',
+                'Option to complete',
+                'Proper completion',
+                'No dead activities',
+            ]);
         });
 
-        test('check properties - mixed results', async ({ page }) => {
-            // Override mock for this test
-            await page.route(
-                'http://localhost:8080/checkBPMNSpecificProperties',
-                (route) => {
-                    route.fulfill({
-                        status: 200,
-                        contentType: 'application/json',
-                        body: JSON.stringify(bpmnPropertiesMixed),
-                    });
-                },
-            );
+        test('check properties - mixed results', async () => {
+            await analysis.mockBpmnPropertiesMixed();
 
-            await page
-                .getByRole('button', { name: 'Safeness', exact: true })
-                .click();
-            await page
-                .getByRole('button', { name: 'Option to complete' })
-                .click();
-            await page.getByTestId('check-properties-btn').click();
+            await analysis.safenessToggle.click();
+            await analysis.optionToCompleteToggle.click();
+            await analysis.checkPropertiesBtn.click();
 
-            const resultsList = page.getByTestId('bpmn-property-results');
-            await expect(resultsList).toBeVisible();
-
-            // One green check (Safeness) and one red X (Option to complete)
-            await expect(resultsList.locator('.color_green')).toHaveCount(1);
-            await expect(resultsList.locator('.color_red')).toHaveCount(1);
+            await analysis.expectBpmnResults(1, 1);
         });
 
-        test('check single property', async ({ page }) => {
-            await page
-                .getByRole('button', { name: 'Safeness', exact: true })
-                .click();
-            await page.getByTestId('check-properties-btn').click();
+        test('check single property', async () => {
+            await analysis.safenessToggle.click();
+            await analysis.checkPropertiesBtn.click();
 
-            const resultsList = page.getByTestId('bpmn-property-results');
-            await expect(resultsList).toBeVisible();
-            await expect(resultsList.getByText('Safeness')).toBeVisible();
+            await expect(analysis.bpmnPropertyResults).toBeVisible();
+            await expect(
+                analysis.bpmnPropertyResults.getByText('Safeness'),
+            ).toBeVisible();
         });
 
         test('shows error snackbar on server error', async ({ page }) => {
-            await page.route(
-                'http://localhost:8080/checkBPMNSpecificProperties',
-                (route) => {
-                    route.fulfill({
-                        status: 500,
-                        contentType: 'application/json',
-                        body: JSON.stringify({
-                            message:
-                                'State space generation timed out after 60 seconds.',
-                        }),
-                    });
-                },
+            await analysis.mockBpmnPropertiesServerError(
+                'State space generation timed out after 60 seconds.',
             );
 
-            await page
-                .getByRole('button', { name: 'Safeness', exact: true })
-                .click();
-            await page.getByTestId('check-properties-btn').click();
+            await analysis.safenessToggle.click();
+            await analysis.checkPropertiesBtn.click();
 
             await expect(
                 page.getByText(
@@ -139,87 +78,30 @@ test.describe('Step 3 - Analysis', () => {
     });
 
     test.describe('CTL property checking', () => {
-        test.beforeEach(async ({ page }) => {
-            // Switch to the CTL properties tab
-            await page.getByRole('tab', { name: 'CTL properties' }).click();
+        test.beforeEach(async () => {
+            await analysis.switchToCtlTab();
         });
 
-        test('check valid CTL property', async ({ page }) => {
-            await page.getByTestId('ctl-property-input').fill('AG(!Unsafe)');
-            await page.getByTestId('check-ctl-btn').click();
-
-            const ctlResults = page.getByTestId('ctl-results');
-            await expect(ctlResults).toBeVisible();
-            await expect(
-                ctlResults.getByTestId('ctl-result-valid'),
-            ).toBeVisible();
-            await expect(ctlResults.getByText('AG(!Unsafe)')).toBeVisible();
+        test('check valid CTL property', async () => {
+            await analysis.checkCtlFormula('AG(!Unsafe)');
+            await analysis.expectCtlValid('AG(!Unsafe)');
         });
 
-        test('check invalid CTL property', async ({ page }) => {
-            await page.route(
-                'http://localhost:8080/checkTemporalLogic',
-                (route) => {
-                    route.fulfill({
-                        status: 200,
-                        contentType: 'application/json',
-                        body: JSON.stringify(ctlPropertyInvalid),
-                    });
-                },
-            );
-
-            await page
-                .getByTestId('ctl-property-input')
-                .fill('AF(AllTerminated)');
-            await page.getByTestId('check-ctl-btn').click();
-
-            const ctlResults = page.getByTestId('ctl-results');
-            await expect(ctlResults).toBeVisible();
-            await expect(
-                ctlResults.getByTestId('ctl-result-invalid'),
-            ).toBeVisible();
+        test('check invalid CTL property', async () => {
+            await analysis.mockCtlInvalid();
+            await analysis.checkCtlFormula('AF(AllTerminated)');
+            await analysis.expectCtlInvalid();
         });
 
-        test('check CTL property with error message', async ({ page }) => {
-            await page.route(
-                'http://localhost:8080/checkTemporalLogic',
-                (route) => {
-                    route.fulfill({
-                        status: 200,
-                        contentType: 'application/json',
-                        body: JSON.stringify(ctlPropertyError),
-                    });
-                },
-            );
-
-            await page
-                .getByTestId('ctl-property-input')
-                .fill('INVALID_FORMULA');
-            await page.getByTestId('check-ctl-btn').click();
-
-            const ctlResults = page.getByTestId('ctl-results');
-            await expect(ctlResults).toBeVisible();
-            await expect(
-                ctlResults.getByText('Parse error in CTL formula'),
-            ).toBeVisible();
+        test('check CTL property with error message', async () => {
+            await analysis.mockCtlError();
+            await analysis.checkCtlFormula('INVALID_FORMULA');
+            await analysis.expectCtlError('Parse error in CTL formula');
         });
 
         test('shows error snackbar on CTL server error', async ({ page }) => {
-            await page.route(
-                'http://localhost:8080/checkTemporalLogic',
-                (route) => {
-                    route.fulfill({
-                        status: 500,
-                        contentType: 'application/json',
-                        body: JSON.stringify({
-                            message: 'Internal server error',
-                        }),
-                    });
-                },
-            );
-
-            await page.getByTestId('ctl-property-input').fill('AG(!Unsafe)');
-            await page.getByTestId('check-ctl-btn').click();
+            await analysis.mockCtlServerError('Internal server error');
+            await analysis.checkCtlFormula('AG(!Unsafe)');
 
             await expect(page.getByText('Internal server error')).toBeVisible();
         });
@@ -229,12 +111,9 @@ test.describe('Step 3 - Analysis', () => {
         test('download triggers and completes without error', async ({
             page,
         }) => {
-            // Listen for the download event
             const downloadPromise = page.waitForEvent('download');
+            await analysis.downloadGGBtn.click();
 
-            await page.getByTestId('download-gg-btn').click();
-
-            // The download event should fire
             const download = await downloadPromise;
             expect(download.suggestedFilename()).toContain('.gps.zip');
         });
