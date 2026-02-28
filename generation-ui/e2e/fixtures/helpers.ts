@@ -1,11 +1,10 @@
-import { Page } from '@playwright/test';
+import { type Page, expect } from '@playwright/test';
 import {
     bpmnPropertiesAllValid,
     ctlPropertyValid,
     fakeZipBuffer,
 } from './mock-responses';
-
-const API_BASE = 'http://localhost:8080/';
+import { API_BASE } from './constants';
 
 /**
  * Intercept all backend API requests and return canned responses.
@@ -52,4 +51,11 @@ export async function setupApiMocks(
  */
 export async function waitForAppReady(page: Page) {
     await page.waitForSelector('.bjs-container', { timeout: 15_000 });
+}
+
+/**
+ * Assert that a Material snackbar with the given text is visible.
+ */
+export async function expectSnackbar(page: Page, text: string) {
+    await expect(page.getByText(text)).toBeVisible();
 }

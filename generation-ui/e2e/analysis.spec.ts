@@ -1,5 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { setupApiMocks, waitForAppReady } from './fixtures/helpers';
+import {
+    setupApiMocks,
+    waitForAppReady,
+    expectSnackbar,
+} from './fixtures/helpers';
 import { StepperPage } from './page-objects/stepper.page';
 import { AnalysisPage } from './page-objects/analysis.page';
 
@@ -20,12 +24,10 @@ test.describe('Step 3 - Analysis', () => {
         test('shows snackbar when no properties selected', async ({ page }) => {
             await analysis.checkPropertiesBtn.click();
 
-            // Snackbar should show the validation message
-            await expect(
-                page.getByText(
-                    'Please select at least one property for verification.',
-                ),
-            ).toBeVisible();
+            await expectSnackbar(
+                page,
+                'Please select at least one property for verification.',
+            );
         });
 
         test('check all properties - all valid', async () => {
@@ -69,11 +71,10 @@ test.describe('Step 3 - Analysis', () => {
             await analysis.safenessToggle.click();
             await analysis.checkPropertiesBtn.click();
 
-            await expect(
-                page.getByText(
-                    'State space generation timed out after 60 seconds.',
-                ),
-            ).toBeVisible();
+            await expectSnackbar(
+                page,
+                'State space generation timed out after 60 seconds.',
+            );
         });
     });
 
@@ -103,7 +104,7 @@ test.describe('Step 3 - Analysis', () => {
             await analysis.mockCtlServerError('Internal server error');
             await analysis.checkCtlFormula('AG(!Unsafe)');
 
-            await expect(page.getByText('Internal server error')).toBeVisible();
+            await expectSnackbar(page, 'Internal server error');
         });
     });
 
@@ -121,15 +122,12 @@ test.describe('Step 3 - Analysis', () => {
         test('shows info snackbar when info button clicked', async ({
             page,
         }) => {
-            await page
-                .getByRole('button', {
-                    name: 'Graph transformation system download info button',
-                })
-                .click();
+            await analysis.ggInfoBtn.click();
 
-            await expect(
-                page.getByText('Graph transformation systems are generated'),
-            ).toBeVisible();
+            await expectSnackbar(
+                page,
+                'Graph transformation systems are generated',
+            );
         });
     });
 });

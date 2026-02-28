@@ -4,8 +4,7 @@ import {
     ctlPropertyInvalid,
     ctlPropertyError,
 } from '../fixtures/mock-responses';
-
-const API_BASE = 'http://localhost:8080/';
+import { API_BASE } from '../fixtures/constants';
 
 /**
  * Page object for Step 3 – Analysis.
@@ -25,6 +24,7 @@ export class AnalysisPage {
     readonly checkPropertiesBtn: Locator;
     readonly checkCtlBtn: Locator;
     readonly downloadGGBtn: Locator;
+    readonly ggInfoBtn: Locator;
 
     // --- CTL ---
     readonly ctlTab: Locator;
@@ -56,6 +56,7 @@ export class AnalysisPage {
         this.checkPropertiesBtn = page.getByTestId('check-properties-btn');
         this.checkCtlBtn = page.getByTestId('check-ctl-btn');
         this.downloadGGBtn = page.getByTestId('download-gg-btn');
+        this.ggInfoBtn = page.getByTestId('gg-info-btn');
 
         // CTL
         this.ctlTab = page.getByRole('tab', { name: 'CTL properties' });
