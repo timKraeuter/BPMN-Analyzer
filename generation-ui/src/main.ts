@@ -11,7 +11,7 @@ if (environment.production) {
     enableProdMode();
 }
 
-await bootstrapApplication(AppComponent, {
+bootstrapApplication(AppComponent, {
     providers: [
         provideAnimations(),
         provideHttpClient(),

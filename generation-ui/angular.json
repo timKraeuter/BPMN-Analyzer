@@ -37,7 +37,12 @@
                             "node_modules/bpmn-token/assets/bt.css",
                             "src/styles.scss"
                         ],
-                        "scripts": []
+                        "scripts": [],
+                        "allowedCommonJsDependencies": [
+                            "classnames",
+                            "randomcolor",
+                            "path-intersection"
+                        ]
                     },
                     "configurations": {
                         "production": {
