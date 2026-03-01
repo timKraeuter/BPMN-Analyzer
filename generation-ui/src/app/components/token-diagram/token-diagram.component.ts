@@ -2,7 +2,7 @@ import {
     AfterContentInit,
     Component,
     ElementRef,
-    Input,
+    input,
     OnDestroy,
     ViewChild,
 } from '@angular/core';
@@ -25,7 +25,7 @@ export class TokenDiagramComponent implements AfterContentInit, OnDestroy {
     private readonly modeler: TokenModeler;
 
     @ViewChild('ref', { static: true }) private readonly el!: ElementRef;
-    @Input() public viewer: boolean = false;
+    public viewer = input(false);
 
     constructor(private readonly bpmnModeler: BPMNModelerService) {
         this.modeler = bpmnModeler.getTokenModeler();

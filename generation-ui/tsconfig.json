@@ -11,8 +11,7 @@
         "experimentalDecorators": true,
         "importHelpers": true,
         "target": "ES2022",
-        "module": "preserve",
-        "useDefineForClassFields": false
+        "module": "preserve"
     },
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,

@@ -2,7 +2,7 @@ import {
     AfterContentInit,
     Component,
     ElementRef,
-    Input,
+    input,
     OnDestroy,
     OnInit,
     ViewChild,
@@ -24,14 +24,14 @@ export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {
     @ViewChild('properties', { static: true })
     private readonly properties!: ElementRef;
     @ViewChild('diagram', { static: true }) private readonly el!: ElementRef;
-    @Input() public viewer: boolean = false;
-    @Input() public propertiesPanel: boolean = false;
-    @Input() public height: string = '750';
+    public viewer = input(false);
+    public propertiesPanel = input(false);
+    public height = input('750');
 
     constructor(private readonly bpmnModeler: BPMNModelerService) {}
 
     ngOnInit(): void {
-        if (this.viewer) {
+        if (this.viewer()) {
             this.modeler = this.bpmnModeler.getViewer();
         } else {
             this.modeler = this.bpmnModeler.getModeler();
@@ -41,7 +41,7 @@ export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {
 
     ngAfterContentInit(): void {
         this.modeler.attachTo(this.el.nativeElement);
-        if (this.propertiesPanel) {
+        if (this.propertiesPanel()) {
             const propertiesPanel = this.modeler.get('propertiesPanel');
             // @ts-ignore
             propertiesPanel.attachTo(this.properties.nativeElement);

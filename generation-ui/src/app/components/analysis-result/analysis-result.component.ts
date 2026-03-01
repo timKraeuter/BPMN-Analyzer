@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,25 +19,11 @@ import { ModelCheckingResponse } from '../../services/model-checking.service';
     ],
 })
 export class AnalysisResultComponent {
-    private _running: boolean = false;
-
-    @Input()
-    public set running(value: boolean) {
-        this._running = value;
-        this.cdr.detectChanges();
-    }
-
-    public get running(): boolean {
-        return this._running;
-    }
-
-    @Input()
-    public properties: BPMNProperty[] = [];
-
-    @Input()
-    public ctlPropertyResult: ModelCheckingResponse | undefined = undefined;
-
-    constructor(private readonly cdr: ChangeDetectorRef) {}
+    public running = input(false);
+    public properties = input<BPMNProperty[]>([]);
+    public ctlPropertyResult = input<ModelCheckingResponse | undefined>(
+        undefined,
+    );
 }
 
 export class BPMNProperty {
