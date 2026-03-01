@@ -7,6 +7,8 @@
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
+        "e2e": "npx playwright test",
+        "e2e:ui": "npx playwright test --ui",
         "check": "npx prettier --check .",
         "format": "npx prettier --write ."
     },
@@ -37,6 +39,7 @@
         "@angular-devkit/build-angular": "^21.2.0",
         "@angular/cli": "^21.2.0",
         "@angular/compiler-cli": "^21.2.0",
+        "@playwright/test": "^1.58.2",
         "@types/jasmine": "~6.0.0",
         "@types/node": "^25.3.2",
         "jasmine-core": "~6.1.0",

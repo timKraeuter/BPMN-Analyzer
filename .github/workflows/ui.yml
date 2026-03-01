@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "npm"
           cache-dependency-path: "./generation-ui/package-lock.json"
       - name: Install dependencies
@@ -37,13 +37,37 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "npm"
           cache-dependency-path: "./generation-ui/package-lock.json"
       - name: Install dependencies
         run: npm ci
       - name: Run tests
         run: npm run test -- --watch=false --browsers=ChromeHeadless
+
+  e2e:
+    name: Run E2E tests
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+    defaults:
+      run:
+        working-directory: ./generation-ui
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install dependencies
+        run: npm ci
+      - name: Run E2E tests
+        run: npm run e2e
+        env:
+          HOME: /root
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: generation-ui/playwright-report/
+          retention-days: 30
 
   sonarcloud:
     name: Analyze ui

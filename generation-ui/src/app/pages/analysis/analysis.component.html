@@ -11,6 +11,7 @@
             color="primary"
             matTooltip="Download a groove graph transformation system."
             (click)="downloadGGClicked()"
+            data-testid="download-gg-btn"
         >
             <mat-icon>cloud_download</mat-icon>
             Download GT-system
@@ -22,6 +23,7 @@
         color="primary"
         (click)="ggInfoClicked()"
         matTooltip="Further graph transformation system information."
+        data-testid="gg-info-btn"
     >
         <mat-icon>info</mat-icon>
     </button>
@@ -42,6 +44,7 @@
                     aria-label="general BPMN Properties"
                     multiple
                     class="margin-top"
+                    data-testid="bpmn-property-toggles"
                 >
                     <mat-button-toggle
                         value="SAFENESS"
@@ -79,6 +82,7 @@
                     matTooltip="Check the selected general BPMN properties using groove."
                     class="margin-top"
                     (click)="checkBPMNSpecificPropertiesClicked()"
+                    data-testid="check-properties-btn"
                 >
                     <mat-icon>done_all</mat-icon>
                     Check selected properties
@@ -133,6 +137,7 @@
                     <mat-select
                         [(ngModel)]="selectedTemplate"
                         name="ctlTemplate"
+                        data-testid="ctl-template-select"
                     >
                         @for (template of ctlTemplates; track template) {
                             <mat-option [value]="template">
@@ -191,6 +196,7 @@
                         color="primary"
                         matTooltip="Create a CTL from the chosen template and proposition."
                         (click)="createCTLProperty()"
+                        data-testid="create-ctl-btn"
                     >
                         <mat-icon>autorenew</mat-icon>
                         Create CTL property
@@ -213,6 +219,7 @@
                             placeholder="AG(!Unsafe)"
                             name="ctlProperty"
                             (keydown)="this.stopEventPropagation($event)"
+                            data-testid="ctl-property-input"
                         ></textarea>
                     </mat-form-field>
                 </form>
@@ -222,6 +229,7 @@
                         color="primary"
                         matTooltip="Check the given CTL property using groove."
                         (click)="checkCTLPropertyClicked()"
+                        data-testid="check-ctl-btn"
                     >
                         <mat-icon>check</mat-icon>
                         Check CTL property

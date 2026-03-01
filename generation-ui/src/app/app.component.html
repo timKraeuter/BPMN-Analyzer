@@ -2,12 +2,18 @@
     #stepper
     animationDuration="0"
     (selectionChange)="stepChanged($event)"
+    data-testid="stepper"
 >
     <mat-step label="Model your BPMN process">
         <app-modeling></app-modeling>
         <mat-divider class="margin-top"></mat-divider>
         <div class="step-buttons">
-            <button mat-raised-button color="primary" matStepperNext>
+            <button
+                mat-raised-button
+                color="primary"
+                matStepperNext
+                data-testid="step1-next-btn"
+            >
                 <mat-icon iconPositionEnd>navigate_next</mat-icon>
                 Next Step
             </button>
@@ -22,11 +28,17 @@
                 color="primary"
                 class="right-margin"
                 matStepperPrevious
+                data-testid="step2-prev-btn"
             >
                 <mat-icon>navigate_before</mat-icon>
                 Previous Step
             </button>
-            <button mat-raised-button color="primary" matStepperNext>
+            <button
+                mat-raised-button
+                color="primary"
+                matStepperNext
+                data-testid="step2-next-btn"
+            >
                 <mat-icon iconPositionEnd>navigate_next</mat-icon>
                 Next Step
             </button>
@@ -41,11 +53,17 @@
                 color="primary"
                 class="right-margin"
                 matStepperPrevious
+                data-testid="step3-prev-btn"
             >
                 <mat-icon>navigate_before</mat-icon>
                 Previous Step
             </button>
-            <button mat-raised-button color="primary" (click)="stepper.reset()">
+            <button
+                mat-raised-button
+                color="primary"
+                (click)="stepper.reset()"
+                data-testid="back-to-start-btn"
+            >
                 <mat-icon>restart_alt</mat-icon>
                 Back to the start
             </button>
