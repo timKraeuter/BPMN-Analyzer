@@ -7,10 +7,8 @@ import {
     OnInit,
     ViewChild,
 } from '@angular/core';
-// @ts-ignore
-import Modeler from 'bpmn-js/Modeler';
-// @ts-ignore
-import Viewer from 'bpmn-js/Viewer';
+import Modeler from 'bpmn-js/lib/Modeler';
+import Viewer from 'bpmn-js/lib/Viewer';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 
 @Component({
@@ -19,7 +17,7 @@ import { BPMNModelerService } from '../../services/bpmnmodeler.service';
     styleUrls: ['./diagram.component.scss'],
 })
 export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {
-    private modeler: Modeler | Viewer;
+    private modeler!: Modeler | Viewer;
 
     @ViewChild('properties', { static: true })
     private readonly properties!: ElementRef;
@@ -42,8 +40,9 @@ export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {
     ngAfterContentInit(): void {
         this.modeler.attachTo(this.el.nativeElement);
         if (this.propertiesPanel) {
-            const propertiesPanel = this.modeler.get('propertiesPanel');
-            // @ts-ignore
+            const propertiesPanel = this.modeler.get('propertiesPanel') as {
+                attachTo: (element: HTMLElement) => void;
+            };
             propertiesPanel.attachTo(this.properties.nativeElement);
         }
     }

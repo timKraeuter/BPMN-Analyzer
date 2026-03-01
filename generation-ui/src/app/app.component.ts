@@ -30,21 +30,28 @@ export class AppComponent {
     constructor(private readonly modeler: BPMNModelerService) {}
 
     async stepChanged(event: StepperSelectionEvent) {
-        if (this.changedToPropositionStep(event)) {
-            await this.modeler.updateTokenBPMNModelIfNeeded();
-        }
-        if (this.changedToAnalyzeStep(event)) {
-            await this.propositionComponent.saveCurrentProposition();
-            await this.modeler.updateViewerBPMNModel();
+        try {
+            if (this.changedToPropositionStep(event)) {
+                await this.modeler.updateTokenBPMNModelIfNeeded();
+            }
+            if (this.changedToAnalyzeStep(event)) {
+                await this.propositionComponent.saveCurrentProposition();
+                await this.modeler.updateViewerBPMNModel();
+            }
+        } catch (error) {
+            console.error(
+                'Failed to synchronize models on step change:',
+                error,
+            );
         }
     }
 
     private changedToAnalyzeStep(event: StepperSelectionEvent) {
-        return event.selectedIndex == 2;
+        return event.selectedIndex === 2;
     }
 
     private changedToPropositionStep(event: StepperSelectionEvent) {
-        return event.selectedIndex == 1;
+        return event.selectedIndex === 1;
     }
 
     @HostListener('document:keydown.ArrowRight', ['$event'])

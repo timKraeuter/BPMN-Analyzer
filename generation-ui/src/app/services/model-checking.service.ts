@@ -21,27 +21,29 @@ export class ModelCheckingService {
         xmlModel: Blob,
         propositions: Proposition[],
     ): Observable<ArrayBuffer> {
-        const options = {
-            responseType: 'arraybuffer',
-        } as any; // Expect a zip/file response type.
         const formData = new FormData();
         formData.append('file', xmlModel);
         formData.append('propositions', JSON.stringify(propositions));
 
-        return this.httpClient.post(generateGGAndZipURL, formData, options);
+        return this.httpClient.post(generateGGAndZipURL, formData, {
+            responseType: 'arraybuffer' as const,
+        });
     }
 
     checkBPMNSpecificProperties(
         bpmnSpecificPropertiesToBeChecked: string[],
         xmlModel: Blob,
-    ) {
+    ): Observable<BPMNSpecificPropertyResponse> {
         const formData = new FormData();
         bpmnSpecificPropertiesToBeChecked.forEach((property) =>
             formData.append('propertiesToBeChecked', property),
         );
         formData.append('file', xmlModel);
 
-        return this.httpClient.post(checkBPMNSpecificPropertiesURL, formData);
+        return this.httpClient.post<BPMNSpecificPropertyResponse>(
+            checkBPMNSpecificPropertiesURL,
+            formData,
+        );
     }
 
     checkTemporalLogic(
@@ -62,14 +64,18 @@ export class ModelCheckingService {
     }
 }
 
-export class ModelCheckingResponse {
-    constructor(
-        public property: string,
-        public valid: boolean,
-        public error: string,
-    ) {
-        this.property = property;
-        this.valid = valid;
-        this.error = error;
-    }
+export interface ModelCheckingResponse {
+    property: string;
+    valid: boolean;
+    error: string;
+}
+
+export interface BPMNPropertyResult {
+    name: string;
+    valid: boolean;
+    additionalInfo: string;
+}
+
+export interface BPMNSpecificPropertyResponse {
+    propertyCheckingResults: BPMNPropertyResult[];
 }

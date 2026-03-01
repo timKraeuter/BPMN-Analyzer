@@ -1,11 +1,14 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
     BPMNProperty,
     AnalysisResultComponent,
 } from '../../components/analysis-result/analysis-result.component';
 import {
+    BPMNPropertyResult,
+    BPMNSpecificPropertyResponse,
     ModelCheckingResponse,
     ModelCheckingService,
 } from '../../services/model-checking.service';
@@ -25,8 +28,21 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DiagramComponent } from '../../components/diagram/diagram.component';
-// @ts-ignore
 import { saveAs } from 'file-saver-es';
+
+export interface CTLTemplate {
+    template: (proposition1: string, proposition2?: string) => string;
+    description: string;
+    twoPropositions: boolean;
+}
+
+/** Represents a BPMN element from the element registry */
+interface BPMNElement {
+    id: string;
+    businessObject: {
+        name?: string;
+    };
+}
 
 @Component({
     selector: 'app-analysis',
@@ -52,6 +68,8 @@ import { saveAs } from 'file-saver-es';
     ],
 })
 export class AnalysisComponent {
+    private readonly destroyRef = inject(DestroyRef);
+
     // GG generation
     public graphGrammarGenerationRunning: boolean = false;
 
@@ -61,11 +79,11 @@ export class AnalysisComponent {
     public bpmnPropertyCheckingResults: BPMNProperty[] = [];
 
     // CTL property checking with templates
-    public selectedTemplate: any;
+    public selectedTemplate: CTLTemplate | undefined;
     public selectedProposition1: string = ''; // We only support one or two propositions.
     public selectedProposition2: string = '';
 
-    ctlTemplates: any[] = [
+    ctlTemplates: CTLTemplate[] = [
         {
             template: (proposition: string) => `AG(!${proposition})`,
             description: 'Never reaches',
@@ -82,7 +100,7 @@ export class AnalysisComponent {
             twoPropositions: false,
         },
         {
-            template: (proposition1: string, proposition2: string) =>
+            template: (proposition1: string, proposition2?: string) =>
                 `AG(${proposition1} -> AF(${proposition2}))`,
             description: 'Response',
             twoPropositions: true,
@@ -99,32 +117,45 @@ export class AnalysisComponent {
         private readonly snackBar: MatSnackBar,
         private readonly modelCheckingService: ModelCheckingService,
         private readonly sharedState: SharedStateService,
-        private readonly cdr: ChangeDetectorRef,
     ) {}
 
     async downloadGGClicked() {
         this.graphGrammarGenerationRunning = true;
-        const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
+        try {
+            const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
 
-        this.modelCheckingService
-            .downloadGG(xmlModel, this.sharedState.propositions)
-            .subscribe({
-                error: (error) => {
-                    const errorObject = JSON.parse(
-                        new TextDecoder().decode(error.error),
-                    );
-                    console.log(errorObject);
-                    this.snackBar.open(errorObject.message, 'close');
-                },
-                next: (data: ArrayBuffer) => {
-                    // Receive and save as zip.
-                    const blob = new Blob([data], {
-                        type: 'application/zip',
-                    });
-                    saveAs(blob, this.sharedState.modelFileName + '.gps.zip');
-                },
-            })
-            .add(() => (this.graphGrammarGenerationRunning = false));
+            this.modelCheckingService
+                .downloadGG(xmlModel, this.sharedState.propositions)
+                .pipe(takeUntilDestroyed(this.destroyRef))
+                .subscribe({
+                    error: (error) => {
+                        this.graphGrammarGenerationRunning = false;
+                        const errorMessage = this.extractErrorMessage(error);
+                        console.error(
+                            'Failed to download graph grammar:',
+                            errorMessage,
+                        );
+                        this.snackBar.open(errorMessage, 'close');
+                    },
+                    next: (data: ArrayBuffer) => {
+                        // Receive and save as zip.
+                        const blob = new Blob([data], {
+                            type: 'application/zip',
+                        });
+                        saveAs(
+                            blob,
+                            this.sharedState.modelFileName + '.gps.zip',
+                        );
+                    },
+                    complete: () => {
+                        this.graphGrammarGenerationRunning = false;
+                    },
+                });
+        } catch (error) {
+            this.graphGrammarGenerationRunning = false;
+            console.error('Failed to prepare model for download:', error);
+            this.snackBar.open('Failed to prepare the BPMN model.', 'close');
+        }
     }
 
     ggInfoClicked() {
@@ -135,7 +166,7 @@ export class AnalysisComponent {
     }
 
     async checkBPMNSpecificPropertiesClicked() {
-        if (this.bpmnSpecificPropertiesToBeChecked.length == 0) {
+        if (this.bpmnSpecificPropertiesToBeChecked.length === 0) {
             this.snackBar.open(
                 'Please select at least one property for verification.',
                 'close',
@@ -145,28 +176,42 @@ export class AnalysisComponent {
             );
             return;
         }
-        this.setVerificationRunning(true);
-        const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
-        this.modelCheckingService
-            .checkBPMNSpecificProperties(
-                this.bpmnSpecificPropertiesToBeChecked,
-                xmlModel,
-            )
-            .subscribe({
-                error: (error) => {
-                    console.error(error);
-                    this.snackBar.open(error.error.message, 'close');
-                    this.bpmnPropertyCheckingResults = [];
-                },
-                next: (data: any) => {
-                    this.bpmnPropertyCheckingResults = structuredClone(
-                        data['propertyCheckingResults'],
-                    );
-                    this.setProperCompletionHintsIfNeeded();
-                    this.colorDeadActivitiesAndSetNamesIfNeeded();
-                },
-            })
-            .add(() => this.setVerificationRunning(false));
+        this.bpmnSpecificVerificationRunning = true;
+        try {
+            const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
+            this.modelCheckingService
+                .checkBPMNSpecificProperties(
+                    this.bpmnSpecificPropertiesToBeChecked,
+                    xmlModel,
+                )
+                .pipe(takeUntilDestroyed(this.destroyRef))
+                .subscribe({
+                    error: (error) => {
+                        this.bpmnSpecificVerificationRunning = false;
+                        const errorMessage = this.extractErrorMessage(error);
+                        console.error(
+                            'BPMN property check failed:',
+                            errorMessage,
+                        );
+                        this.snackBar.open(errorMessage, 'close');
+                        this.bpmnPropertyCheckingResults = [];
+                    },
+                    next: (data: BPMNSpecificPropertyResponse) => {
+                        this.bpmnPropertyCheckingResults = structuredClone(
+                            data.propertyCheckingResults,
+                        );
+                        this.setProperCompletionHintsIfNeeded();
+                        this.colorDeadActivitiesAndSetNamesIfNeeded();
+                    },
+                    complete: () => {
+                        this.bpmnSpecificVerificationRunning = false;
+                    },
+                });
+        } catch (error) {
+            this.bpmnSpecificVerificationRunning = false;
+            console.error('Failed to prepare model for checking:', error);
+            this.snackBar.open('Failed to prepare the BPMN model.', 'close');
+        }
     }
 
     checkLTLPropertyClicked() {
@@ -186,25 +231,39 @@ export class AnalysisComponent {
     }
 
     async checkCTLPropertyClicked() {
-        const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
-        this.setVerificationRunning(true);
-        this.modelCheckingService
-            .checkTemporalLogic(
-                'CTL',
-                this.ctlProperty,
-                xmlModel,
-                this.sharedState.propositions,
-            )
-            .subscribe({
-                error: (error) => {
-                    console.error(error);
-                    this.snackBar.open(error.error.message, 'close');
-                },
-                next: (response: ModelCheckingResponse) => {
-                    this.ctlPropertyResult = response;
-                },
-            })
-            .add(() => this.setVerificationRunning(false));
+        this.bpmnSpecificVerificationRunning = true;
+        try {
+            const xmlModel = await this.bpmnModeler.getBPMNModelXMLBlob();
+            this.modelCheckingService
+                .checkTemporalLogic(
+                    'CTL',
+                    this.ctlProperty,
+                    xmlModel,
+                    this.sharedState.propositions,
+                )
+                .pipe(takeUntilDestroyed(this.destroyRef))
+                .subscribe({
+                    error: (error) => {
+                        this.bpmnSpecificVerificationRunning = false;
+                        const errorMessage = this.extractErrorMessage(error);
+                        console.error(
+                            'CTL property check failed:',
+                            errorMessage,
+                        );
+                        this.snackBar.open(errorMessage, 'close');
+                    },
+                    next: (response: ModelCheckingResponse) => {
+                        this.ctlPropertyResult = response;
+                    },
+                    complete: () => {
+                        this.bpmnSpecificVerificationRunning = false;
+                    },
+                });
+        } catch (error) {
+            this.bpmnSpecificVerificationRunning = false;
+            console.error('Failed to prepare model for CTL check:', error);
+            this.snackBar.open('Failed to prepare the BPMN model.', 'close');
+        }
     }
 
     private setProperCompletionHintsIfNeeded(): void {
@@ -220,7 +279,10 @@ export class AnalysisComponent {
         });
     }
 
-    private setEndNameAsInfo(value: BPMNProperty, unproperEndEvents: any) {
+    private setEndNameAsInfo(
+        value: BPMNProperty,
+        unproperEndEvents: BPMNElement[],
+    ) {
         const flowNodeNameOrIdList =
             this.getFlowNodeNameOrIdList(unproperEndEvents);
         value.additionalInfo = `The end event ${flowNodeNameOrIdList} consumed more than one token.`;
@@ -239,7 +301,10 @@ export class AnalysisComponent {
         });
     }
 
-    private setActivityNamesAsInfo(value: BPMNProperty, deadActivities: any[]) {
+    private setActivityNamesAsInfo(
+        value: BPMNProperty,
+        deadActivities: BPMNElement[],
+    ) {
         const deadActivityNames = this.getFlowNodeNameOrIdList(deadActivities);
         if (deadActivities.length > 1) {
             value.additionalInfo = `The dead activities are ${deadActivityNames}.`;
@@ -248,36 +313,38 @@ export class AnalysisComponent {
         }
     }
 
-    private getFlowNodeNameOrIdList(deadActivities: any[]): string {
-        return deadActivities
-            .map((value1) => {
-                if (!value1.businessObject.name) {
-                    return value1.id;
+    private getFlowNodeNameOrIdList(elements: BPMNElement[]): string {
+        return elements
+            .map((element) => {
+                if (!element.businessObject.name) {
+                    return element.id;
                 }
-                return value1.businessObject.name;
+                return element.businessObject.name;
             })
-            .map((value) => `"${value}"`)
+            .map((name) => `"${name}"`)
             .join(', ');
     }
 
-    private colorElementsInRed(elementsToColor: any[]) {
-        const modeling: any = this.bpmnModeler.getModeler().get('modeling');
+    private colorElementsInRed(elementsToColor: BPMNElement[]) {
+        const modeling = this.bpmnModeler.getModeler().get('modeling') as {
+            setColor: (
+                elements: BPMNElement[],
+                colors: { stroke: string; fill: string },
+            ) => void;
+        };
         modeling.setColor(elementsToColor, {
             stroke: '#831311',
             fill: '#ffcdd2',
         });
     }
 
-    private getElementsForIDs(ids: string[]) {
-        const elementRegistry: any = this.bpmnModeler
+    private getElementsForIDs(ids: string[]): BPMNElement[] {
+        const elementRegistry = this.bpmnModeler
             .getModeler()
-            .get('elementRegistry');
+            .get('elementRegistry') as {
+            get: (id: string) => BPMNElement;
+        };
         return ids.map((id) => elementRegistry.get(id));
-    }
-
-    private setVerificationRunning(isRunning: boolean): void {
-        this.bpmnSpecificVerificationRunning = isRunning;
-        this.cdr.detectChanges();
     }
 
     getPropositions(): string[] {
@@ -311,6 +378,43 @@ export class AnalysisComponent {
                 this.selectedProposition2.length > 0
             );
         }
-        return this.selectedTemplate && this.selectedProposition1;
+        return !!this.selectedTemplate && !!this.selectedProposition1;
+    }
+
+    /**
+     * Safely extracts an error message from an HTTP error response.
+     * Handles both JSON ArrayBuffer errors and standard error objects.
+     */
+    private extractErrorMessage(error: unknown): string {
+        const defaultMessage = 'An unexpected error occurred.';
+        if (!error || typeof error !== 'object') {
+            return defaultMessage;
+        }
+        const httpError = error as {
+            error?: ArrayBuffer | { message?: string };
+        };
+
+        // Handle ArrayBuffer error body (e.g., from arraybuffer responseType)
+        if (httpError.error instanceof ArrayBuffer) {
+            try {
+                const errorObject = JSON.parse(
+                    new TextDecoder().decode(httpError.error),
+                );
+                return errorObject?.message || defaultMessage;
+            } catch {
+                return defaultMessage;
+            }
+        }
+
+        // Handle standard JSON error body
+        if (
+            httpError.error &&
+            typeof httpError.error === 'object' &&
+            'message' in httpError.error
+        ) {
+            return httpError.error.message || defaultMessage;
+        }
+
+        return defaultMessage;
     }
 }

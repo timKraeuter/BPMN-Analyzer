@@ -9,7 +9,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Proposition } from '../../services/shared-state.service';
+import {
+    Proposition,
+    SharedStateService,
+} from '../../services/shared-state.service';
 
 @Component({
     selector: 'app-rename-proposition-dialog',
@@ -29,6 +32,7 @@ export class RenamePropositionDialogComponent {
 
     constructor(
         private readonly dialogRef: MatDialogRef<RenamePropositionDialogComponent>,
+        private readonly sharedState: SharedStateService,
         @Inject(MAT_DIALOG_DATA) public data: RenamePropositionDialogData,
     ) {
         this.newName = data.proposition.name;
@@ -44,7 +48,7 @@ export class RenamePropositionDialogComponent {
     }
 
     saveNameAndCloseDialog() {
-        this.data.proposition.name = this.newName;
+        this.sharedState.renameProposition(this.data.proposition, this.newName);
         this.closeDialog();
     }
 
