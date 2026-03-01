@@ -1,20 +1,20 @@
-@if (running || properties.length > 0 || ctlPropertyResult) {
+@if (running() || properties().length > 0 || ctlPropertyResult()) {
     <mat-card appearance="outlined" data-testid="analysis-results">
         <mat-card-header>
             <mat-card-title>Analysis results</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            @if (running) {
+            @if (running()) {
                 <span data-testid="verification-spinner">
                     The verification will at most take 60 seconds.
                     <mat-spinner class="margin-top"></mat-spinner>
                 </span>
             } @else {
-                @if (ctlPropertyResult) {
+                @if (ctlPropertyResult()) {
                     <mat-list data-testid="ctl-results">
                         <div mat-subheader>CTL property</div>
                         <mat-list-item>
-                            @if (ctlPropertyResult.valid) {
+                            @if (ctlPropertyResult()!.valid) {
                                 <mat-icon
                                     matListItemIcon
                                     class="material-icons color_green"
@@ -30,18 +30,21 @@
                                 </mat-icon>
                             }
                             <div matListItemTitle>
-                                {{ ctlPropertyResult.property }}
-                                @if (ctlPropertyResult.error) {
-                                    <span>: {{ ctlPropertyResult.error }}</span>
+                                {{ ctlPropertyResult()!.property }}
+                                @if (ctlPropertyResult()!.error) {
+                                    <span
+                                        >:
+                                        {{ ctlPropertyResult()!.error }}</span
+                                    >
                                 }
                             </div>
                         </mat-list-item>
                     </mat-list>
                 }
-                @if (properties.length > 0) {
+                @if (properties().length > 0) {
                     <mat-list data-testid="bpmn-property-results">
                         <div mat-subheader>General BPMN properties</div>
-                        @for (property of properties; track property) {
+                        @for (property of properties(); track property) {
                             <mat-list-item>
                                 @if (property.valid) {
                                     <mat-icon

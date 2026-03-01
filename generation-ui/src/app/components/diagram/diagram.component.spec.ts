@@ -46,7 +46,7 @@ describe('DiagramComponent', () => {
     });
 
     it('should use modeler when viewer is false', () => {
-        component.viewer = false;
+        fixture.componentRef.setInput('viewer', false);
         fixture.detectChanges();
 
         expect(mockModelerService.getModeler).toHaveBeenCalled();
@@ -54,7 +54,7 @@ describe('DiagramComponent', () => {
     });
 
     it('should use viewer when viewer is true', () => {
-        component.viewer = true;
+        fixture.componentRef.setInput('viewer', true);
         fixture.detectChanges();
 
         expect(mockModelerService.getViewer).toHaveBeenCalled();
@@ -74,7 +74,7 @@ describe('DiagramComponent', () => {
     });
 
     it('should attach properties panel when propertiesPanel is true', () => {
-        component.propertiesPanel = true;
+        fixture.componentRef.setInput('propertiesPanel', true);
         fixture.detectChanges();
 
         expect(mockModeler.get).toHaveBeenCalledWith('propertiesPanel');
