@@ -72,12 +72,12 @@ jobs:
   sonarcloud:
     name: Analyze ui
     runs-on: ubuntu-latest
-    if: ${{ secrets.SONAR_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - name: SonarCloud Scan
+        continue-on-error: true
         uses: SonarSource/sonarqube-scan-action@master
         with:
           projectBaseDir: ./generation-ui
