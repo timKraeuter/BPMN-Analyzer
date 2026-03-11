@@ -42,7 +42,32 @@ public class BPMNModelChecker {
 
   public static final String OPTION_TO_COMPLETE_CTL = "AF(AllTerminated)";
   public static final String UNSAFE_CTL = "AG(!Unsafe)";
+  private static final Pattern START_STATE_PATTERN =
+      Pattern.compile(
+          """
+          <edge from="(.*)" to=".*">
+          \\s*<attr name="label">
+          \\s*<string>start</string>
+          """);
+  private static final Pattern ALL_TERMINATED_PATTERN =
+      Pattern.compile(
+          """
+          <edge from="(.*)" to=".*">
+          \\s*<attr name="label">
+          \\s*<string>AllTerminated</string>
+          """);
+  private static final Pattern UNSAFE_PATTERN =
+      Pattern.compile(
+          """
+          <edge from=".*" to=".*">
+          \\s*<attr name="label">
+          \\s*<string>Unsafe</string>
+          """);
+  private static final Pattern EXECUTED_ACTIVITIES_PATTERN =
+      Pattern.compile("<string>(.*)_end</string>");
+
   private final Path graphGrammarDir;
+  private final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
   private String stateSpace = "";
   private final BPMNCollaboration bpmnModel;
   protected static final Logger logger = LoggerFactory.getLogger(BPMNModelChecker.class);
@@ -55,7 +80,6 @@ public class BPMNModelChecker {
   public ModelCheckingResponse checkTemporalLogicProperty(TemporalLogic logic, String property)
       throws IOException, InterruptedException {
     if (logic == TemporalLogic.CTL) {
-      final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
       ModelCheckingResult propertyCheckingResult =
           grooveJarRunner.checkCTL(graphGrammarDir.toString(), property);
       return new ModelCheckingResponse(
@@ -210,14 +234,7 @@ public class BPMNModelChecker {
   }
 
   private String getStartState(String stateSpace) {
-    Pattern regEx =
-        Pattern.compile(
-            """
-            <edge from="(.*)" to=".*">
-            \\s*<attr name="label">
-            \\s*<string>start</string>
-            """);
-    Matcher matcher = regEx.matcher(stateSpace);
+    Matcher matcher = START_STATE_PATTERN.matcher(stateSpace);
     if (!matcher.find()) {
       throw new ShouldNotHappenRuntimeException("Start state in state space could not be found!");
     }
@@ -225,14 +242,7 @@ public class BPMNModelChecker {
   }
 
   private static Set<String> findAllTerminatedStates(String stateSpace) {
-    Pattern regEx =
-        Pattern.compile(
-            """
-            <edge from="(.*)" to=".*">
-            \\s*<attr name="label">
-            \\s*<string>AllTerminated</string>
-            """);
-    final Matcher matcher = regEx.matcher(stateSpace);
+    final Matcher matcher = ALL_TERMINATED_PATTERN.matcher(stateSpace);
     Set<String> terminatedStateIds = new HashSet<>();
     while (matcher.find()) {
       terminatedStateIds.add(matcher.group(1));
@@ -243,7 +253,6 @@ public class BPMNModelChecker {
   private void checkOptionToComplete(BPMNSpecificPropertyCheckingResponse response)
       throws IOException, InterruptedException {
 
-    final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
     ModelCheckingResult safenessResult =
         grooveJarRunner.checkCTL(graphGrammarDir.toString(), OPTION_TO_COMPLETE_CTL);
 
@@ -264,21 +273,13 @@ public class BPMNModelChecker {
   }
 
   private static boolean isSafe(String stateSpace) {
-    Pattern regEx =
-        Pattern.compile(
-            """
-            <edge from=".*" to=".*">
-            \\s*<attr name="label">
-            \\s*<string>Unsafe</string>
-            """);
-    return !regEx.matcher(stateSpace).find();
+    return !UNSAFE_PATTERN.matcher(stateSpace).find();
   }
 
   private void generateStateSpaceIfNeeded() throws IOException, InterruptedException {
     // Generate state space for graph grammar.
     if (stateSpace.isEmpty()) {
       // Generate new state space
-      final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
       final String stateSpaceTempFile = getStateSpaceTempFile();
       try {
         stateSpace =
@@ -307,7 +308,6 @@ public class BPMNModelChecker {
 
   private String getStateSpaceDirPath() {
     return RuleGeneratorControllerHelper.STATE_SPACE_TEMP_DIR
-        + File.separator
         + RuleGeneratorControllerHelper.getGGOrStateSpaceDirName(bpmnModel.getName())
         + File.separator;
   }
@@ -401,9 +401,7 @@ public class BPMNModelChecker {
   }
 
   private Set<String> findExecutedActivitiesInStateSpace(String stateSpace) {
-    final Pattern regEx = Pattern.compile("<string>(.*)_end</string>");
-
-    final Matcher matcher = regEx.matcher(stateSpace);
+    final Matcher matcher = EXECUTED_ACTIVITIES_PATTERN.matcher(stateSpace);
     final Set<String> executedActivities = new HashSet<>();
     while (matcher.find()) {
       executedActivities.add(matcher.group(1));

@@ -36,7 +36,7 @@ public class RuleGeneratorControllerHelper {
   public static final DateTimeFormatter DTF =
       DateTimeFormatter.ofPattern("dd.MM.yyyy-HH.mm.ss").withZone(ZoneId.systemDefault());
 
-  public static final ReentrantLock deleteLock = new ReentrantLock();
+  private static final ReentrantLock deleteLock = new ReentrantLock();
 
   private static String getTempDir() {
     String tempDir = System.getProperty("java.io.tmpdir");
@@ -114,7 +114,7 @@ public class RuleGeneratorControllerHelper {
   }
 
   private static String getGGDirPathname(String subFolderName) {
-    return GRAPH_GRAMMAR_TEMP_DIR + File.separator + subFolderName + File.separator;
+    return GRAPH_GRAMMAR_TEMP_DIR + subFolderName + File.separator;
   }
 
   public static String getGGOrStateSpaceDirName(String modelName) {

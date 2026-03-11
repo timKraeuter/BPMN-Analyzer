@@ -24,7 +24,7 @@ repositories {
 dependencies {
     implementation 'no.hvl.tk:ruleGenerator:1'
 
-    // XML-marshalling not part of jdk 11 anymore.
+    // XML-marshalling removed from JDK since module system (JDK 9+).
     // https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.5'
     // https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime
@@ -47,9 +47,6 @@ dependencies {
     testImplementation 'org.apache.httpcomponents:httpmime:4.5.14'
     // https://mvnrepository.com/artifact/com.google.guava/guava
     testImplementation 'com.google.guava:guava:33.5.0-jre'
-    // https://mvnrepository.com/artifact/commons-io/commons-io
-    testImplementation 'commons-io:commons-io:2.21.0'
-
     errorprone('com.google.errorprone:error_prone_core:2.46.0')
 }
 

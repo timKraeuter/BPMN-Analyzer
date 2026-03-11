@@ -31,8 +31,8 @@ import org.springframework.web.server.ResponseStatusException;
 public class RuleGeneratorController {
 
   // Needed for custom form data deserialization
-  ObjectMapper jsonMapper = new ObjectMapper();
-  CollectionType setTypeJackson =
+  private final ObjectMapper jsonMapper = new ObjectMapper();
+  private final CollectionType setTypeJackson =
       jsonMapper.getTypeFactory().constructCollectionType(Set.class, BPMNProposition.class);
 
   /**
@@ -47,6 +47,7 @@ public class RuleGeneratorController {
       @RequestParam(value = "propositions", defaultValue = "[]") String propositions,
       HttpServletResponse response)
       throws IOException {
+    validateFilePresent(file);
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
     Path ggDir = RuleGeneratorControllerHelper.generateGGForBPMNFile(file, true).getLeft();
