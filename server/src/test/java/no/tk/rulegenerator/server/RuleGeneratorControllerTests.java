@@ -1,5 +1,6 @@
 package no.tk.rulegenerator.server;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -238,6 +239,83 @@ class RuleGeneratorControllerTests {
   }
 
   @Test
+  void testCheckAllFourBPMNSpecificProperties() throws Exception {
+    Path bpmnModelFile = getBpmnModelFile(BPMN_FILE);
+    String properties =
+        convertProps(
+            Lists.newArrayList(
+                BPMNSpecificProperty.SAFENESS,
+                BPMNSpecificProperty.OPTION_TO_COMPLETE,
+                BPMNSpecificProperty.PROPER_COMPLETION,
+                BPMNSpecificProperty.NO_DEAD_ACTIVITIES));
+
+    String response =
+        makeMultipartRequest(
+            CHECK_BPMN_SPECIFIC_PROPERTIES,
+            bpmnModelFile,
+            Pair.of(PROPERTIES_TO_BE_CHECKED, properties));
+
+    // Results should be sorted by property ordering: Safeness, Option to complete, Proper
+    // completion, No dead activities
+    assertThat(
+        response,
+        is(
+            "{\"propertyCheckingResults\":["
+                + "{\"name\":\"Safeness\",\"valid\":true,\"additionalInfo\":\"CTL: AG(!Unsafe)\"},"
+                + "{\"name\":\"Option to complete\",\"valid\":true,\"additionalInfo\":\"CTL: AF(AllTerminated)\"},"
+                + "{\"name\":\"Proper completion\",\"valid\":true,\"additionalInfo\":\"\"},"
+                + "{\"name\":\"No dead activities\",\"valid\":true,\"additionalInfo\":\"\"}"
+                + "]}"));
+  }
+
+  @Test
+  void testCheckBPMNSpecificPropertiesEmptyFile() throws Exception {
+    Pair<Integer, String> response =
+        makeMultipartRequestWithBytes(
+            CHECK_BPMN_SPECIFIC_PROPERTIES,
+            new byte[0],
+            "empty.bpmn",
+            Lists.newArrayList(
+                Pair.of(
+                    PROPERTIES_TO_BE_CHECKED,
+                    convertProps(Lists.newArrayList(BPMNSpecificProperty.NO_DEAD_ACTIVITIES)))));
+
+    // An empty file is rejected by input validation — expect a 400 Bad Request
+    assertThat(response.getLeft(), is(400));
+    assertThat(response.getRight(), containsString("BPMN file is required"));
+  }
+
+  @Test
+  void testCheckBPMNSpecificPropertiesMissingFile() throws Exception {
+    Pair<Integer, String> response =
+        makeMultipartRequestWithoutFile(CHECK_BPMN_SPECIFIC_PROPERTIES);
+
+    // Missing required file part — expect a 400 Bad Request
+    assertThat(response.getLeft(), is(400));
+    assertThat(response.getRight(), containsString("BPMN file is required"));
+  }
+
+  @Test
+  void testUploadExceedingSizeLimitIsRejected() throws Exception {
+    // Create an 11MB byte array (exceeds the 10MB max-file-size)
+    byte[] oversizedPayload = new byte[11 * 1024 * 1024];
+    Pair<Integer, String> response =
+        makeMultipartRequestWithBytes(
+            CHECK_BPMN_SPECIFIC_PROPERTIES,
+            oversizedPayload,
+            "oversized.bpmn",
+            Lists.newArrayList(
+                Pair.of(
+                    PROPERTIES_TO_BE_CHECKED,
+                    convertProps(Lists.newArrayList(BPMNSpecificProperty.NO_DEAD_ACTIVITIES)))));
+
+    // Spring should reject with a 413 Payload Too Large (or 500 wrapping MaxUploadSizeExceeded)
+    assertTrue(
+        response.getLeft() == 413 || response.getLeft() == 500,
+        "Expected 413 or 500 but got " + response.getLeft());
+  }
+
+  @Test
   void timestampFormatTest() {
     Instant instant = Instant.now().truncatedTo(ChronoUnit.SECONDS);
     MatcherAssert.assertThat(
@@ -311,5 +389,38 @@ class RuleGeneratorControllerTests {
   private String makeMultipartRequest(String url, Path bpmnModelFile, Pair<String, String> body)
       throws IOException {
     return makeMultipartRequest(url, bpmnModelFile, Lists.newArrayList(body));
+  }
+
+  private Pair<Integer, String> makeMultipartRequestWithBytes(
+      String url, byte[] fileContent, String fileName, List<Pair<String, String>> body)
+      throws IOException {
+    try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+      HttpPost uploadFile = new HttpPost(getFullUrl(url));
+      MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+      body.forEach(bodyPart -> builder.addTextBody(bodyPart.getLeft(), bodyPart.getRight()));
+      builder.addBinaryBody("file", fileContent, ContentType.APPLICATION_OCTET_STREAM, fileName);
+      uploadFile.setEntity(builder.build());
+
+      CloseableHttpResponse response = httpClient.execute(uploadFile);
+      int statusCode = response.getStatusLine().getStatusCode();
+      String responseBody =
+          IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset());
+      return Pair.of(statusCode, responseBody);
+    }
+  }
+
+  private Pair<Integer, String> makeMultipartRequestWithoutFile(String url) throws IOException {
+    try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+      HttpPost uploadFile = new HttpPost(getFullUrl(url));
+      MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+      builder.addTextBody("dummy", "value");
+      uploadFile.setEntity(builder.build());
+
+      CloseableHttpResponse response = httpClient.execute(uploadFile);
+      int statusCode = response.getStatusLine().getStatusCode();
+      String responseBody =
+          IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset());
+      return Pair.of(statusCode, responseBody);
+    }
   }
 }

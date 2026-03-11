@@ -21,8 +21,10 @@ import no.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import no.tk.rulegenerator.server.endpoint.verification.BPMNModelChecker;
 import no.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -85,6 +87,7 @@ public class RuleGeneratorController {
   @PostMapping(value = "/checkBPMNSpecificProperties")
   public BPMNSpecificPropertyCheckingResponse checkBPMNSpecificProperties(
       @ModelAttribute BPMNSpecificPropertyCheckingRequest request) throws IOException {
+    validateFilePresent(request.file());
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
     Pair<Path, BPMNCollaboration> result =
@@ -108,6 +111,7 @@ public class RuleGeneratorController {
   @PostMapping(value = "/checkTemporalLogic")
   public ModelCheckingResponse checkTemporalLogicProperty(
       @ModelAttribute ModelCheckingRequest request) throws IOException {
+    validateFilePresent(request.file());
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
     Pair<Path, BPMNCollaboration> dirAndCollaboration =
@@ -131,5 +135,11 @@ public class RuleGeneratorController {
       return Collections.emptySet();
     }
     return jsonMapper.readValue(propositions, setTypeJackson);
+  }
+
+  private static void validateFilePresent(MultipartFile file) {
+    if (file == null || file.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A BPMN file is required.");
+    }
   }
 }

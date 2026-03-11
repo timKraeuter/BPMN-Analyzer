@@ -2,6 +2,7 @@ package no.tk.rulegenerator.server.endpoint.verification;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -18,6 +19,7 @@ import no.tk.rulegenerator.server.endpoint.dtos.BPMNPropertyCheckingResult;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResponse;
 import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -67,6 +69,89 @@ class BPMNModelCheckerTest {
         is(
             List.of(
                 new BPMNPropertyCheckingResult(BPMNSpecificProperty.PROPER_COMPLETION, true, ""))));
+  }
+
+  @Test
+  void checkNoDeadActivitiesWithDeadActivities() throws Exception {
+    // Given
+    BPMNCollaboration bpmnCollaboration = readBPMNModel("ruleGeneratorController/dead.bpmn");
+    Path ggDir = generateGG(bpmnCollaboration);
+
+    // When
+    BPMNModelChecker bpmnModelChecker = new BPMNModelChecker(ggDir, bpmnCollaboration);
+    BPMNSpecificPropertyCheckingResponse result =
+        bpmnModelChecker.checkBPMNProperties(Set.of(BPMNSpecificProperty.NO_DEAD_ACTIVITIES));
+
+    // Then
+    List<BPMNPropertyCheckingResult> results = result.propertyCheckingResults();
+    assertThat(results.size(), is(1));
+    BPMNPropertyCheckingResult noDeadResult = results.getFirst();
+    assertThat(noDeadResult.name(), is(BPMNSpecificProperty.NO_DEAD_ACTIVITIES));
+    assertFalse(noDeadResult.valid());
+    // The additional info should contain the dead activity IDs
+    assertFalse(noDeadResult.additionalInfo().isEmpty());
+  }
+
+  @Test
+  void checkNoDeadActivitiesAllAlive() throws Exception {
+    // Given
+    BPMNCollaboration bpmnCollaboration =
+        readBPMNModel("ruleGeneratorController/name-with-numbers.bpmn");
+    Path ggDir = generateGG(bpmnCollaboration);
+
+    // When
+    BPMNModelChecker bpmnModelChecker = new BPMNModelChecker(ggDir, bpmnCollaboration);
+    BPMNSpecificPropertyCheckingResponse result =
+        bpmnModelChecker.checkBPMNProperties(Set.of(BPMNSpecificProperty.NO_DEAD_ACTIVITIES));
+
+    // Then
+    assertThat(
+        result.propertyCheckingResults(),
+        is(
+            List.of(
+                new BPMNPropertyCheckingResult(
+                    BPMNSpecificProperty.NO_DEAD_ACTIVITIES, true, ""))));
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"no-proper-completion-3-unsafe"})
+  void checkSafenessNotFulfilled(String fileName) throws Exception {
+    // Given
+    BPMNCollaboration bpmnCollaboration = readProperCompletionBPMNFile(fileName);
+    Path ggDir = generateGG(bpmnCollaboration);
+
+    // When
+    BPMNModelChecker bpmnModelChecker = new BPMNModelChecker(ggDir, bpmnCollaboration);
+    BPMNSpecificPropertyCheckingResponse result =
+        bpmnModelChecker.checkBPMNProperties(Set.of(BPMNSpecificProperty.SAFENESS));
+
+    // Then
+    List<BPMNPropertyCheckingResult> results = result.propertyCheckingResults();
+    assertThat(results.size(), is(1));
+    BPMNPropertyCheckingResult safenessResult = results.getFirst();
+    assertThat(safenessResult.name(), is(BPMNSpecificProperty.SAFENESS));
+    assertFalse(safenessResult.valid());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"proper-completion-1", "proper-completion-2"})
+  void checkSafenessFulfilled(String fileName) throws Exception {
+    // Given
+    BPMNCollaboration bpmnCollaboration = readProperCompletionBPMNFile(fileName);
+    Path ggDir = generateGG(bpmnCollaboration);
+
+    // When
+    BPMNModelChecker bpmnModelChecker = new BPMNModelChecker(ggDir, bpmnCollaboration);
+    BPMNSpecificPropertyCheckingResponse result =
+        bpmnModelChecker.checkBPMNProperties(Set.of(BPMNSpecificProperty.SAFENESS));
+
+    // Then
+    assertThat(
+        result.propertyCheckingResults(),
+        is(
+            List.of(
+                new BPMNPropertyCheckingResult(
+                    BPMNSpecificProperty.SAFENESS, true, "CTL: AG(!Unsafe)"))));
   }
 
   private static Path generateGG(BPMNCollaboration bpmnCollaboration) {
