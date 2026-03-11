@@ -19,6 +19,7 @@ import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResp
 import no.tk.rulegenerator.server.endpoint.dtos.ModelCheckingRequest;
 import no.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import no.tk.rulegenerator.server.endpoint.verification.BPMNModelChecker;
+import no.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -83,15 +84,19 @@ public class RuleGeneratorController {
    */
   @PostMapping(value = "/checkBPMNSpecificProperties")
   public BPMNSpecificPropertyCheckingResponse checkBPMNSpecificProperties(
-      @ModelAttribute BPMNSpecificPropertyCheckingRequest request)
-      throws IOException, InterruptedException {
+      @ModelAttribute BPMNSpecificPropertyCheckingRequest request) throws IOException {
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
     Pair<Path, BPMNCollaboration> result =
         RuleGeneratorControllerHelper.generateGGForBPMNFile(request.file(), false);
 
-    return new BPMNModelChecker(result.getLeft(), result.getRight())
-        .checkBPMNProperties(request.propertiesToBeChecked());
+    try {
+      return new BPMNModelChecker(result.getLeft(), result.getRight())
+          .checkBPMNProperties(request.propertiesToBeChecked());
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ModelCheckingException("Model checking was interrupted.");
+    }
   }
 
   /**
@@ -102,7 +107,7 @@ public class RuleGeneratorController {
    */
   @PostMapping(value = "/checkTemporalLogic")
   public ModelCheckingResponse checkTemporalLogicProperty(
-      @ModelAttribute ModelCheckingRequest request) throws IOException, InterruptedException {
+      @ModelAttribute ModelCheckingRequest request) throws IOException {
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
     Pair<Path, BPMNCollaboration> dirAndCollaboration =
@@ -111,8 +116,13 @@ public class RuleGeneratorController {
     RuleGeneratorControllerHelper.generatePropositions(
         dirAndCollaboration.getLeft(), readPropositionsFromJSON(request.propositions()), false);
 
-    return new BPMNModelChecker(dirAndCollaboration.getLeft(), dirAndCollaboration.getRight())
-        .checkTemporalLogicProperty(request.logic(), request.property());
+    try {
+      return new BPMNModelChecker(dirAndCollaboration.getLeft(), dirAndCollaboration.getRight())
+          .checkTemporalLogicProperty(request.logic(), request.property());
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ModelCheckingException("Model checking was interrupted.");
+    }
   }
 
   private Set<BPMNProposition> readPropositionsFromJSON(String propositions)

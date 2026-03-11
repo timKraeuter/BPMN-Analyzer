@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.Set;
 import java.util.UUID;
@@ -74,16 +75,22 @@ public class RuleGeneratorControllerHelper {
 
   private static void deleteIfOlderThan(Path timestampedFile, Instant oneHourBefore)
       throws IOException {
-    String timeStampString =
-        timestampedFile
-            .getFileName()
-            .toString()
-            .substring(0, timestampedFile.getFileName().toString().indexOf("_"));
-    Instant fileTimeStamp = DTF.parse(timeStampString, Instant::from);
+    String fileName = timestampedFile.getFileName().toString();
+    int firstUnderscore = fileName.indexOf("_");
+    if (firstUnderscore < 0) {
+      logger.warn("Skipping file with unexpected name format: {}", fileName);
+      return;
+    }
+    try {
+      String timeStampString = fileName.substring(0, firstUnderscore);
+      Instant fileTimeStamp = DTF.parse(timeStampString, Instant::from);
 
-    if (fileTimeStamp.isBefore(oneHourBefore)) {
-      logger.info("Deleting old generated files at {}", timestampedFile);
-      PathUtils.delete(timestampedFile);
+      if (fileTimeStamp.isBefore(oneHourBefore)) {
+        logger.info("Deleting old generated files at {}", timestampedFile);
+        PathUtils.delete(timestampedFile);
+      }
+    } catch (DateTimeParseException e) {
+      logger.warn("Skipping file with unparseable timestamp: {}", fileName);
     }
   }
 
@@ -116,7 +123,12 @@ public class RuleGeneratorControllerHelper {
 
   public static String getGGOrStateSpaceDirName(String modelName, Instant time) {
     String timestamp = DTF.format(time.truncatedTo(ChronoUnit.SECONDS));
-    return String.format("%s_%s_%s", timestamp, UUID.randomUUID(), modelName);
+    return String.format("%s_%s_%s", timestamp, UUID.randomUUID(), sanitizeModelName(modelName));
+  }
+
+  private static String sanitizeModelName(String modelName) {
+    // Remove path separators and null bytes to prevent path traversal
+    return modelName.replace("/", "_").replace("\\", "_").replace("\0", "_").replace("..", "_");
   }
 
   public static void generatePropositions(Path ggFolder, Set<BPMNProposition> props, boolean layout)
