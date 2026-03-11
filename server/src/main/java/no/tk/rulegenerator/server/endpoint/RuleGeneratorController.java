@@ -93,7 +93,7 @@ public class RuleGeneratorController {
     try {
       return new BPMNModelChecker(result.getLeft(), result.getRight())
           .checkBPMNProperties(request.propertiesToBeChecked());
-    } catch (InterruptedException e) {
+    } catch (InterruptedException _) {
       Thread.currentThread().interrupt();
       throw new ModelCheckingException("Model checking was interrupted.");
     }
@@ -119,7 +119,7 @@ public class RuleGeneratorController {
     try {
       return new BPMNModelChecker(dirAndCollaboration.getLeft(), dirAndCollaboration.getRight())
           .checkTemporalLogicProperty(request.logic(), request.property());
-    } catch (InterruptedException e) {
+    } catch (InterruptedException _) {
       Thread.currentThread().interrupt();
       throw new ModelCheckingException("Model checking was interrupted.");
     }

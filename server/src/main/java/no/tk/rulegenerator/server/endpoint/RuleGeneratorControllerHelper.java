@@ -89,7 +89,7 @@ public class RuleGeneratorControllerHelper {
         logger.info("Deleting old generated files at {}", timestampedFile);
         PathUtils.delete(timestampedFile);
       }
-    } catch (DateTimeParseException e) {
+    } catch (DateTimeParseException _) {
       logger.warn("Skipping file with unparseable timestamp: {}", fileName);
     }
   }
