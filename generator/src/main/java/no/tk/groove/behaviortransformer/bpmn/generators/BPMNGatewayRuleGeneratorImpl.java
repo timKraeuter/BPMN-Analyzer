@@ -1,7 +1,12 @@
 package no.tk.groove.behaviortransformer.bpmn.generators;
 
 import static no.tk.groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
-import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.DECISION;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.DECISIONS;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.POSITION;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TOKENS;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_DECISION;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_TOKEN;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.addOutgoingTokensForFlowNodeToProcessInstance;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteFlowNodeToken;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteSequenceFlowToken;
@@ -11,7 +16,11 @@ import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelpe
 import com.google.common.collect.Sets;
 import io.github.timkraeuter.groove.graph.GrooveNode;
 import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,7 +28,11 @@ import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.FlowNode;
 import no.tk.behavior.bpmn.SequenceFlow;
 import no.tk.behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
-import no.tk.behavior.bpmn.gateways.*;
+import no.tk.behavior.bpmn.gateways.EventBasedGateway;
+import no.tk.behavior.bpmn.gateways.ExclusiveGateway;
+import no.tk.behavior.bpmn.gateways.Gateway;
+import no.tk.behavior.bpmn.gateways.InclusiveGateway;
+import no.tk.behavior.bpmn.gateways.ParallelGateway;
 import no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper;
 
 public class BPMNGatewayRuleGeneratorImpl implements BPMNGatewayRuleGenerator {

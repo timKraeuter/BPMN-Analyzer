@@ -91,7 +91,10 @@ tasks.compileJava {
 
 spotless {
     java {
-        googleJavaFormat()
+        importOrder('', '\\#')
+        removeUnusedImports()
+        forbidWildcardImports()
+        googleJavaFormat().reorderImports(false)
         formatAnnotations()
     }
 }

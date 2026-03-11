@@ -1,7 +1,13 @@
 package no.tk.maude.behaviortransformer.bpmn.generators;
 
-import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.*;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_OTHER_SUBPROCESSES;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_OTHER_TOKENS;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_SIGNALS;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_SUBPROCESSES;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_TOKENS;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ENQUOTE_FORMAT;
 import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.NONE;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.RUNNING;
 
 import java.util.function.Consumer;
 import java.util.stream.Collectors;

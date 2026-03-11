@@ -2,7 +2,16 @@ package no.tk.maude.generation;
 
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.CONFIGURATION;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.MESSAGES;
-import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.*;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_MESSAGES;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_OTHER_MESSAGES;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ANY_OTHER_PROCESSES;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.BPMN_SYSTEM;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.BRACKET_FORMAT;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.ENQUOTE_FORMAT;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.NONE;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.PROCESSES;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.PS;
+import static no.tk.maude.behaviortransformer.bpmn.BPMNToMaudeTransformerConstants.WHITE_SPACE;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;

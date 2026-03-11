@@ -11,7 +11,16 @@ import java.util.stream.Stream;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
 import no.tk.behavior.bpmn.BPMNCollaboration;
 import no.tk.behavior.bpmn.BPMNProcess;
-import no.tk.groove.behaviortransformer.bpmn.generators.*;
+import no.tk.groove.behaviortransformer.bpmn.generators.BPMNEventRuleGenerator;
+import no.tk.groove.behaviortransformer.bpmn.generators.BPMNEventRuleGeneratorImpl;
+import no.tk.groove.behaviortransformer.bpmn.generators.BPMNEventSubprocessRuleGenerator;
+import no.tk.groove.behaviortransformer.bpmn.generators.BPMNEventSubprocessRuleGeneratorImpl;
+import no.tk.groove.behaviortransformer.bpmn.generators.BPMNGatewayRuleGenerator;
+import no.tk.groove.behaviortransformer.bpmn.generators.BPMNGatewayRuleGeneratorImpl;
+import no.tk.groove.behaviortransformer.bpmn.generators.BPMNSubprocessRuleGenerator;
+import no.tk.groove.behaviortransformer.bpmn.generators.BPMNSubprocessRuleGeneratorImpl;
+import no.tk.groove.behaviortransformer.bpmn.generators.BPMNTaskRuleGenerator;
+import no.tk.groove.behaviortransformer.bpmn.generators.BPMNTaskRuleGeneratorImpl;
 
 public class BPMNRuleGenerator {
   private final GrooveRuleBuilder ruleBuilder;

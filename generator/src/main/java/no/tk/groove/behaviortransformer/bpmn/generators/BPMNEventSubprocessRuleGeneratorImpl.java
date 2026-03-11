@@ -1,7 +1,10 @@
 package no.tk.groove.behaviortransformer.bpmn.generators;
 
 import static no.tk.groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
-import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.*;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.END;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.POSITION;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.SUBPROCESS;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.TYPE_MESSAGE;
 
 import io.github.timkraeuter.groove.graph.GrooveNode;
 import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;

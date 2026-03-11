@@ -15,12 +15,12 @@ public class BooleanBinaryExpression extends BooleanExpression implements Binary
       BooleanVariable operand2,
       BooleanBinaryOperator operator,
       BooleanVariable assignee) {
-    super(assignee);
     if (assignee.getName().equals(operand1.getName())
         || assignee.getName().equals(operand2.getName())) {
       throw new IllegalArgumentException(
           "Assignee is not allowed to be equal to operand1 or operand2!");
     }
+    super(assignee);
     this.operator = operator;
     this.operand1 = operand1;
     this.operand2 = operand2;

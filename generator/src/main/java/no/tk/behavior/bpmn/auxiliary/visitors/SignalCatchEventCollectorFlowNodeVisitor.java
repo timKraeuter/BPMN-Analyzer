@@ -8,7 +8,13 @@ import no.tk.behavior.bpmn.activities.CallActivity;
 import no.tk.behavior.bpmn.activities.tasks.ReceiveTask;
 import no.tk.behavior.bpmn.activities.tasks.SendTask;
 import no.tk.behavior.bpmn.activities.tasks.Task;
-import no.tk.behavior.bpmn.events.*;
+import no.tk.behavior.bpmn.events.BoundaryEvent;
+import no.tk.behavior.bpmn.events.BoundaryEventType;
+import no.tk.behavior.bpmn.events.Event;
+import no.tk.behavior.bpmn.events.IntermediateCatchEvent;
+import no.tk.behavior.bpmn.events.IntermediateCatchEventType;
+import no.tk.behavior.bpmn.events.StartEvent;
+import no.tk.behavior.bpmn.events.StartEventType;
 import no.tk.behavior.bpmn.events.definitions.EventDefinition;
 import org.apache.commons.lang3.tuple.Pair;
 

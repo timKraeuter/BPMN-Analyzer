@@ -1,6 +1,10 @@
 package no.tk.behavior.picalculus;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class MultiarySum implements Sum {
   private final Set<Sum> sums;

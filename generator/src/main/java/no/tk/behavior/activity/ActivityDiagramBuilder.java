@@ -18,12 +18,7 @@ public class ActivityDiagramBuilder {
 
   public ActivityDiagram build() {
     return new ActivityDiagram(
-        this.name,
-        this.initialNode,
-        this.inputVariables,
-        this.localVariables,
-        this.nodes
-    );
+        this.name, this.initialNode, this.inputVariables, this.localVariables, this.nodes);
   }
 
   public ActivityDiagramBuilder setName(String name) {

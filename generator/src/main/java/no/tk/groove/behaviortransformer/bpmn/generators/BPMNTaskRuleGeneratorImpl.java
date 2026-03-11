@@ -2,8 +2,17 @@ package no.tk.groove.behaviortransformer.bpmn.generators;
 
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.END;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerConstants.START;
-import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.*;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.addFlowNodeToken;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.addSendMessageBehaviorForFlowNode;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.addSequenceFlowToken;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.addTokensForOutgoingFlowsToRunningInstance;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.contextFlowNodeToken;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.contextProcessInstance;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteFlowNodeToken;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteMessageToProcessInstanceWithPosition;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.deleteSequenceFlowToken;
 import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.getFlowNodeRuleName;
+import static no.tk.groove.behaviortransformer.bpmn.BPMNToGrooveTransformerHelper.isAfterInstantiateEventBasedGateway;
 
 import io.github.timkraeuter.groove.graph.GrooveNode;
 import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;

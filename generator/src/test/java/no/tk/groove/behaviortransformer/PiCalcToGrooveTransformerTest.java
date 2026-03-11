@@ -7,7 +7,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import no.tk.behavior.picalculus.*;
+import no.tk.behavior.picalculus.EmptySum;
+import no.tk.behavior.picalculus.MultiarySum;
+import no.tk.behavior.picalculus.NameRestriction;
+import no.tk.behavior.picalculus.NamedPiProcess;
+import no.tk.behavior.picalculus.Parallelism;
+import no.tk.behavior.picalculus.Prefix;
+import no.tk.behavior.picalculus.PrefixType;
+import no.tk.behavior.picalculus.PrefixedProcess;
 import no.tk.util.FileTestHelper;
 import org.junit.jupiter.api.Test;
 
