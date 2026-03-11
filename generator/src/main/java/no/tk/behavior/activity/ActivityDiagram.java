@@ -4,7 +4,6 @@ import java.util.Set;
 import java.util.stream.Stream;
 import no.tk.behavior.Behavior;
 import no.tk.behavior.BehaviorVisitor;
-import no.tk.behavior.activity.edges.ControlFlow;
 import no.tk.behavior.activity.nodes.ActivityNode;
 import no.tk.behavior.activity.nodes.InitialNode;
 import no.tk.behavior.activity.variables.Variable;
@@ -15,7 +14,6 @@ public class ActivityDiagram implements Behavior {
 
   private final InitialNode initialNode;
   private final Set<ActivityNode> nodes;
-  private final Set<ControlFlow> edges;
 
   private final Set<Variable<?>> inputVariables;
   private final Set<Variable<?>> localVariables;
@@ -25,14 +23,12 @@ public class ActivityDiagram implements Behavior {
       InitialNode initialNode,
       Set<Variable<?>> inputVariables,
       Set<Variable<?>> localVariables,
-      Set<ActivityNode> nodes,
-      Set<ControlFlow> edges) {
+      Set<ActivityNode> nodes) {
     this.name = name;
     this.initialNode = initialNode;
     this.inputVariables = inputVariables;
     this.localVariables = localVariables;
     this.nodes = nodes;
-    this.edges = edges;
   }
 
   public InitialNode getInitialNode() {

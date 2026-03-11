@@ -22,8 +22,8 @@ public class ActivityDiagramBuilder {
         this.initialNode,
         this.inputVariables,
         this.localVariables,
-        this.nodes,
-        this.edges);
+        this.nodes
+    );
   }
 
   public ActivityDiagramBuilder setName(String name) {
