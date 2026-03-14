@@ -22,9 +22,4 @@ public record Pair<L, R>(L left, R right) {
   public R getRight() {
     return right;
   }
-
-  /** Returns the left element (alias for {@link #left()}). */
-  public L getKey() {
-    return left;
-  }
 }

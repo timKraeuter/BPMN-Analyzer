@@ -179,7 +179,7 @@ public class BPMNModelChecker {
       }
     }
 
-    String transitionSource = currentTransition.getKey();
+    String transitionSource = currentTransition.getLeft();
     if (transitionSource.equals(startState)) {
       return Optional.empty();
     }
