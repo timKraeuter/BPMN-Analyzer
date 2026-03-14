@@ -43,7 +43,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run tests
-        run: npm run test -- --watch=false --browsers=ChromeHeadless
+        run: npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-report
+          path: generation-ui/coverage/generation-ui/lcov.info
 
   e2e:
     name: Run E2E tests
@@ -72,10 +77,16 @@ jobs:
   sonarcloud:
     name: Analyze ui
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Download coverage report
+        uses: actions/download-artifact@v7
+        with:
+          name: coverage-report
+          path: generation-ui/coverage/generation-ui
       - name: SonarCloud Scan
         continue-on-error: true
         uses: SonarSource/sonarqube-scan-action@master
