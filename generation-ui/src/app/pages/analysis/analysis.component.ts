@@ -1,14 +1,9 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {
-    BPMNProperty,
-    AnalysisResultComponent,
-} from '../../components/analysis-result/analysis-result.component';
-import {
-    ModelCheckingResponse,
-    ModelCheckingService,
-} from '../../services/model-checking.service';
+import { AnalysisResultComponent } from '../../components/analysis-result/analysis-result.component';
+import { BPMNProperty } from '../../models/bpmn-property';
+import { ModelCheckingResponse } from '../../models/model-checking-response';
+import { ModelCheckingService } from '../../services/model-checking.service';
 import { TemporalLogicSyntaxComponent } from '../../components/temporal-logic-syntax/temporal-logic-syntax.component';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -33,7 +28,6 @@ import { saveAs } from 'file-saver-es';
     templateUrl: './analysis.component.html',
     styleUrls: ['./analysis.component.scss'],
     imports: [
-        CommonModule,
         FormsModule,
         MatCardModule,
         MatButtonModule,
@@ -92,7 +86,6 @@ export class AnalysisComponent {
     // CTL property checking
     public ctlProperty: string = '';
     public ctlPropertyResult: ModelCheckingResponse | undefined;
-    public ltlProperty: string = '';
 
     constructor(
         private readonly bpmnModeler: BPMNModelerService,
@@ -113,7 +106,7 @@ export class AnalysisComponent {
                     const errorObject = JSON.parse(
                         new TextDecoder().decode(error.error),
                     );
-                    console.log(errorObject);
+                    console.error(errorObject);
                     this.snackBar.open(errorObject.message, 'close');
                 },
                 next: (data: ArrayBuffer) => {
@@ -135,7 +128,7 @@ export class AnalysisComponent {
     }
 
     async checkBPMNSpecificPropertiesClicked() {
-        if (this.bpmnSpecificPropertiesToBeChecked.length == 0) {
+        if (this.bpmnSpecificPropertiesToBeChecked.length === 0) {
             this.snackBar.open(
                 'Please select at least one property for verification.',
                 'close',
@@ -167,16 +160,6 @@ export class AnalysisComponent {
                 },
             })
             .add(() => this.setVerificationRunning(false));
-    }
-
-    checkLTLPropertyClicked() {
-        this.snackBar.open(
-            'Checking LTL properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/.',
-            'close',
-            {
-                duration: 5000,
-            },
-        );
     }
 
     temporalLogicInfoClicked() {

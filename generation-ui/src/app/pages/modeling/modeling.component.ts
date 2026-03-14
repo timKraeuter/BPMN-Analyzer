@@ -43,8 +43,10 @@ export class ModelingComponent {
     }
 
     async uploadBPMN(event: Event) {
-        // @ts-ignore
-        let file = (event.target as HTMLInputElement).files[0];
+        const file = (event.target as HTMLInputElement).files?.[0];
+        if (!file) {
+            return;
+        }
         // Remove file extension: https://stackoverflow.com/questions/4250364/how-to-trim-a-file-extension-from-a-string-in-javascript
         this.sharedState.modelFileName = file.name.replace(/\.[^/.]+$/, '');
         const fileText: string = await file.text();

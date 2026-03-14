@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Proposition } from '../models/proposition';
 
 @Injectable({
     providedIn: 'root',
@@ -10,9 +11,4 @@ export class SharedStateService {
     getPropositionNames(): string[] {
         return this.propositions.map((proposition) => proposition.name);
     }
-}
-
-export interface Proposition {
-    name: string;
-    xml: string;
 }

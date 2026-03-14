@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { Proposition } from './shared-state.service';
+import { ModelCheckingResponse } from '../models/model-checking-response';
+import { Proposition } from '../models/proposition';
 
 const baseURL = environment.production
     ? globalThis.location.href
@@ -59,17 +60,5 @@ export class ModelCheckingService {
             checkTemporalLogicPropertyURL,
             formData,
         );
-    }
-}
-
-export class ModelCheckingResponse {
-    constructor(
-        public property: string,
-        public valid: boolean,
-        public error: string,
-    ) {
-        this.property = property;
-        this.valid = valid;
-        this.error = error;
     }
 }

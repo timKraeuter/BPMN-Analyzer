@@ -1,9 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {
-    AnalysisResultComponent,
-    BPMNProperty,
-} from './analysis-result.component';
+import { AnalysisResultComponent } from './analysis-result.component';
+import { BPMNProperty } from '../../models/bpmn-property';
 
 describe('AnalysisResultComponent', () => {
     let component: AnalysisResultComponent;
@@ -40,7 +38,11 @@ describe('AnalysisResultComponent', () => {
 
 describe('BPMNProperty', () => {
     it('should construct with name and valid', () => {
-        const prop = new BPMNProperty('Safeness', true);
+        const prop: BPMNProperty = {
+            name: 'Safeness',
+            valid: true,
+            additionalInfo: '',
+        };
 
         expect(prop.name).toBe('Safeness');
         expect(prop.valid).toBeTrue();
@@ -48,11 +50,11 @@ describe('BPMNProperty', () => {
     });
 
     it('should construct with additionalInfo', () => {
-        const prop = new BPMNProperty(
-            'No dead activities',
-            false,
-            'Activity_1,Activity_2',
-        );
+        const prop: BPMNProperty = {
+            name: 'No dead activities',
+            valid: false,
+            additionalInfo: 'Activity_1,Activity_2',
+        };
 
         expect(prop.name).toBe('No dead activities');
         expect(prop.valid).toBeFalse();

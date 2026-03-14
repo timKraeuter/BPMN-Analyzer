@@ -8,10 +8,8 @@ import {
     provideHttpClientTesting,
 } from '@angular/common/http/testing';
 
-import {
-    ModelCheckingService,
-    ModelCheckingResponse,
-} from './model-checking.service';
+import { ModelCheckingService } from './model-checking.service';
+import { ModelCheckingResponse } from '../models/model-checking-response';
 
 describe('ModelCheckingService', () => {
     let service: ModelCheckingService;
@@ -124,18 +122,22 @@ describe('ModelCheckingService', () => {
 
     describe('ModelCheckingResponse', () => {
         it('should construct with all fields', () => {
-            const response = new ModelCheckingResponse('AG(!Unsafe)', true, '');
+            const response: ModelCheckingResponse = {
+                property: 'AG(!Unsafe)',
+                valid: true,
+                error: '',
+            };
             expect(response.property).toBe('AG(!Unsafe)');
             expect(response.valid).toBeTrue();
             expect(response.error).toBe('');
         });
 
         it('should construct with error', () => {
-            const response = new ModelCheckingResponse(
-                'G(!Unsafe)',
-                false,
-                'Invalid syntax',
-            );
+            const response: ModelCheckingResponse = {
+                property: 'G(!Unsafe)',
+                valid: false,
+                error: 'Invalid syntax',
+            };
             expect(response.property).toBe('G(!Unsafe)');
             expect(response.valid).toBeFalse();
             expect(response.error).toBe('Invalid syntax');

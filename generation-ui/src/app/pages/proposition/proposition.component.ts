@@ -1,13 +1,11 @@
 import { Component, HostListener } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 // @ts-ignore
 import { saveAs } from 'file-saver-es';
 import { BPMN_FILE_EXTENSION } from '../modeling/modeling.component';
-import {
-    Proposition,
-    SharedStateService,
-} from '../../services/shared-state.service';
+import { Proposition } from '../../models/proposition';
+import { SharedStateService } from '../../services/shared-state.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RenamePropositionDialogComponent } from '../../components/rename-proposition-dialog/rename-proposition-dialog.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -25,7 +23,7 @@ export const SVG_FILE_EXTENSION = '.svg';
     templateUrl: './proposition.component.html',
     styleUrls: ['./proposition.component.scss'],
     imports: [
-        CommonModule,
+        NgClass,
         MatCardModule,
         MatButtonModule,
         MatIconModule,
@@ -76,8 +74,10 @@ export class PropositionComponent {
     }
 
     async uploadTokenModel(event: Event) {
-        // @ts-ignore
-        let file = (event.target as HTMLInputElement).files[0];
+        const file = (event.target as HTMLInputElement).files?.[0];
+        if (!file) {
+            return;
+        }
         const fileText: string = await file.text();
 
         await this.modeler.getTokenModeler().importXML(fileText);
@@ -157,11 +157,13 @@ export class PropositionComponent {
     async propositionDown(event: Event) {
         if (
             event.target &&
-            // @ts-ignore Do not step forward when inputting something in the panel.
-            event.target.className !== 'bio-properties-panel-input'
+            // Do not step forward when inputting something in the panel.
+            !(event.target as HTMLElement).classList.contains(
+                'bio-properties-panel-input',
+            )
         ) {
             const currentIndex = this.propositions.findIndex(
-                (proposition) => proposition == this.currentProposition,
+                (proposition) => proposition === this.currentProposition,
             );
             const nextProposition = this.propositions[currentIndex + 1];
             if (nextProposition) {
@@ -174,11 +176,13 @@ export class PropositionComponent {
     async propositionUp(event: Event) {
         if (
             event.target &&
-            // @ts-ignore Do not step forward when inputting something in the panel.
-            event.target.className !== 'bio-properties-panel-input'
+            // Do not step forward when inputting something in the panel.
+            !(event.target as HTMLElement).classList.contains(
+                'bio-properties-panel-input',
+            )
         ) {
             const currentIndex = this.propositions.findIndex(
-                (proposition) => proposition == this.currentProposition,
+                (proposition) => proposition === this.currentProposition,
             );
             const nextProposition = this.propositions[currentIndex - 1];
             if (nextProposition) {

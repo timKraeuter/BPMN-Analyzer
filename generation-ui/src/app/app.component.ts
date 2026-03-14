@@ -40,11 +40,11 @@ export class AppComponent {
     }
 
     private changedToAnalyzeStep(event: StepperSelectionEvent) {
-        return event.selectedIndex == 2;
+        return event.selectedIndex === 2;
     }
 
     private changedToPropositionStep(event: StepperSelectionEvent) {
-        return event.selectedIndex == 1;
+        return event.selectedIndex === 1;
     }
 
     @HostListener('document:keydown.ArrowRight', ['$event'])
