@@ -31,9 +31,14 @@ import org.springframework.web.server.ResponseStatusException;
 public class RuleGeneratorController {
 
   // Needed for custom form data deserialization
-  private final ObjectMapper jsonMapper = new ObjectMapper();
-  private final CollectionType setTypeJackson =
-      jsonMapper.getTypeFactory().constructCollectionType(Set.class, BPMNProposition.class);
+  private final ObjectMapper jsonMapper;
+  private final CollectionType setTypeJackson;
+
+  public RuleGeneratorController(ObjectMapper jsonMapper) {
+    this.jsonMapper = jsonMapper;
+    this.setTypeJackson =
+        jsonMapper.getTypeFactory().constructCollectionType(Set.class, BPMNProposition.class);
+  }
 
   /**
    * Generate a graph grammar for a given BPMN file.

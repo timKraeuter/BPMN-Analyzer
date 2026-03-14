@@ -24,7 +24,7 @@ This will start the application at [localhost:8080](http://localhost:8080/).
 Run the application (execute in this directory):
 
 ```bash
-java -jar libs/ruleGeneratorServer-2.0.0.jar
+java -jar libs/ruleGeneratorServer-2.0.1.jar
 ```
 
 This will start the application at [localhost:8080](http://localhost:8080/).
@@ -32,7 +32,7 @@ This will start the application at [localhost:8080](http://localhost:8080/).
 Run the application on a specific port, for example, 4300:
 
 ```bash
-java -jar libs/ruleGeneratorServer-2.0.0.jar --server.port=4300
+java -jar libs/ruleGeneratorServer-2.0.1.jar --server.port=4300
 ```
 
 This will start the application with the specified port.

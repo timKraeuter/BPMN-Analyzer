@@ -70,7 +70,8 @@ public class BPMNModelChecker {
   private final GrooveJarRunner grooveJarRunner = new GrooveJarRunner();
   private String stateSpace = "";
   private final BPMNCollaboration bpmnModel;
-  protected static final Logger logger = LoggerFactory.getLogger(BPMNModelChecker.class);
+  private final Map<String, Pattern> incomingTransitionPatternCache = new HashMap<>();
+  private static final Logger logger = LoggerFactory.getLogger(BPMNModelChecker.class);
 
   public BPMNModelChecker(Path graphGrammarDir, BPMNCollaboration bpmnModel) {
     this.graphGrammarDir = graphGrammarDir;
@@ -158,24 +159,23 @@ public class BPMNModelChecker {
     String startState = getStartState(stateSpace);
 
     return checkIncomingTransitionsForNode(
-        startState, stateSpace, endEventNames, new HashMap<>(), terminatedStateId);
+        startState, stateSpace, endEventNames, new HashSet<>(), terminatedStateId);
   }
 
   private Optional<String> checkTransitionAndItsSource(
       String startState,
       String stateSpace,
       Set<String> endEventNames,
-      Map<String, Boolean> seenEndEvents,
+      Set<String> seenEndEvents,
       Pair<String, String> currentTransition) {
     String transitionLabel = currentTransition.getRight();
     // Check the label
     for (String endEventName : endEventNames) {
       if (transitionLabel.equals(endEventName) || transitionLabel.startsWith(endEventName + "_")) {
-        Boolean seen = seenEndEvents.get(endEventName);
-        if (seen != null) {
+        if (seenEndEvents.contains(endEventName)) {
           return Optional.of(endEventName);
         }
-        seenEndEvents.put(endEventName, true);
+        seenEndEvents.add(endEventName);
       }
     }
 
@@ -193,7 +193,7 @@ public class BPMNModelChecker {
       String startState,
       String stateSpace,
       Set<String> endEventNames,
-      Map<String, Boolean> seenEndEvents,
+      Set<String> seenEndEvents,
       String node) {
     Set<Pair<String, String>> incomingTransitions = getIncomingTransitions(node, stateSpace);
     for (Pair<String, String> incomingTransition : incomingTransitions) {
@@ -202,7 +202,7 @@ public class BPMNModelChecker {
               startState,
               stateSpace,
               endEventNames,
-              new HashMap<>(seenEndEvents),
+              new HashSet<>(seenEndEvents),
               incomingTransition);
       if (endEventName.isPresent()) {
         return endEventName;
@@ -213,14 +213,17 @@ public class BPMNModelChecker {
 
   private Set<Pair<String, String>> getIncomingTransitions(String nodeId, String stateSpace) {
     Pattern regEx =
-        Pattern.compile(
-            String.format(
-                """
-            <edge from="(.*)" to="%s">
-            \\s*<attr name="label">
-            \\s*<string>(.*)</string>
-            """,
-                nodeId));
+        incomingTransitionPatternCache.computeIfAbsent(
+            nodeId,
+            id ->
+                Pattern.compile(
+                    String.format(
+                        """
+                    <edge from="(.*)" to="%s">
+                    \\s*<attr name="label">
+                    \\s*<string>(.*)</string>
+                    """,
+                        id)));
     final Matcher matcher = regEx.matcher(stateSpace);
     Set<Pair<String, String>> transitionSourceAndLabel = new HashSet<>();
     while (matcher.find()) {

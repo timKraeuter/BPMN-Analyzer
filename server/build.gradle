@@ -43,10 +43,6 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-starter-actuator'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime
-    testImplementation 'org.apache.httpcomponents:httpmime:4.5.14'
-    // https://mvnrepository.com/artifact/com.google.guava/guava
-    testImplementation 'com.google.guava:guava:33.5.0-jre'
     errorprone('com.google.errorprone:error_prone_core:2.46.0')
 }
 

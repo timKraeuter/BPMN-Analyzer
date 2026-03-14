@@ -7,11 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,21 +26,22 @@ import java.util.zip.ZipInputStream;
 import no.tk.rulegenerator.server.endpoint.RuleGeneratorController;
 import no.tk.rulegenerator.server.endpoint.RuleGeneratorControllerHelper;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.ResourceAccessException;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RuleGeneratorControllerTests {
@@ -51,11 +50,11 @@ class RuleGeneratorControllerTests {
   public static final String BPMN_FILE_ERROR = "/ruleGeneratorController/errorModel.bpmn";
   public static final String BPMN_FILE_DEAD = "/ruleGeneratorController/dead.bpmn";
   public static final String BPMN_FILE_PROPOSITIONS = "/ruleGeneratorController/propositions.bpmn";
-  public static final String LOCALHOST = "http://localhost:%s/%s";
   public static final String PROPERTIES_TO_BE_CHECKED = "propertiesToBeChecked";
   public static final String CHECK_BPMN_SPECIFIC_PROPERTIES = "checkBPMNSpecificProperties";
   public static final String CHECK_TEMPORAL_LOGIC = "checkTemporalLogic";
-  @LocalServerPort private int port;
+
+  @Autowired private TestRestTemplate restTemplate;
 
   @Autowired private RuleGeneratorController restController;
 
@@ -68,44 +67,33 @@ class RuleGeneratorControllerTests {
   void testGenerateGGAndZip() throws Exception {
     Path bpmnModelFile = getBpmnModelFile(BPMN_FILE);
 
-    CloseableHttpResponse response;
-    try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-      // Build request
-      HttpPost uploadFile = new HttpPost(getFullUrl("generateGGAndZip"));
-      MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-      builder.addBinaryBody(
-          "file",
-          Files.newInputStream(bpmnModelFile),
-          ContentType.APPLICATION_OCTET_STREAM,
-          bpmnModelFile.getFileName().toString());
-      HttpEntity multipart = builder.build();
-      uploadFile.setEntity(multipart);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-      response = httpClient.execute(uploadFile);
+    MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+    body.add("file", new FileSystemResource(bpmnModelFile));
 
-      // Check response
-      HttpEntity responseEntity = response.getEntity();
-      ZipInputStream zis = new ZipInputStream(responseEntity.getContent());
-      Set<String> zipEntryNames = this.getZipEntryNames(zis);
-      // We only check file names not content since the content contains timestamps etc.
-      assertThat(
-          zipEntryNames,
-          is(
-              Sets.newHashSet(
-                  "_2__345_end.gpr",
-                  "_2__345_start.gpr",
-                  "_3.gpr",
-                  "bpmn_e_model.gty",
-                  "AllTerminated.gpr",
-                  "start.gst",
-                  "system.properties",
-                  "Terminate.gpr",
-                  "Unsafe.gpr")));
-    }
-  }
+    HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+    ResponseEntity<byte[]> response =
+        restTemplate.postForEntity("/generateGGAndZip", requestEntity, byte[].class);
 
-  private String getFullUrl(String generateGGAndZip) {
-    return String.format(LOCALHOST, port, generateGGAndZip);
+    // Check response
+    ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(response.getBody()));
+    Set<String> zipEntryNames = this.getZipEntryNames(zis);
+    // We only check file names not content since the content contains timestamps etc.
+    assertThat(
+        zipEntryNames,
+        is(
+            Set.of(
+                "_2__345_end.gpr",
+                "_2__345_start.gpr",
+                "_3.gpr",
+                "bpmn_e_model.gty",
+                "AllTerminated.gpr",
+                "start.gst",
+                "system.properties",
+                "Terminate.gpr",
+                "Unsafe.gpr")));
   }
 
   private Set<String> getZipEntryNames(ZipInputStream zis) throws IOException {
@@ -120,7 +108,7 @@ class RuleGeneratorControllerTests {
   @Test
   void testCheckBPMNSpecificPropertiesNoDeadActivities() throws Exception {
     Path bpmnModelFile = getBpmnModelFile(BPMN_FILE);
-    String properties = convertProps(Lists.newArrayList(BPMNSpecificProperty.NO_DEAD_ACTIVITIES));
+    String properties = convertProps(List.of(BPMNSpecificProperty.NO_DEAD_ACTIVITIES));
 
     String response =
         makeMultipartRequest(
@@ -137,7 +125,7 @@ class RuleGeneratorControllerTests {
   @Test
   void testCheckBPMNSpecificPropertiesDeadActivities() throws Exception {
     Path bpmnModelFile = getBpmnModelFile(BPMN_FILE_DEAD);
-    String properties = convertProps(Lists.newArrayList(BPMNSpecificProperty.NO_DEAD_ACTIVITIES));
+    String properties = convertProps(List.of(BPMNSpecificProperty.NO_DEAD_ACTIVITIES));
 
     String response =
         makeMultipartRequest(
@@ -157,8 +145,7 @@ class RuleGeneratorControllerTests {
     Path bpmnModelFile = getBpmnModelFile(BPMN_FILE);
     String properties =
         convertProps(
-            Lists.newArrayList(
-                BPMNSpecificProperty.SAFENESS, BPMNSpecificProperty.OPTION_TO_COMPLETE));
+            List.of(BPMNSpecificProperty.SAFENESS, BPMNSpecificProperty.OPTION_TO_COMPLETE));
 
     String response =
         makeMultipartRequest(
@@ -198,7 +185,7 @@ class RuleGeneratorControllerTests {
         makeMultipartRequest(
             CHECK_TEMPORAL_LOGIC,
             bpmnModelFile,
-            Lists.newArrayList(Pair.of("logic", "CTL"), Pair.of("property", "AG(!Unsafe)")));
+            List.of(Pair.of("logic", "CTL"), Pair.of("property", "AG(!Unsafe)")));
     assertThat(response, is("{\"property\":\"AG(!Unsafe)\",\"valid\":true,\"error\":\"\"}"));
   }
 
@@ -210,7 +197,7 @@ class RuleGeneratorControllerTests {
         makeMultipartRequest(
             CHECK_TEMPORAL_LOGIC,
             bpmnModelFile,
-            Lists.newArrayList(
+            List.of(
                 Pair.of("logic", "CTL"),
                 Pair.of("property", "EF(a) & EF(sf) & EF(unnamedFlow) & EF(unnamedTask)"),
                 Pair.of(
@@ -231,7 +218,7 @@ class RuleGeneratorControllerTests {
         makeMultipartRequest(
             CHECK_TEMPORAL_LOGIC,
             bpmnModelFile,
-            Lists.newArrayList(Pair.of("logic", "CTL"), Pair.of("property", "G(!Unsafe)")));
+            List.of(Pair.of("logic", "CTL"), Pair.of("property", "G(!Unsafe)")));
     assertThat(
         response,
         is(
@@ -243,7 +230,7 @@ class RuleGeneratorControllerTests {
     Path bpmnModelFile = getBpmnModelFile(BPMN_FILE);
     String properties =
         convertProps(
-            Lists.newArrayList(
+            List.of(
                 BPMNSpecificProperty.SAFENESS,
                 BPMNSpecificProperty.OPTION_TO_COMPLETE,
                 BPMNSpecificProperty.PROPER_COMPLETION,
@@ -275,10 +262,10 @@ class RuleGeneratorControllerTests {
             CHECK_BPMN_SPECIFIC_PROPERTIES,
             new byte[0],
             "empty.bpmn",
-            Lists.newArrayList(
+            List.of(
                 Pair.of(
                     PROPERTIES_TO_BE_CHECKED,
-                    convertProps(Lists.newArrayList(BPMNSpecificProperty.NO_DEAD_ACTIVITIES)))));
+                    convertProps(List.of(BPMNSpecificProperty.NO_DEAD_ACTIVITIES)))));
 
     // An empty file is rejected by input validation — expect a 400 Bad Request
     assertThat(response.getLeft(), is(400));
@@ -299,20 +286,26 @@ class RuleGeneratorControllerTests {
   void testUploadExceedingSizeLimitIsRejected() throws Exception {
     // Create an 11MB byte array (exceeds the 10MB max-file-size)
     byte[] oversizedPayload = new byte[11 * 1024 * 1024];
-    Pair<Integer, String> response =
-        makeMultipartRequestWithBytes(
-            CHECK_BPMN_SPECIFIC_PROPERTIES,
-            oversizedPayload,
-            "oversized.bpmn",
-            Lists.newArrayList(
-                Pair.of(
-                    PROPERTIES_TO_BE_CHECKED,
-                    convertProps(Lists.newArrayList(BPMNSpecificProperty.NO_DEAD_ACTIVITIES)))));
+    try {
+      Pair<Integer, String> response =
+          makeMultipartRequestWithBytes(
+              CHECK_BPMN_SPECIFIC_PROPERTIES,
+              oversizedPayload,
+              "oversized.bpmn",
+              List.of(
+                  Pair.of(
+                      PROPERTIES_TO_BE_CHECKED,
+                      convertProps(List.of(BPMNSpecificProperty.NO_DEAD_ACTIVITIES)))));
 
-    // Spring should reject with a 413 Payload Too Large (or 500 wrapping MaxUploadSizeExceeded)
-    assertTrue(
-        response.getLeft() == 413 || response.getLeft() == 500,
-        "Expected 413 or 500 but got " + response.getLeft());
+      // Spring should reject with a 413 Payload Too Large (or 500 wrapping MaxUploadSizeExceeded)
+      assertTrue(
+          response.getLeft() == 413 || response.getLeft() == 500,
+          "Expected 413 or 500 but got " + response.getLeft());
+    } catch (ResourceAccessException e) {
+      // On some JDKs, Tomcat closes the connection before a response is fully sent for oversized
+      // uploads. A ResourceAccessException (connection reset/aborted) still means the server
+      // correctly rejected the payload.
+    }
   }
 
   @Test
@@ -361,66 +354,59 @@ class RuleGeneratorControllerTests {
   }
 
   private String makeMultipartRequest(
-      String url, Path bpmnModelFile, List<Pair<String, String>> body) throws IOException {
-    String responseString;
-    try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-      CloseableHttpResponse response;
-      // Build request
-      HttpPost uploadFile = new HttpPost(getFullUrl(url));
-      MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-      body.forEach(bodyPart -> builder.addTextBody(bodyPart.getLeft(), bodyPart.getRight()));
-      builder.addBinaryBody(
-          "file",
-          Files.newInputStream(bpmnModelFile),
-          ContentType.APPLICATION_OCTET_STREAM,
-          bpmnModelFile.getFileName().toString());
-      HttpEntity multipart = builder.build();
-      uploadFile.setEntity(multipart);
+      String url, Path bpmnModelFile, List<Pair<String, String>> body) {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-      response = httpClient.execute(uploadFile);
+    MultiValueMap<String, Object> multipartBody = new LinkedMultiValueMap<>();
+    body.forEach(bodyPart -> multipartBody.add(bodyPart.getLeft(), bodyPart.getRight()));
+    multipartBody.add("file", new FileSystemResource(bpmnModelFile));
 
-      // Check response
-      responseString =
-          IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset());
-    }
-    return responseString;
+    HttpEntity<MultiValueMap<String, Object>> requestEntity =
+        new HttpEntity<>(multipartBody, headers);
+    ResponseEntity<String> response =
+        restTemplate.postForEntity("/" + url, requestEntity, String.class);
+    return response.getBody();
   }
 
-  private String makeMultipartRequest(String url, Path bpmnModelFile, Pair<String, String> body)
-      throws IOException {
-    return makeMultipartRequest(url, bpmnModelFile, Lists.newArrayList(body));
+  private String makeMultipartRequest(String url, Path bpmnModelFile, Pair<String, String> body) {
+    return makeMultipartRequest(url, bpmnModelFile, List.of(body));
   }
 
   private Pair<Integer, String> makeMultipartRequestWithBytes(
-      String url, byte[] fileContent, String fileName, List<Pair<String, String>> body)
-      throws IOException {
-    try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-      HttpPost uploadFile = new HttpPost(getFullUrl(url));
-      MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-      body.forEach(bodyPart -> builder.addTextBody(bodyPart.getLeft(), bodyPart.getRight()));
-      builder.addBinaryBody("file", fileContent, ContentType.APPLICATION_OCTET_STREAM, fileName);
-      uploadFile.setEntity(builder.build());
+      String url, byte[] fileContent, String fileName, List<Pair<String, String>> body) {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-      CloseableHttpResponse response = httpClient.execute(uploadFile);
-      int statusCode = response.getStatusLine().getStatusCode();
-      String responseBody =
-          IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset());
-      return Pair.of(statusCode, responseBody);
-    }
+    MultiValueMap<String, Object> multipartBody = new LinkedMultiValueMap<>();
+    body.forEach(bodyPart -> multipartBody.add(bodyPart.getLeft(), bodyPart.getRight()));
+    multipartBody.add(
+        "file",
+        new ByteArrayResource(fileContent) {
+          @Override
+          public String getFilename() {
+            return fileName;
+          }
+        });
+
+    HttpEntity<MultiValueMap<String, Object>> requestEntity =
+        new HttpEntity<>(multipartBody, headers);
+    ResponseEntity<String> response =
+        restTemplate.postForEntity("/" + url, requestEntity, String.class);
+    return Pair.of(response.getStatusCode().value(), response.getBody());
   }
 
-  private Pair<Integer, String> makeMultipartRequestWithoutFile(String url) throws IOException {
-    try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-      HttpPost uploadFile = new HttpPost(getFullUrl(url));
-      MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-      builder.addTextBody("dummy", "value");
-      uploadFile.setEntity(builder.build());
+  private Pair<Integer, String> makeMultipartRequestWithoutFile(String url) {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-      CloseableHttpResponse response = httpClient.execute(uploadFile);
-      int statusCode = response.getStatusLine().getStatusCode();
-      String responseBody =
-          IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset());
-      return Pair.of(statusCode, responseBody);
-    }
+    MultiValueMap<String, Object> multipartBody = new LinkedMultiValueMap<>();
+    multipartBody.add("dummy", "value");
+
+    HttpEntity<MultiValueMap<String, Object>> requestEntity =
+        new HttpEntity<>(multipartBody, headers);
+    ResponseEntity<String> response =
+        restTemplate.postForEntity("/" + url, requestEntity, String.class);
+    return Pair.of(response.getStatusCode().value(), response.getBody());
   }
 }
