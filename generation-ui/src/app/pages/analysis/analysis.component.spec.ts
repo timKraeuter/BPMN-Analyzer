@@ -665,7 +665,11 @@ describe('AnalysisComponent', () => {
                 Promise.resolve(new Blob(['<xml/>'])),
             );
             mockModelCheckingService.checkTemporalLogic.and.returnValue(
-                of(new ModelCheckingResponse('AG(!p)', true, '')),
+                of({
+                    property: 'AG(!p)',
+                    valid: true,
+                    error: '',
+                } as ModelCheckingResponse),
             );
 
             await component.checkCTLPropertyClicked();
