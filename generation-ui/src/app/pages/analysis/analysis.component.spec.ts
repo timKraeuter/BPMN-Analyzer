@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ChangeDetectorRef, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { of, throwError } from 'rxjs';
 
@@ -19,15 +19,25 @@ describe('AnalysisComponent', () => {
     let mockSnackBar: jasmine.SpyObj<MatSnackBar>;
     let mockModelCheckingService: jasmine.SpyObj<ModelCheckingService>;
     let mockSharedState: SharedStateService;
-    let mockCdr: jasmine.SpyObj<ChangeDetectorRef>;
+    let mockModeling: { setColor: jasmine.Spy };
+    let mockElementRegistry: { get: jasmine.Spy };
 
     beforeEach(() => {
+        mockModeling = { setColor: jasmine.createSpy('setColor') };
+        mockElementRegistry = {
+            get: jasmine.createSpy('elementRegistryGet'),
+        };
+
         const mockModeler = {
             attachTo: jasmine.createSpy('attachTo'),
             destroy: jasmine.createSpy('destroy'),
             importXML: jasmine.createSpy('importXML'),
-            get: jasmine.createSpy('get').and.returnValue({
-                attachTo: jasmine.createSpy('propertiesPanelAttachTo'),
+            get: jasmine.createSpy('get').and.callFake((name: string) => {
+                if (name === 'modeling') return mockModeling;
+                if (name === 'elementRegistry') return mockElementRegistry;
+                return {
+                    attachTo: jasmine.createSpy('propertiesPanelAttachTo'),
+                };
             }),
         };
 
@@ -48,7 +58,6 @@ describe('AnalysisComponent', () => {
             ['downloadGG', 'checkBPMNSpecificProperties', 'checkTemporalLogic'],
         );
         mockSharedState = new SharedStateService();
-        mockCdr = jasmine.createSpyObj('ChangeDetectorRef', ['detectChanges']);
 
         TestBed.configureTestingModule({
             imports: [AnalysisComponent],
@@ -65,7 +74,6 @@ describe('AnalysisComponent', () => {
                     provide: SharedStateService,
                     useValue: mockSharedState,
                 },
-                { provide: ChangeDetectorRef, useValue: mockCdr },
             ],
         });
 
@@ -384,6 +392,296 @@ describe('AnalysisComponent', () => {
                     twoProps,
                 );
             });
+        });
+    });
+
+    describe('downloadGGClicked', () => {
+        it('should download GG as zip on success', async () => {
+            mockBpmnModeler.getBPMNModelXMLBlob.and.returnValue(
+                Promise.resolve(new Blob(['<xml/>'])),
+            );
+            const fakeArrayBuffer = new ArrayBuffer(8);
+            mockModelCheckingService.downloadGG.and.returnValue(
+                of(fakeArrayBuffer),
+            );
+            mockSharedState.modelFileName = 'myModel';
+
+            await component.downloadGGClicked();
+
+            expect(mockModelCheckingService.downloadGG).toHaveBeenCalled();
+            expect(component.graphGrammarGenerationRunning).toBeFalse();
+        });
+
+        it('should set graphGrammarGenerationRunning to true while in progress', async () => {
+            mockBpmnModeler.getBPMNModelXMLBlob.and.returnValue(
+                Promise.resolve(new Blob(['<xml/>'])),
+            );
+            mockModelCheckingService.downloadGG.and.returnValue(
+                of(new ArrayBuffer(8)),
+            );
+
+            const promise = component.downloadGGClicked();
+            expect(component.graphGrammarGenerationRunning).toBeTrue();
+            await promise;
+            expect(component.graphGrammarGenerationRunning).toBeFalse();
+        });
+
+        it('should show snackbar on download error and reset running flag', async () => {
+            mockBpmnModeler.getBPMNModelXMLBlob.and.returnValue(
+                Promise.resolve(new Blob(['<xml/>'])),
+            );
+            const errorMessage = JSON.stringify({
+                message: 'Generation failed',
+            });
+            const errorBytes = new TextEncoder().encode(errorMessage);
+            mockModelCheckingService.downloadGG.and.returnValue(
+                throwError(() => ({ error: errorBytes.buffer })),
+            );
+
+            await component.downloadGGClicked();
+
+            expect(mockSnackBar.open).toHaveBeenCalledWith(
+                'Generation failed',
+                'close',
+            );
+            expect(component.graphGrammarGenerationRunning).toBeFalse();
+        });
+    });
+
+    describe('BPMN property checking with coloring', () => {
+        beforeEach(() => {
+            mockBpmnModeler.getBPMNModelXMLBlob.and.returnValue(
+                Promise.resolve(new Blob(['<xml/>'])),
+            );
+        });
+
+        it('should color improper end events and rewrite additionalInfo for Proper completion', async () => {
+            component.bpmnSpecificPropertiesToBeChecked = ['PROPER_COMPLETION'];
+            const mockEndEvent = {
+                id: 'EndEvent_1',
+                businessObject: { name: 'Order completed' },
+            };
+            mockElementRegistry.get.and.callFake((id: string) => {
+                if (id === 'EndEvent_1') return mockEndEvent;
+                return undefined;
+            });
+            mockModelCheckingService.checkBPMNSpecificProperties.and.returnValue(
+                of({
+                    propertyCheckingResults: [
+                        {
+                            name: 'Proper completion',
+                            valid: false,
+                            additionalInfo: 'EndEvent_1',
+                        },
+                    ],
+                }),
+            );
+
+            await component.checkBPMNSpecificPropertiesClicked();
+
+            expect(mockModeling.setColor).toHaveBeenCalledWith([mockEndEvent], {
+                stroke: '#831311',
+                fill: '#ffcdd2',
+            });
+            expect(
+                component.bpmnPropertyCheckingResults[0].additionalInfo,
+            ).toBe(
+                'The end event "Order completed" consumed more than one token.',
+            );
+            expect(mockBpmnModeler.updateViewerBPMNModel).toHaveBeenCalled();
+        });
+
+        it('should not color elements when Proper completion has no additionalInfo', async () => {
+            component.bpmnSpecificPropertiesToBeChecked = ['PROPER_COMPLETION'];
+            mockModelCheckingService.checkBPMNSpecificProperties.and.returnValue(
+                of({
+                    propertyCheckingResults: [
+                        {
+                            name: 'Proper completion',
+                            valid: true,
+                            additionalInfo: '',
+                        },
+                    ],
+                }),
+            );
+
+            await component.checkBPMNSpecificPropertiesClicked();
+
+            expect(mockModeling.setColor).not.toHaveBeenCalled();
+            expect(
+                mockBpmnModeler.updateViewerBPMNModel,
+            ).not.toHaveBeenCalled();
+        });
+
+        it('should color dead activities and show plural message for multiple dead activities', async () => {
+            component.bpmnSpecificPropertiesToBeChecked = [
+                'NO_DEAD_ACTIVITIES',
+            ];
+            const mockTask1 = {
+                id: 'Task_1',
+                businessObject: { name: 'Review' },
+            };
+            const mockTask2 = {
+                id: 'Task_2',
+                businessObject: { name: 'Approve' },
+            };
+            mockElementRegistry.get.and.callFake((id: string) => {
+                if (id === 'Task_1') return mockTask1;
+                if (id === 'Task_2') return mockTask2;
+                return undefined;
+            });
+            mockModelCheckingService.checkBPMNSpecificProperties.and.returnValue(
+                of({
+                    propertyCheckingResults: [
+                        {
+                            name: 'No dead activities',
+                            valid: false,
+                            additionalInfo: 'Task_1,Task_2',
+                        },
+                    ],
+                }),
+            );
+
+            await component.checkBPMNSpecificPropertiesClicked();
+
+            expect(mockModeling.setColor).toHaveBeenCalledWith(
+                [mockTask1, mockTask2],
+                { stroke: '#831311', fill: '#ffcdd2' },
+            );
+            expect(
+                component.bpmnPropertyCheckingResults[0].additionalInfo,
+            ).toBe('The dead activities are "Review", "Approve".');
+            expect(mockBpmnModeler.updateViewerBPMNModel).toHaveBeenCalled();
+        });
+
+        it('should show singular message for single dead activity', async () => {
+            component.bpmnSpecificPropertiesToBeChecked = [
+                'NO_DEAD_ACTIVITIES',
+            ];
+            const mockTask = {
+                id: 'Task_1',
+                businessObject: { name: 'Review' },
+            };
+            mockElementRegistry.get.and.callFake((id: string) => {
+                if (id === 'Task_1') return mockTask;
+                return undefined;
+            });
+            mockModelCheckingService.checkBPMNSpecificProperties.and.returnValue(
+                of({
+                    propertyCheckingResults: [
+                        {
+                            name: 'No dead activities',
+                            valid: false,
+                            additionalInfo: 'Task_1',
+                        },
+                    ],
+                }),
+            );
+
+            await component.checkBPMNSpecificPropertiesClicked();
+
+            expect(
+                component.bpmnPropertyCheckingResults[0].additionalInfo,
+            ).toBe('The dead activity is "Review".');
+        });
+
+        it('should fall back to element ID when businessObject.name is undefined', async () => {
+            component.bpmnSpecificPropertiesToBeChecked = [
+                'NO_DEAD_ACTIVITIES',
+            ];
+            const mockTask = {
+                id: 'Task_abc',
+                businessObject: {},
+            };
+            mockElementRegistry.get.and.callFake((id: string) => {
+                if (id === 'Task_abc') return mockTask;
+                return undefined;
+            });
+            mockModelCheckingService.checkBPMNSpecificProperties.and.returnValue(
+                of({
+                    propertyCheckingResults: [
+                        {
+                            name: 'No dead activities',
+                            valid: false,
+                            additionalInfo: 'Task_abc',
+                        },
+                    ],
+                }),
+            );
+
+            await component.checkBPMNSpecificPropertiesClicked();
+
+            expect(
+                component.bpmnPropertyCheckingResults[0].additionalInfo,
+            ).toBe('The dead activity is "Task_abc".');
+        });
+
+        it('should not color elements when No dead activities has no additionalInfo', async () => {
+            component.bpmnSpecificPropertiesToBeChecked = [
+                'NO_DEAD_ACTIVITIES',
+            ];
+            mockModelCheckingService.checkBPMNSpecificProperties.and.returnValue(
+                of({
+                    propertyCheckingResults: [
+                        {
+                            name: 'No dead activities',
+                            valid: true,
+                            additionalInfo: '',
+                        },
+                    ],
+                }),
+            );
+
+            await component.checkBPMNSpecificPropertiesClicked();
+
+            expect(mockModeling.setColor).not.toHaveBeenCalled();
+            expect(
+                mockBpmnModeler.updateViewerBPMNModel,
+            ).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('setVerificationRunning', () => {
+        it('should call detectChanges when verification starts and completes via checkBPMNSpecificPropertiesClicked', async () => {
+            const detectChangesSpy = spyOn(
+                (component as any).cdr,
+                'detectChanges',
+            );
+
+            component.bpmnSpecificPropertiesToBeChecked = ['Safeness'];
+            mockBpmnModeler.getBPMNModelXMLBlob.and.returnValue(
+                Promise.resolve(new Blob(['<xml/>'])),
+            );
+            mockModelCheckingService.checkBPMNSpecificProperties.and.returnValue(
+                of({
+                    propertyCheckingResults: [
+                        { name: 'Safeness', valid: true },
+                    ],
+                }),
+            );
+
+            await component.checkBPMNSpecificPropertiesClicked();
+
+            // Called twice: once when starting (true), once when finishing (false)
+            expect(detectChangesSpy).toHaveBeenCalledTimes(2);
+        });
+
+        it('should call detectChanges when verification starts and completes via checkCTLPropertyClicked', async () => {
+            const detectChangesSpy = spyOn(
+                (component as any).cdr,
+                'detectChanges',
+            );
+
+            mockBpmnModeler.getBPMNModelXMLBlob.and.returnValue(
+                Promise.resolve(new Blob(['<xml/>'])),
+            );
+            mockModelCheckingService.checkTemporalLogic.and.returnValue(
+                of(new ModelCheckingResponse('AG(!p)', true, '')),
+            );
+
+            await component.checkCTLPropertyClicked();
+
+            expect(detectChangesSpy).toHaveBeenCalledTimes(2);
         });
     });
 });
