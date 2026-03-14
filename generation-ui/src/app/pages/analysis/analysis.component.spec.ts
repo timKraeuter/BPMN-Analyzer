@@ -205,9 +205,9 @@ describe('AnalysisComponent', () => {
         ].forEach(({ desc, templateIndex, prop1, prop2, expected }) => {
             it(`should return ${expected} when ${desc}`, () => {
                 component.selectedTemplate =
-                    templateIndex !== undefined
-                        ? component.ctlTemplates[templateIndex]
-                        : undefined;
+                    templateIndex === undefined
+                        ? undefined
+                        : component.ctlTemplates[templateIndex];
                 component.selectedProposition1 = prop1;
                 component.selectedProposition2 = prop2;
                 if (expected) {
