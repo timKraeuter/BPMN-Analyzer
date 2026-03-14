@@ -28,16 +28,18 @@
     max-width: 20%;
 }
 
-.modeler-buttons {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
 .order {
     order: 1;
 }
 
 .editButton:hover {
     cursor: pointer;
+}
+
+.edit-icon-margin {
+    margin-right: -1px;
+}
+
+.delete-icon-margin {
+    margin-right: -1px;
 }

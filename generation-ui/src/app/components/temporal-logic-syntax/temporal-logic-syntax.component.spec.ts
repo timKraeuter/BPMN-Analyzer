@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TemporalLogicSyntaxComponent } from './temporal-logic-syntax.component';
 
-describe('LTlSyntaxComponent', () => {
+describe('TemporalLogicSyntaxComponent', () => {
     let component: TemporalLogicSyntaxComponent;
     let fixture: ComponentFixture<TemporalLogicSyntaxComponent>;
 

@@ -48,7 +48,7 @@ export class AppComponent {
     }
 
     @HostListener('document:keydown.ArrowRight', ['$event'])
-    async stepForward(event: Event) {
+    stepForward(event: Event) {
         if (
             event.target &&
             (event.target as HTMLElement).classList.contains(
@@ -61,7 +61,15 @@ export class AppComponent {
     }
 
     @HostListener('document:keydown.ArrowLeft', ['$event'])
-    async stepBackward(_: Event) {
+    stepBackward(event: Event) {
+        if (
+            event.target &&
+            (event.target as HTMLElement).classList.contains(
+                'bio-properties-panel-input',
+            )
+        ) {
+            return;
+        }
         this.stepper.previous();
     }
 }

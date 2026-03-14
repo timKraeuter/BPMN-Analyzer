@@ -266,7 +266,7 @@ describe('AnalysisComponent', () => {
             mockModelCheckingService.checkBPMNSpecificProperties.and.returnValue(
                 of({
                     propertyCheckingResults: [
-                        { name: 'Safeness', valid: true },
+                        { name: 'Safeness', valid: true, additionalInfo: '' },
                     ],
                 }),
             );
@@ -644,7 +644,7 @@ describe('AnalysisComponent', () => {
             mockModelCheckingService.checkBPMNSpecificProperties.and.returnValue(
                 of({
                     propertyCheckingResults: [
-                        { name: 'Safeness', valid: true },
+                        { name: 'Safeness', valid: true, additionalInfo: '' },
                     ],
                 }),
             );

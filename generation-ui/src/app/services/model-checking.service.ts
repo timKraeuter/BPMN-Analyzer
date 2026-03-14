@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { ModelCheckingResponse } from '../models/model-checking-response';
+import {
+    BPMNSpecificPropertiesResponse,
+    ModelCheckingResponse,
+} from '../models/model-checking-response';
 import { Proposition } from '../models/proposition';
 
 const baseURL = environment.production
@@ -22,27 +25,29 @@ export class ModelCheckingService {
         xmlModel: Blob,
         propositions: Proposition[],
     ): Observable<ArrayBuffer> {
-        const options = {
-            responseType: 'arraybuffer',
-        } as any; // Expect a zip/file response type.
         const formData = new FormData();
         formData.append('file', xmlModel);
         formData.append('propositions', JSON.stringify(propositions));
 
-        return this.httpClient.post(generateGGAndZipURL, formData, options);
+        return this.httpClient.post(generateGGAndZipURL, formData, {
+            responseType: 'arraybuffer',
+        });
     }
 
     checkBPMNSpecificProperties(
         bpmnSpecificPropertiesToBeChecked: string[],
         xmlModel: Blob,
-    ) {
+    ): Observable<BPMNSpecificPropertiesResponse> {
         const formData = new FormData();
         bpmnSpecificPropertiesToBeChecked.forEach((property) =>
             formData.append('propertiesToBeChecked', property),
         );
         formData.append('file', xmlModel);
 
-        return this.httpClient.post(checkBPMNSpecificPropertiesURL, formData);
+        return this.httpClient.post<BPMNSpecificPropertiesResponse>(
+            checkBPMNSpecificPropertiesURL,
+            formData,
+        );
     }
 
     checkTemporalLogic(

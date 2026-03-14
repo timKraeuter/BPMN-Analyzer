@@ -15,5 +15,11 @@ body {
 }
 
 .right-margin {
-    margin-right: 0.25%;
+    margin-right: 4px;
+}
+
+.modeler-buttons {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
