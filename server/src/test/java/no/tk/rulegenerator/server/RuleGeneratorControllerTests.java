@@ -256,7 +256,7 @@ class RuleGeneratorControllerTests {
   }
 
   @Test
-  void testCheckBPMNSpecificPropertiesEmptyFile() throws Exception {
+  void testCheckBPMNSpecificPropertiesEmptyFile() {
     Pair<Integer, String> response =
         makeMultipartRequestWithBytes(
             CHECK_BPMN_SPECIFIC_PROPERTIES,
@@ -273,7 +273,7 @@ class RuleGeneratorControllerTests {
   }
 
   @Test
-  void testCheckBPMNSpecificPropertiesMissingFile() throws Exception {
+  void testCheckBPMNSpecificPropertiesMissingFile() {
     Pair<Integer, String> response =
         makeMultipartRequestWithoutFile(CHECK_BPMN_SPECIFIC_PROPERTIES);
 
@@ -283,7 +283,7 @@ class RuleGeneratorControllerTests {
   }
 
   @Test
-  void testUploadExceedingSizeLimitIsRejected() throws Exception {
+  void testUploadExceedingSizeLimitIsRejected() {
     // Create an 11MB byte array (exceeds the 10MB max-file-size)
     byte[] oversizedPayload = new byte[11 * 1024 * 1024];
     try {
@@ -301,7 +301,7 @@ class RuleGeneratorControllerTests {
       assertTrue(
           response.getLeft() == 413 || response.getLeft() == 500,
           "Expected 413 or 500 but got " + response.getLeft());
-    } catch (ResourceAccessException e) {
+    } catch (ResourceAccessException _) {
       // On some JDKs, Tomcat closes the connection before a response is fully sent for oversized
       // uploads. A ResourceAccessException (connection reset/aborted) still means the server
       // correctly rejected the payload.

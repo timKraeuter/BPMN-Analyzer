@@ -13,13 +13,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class RuntimeExceptionHandler extends ResponseEntityExceptionHandler {
-  private static final Logger logger = LoggerFactory.getLogger(RuntimeExceptionHandler.class);
+  private static final Logger log = LoggerFactory.getLogger(RuntimeExceptionHandler.class);
 
   /** Handle known model-checking exceptions with user-facing messages. */
   @ExceptionHandler(ModelCheckingException.class)
   public ResponseEntity<ModelCheckingErrorResponse> handleModelCheckingException(
       ModelCheckingException ex) {
-    logger.error("Model checking exception!", ex);
+    log.error("Model checking exception!", ex);
     return new ResponseEntity<>(
         new ModelCheckingErrorResponse(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
   }
@@ -31,7 +31,7 @@ public class RuntimeExceptionHandler extends ResponseEntityExceptionHandler {
     ShouldNotHappenRuntimeException.class
   })
   public ResponseEntity<ModelCheckingErrorResponse> handleBPMNException(RuntimeException ex) {
-    logger.error("BPMN processing exception!", ex);
+    log.error("BPMN processing exception!", ex);
     return new ResponseEntity<>(
         new ModelCheckingErrorResponse(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
   }
@@ -39,7 +39,7 @@ public class RuntimeExceptionHandler extends ResponseEntityExceptionHandler {
   /** Catch-all for unexpected exceptions — does not leak internal details to the client. */
   @ExceptionHandler(RuntimeException.class)
   public ResponseEntity<ModelCheckingErrorResponse> handleUnexpectedException(RuntimeException ex) {
-    logger.error("Unexpected exception in controller!", ex);
+    log.error("Unexpected exception in controller!", ex);
     return new ResponseEntity<>(
         new ModelCheckingErrorResponse("An unexpected internal error occurred."),
         HttpStatus.INTERNAL_SERVER_ERROR);
