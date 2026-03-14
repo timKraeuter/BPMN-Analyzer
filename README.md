@@ -20,6 +20,7 @@ This repository contains multiple related projects.
 The project **Generator** contains the source code to generate Groove/Maude rules from different behavioral languages, for example, BPMN. It uses my [graph-rule-generation library](https://github.com/timKraeuter/graph-rule-generation/tree/master).
 ### Generation-ui
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=timkraeuter_Groove_Rule_Generation_Generation-UI&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=timkraeuter_Groove_Rule_Generation_Generation-UI)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=timkraeuter_Groove_Rule_Generation_Generation-UI&metric=coverage)](https://sonarcloud.io/summary/new_code?id=timkraeuter_Groove_Rule_Generation_Generation-UI)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=timkraeuter_Groove_Rule_Generation_Generation-UI&metric=bugs)](https://sonarcloud.io/summary/new_code?id=timkraeuter_Groove_Rule_Generation_Generation-UI)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=timkraeuter_Groove_Rule_Generation_Generation-UI&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=timkraeuter_Groove_Rule_Generation_Generation-UI)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=timkraeuter_Groove_Rule_Generation_Generation-UI&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=timkraeuter_Groove_Rule_Generation_Generation-UI)
