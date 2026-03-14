@@ -26,53 +26,39 @@ describe('BPMNModelerService', () => {
         expect(service.getTokenModeler()).toBeTruthy();
     });
 
-    describe('getBPMNModelXMLBlob', () => {
-        it('should return a blob with XML content', async () => {
-            spyOn(service.getModeler(), 'saveXML').and.returnValue(
-                Promise.resolve({ xml: '<definitions/>' }),
-            );
+    [
+        {
+            method: 'getBPMNModelXMLBlob' as const,
+            modelerGetter: 'getModeler' as const,
+        },
+        {
+            method: 'getTokenModelXMLBlob' as const,
+            modelerGetter: 'getTokenModeler' as const,
+        },
+    ].forEach(({ method, modelerGetter }) => {
+        describe(method, () => {
+            it('should return a blob with XML content', async () => {
+                spyOn(service[modelerGetter](), 'saveXML').and.returnValue(
+                    Promise.resolve({ xml: '<definitions/>' }),
+                );
 
-            const blob = await service.getBPMNModelXMLBlob();
+                const blob = await service[method]();
 
-            expect(blob).toBeTruthy();
-            expect(blob.type).toBe('text/xml;charset=utf-8');
-            expect(blob.size).toBeGreaterThan(0);
-        });
+                expect(blob).toBeTruthy();
+                expect(blob.type).toBe('text/xml;charset=utf-8');
+                expect(blob.size).toBeGreaterThan(0);
+            });
 
-        it('should return empty blob when saveXML returns no xml', async () => {
-            spyOn(service.getModeler(), 'saveXML').and.returnValue(
-                Promise.resolve({} as any),
-            );
+            it('should return empty blob when saveXML returns no xml', async () => {
+                spyOn(service[modelerGetter](), 'saveXML').and.returnValue(
+                    Promise.resolve({} as any),
+                );
 
-            const blob = await service.getBPMNModelXMLBlob();
+                const blob = await service[method]();
 
-            expect(blob).toBeTruthy();
-            expect(blob.size).toBe(0);
-        });
-    });
-
-    describe('getTokenModelXMLBlob', () => {
-        it('should return a blob with XML content', async () => {
-            spyOn(service.getTokenModeler(), 'saveXML').and.returnValue(
-                Promise.resolve({ xml: '<token-definitions/>' }),
-            );
-
-            const blob = await service.getTokenModelXMLBlob();
-
-            expect(blob).toBeTruthy();
-            expect(blob.type).toBe('text/xml;charset=utf-8');
-            expect(blob.size).toBeGreaterThan(0);
-        });
-
-        it('should return empty blob when saveXML returns no xml', async () => {
-            spyOn(service.getTokenModeler(), 'saveXML').and.returnValue(
-                Promise.resolve({} as any),
-            );
-
-            const blob = await service.getTokenModelXMLBlob();
-
-            expect(blob).toBeTruthy();
-            expect(blob.size).toBe(0);
+                expect(blob).toBeTruthy();
+                expect(blob.size).toBe(0);
+            });
         });
     });
 
@@ -179,47 +165,36 @@ describe('BPMNModelerService', () => {
         });
     });
 
-    describe('getBpmnXML', () => {
-        it('should return XML string from modeler', async () => {
-            spyOn(service.getModeler(), 'saveXML').and.returnValue(
-                Promise.resolve({ xml: '<bpmn-xml/>' }),
-            );
+    [
+        {
+            method: 'getBpmnXML' as const,
+            modelerGetter: 'getModeler' as const,
+        },
+        {
+            method: 'getTokenXML' as const,
+            modelerGetter: 'getTokenModeler' as const,
+        },
+    ].forEach(({ method, modelerGetter }) => {
+        describe(method, () => {
+            it('should return XML string', async () => {
+                spyOn(service[modelerGetter](), 'saveXML').and.returnValue(
+                    Promise.resolve({ xml: '<xml-content/>' }),
+                );
 
-            const xml = await service.getBpmnXML();
+                const xml = await service[method]();
 
-            expect(xml).toBe('<bpmn-xml/>');
-        });
+                expect(xml).toBe('<xml-content/>');
+            });
 
-        it('should return empty string when no XML available', async () => {
-            spyOn(service.getModeler(), 'saveXML').and.returnValue(
-                Promise.resolve({} as any),
-            );
+            it('should return empty string when no XML available', async () => {
+                spyOn(service[modelerGetter](), 'saveXML').and.returnValue(
+                    Promise.resolve({} as any),
+                );
 
-            const xml = await service.getBpmnXML();
+                const xml = await service[method]();
 
-            expect(xml).toBe('');
-        });
-    });
-
-    describe('getTokenXML', () => {
-        it('should return XML string from token modeler', async () => {
-            spyOn(service.getTokenModeler(), 'saveXML').and.returnValue(
-                Promise.resolve({ xml: '<token-xml/>' }),
-            );
-
-            const xml = await service.getTokenXML();
-
-            expect(xml).toBe('<token-xml/>');
-        });
-
-        it('should return empty string when no XML available', async () => {
-            spyOn(service.getTokenModeler(), 'saveXML').and.returnValue(
-                Promise.resolve({} as any),
-            );
-
-            const xml = await service.getTokenXML();
-
-            expect(xml).toBe('');
+                expect(xml).toBe('');
+            });
         });
     });
 });

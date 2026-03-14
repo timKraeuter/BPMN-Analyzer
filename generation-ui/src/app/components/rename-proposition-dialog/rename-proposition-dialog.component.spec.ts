@@ -59,30 +59,23 @@ describe('RenamePropositionDialogComponent', () => {
         expect(component.saveNameAndCloseDialog).toHaveBeenCalled();
     });
 
-    it('should stop propagation for ArrowLeft key', () => {
-        const event = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
-        spyOn(event, 'stopPropagation');
+    [
+        { key: 'ArrowLeft', shouldStop: true },
+        { key: 'ArrowRight', shouldStop: true },
+        { key: 'Enter', shouldStop: false },
+        { key: 'ArrowUp', shouldStop: false },
+    ].forEach(({ key, shouldStop }) => {
+        it(`should ${shouldStop ? '' : 'not '}stop propagation for ${key} key`, () => {
+            const event = new KeyboardEvent('keydown', { key });
+            spyOn(event, 'stopPropagation');
 
-        component.stopEventPropagation(event);
+            component.stopEventPropagation(event);
 
-        expect(event.stopPropagation).toHaveBeenCalled();
-    });
-
-    it('should stop propagation for ArrowRight key', () => {
-        const event = new KeyboardEvent('keydown', { key: 'ArrowRight' });
-        spyOn(event, 'stopPropagation');
-
-        component.stopEventPropagation(event);
-
-        expect(event.stopPropagation).toHaveBeenCalled();
-    });
-
-    it('should not stop propagation for other keys', () => {
-        const event = new KeyboardEvent('keydown', { key: 'Enter' });
-        spyOn(event, 'stopPropagation');
-
-        component.stopEventPropagation(event);
-
-        expect(event.stopPropagation).not.toHaveBeenCalled();
+            if (shouldStop) {
+                expect(event.stopPropagation).toHaveBeenCalled();
+            } else {
+                expect(event.stopPropagation).not.toHaveBeenCalled();
+            }
+        });
     });
 });

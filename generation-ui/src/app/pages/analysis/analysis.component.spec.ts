@@ -114,33 +114,40 @@ describe('AnalysisComponent', () => {
     });
 
     describe('createCTLProperty', () => {
-        it('should create CTL property from one-proposition template', () => {
-            component.selectedTemplate = component.ctlTemplates[0]; // AG(!proposition)
-            component.selectedProposition1 = 'myProp';
-            component.createCTLProperty();
-            expect(component.ctlProperty).toBe('AG(!myProp)');
-        });
-
-        it('should create CTL property from two-proposition template', () => {
-            component.selectedTemplate = component.ctlTemplates[3]; // AG(p1 -> AF(p2))
-            component.selectedProposition1 = 'start';
-            component.selectedProposition2 = 'end';
-            component.createCTLProperty();
-            expect(component.ctlProperty).toBe('AG(start -> AF(end))');
-        });
-
-        it('should create EF template correctly', () => {
-            component.selectedTemplate = component.ctlTemplates[1]; // EF(proposition)
-            component.selectedProposition1 = 'goal';
-            component.createCTLProperty();
-            expect(component.ctlProperty).toBe('EF(goal)');
-        });
-
-        it('should create AF template correctly', () => {
-            component.selectedTemplate = component.ctlTemplates[2]; // AF(proposition)
-            component.selectedProposition1 = 'done';
-            component.createCTLProperty();
-            expect(component.ctlProperty).toBe('AF(done)');
+        [
+            {
+                templateIndex: 0,
+                prop1: 'myProp',
+                prop2: '',
+                expected: 'AG(!myProp)',
+            },
+            {
+                templateIndex: 1,
+                prop1: 'goal',
+                prop2: '',
+                expected: 'EF(goal)',
+            },
+            {
+                templateIndex: 2,
+                prop1: 'done',
+                prop2: '',
+                expected: 'AF(done)',
+            },
+            {
+                templateIndex: 3,
+                prop1: 'start',
+                prop2: 'end',
+                expected: 'AG(start -> AF(end))',
+            },
+        ].forEach(({ templateIndex, prop1, prop2, expected }) => {
+            it(`should create "${expected}" from template ${templateIndex}`, () => {
+                component.selectedTemplate =
+                    component.ctlTemplates[templateIndex];
+                component.selectedProposition1 = prop1;
+                component.selectedProposition2 = prop2;
+                component.createCTLProperty();
+                expect(component.ctlProperty).toBe(expected);
+            });
         });
 
         it('should not create property when no template selected', () => {
@@ -159,58 +166,78 @@ describe('AnalysisComponent', () => {
     });
 
     describe('showCreateCTLPropertyButton', () => {
-        it('should return false when no template selected', () => {
-            component.selectedTemplate = undefined;
-            expect(component.showCreateCTLPropertyButton()).toBeFalsy();
-        });
-
-        it('should return false when template selected but no proposition', () => {
-            component.selectedTemplate = component.ctlTemplates[0];
-            component.selectedProposition1 = '';
-            expect(component.showCreateCTLPropertyButton()).toBeFalsy();
-        });
-
-        it('should return true for one-proposition template with proposition selected', () => {
-            component.selectedTemplate = component.ctlTemplates[0];
-            component.selectedProposition1 = 'myProp';
-            expect(component.showCreateCTLPropertyButton()).toBeTruthy();
-        });
-
-        it('should return false for two-proposition template with only first proposition', () => {
-            component.selectedTemplate = component.ctlTemplates[3];
-            component.selectedProposition1 = 'start';
-            component.selectedProposition2 = '';
-            expect(component.showCreateCTLPropertyButton()).toBeFalse();
-        });
-
-        it('should return true for two-proposition template with both propositions', () => {
-            component.selectedTemplate = component.ctlTemplates[3];
-            component.selectedProposition1 = 'start';
-            component.selectedProposition2 = 'end';
-            expect(component.showCreateCTLPropertyButton()).toBeTrue();
+        [
+            {
+                desc: 'no template selected',
+                templateIndex: undefined as number | undefined,
+                prop1: '',
+                prop2: '',
+                expected: false,
+            },
+            {
+                desc: 'template selected but no proposition',
+                templateIndex: 0,
+                prop1: '',
+                prop2: '',
+                expected: false,
+            },
+            {
+                desc: 'one-proposition template with proposition',
+                templateIndex: 0,
+                prop1: 'myProp',
+                prop2: '',
+                expected: true,
+            },
+            {
+                desc: 'two-proposition template with only first',
+                templateIndex: 3,
+                prop1: 'start',
+                prop2: '',
+                expected: false,
+            },
+            {
+                desc: 'two-proposition template with both',
+                templateIndex: 3,
+                prop1: 'start',
+                prop2: 'end',
+                expected: true,
+            },
+        ].forEach(({ desc, templateIndex, prop1, prop2, expected }) => {
+            it(`should return ${expected} when ${desc}`, () => {
+                component.selectedTemplate =
+                    templateIndex !== undefined
+                        ? component.ctlTemplates[templateIndex]
+                        : undefined;
+                component.selectedProposition1 = prop1;
+                component.selectedProposition2 = prop2;
+                if (expected) {
+                    expect(
+                        component.showCreateCTLPropertyButton(),
+                    ).toBeTruthy();
+                } else {
+                    expect(component.showCreateCTLPropertyButton()).toBeFalsy();
+                }
+            });
         });
     });
 
     describe('stopEventPropagation', () => {
-        it('should stop propagation for ArrowLeft', () => {
-            const event = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
-            spyOn(event, 'stopPropagation');
-            component.stopEventPropagation(event);
-            expect(event.stopPropagation).toHaveBeenCalled();
-        });
-
-        it('should stop propagation for ArrowRight', () => {
-            const event = new KeyboardEvent('keydown', { key: 'ArrowRight' });
-            spyOn(event, 'stopPropagation');
-            component.stopEventPropagation(event);
-            expect(event.stopPropagation).toHaveBeenCalled();
-        });
-
-        it('should not stop propagation for other keys', () => {
-            const event = new KeyboardEvent('keydown', { key: 'Enter' });
-            spyOn(event, 'stopPropagation');
-            component.stopEventPropagation(event);
-            expect(event.stopPropagation).not.toHaveBeenCalled();
+        [
+            { key: 'ArrowLeft', shouldStop: true },
+            { key: 'ArrowRight', shouldStop: true },
+            { key: 'Enter', shouldStop: false },
+            { key: 'ArrowUp', shouldStop: false },
+        ].forEach(({ key, shouldStop }) => {
+            it(`should ${shouldStop ? '' : 'not '}stop propagation for ${key}`, () => {
+                const event = new KeyboardEvent('keydown', { key });
+                spyOn(event, 'stopPropagation');
+                component.stopEventPropagation(event);
+                if (shouldStop) {
+                    expect(event.stopPropagation).toHaveBeenCalled();
+                } else {
+                    expect(event.stopPropagation).not.toHaveBeenCalled();
+                }
+            });
         });
     });
 
@@ -346,11 +373,17 @@ describe('AnalysisComponent', () => {
             expect(component.ctlTemplates.length).toBe(4);
         });
 
-        it('should have correct two-proposition flags', () => {
-            expect(component.ctlTemplates[0].twoPropositions).toBeFalse();
-            expect(component.ctlTemplates[1].twoPropositions).toBeFalse();
-            expect(component.ctlTemplates[2].twoPropositions).toBeFalse();
-            expect(component.ctlTemplates[3].twoPropositions).toBeTrue();
+        [
+            { index: 0, description: 'AG(!proposition)', twoProps: false },
+            { index: 1, description: 'EF(proposition)', twoProps: false },
+            { index: 2, description: 'AF(proposition)', twoProps: false },
+            { index: 3, description: 'AG(p1 -> AF(p2))', twoProps: true },
+        ].forEach(({ index, description, twoProps }) => {
+            it(`template ${index} (${description}) should have twoPropositions=${twoProps}`, () => {
+                expect(component.ctlTemplates[index].twoPropositions).toBe(
+                    twoProps,
+                );
+            });
         });
     });
 });
