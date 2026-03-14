@@ -1,6 +1,6 @@
 package no.tk.behavior.bpmn;
 
-import com.google.common.base.Objects;
+import java.util.Objects;
 import no.tk.behavior.bpmn.auxiliary.visitors.FlowElementVisitor;
 
 public abstract class FlowElement {
@@ -42,7 +42,7 @@ public abstract class FlowElement {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(getId());
+    return Objects.hash(getId());
   }
 
   @Override

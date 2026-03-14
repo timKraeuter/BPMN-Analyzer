@@ -69,7 +69,9 @@ public class BPMNFileReader {
 
   public BPMNCollaboration readModelFromFilePath(Path file) throws IOException {
     String modelName = FilenameUtils.removeExtension(file.getFileName().toString());
-    return readModelFromStream(modelName, Files.newInputStream(file));
+    try (InputStream stream = Files.newInputStream(file)) {
+      return readModelFromStream(modelName, stream);
+    }
   }
 
   public BPMNCollaboration readModelFromStream(InputStream stream) {
@@ -590,7 +592,7 @@ public class BPMNFileReader {
           };
       return this.visitDefinition(eventDefinition, visitor);
     }
-    throw new BPMNRuntimeException("Start event has more than one event definition!");
+    throw new BPMNRuntimeException("End event has more than one event definition!");
   }
 
   private StartEvent mapStartEvent(FlowNode flowNode) {
@@ -825,27 +827,18 @@ public class BPMNFileReader {
   private <T> T visitDefinition(
       org.camunda.bpm.model.bpmn.instance.EventDefinition evDefinition,
       EventDefinitionVisitor<T> eventVisitor) {
-    if (evDefinition instanceof MessageEventDefinition messageEventDefinition) {
-      return eventVisitor.handle(messageEventDefinition);
-    }
-    if (evDefinition instanceof LinkEventDefinition linkEventDefinition) {
-      return eventVisitor.handle(linkEventDefinition);
-    }
-    if (evDefinition instanceof SignalEventDefinition signalEventDefinition) {
-      return eventVisitor.handle(signalEventDefinition);
-    }
-    if (evDefinition instanceof TerminateEventDefinition terminateEventDefinition) {
-      return eventVisitor.handle(terminateEventDefinition);
-    }
-    if (evDefinition instanceof TimerEventDefinition timerEventDefinition) {
-      return eventVisitor.handle(timerEventDefinition);
-    }
-    if (evDefinition instanceof ErrorEventDefinition errEvDef) {
-      return eventVisitor.handle(errEvDef);
-    }
-    if (evDefinition instanceof EscalationEventDefinition escEvDef) {
-      return eventVisitor.handle(escEvDef);
-    }
-    throw new BPMNRuntimeException("Unknown event definition found!" + evDefinition);
+    return switch (evDefinition) {
+      case MessageEventDefinition messageEventDefinition ->
+          eventVisitor.handle(messageEventDefinition);
+      case LinkEventDefinition linkEventDefinition -> eventVisitor.handle(linkEventDefinition);
+      case SignalEventDefinition signalEventDefinition ->
+          eventVisitor.handle(signalEventDefinition);
+      case TerminateEventDefinition terminateEventDefinition ->
+          eventVisitor.handle(terminateEventDefinition);
+      case TimerEventDefinition timerEventDefinition -> eventVisitor.handle(timerEventDefinition);
+      case ErrorEventDefinition errEvDef -> eventVisitor.handle(errEvDef);
+      case EscalationEventDefinition escEvDef -> eventVisitor.handle(escEvDef);
+      default -> throw new BPMNRuntimeException("Unknown event definition found!" + evDefinition);
+    };
   }
 }

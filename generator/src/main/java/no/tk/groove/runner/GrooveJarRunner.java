@@ -1,6 +1,5 @@
 package no.tk.groove.runner;
 
-import com.google.common.collect.Lists;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -17,7 +16,7 @@ public class GrooveJarRunner {
   private final boolean printOutputToConsole;
 
   private static String findGrooveBinDir() {
-    List<String> possibleLocations = Lists.newArrayList("./groove/bin", "../groove/bin");
+    List<String> possibleLocations = List.of("./groove/bin", "../groove/bin");
     for (String possibleLocation : possibleLocations) {
       if (Files.exists(Path.of(possibleLocation))) {
         return possibleLocation;
@@ -89,12 +88,17 @@ public class GrooveJarRunner {
       throws IOException, InterruptedException {
     builder.redirectErrorStream(true);
     Process process = builder.start();
+    Thread outputThread = null;
     if (printOutput) {
-      new Thread(() -> printOutput(process)).start();
+      outputThread = new Thread(() -> printOutput(process));
+      outputThread.start();
     }
     process.waitFor(60, TimeUnit.SECONDS);
     process.destroy(); // no op if already stopped.
     process.waitFor();
+    if (outputThread != null) {
+      outputThread.join();
+    }
   }
 
   private String runProcessAndReturnOutput(ProcessBuilder builder)
@@ -103,11 +107,13 @@ public class GrooveJarRunner {
 
     Process process = builder.start();
     ByteArrayOutputStream output = new ByteArrayOutputStream();
-    new Thread(() -> printOutput(process, output)).start();
+    Thread outputThread = new Thread(() -> printOutput(process, output));
+    outputThread.start();
 
     process.waitFor(60, TimeUnit.SECONDS);
     process.destroy(); // no op if already stopped.
     process.waitFor();
+    outputThread.join();
 
     return output.toString(StandardCharsets.UTF_8);
   }

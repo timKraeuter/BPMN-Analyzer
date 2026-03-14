@@ -1,6 +1,6 @@
 package no.tk.behavior.bpmn.gateways;
 
-import com.google.common.base.Objects;
+import java.util.Objects;
 import no.tk.behavior.bpmn.auxiliary.visitors.FlowElementVisitor;
 import no.tk.behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
 
@@ -59,6 +59,6 @@ public class EventBasedGateway extends Gateway {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(super.hashCode(), instantiate);
+    return Objects.hash(super.hashCode(), instantiate);
   }
 }

@@ -48,17 +48,17 @@ class GrooveJarRunnerTest {
     ModelCheckingResult result1 =
         grooveJarRunner.checkCTL(getCyclicNoLayoutGraphGrammar(), trueCTLProperty);
 
-    assertThat(result1.getUsedLogic(), is(TemporalLogic.CTL));
-    assertThat(result1.getProperty(), is(trueCTLProperty));
-    assertTrue(result1.isValid());
+    assertThat(result1.usedLogic(), is(TemporalLogic.CTL));
+    assertThat(result1.property(), is(trueCTLProperty));
+    assertTrue(result1.valid());
     assertFalse(result1.hasError());
 
     ModelCheckingResult result2 =
         grooveJarRunner.checkCTL(getCyclicNoLayoutGraphGrammar(), wrongCTLProperty);
 
-    assertThat(result2.getUsedLogic(), is(TemporalLogic.CTL));
-    assertThat(result2.getProperty(), is(wrongCTLProperty));
-    assertFalse(result2.isValid());
+    assertThat(result2.usedLogic(), is(TemporalLogic.CTL));
+    assertThat(result2.property(), is(wrongCTLProperty));
+    assertFalse(result2.valid());
     assertFalse(result2.hasError());
   }
 
@@ -74,12 +74,12 @@ class GrooveJarRunnerTest {
     ModelCheckingResult result =
         grooveJarRunner.checkCTL(getCyclicNoLayoutGraphGrammar(), property);
 
-    assertThat(result.getUsedLogic(), is(TemporalLogic.CTL));
-    assertThat(result.getProperty(), is(property));
+    assertThat(result.usedLogic(), is(TemporalLogic.CTL));
+    assertThat(result.property(), is(property));
     assertTrue(result.hasError());
-    assertFalse(result.isValid());
+    assertFalse(result.valid());
     assertThat(
-        result.getError(),
+        result.error(),
         is(
             "Error: Error while parsing 'G(!false)': Temporal operator 'G' should be nested inside path quantifier in CTL formula"));
   }

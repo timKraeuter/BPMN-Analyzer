@@ -1,6 +1,6 @@
 package no.tk.behavior.bpmn.activities.tasks;
 
-import com.google.common.base.Objects;
+import java.util.Objects;
 import no.tk.behavior.bpmn.auxiliary.visitors.ActivityVisitor;
 import no.tk.behavior.bpmn.auxiliary.visitors.FlowElementVisitor;
 import no.tk.behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
@@ -58,6 +58,6 @@ public class ReceiveTask extends AbstractTask {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(super.hashCode(), instantiate);
+    return Objects.hash(super.hashCode(), instantiate);
   }
 }

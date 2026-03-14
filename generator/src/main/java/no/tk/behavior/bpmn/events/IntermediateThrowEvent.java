@@ -1,6 +1,6 @@
 package no.tk.behavior.bpmn.events;
 
-import com.google.common.base.Objects;
+import java.util.Objects;
 import no.tk.behavior.bpmn.auxiliary.visitors.EventVisitor;
 import no.tk.behavior.bpmn.auxiliary.visitors.FlowElementVisitor;
 import no.tk.behavior.bpmn.auxiliary.visitors.FlowNodeVisitor;
@@ -55,6 +55,6 @@ public class IntermediateThrowEvent extends ThrowEvent {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(super.hashCode(), type, this.getEventDefinition().hashCode());
+    return Objects.hash(super.hashCode(), type, this.getEventDefinition().hashCode());
   }
 }
