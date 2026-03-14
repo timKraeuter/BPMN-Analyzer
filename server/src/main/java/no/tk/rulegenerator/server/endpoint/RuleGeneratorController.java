@@ -20,7 +20,7 @@ import no.tk.rulegenerator.server.endpoint.dtos.ModelCheckingRequest;
 import no.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import no.tk.rulegenerator.server.endpoint.verification.BPMNModelChecker;
 import no.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
-import org.apache.commons.lang3.tuple.Pair;
+import no.tk.rulegenerator.server.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

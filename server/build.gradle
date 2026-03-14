@@ -17,7 +17,6 @@ java {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 
@@ -32,9 +31,6 @@ dependencies {
     // https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api
     implementation group: 'jakarta.activation', name: 'jakarta.activation-api', version: '2.1.4'
 
-    // Add pair class
-    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    implementation 'org.apache.commons:commons-lang3:3.20.0'
     // https://mvnrepository.com/artifact/commons-io/commons-io
     implementation 'commons-io:commons-io:2.21.0'
 

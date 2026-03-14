@@ -33,8 +33,8 @@ import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
 import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificPropertyCheckingResponse;
 import no.tk.rulegenerator.server.endpoint.dtos.ModelCheckingResponse;
 import no.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
+import no.tk.rulegenerator.server.util.Pair;
 import no.tk.util.ValueWrapper;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -179,7 +179,7 @@ public class BPMNModelChecker {
       }
     }
 
-    String transitionSource = currentTransition.getKey();
+    String transitionSource = currentTransition.getLeft();
     if (transitionSource.equals(startState)) {
       return Optional.empty();
     }
