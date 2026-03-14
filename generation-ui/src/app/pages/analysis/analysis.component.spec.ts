@@ -266,7 +266,7 @@ describe('AnalysisComponent', () => {
             mockModelCheckingService.checkBPMNSpecificProperties.and.returnValue(
                 of({
                     propertyCheckingResults: [
-                        { name: 'Safeness', valid: true },
+                        { name: 'Safeness', valid: true, additionalInfo: '' },
                     ],
                 }),
             );
@@ -644,7 +644,7 @@ describe('AnalysisComponent', () => {
             mockModelCheckingService.checkBPMNSpecificProperties.and.returnValue(
                 of({
                     propertyCheckingResults: [
-                        { name: 'Safeness', valid: true },
+                        { name: 'Safeness', valid: true, additionalInfo: '' },
                     ],
                 }),
             );
@@ -665,7 +665,11 @@ describe('AnalysisComponent', () => {
                 Promise.resolve(new Blob(['<xml/>'])),
             );
             mockModelCheckingService.checkTemporalLogic.and.returnValue(
-                of(new ModelCheckingResponse('AG(!p)', true, '')),
+                of({
+                    property: 'AG(!p)',
+                    valid: true,
+                    error: '',
+                } as ModelCheckingResponse),
             );
 
             await component.checkCTLPropertyClicked();

@@ -1,4 +1,4 @@
-import { Component, HostListener, Inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
     MAT_DIALOG_DATA,
@@ -26,12 +26,13 @@ import { Proposition } from '../../models/proposition';
 })
 export class RenamePropositionDialogComponent {
     public newName: string;
+    public data: RenamePropositionDialogData =
+        inject<RenamePropositionDialogData>(MAT_DIALOG_DATA);
 
     constructor(
         private readonly dialogRef: MatDialogRef<RenamePropositionDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: RenamePropositionDialogData,
     ) {
-        this.newName = data.proposition.name;
+        this.newName = this.data.proposition.name;
     }
 
     closeDialog() {

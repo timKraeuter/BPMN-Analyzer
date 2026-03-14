@@ -1,8 +1,12 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { finalize } from 'rxjs';
 import { AnalysisResultComponent } from '../../components/analysis-result/analysis-result.component';
 import { BPMNProperty } from '../../models/bpmn-property';
-import { ModelCheckingResponse } from '../../models/model-checking-response';
+import {
+    BPMNSpecificPropertiesResponse,
+    ModelCheckingResponse,
+} from '../../models/model-checking-response';
 import { ModelCheckingService } from '../../services/model-checking.service';
 import { TemporalLogicSyntaxComponent } from '../../components/temporal-logic-syntax/temporal-logic-syntax.component';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
@@ -20,8 +24,18 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DiagramComponent } from '../../components/diagram/diagram.component';
-// @ts-ignore
 import { saveAs } from 'file-saver-es';
+
+interface CTLTemplate {
+    template: (...propositions: string[]) => string;
+    description: string;
+    twoPropositions: boolean;
+}
+
+interface BPMNElement {
+    id: string;
+    businessObject: { name?: string };
+}
 
 @Component({
     selector: 'app-analysis',
@@ -55,11 +69,11 @@ export class AnalysisComponent {
     public bpmnPropertyCheckingResults: BPMNProperty[] = [];
 
     // CTL property checking with templates
-    public selectedTemplate: any;
+    public selectedTemplate: CTLTemplate | undefined;
     public selectedProposition1: string = ''; // We only support one or two propositions.
     public selectedProposition2: string = '';
 
-    ctlTemplates: any[] = [
+    ctlTemplates: CTLTemplate[] = [
         {
             template: (proposition: string) => `AG(!${proposition})`,
             description: 'Never reaches',
@@ -101,13 +115,22 @@ export class AnalysisComponent {
 
         this.modelCheckingService
             .downloadGG(xmlModel, this.sharedState.propositions)
+            .pipe(finalize(() => (this.graphGrammarGenerationRunning = false)))
             .subscribe({
                 error: (error) => {
-                    const errorObject = JSON.parse(
-                        new TextDecoder().decode(error.error),
-                    );
-                    console.error(errorObject);
-                    this.snackBar.open(errorObject.message, 'close');
+                    let message = 'An unexpected error occurred.';
+                    try {
+                        const errorObject = JSON.parse(
+                            new TextDecoder().decode(error.error),
+                        );
+                        message = errorObject.message;
+                    } catch {
+                        if (error.message) {
+                            message = error.message;
+                        }
+                    }
+                    console.error(error);
+                    this.snackBar.open(message, 'close');
                 },
                 next: (data: ArrayBuffer) => {
                     // Receive and save as zip.
@@ -116,8 +139,7 @@ export class AnalysisComponent {
                     });
                     saveAs(blob, this.sharedState.modelFileName + '.gps.zip');
                 },
-            })
-            .add(() => (this.graphGrammarGenerationRunning = false));
+            });
     }
 
     ggInfoClicked() {
@@ -145,21 +167,21 @@ export class AnalysisComponent {
                 this.bpmnSpecificPropertiesToBeChecked,
                 xmlModel,
             )
+            .pipe(finalize(() => this.setVerificationRunning(false)))
             .subscribe({
                 error: (error) => {
                     console.error(error);
                     this.snackBar.open(error.error.message, 'close');
                     this.bpmnPropertyCheckingResults = [];
                 },
-                next: (data: any) => {
+                next: (data: BPMNSpecificPropertiesResponse) => {
                     this.bpmnPropertyCheckingResults = structuredClone(
-                        data['propertyCheckingResults'],
+                        data.propertyCheckingResults,
                     );
                     this.setProperCompletionHintsIfNeeded();
                     this.colorDeadActivitiesAndSetNamesIfNeeded();
                 },
-            })
-            .add(() => this.setVerificationRunning(false));
+            });
     }
 
     temporalLogicInfoClicked() {
@@ -178,6 +200,7 @@ export class AnalysisComponent {
                 xmlModel,
                 this.sharedState.propositions,
             )
+            .pipe(finalize(() => this.setVerificationRunning(false)))
             .subscribe({
                 error: (error) => {
                     console.error(error);
@@ -186,8 +209,7 @@ export class AnalysisComponent {
                 next: (response: ModelCheckingResponse) => {
                     this.ctlPropertyResult = response;
                 },
-            })
-            .add(() => this.setVerificationRunning(false));
+            });
     }
 
     private setProperCompletionHintsIfNeeded(): void {
@@ -198,12 +220,15 @@ export class AnalysisComponent {
                 ]);
                 this.colorElementsInRed(unproperEndEvents);
                 this.setEndNameAsInfo(value, unproperEndEvents);
-                this.bpmnModeler.updateViewerBPMNModel();
+                void this.bpmnModeler.updateViewerBPMNModel();
             }
         });
     }
 
-    private setEndNameAsInfo(value: BPMNProperty, unproperEndEvents: any) {
+    private setEndNameAsInfo(
+        value: BPMNProperty,
+        unproperEndEvents: BPMNElement[],
+    ) {
         const flowNodeNameOrIdList =
             this.getFlowNodeNameOrIdList(unproperEndEvents);
         value.additionalInfo = `The end event ${flowNodeNameOrIdList} consumed more than one token.`;
@@ -217,12 +242,15 @@ export class AnalysisComponent {
                 );
                 this.colorElementsInRed(deadActivities);
                 this.setActivityNamesAsInfo(value, deadActivities);
-                this.bpmnModeler.updateViewerBPMNModel();
+                void this.bpmnModeler.updateViewerBPMNModel();
             }
         });
     }
 
-    private setActivityNamesAsInfo(value: BPMNProperty, deadActivities: any[]) {
+    private setActivityNamesAsInfo(
+        value: BPMNProperty,
+        deadActivities: BPMNElement[],
+    ) {
         const deadActivityNames = this.getFlowNodeNameOrIdList(deadActivities);
         if (deadActivities.length > 1) {
             value.additionalInfo = `The dead activities are ${deadActivityNames}.`;
@@ -231,31 +259,36 @@ export class AnalysisComponent {
         }
     }
 
-    private getFlowNodeNameOrIdList(deadActivities: any[]): string {
-        return deadActivities
-            .map((value1) => {
-                if (!value1.businessObject.name) {
-                    return value1.id;
+    private getFlowNodeNameOrIdList(elements: BPMNElement[]): string {
+        return elements
+            .map((element) => {
+                if (!element.businessObject.name) {
+                    return element.id;
                 }
-                return value1.businessObject.name;
+                return element.businessObject.name;
             })
-            .map((value) => `"${value}"`)
+            .map((name) => `"${name}"`)
             .join(', ');
     }
 
-    private colorElementsInRed(elementsToColor: any[]) {
-        const modeling: any = this.bpmnModeler.getModeler().get('modeling');
-        modeling.setColor(elementsToColor, {
+    private colorElementsInRed(elementsToColor: BPMNElement[]) {
+        const modeling = this.bpmnModeler.getModeler().get('modeling');
+        (modeling as any).setColor(elementsToColor, {
             stroke: '#831311',
             fill: '#ffcdd2',
         });
     }
 
-    private getElementsForIDs(ids: string[]) {
-        const elementRegistry: any = this.bpmnModeler
+    private getElementsForIDs(ids: string[]): BPMNElement[] {
+        const elementRegistry = this.bpmnModeler
             .getModeler()
             .get('elementRegistry');
-        return ids.map((id) => elementRegistry.get(id));
+        return ids
+            .map(
+                (id) =>
+                    (elementRegistry as any).get(id) as BPMNElement | undefined,
+            )
+            .filter((element): element is BPMNElement => element !== undefined);
     }
 
     private setVerificationRunning(isRunning: boolean): void {
@@ -294,6 +327,6 @@ export class AnalysisComponent {
                 this.selectedProposition2.length > 0
             );
         }
-        return this.selectedTemplate && this.selectedProposition1;
+        return !!this.selectedTemplate && this.selectedProposition1.length > 0;
     }
 }

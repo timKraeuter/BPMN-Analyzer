@@ -1,7 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
-// @ts-ignore
 import { saveAs } from 'file-saver-es';
 import { BPMN_FILE_EXTENSION } from '../modeling/modeling.component';
 import { Proposition } from '../../models/proposition';
@@ -91,12 +90,14 @@ export class PropositionComponent {
     downloadTokenModel() {
         this.modeler
             .getTokenModelXMLBlob()
-            // @ts-ignore
             .then((result) => {
                 saveAs(
                     result,
                     this.currentProposition.name + BPMN_FILE_EXTENSION,
                 );
+            })
+            .catch((error) => {
+                console.error('Failed to download token model:', error);
             });
     }
 
@@ -124,7 +125,9 @@ export class PropositionComponent {
             return;
         }
         const index = this.propositions.indexOf(prop);
-        // Propositions should always exist.
+        if (index === -1) {
+            return;
+        }
         this.propositions.splice(index, 1);
         if (prop === this.currentProposition) {
             await this.switchToProposition(this.propositions[0]);
@@ -150,6 +153,9 @@ export class PropositionComponent {
                     svgBlob,
                     this.currentProposition.name + SVG_FILE_EXTENSION,
                 );
+            })
+            .catch((error) => {
+                console.error('Failed to download token model SVG:', error);
             });
     }
 

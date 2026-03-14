@@ -11,7 +11,7 @@ describe('DiagramComponent', () => {
     beforeEach(async () => {
         mockModeler = {
             attachTo: jasmine.createSpy('attachTo'),
-            destroy: jasmine.createSpy('destroy'),
+            detach: jasmine.createSpy('detach'),
             importXML: jasmine.createSpy('importXML'),
             get: jasmine.createSpy('get').and.returnValue({
                 attachTo: jasmine.createSpy('propertiesPanelAttachTo'),
@@ -66,11 +66,11 @@ describe('DiagramComponent', () => {
         expect(mockModeler.attachTo).toHaveBeenCalled();
     });
 
-    it('should destroy modeler on component destroy', () => {
+    it('should detach modeler on component destroy', () => {
         fixture.detectChanges();
         component.ngOnDestroy();
 
-        expect(mockModeler.destroy).toHaveBeenCalled();
+        expect(mockModeler.detach).toHaveBeenCalled();
     });
 
     it('should attach properties panel when propertiesPanel is true', () => {

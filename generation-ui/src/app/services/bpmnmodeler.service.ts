@@ -17,7 +17,6 @@ import ZoomScrollModule from 'diagram-js/lib/navigation/zoomscroll';
 import {
     BpmnPropertiesPanelModule,
     BpmnPropertiesProviderModule,
-    // @ts-ignore
 } from 'bpmn-js-properties-panel';
 
 const tokenOverrideModule = {

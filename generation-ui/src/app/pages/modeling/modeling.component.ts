@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-// @ts-ignore
 import { saveAs } from 'file-saver-es';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 import { SharedStateService } from '../../services/shared-state.service';
@@ -33,12 +32,14 @@ export class ModelingComponent {
     downloadBPMN() {
         this.bpmnModeler
             .getBPMNModelXMLBlob()
-            // @ts-ignore
             .then((result) => {
                 saveAs(
                     result,
                     this.sharedState.modelFileName + BPMN_FILE_EXTENSION,
                 );
+            })
+            .catch((error) => {
+                console.error('Failed to download BPMN model:', error);
             });
     }
 
@@ -65,6 +66,9 @@ export class ModelingComponent {
                     svgBlob,
                     this.sharedState.modelFileName + SVG_FILE_EXTENSION,
                 );
+            })
+            .catch((error) => {
+                console.error('Failed to download SVG:', error);
             });
     }
 }

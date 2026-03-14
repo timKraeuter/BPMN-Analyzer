@@ -36,6 +36,6 @@ export class TokenDiagramComponent implements AfterContentInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.modeler.destroy();
+        this.modeler.detach();
     }
 }
