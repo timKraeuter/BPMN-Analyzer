@@ -6,8 +6,6 @@
     color: red;
 }
 
-// Needed as a component-scoped override to keep 20px spacing for the spinner,
-// since the global .margin-top rule uses 10px.
 .margin-top {
     margin-top: 20px;
 }
