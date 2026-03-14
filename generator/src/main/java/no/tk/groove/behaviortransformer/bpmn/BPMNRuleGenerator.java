@@ -2,10 +2,10 @@ package no.tk.groove.behaviortransformer.bpmn;
 
 import static no.tk.groove.behaviortransformer.GrooveTransformerHelper.createStringNodeLabel;
 
-import com.google.common.collect.Sets;
 import io.github.timkraeuter.groove.graph.GrooveNode;
 import io.github.timkraeuter.groove.rule.GrooveGraphRule;
 import io.github.timkraeuter.groove.rule.GrooveRuleBuilder;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 import no.tk.behavior.bpmn.AbstractBPMNProcess;
@@ -37,7 +37,7 @@ public class BPMNRuleGenerator {
   BPMNRuleGenerator(GrooveRuleBuilder ruleBuilder, BPMNCollaboration collaboration) {
     this.ruleBuilder = ruleBuilder;
     this.collaboration = collaboration;
-    visitedProcessModels = Sets.newHashSet();
+    visitedProcessModels = new HashSet<>();
 
     taskRuleGenerator = new BPMNTaskRuleGeneratorImpl(collaboration, ruleBuilder);
     eventRuleGenerator = new BPMNEventRuleGeneratorImpl(this, ruleBuilder);

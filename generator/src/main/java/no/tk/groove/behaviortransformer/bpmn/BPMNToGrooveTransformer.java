@@ -91,26 +91,26 @@ public class BPMNToGrooveTransformer extends GrooveTransformer<BPMNCollaboration
   }
 
   private void copyTypeGraphAndFixedRules(Path targetFolder) {
-    InputStream typeGraph =
-        this.getClass()
-            .getResourceAsStream(
-                BPMNToGrooveTransformerConstants.FIXED_RULES_AND_TYPE_GRAPH_DIR
-                    + TYPE_GRAPH_FILE_NAME);
-    InputStream terminateRule =
-        this.getClass()
-            .getResourceAsStream(
-                BPMNToGrooveTransformerConstants.FIXED_RULES_AND_TYPE_GRAPH_DIR
-                    + TERMINATE_RULE_FILE_NAME);
-    InputStream unsafeGraph =
-        this.getClass()
-            .getResourceAsStream(
-                BPMNToGrooveTransformerConstants.FIXED_RULES_AND_TYPE_GRAPH_DIR + UNSAFE_FILE_NAME);
-    InputStream allterminatedGraph =
-        this.getClass()
-            .getResourceAsStream(
-                BPMNToGrooveTransformerConstants.FIXED_RULES_AND_TYPE_GRAPH_DIR
-                    + ALL_TERMINATED_FILE_NAME);
-    try {
+    try (InputStream typeGraph =
+            this.getClass()
+                .getResourceAsStream(
+                    BPMNToGrooveTransformerConstants.FIXED_RULES_AND_TYPE_GRAPH_DIR
+                        + TYPE_GRAPH_FILE_NAME);
+        InputStream terminateRule =
+            this.getClass()
+                .getResourceAsStream(
+                    BPMNToGrooveTransformerConstants.FIXED_RULES_AND_TYPE_GRAPH_DIR
+                        + TERMINATE_RULE_FILE_NAME);
+        InputStream unsafeGraph =
+            this.getClass()
+                .getResourceAsStream(
+                    BPMNToGrooveTransformerConstants.FIXED_RULES_AND_TYPE_GRAPH_DIR
+                        + UNSAFE_FILE_NAME);
+        InputStream allterminatedGraph =
+            this.getClass()
+                .getResourceAsStream(
+                    BPMNToGrooveTransformerConstants.FIXED_RULES_AND_TYPE_GRAPH_DIR
+                        + ALL_TERMINATED_FILE_NAME)) {
       Files.copy(typeGraph, Path.of(targetFolder.toString(), TYPE_GRAPH_FILE_NAME));
       Files.copy(terminateRule, Path.of(targetFolder.toString(), TERMINATE_RULE_FILE_NAME));
       Files.copy(unsafeGraph, Path.of(targetFolder.toString(), UNSAFE_FILE_NAME));

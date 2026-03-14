@@ -1,6 +1,6 @@
 package no.tk.behavior.bpmn.activities;
 
-import com.google.common.base.Objects;
+import java.util.Objects;
 import no.tk.behavior.bpmn.BPMNProcess;
 import no.tk.behavior.bpmn.auxiliary.visitors.ActivityVisitor;
 import no.tk.behavior.bpmn.auxiliary.visitors.FlowElementVisitor;
@@ -56,11 +56,11 @@ public class CallActivity extends Activity {
     if (!super.equals(o)) {
       return false;
     }
-    return Objects.equal(subProcessModel, that.subProcessModel);
+    return Objects.equals(subProcessModel, that.subProcessModel);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(super.hashCode(), subProcessModel);
+    return Objects.hash(super.hashCode(), subProcessModel);
   }
 }

@@ -1,13 +1,10 @@
 package no.tk.behavior.bpmn.events.definitions;
 
-public class NoEventDefinition implements EventDefinition {
-  private static NoEventDefinition instance;
+public final class NoEventDefinition implements EventDefinition {
+  private static final NoEventDefinition INSTANCE = new NoEventDefinition();
 
   public static NoEventDefinition create() {
-    if (instance == null) {
-      instance = new NoEventDefinition();
-    }
-    return instance;
+    return INSTANCE;
   }
 
   private NoEventDefinition() {}

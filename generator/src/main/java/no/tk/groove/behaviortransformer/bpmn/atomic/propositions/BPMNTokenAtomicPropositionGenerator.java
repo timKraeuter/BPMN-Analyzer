@@ -53,10 +53,10 @@ public class BPMNTokenAtomicPropositionGenerator {
 
   private void generateNodeForToken(
       Token token, GrooveNode snapshotNode, GrooveRuleBuilder ruleBuilder) {
-    if (token.isShouldExist()) {
-      contextTokenWithPosition(ruleBuilder, snapshotNode, token.getElementID());
+    if (token.shouldExist()) {
+      contextTokenWithPosition(ruleBuilder, snapshotNode, token.elementID());
     } else {
-      nacTokenWithPosition(ruleBuilder, snapshotNode, token.getElementID());
+      nacTokenWithPosition(ruleBuilder, snapshotNode, token.elementID());
     }
   }
 
