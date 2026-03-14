@@ -6,6 +6,13 @@
     margin-top: 16px;
 }
 
+// Needed as a component-scoped override so it wins over Angular Material's
+// stepper styles. The global .margin-top rule alone does not have enough
+// specificity inside the emulated encapsulation.
+.margin-top {
+    margin-top: 10px;
+}
+
 .step-buttons {
     display: flex;
     justify-content: flex-end;
