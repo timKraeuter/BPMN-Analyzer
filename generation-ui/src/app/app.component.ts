@@ -1,10 +1,12 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { BPMNModelerService } from './services/bpmnmodeler.service';
+import { ThemeService } from './services/theme.service';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { PropositionComponent } from './pages/proposition/proposition.component';
 import { ModelingComponent } from './pages/modeling/modeling.component';
 import { AnalysisComponent } from './pages/analysis/analysis.component';
@@ -18,6 +20,7 @@ import { AnalysisComponent } from './pages/analysis/analysis.component';
         MatIconModule,
         MatButtonModule,
         MatDividerModule,
+        MatTooltipModule,
         ModelingComponent,
         PropositionComponent,
         AnalysisComponent,
@@ -27,7 +30,10 @@ export class AppComponent {
     @ViewChild('stepper') private readonly stepper!: MatStepper;
     @ViewChild('proposition') propositionComponent!: PropositionComponent;
 
-    constructor(private readonly modeler: BPMNModelerService) {}
+    constructor(
+        private readonly modeler: BPMNModelerService,
+        public readonly themeService: ThemeService,
+    ) {}
 
     async stepChanged(event: StepperSelectionEvent) {
         if (this.changedToPropositionStep(event)) {

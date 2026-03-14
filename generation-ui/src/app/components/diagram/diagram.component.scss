@@ -8,6 +8,10 @@
     border-left: solid 3px #eee;
 }
 
+:host-context(.dark-theme) .properties-panel-parent {
+    border-left-color: #555555;
+}
+
 .diagram-parent {
     border: solid 3px #eee;
     position: relative;
@@ -17,4 +21,8 @@
     max-height: 100%;
     max-width: 100%;
     display: flex;
+}
+
+:host-context(.dark-theme) .diagram-parent {
+    border-color: #555555;
 }

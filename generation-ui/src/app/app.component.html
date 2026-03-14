@@ -1,3 +1,19 @@
+<div class="theme-toggle">
+    <button
+        mat-icon-button
+        (click)="themeService.toggle()"
+        [matTooltip]="
+            themeService.isDarkMode
+                ? 'Switch to light mode'
+                : 'Switch to dark mode'
+        "
+        data-testid="theme-toggle-btn"
+    >
+        <mat-icon>{{
+            themeService.isDarkMode ? 'light_mode' : 'dark_mode'
+        }}</mat-icon>
+    </button>
+</div>
 <mat-stepper
     #stepper
     animationDuration="0"

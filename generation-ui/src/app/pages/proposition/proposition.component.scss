@@ -2,8 +2,16 @@
     background: rgba(0, 0, 0, 0.04);
 }
 
+:host-context(.dark-theme) .proposition:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
 .highlight {
     background: #dddddd;
+}
+
+:host-context(.dark-theme) .highlight {
+    background: #444444;
 }
 
 .diagram-parent {
@@ -15,6 +23,10 @@
     max-height: 100%;
     width: 80%;
     max-width: 90%;
+}
+
+:host-context(.dark-theme) .diagram-parent {
+    border-color: #555555;
 }
 
 .propositions-container {

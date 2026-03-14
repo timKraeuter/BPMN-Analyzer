@@ -1,4 +1,32 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+html {
+    @include mat.theme(
+        (
+            color: (
+                theme-type: light,
+                primary: mat.$azure-palette,
+                tertiary: mat.$rose-palette,
+            ),
+            typography: Roboto,
+            density: 0,
+        )
+    );
+}
+
+html.dark-theme {
+    @include mat.theme(
+        (
+            color: (
+                theme-type: dark,
+                primary: mat.$azure-palette,
+                tertiary: mat.$rose-palette,
+            ),
+            typography: Roboto,
+            density: 0,
+        )
+    );
+}
 
 html,
 body {
@@ -8,6 +36,11 @@ body {
 body {
     margin: 0;
     font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+html.dark-theme body {
+    background-color: #303030;
+    color: #ffffff;
 }
 
 .margin-top {
