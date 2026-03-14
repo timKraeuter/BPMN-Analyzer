@@ -249,7 +249,7 @@ describe('PropositionComponent', () => {
             await component.switchToProposition(firstProp);
 
             const event = {
-                target: { className: '' },
+                target: { classList: { contains: () => false } },
             } as unknown as Event;
 
             await component.propositionDown(event);
@@ -261,7 +261,7 @@ describe('PropositionComponent', () => {
 
         it('should not navigate when already at last proposition', async () => {
             const event = {
-                target: { className: '' },
+                target: { classList: { contains: () => false } },
             } as unknown as Event;
             const current = component.currentProposition;
 
@@ -276,7 +276,12 @@ describe('PropositionComponent', () => {
             await component.switchToProposition(firstProp);
 
             const event = {
-                target: { className: 'bio-properties-panel-input' },
+                target: {
+                    classList: {
+                        contains: (cls: string) =>
+                            cls === 'bio-properties-panel-input',
+                    },
+                },
             } as unknown as Event;
 
             await component.propositionDown(event);
@@ -291,7 +296,7 @@ describe('PropositionComponent', () => {
             const firstProp = component.propositions[0];
 
             const event = {
-                target: { className: '' },
+                target: { classList: { contains: () => false } },
             } as unknown as Event;
 
             await component.propositionUp(event);
@@ -305,7 +310,7 @@ describe('PropositionComponent', () => {
             await component.switchToProposition(firstProp);
 
             const event = {
-                target: { className: '' },
+                target: { classList: { contains: () => false } },
             } as unknown as Event;
 
             await component.propositionUp(event);
@@ -317,7 +322,12 @@ describe('PropositionComponent', () => {
             await component.createNewProposition();
 
             const event = {
-                target: { className: 'bio-properties-panel-input' },
+                target: {
+                    classList: {
+                        contains: (cls: string) =>
+                            cls === 'bio-properties-panel-input',
+                    },
+                },
             } as unknown as Event;
             const current = component.currentProposition;
 

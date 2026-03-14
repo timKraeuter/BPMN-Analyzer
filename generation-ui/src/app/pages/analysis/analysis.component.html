@@ -89,46 +89,6 @@
                 </button>
             </mat-card-content>
         </mat-tab>
-        @if (false) {
-            <mat-tab label="LTL properties">
-                <mat-card-content>
-                    Specify a LTL property to check for the BPMN model.
-                    <br />
-                    <form class="form margin-top">
-                        <mat-form-field class="full-width" appearance="fill">
-                            <mat-label>LTL Property</mat-label>
-                            <textarea
-                                matInput
-                                [(ngModel)]="ltlProperty"
-                                placeholder="G(F(AllTerminated))"
-                                name="ltlProperty"
-                                (keydown)="this.stopEventPropagation($event)"
-                            ></textarea>
-                        </mat-form-field>
-                    </form>
-                    <div class="analysis-buttons">
-                        <button
-                            mat-raised-button
-                            color="primary"
-                            matTooltip="Checking custom LTL properties is not implemented in the web interface yet due to the following bug in Groove https://sourceforge.net/p/groove/bugs/499/."
-                            (click)="checkLTLPropertyClicked()"
-                        >
-                            <mat-icon>check</mat-icon>
-                            Check LTL property
-                        </button>
-                        <button
-                            mat-icon-button
-                            aria-label="LTL syntax info button"
-                            color="primary"
-                            (click)="temporalLogicInfoClicked()"
-                            matTooltip="Show LTL syntax."
-                        >
-                            <mat-icon>info</mat-icon>
-                        </button>
-                    </div>
-                </mat-card-content>
-            </mat-tab>
-        }
         <mat-tab label="CTL properties">
             <mat-card-content>
                 <div>Create a CTL property from a template.</div>
@@ -248,8 +208,8 @@
         </mat-tab>
     </mat-tab-group>
 </mat-card>
-<analysis-result-component
+<app-analysis-result
     [running]="bpmnSpecificVerificationRunning"
     [properties]="bpmnPropertyCheckingResults"
     [ctlPropertyResult]="ctlPropertyResult"
-></analysis-result-component>
+></app-analysis-result>

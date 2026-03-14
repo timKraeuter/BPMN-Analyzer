@@ -6,10 +6,8 @@ import { of, throwError } from 'rxjs';
 import { AnalysisComponent } from './analysis.component';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 import { DiagramComponent } from '../../components/diagram/diagram.component';
-import {
-    ModelCheckingResponse,
-    ModelCheckingService,
-} from '../../services/model-checking.service';
+import { ModelCheckingService } from '../../services/model-checking.service';
+import { ModelCheckingResponse } from '../../models/model-checking-response';
 import { SharedStateService } from '../../services/shared-state.service';
 
 describe('AnalysisComponent', () => {
@@ -310,11 +308,11 @@ describe('AnalysisComponent', () => {
 
     describe('checkCTLPropertyClicked', () => {
         it('should call service and set result on success', async () => {
-            const mockResponse = new ModelCheckingResponse(
-                'AG(!Unsafe)',
-                true,
-                '',
-            );
+            const mockResponse: ModelCheckingResponse = {
+                property: 'AG(!Unsafe)',
+                valid: true,
+                error: '',
+            };
             mockBpmnModeler.getBPMNModelXMLBlob.and.returnValue(
                 Promise.resolve(new Blob(['<xml/>'])),
             );
@@ -352,7 +350,7 @@ describe('AnalysisComponent', () => {
         });
     });
 
-    describe('info and LTL snackbars', () => {
+    describe('info snackbars', () => {
         it('should show GG info snackbar', () => {
             component.ggInfoClicked();
             expect(mockSnackBar.open).toHaveBeenCalledWith(
@@ -364,15 +362,6 @@ describe('AnalysisComponent', () => {
         it('should show temporal logic info snackbar', () => {
             component.temporalLogicInfoClicked();
             expect(mockSnackBar.openFromComponent).toHaveBeenCalled();
-        });
-
-        it('should show LTL not implemented snackbar', () => {
-            component.checkLTLPropertyClicked();
-            expect(mockSnackBar.open).toHaveBeenCalledWith(
-                jasmine.stringContaining('LTL'),
-                'close',
-                { duration: 5000 },
-            );
         });
     });
 
