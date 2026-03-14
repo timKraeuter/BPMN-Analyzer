@@ -42,8 +42,13 @@ describe('ThemeService', () => {
 
     it('should restore dark mode from localStorage', () => {
         localStorage.setItem('dark-theme', 'true');
+        // Create a fresh injector so the constructor re-reads localStorage
+        TestBed.resetTestingModule();
+        TestBed.configureTestingModule({});
         const newService = TestBed.inject(ThemeService);
-        // Service reads from localStorage in constructor
-        expect(newService).toBeTruthy();
+        expect(newService.isDarkMode).toBeTrue();
+        expect(
+            document.documentElement.classList.contains('dark-theme'),
+        ).toBeTrue();
     });
 });
