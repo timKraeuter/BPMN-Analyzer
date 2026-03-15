@@ -14,7 +14,6 @@ export const BPMN_FILE_EXTENSION = '.bpmn';
 @Component({
     selector: 'app-modeling',
     templateUrl: './modeling.component.html',
-    styleUrls: ['./modeling.component.scss'],
     imports: [
         MatCardModule,
         MatButtonModule,

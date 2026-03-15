@@ -168,8 +168,8 @@ export class PropositionComponent {
                 'bio-properties-panel-input',
             )
         ) {
-            const currentIndex = this.propositions.findIndex(
-                (proposition) => proposition === this.currentProposition,
+            const currentIndex = this.propositions.indexOf(
+                this.currentProposition,
             );
             const nextProposition = this.propositions[currentIndex + 1];
             if (nextProposition) {
@@ -187,8 +187,8 @@ export class PropositionComponent {
                 'bio-properties-panel-input',
             )
         ) {
-            const currentIndex = this.propositions.findIndex(
-                (proposition) => proposition === this.currentProposition,
+            const currentIndex = this.propositions.indexOf(
+                this.currentProposition,
             );
             const nextProposition = this.propositions[currentIndex - 1];
             if (nextProposition) {
