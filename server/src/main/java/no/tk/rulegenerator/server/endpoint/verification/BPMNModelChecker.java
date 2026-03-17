@@ -168,7 +168,7 @@ public class BPMNModelChecker {
       Set<String> endEventNames,
       Set<String> seenEndEvents,
       Pair<String, String> currentTransition) {
-    String transitionLabel = currentTransition.getRight();
+    String transitionLabel = currentTransition.right();
     // Check the label
     for (String endEventName : endEventNames) {
       if (transitionLabel.equals(endEventName) || transitionLabel.startsWith(endEventName + "_")) {
@@ -179,7 +179,7 @@ public class BPMNModelChecker {
       }
     }
 
-    String transitionSource = currentTransition.getLeft();
+    String transitionSource = currentTransition.left();
     if (transitionSource.equals(startState)) {
       return Optional.empty();
     }

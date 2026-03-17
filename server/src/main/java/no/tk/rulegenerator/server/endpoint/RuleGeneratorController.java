@@ -55,7 +55,7 @@ public class RuleGeneratorController {
     validateFilePresent(file);
     RuleGeneratorControllerHelper.deleteGGsAndStateSpacesOlderThanOneHour();
 
-    Path ggDir = RuleGeneratorControllerHelper.generateGGForBPMNFile(file, true).getLeft();
+    Path ggDir = RuleGeneratorControllerHelper.generateGGForBPMNFile(file, true).left();
 
     RuleGeneratorControllerHelper.generatePropositions(
         ggDir, readPropositionsFromJSON(propositions), true);
@@ -100,7 +100,7 @@ public class RuleGeneratorController {
         RuleGeneratorControllerHelper.generateGGForBPMNFile(request.file(), false);
 
     try {
-      return new BPMNModelChecker(result.getLeft(), result.getRight())
+      return new BPMNModelChecker(result.left(), result.right())
           .checkBPMNProperties(request.propertiesToBeChecked());
     } catch (InterruptedException _) {
       Thread.currentThread().interrupt();
@@ -124,10 +124,10 @@ public class RuleGeneratorController {
         RuleGeneratorControllerHelper.generateGGForBPMNFile(request.file(), false);
 
     RuleGeneratorControllerHelper.generatePropositions(
-        dirAndCollaboration.getLeft(), readPropositionsFromJSON(request.propositions()), false);
+        dirAndCollaboration.left(), readPropositionsFromJSON(request.propositions()), false);
 
     try {
-      return new BPMNModelChecker(dirAndCollaboration.getLeft(), dirAndCollaboration.getRight())
+      return new BPMNModelChecker(dirAndCollaboration.left(), dirAndCollaboration.right())
           .checkTemporalLogicProperty(request.logic(), request.property());
     } catch (InterruptedException _) {
       Thread.currentThread().interrupt();

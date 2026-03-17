@@ -268,8 +268,8 @@ class RuleGeneratorControllerTests {
                     convertProps(List.of(BPMNSpecificProperty.NO_DEAD_ACTIVITIES)))));
 
     // An empty file is rejected by input validation — expect a 400 Bad Request
-    assertThat(response.getLeft(), is(400));
-    assertThat(response.getRight(), containsString("BPMN file is required"));
+    assertThat(response.left(), is(400));
+    assertThat(response.right(), containsString("BPMN file is required"));
   }
 
   @Test
@@ -278,8 +278,8 @@ class RuleGeneratorControllerTests {
         makeMultipartRequestWithoutFile(CHECK_BPMN_SPECIFIC_PROPERTIES);
 
     // Missing required file part — expect a 400 Bad Request
-    assertThat(response.getLeft(), is(400));
-    assertThat(response.getRight(), containsString("BPMN file is required"));
+    assertThat(response.left(), is(400));
+    assertThat(response.right(), containsString("BPMN file is required"));
   }
 
   @Test
@@ -299,8 +299,8 @@ class RuleGeneratorControllerTests {
 
       // Spring should reject with a 413 Payload Too Large (or 500 wrapping MaxUploadSizeExceeded)
       assertTrue(
-          response.getLeft() == 413 || response.getLeft() == 500,
-          "Expected 413 or 500 but got " + response.getLeft());
+          response.left() == 413 || response.left() == 500,
+          "Expected 413 or 500 but got " + response.left());
     } catch (ResourceAccessException _) {
       // On some JDKs, Tomcat closes the connection before a response is fully sent for oversized
       // uploads. A ResourceAccessException (connection reset/aborted) still means the server
@@ -359,7 +359,7 @@ class RuleGeneratorControllerTests {
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
     MultiValueMap<String, Object> multipartBody = new LinkedMultiValueMap<>();
-    body.forEach(bodyPart -> multipartBody.add(bodyPart.getLeft(), bodyPart.getRight()));
+    body.forEach(bodyPart -> multipartBody.add(bodyPart.left(), bodyPart.right()));
     multipartBody.add("file", new FileSystemResource(bpmnModelFile));
 
     HttpEntity<MultiValueMap<String, Object>> requestEntity =
@@ -379,7 +379,7 @@ class RuleGeneratorControllerTests {
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
     MultiValueMap<String, Object> multipartBody = new LinkedMultiValueMap<>();
-    body.forEach(bodyPart -> multipartBody.add(bodyPart.getLeft(), bodyPart.getRight()));
+    body.forEach(bodyPart -> multipartBody.add(bodyPart.left(), bodyPart.right()));
     multipartBody.add(
         "file",
         new ByteArrayResource(fileContent) {

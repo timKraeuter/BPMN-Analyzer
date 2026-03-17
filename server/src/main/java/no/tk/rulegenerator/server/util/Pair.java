@@ -12,14 +12,4 @@ public record Pair<L, R>(L left, R right) {
   public static <L, R> Pair<L, R> of(L left, R right) {
     return new Pair<>(left, right);
   }
-
-  /** Returns the left element (alias for {@link #left()}). */
-  public L getLeft() {
-    return left;
-  }
-
-  /** Returns the right element (alias for {@link #right()}). */
-  public R getRight() {
-    return right;
-  }
 }
