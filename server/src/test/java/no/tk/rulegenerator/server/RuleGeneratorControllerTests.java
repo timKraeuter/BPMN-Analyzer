@@ -349,8 +349,8 @@ class RuleGeneratorControllerTests {
     ResponseEntity<String> response =
         restTemplate.postForEntity("/generateGGAndZip", requestEntity, String.class);
 
-    // Then: Expect error response with structured message
-    assertThat(response.getStatusCode().value(), is(500));
+    // Then: Expect error response with structured message (400 since it's a BPMN validation error)
+    assertThat(response.getStatusCode().value(), is(400));
     assertThat(response.getBody(), containsString("message"));
     assertThat(
         response.getBody(),
