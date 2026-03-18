@@ -22,7 +22,11 @@ import no.tk.rulegenerator.server.endpoint.verification.BPMNModelChecker;
 import no.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
 import no.tk.rulegenerator.server.util.Pair;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 

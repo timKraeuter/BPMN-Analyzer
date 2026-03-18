@@ -66,7 +66,10 @@ tasks.named('sonar').configure {
 
 spotless {
     java {
-        googleJavaFormat()
+        importOrder('', '\\#')
+        removeUnusedImports()
+        forbidWildcardImports()
+        googleJavaFormat().reorderImports(false)
         formatAnnotations()
     }
 }
