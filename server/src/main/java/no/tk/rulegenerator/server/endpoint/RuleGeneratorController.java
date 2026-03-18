@@ -22,7 +22,11 @@ import no.tk.rulegenerator.server.endpoint.verification.BPMNModelChecker;
 import no.tk.rulegenerator.server.endpoint.verification.exception.ModelCheckingException;
 import no.tk.rulegenerator.server.util.Pair;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -102,9 +106,9 @@ public class RuleGeneratorController {
     try {
       return new BPMNModelChecker(result.left(), result.right())
           .checkBPMNProperties(request.propertiesToBeChecked());
-    } catch (InterruptedException _) {
+    } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      throw new ModelCheckingException("Model checking was interrupted.");
+      throw new ModelCheckingException("Model checking was interrupted.", e);
     }
   }
 
@@ -129,9 +133,9 @@ public class RuleGeneratorController {
     try {
       return new BPMNModelChecker(dirAndCollaboration.left(), dirAndCollaboration.right())
           .checkTemporalLogicProperty(request.logic(), request.property());
-    } catch (InterruptedException _) {
+    } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      throw new ModelCheckingException("Model checking was interrupted.");
+      throw new ModelCheckingException("Model checking was interrupted.", e);
     }
   }
 
