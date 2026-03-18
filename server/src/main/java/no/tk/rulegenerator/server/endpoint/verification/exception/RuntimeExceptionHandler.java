@@ -24,14 +24,20 @@ public class RuntimeExceptionHandler extends ResponseEntityExceptionHandler {
         new ModelCheckingErrorResponse(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
-  /** Handle known BPMN validation exceptions from the generator library. */
-  @ExceptionHandler({
-    BPMNRuntimeException.class,
-    GrooveGenerationRuntimeException.class,
-    ShouldNotHappenRuntimeException.class
-  })
-  public ResponseEntity<ModelCheckingErrorResponse> handleBPMNException(RuntimeException ex) {
-    log.error("BPMN processing exception!", ex);
+  /** Handle BPMN validation errors caused by invalid user input (bad BPMN models). */
+  @ExceptionHandler({BPMNRuntimeException.class, GrooveGenerationRuntimeException.class})
+  public ResponseEntity<ModelCheckingErrorResponse> handleBPMNValidationException(
+      RuntimeException ex) {
+    log.error("BPMN validation exception!", ex);
+    return new ResponseEntity<>(
+        new ModelCheckingErrorResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
+  }
+
+  /** Handle internal generator errors that indicate a bug rather than invalid input. */
+  @ExceptionHandler(ShouldNotHappenRuntimeException.class)
+  public ResponseEntity<ModelCheckingErrorResponse> handleShouldNotHappenException(
+      ShouldNotHappenRuntimeException ex) {
+    log.error("Internal generator error!", ex);
     return new ResponseEntity<>(
         new ModelCheckingErrorResponse(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
   }

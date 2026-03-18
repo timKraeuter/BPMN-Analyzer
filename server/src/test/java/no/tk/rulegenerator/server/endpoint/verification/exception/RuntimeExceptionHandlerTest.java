@@ -32,20 +32,20 @@ class RuntimeExceptionHandlerTest {
     assertThat(response.getBody().message(), is("State space generation timed out."));
   }
 
-  // --- BPMN exception handler ---
+  // --- BPMN validation exception handler (400 Bad Request) ---
 
   @Test
-  void testBPMNRuntimeExceptionReturnsMessage() {
+  void testBPMNRuntimeExceptionReturnsBadRequest() {
     // Given
     BPMNRuntimeException ex =
         new BPMNRuntimeException(
             "Intermediate throw events should have exactly one incoming sequence flow!");
 
     // When
-    ResponseEntity<ModelCheckingErrorResponse> response = handler.handleBPMNException(ex);
+    ResponseEntity<ModelCheckingErrorResponse> response = handler.handleBPMNValidationException(ex);
 
     // Then
-    assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+    assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     assertThat(response.getBody(), is(notNullValue()));
     assertThat(
         response.getBody().message(),
@@ -53,28 +53,31 @@ class RuntimeExceptionHandlerTest {
   }
 
   @Test
-  void testGrooveGenerationExceptionReturnsMessage() {
+  void testGrooveGenerationExceptionReturnsBadRequest() {
     // Given
     GrooveGenerationRuntimeException ex =
         new GrooveGenerationRuntimeException("Grammar generation failed.");
 
     // When
-    ResponseEntity<ModelCheckingErrorResponse> response = handler.handleBPMNException(ex);
+    ResponseEntity<ModelCheckingErrorResponse> response = handler.handleBPMNValidationException(ex);
 
     // Then
-    assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+    assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     assertThat(response.getBody(), is(notNullValue()));
     assertThat(response.getBody().message(), is("Grammar generation failed."));
   }
 
+  // --- ShouldNotHappenRuntimeException handler (500 Internal Server Error) ---
+
   @Test
-  void testShouldNotHappenExceptionReturnsMessage() {
+  void testShouldNotHappenExceptionReturnsInternalServerError() {
     // Given
     ShouldNotHappenRuntimeException ex =
         new ShouldNotHappenRuntimeException("Only CTL model checking is currently supported!");
 
     // When
-    ResponseEntity<ModelCheckingErrorResponse> response = handler.handleBPMNException(ex);
+    ResponseEntity<ModelCheckingErrorResponse> response =
+        handler.handleShouldNotHappenException(ex);
 
     // Then
     assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
