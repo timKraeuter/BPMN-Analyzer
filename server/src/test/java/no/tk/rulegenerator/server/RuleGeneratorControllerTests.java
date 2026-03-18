@@ -50,6 +50,10 @@ class RuleGeneratorControllerTests {
   public static final String BPMN_FILE_ERROR = "/ruleGeneratorController/errorModel.bpmn";
   public static final String BPMN_FILE_DEAD = "/ruleGeneratorController/dead.bpmn";
   public static final String BPMN_FILE_PROPOSITIONS = "/ruleGeneratorController/propositions.bpmn";
+  public static final String FOUR_PROPOSITIONS_JSON =
+      "/ruleGeneratorController/four-propositions.json";
+  public static final String SINGLE_PROPOSITION_JSON =
+      "/ruleGeneratorController/single-proposition.json";
   public static final String PROPERTIES_TO_BE_CHECKED = "propertiesToBeChecked";
   public static final String CHECK_BPMN_SPECIFIC_PROPERTIES = "checkBPMNSpecificProperties";
   public static final String CHECK_TEMPORAL_LOGIC = "checkTemporalLogic";
@@ -200,10 +204,7 @@ class RuleGeneratorControllerTests {
             List.of(
                 Pair.of("logic", "CTL"),
                 Pair.of("property", "EF(a) & EF(sf) & EF(unnamedFlow) & EF(unnamedTask)"),
-                Pair.of(
-                    "propositions",
-                    // Added propositions as string instead of reading three files.
-                    "[{\"name\":\"a\",\"xml\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\\n<definitions xmlns=\\\"http://www.omg.org/spec/BPMN/20100524/MODEL\\\" xmlns:bpmndi=\\\"http://www.omg.org/spec/BPMN/20100524/DI\\\" xmlns:omgdc=\\\"http://www.omg.org/spec/DD/20100524/DC\\\" xmlns:omgdi=\\\"http://www.omg.org/spec/DD/20100524/DI\\\" xmlns:xsi=\\\"http://www.w3.org/2001/XMLSchema-instance\\\" xmlns:bt=\\\"http://tk/schema/1.0/bt\\\" xmlns:bioc=\\\"http://bpmn.io/schema/bpmn/biocolor/1.0\\\" xmlns:color=\\\"http://www.omg.org/spec/BPMN/non-normative/color/1.0\\\" targetNamespace=\\\"\\\" xsi:schemaLocation=\\\"http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd\\\"><process id=\\\"Process_00fdlmt\\\"><extensionElements><bt:processSnapshot id=\\\"ProcessSnapshot_0vizifk\\\" /><bt:token id=\\\"Token_1ak8s1u\\\" processSnapshot=\\\"ProcessSnapshot_0vizifk\\\" /></extensionElements><startEvent id=\\\"Event_18czgyp\\\"><outgoing>Flow_1nyqtbr</outgoing></startEvent><task id=\\\"Activity_066r1vr\\\" name=\\\"A\\\"><incoming>Flow_1nyqtbr</incoming><outgoing>Flow_1puhjbw</outgoing></task><sequenceFlow id=\\\"Flow_1nyqtbr\\\" name=\\\"sf\\\" sourceRef=\\\"Event_18czgyp\\\" targetRef=\\\"Activity_066r1vr\\\" /><task id=\\\"Activity_1fzxoyj\\\"><incoming>Flow_1puhjbw</incoming><outgoing>Flow_06vnlyp</outgoing></task><sequenceFlow id=\\\"Flow_1puhjbw\\\" sourceRef=\\\"Activity_066r1vr\\\" targetRef=\\\"Activity_1fzxoyj\\\" /><endEvent id=\\\"Event_0qqd83m\\\"><incoming>Flow_06vnlyp</incoming></endEvent><sequenceFlow id=\\\"Flow_06vnlyp\\\" sourceRef=\\\"Activity_1fzxoyj\\\" targetRef=\\\"Event_0qqd83m\\\" /><association id=\\\"Association_0grzgrz\\\" sourceRef=\\\"Activity_066r1vr\\\" targetRef=\\\"Token_1ak8s1u\\\" /></process><bpmndi:BPMNDiagram id=\\\"sid-74620812-92c4-44e5-949c-aa47393d3830\\\"><bpmndi:BPMNPlane id=\\\"sid-cdcae759-2af7-4a6d-bd02-53f3352a731d\\\" bpmnElement=\\\"Process_00fdlmt\\\"><bpmndi:BPMNShape id=\\\"Event_18czgyp_di\\\" bpmnElement=\\\"Event_18czgyp\\\"><omgdc:Bounds x=\\\"222\\\" y=\\\"172\\\" width=\\\"36\\\" height=\\\"36\\\" /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"Activity_066r1vr_di\\\" bpmnElement=\\\"Activity_066r1vr\\\"><omgdc:Bounds x=\\\"310\\\" y=\\\"150\\\" width=\\\"100\\\" height=\\\"80\\\" /><bpmndi:BPMNLabel /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"Activity_1fzxoyj_di\\\" bpmnElement=\\\"Activity_1fzxoyj\\\"><omgdc:Bounds x=\\\"470\\\" y=\\\"150\\\" width=\\\"100\\\" height=\\\"80\\\" /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"Event_0qqd83m_di\\\" bpmnElement=\\\"Event_0qqd83m\\\"><omgdc:Bounds x=\\\"632\\\" y=\\\"172\\\" width=\\\"36\\\" height=\\\"36\\\" /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"ProcessSnapshot_0vizifk_di\\\" bpmnElement=\\\"ProcessSnapshot_0vizifk\\\" bioc:fill=\\\"#1298ba\\\" color:background-color=\\\"#1298ba\\\"><omgdc:Bounds x=\\\"210\\\" y=\\\"290\\\" width=\\\"20\\\" height=\\\"20\\\" /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"Token_1ak8s1u_di\\\" bpmnElement=\\\"Token_1ak8s1u\\\" bioc:fill=\\\"#1298ba\\\" color:background-color=\\\"#1298ba\\\"><omgdc:Bounds x=\\\"350\\\" y=\\\"280\\\" width=\\\"20\\\" height=\\\"20\\\" /></bpmndi:BPMNShape><bpmndi:BPMNEdge id=\\\"Flow_1nyqtbr_di\\\" bpmnElement=\\\"Flow_1nyqtbr\\\"><omgdi:waypoint x=\\\"258\\\" y=\\\"190\\\" /><omgdi:waypoint x=\\\"310\\\" y=\\\"190\\\" /><bpmndi:BPMNLabel><omgdc:Bounds x=\\\"279\\\" y=\\\"172\\\" width=\\\"11\\\" height=\\\"14\\\" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge><bpmndi:BPMNEdge id=\\\"Flow_1puhjbw_di\\\" bpmnElement=\\\"Flow_1puhjbw\\\"><omgdi:waypoint x=\\\"410\\\" y=\\\"190\\\" /><omgdi:waypoint x=\\\"470\\\" y=\\\"190\\\" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id=\\\"Flow_06vnlyp_di\\\" bpmnElement=\\\"Flow_06vnlyp\\\"><omgdi:waypoint x=\\\"570\\\" y=\\\"190\\\" /><omgdi:waypoint x=\\\"632\\\" y=\\\"190\\\" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id=\\\"Association_0grzgrz_di\\\" bpmnElement=\\\"Association_0grzgrz\\\"><omgdi:waypoint x=\\\"360\\\" y=\\\"230\\\" /><omgdi:waypoint x=\\\"360\\\" y=\\\"280\\\" /></bpmndi:BPMNEdge></bpmndi:BPMNPlane><bpmndi:BPMNLabelStyle id=\\\"sid-e0502d32-f8d1-41cf-9c4a-cbb49fecf581\\\"><omgdc:Font name=\\\"Arial\\\" size=\\\"11\\\" isBold=\\\"false\\\" isItalic=\\\"false\\\" isUnderline=\\\"false\\\" isStrikeThrough=\\\"false\\\" /></bpmndi:BPMNLabelStyle><bpmndi:BPMNLabelStyle id=\\\"sid-84cb49fd-2f7c-44fb-8950-83c3fa153d3b\\\"><omgdc:Font name=\\\"Arial\\\" size=\\\"12\\\" isBold=\\\"false\\\" isItalic=\\\"false\\\" isUnderline=\\\"false\\\" isStrikeThrough=\\\"false\\\" /></bpmndi:BPMNLabelStyle></bpmndi:BPMNDiagram></definitions>\"},{\"name\":\"sf\",\"xml\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\\n<definitions xmlns=\\\"http://www.omg.org/spec/BPMN/20100524/MODEL\\\" xmlns:bpmndi=\\\"http://www.omg.org/spec/BPMN/20100524/DI\\\" xmlns:omgdc=\\\"http://www.omg.org/spec/DD/20100524/DC\\\" xmlns:omgdi=\\\"http://www.omg.org/spec/DD/20100524/DI\\\" xmlns:xsi=\\\"http://www.w3.org/2001/XMLSchema-instance\\\" xmlns:bt=\\\"http://tk/schema/1.0/bt\\\" xmlns:bioc=\\\"http://bpmn.io/schema/bpmn/biocolor/1.0\\\" xmlns:color=\\\"http://www.omg.org/spec/BPMN/non-normative/color/1.0\\\" targetNamespace=\\\"\\\" xsi:schemaLocation=\\\"http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd\\\"><process id=\\\"Process_00fdlmt\\\"><extensionElements><bt:processSnapshot id=\\\"ProcessSnapshot_0txhj1e\\\" /><bt:token id=\\\"Token_06dl8kn\\\" processSnapshot=\\\"ProcessSnapshot_0txhj1e\\\" /></extensionElements><startEvent id=\\\"Event_18czgyp\\\"><outgoing>Flow_1nyqtbr</outgoing></startEvent><task id=\\\"Activity_066r1vr\\\" name=\\\"A\\\"><incoming>Flow_1nyqtbr</incoming><outgoing>Flow_1puhjbw</outgoing></task><sequenceFlow id=\\\"Flow_1nyqtbr\\\" name=\\\"sf\\\" sourceRef=\\\"Event_18czgyp\\\" targetRef=\\\"Activity_066r1vr\\\" /><task id=\\\"Activity_1fzxoyj\\\"><incoming>Flow_1puhjbw</incoming><outgoing>Flow_06vnlyp</outgoing></task><sequenceFlow id=\\\"Flow_1puhjbw\\\" sourceRef=\\\"Activity_066r1vr\\\" targetRef=\\\"Activity_1fzxoyj\\\" /><endEvent id=\\\"Event_0qqd83m\\\"><incoming>Flow_06vnlyp</incoming></endEvent><sequenceFlow id=\\\"Flow_06vnlyp\\\" sourceRef=\\\"Activity_1fzxoyj\\\" targetRef=\\\"Event_0qqd83m\\\" /><association id=\\\"Association_1ka5ysn\\\" sourceRef=\\\"Flow_1nyqtbr\\\" targetRef=\\\"Token_06dl8kn\\\" /></process><bpmndi:BPMNDiagram id=\\\"sid-74620812-92c4-44e5-949c-aa47393d3830\\\"><bpmndi:BPMNPlane id=\\\"sid-cdcae759-2af7-4a6d-bd02-53f3352a731d\\\" bpmnElement=\\\"Process_00fdlmt\\\"><bpmndi:BPMNShape id=\\\"Event_18czgyp_di\\\" bpmnElement=\\\"Event_18czgyp\\\"><omgdc:Bounds x=\\\"222\\\" y=\\\"172\\\" width=\\\"36\\\" height=\\\"36\\\" /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"Activity_066r1vr_di\\\" bpmnElement=\\\"Activity_066r1vr\\\"><omgdc:Bounds x=\\\"310\\\" y=\\\"150\\\" width=\\\"100\\\" height=\\\"80\\\" /><bpmndi:BPMNLabel /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"Activity_1fzxoyj_di\\\" bpmnElement=\\\"Activity_1fzxoyj\\\"><omgdc:Bounds x=\\\"470\\\" y=\\\"150\\\" width=\\\"100\\\" height=\\\"80\\\" /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"Event_0qqd83m_di\\\" bpmnElement=\\\"Event_0qqd83m\\\"><omgdc:Bounds x=\\\"632\\\" y=\\\"172\\\" width=\\\"36\\\" height=\\\"36\\\" /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"ProcessSnapshot_0txhj1e_di\\\" bpmnElement=\\\"ProcessSnapshot_0txhj1e\\\" bioc:fill=\\\"#451984\\\" color:background-color=\\\"#451984\\\"><omgdc:Bounds x=\\\"170\\\" y=\\\"240\\\" width=\\\"20\\\" height=\\\"20\\\" /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"Token_06dl8kn_di\\\" bpmnElement=\\\"Token_06dl8kn\\\" bioc:fill=\\\"#451984\\\" color:background-color=\\\"#451984\\\"><omgdc:Bounds x=\\\"274.5\\\" y=\\\"241\\\" width=\\\"20\\\" height=\\\"20\\\" /></bpmndi:BPMNShape><bpmndi:BPMNEdge id=\\\"Flow_1nyqtbr_di\\\" bpmnElement=\\\"Flow_1nyqtbr\\\"><omgdi:waypoint x=\\\"258\\\" y=\\\"190\\\" /><omgdi:waypoint x=\\\"310\\\" y=\\\"190\\\" /><bpmndi:BPMNLabel><omgdc:Bounds x=\\\"279\\\" y=\\\"172\\\" width=\\\"11\\\" height=\\\"14\\\" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge><bpmndi:BPMNEdge id=\\\"Flow_1puhjbw_di\\\" bpmnElement=\\\"Flow_1puhjbw\\\"><omgdi:waypoint x=\\\"410\\\" y=\\\"190\\\" /><omgdi:waypoint x=\\\"470\\\" y=\\\"190\\\" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id=\\\"Flow_06vnlyp_di\\\" bpmnElement=\\\"Flow_06vnlyp\\\"><omgdi:waypoint x=\\\"570\\\" y=\\\"190\\\" /><omgdi:waypoint x=\\\"632\\\" y=\\\"190\\\" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id=\\\"Association_1ka5ysn_di\\\" bpmnElement=\\\"Association_1ka5ysn\\\"><omgdi:waypoint x=\\\"285\\\" y=\\\"186\\\" /><omgdi:waypoint x=\\\"285\\\" y=\\\"241\\\" /></bpmndi:BPMNEdge></bpmndi:BPMNPlane><bpmndi:BPMNLabelStyle id=\\\"sid-e0502d32-f8d1-41cf-9c4a-cbb49fecf581\\\"><omgdc:Font name=\\\"Arial\\\" size=\\\"11\\\" isBold=\\\"false\\\" isItalic=\\\"false\\\" isUnderline=\\\"false\\\" isStrikeThrough=\\\"false\\\" /></bpmndi:BPMNLabelStyle><bpmndi:BPMNLabelStyle id=\\\"sid-84cb49fd-2f7c-44fb-8950-83c3fa153d3b\\\"><omgdc:Font name=\\\"Arial\\\" size=\\\"12\\\" isBold=\\\"false\\\" isItalic=\\\"false\\\" isUnderline=\\\"false\\\" isStrikeThrough=\\\"false\\\" /></bpmndi:BPMNLabelStyle></bpmndi:BPMNDiagram></definitions>\"},{\"name\":\"unnamedTask\",\"xml\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\\n<definitions xmlns=\\\"http://www.omg.org/spec/BPMN/20100524/MODEL\\\" xmlns:bpmndi=\\\"http://www.omg.org/spec/BPMN/20100524/DI\\\" xmlns:omgdc=\\\"http://www.omg.org/spec/DD/20100524/DC\\\" xmlns:omgdi=\\\"http://www.omg.org/spec/DD/20100524/DI\\\" xmlns:xsi=\\\"http://www.w3.org/2001/XMLSchema-instance\\\" xmlns:bt=\\\"http://tk/schema/1.0/bt\\\" xmlns:bioc=\\\"http://bpmn.io/schema/bpmn/biocolor/1.0\\\" xmlns:color=\\\"http://www.omg.org/spec/BPMN/non-normative/color/1.0\\\" targetNamespace=\\\"\\\" xsi:schemaLocation=\\\"http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd\\\"><process id=\\\"Process_00fdlmt\\\"><extensionElements><bt:processSnapshot id=\\\"ProcessSnapshot_0llz96x\\\" /><bt:token id=\\\"Token_1su6pcl\\\" processSnapshot=\\\"ProcessSnapshot_0llz96x\\\" /></extensionElements><startEvent id=\\\"Event_18czgyp\\\"><outgoing>Flow_1nyqtbr</outgoing></startEvent><task id=\\\"Activity_066r1vr\\\" name=\\\"A\\\"><incoming>Flow_1nyqtbr</incoming><outgoing>Flow_1puhjbw</outgoing></task><sequenceFlow id=\\\"Flow_1nyqtbr\\\" name=\\\"sf\\\" sourceRef=\\\"Event_18czgyp\\\" targetRef=\\\"Activity_066r1vr\\\" /><task id=\\\"Activity_1fzxoyj\\\"><incoming>Flow_1puhjbw</incoming><outgoing>Flow_06vnlyp</outgoing></task><sequenceFlow id=\\\"Flow_1puhjbw\\\" sourceRef=\\\"Activity_066r1vr\\\" targetRef=\\\"Activity_1fzxoyj\\\" /><endEvent id=\\\"Event_0qqd83m\\\"><incoming>Flow_06vnlyp</incoming></endEvent><sequenceFlow id=\\\"Flow_06vnlyp\\\" sourceRef=\\\"Activity_1fzxoyj\\\" targetRef=\\\"Event_0qqd83m\\\" /><association id=\\\"Association_1ubbg30\\\" sourceRef=\\\"Activity_1fzxoyj\\\" targetRef=\\\"Token_1su6pcl\\\" /></process><bpmndi:BPMNDiagram id=\\\"sid-74620812-92c4-44e5-949c-aa47393d3830\\\"><bpmndi:BPMNPlane id=\\\"sid-cdcae759-2af7-4a6d-bd02-53f3352a731d\\\" bpmnElement=\\\"Process_00fdlmt\\\"><bpmndi:BPMNShape id=\\\"Event_18czgyp_di\\\" bpmnElement=\\\"Event_18czgyp\\\"><omgdc:Bounds x=\\\"222\\\" y=\\\"172\\\" width=\\\"36\\\" height=\\\"36\\\" /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"Activity_066r1vr_di\\\" bpmnElement=\\\"Activity_066r1vr\\\"><omgdc:Bounds x=\\\"310\\\" y=\\\"150\\\" width=\\\"100\\\" height=\\\"80\\\" /><bpmndi:BPMNLabel /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"Activity_1fzxoyj_di\\\" bpmnElement=\\\"Activity_1fzxoyj\\\"><omgdc:Bounds x=\\\"470\\\" y=\\\"150\\\" width=\\\"100\\\" height=\\\"80\\\" /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"Event_0qqd83m_di\\\" bpmnElement=\\\"Event_0qqd83m\\\"><omgdc:Bounds x=\\\"632\\\" y=\\\"172\\\" width=\\\"36\\\" height=\\\"36\\\" /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"ProcessSnapshot_0llz96x_di\\\" bpmnElement=\\\"ProcessSnapshot_0llz96x\\\" bioc:fill=\\\"#7d7ad3\\\" color:background-color=\\\"#7d7ad3\\\"><omgdc:Bounds x=\\\"220\\\" y=\\\"300\\\" width=\\\"20\\\" height=\\\"20\\\" /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"Token_1su6pcl_di\\\" bpmnElement=\\\"Token_1su6pcl\\\" bioc:fill=\\\"#7d7ad3\\\" color:background-color=\\\"#7d7ad3\\\"><omgdc:Bounds x=\\\"510\\\" y=\\\"280\\\" width=\\\"20\\\" height=\\\"20\\\" /></bpmndi:BPMNShape><bpmndi:BPMNEdge id=\\\"Flow_1nyqtbr_di\\\" bpmnElement=\\\"Flow_1nyqtbr\\\"><omgdi:waypoint x=\\\"258\\\" y=\\\"190\\\" /><omgdi:waypoint x=\\\"310\\\" y=\\\"190\\\" /><bpmndi:BPMNLabel><omgdc:Bounds x=\\\"279\\\" y=\\\"172\\\" width=\\\"11\\\" height=\\\"14\\\" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge><bpmndi:BPMNEdge id=\\\"Flow_1puhjbw_di\\\" bpmnElement=\\\"Flow_1puhjbw\\\"><omgdi:waypoint x=\\\"410\\\" y=\\\"190\\\" /><omgdi:waypoint x=\\\"470\\\" y=\\\"190\\\" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id=\\\"Flow_06vnlyp_di\\\" bpmnElement=\\\"Flow_06vnlyp\\\"><omgdi:waypoint x=\\\"570\\\" y=\\\"190\\\" /><omgdi:waypoint x=\\\"632\\\" y=\\\"190\\\" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id=\\\"Association_1ubbg30_di\\\" bpmnElement=\\\"Association_1ubbg30\\\"><omgdi:waypoint x=\\\"520\\\" y=\\\"230\\\" /><omgdi:waypoint x=\\\"520\\\" y=\\\"280\\\" /></bpmndi:BPMNEdge></bpmndi:BPMNPlane><bpmndi:BPMNLabelStyle id=\\\"sid-e0502d32-f8d1-41cf-9c4a-cbb49fecf581\\\"><omgdc:Font name=\\\"Arial\\\" size=\\\"11\\\" isBold=\\\"false\\\" isItalic=\\\"false\\\" isUnderline=\\\"false\\\" isStrikeThrough=\\\"false\\\" /></bpmndi:BPMNLabelStyle><bpmndi:BPMNLabelStyle id=\\\"sid-84cb49fd-2f7c-44fb-8950-83c3fa153d3b\\\"><omgdc:Font name=\\\"Arial\\\" size=\\\"12\\\" isBold=\\\"false\\\" isItalic=\\\"false\\\" isUnderline=\\\"false\\\" isStrikeThrough=\\\"false\\\" /></bpmndi:BPMNLabelStyle></bpmndi:BPMNDiagram></definitions>\"},{\"name\":\"unnamedFlow\",\"xml\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\\n<definitions xmlns=\\\"http://www.omg.org/spec/BPMN/20100524/MODEL\\\" xmlns:bpmndi=\\\"http://www.omg.org/spec/BPMN/20100524/DI\\\" xmlns:omgdc=\\\"http://www.omg.org/spec/DD/20100524/DC\\\" xmlns:omgdi=\\\"http://www.omg.org/spec/DD/20100524/DI\\\" xmlns:xsi=\\\"http://www.w3.org/2001/XMLSchema-instance\\\" xmlns:bt=\\\"http://tk/schema/1.0/bt\\\" xmlns:bioc=\\\"http://bpmn.io/schema/bpmn/biocolor/1.0\\\" xmlns:color=\\\"http://www.omg.org/spec/BPMN/non-normative/color/1.0\\\" targetNamespace=\\\"\\\" xsi:schemaLocation=\\\"http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd\\\"><process id=\\\"Process_00fdlmt\\\"><extensionElements><bt:processSnapshot id=\\\"ProcessSnapshot_0lc5bi8\\\" /><bt:token id=\\\"Token_0nsrtn0\\\" processSnapshot=\\\"ProcessSnapshot_0lc5bi8\\\" /></extensionElements><startEvent id=\\\"Event_18czgyp\\\"><outgoing>Flow_1nyqtbr</outgoing></startEvent><task id=\\\"Activity_066r1vr\\\" name=\\\"A\\\"><incoming>Flow_1nyqtbr</incoming><outgoing>Flow_1puhjbw</outgoing></task><sequenceFlow id=\\\"Flow_1nyqtbr\\\" name=\\\"sf\\\" sourceRef=\\\"Event_18czgyp\\\" targetRef=\\\"Activity_066r1vr\\\" /><task id=\\\"Activity_1fzxoyj\\\"><incoming>Flow_1puhjbw</incoming><outgoing>Flow_06vnlyp</outgoing></task><sequenceFlow id=\\\"Flow_1puhjbw\\\" sourceRef=\\\"Activity_066r1vr\\\" targetRef=\\\"Activity_1fzxoyj\\\" /><endEvent id=\\\"Event_0qqd83m\\\"><incoming>Flow_06vnlyp</incoming></endEvent><sequenceFlow id=\\\"Flow_06vnlyp\\\" sourceRef=\\\"Activity_1fzxoyj\\\" targetRef=\\\"Event_0qqd83m\\\" /><association id=\\\"Association_127p1jo\\\" sourceRef=\\\"Flow_1puhjbw\\\" targetRef=\\\"Token_0nsrtn0\\\" /></process><bpmndi:BPMNDiagram id=\\\"sid-74620812-92c4-44e5-949c-aa47393d3830\\\"><bpmndi:BPMNPlane id=\\\"sid-cdcae759-2af7-4a6d-bd02-53f3352a731d\\\" bpmnElement=\\\"Process_00fdlmt\\\"><bpmndi:BPMNShape id=\\\"Event_18czgyp_di\\\" bpmnElement=\\\"Event_18czgyp\\\"><omgdc:Bounds x=\\\"222\\\" y=\\\"172\\\" width=\\\"36\\\" height=\\\"36\\\" /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"Activity_066r1vr_di\\\" bpmnElement=\\\"Activity_066r1vr\\\"><omgdc:Bounds x=\\\"310\\\" y=\\\"150\\\" width=\\\"100\\\" height=\\\"80\\\" /><bpmndi:BPMNLabel /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"Activity_1fzxoyj_di\\\" bpmnElement=\\\"Activity_1fzxoyj\\\"><omgdc:Bounds x=\\\"470\\\" y=\\\"150\\\" width=\\\"100\\\" height=\\\"80\\\" /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"Event_0qqd83m_di\\\" bpmnElement=\\\"Event_0qqd83m\\\"><omgdc:Bounds x=\\\"632\\\" y=\\\"172\\\" width=\\\"36\\\" height=\\\"36\\\" /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"ProcessSnapshot_0lc5bi8_di\\\" bpmnElement=\\\"ProcessSnapshot_0lc5bi8\\\" bioc:fill=\\\"#714fc6\\\" color:background-color=\\\"#714fc6\\\"><omgdc:Bounds x=\\\"260\\\" y=\\\"310\\\" width=\\\"20\\\" height=\\\"20\\\" /></bpmndi:BPMNShape><bpmndi:BPMNShape id=\\\"Token_0nsrtn0_di\\\" bpmnElement=\\\"Token_0nsrtn0\\\" bioc:fill=\\\"#714fc6\\\" color:background-color=\\\"#714fc6\\\"><omgdc:Bounds x=\\\"430\\\" y=\\\"250\\\" width=\\\"20\\\" height=\\\"20\\\" /></bpmndi:BPMNShape><bpmndi:BPMNEdge id=\\\"Flow_1nyqtbr_di\\\" bpmnElement=\\\"Flow_1nyqtbr\\\"><omgdi:waypoint x=\\\"258\\\" y=\\\"190\\\" /><omgdi:waypoint x=\\\"310\\\" y=\\\"190\\\" /><bpmndi:BPMNLabel><omgdc:Bounds x=\\\"279\\\" y=\\\"172\\\" width=\\\"11\\\" height=\\\"14\\\" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge><bpmndi:BPMNEdge id=\\\"Flow_1puhjbw_di\\\" bpmnElement=\\\"Flow_1puhjbw\\\"><omgdi:waypoint x=\\\"410\\\" y=\\\"190\\\" /><omgdi:waypoint x=\\\"470\\\" y=\\\"190\\\" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id=\\\"Flow_06vnlyp_di\\\" bpmnElement=\\\"Flow_06vnlyp\\\"><omgdi:waypoint x=\\\"570\\\" y=\\\"190\\\" /><omgdi:waypoint x=\\\"632\\\" y=\\\"190\\\" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id=\\\"Association_127p1jo_di\\\" bpmnElement=\\\"Association_127p1jo\\\"><omgdi:waypoint x=\\\"440\\\" y=\\\"190\\\" /><omgdi:waypoint x=\\\"440\\\" y=\\\"250\\\" /></bpmndi:BPMNEdge></bpmndi:BPMNPlane><bpmndi:BPMNLabelStyle id=\\\"sid-e0502d32-f8d1-41cf-9c4a-cbb49fecf581\\\"><omgdc:Font name=\\\"Arial\\\" size=\\\"11\\\" isBold=\\\"false\\\" isItalic=\\\"false\\\" isUnderline=\\\"false\\\" isStrikeThrough=\\\"false\\\" /></bpmndi:BPMNLabelStyle><bpmndi:BPMNLabelStyle id=\\\"sid-84cb49fd-2f7c-44fb-8950-83c3fa153d3b\\\"><omgdc:Font name=\\\"Arial\\\" size=\\\"12\\\" isBold=\\\"false\\\" isItalic=\\\"false\\\" isUnderline=\\\"false\\\" isStrikeThrough=\\\"false\\\" /></bpmndi:BPMNLabelStyle></bpmndi:BPMNDiagram></definitions>\"}]\n")));
+                Pair.of("propositions", readResourceAsString(FOUR_PROPOSITIONS_JSON))));
     assertThat(
         response,
         is(
@@ -309,6 +310,151 @@ class RuleGeneratorControllerTests {
   }
 
   @Test
+  void testCheckTemporalLogicEmptyFile() {
+    // Given: An empty file and valid parameters
+    Pair<Integer, String> response =
+        makeMultipartRequestWithBytes(
+            CHECK_TEMPORAL_LOGIC,
+            new byte[0],
+            "empty.bpmn",
+            List.of(Pair.of("logic", "CTL"), Pair.of("property", "AG(!Unsafe)")));
+
+    // Then: Expect 400 Bad Request
+    assertThat(response.left(), is(400));
+    assertThat(response.right(), containsString("BPMN file is required"));
+  }
+
+  @Test
+  void testCheckTemporalLogicMissingFile() {
+    // Given: No file part at all
+    Pair<Integer, String> response = makeMultipartRequestWithoutFile(CHECK_TEMPORAL_LOGIC);
+
+    // Then: Expect 400 Bad Request
+    assertThat(response.left(), is(400));
+    assertThat(response.right(), containsString("BPMN file is required"));
+  }
+
+  @Test
+  void testGenerateGGAndZipError() throws Exception {
+    // Given: An invalid BPMN model
+    Path bpmnModelFile = getBpmnModelFile(BPMN_FILE_ERROR);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+    MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+    body.add("file", new FileSystemResource(bpmnModelFile));
+
+    HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+    ResponseEntity<String> response =
+        restTemplate.postForEntity("/generateGGAndZip", requestEntity, String.class);
+
+    // Then: Expect error response with structured message
+    assertThat(response.getStatusCode().value(), is(500));
+    assertThat(response.getBody(), containsString("message"));
+    assertThat(
+        response.getBody(),
+        containsString(
+            "Intermediate throw events should have exactly one incoming sequence flow!"));
+  }
+
+  @Test
+  void testCheckBPMNSpecificPropertiesOptionToComplete() throws Exception {
+    // Given: A valid BPMN model and only OPTION_TO_COMPLETE property
+    Path bpmnModelFile = getBpmnModelFile(BPMN_FILE);
+    String properties = convertProps(List.of(BPMNSpecificProperty.OPTION_TO_COMPLETE));
+
+    // When
+    String response =
+        makeMultipartRequest(
+            CHECK_BPMN_SPECIFIC_PROPERTIES,
+            bpmnModelFile,
+            Pair.of(PROPERTIES_TO_BE_CHECKED, properties));
+
+    // Then
+    assertThat(
+        response,
+        is(
+            "{\"propertyCheckingResults\":[{\"name\":\"Option to complete\","
+                + "\"valid\":true,\"additionalInfo\":\"CTL: AF(AllTerminated)\"}]}"));
+  }
+
+  @Test
+  void testCheckBPMNSpecificPropertiesProperCompletion() throws Exception {
+    // Given: A valid BPMN model and only PROPER_COMPLETION property
+    Path bpmnModelFile = getBpmnModelFile(BPMN_FILE);
+    String properties = convertProps(List.of(BPMNSpecificProperty.PROPER_COMPLETION));
+
+    // When
+    String response =
+        makeMultipartRequest(
+            CHECK_BPMN_SPECIFIC_PROPERTIES,
+            bpmnModelFile,
+            Pair.of(PROPERTIES_TO_BE_CHECKED, properties));
+
+    // Then
+    assertThat(
+        response,
+        is(
+            "{\"propertyCheckingResults\":[{\"name\":\"Proper completion\","
+                + "\"valid\":true,\"additionalInfo\":\"\"}]}"));
+  }
+
+  @Test
+  void testCheckBPMNSpecificPropertiesSafeness() throws Exception {
+    // Given: A valid BPMN model and only SAFENESS property
+    Path bpmnModelFile = getBpmnModelFile(BPMN_FILE);
+    String properties = convertProps(List.of(BPMNSpecificProperty.SAFENESS));
+
+    // When
+    String response =
+        makeMultipartRequest(
+            CHECK_BPMN_SPECIFIC_PROPERTIES,
+            bpmnModelFile,
+            Pair.of(PROPERTIES_TO_BE_CHECKED, properties));
+
+    // Then
+    assertThat(
+        response,
+        is(
+            "{\"propertyCheckingResults\":[{\"name\":\"Safeness\","
+                + "\"valid\":true,\"additionalInfo\":\"CTL: AG(!Unsafe)\"}]}"));
+  }
+
+  @Test
+  void testGenerateGGAndZipWithPropositions() throws Exception {
+    // Given: A BPMN model that supports propositions
+    Path bpmnModelFile = getBpmnModelFile(BPMN_FILE_PROPOSITIONS);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+    // Use the same propositions as testCheckCTLWithCustomPropositions, but only one
+    String propositionsJson = readResourceAsString(SINGLE_PROPOSITION_JSON);
+
+    MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+    body.add("file", new FileSystemResource(bpmnModelFile));
+    body.add("propositions", propositionsJson);
+
+    HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+    ResponseEntity<byte[]> response =
+        restTemplate.postForEntity("/generateGGAndZip", requestEntity, byte[].class);
+
+    // Then: Response should be a valid ZIP with more files than without propositions
+    assertThat(response.getStatusCode().value(), is(200));
+    ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(response.getBody()));
+    Set<String> zipEntryNames = getZipEntryNames(zis);
+    // Should contain at least the base files plus the proposition file
+    assertFalse(zipEntryNames.isEmpty());
+    assertTrue(zipEntryNames.contains("start.gst"));
+    assertTrue(zipEntryNames.contains("system.properties"));
+    // The proposition should generate an additional .gpr file named "a.gpr"
+    assertTrue(
+        zipEntryNames.contains("a.gpr"),
+        "ZIP should contain proposition file a.gpr but found: " + zipEntryNames);
+  }
+
+  @Test
   void timestampFormatTest() {
     Instant instant = Instant.now().truncatedTo(ChronoUnit.SECONDS);
     MatcherAssert.assertThat(
@@ -351,6 +497,11 @@ class RuleGeneratorControllerTests {
 
   private Path getBpmnModelFile(String bpmnFile) throws URISyntaxException {
     return Paths.get(Objects.requireNonNull(this.getClass().getResource(bpmnFile)).toURI());
+  }
+
+  private String readResourceAsString(String resource) throws IOException, URISyntaxException {
+    return Files.readString(
+        Paths.get(Objects.requireNonNull(this.getClass().getResource(resource)).toURI()));
   }
 
   private String makeMultipartRequest(
