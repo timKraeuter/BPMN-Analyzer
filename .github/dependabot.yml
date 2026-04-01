@@ -4,8 +4,22 @@ updates:
   directory: "/"
   schedule:
     interval: "monthly"
+    time: "10:00"
+    timezone: Europe/Amsterdam
 - package-ecosystem: npm
   directory: "/generation-ui/"
+  schedule:
+    interval: monthly
+    time: "10:00"
+    timezone: Europe/Amsterdam
+- package-ecosystem: gradle
+  directory: "/generator/"
+  schedule:
+    interval: monthly
+    time: "10:00"
+    timezone: Europe/Amsterdam
+- package-ecosystem: gradle
+  directory: "/server/"
   schedule:
     interval: monthly
     time: "10:00"
