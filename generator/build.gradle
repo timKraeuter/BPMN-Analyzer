@@ -55,7 +55,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
     testImplementation 'org.junit.platform:junit-platform-launcher:6.0.3'
 
-    errorprone('com.google.errorprone:error_prone_core:2.46.0')
+    errorprone('com.google.errorprone:error_prone_core:2.48.0')
 }
 
 test {
