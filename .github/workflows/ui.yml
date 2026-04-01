@@ -54,7 +54,7 @@ jobs:
     name: Run E2E tests
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      image: mcr.microsoft.com/playwright:v1.59.0-noble
     defaults:
       run:
         working-directory: ./generation-ui
