@@ -21,10 +21,10 @@ This will start the application at [localhost:8080](http://localhost:8080/).
 
 ## Jar File
 
-Run the application (execute in this directory):
+Build the jar first with `./gradlew bootJar`, then run the application:
 
 ```bash
-java -jar libs/ruleGeneratorServer-2.0.1.jar
+java -jar build/libs/ruleGeneratorServer-2.0.1.jar
 ```
 
 This will start the application at [localhost:8080](http://localhost:8080/).
@@ -32,7 +32,7 @@ This will start the application at [localhost:8080](http://localhost:8080/).
 Run the application on a specific port, for example, 4300:
 
 ```bash
-java -jar libs/ruleGeneratorServer-2.0.1.jar --server.port=4300
+java -jar build/libs/ruleGeneratorServer-2.0.1.jar --server.port=4300
 ```
 
 This will start the application with the specified port.
