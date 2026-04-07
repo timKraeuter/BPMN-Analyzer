@@ -2,10 +2,7 @@ package no.tk.scalability;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.FlowElement;
 import org.junit.jupiter.api.Test;
@@ -48,16 +45,5 @@ class ScalabilityTest {
 
     BpmnModelInstance modelInstance2 = BPMNModelBuilder.createModelWithXBlocks(10);
     assertThat(modelInstance2.getModelElementsByType(FlowElement.class).size(), is(81));
-  }
-
-  //  @Test
-  void upToNumberOfBlocksTest() {
-    BPMNModelBuilder.createModelsWithUpToXBlocks(300);
-    assertTrue(true);
-  }
-
-  //  @Test
-  void printStats() throws IOException {
-    BPMNStatPrinter.printStats(Path.of("C:/Source/scalability/"));
   }
 }
