@@ -6,7 +6,7 @@ plugins {
     id 'org.sonarqube' version '7.2.3.7755'
     id 'jacoco'
     id 'net.ltgt.errorprone' version '5.1.0'
-    id 'com.diffplug.spotless' version '8.2.1'
+    id 'com.diffplug.spotless' version '8.4.0'
 }
 
 group = 'no.hvl.tk'
@@ -36,7 +36,6 @@ dependencies {
 
     // Spring
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    developmentOnly 'org.springframework.boot:spring-boot-starter-actuator'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     errorprone('com.google.errorprone:error_prone_core:2.48.0')
