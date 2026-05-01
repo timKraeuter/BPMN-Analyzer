@@ -32,7 +32,7 @@ dependencies {
     implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.7'
 
     // https://mvnrepository.com/artifact/commons-io/commons-io
-    implementation 'commons-io:commons-io:2.21.0'
+    implementation 'commons-io:commons-io:2.22.0'
     // https://mvnrepository.com/artifact/com.google.guava/guava
     implementation 'com.google.guava:guava:33.5.0-jre'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
