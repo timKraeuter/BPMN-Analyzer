@@ -6,6 +6,7 @@ import {
     OnDestroy,
     OnInit,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import Modeler from 'bpmn-js/lib/Modeler';
 import Viewer from 'bpmn-js/lib/Viewer';
@@ -15,6 +16,7 @@ import { INITIAL_BPMN_DIAGRAM } from '../../constants/initial-diagram';
 @Component({
     selector: 'app-diagram',
     templateUrl: './diagram.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./diagram.component.scss'],
 })
 export class DiagramComponent implements AfterContentInit, OnDestroy, OnInit {

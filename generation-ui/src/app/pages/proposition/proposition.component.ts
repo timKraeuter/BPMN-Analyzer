@@ -1,4 +1,8 @@
-import { Component, HostListener } from '@angular/core';
+import {
+    Component,
+    HostListener,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { NgClass } from '@angular/common';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 import { saveAs } from 'file-saver-es';
@@ -21,6 +25,7 @@ export const SVG_FILE_EXTENSION = '.svg';
     selector: 'app-proposition',
     templateUrl: './proposition.component.html',
     styleUrls: ['./proposition.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         NgClass,
         MatCardModule,

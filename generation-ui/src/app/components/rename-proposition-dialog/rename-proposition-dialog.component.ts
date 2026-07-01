@@ -1,4 +1,9 @@
-import { Component, HostListener, inject } from '@angular/core';
+import {
+    Component,
+    HostListener,
+    inject,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
     MAT_DIALOG_DATA,
@@ -15,6 +20,7 @@ import { Proposition } from '../../models/proposition';
     selector: 'app-rename-proposition-dialog',
     templateUrl: './rename-proposition-dialog.component.html',
     styleUrls: ['./rename-proposition-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         FormsModule,
         MatDialogModule,

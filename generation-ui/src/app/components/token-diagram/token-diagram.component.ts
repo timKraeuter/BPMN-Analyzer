@@ -5,6 +5,7 @@ import {
     input,
     OnDestroy,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 import TokenModeler from 'bpmn-token/lib/Modeler';
@@ -12,6 +13,7 @@ import TokenModeler from 'bpmn-token/lib/Modeler';
 @Component({
     selector: 'app-token-diagram',
     template: ` <div #ref class="diagram-container"></div> `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     styles: [
         `
             .diagram-container {

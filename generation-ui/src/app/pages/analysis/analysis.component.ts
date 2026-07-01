@@ -1,4 +1,8 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import {
+    Component,
+    ChangeDetectorRef,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { AnalysisResultComponent } from '../../components/analysis-result/analysis-result.component';
@@ -41,6 +45,7 @@ interface BPMNElement {
     selector: 'app-analysis',
     templateUrl: './analysis.component.html',
     styleUrls: ['./analysis.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         FormsModule,
         MatCardModule,

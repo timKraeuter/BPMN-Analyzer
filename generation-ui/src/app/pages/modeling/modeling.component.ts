@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { saveAs } from 'file-saver-es';
 import { BPMNModelerService } from '../../services/bpmnmodeler.service';
 import { SharedStateService } from '../../services/shared-state.service';
@@ -14,6 +14,7 @@ export const BPMN_FILE_EXTENSION = '.bpmn';
 @Component({
     selector: 'app-modeling',
     templateUrl: './modeling.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatCardModule,
         MatButtonModule,
