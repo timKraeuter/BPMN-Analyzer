@@ -1,4 +1,9 @@
-import { Component, HostListener, ViewChild } from '@angular/core';
+import {
+    Component,
+    HostListener,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { BPMNModelerService } from './services/bpmnmodeler.service';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
@@ -13,6 +18,7 @@ import { AnalysisComponent } from './pages/analysis/analysis.component';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatStepperModule,
         MatIconModule,

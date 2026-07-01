@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 import {
     HttpTestingController,
@@ -18,7 +19,7 @@ describe('ModelCheckingService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         });

@@ -1,7 +1,7 @@
 import { enableProdMode } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 import { AppComponent } from './app/app.component';
@@ -14,7 +14,7 @@ if (environment.production) {
 bootstrapApplication(AppComponent, {
     providers: [
         provideAnimations(),
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         {
             provide: STEPPER_GLOBAL_OPTIONS,
             useValue: { displayDefaultIndicatorType: false },

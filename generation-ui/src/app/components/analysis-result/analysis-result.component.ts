@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
@@ -10,6 +10,7 @@ import { ModelCheckingResponse } from '../../models/model-checking-response';
     selector: 'app-analysis-result',
     templateUrl: './analysis-result.component.html',
     styleUrls: ['./analysis-result.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatListModule,
         MatIconModule,
