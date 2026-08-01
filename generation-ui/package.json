@@ -23,7 +23,7 @@
         "@angular/material": "^21.2.14",
         "@angular/platform-browser": "^22.0.4",
         "@angular/platform-browser-dynamic": "^22.0.4",
-        "bpmn-js": "^18.15.0",
+        "bpmn-js": "^18.22.0",
         "bpmn-js-properties-panel": "^5.54.0",
         "bpmn-token": "^1.0.3",
         "file-saver-es": "^2.0.5",
