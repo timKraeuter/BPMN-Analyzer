@@ -4,13 +4,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import no.tk.behavior.bpmn.auxiliary.exceptions.BPMNRuntimeException;
 import no.tk.behavior.bpmn.auxiliary.exceptions.GrooveGenerationRuntimeException;
 import no.tk.behavior.bpmn.auxiliary.exceptions.ShouldNotHappenRuntimeException;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import tools.jackson.databind.ObjectMapper;
 
 class RuntimeExceptionHandlerTest {
 

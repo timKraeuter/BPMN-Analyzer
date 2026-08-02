@@ -1,8 +1,5 @@
 package no.tk.rulegenerator.server.endpoint;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -29,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -36,12 +35,9 @@ public class RuleGeneratorController {
 
   // Needed for custom form data deserialization
   private final ObjectMapper jsonMapper;
-  private final CollectionType setTypeJackson;
 
   public RuleGeneratorController(ObjectMapper jsonMapper) {
     this.jsonMapper = jsonMapper;
-    this.setTypeJackson =
-        jsonMapper.getTypeFactory().constructCollectionType(Set.class, BPMNProposition.class);
   }
 
   /**
@@ -139,12 +135,11 @@ public class RuleGeneratorController {
     }
   }
 
-  private Set<BPMNProposition> readPropositionsFromJSON(String propositions)
-      throws JsonProcessingException {
+  private Set<BPMNProposition> readPropositionsFromJSON(String propositions) {
     if (propositions == null) {
       return Collections.emptySet();
     }
-    return jsonMapper.readValue(propositions, setTypeJackson);
+    return jsonMapper.readValue(propositions, new TypeReference<Set<BPMNProposition>>() {});
   }
 
   private static void validateFilePresent(MultipartFile file) {

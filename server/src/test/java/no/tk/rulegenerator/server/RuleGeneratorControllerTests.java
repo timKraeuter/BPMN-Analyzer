@@ -29,19 +29,23 @@ import no.tk.rulegenerator.server.endpoint.dtos.BPMNSpecificProperty;
 import no.tk.rulegenerator.server.util.Pair;
 import org.apache.commons.io.file.PathUtils;
 import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RuleGeneratorControllerTests {
@@ -58,9 +62,24 @@ class RuleGeneratorControllerTests {
   public static final String CHECK_BPMN_SPECIFIC_PROPERTIES = "checkBPMNSpecificProperties";
   public static final String CHECK_TEMPORAL_LOGIC = "checkTemporalLogic";
 
-  @Autowired private TestRestTemplate restTemplate;
+  @LocalServerPort private int port;
+
+  private RestTemplate restTemplate;
 
   @Autowired private RuleGeneratorController restController;
+
+  @BeforeEach
+  void setUp() {
+    restTemplate = new RestTemplate();
+    // Don't throw on non-2xx responses — matches the old TestRestTemplate behaviour.
+    restTemplate.setErrorHandler(
+        new DefaultResponseErrorHandler() {
+          @Override
+          public boolean hasError(ClientHttpResponse response) throws IOException {
+            return false;
+          }
+        });
+  }
 
   @Test
   void testContextLoads() {
@@ -79,7 +98,8 @@ class RuleGeneratorControllerTests {
 
     HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
     ResponseEntity<byte[]> response =
-        restTemplate.postForEntity("/generateGGAndZip", requestEntity, byte[].class);
+        restTemplate.postForEntity(
+            "http://localhost:" + port + "/generateGGAndZip", requestEntity, byte[].class);
 
     // Check response
     ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(response.getBody()));
@@ -347,7 +367,8 @@ class RuleGeneratorControllerTests {
 
     HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
     ResponseEntity<String> response =
-        restTemplate.postForEntity("/generateGGAndZip", requestEntity, String.class);
+        restTemplate.postForEntity(
+            "http://localhost:" + port + "/generateGGAndZip", requestEntity, String.class);
 
     // Then: Expect error response with structured message (400 since it's a BPMN validation error)
     assertThat(response.getStatusCode().value(), is(400));
@@ -438,7 +459,8 @@ class RuleGeneratorControllerTests {
 
     HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
     ResponseEntity<byte[]> response =
-        restTemplate.postForEntity("/generateGGAndZip", requestEntity, byte[].class);
+        restTemplate.postForEntity(
+            "http://localhost:" + port + "/generateGGAndZip", requestEntity, byte[].class);
 
     // Then: Response should be a valid ZIP with more files than without propositions
     assertThat(response.getStatusCode().value(), is(200));
@@ -516,7 +538,8 @@ class RuleGeneratorControllerTests {
     HttpEntity<MultiValueMap<String, Object>> requestEntity =
         new HttpEntity<>(multipartBody, headers);
     ResponseEntity<String> response =
-        restTemplate.postForEntity("/" + url, requestEntity, String.class);
+        restTemplate.postForEntity(
+            "http://localhost:" + port + "/" + url, requestEntity, String.class);
     return response.getBody();
   }
 
@@ -543,7 +566,8 @@ class RuleGeneratorControllerTests {
     HttpEntity<MultiValueMap<String, Object>> requestEntity =
         new HttpEntity<>(multipartBody, headers);
     ResponseEntity<String> response =
-        restTemplate.postForEntity("/" + url, requestEntity, String.class);
+        restTemplate.postForEntity(
+            "http://localhost:" + port + "/" + url, requestEntity, String.class);
     return Pair.of(response.getStatusCode().value(), response.getBody());
   }
 
@@ -557,7 +581,8 @@ class RuleGeneratorControllerTests {
     HttpEntity<MultiValueMap<String, Object>> requestEntity =
         new HttpEntity<>(multipartBody, headers);
     ResponseEntity<String> response =
-        restTemplate.postForEntity("/" + url, requestEntity, String.class);
+        restTemplate.postForEntity(
+            "http://localhost:" + port + "/" + url, requestEntity, String.class);
     return Pair.of(response.getStatusCode().value(), response.getBody());
   }
 }
