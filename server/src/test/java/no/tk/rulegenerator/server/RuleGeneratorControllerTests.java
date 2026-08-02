@@ -538,7 +538,8 @@ class RuleGeneratorControllerTests {
     HttpEntity<MultiValueMap<String, Object>> requestEntity =
         new HttpEntity<>(multipartBody, headers);
     ResponseEntity<String> response =
-        restTemplate.postForEntity("http://localhost:" + port + "/" + url, requestEntity, String.class);
+        restTemplate.postForEntity(
+            "http://localhost:" + port + "/" + url, requestEntity, String.class);
     return response.getBody();
   }
 
@@ -565,7 +566,8 @@ class RuleGeneratorControllerTests {
     HttpEntity<MultiValueMap<String, Object>> requestEntity =
         new HttpEntity<>(multipartBody, headers);
     ResponseEntity<String> response =
-        restTemplate.postForEntity("http://localhost:" + port + "/" + url, requestEntity, String.class);
+        restTemplate.postForEntity(
+            "http://localhost:" + port + "/" + url, requestEntity, String.class);
     return Pair.of(response.getStatusCode().value(), response.getBody());
   }
 
@@ -579,7 +581,8 @@ class RuleGeneratorControllerTests {
     HttpEntity<MultiValueMap<String, Object>> requestEntity =
         new HttpEntity<>(multipartBody, headers);
     ResponseEntity<String> response =
-        restTemplate.postForEntity("http://localhost:" + port + "/" + url, requestEntity, String.class);
+        restTemplate.postForEntity(
+            "http://localhost:" + port + "/" + url, requestEntity, String.class);
     return Pair.of(response.getStatusCode().value(), response.getBody());
   }
 }
