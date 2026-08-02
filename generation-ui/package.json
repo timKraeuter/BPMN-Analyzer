@@ -20,7 +20,7 @@
         "@angular/compiler": "^22.0.4",
         "@angular/core": "^22.0.4",
         "@angular/forms": "^22.0.4",
-        "@angular/material": "^21.2.14",
+        "@angular/material": "^22.1.0",
         "@angular/platform-browser": "^22.0.4",
         "@angular/platform-browser-dynamic": "^22.0.4",
         "bpmn-js": "^18.22.0",
