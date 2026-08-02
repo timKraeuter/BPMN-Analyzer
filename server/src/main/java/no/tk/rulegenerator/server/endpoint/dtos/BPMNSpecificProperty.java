@@ -1,6 +1,6 @@
 package no.tk.rulegenerator.server.endpoint.dtos;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import tools.jackson.annotation.JsonValue;
 
 public enum BPMNSpecificProperty {
   SAFENESS("Safeness"),
