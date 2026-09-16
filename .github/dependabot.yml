@@ -6,21 +6,53 @@ updates:
     interval: "monthly"
     time: "10:00"
     timezone: Europe/Amsterdam
+  groups:
+    minor-and-patch:
+      applies-to: "version-updates"
+      patterns:
+        - "*"
+      update-types:
+        - "minor"
+        - "patch"
 - package-ecosystem: npm
   directory: "/generation-ui/"
   schedule:
     interval: monthly
     time: "10:00"
     timezone: Europe/Amsterdam
+  groups:
+    minor-and-patch:
+      applies-to: "version-updates"
+      patterns:
+        - "*"
+      update-types:
+        - "minor"
+        - "patch"
 - package-ecosystem: gradle
   directory: "/generator/"
   schedule:
     interval: monthly
     time: "10:00"
     timezone: Europe/Amsterdam
+  groups:
+    minor-and-patch:
+      applies-to: "version-updates"
+      patterns:
+        - "*"
+      update-types:
+        - "minor"
+        - "patch"
 - package-ecosystem: gradle
   directory: "/server/"
   schedule:
     interval: monthly
     time: "10:00"
     timezone: Europe/Amsterdam
+  groups:
+    minor-and-patch:
+      applies-to: "version-updates"
+      patterns:
+        - "*"
+      update-types:
+        - "minor"
+        - "patch"
