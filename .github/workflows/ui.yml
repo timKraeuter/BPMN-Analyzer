@@ -53,8 +53,6 @@ jobs:
   e2e:
     name: Run E2E tests
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.62.0-noble
     defaults:
       run:
         working-directory: ./generation-ui
@@ -62,10 +60,10 @@ jobs:
       - uses: actions/checkout@v7
       - name: Install dependencies
         run: npm ci
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
       - name: Run E2E tests
         run: npm run e2e
-        env:
-          HOME: /root
       - name: Upload Playwright report
         uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
