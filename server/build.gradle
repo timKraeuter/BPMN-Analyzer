@@ -1,12 +1,12 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '4.1.1'
+    id 'org.springframework.boot' version '4.1.2'
     id 'io.spring.dependency-management' version '1.1.7'
     // Analysis
     id 'org.sonarqube' version '7.5.0.8588'
     id 'jacoco'
     id 'net.ltgt.errorprone' version '5.1.1'
-    id 'com.diffplug.spotless' version '8.10.3'
+    id 'com.diffplug.spotless' version '8.10.4'
 }
 
 group = 'no.hvl.tk'
@@ -38,7 +38,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    errorprone('com.google.errorprone:error_prone_core:2.50.0')
+    errorprone('com.google.errorprone:error_prone_core:2.51.0')
 }
 
 tasks.named('test') {
