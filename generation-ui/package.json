@@ -22,7 +22,7 @@
         "@angular/forms": "^22.2.3",
         "@angular/material": "^22.2.5",
         "@angular/platform-browser": "^22.2.3",
-        "@angular/platform-browser-dynamic": "22.2.0",
+        "@angular/platform-browser-dynamic": "22.2.3",
         "bpmn-js": "^18.31.1",
         "bpmn-js-properties-panel": "^5.65.3",
         "bpmn-token": "^1.0.3",
